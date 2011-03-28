@@ -84,3 +84,4 @@ public:
 } //namespace ax
 
 #endif //__ax_StringFormat_h__
+

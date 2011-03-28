@@ -199,3 +199,4 @@ Size ax_strnlen( const wchar_t* s, Size len ) {
 #include "str_to.h"
 
 #endif //__ax_ax_string_h__
+

@@ -93,3 +93,4 @@ Status wchar_count_in_utf8( Size &out_len, const char* sz ) {
 } //namespace ax
 
 #endif //__ax_utf8_h__
+
