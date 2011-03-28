@@ -2,8 +2,8 @@
 #ifndef __ax_DList_h__
 #define __ax_DList_h__
 
-#include "../Common/Status.h"
-#include "../Common/NonCopyable.h"
+#include "../common/Status.h"
+#include "../common/NonCopyable.h"
 
 namespace ax {
 //! \addtogroup data_algorithm
@@ -274,3 +274,4 @@ T*	 DList<T>::getNodeByIndex( Size idx ) const {
 } // namespace ax
 
 #endif //__ax_DList_h__
+

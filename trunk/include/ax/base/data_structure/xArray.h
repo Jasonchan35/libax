@@ -2,7 +2,7 @@
 #ifndef __ax_xArray_h__
 #define __ax_xArray_h__
 
-#include "../Common/Common.h"
+#include "../common/common.h"
 
 namespace ax {
 //! \addtogroup data_algorithm
@@ -165,3 +165,4 @@ Status	xArray<T>::reserve( Size new_size, bool keep_data ) {
 }//namespace ax
 
 #endif //__ax_xArray_h__
+

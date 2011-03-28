@@ -34,3 +34,4 @@ inline	int  alignPowOf2( int v ) { v--; v |= v >> 1; v |= v >> 2; v |= v >> 4;	v
 } //namespace ax
 
 #endif //__ax_math_template_h__
+

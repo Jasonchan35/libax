@@ -34,10 +34,10 @@ template<> inline	Status	takeOwnership( wchar_t &a, wchar_t &b )	{ a=b; return 0
 
 template<class T>	inline bool  _lessThan0( T value );
 
-#ifdef axCOMPILER_GCC
-template<>	inline bool  _lessThan0( size_t  value )	{ return false; }
-template<>	inline bool  _lessThan0( ssize_t value )	{ return value < 0; }
-#endif //axCOMPILER_GCC
+#ifdef axOS_MacOSX
+	template<>	inline bool  _lessThan0( size_t  value )	{ return false; }
+	template<>	inline bool  _lessThan0( ssize_t value )	{ return value < 0; }
+#endif
 
 
 //primitive

@@ -78,3 +78,4 @@ Array< T, LOCAL_BUF_SIZE >::~Array() {
 } //namespace ax
 
 #endif //__ax_Array_h__
+

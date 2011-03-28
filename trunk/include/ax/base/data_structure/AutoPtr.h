@@ -2,8 +2,8 @@
 #ifndef __ax_AutoPtr_h__
 #define __ax_AutoPtr_h__
 
-#include "../Common/NonCopyable.h"
-#include "../Common/Status.h"
+#include "../common/NonCopyable.h"
+#include "../common/Status.h"
 
 namespace ax {
 //! \addtogroup data_algorithm

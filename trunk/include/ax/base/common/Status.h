@@ -2,7 +2,7 @@
 #ifndef __ax_Status_h__
 #define __ax_Status_h__
 
-#include "../Platform/Platform.h"
+#include "../platform/platform.h"
 
 namespace ax {
 //! \addtogroup common
@@ -47,3 +47,4 @@ const char* Status :: toString() const {
 } //namespace ax
 
 #endif //__ax_Status_h__
+
