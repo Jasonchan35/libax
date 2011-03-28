@@ -1,7 +1,7 @@
-#ifndef __svn_revision_h__
-#define __svn_revision_h__
+#ifndef __ax_svn_revision_h__
+#define __ax_svn_revision_h__
 
-#define SVN_REVISION 			
+#define axSVN_REVISION 4
 
 
 #endif
