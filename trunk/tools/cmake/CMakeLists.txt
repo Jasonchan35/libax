@@ -3,8 +3,5 @@ PROJECT(libax)
 
 INCLUDE( common.cmake )
 INCLUDE( libax.cmake )
-INCLUDE( ../cmake_test/libax_test.cmake )
-
-
 
 MESSAGE(  STATUS CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )

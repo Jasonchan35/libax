@@ -58,4 +58,4 @@ FOREACH( f IN LISTS cpp_files )
 	ENDIF()
 ENDFOREACH()
 
-ADD_LIBRARY( libax ${h_files} ${cpp_files} )
+ADD_LIBRARY( ax ${h_files} ${cpp_files} )

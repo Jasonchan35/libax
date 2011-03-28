@@ -1,5 +1,5 @@
-mkdir _visualc2008
-cd _visualc2008
+mkdir project_visualc2008
+cd project_visualc2008
 
 call cmake.exe -G "Visual Studio 9 2008" ..
 
