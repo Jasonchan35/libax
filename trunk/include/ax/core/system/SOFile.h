@@ -9,6 +9,11 @@ namespace ax {
 //! \addtogroup core
 //@{
 
+//! Dynamic Shared Library
+/*! 
+	.so file on UNIX
+	.dll file on Windows
+*/
 class SOFile : public NonCopyable {
 public:
     SOFile();
@@ -43,6 +48,8 @@ Status  SOFile::getProc( FUNC &func, const char* proc_name ) {
     func = (FUNC)p;
     return 0;
 }
+
+typedef	SOFile	DLLFile;
 
 //@}
 } //namespace ax
