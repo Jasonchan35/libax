@@ -13,23 +13,17 @@ CONFIGURE_FILE(
 )
 
 #----------
-
+SET( h_files_path   "../../include/ax" )
+SET( cpp_files_path "../../src" )
 INCLUDE_DIRECTORIES( ../../include )
 #-------
-FILE( GLOB_RECURSE  h_files   RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "../../include/ax/*.h" )
-FILE( GLOB_RECURSE  cpp_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "../../src/*.cpp"  )
-
-#set( h_files
-#	../../include/ax/core/system/SOFile.h
-#)
-#set( cpp_files
-#	../../src/core/system/SOFile.cpp
-#)
+FILE( GLOB_RECURSE  h_files   RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${h_files_path}/*.h" )
+FILE( GLOB_RECURSE  cpp_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${cpp_files_path}/*.cpp"  )
 
 FOREACH( f IN LISTS h_files )
 #	MESSAGE( STATUS "File: ${f}" )
 	GET_FILENAME_COMPONENT( g ${f} PATH )
-	STRING(REPLACE "../../include/ax" "" g "${g}" )
+	STRING(REPLACE ${h_files_path} "" g "${g}" )
 	STRING(REPLACE "/" "\\\\" g "${g}" )
 	
 	if( "${g}" STREQUAL  "" )
@@ -45,7 +39,7 @@ ENDFOREACH()
 FOREACH( f IN LISTS cpp_files )
 #	MESSAGE( STATUS "File: ${f}" )
 	GET_FILENAME_COMPONENT( g ${f} PATH )
-	STRING(REPLACE "../../src" "" g "${g}" )
+	STRING(REPLACE ${cpp_files_path} "" g "${g}" )
 	STRING(REPLACE "/" "\\\\" g "${g}" )
 	
 	IF( "${g}" STREQUAL  "" )
