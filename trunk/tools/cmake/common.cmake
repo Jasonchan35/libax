@@ -10,3 +10,9 @@ foreach(flag_var CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE C
 endforeach(flag_var)
 
 endif(MSVC)
+
+
+if (CMAKE_COMPILER_IS_GNUCC)
+	set( CMAKE_C_FLAGS   ${CMAKE_C_FLAGS}   -Wall -fPIC)
+	set( CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -Wall -fPIC)
+endif()
