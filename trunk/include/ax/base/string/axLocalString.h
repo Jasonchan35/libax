@@ -4,7 +4,7 @@
 #include "axIString.h"
 
 
-template< class T, axSize LOCAL_BUF_SIZE >
+template< class T, size_t LOCAL_BUF_SIZE >
 class axLocalString_ : public axIString<T> {
 	typedef	axIString<T>	B;
 public:
@@ -14,7 +14,7 @@ private:
 };
 
 //-----------
-template< axSize LOCAL_BUF_SIZE >
+template< size_t LOCAL_BUF_SIZE >
 class axLocalStringA : public axIString<char> {
 	typedef	axIString<char>	B;
 public:
@@ -24,7 +24,7 @@ private:
 };
 
 //-----------
-template< axSize LOCAL_BUF_SIZE >
+template< size_t LOCAL_BUF_SIZE >
 class axLocalStringW : public axIString<wchar_t> {
 	typedef	axIString<wchar_t>	B;
 public:

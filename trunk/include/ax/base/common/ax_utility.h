@@ -3,7 +3,7 @@
 #define __ax_utility_h__
 
 #include "ax_math_template.h"
-#include "axTypeOf.h"
+#include "axSize.h"
 
 //! \addtogroup common
 //@{
@@ -51,9 +51,9 @@ void dumpHexRaw( const void* buf, axSize len, FILE* s = stdout ) {
 	const uint8_t *c = (const uint8_t*)buf;
 
 #ifdef axCPU_LP32
-	fprintf( s, "----------- dump hex len=%d ------------", (int32_t)len );
+	fprintf( s, "----------- dump hex len=%d ------------", len.native() );
 #elif axCPU_LP64
-	fprintf( s, "----------- dump hex len=%lld ------------", (int64_t)len );
+	fprintf( s, "----------- dump hex len=%lld ------------", len.native() );
 #else
 	#error
 #endif

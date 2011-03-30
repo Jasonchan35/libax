@@ -16,16 +16,12 @@ template<class T> inline T ax_sign( T a )					{ if( a == 0 ) return 0; return ax
 	inline T	ax_abs( T  a ) { return a; }
 //-----
 	#include "axTYPE_LIST_uint.h"
-	axTYPE_LIST( axSize )
 #undef axTYPE_LIST
 
 template<class T> inline T ax_abs ( T a );
 
-
 template<class T> inline T ax_min ( T a, T b )						{ return (a<b)?a:b; }
-template<class T> inline T ax_min ( T a, T b, T c )					{ return ax_min( (a<b)?a:b, c ); }
 template<class T> inline T ax_max ( T a, T b )						{ return (a>b)?a:b; }
-template<class T> inline T ax_max ( T a, T b, T c )					{ return ax_max( (a>b)?a:b, c ); }
 
 template<class T> inline void ax_min_it		( T& a, const T& b )	{ if( b<a ) a=b; }
 template<class T> inline void ax_max_it		( T& a, const T& b )	{ if( b>a ) a=b; }

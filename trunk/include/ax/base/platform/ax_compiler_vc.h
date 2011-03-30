@@ -8,10 +8,6 @@
 
 #define	_CRT_SECURE_NO_WARNINGS	 1
 
-#include <winsock2.h> //winsock2 must include before windows.h to avoid winsock1 define
-#include <windows.h>
-#include <WTypes.h> // we need this for SIZE_T
-
 #define	axCOMPILER_VC	1
 #define axEXPORT		_declspec (dllexport)
 #define	axFUNC_NAME		__FUNCTION__

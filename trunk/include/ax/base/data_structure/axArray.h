@@ -7,7 +7,7 @@
 //! \addtogroup data_algorithm
 //@{
 
-template<class T, axSize LOCAL_BUF_SIZE = 0 >
+template<class T, size_t LOCAL_BUF_SIZE = 0 >
 class axArray : public axIArray<T> {
 	typedef axIArray<T>	B;
 public:
@@ -25,7 +25,7 @@ protected:
 
 // -----------
 
-template<class T, axSize LOCAL_BUF_SIZE>
+template<class T, size_t LOCAL_BUF_SIZE>
 axArray< T, LOCAL_BUF_SIZE >::axArray() {
 	chunkSize_ = 0;
 	if( LOCAL_BUF_SIZE ) {
@@ -35,12 +35,12 @@ axArray< T, LOCAL_BUF_SIZE >::axArray() {
 	}
 }
 
-template<class T, axSize LOCAL_BUF_SIZE>
+template<class T, size_t LOCAL_BUF_SIZE>
 void axArray< T, LOCAL_BUF_SIZE >::setChunkSize( axSize n ) {
 	chunkSize_ = n;
 }
 
-template<class T, axSize LOCAL_BUF_SIZE>
+template<class T, size_t LOCAL_BUF_SIZE>
 axStatus	axArray< T, LOCAL_BUF_SIZE >::on_malloc( axSize req_size, T* &out_ptr, axSize &out_size ) {
 	out_size = 0;
 	if( req_size <= LOCAL_BUF_SIZE ) {
@@ -62,14 +62,14 @@ axStatus	axArray< T, LOCAL_BUF_SIZE >::on_malloc( axSize req_size, T* &out_ptr, 
 	return 0;
 }
 
-template<class T, axSize LOCAL_BUF_SIZE>
+template<class T, size_t LOCAL_BUF_SIZE>
 void axArray< T, LOCAL_BUF_SIZE >::on_free( T* p ) {
 	if( (void*)p != local_ ) {
 		ax_free( p );
 	}
 }
 
-template<class T, axSize LOCAL_BUF_SIZE>
+template<class T, size_t LOCAL_BUF_SIZE>
 axArray< T, LOCAL_BUF_SIZE >::~axArray() {
 	B::free(); // must call free here, becoz ~axArray() cannot call virtual function to free memory
 }

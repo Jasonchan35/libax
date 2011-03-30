@@ -6,7 +6,7 @@
 //! \addtogroup string
 //@{
 
-template< axSize LOCAL_BUF_SIZE >
+template< size_t LOCAL_BUF_SIZE >
 class axStringA_ : public axIString<char> {
 	typedef	axIString<char>	B;
 public:
@@ -15,7 +15,7 @@ private:
 	axArray<char, LOCAL_BUF_SIZE>	buf_;
 };
 
-template< axSize LOCAL_BUF_SIZE >
+template< size_t LOCAL_BUF_SIZE >
 class axStringW_ : public axIString<wchar_t> {
 	typedef	axIString<wchar_t>	B;
 public:

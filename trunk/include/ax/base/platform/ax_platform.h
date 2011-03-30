@@ -56,6 +56,7 @@
 #include <limits.h>
 #include <assert.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 
 //C++ define
 #include <cstddef>

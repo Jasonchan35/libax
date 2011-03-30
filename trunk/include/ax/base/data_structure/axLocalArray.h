@@ -7,7 +7,7 @@
 //! \addtogroup data_algorithm
 //@{
 
-template<class T, axSize LOCAL_BUF_SIZE>
+template<class T, size_t LOCAL_BUF_SIZE>
 class axLocalArray : public axIArray<T> {
 	typedef	axIArray<T>	B;
 public:
@@ -23,13 +23,13 @@ private:
 
 
 //------------
-template<class T, axSize LOCAL_BUF_SIZE>
+template<class T, size_t LOCAL_BUF_SIZE>
 axLocalArray<T,LOCAL_BUF_SIZE> :: axLocalArray() {
 	B::_init( (T*)local_, 0, LOCAL_BUF_SIZE );
 }
 
 
-template<class T, axSize LOCAL_BUF_SIZE>
+template<class T, size_t LOCAL_BUF_SIZE>
 axLocalArray<T,LOCAL_BUF_SIZE> :: ~axLocalArray() {
 	B::free();
 }

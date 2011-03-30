@@ -7,15 +7,6 @@
 //! \addtogroup common
 //@{
 
-#ifdef axCOMPILER_VC
-	typedef	SIZE_T		axSize;
-#else
-	typedef size_t		axSize;
-#endif
-
-typedef	uint64_t		axFileSize;
-
-
 template< class T >	
 class axTypeOf {
 public:
@@ -34,15 +25,12 @@ template<> inline	axStatus	ax_takeOwnership( wchar_t &a, wchar_t &b )	{ a=b; ret
 
 template<class T>	inline bool  ax_lessThan0( T value );
 
-template<>	inline bool  ax_lessThan0( axSize  value )	{ return false; }
-
-
 //primitive
 #define	axTYPE_LIST(T)	\
 	template<> inline	bool		axTypeOf<T>::isPrimitive()			{ return true; } \
 	template<> inline	bool		axTypeOf<T>::isUnsigned()			{ return false; } \
-	template<> inline	axStatus	ax_takeOwnership<T>( T &a, T &b )	{ a=b; return 0; } \
-	template<> inline	bool		ax_lessThan0( T value )				{ return value < 0; } \
+	inline	axStatus	ax_takeOwnership( T &a, T &b )		{ a=b; return 0; } \
+	inline	bool		ax_lessThan0( T value )				{ return value < 0; } \
 //-------
 	#include "axTYPE_LIST_int.h"
 #undef		axTYPE_LIST
@@ -51,8 +39,8 @@ template<>	inline bool  ax_lessThan0( axSize  value )	{ return false; }
 #define	axTYPE_LIST(T)	\
 	template<> inline	bool		axTypeOf<T>::isPrimitive()			{ return true; } \
 	template<> inline	bool		axTypeOf<T>::isUnsigned()			{ return true; } \
-	template<> inline	axStatus	ax_takeOwnership<T>( T &a, T &b )	{ a=b; return 0; } \
-	template<> inline	bool		ax_lessThan0( T value )				{ return false; } \
+	inline	axStatus	ax_takeOwnership( T &a, T &b )	{ a=b; return 0; } \
+	inline	bool		ax_lessThan0( T value )				{ return false; } \
 //-------
 	#include "axTYPE_LIST_uint.h"
 #undef		axTYPE_LIST

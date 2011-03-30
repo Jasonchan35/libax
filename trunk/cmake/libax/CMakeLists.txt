@@ -60,7 +60,7 @@ FOREACH( f IN LISTS cpp_files )
 	ENDIF()
 ENDFOREACH()
 
-ADD_LIBRARY( ax ${cpp_files} )
+ADD_LIBRARY( ax ${h_files} ${cpp_files} )
 SET_TARGET_PROPERTIES( ax PROPERTIES 
-	ARCHIVE_OUTPUT_DIRECTORY ../../lib 
+	ARCHIVE_OUTPUT_DIRECTORY ../../../lib 
 )
