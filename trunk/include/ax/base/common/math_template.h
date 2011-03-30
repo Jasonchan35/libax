@@ -2,6 +2,8 @@
 #ifndef __ax_math_template_h__
 #define __ax_math_template_h__
 
+#include "TypeOf.h"
+
 namespace ax {
 //! \addtogroup common
 //@{
@@ -9,8 +11,18 @@ namespace ax {
 
 template<class T> inline void swap( T &a, T &b )			{ T tmp; takeOwnership(tmp,a); takeOwnership(a,b); takeOwnership(b,tmp); }
 
-template<class T> inline T sign( T a )						{ if( a == 0 ) return 0; return (a<0) ? -1: 1; }
-template<class T> inline T abs ( T a )						{ return (a>0)?a:-a; }
+template<class T> inline T sign( T a )						{ if( a == 0 ) return 0; return _lessThan0(a) ? -1: 1; }
+
+//-- abs for unsigned
+#define	axTYPE_LIST(T)\
+	inline T	abs( T  a ) { return a; }
+//-----
+	#include "TYPE_LIST_uint.h"
+	axTYPE_LIST( Size )
+#undef axTYPE_LIST
+
+template<class T> inline T abs ( T a );
+
 
 template<class T> inline T min ( T a, T b )					{ return (a<b)?a:b; }
 template<class T> inline T min ( T a, T b, T c )			{ return min( (a<b)?a:b, c ); }
@@ -25,7 +37,14 @@ template<class T> inline T	  clamp		( T  x, T a, T b )		{ if( x < a ) return a; 
 template<class T> inline void clampIt	( T &x, T a, T b )		{ if( x < a ) x=a; else if( x > b ) x=b; }
 
 //! align multiple
-template<class T> inline T alignMultiple( T n, T a ) {  T r = n % a;	if( n > 0 ) { return n +abs(a) -r; }else{ return n -abs(a) -r; } }
+template<class T> inline T alignMultiple( T n, T a ) {  
+	T r = n % a;	
+	if( n > 0 ) { 
+		return n +abs(a) -r; 
+	}else{ 
+		return n -abs(a) -r; 
+	} 
+}
 
 inline	int  alignPowOf2( int v ) { v--; v |= v >> 1; v |= v >> 2; v |= v >> 4;	v |= v >> 8; v |= v >> 16; v++;	return v; }
 

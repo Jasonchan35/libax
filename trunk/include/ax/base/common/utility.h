@@ -9,6 +9,7 @@ namespace ax {
 //! \addtogroup common
 //@{
 
+#define	axPRINT_FUNC_NAME	printf("FUNC [%s]\n", axFUNC_NAME );
 
 inline void toggle_bool( bool &b ) { b = !b; }
 
@@ -86,6 +87,9 @@ void dumpHexRaw( const void* buf, Size len, FILE* s = stdout ) {
 	fprintf(s, "\n\n");
 }
 
+
+inline	void*	axMalloc( size_t n )	{ return ::malloc(n); }
+inline	void	axFree	( void* p  )	{ return ::free(p); }
 
 } //namespace ax
 

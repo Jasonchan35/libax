@@ -4,11 +4,13 @@
 
 //! \addtogroup platform
 //@{
-
-
 #ifdef	_MSC_VER
 
 #define	_CRT_SECURE_NO_WARNINGS	 1
+
+#include <winsock2.h> //winsock2 must include before windows.h to avoid winsock1 define
+#include <windows.h>
+#include <WTypes.h> // we need this for SIZE_T
 
 #define	axCOMPILER_VC	1
 #define axEXPORT		_declspec (dllexport)
@@ -53,8 +55,6 @@
 	#define axOS_WINCE     1
 #endif
 
-namespace ax {
-
 typedef	signed   char		int8_t;
 typedef	signed   short		int16_t;
 typedef	signed   int		int32_t;
@@ -64,8 +64,6 @@ typedef	unsigned char		uint8_t;
 typedef	unsigned short		uint16_t;
 typedef	unsigned int		uint32_t;
 typedef	unsigned __int64	uint64_t;
-
-} //namespace ax
 
 #endif //_MSC_VER
 

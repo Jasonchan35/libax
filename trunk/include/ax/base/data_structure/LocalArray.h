@@ -14,7 +14,7 @@ class LocalArray : public xArray<T> {
 	typedef	xArray<T>	B;
 public:
 	LocalArray();
-	~LocalArray();
+	virtual	~LocalArray();
 
 private:
 	virtual	Status	on_malloc	( Size req_size, T* &out_ptr, Size &out_size ) { return Status::LocalArray_limit; }

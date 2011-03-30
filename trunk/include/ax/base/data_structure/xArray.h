@@ -18,14 +18,13 @@ public:
 	xArray();
 	virtual	~xArray();
 	
-
 			bool	inBound		( Size i ) const			{ return ( i>=0 && i<size_ ); }
 
 			Status	resize		( Size new_size, bool keep_data = true );
-			Status	incSize		( Size n, bool keep_data = true )			{ return resize( size()+n, keep_data ); }
-			Status	decSize		( Size n, bool keep_data = true )			{ return resize( size()-n, keep_data ); }
-
 			Status	reserve		( Size new_size, bool keep_data = true );
+
+			Status	incSize		( Size n,		 bool keep_data = true )	{ return resize( size()+n, keep_data ); }
+			Status	decSize		( Size n,		 bool keep_data = true )	{ return resize( size()-n, keep_data ); }
 
 			T&		element		( Size i )					{ axRELEASE_ASSERT( xArray :: inBound(i) ); return p_[i]; }
 	const	T&		element		( Size i ) const			{ axRELEASE_ASSERT( xArray :: inBound(i) ); return p_[i]; }
@@ -33,23 +32,25 @@ public:
 			T&		elementNoCheck ( Size i )				{ return p_[i]; }
 	const	T&		elementNoCheck ( Size i ) const			{ return p_[i]; }
 
-			T& operator[] ( Size i )				{ return element(i); }
-	const	T& operator[] ( Size i ) const			{ return element(i); }
+			T&		operator[]	( Size i )					{ return element(i); }
+	const	T&		operator[]	( Size i ) const			{ return element(i); }
 	
 			T&		last		( Size i = 0 )				{ return element( size_-i-1 ); }
 	const	T&		last		( Size i = 0 ) const		{ return element( size_-i-1 ); }
 
 			Status	append		( const T& value )			{ Status st = incSize(1); if( !st ) return st; last() = value; return 0; }
+			Status	append		( const xArray<T> &src )	{ return append_n( src.ptr(), src.size() ); }
+			Status	append_n	( const T* src, Size count );
 
 			T*		ptr()									{ return p_; }
 	const	T*		ptr() const								{ return p_; }
 			Size	size		() const					{ return size_; }
 			Size	capacity	() const					{ return capacity_; }
-			void	clear		();
-			void	free		();
 
-	//! free unused memory
-	Status	shrink		();
+			void	clear		();
+			
+			void	free		();	//!< free all memory		
+			Status	shrink		();	//!< free unused memory <TODO>
 
 protected:
 	void	_init( T* p, Size size, Size capacity );
@@ -69,6 +70,12 @@ void dumpHex( const xArray<T> &buf, FILE* f = stdout ) {
 }
 
 // ----------
+
+template<class T> inline bool	_array_equal			( const T* dst, const T* src, Size n );
+template<class T> inline Status	_array_copy				( const T* dst, const T* src, Size n );
+template<class T> inline Status	_array_takeOwnership	( const T* dst, const T* src, Size n );
+
+
 template< class T >
 xArray<T>::xArray() {
 	size_ = 0;
@@ -96,7 +103,11 @@ void xArray<T>::clear() {
 template< class T >
 void xArray<T>::free() {
 	clear();
-	if( p_ ) { on_free( p_ ); p_ = NULL; }
+	if( p_ ) { 
+		on_free( p_ ); 
+		p_ = NULL; 
+		capacity_ = 0; 
+	}
 }
 
 template< class T >
@@ -158,6 +169,68 @@ Status	xArray<T>::reserve( Size new_size, bool keep_data ) {
 	}
 
 	p_ = np;
+	return 0;
+}
+
+template< class T >
+Status	xArray<T>::append_n	( const T* src, Size count ) {
+	Status	st;
+	st = incSize( count );						if( !st ) return st;
+	st = array_copy( p_ + size_, src, count );	if( !st ) return st;
+	return 0;
+}
+
+
+
+//==========
+template<class T> inline
+bool _array_equal( const T* dst, const T* src, Size n ) {
+	if( TypeOf<T>::isPrimitive() ) {
+		return ( 0 == memcmp( dst, src, n * sizeof(T) ) );
+	}else{
+		const T* end = src + n;
+		for( ; src < end; src++, dst++ ) {
+			if( *dst != *src ) return false;
+		}
+	}
+	return true;
+}
+
+template<class T> inline 
+Status _array_copy( T* dst, const T* src, Size n ) {
+	if( dst+n > src && dst < src+n ) {
+		assert( false );
+		return Status::cannot_be_itself;
+	}
+
+	Status st;
+	if( TypeOf<T>::isPrimitive() ) {
+		memcpy( dst, src, n * sizeof(T) );
+	}else{
+		const T* end = src + n;
+		for( ; src < end; src++, dst++ ) {
+			st = copy( *dst, *src );	if( !st ) return st;
+		}
+	}
+	return 0;
+}
+
+template<class T> inline 
+Status _array_take( T* dst, T* src, Size n ) {
+	if( dst+n > src && dst < src+n ) {
+		assert( false );
+		return Status::cannot_be_itself;
+	}
+
+	Status st;
+	if( TypeOf<T>::isPrimitive() ) {
+		memcpy( dst, src, n * sizeof(T) );
+	}else{
+		T* end = src + n;
+		for( ; src < end; src++, dst++ ) {
+			st = take( *dst, *src );	if( !st ) return st;
+		}
+	}
 	return 0;
 }
 

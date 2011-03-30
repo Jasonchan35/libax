@@ -8,12 +8,13 @@ namespace ax {
 //! \addtogroup common
 //@{
 
-#ifdef axCPU_LP32
-    typedef int32_t		Size;
-#elif  axCPU_LP64
-    typedef int64_t		Size;
+#ifdef axCOMPILER_VC
+	typedef	SIZE_T		Size;
+#else
+	typedef size_t		Size;
 #endif
 
+typedef	uint64_t		FileSize;
 
 
 template< class T >	
@@ -34,10 +35,7 @@ template<> inline	Status	takeOwnership( wchar_t &a, wchar_t &b )	{ a=b; return 0
 
 template<class T>	inline bool  _lessThan0( T value );
 
-#ifdef axOS_MacOSX
-	template<>	inline bool  _lessThan0( size_t  value )	{ return false; }
-	template<>	inline bool  _lessThan0( ssize_t value )	{ return value < 0; }
-#endif
+template<>	inline bool  _lessThan0( Size  value )	{ return false; }
 
 
 //primitive

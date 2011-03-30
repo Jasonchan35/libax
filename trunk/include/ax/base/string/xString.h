@@ -13,7 +13,7 @@ template< class T >
 class xString : public NonCopyable {
 public:
 	typedef	T	Type;
-	enum { defaultChunkSize = 64 };
+	enum { defaultChunkSize = 0 };
 
 	Status		set			( const T* sz );
 	Status		set			( const T* sz, Size len );

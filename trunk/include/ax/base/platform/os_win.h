@@ -10,6 +10,8 @@
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #define NOMINMAX // no min and max macro in windows.h
+
+#include <winsock2.h> //winsock2 must include before windows.h to avoid winsock1 define
 #include <windows.h>
 
 #undef	min

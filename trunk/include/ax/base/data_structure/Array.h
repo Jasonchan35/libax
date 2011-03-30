@@ -55,7 +55,8 @@ Status	Array< T, LOCAL_BUF_SIZE >::on_malloc( Size req_size, T* &out_ptr, Size &
 	}else{
 		n = alignMultiple( req_size, chunkSize_ );
 	}
-	out_ptr = (T*) ::malloc( sizeof(T) * n );
+
+	out_ptr = (T*) axMalloc( sizeof(T) * n );
 	if( ! out_ptr ) return Status::Array_malloc_failure;
 
 	out_size = n;
@@ -65,7 +66,7 @@ Status	Array< T, LOCAL_BUF_SIZE >::on_malloc( Size req_size, T* &out_ptr, Size &
 template<class T, Size LOCAL_BUF_SIZE>
 void Array< T, LOCAL_BUF_SIZE >::on_free( T* p ) {
 	if( (void*)p != local_ ) {
-		::free( p );
+		axFree( p );
 	}
 }
 

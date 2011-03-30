@@ -2,7 +2,7 @@
 #ifndef	__ax_StringFormat_Imp_h__
 #define __ax_StringFormat_Imp_h__
 
-#include "axString.h"
+#include "String_.h"
 
 namespace ax {
 //! \addtogroup string

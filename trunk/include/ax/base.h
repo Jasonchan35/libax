@@ -9,7 +9,8 @@
 #include "base/data_structure/Array.h"
 #include "base/data_structure/LocalArray.h"
 #include "base/data_structure/ExternalArray.h"
-#include "base/string/axString.h"
-
+#include "base/string/String_.h"
+#include "base/string/ExternalString.h"
+#include "base/string/LocalString.h"
 
 #endif //__ax_h__

@@ -13,6 +13,7 @@ endif(MSVC)
 
 
 if (CMAKE_COMPILER_IS_GNUCC)
-	set( CMAKE_C_FLAGS   ${CMAKE_C_FLAGS}   -Wall -fPIC)
-	set( CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -Wall -fPIC)
+	set( MY_C_FLAGS -Wall -fPIC -Wdouble-promotion -Wmissing-include-dirs )
+	set( CMAKE_C_FLAGS   ${CMAKE_C_FLAGS}   ${MY_C_FLAGS} )
+	set( CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} ${MY_C_FLAGS} )
 endif()
