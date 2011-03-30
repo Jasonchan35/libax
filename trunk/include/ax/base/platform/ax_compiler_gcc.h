@@ -19,7 +19,7 @@
 	#define axCPU_x86         1
 #elif defined(__POWERPC__)
 	#define axCPU_PowerPC     1
-#elif defined(__arm__) 
+#elif defined(__arm__)
 	#define axCPU_ARM     1
 #endif
 

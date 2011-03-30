@@ -38,7 +38,7 @@
 #endif
 
 #if axOS_FreeBSD || axOS_Linux || axOS_Solaris || axOS_MacOSX || axOS_iOS
-	#define axOS_Unix         1
+	#define axOS_UNIX         1
     #include "ax_os_unix.h"
 #endif
 

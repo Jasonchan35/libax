@@ -8,7 +8,7 @@
 //@{
 
 //! Dynamic Shared Library
-/*! 
+/*!
 	.so file on UNIX
 	.dll file on Windows
 */
@@ -47,7 +47,7 @@ axStatus  axSOFile::getProc( FUNC &func, const char* proc_name ) {
     return 0;
 }
 
-typedef	axSOFile	DLLFile;
+typedef	axSOFile	axDLLFile;
 
 //@}
 

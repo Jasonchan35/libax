@@ -8,7 +8,7 @@ axSOFile::~axSOFile() {
     unload();
 }
 
-#ifdef axOS_WIN32
+#ifdef axOS_WIN
 
 void axSOFile::_os_ctor() {
     handle_ = NULL;
@@ -41,15 +41,15 @@ void axSOFile::unload() {
     }
 }
 
-#endif //axOS_WIN32
+#endif //axOS_WIN
 
 #ifdef axOS_UNIX
 
-void DSO::_os_ctor() {
+void axSOFile::_os_ctor() {
     handle_ = NULL;
 }
 
-axStatus	DSO::load( const char* filename ) {
+axStatus	axSOFile::load( const char* filename ) {
     unload();
     printf("load module [%s]\n", filename);
 
@@ -61,7 +61,7 @@ axStatus	DSO::load( const char* filename ) {
     return 0;
 }
 
-axStatus	DSO::_getProc( void* &proc, const char* proc_name ) {
+axStatus	axSOFile::_getProc( void* &proc, const char* proc_name ) {
     proc = NULL;
     if( ! handle_ ) return -1;
 
@@ -69,7 +69,7 @@ axStatus	DSO::_getProc( void* &proc, const char* proc_name ) {
     return 1;
 }
 
-void DSO::unload() {
+void axSOFile::unload() {
     if( handle_ ) {
         dlclose( handle_ );
         handle_ = NULL;

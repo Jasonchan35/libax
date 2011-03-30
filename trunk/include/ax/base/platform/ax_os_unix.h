@@ -6,7 +6,7 @@
 //@{
 
 
-#ifdef axOS_Unix
+#ifdef axOS_UNIX
 
 #include <stddef.h>
 #include <stdint.h>
@@ -29,10 +29,7 @@
 	#define	axASSERT(_Expression)	//nothing
 #endif
 
-
-
-
-#endif //__unix__
+#endif //axOS_UNIX
 
 //@}
 #endif //__ax_os_unix_h__
