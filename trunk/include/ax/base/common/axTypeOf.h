@@ -58,8 +58,8 @@ template<> inline	uint64_t	axTypeOf<uint64_t>::min()		{ return 0; }
 template<> inline	uint64_t	axTypeOf<uint64_t>::max()		{ return 0xffffffffffffffffULL; }
 
 
-template<> inline	int8_t		axTypeOf<int8_t>::min()		{ return (-0x7f-1); }
-template<> inline	int8_t		axTypeOf<int8_t>::max()		{ return 0x7f; }
+template<> inline	int8_t		axTypeOf<int8_t>::min()			{ return (-0x7f-1); }
+template<> inline	int8_t		axTypeOf<int8_t>::max()			{ return 0x7f; }
 
 template<> inline	int16_t		axTypeOf<int16_t>::min()		{ return (-0x7fff-1); }
 template<> inline	int16_t		axTypeOf<int16_t>::max()		{ return 0x7fff; }
@@ -71,8 +71,8 @@ template<> inline	int64_t		axTypeOf<int64_t>::min()		{ return (-0x7fffffffffffff
 template<> inline	int64_t		axTypeOf<int64_t>::max()		{ return 0x7fffffffffffffffLL; }
 
 
-template<class DST, class SRC>
-inline axStatus	ax_safe_assign( DST &dst, const SRC &src ) {
+template<class DST, class SRC> inline 
+axStatus	ax_safe_assign( DST &dst, const SRC &src ) {
 	DST tmp = (DST)src;
 	if( axTypeOf<DST>::isUnsigned() ) {
 		if( ! axTypeOf<SRC>::isUnsigned() ) {

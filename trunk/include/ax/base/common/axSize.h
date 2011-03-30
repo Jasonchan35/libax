@@ -36,5 +36,6 @@ inline bool		ax_lessThan0( axSize  value )		{ return false; }
 inline axSize	ax_min		( axSize a, axSize b )	{ return (a<b)?a:b; }
 inline axSize	ax_max		( axSize a, axSize b )	{ return (a>b)?a:b; }
 inline axSize	ax_abs		( axSize a )			{ return a; } //unsigned will always be positive
+inline	bool	axTypeOf<axSize>::isUnsigned()		{ return true; }
 
 #endif //__axSize_h__

@@ -8,14 +8,14 @@ axStatus	ax_base_test() {
 	return 0;
 }
 
-
+/*
 #include <ax/ax_core.h>
 
 axStatus	ax_core_test() {
 	axSOFile	so;
 	return 0;
 }
-
+*/
 int main() {
 	axSize	a = sizeof( axSize );
 

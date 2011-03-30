@@ -57,7 +57,7 @@ public:
 	axStatus		format_ArgList			( const wchar_t* fmt, const ArgList &list )			{ clear(); return formatAppend_ArgList( fmt, list ); }
 	axStatus		formatAppend_ArgList	( const wchar_t* fmt, const ArgList &list );
 
-	axStatus		toStringFormat( axStringFormat &f ) const { return StringFormat_out( f, c_str() ); }
+	axStatus		toStringFormat( axStringFormat &f ) const { return axStringFormat_out( f, c_str() ); }
 
 //------- Arg List -------
 	axStatus		format			( const wchar_t* fmt,	const Arg &a0 )																																			{ ArgList list;	list<<a0;										return format_ArgList( fmt, list ); }

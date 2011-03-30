@@ -11,10 +11,10 @@
 //! AutoPtr - auto 'delete' pointer
 //! no virtual function please
 template<class T>
-class AutoPtr : public axNonCopyable {
+class axAutoPtr : public axNonCopyable {
 public:
-	AutoPtr()						{ p_=NULL; }
-	~AutoPtr()						{ deleteIt(); }
+	axAutoPtr()						{ p_=NULL; }
+	~axAutoPtr()					{ deleteIt(); }
 
 	bool is_null	() const		{ return (p_ == NULL); }
 	bool not_null	() const		{ return (p_ != NULL); }
@@ -34,7 +34,7 @@ public:
 	operator T*()					{ return p_; }
 	operator const T*() const		{ return p_; }
 
-	axStatus	takeOwnership( AutoPtr<T> &o )	{ ref(o.ptr()); o.deleteIt(); return 0; }
+	axStatus	takeOwnership( axAutoPtr<T> &o )	{ ref(o.ptr()); o.deleteIt(); return 0; }
 
 	axStatus	newIt()					{ ref( new T ); return (p_)? 0 : axStatus::not_enough_memory; }
 	void	deleteIt()				{ if( p_ ) { delete p_; p_=NULL; } }

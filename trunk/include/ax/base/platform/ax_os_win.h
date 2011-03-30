@@ -19,7 +19,7 @@
 
 #ifdef	_DEBUG
 	#define axRELEASE_ASSERT(_Expression) \
-		{ if(!(_Expression) ) { _wassert(_CRT_WIDE(#_Expression), _CRT_WIDE(__FILE__), __LINE__); }
+		{ if(!(_Expression) ) { _wassert(_CRT_WIDE(#_Expression), _CRT_WIDE(__FILE__), __LINE__); } }
 	#define axASSERT(_Expression)	axRELEASE_ASSERT(_Expression)
 #else
 	#define	axASSERT		(_Expression) //nothing
