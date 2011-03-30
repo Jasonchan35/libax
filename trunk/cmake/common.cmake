@@ -1,4 +1,4 @@
- 
+
 if(MSVC)
 	foreach(flag_var CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
 		if(${flag_var} MATCHES "/MD")
@@ -14,19 +14,22 @@ if(MSVC)
 	else()
 		SET( axPLATFORM_NAME  win32 )
 	endif()
-	
+
 endif(MSVC)
 
 
 if (CMAKE_COMPILER_IS_GNUCC)
-	set( MY_C_FLAGS -Wall -fPIC -Wdouble-promotion -Wmissing-include-dirs )
-	set( CMAKE_C_FLAGS   ${CMAKE_C_FLAGS}   ${MY_C_FLAGS} )
-	set( CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} ${MY_C_FLAGS} )
+#	set( MY_C_FLAGS "-Wall -fPIC -Wdouble-promotion -Wmissing-include-dirs" )
+#	set( CMAKE_C_FLAGS   ${CMAKE_C_FLAGS}   ${MY_C_FLAGS} )
+#	set( CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} ${MY_C_FLAGS} )
+
+	SET( MY_DEFAULT_LIBS	dl pthread )
 endif()
 
-if( axPLATFORM_NAME ) 
+if( axPLATFORM_NAME )
 	add_definitions( -D${axPLATFORM_NAME} )
 	message( STATUS "axPLATFORM_NAME: ${axPLATFORM_NAME}" )
 else()
-	message( FATAL_ERROR  "Unknown axPLATFORM_NAME" )
+#	message( FATAL_ERROR  "Unknown axPLATFORM_NAME" )
 endif()
+
