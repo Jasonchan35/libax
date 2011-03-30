@@ -14,21 +14,6 @@
 
 #pragma warning( disable : 4200 ) //warning C4200: nonstandard extension used : zero-sized array in struct/union
 
-
-#pragma comment( lib, "Ws2_32.lib" )
-#pragma comment( lib, "User32.lib" )
-#pragma comment( lib, "gdi32.lib" )
-#pragma comment( lib, "shell32.lib" )
-#pragma comment( lib, "winmm.lib" )
-#pragma comment( lib, "comctl32.lib" )
-#pragma comment( lib, "opengl32.lib" )
-#pragma comment( lib, "glu32.lib" )
-#pragma comment( lib, "Ole32.lib" )
-#pragma comment( lib, "Oleaut32.lib" )
-#pragma comment( lib, "Comdlg32.lib" )
-#pragma comment( lib, "Rpcrt4.lib" )
-#pragma comment( lib, "Advapi32.lib" )
-
 //cpu
 #ifdef _M_X64
 	#define axCPU_x86_64      1
