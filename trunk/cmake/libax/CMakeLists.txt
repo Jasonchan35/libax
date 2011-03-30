@@ -1,3 +1,9 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+PROJECT(libax)
+MESSAGE( "======== ${PROJECT_NAME} ============" )
+
+INCLUDE( ../common.cmake )
+
 #-- svn ------
 FIND_PACKAGE(Subversion)
 #if(Subversion_FOUND)
@@ -7,15 +13,17 @@ FIND_PACKAGE(Subversion)
 
 #SET(CPACK_PACKAGE_VERSION_PATCH "${SUBVERSION_REVISION}")
 
-CONFIGURE_FILE( 
-	svn_revision.h.in  
-	${CMAKE_HOME_DIRECTORY}/../../include/ax/svn_revision.h
-)
+#CONFIGURE_FILE( 
+#	svn_revision.h.in  
+#	${CMAKE_HOME_DIRECTORY}/../../include/ax/svn_revision.h
+#)
 
 #----------
+
 SET( h_files_path   "../../include/ax" )
 SET( cpp_files_path "../../src" )
 INCLUDE_DIRECTORIES( ../../include )
+
 #-------
 FILE( GLOB_RECURSE  h_files   RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${h_files_path}/*.h" )
 FILE( GLOB_RECURSE  cpp_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${cpp_files_path}/*.cpp"  )
@@ -52,4 +60,7 @@ FOREACH( f IN LISTS cpp_files )
 	ENDIF()
 ENDFOREACH()
 
-ADD_LIBRARY( ax ${h_files} ${cpp_files} )
+ADD_LIBRARY( ax ${cpp_files} )
+SET_TARGET_PROPERTIES( ax PROPERTIES 
+	ARCHIVE_OUTPUT_DIRECTORY ../../lib 
+)

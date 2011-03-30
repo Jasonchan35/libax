@@ -1,28 +1,30 @@
-#include <ax/base.h>
+#include <ax/ax_base.h>
 
-namespace ax {
-
-Status	ax_base_test() {
-	Status	st;
+axStatus	ax_base_test() {
+	axStatus	st;
 	st = ax_print(L"ax_print test {?}\n", 123);
 	if( !st ) st;
 
 	return 0;
 }
 
-} //namespace ax
 
+#include <ax/ax_core.h>
+
+axStatus	ax_core_test() {
+	axSOFile	so;
+	return 0;
+}
 
 int main() {
+	axSize	a = sizeof( axSize );
 
-
-	ax::Status st;
-	st = ax::ax_base_test();
+	axStatus st;
+	st = ax_base_test();
 
 #if axOS_WIN
-//	getchar();
+	getchar();
 #endif
-
 	return st.code();
 }
 

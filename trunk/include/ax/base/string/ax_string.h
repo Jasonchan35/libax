@@ -1,17 +1,16 @@
 #pragma once
-#ifndef __ax_ax_string_h__
-#define __ax_ax_string_h__
+#ifndef __ax_string_h__
+#define __ax_string_h__
 
-#include "utf8.h"
+#include "ax_utf8.h"
 
-namespace ax {
 //! \addtogroup string
 //@{
 
 #ifdef axOS_WIN
-	inline int	 strncasecmp( const char* s1, const char* s2, Size n )			{ return _strnicmp(s1,s2,n); }
+	inline int	 strncasecmp( const char* s1, const char* s2, axSize n )			{ return _strnicmp(s1,s2,n); }
 	inline int	 strcasecmp ( const char* s1, const char* s2 )					{ return _stricmp(s1,s2); }
-	inline int	 wcsncasecmp( const wchar_t* s1, const wchar_t* s2, Size n )	{ return _wcsnicmp(s1,s2,n); }
+	inline int	 wcsncasecmp( const wchar_t* s1, const wchar_t* s2, axSize n )	{ return _wcsnicmp(s1,s2,n); }
 	inline int	 wcscasecmp ( const wchar_t* s1, const wchar_t* s2 )			{ return _wcsicmp(s1,s2); }
 #endif //axOS_WIN
 
@@ -21,17 +20,17 @@ inline size_t ax_strlen( const wchar_t* sz )	{ return wcslen(sz); }
 inline int ax_strcmp( const char*    a, const char* b )	{ return strcmp(a,b); }
 inline int ax_strcmp( const wchar_t* a, const wchar_t* b )	{ return wcscmp(a,b); }
 
-inline int ax_strncmp( const char*    a, const char* b, Size n )		{ return strncmp(a,b,n); }
-inline int ax_strncmp( const wchar_t* a, const wchar_t* b, Size n )		{ return wcsncmp(a,b,n); }
+inline int ax_strncmp( const char*    a, const char* b, axSize n )		{ return strncmp(a,b,n); }
+inline int ax_strncmp( const wchar_t* a, const wchar_t* b, axSize n )		{ return wcsncmp(a,b,n); }
 
 inline int ax_strcasecmp( const char*    a, const char* b )				{ return strcasecmp(a,b); }
 inline int ax_strcasecmp( const wchar_t* a, const wchar_t* b );
 
-inline int ax_strncasecmp( const char*    a, const char* b, Size n )	{ return strncasecmp(a,b,n); }
-inline int ax_strncasecmp( const wchar_t* a, const wchar_t* b, Size n );
+inline int ax_strncasecmp( const char*    a, const char* b, axSize n )	{ return strncasecmp(a,b,n); }
+inline int ax_strncasecmp( const wchar_t* a, const wchar_t* b, axSize n );
 
-inline char*	ax_strncpy( char*    dest, const char*    src, Size n ) { return strncpy(dest,src,n); }
-inline wchar_t* ax_strncpy( wchar_t* dest, const wchar_t* src, Size n ) { return wcsncpy(dest,src,n); }
+inline char*	ax_strncpy( char*    dest, const char*    src, axSize n ) { return strncpy(dest,src,n); }
+inline wchar_t* ax_strncpy( wchar_t* dest, const wchar_t* src, axSize n ) { return wcsncpy(dest,src,n); }
 
 inline const char*	  ax_strchr( const char*    sz, const char    ch )			{ if(!sz || !ch  ) return NULL; return strchr(sz,ch); }
 inline const wchar_t* ax_strchr( const wchar_t* sz, const wchar_t ch )			{ if(!sz || !ch  ) return NULL; return wcschr(sz,ch); }
@@ -154,8 +153,8 @@ int	 ax_strcasecmp ( const wchar_t* s1, const wchar_t* s2 ) {
 }
 
 inline
-int	 ax_strncasecmp( const wchar_t* s1, const wchar_t* s2, Size n ) {
-	Size i;
+int	 ax_strncasecmp( const wchar_t* s1, const wchar_t* s2, axSize n ) {
+	axSize i;
 	for( i=0; i<n; s1++, s2++, i++ ) {
 		if( towupper(*s1) != towupper(*s2) ) return (*s1 - *s2);
 		if( *s1 == 0 || *s2 == 0 ) break;
@@ -168,8 +167,8 @@ inline	const wchar_t*	ax_empty_c_str( const wchar_t* foo ) { return L""; }
 
 
 inline
-Size ax_strnlen( const char* s, Size len ) {
-	Size l=0;
+axSize ax_strnlen( const char* s, axSize len ) {
+	axSize l=0;
 	for(;;) {
 		if( len <= l ) return len;
 		if( *s == 0 ) return l;
@@ -180,8 +179,8 @@ Size ax_strnlen( const char* s, Size len ) {
 }
 
 inline
-Size ax_strnlen( const wchar_t* s, Size len ) {
-	Size l=0;
+axSize ax_strnlen( const wchar_t* s, axSize len ) {
+	axSize l=0;
 	for(;;) {
 		if( len <= l ) return len;
 		if( *s == 0 ) return l;
@@ -191,12 +190,9 @@ Size ax_strnlen( const wchar_t* s, Size len ) {
 	return len;
 }
 
-
-
 //@}
-} //namespace ax
 
-#include "str_to.h"
+#include "ax_str_to.h"
 
-#endif //__ax_ax_string_h__
+#endif //__ax_string_h__
 
