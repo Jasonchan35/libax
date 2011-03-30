@@ -25,8 +25,8 @@ public:
 			axStatus	incSize		( axSize n,		 bool keep_data = true )	{ return resize( size()+n, keep_data ); }
 			axStatus	decSize		( axSize n,		 bool keep_data = true )	{ return resize( size()-n, keep_data ); }
 
-			T&		element		( axSize i )					{ axRELEASE_ASSERT( axIArray :: inBound(i) ); return p_[i]; }
-	const	T&		element		( axSize i ) const			{ axRELEASE_ASSERT( axIArray :: inBound(i) ); return p_[i]; }
+			T&		element		( axSize i )				{ axRELEASE_ASSERT( inBound(i) ); return p_[i]; }
+	const	T&		element		( axSize i ) const			{ axRELEASE_ASSERT( inBound(i) ); return p_[i]; }
 
 			T&		elementNoCheck ( axSize i )				{ return p_[i]; }
 	const	T&		elementNoCheck ( axSize i ) const			{ return p_[i]; }

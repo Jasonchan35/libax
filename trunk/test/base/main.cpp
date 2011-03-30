@@ -3,7 +3,7 @@
 axStatus	ax_base_test() {
 	axStatus	st;
 	st = ax_print(L"ax_print test {?}\n", 123);
-	if( !st ) st;
+	if( !st ) return st;
 
 	return 0;
 }

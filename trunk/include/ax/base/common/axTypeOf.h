@@ -23,7 +23,7 @@ template<> inline	axStatus	ax_takeOwnership( char    &a, char    &b )	{ a=b; ret
 template<> inline	axStatus	ax_takeOwnership( wchar_t &a, wchar_t &b )	{ a=b; return 0; }
 
 
-template<class T>	inline bool  ax_lessThan0( T value );
+template<class T>	bool  ax_lessThan0( T value );
 
 //primitive
 #define	axTYPE_LIST(T)	\

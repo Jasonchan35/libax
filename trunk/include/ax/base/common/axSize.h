@@ -7,7 +7,14 @@ class axSize {
 public:
 	axSize( size_t	v=0 )				{ value_ = v; }
 
-	size_t	 native() const				{ return value_; }
+#if axCPU_LP32
+	uint32_t	native() const			{ return (uint32_t) value_; }
+#elif axCPU_LP64
+	uint64_t	native() const			{ return (uint64_t) value_; }
+#else
+	#error
+#endif	
+	
 	operator size_t() const				{ return value_; }
 
 	axSize	operator++(int)					{ axSize o=value_; value_++; return o; }
