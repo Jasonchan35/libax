@@ -61,6 +61,9 @@ typedef	unsigned short		uint16_t;
 typedef	unsigned int		uint32_t;
 typedef	unsigned __int64	uint64_t;
 
+#define axL(_String) L ## _String
+
+
 #endif //_MSC_VER
 
 //@}

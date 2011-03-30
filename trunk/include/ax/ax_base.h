@@ -13,4 +13,20 @@
 #include "base/string/axExternalString.h"
 #include "base/string/axLocalString.h"
 
+#if axCOMPILER_VC 
+	#pragma comment( lib, "Ws2_32.lib" )
+	#pragma comment( lib, "User32.lib" )
+	#pragma comment( lib, "gdi32.lib" )
+	#pragma comment( lib, "shell32.lib" )
+	#pragma comment( lib, "winmm.lib" )
+	#pragma comment( lib, "comctl32.lib" )
+	#pragma comment( lib, "opengl32.lib" )
+	#pragma comment( lib, "glu32.lib" )
+	#pragma comment( lib, "Ole32.lib" )
+	#pragma comment( lib, "Oleaut32.lib" )
+	#pragma comment( lib, "Comdlg32.lib" )
+	#pragma comment( lib, "Rpcrt4.lib" )
+	#pragma comment( lib, "Advapi32.lib" )
+#endif
+
 #endif //__ax_h__
