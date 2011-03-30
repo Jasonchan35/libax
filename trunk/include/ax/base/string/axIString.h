@@ -19,7 +19,7 @@ public:
 	template<class V>
 	axStatus		convert		( const V& value )						{ return format( L"{?}", value ); }
 
-	axSize		size		() const;
+	axSize			size		() const;
 
 	axStatus		resize		( axSize new_size, bool keep_data = true );
 	axStatus		reserve		( axSize new_size, bool keep_data = true );
@@ -44,7 +44,8 @@ public:
 
 	axStatus		clone			( const axIString &src );
 
-	axStatus		findChar		( T ch, axSize &pos, axSize start_from = 0 ) const;
+	axStatus		find			( T ch, axSize &pos, axSize start_from = 0     ) const;
+	axStatus		findFromEnd		( T ch, axSize &pos, axSize	start_from_end = 0 ) const;
 
 	axStatus		splitByIndex	( axSize index, axIString<T> &part1, axIString<T> &part2 ) const;
 	axStatus		splitByChar		( T ch, axIString<T> &part1, axIString<T> &part2 ) const;
@@ -135,7 +136,7 @@ template< class T > inline
 axStatus	axIString<T> :: resize( axSize new_size, bool keep_data ) { 
 	axStatus st;
 	st = buf_.resize( new_size+1, keep_data );		if( !st ) return st;
-	buf_[new_size] = 0;
+	buf_.last() = 0;
 	return 0;
 }
 
@@ -144,8 +145,8 @@ template< class T > inline
 axStatus	axIString<T> :: reserve( axSize new_size, bool keep_data ) { 
 	axStatus st;
 	st = buf_.reserve( new_size+1, keep_data );		if( !st ) return st;
-	if( buf_.size() ) {
-		buf_.last() = 0;
+	if( buf_.capacity() ) {
+		buf_.elementNoCheck( buf_.capacity()-1 ) = 0;
 	}
 	return 0;
 }
@@ -206,14 +207,29 @@ axStatus	axIString<T> :: substring( axSize start, axSize count, axIString<T> &ou
 }
 
 template< class T > inline
-axStatus	axIString<T> :: findChar ( T ch, axSize &out_index, axSize start_from ) const {
+axStatus	axIString<T> :: find ( T ch, axSize &out_index, axSize start_from ) const {
 	if( start_from >= size() ) return axStatus::invalid_param;
+	const T* s = &buf_[start_from];
+	const T* e = &buf_.last();
+	for( ; s<e; s++ ) {
+		if( *s == ch ) {
+			out_index = s-buf_.ptr();
+			return 0;
+		}
+	}
+	return axStatus::not_found;
+}
 
-	axSize n = size() - start_from;
-	const T* p = &buf_[start_from];
-	for( axSize i=0; *p && i<n; i++, p++ ) {
-		if( *p == ch ) {
-			out_index = i+start_from;
+template< class T > inline
+axStatus	axIString<T> :: findFromEnd	( T ch, axSize &out_index, axSize	start_from_end ) const {
+	if( start_from_end >= size() ) return axStatus::invalid_param;
+	axSize n = size() - start_from_end;
+
+	const T* s = &buf_.last( start_from_end );
+	const T* e = &buf_[0];
+	for( ; s>e; s-- ) {
+		if( *s == ch ) {
+			out_index = s-buf_.ptr();
 			return 0;
 		}
 	}
@@ -226,7 +242,7 @@ axStatus	axIString<T> :: splitByChar( T ch, axIString<T> &part1, axIString<T> &p
 	part1.clear();
 	part2.clear();
 	axSize idx = 0;
-	if( findChar( ch, idx ) ) {
+	if( find( ch, idx ) ) {
 		return splitByIndex( idx, part1, part2 );
 	}else{
 		st = part1.clone( *this );		if( !st ) return st;

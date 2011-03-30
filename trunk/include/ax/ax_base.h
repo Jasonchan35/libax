@@ -12,6 +12,7 @@
 #include "base/string/axString.h"
 #include "base/string/axExternalString.h"
 #include "base/string/axLocalString.h"
+#include "base/file_system/axFileSystem.h"
 
 #if axCOMPILER_VC 
 	#pragma comment( lib, "Ws2_32.lib" )
