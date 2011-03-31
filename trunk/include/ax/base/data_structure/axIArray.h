@@ -53,7 +53,7 @@ public:
 			T&			operator[]	( axSize i )				{ return element(i); }
 	const	T&			operator[]	( axSize i ) const			{ return element(i); }
 	
-			T&			last		( axSize i = 0 )				{ return element( size_-i-1 ); }
+			T&			last		( axSize i = 0 )			{ return element( size_-i-1 ); }
 	const	T&			last		( axSize i = 0 ) const		{ return element( size_-i-1 ); }
 
 			axStatus	append		( const T& value )			{ axStatus st = incSize(1); if( !st ) return st; last() = value; return 0; }

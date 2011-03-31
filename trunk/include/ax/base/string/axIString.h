@@ -52,6 +52,8 @@ public:
 
 	axStatus		substring		( axSize start, axSize count, axIString<T> &out ) const;
 
+	bool			equals			( const T* src ) const;
+
 	typedef axStringFormat_Arg			Arg;
 	typedef	axStringFormat_ArgList		ArgList;
 
@@ -262,6 +264,12 @@ axStatus	axIString<T> :: splitByIndex( axSize index, axIString<T> &part1, axIStr
 	st = substring( index, n-index-1, part2 );	if( !st ) return st;
 	return 0;
 }
+
+template< class T > inline
+bool axIString<T> :: equals	( const T* src ) const {
+	return ( 0 == ax_strcmp( c_str(), src ) );
+}
+
 
 //@}
 

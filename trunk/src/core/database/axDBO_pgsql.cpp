@@ -9,7 +9,7 @@ axDBO_pgsql::~axDBO_pgsql() {
 	close();
 }
 
-axStatus axDBO_pgsql::connect( const wchar_t *host, const wchar_t *dbname, const wchar_t *user, const wchar_t *password ){
+axStatus axDBO_pgsql::connect( const wchar_t* host, const wchar_t* dbname, const wchar_t* user, const wchar_t* password ){
 	axStringA_<1024>	dsn;
 	dsn.format(L"host={?} dbname={?} user={?} password={?}", host, dbname, user, password );
 
@@ -24,5 +24,11 @@ axStatus axDBO_pgsql::connect( const wchar_t *host, const wchar_t *dbname, const
 void axDBO_pgsql::close() {
 	if( conn_ ) {
 		PQfinish( (PGconn*)conn_ ); 
+		conn_ = NULL;
 	}
+}
+
+axStatus axDBO_pgsql::execSQL	( const wchar_t* sql ) {
+	if( ! conn_ ) return axStatus::not_initialized;
+	return 0;
 }

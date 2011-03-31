@@ -44,9 +44,9 @@ public:
 	axSize	operator--()					{ value_--; return *this; }
 
 	void	operator+=( axSize v )			{ value_+=v; }
-	void	operator-=( axSize v )			{ value_+=v; }
-	void	operator*=( axSize v )			{ value_+=v; }
-	void	operator/=( axSize v )			{ value_+=v; }
+	void	operator-=( axSize v )			{ value_-=v; }
+	void	operator*=( axSize v )			{ value_*=v; }
+	void	operator/=( axSize v )			{ value_/=v; }
 
 private:
 	size_t	value_;

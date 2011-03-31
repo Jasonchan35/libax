@@ -14,12 +14,12 @@ template< class T >
 class axExternalArray : public axIArray<T> {
 	typedef	axIArray<T>	B;
 public:
-	axExternalArray();
+	axExternalArray() {}
 	axExternalArray( T* buf, axSize buf_len ) { setExternal( buf, buf_len); }
 
 	void	setExternal( T* buf, axSize buf_len );
 private:
-	virtual	axStatus	on_malloc	( axSize req_size, T* &out_ptr, axSize &out_size ) { return axStatus::ExternalArray_limit; }
+	virtual	axStatus	on_malloc	( axSize req_size, T* &out_ptr, axSize &out_size ) { return axStatus::not_enough_memory; }
 	virtual void		on_free		(  T* p  ) {}
 };
 

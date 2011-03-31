@@ -11,6 +11,7 @@ public:
 	virtual	axStatus	connect	( const wchar_t* host, const wchar_t* dbname, 
 								  const wchar_t* user, const wchar_t* password );
 	virtual	void		close	();
+	virtual axStatus	execSQL	( const wchar_t* sql );
 
 private:
     void* conn_;
