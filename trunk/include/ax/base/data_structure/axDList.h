@@ -5,7 +5,7 @@
 #include "../common/axStatus.h"
 #include "../common/axNonCopyable.h"
 
-//! \addtogroup data_algorithm
+//! \ingroup base_data_structure
 //@{
 template<class T> class axDList;
 

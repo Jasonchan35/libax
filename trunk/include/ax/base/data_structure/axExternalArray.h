@@ -4,26 +4,29 @@
 
 #include "axIArray.h"
 
-//! \addtogroup data_algorithm
+//! \ingroup base_data_structure
 //@{
 
+//! pointer to an external buffer as storage for Array
+/*!
+*/
 template< class T >
-class ExternalArray : public axIArray<T> {
+class axExternalArray : public axIArray<T> {
 	typedef	axIArray<T>	B;
 public:
-	ExternalArray();
-	ExternalArray( T* buf, axSize buf_len ) { setExternal( buf, buf_len); }
+	axExternalArray();
+	axExternalArray( T* buf, axSize buf_len ) { setExternal( buf, buf_len); }
 
 	void	setExternal( T* buf, axSize buf_len );
 private:
 	virtual	axStatus	on_malloc	( axSize req_size, T* &out_ptr, axSize &out_size ) { return axStatus::ExternalArray_limit; }
-	virtual void	on_free		(  T* p  ) {}
+	virtual void		on_free		(  T* p  ) {}
 };
 
 
 //-----------
 template< class T >
-void ExternalArray<T> :: setExternal( T* buf, axSize buf_len ) {
+void axExternalArray<T> :: setExternal( T* buf, axSize buf_len ) {
 	B::_init( buf, buf_len, buf_len );
 }
 

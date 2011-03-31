@@ -16,7 +16,3 @@ axStatus_enum( non_safe_assign )
 axStatus_enum( cannot_be_itself )
 axStatus_enum( will_cause_recursion )
 axStatus_enum( timed_out )
-axStatus_enum( Array_malloc_failure )
-axStatus_enum( LocalArray_limit )
-axStatus_enum( ExternalArray_limit )
-

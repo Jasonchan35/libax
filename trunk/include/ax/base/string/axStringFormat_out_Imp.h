@@ -4,7 +4,7 @@
 
 #include "axStringFormat_Imp.h"
 
-//! \addtogroup string
+//! \ingroup base_string
 //@{
 
 template< class T> inline

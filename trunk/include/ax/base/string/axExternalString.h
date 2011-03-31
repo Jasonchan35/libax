@@ -3,6 +3,9 @@
 
 #include "axIString.h"
 
+//! \ingroup base_string
+//@{
+
 
 template< class T >
 class axExternalString_ : public axIString<T> {
@@ -11,11 +14,12 @@ public:
 	axExternalString_ ( T* sz = NULL )	: axIString<T>(buf_) { if( sz ) setExternal( sz ); } 
 	void setExternal( T* sz )			{ buf_.setExternal( sz, ax_strlen(sz) ); }
 private:
-	ExternalArray<T>	buf_;
+	axExternalArray<T>	buf_;
 };
 
-typedef	axExternalString_<char>		ExternalStringA;
-typedef	axExternalString_<wchar_t>	ExternalStringW;
+typedef	axExternalString_<char>		axExternalStringA;
+typedef	axExternalString_<wchar_t>	axExternalStringW;
 
+//@}
 
 #endif //__axExternalString_h__

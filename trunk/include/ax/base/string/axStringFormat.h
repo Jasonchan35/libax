@@ -5,7 +5,7 @@
 #include "../data_structure/axLocalArray.h"
 #include "ax_string.h"
 
-//! \addtogroup string
+//! \ingroup base_string
 //@{
 
 

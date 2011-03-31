@@ -2,7 +2,7 @@
 #ifndef __ax_platform_h__
 #define __ax_platform_h__
 
-//! \addtogroup platform
+//! \ingroup base_platform
 //@{
 
 #ifdef __GNUC__

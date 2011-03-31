@@ -4,7 +4,7 @@
 
 #include "../common/axStatus.h"
 
-//! \addtogroup string
+//! \ingroup base_string
 //@{
 
 //==================  str_to char ============================

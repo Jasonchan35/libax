@@ -4,6 +4,9 @@
 
 #include "../string/axIString.h"
 
+//! \ingroup data_file_system
+//@{
+
 class axFileSystem : public axNonCopyable {
 public:
 
@@ -66,6 +69,8 @@ axStatus	axFileSystem::getExecuteFileName( axIStringW	&out ) {
 }
 
 #endif //axOS_WIN
+
+//@}
 
 
 #endif //__axFileSystem_h__

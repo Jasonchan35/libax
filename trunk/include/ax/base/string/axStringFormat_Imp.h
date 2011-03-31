@@ -4,7 +4,7 @@
 
 #include "axString.h"
 
-//! \addtogroup string
+//! \ingroup base_string
 //@{
 
 class	axStringFormat : public axNonCopyable {
@@ -175,11 +175,24 @@ axStatus	axIString<wchar_t> :: formatAppend_ArgList( const wchar_t* fmt, const A
 
 template<> inline
 axStatus	axIString<char> :: formatAppend_ArgList( const wchar_t* fmt, const ArgList &list ) {
+	axStatus st;
 	axStringW_<1024>	w;
 	w.format_ArgList( fmt, list );
 	//convert back to UTF
+	axSize	n;
+	st = utf8_count_in_wchar( n, w );		if( !st ) return st;
+	st = resize( n, false );				if( !st ) return st;
+	axSize len = n;
 
-	axRELEASE_ASSERT( false );
+	char* p = buf_.ptr();
+	const wchar_t* wp = w;
+	int ret;
+	for( axSize i=0; i<n; i++ ) {
+		ret = wchar_to_utf8( p, len, *wp );
+		p   += ret;
+		len -= ret;
+		wp++;
+	}
 	return 0;
 }
 

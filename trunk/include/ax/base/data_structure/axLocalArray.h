@@ -4,9 +4,11 @@
 
 #include "axIArray.h"
 
-//! \addtogroup data_algorithm
+//! \ingroup base_data_structure
 //@{
-
+//! using local buffer as storage for Array
+/*!
+*/
 template<class T, size_t LOCAL_BUF_SIZE>
 class axLocalArray : public axIArray<T> {
 	typedef	axIArray<T>	B;
@@ -15,8 +17,8 @@ public:
 	virtual	~axLocalArray();
 
 private:
-	virtual	axStatus	on_malloc	( axSize req_size, T* &out_ptr, axSize &out_size ) { return axStatus::LocalArray_limit; }
-	virtual void	on_free		(  T* p  ) {}
+	virtual	axStatus	on_malloc	( axSize req_size, T* &out_ptr, axSize &out_size ) { return axStatus::not_enough_memory; }
+	virtual void		on_free		(  T* p  ) {}
 
 	char	local_[ LOCAL_BUF_SIZE * sizeof(T) ];
 };

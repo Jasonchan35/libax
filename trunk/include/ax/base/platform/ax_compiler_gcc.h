@@ -2,7 +2,7 @@
 #ifndef __ax_compiler_gcc_h__
 #define __ax_compiler_gcc_h__
 
-//! \addtogroup platform
+//! \ingroup base_platform
 //@{
 
 

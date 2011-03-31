@@ -4,7 +4,7 @@
 
 #include "axStringFormat.h"
 
-//! \addtogroup string
+//! \ingroup base_string
 //@{
 
 template< class T >
@@ -33,7 +33,7 @@ public:
 	const T*	c_str		() const;
 	operator const T*		() const	{ return c_str(); }
 
-	T			charAt		( axSize idx   ) const;
+	T			charAt		( axSize idx     ) const;
 	T			lastChar	( axSize idx = 0 ) const;
 
 	//! Must keep the buf end with zero

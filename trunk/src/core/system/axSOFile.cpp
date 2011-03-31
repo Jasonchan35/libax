@@ -8,6 +8,9 @@ axSOFile::~axSOFile() {
     unload();
 }
 
+#if 0
+#pragma mark ================= MS Win ====================
+#endif
 #ifdef axOS_WIN
 
 void axSOFile::_os_ctor() {
@@ -43,6 +46,10 @@ void axSOFile::unload() {
 
 #endif //axOS_WIN
 
+
+#if 0
+#pragma mark ================= UNIX ====================
+#endif
 #ifdef axOS_UNIX
 
 void axSOFile::_os_ctor() {

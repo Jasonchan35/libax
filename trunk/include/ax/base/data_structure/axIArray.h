@@ -4,11 +4,30 @@
 
 #include "../common/ax_common.h"
 
-//! \addtogroup data_algorithm
+//! \ingroup base_data_structure
 //@{
 
-//! axIArray
-//! array interface
+//! Array Interface Class
+/*! 
+	\b Feature:
+	\li call constructor / destructor when Type is not primitive
+	\li separate 'size'(current data size) and 'capacity' (memory size)
+	\li handy functions such as last(), find(), remove() ...
+
+	\b Safety:
+	\li avoid memory leak by owned the memory ownership ( no malloc/free manually )
+	\li inBound check when access element ( even in Release mode )
+
+	\b Performance:
+	\li resize in chunk of memory / auto memory growing
+	\li hold memory as long as free() / shink() being called
+	\li can reserve memory
+	\li using takeOwnership when resize
+	\li using memcpy instead for loop when data is primitive
+	\li param 'keep_data' to avoid copy when resize
+
+
+*/
 template< class T >
 class axIArray : public axNonCopyable {
 public:
@@ -17,7 +36,7 @@ public:
 	axIArray();
 	virtual	~axIArray();
 	
-			bool	inBound		( axSize i ) const			{ return ( i>=0 && i<size_ ); }
+			bool	inBound		( axSize i ) const			{ return i < size_; }
 
 			axStatus	resize		( axSize new_size, bool keep_data = true );
 			axStatus	reserve		( axSize new_size, bool keep_data = true );
@@ -25,37 +44,37 @@ public:
 			axStatus	incSize		( axSize n,		 bool keep_data = true )	{ return resize( size()+n, keep_data ); }
 			axStatus	decSize		( axSize n,		 bool keep_data = true )	{ return resize( size()-n, keep_data ); }
 
-			T&		element		( axSize i )				{ axRELEASE_ASSERT( inBound(i) ); return p_[i]; }
-	const	T&		element		( axSize i ) const			{ axRELEASE_ASSERT( inBound(i) ); return p_[i]; }
+			T&			element		( axSize i )				{ axRELEASE_ASSERT( inBound(i) ); return p_[i]; }
+	const	T&			element		( axSize i ) const			{ axRELEASE_ASSERT( inBound(i) ); return p_[i]; }
 
-			T&		elementNoCheck ( axSize i )				{ return p_[i]; }
-	const	T&		elementNoCheck ( axSize i ) const			{ return p_[i]; }
+			T&			elementNoCheck ( axSize i )				{ return p_[i]; }
+	const	T&			elementNoCheck ( axSize i ) const		{ return p_[i]; }
 
-			T&		operator[]	( axSize i )					{ return element(i); }
-	const	T&		operator[]	( axSize i ) const			{ return element(i); }
+			T&			operator[]	( axSize i )				{ return element(i); }
+	const	T&			operator[]	( axSize i ) const			{ return element(i); }
 	
-			T&		last		( axSize i = 0 )				{ return element( size_-i-1 ); }
-	const	T&		last		( axSize i = 0 ) const		{ return element( size_-i-1 ); }
+			T&			last		( axSize i = 0 )				{ return element( size_-i-1 ); }
+	const	T&			last		( axSize i = 0 ) const		{ return element( size_-i-1 ); }
 
 			axStatus	append		( const T& value )			{ axStatus st = incSize(1); if( !st ) return st; last() = value; return 0; }
 			axStatus	append		( const axIArray<T> &src )	{ return append_n( src.ptr(), src.size() ); }
 			axStatus	append_n	( const T* src, axSize count );
 
-			T*		ptr()									{ return p_; }
-	const	T*		ptr() const								{ return p_; }
-			axSize	size		() const					{ return size_; }
-			axSize	capacity	() const					{ return capacity_; }
+			T*			ptr()									{ return p_; }
+	const	T*			ptr() const								{ return p_; }
+			axSize		size		() const					{ return size_; }
+			axSize		capacity	() const					{ return capacity_; }
 
-			void	clear		();
+			void		clear		();
 			
-			void	free		();	//!< free all memory		
+			void		free		();	//!< free all memory		
 			axStatus	shrink		();	//!< free unused memory <TODO>
 
 protected:
 	void	_init( T* p, axSize size, axSize capacity );
 
 	virtual	axStatus	on_malloc	( axSize req_size, T* &out_ptr, axSize &out_size ) = 0;
-	virtual void	on_free		( T* p ) = 0;
+	virtual void		on_free		( T* p ) = 0;
 
 private:
 	axSize	size_;
@@ -70,7 +89,7 @@ void dumpHex( const axIArray<T> &buf, FILE* f = stdout ) {
 
 // ----------
 
-template<class T> inline bool	_array_equal			( const T* dst, const T* src, axSize n );
+template<class T> inline bool		_array_equal			( const T* dst, const T* src, axSize n );
 template<class T> inline axStatus	_array_copy				( const T* dst, const T* src, axSize n );
 template<class T> inline axStatus	_array_takeOwnership	( const T* dst, const T* src, axSize n );
 

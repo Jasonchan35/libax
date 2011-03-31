@@ -4,7 +4,7 @@
 
 #include "axTypeOf.h"
 
-//! \addtogroup common
+//! \ingroup base_common
 //@{
 
 template<class T> inline void ax_swap( T &a, T &b )			{ T tmp; ax_takeOwnership(tmp,a); ax_takeOwnership(a,b); ax_takeOwnership(b,tmp); }
@@ -43,7 +43,7 @@ template<class T> inline T ax_align_multiple( T n, T a ) {
 inline	int  ax_align_pow_of_2( int v ) { v--; v |= v >> 1; v |= v >> 2; v |= v >> 4;	v |= v >> 8; v |= v >> 16; v++;	return v; }
 
 //@}
-
+//@}
 
 #endif //__ax_math_template_h__
 

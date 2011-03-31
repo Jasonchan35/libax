@@ -1,16 +1,16 @@
 #pragma once
-#ifndef __ax_SOFile_h__
-#define __ax_SOFile_h__
+#ifndef __axSOFile_h__
+#define __axSOFile_h__
 
 #include "../../ax_base.h"
 
-//! \addtogroup core
+//! \ingroup core_system
 //@{
 
 //! Dynamic Shared Library
 /*!
-	.so file on UNIX
-	.dll file on Windows
+	\li .so file on UNIX
+	\li .dll file on Windows
 */
 class axSOFile : public axNonCopyable {
 public:
@@ -33,7 +33,7 @@ private:
     void*   handle_;
 #endif
 
-    void	_os_ctor();
+    void		_os_ctor();
     axStatus	_getProc( void* &proc, const char* proc_name );
 };
 
@@ -51,4 +51,4 @@ typedef	axSOFile	axDLLFile;
 
 //@}
 
-#endif //__ax_SOFile_h__
+#endif //__axSOFile_h__

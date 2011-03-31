@@ -4,7 +4,7 @@
 
 #include "ax_utf8.h"
 
-//! \addtogroup string
+//! \ingroup base_string
 //@{
 
 #ifdef axOS_WIN

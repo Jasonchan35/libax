@@ -5,7 +5,7 @@
 #include "../common/axNonCopyable.h"
 #include "../common/axStatus.h"
 
-//! \addtogroup data_algorithm
+//! \ingroup base_data_structure
 //@{
 	
 //! AutoPtr - auto 'delete' pointer

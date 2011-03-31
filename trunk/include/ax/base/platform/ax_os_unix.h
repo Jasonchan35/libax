@@ -2,7 +2,7 @@
 #ifndef __ax_os_unix_h__
 #define __ax_os_unix_h__
 
-//! \addtogroup platform
+//! \ingroup base_platform
 //@{
 
 

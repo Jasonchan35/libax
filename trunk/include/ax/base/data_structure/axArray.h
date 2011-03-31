@@ -4,9 +4,18 @@
 
 #include "axIArray.h"
 
-//! \addtogroup data_algorithm
+//! \ingroup base_data_structure
 //@{
 
+
+//! Array Class
+/*!
+	Feature:
+	Performance:
+	- support local buffer
+	- memory chunk when resize
+	- auto memory grow by 1.5x of orginal size ( when chuck size = 0 )
+*/
 template<class T, size_t LOCAL_BUF_SIZE = 0 >
 class axArray : public axIArray<T> {
 	typedef axIArray<T>	B;
@@ -15,10 +24,12 @@ public:
 	virtual	~axArray();
 
 	void	setChunkSize		( axSize	n );
+
 protected:
 	virtual	axStatus	on_malloc	( axSize req_size, T* &out_ptr, axSize &out_size );
 	virtual void	on_free		(  T* p  );
 
+private:
 	axSize	chunkSize_;
 	char	local_[ LOCAL_BUF_SIZE * sizeof(T) ];
 };
@@ -56,7 +67,7 @@ axStatus	axArray< T, LOCAL_BUF_SIZE >::on_malloc( axSize req_size, T* &out_ptr, 
 	}
 
 	out_ptr = (T*) ax_malloc( sizeof(T) * n );
-	if( ! out_ptr ) return axStatus::Array_malloc_failure;
+	if( ! out_ptr ) return axStatus::not_enough_memory;
 
 	out_size = n;
 	return 0;

@@ -2,7 +2,7 @@
 #ifndef __ax_os_win_h__
 #define __ax_os_win_h__
 
-//! \addtogroup platform
+//! \ingroup base_platform
 //@{
 #ifdef axOS_WIN
 

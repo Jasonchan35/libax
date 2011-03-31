@@ -3,6 +3,26 @@
 
 #include "axTypeOf.h"
 
+//! \ingroup base_common
+//@{
+
+//! Type for size of memory or object's count
+/*!  handle cross platform serialization issue when "size_t" is in varying byte size, \n
+	 but compiler just cannot distint bewteen uint32/64 and size_t in function overloading \n
+	 \n
+	 for example: \n
+	 \code
+		size_t a;
+		serialize( a ); //<-- will call serialize( uint32 ) on 32bit platform
+	\endcode
+	\n
+	so the binary serialized data cannot cross platform. \n
+	therefore will define axSize wrapper class which compiler will never confuse with uint32/64 \n
+	\code
+		axSize a;
+		serialize( a ); //<--- now we can handle it in our own way, such as varying length encode in binary serialization
+	\endcode
+*/
 class axSize {
 public:
 	axSize( size_t	v=0 )				{ value_ = v; }
@@ -37,5 +57,8 @@ inline axSize	ax_min		( axSize a, axSize b )	{ return (a<b)?a:b; }
 inline axSize	ax_max		( axSize a, axSize b )	{ return (a>b)?a:b; }
 inline axSize	ax_abs		( axSize a )			{ return a; } //unsigned will always be positive
 inline	bool	axTypeOf<axSize>::isUnsigned()		{ return true; }
+
+//@}
+//@}
 
 #endif //__axSize_h__

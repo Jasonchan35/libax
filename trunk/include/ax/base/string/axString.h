@@ -3,7 +3,7 @@
 
 #include "axIString.h"
 
-//! \addtogroup string
+//! \ingroup base_string
 //@{
 
 template< size_t LOCAL_BUF_SIZE >

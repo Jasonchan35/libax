@@ -128,7 +128,7 @@ INLINE_INHERITED_MEMB  = NO
 # path before files name in the file list and in the header files. If set 
 # to NO the shortest path that makes the file name unique will be used.
 
-FULL_PATH_NAMES        = YES
+FULL_PATH_NAMES        = NO
 
 # If the FULL_PATH_NAMES tag is set to YES then the STRIP_FROM_PATH tag 
 # can be used to strip a user-defined part of the path. Stripping is 
@@ -193,7 +193,7 @@ SEPARATE_MEMBER_PAGES  = NO
 # The TAB_SIZE tag can be used to set the number of spaces in a tab. 
 # Doxygen uses this value to replace tabs by spaces in code fragments.
 
-TAB_SIZE               = 8
+TAB_SIZE               = 13
 
 # This tag can be used to specify a number of aliases that acts 
 # as commands in the documentation. An alias has the form "name=value". 
@@ -331,7 +331,7 @@ EXTRACT_PRIVATE        = NO
 # If the EXTRACT_STATIC tag is set to YES all static members of a file 
 # will be included in the documentation.
 
-EXTRACT_STATIC         = NO
+EXTRACT_STATIC         = YES
 
 # If the EXTRACT_LOCAL_CLASSES tag is set to YES classes (and structs) 
 # defined locally in source files will be included in the documentation. 
@@ -449,7 +449,7 @@ SORT_MEMBERS_CTORS_1ST = NO
 # hierarchy of group names into alphabetical order. If set to NO (the default) 
 # the group names will appear in their defined order.
 
-SORT_GROUP_NAMES       = NO
+SORT_GROUP_NAMES       = YES
 
 # If the SORT_BY_SCOPE_NAME tag is set to YES, the class list will be 
 # sorted by fully-qualified names, including namespaces. If set to 
@@ -519,7 +519,7 @@ SHOW_USED_FILES        = YES
 # then setting the SHOW_DIRECTORIES tag to YES will show the directory hierarchy 
 # in the documentation. The default is NO.
 
-SHOW_DIRECTORIES       = NO
+SHOW_DIRECTORIES       = YES
 
 # Set the SHOW_FILES tag to NO to disable the generation of the Files page. 
 # This will remove the Files entry from the Quick Index and from the 
@@ -890,7 +890,7 @@ HTML_COLORSTYLE_HUE    = 220
 # the colors in the HTML output. For a value of 0 the output will use 
 # grayscales only. A value of 255 will produce the most vivid colors.
 
-HTML_COLORSTYLE_SAT    = 100
+HTML_COLORSTYLE_SAT    = 101
 
 # The HTML_COLORSTYLE_GAMMA tag controls the gamma correction applied to 
 # the luminance component of the colors in the HTML output. Values below 

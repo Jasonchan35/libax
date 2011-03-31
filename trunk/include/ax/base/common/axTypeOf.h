@@ -4,7 +4,7 @@
 
 #include "axStatus.h"
 
-//! \addtogroup common
+//! \ingroup base_common
 //@{
 
 template< class T >	

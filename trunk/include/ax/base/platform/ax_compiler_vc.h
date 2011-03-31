@@ -2,7 +2,7 @@
 #ifndef __ax_compiler_vc_h__
 #define __ax_compiler_vc_h__
 
-//! \addtogroup platform
+//! \ingroup base_platform
 //@{
 #ifdef	_MSC_VER
 

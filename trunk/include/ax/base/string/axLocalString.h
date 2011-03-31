@@ -3,6 +3,8 @@
 
 #include "axIString.h"
 
+//! \ingroup base_string
+//@{
 
 template< class T, size_t LOCAL_BUF_SIZE >
 class axLocalString_ : public axIString<T> {
@@ -32,5 +34,7 @@ public:
 private:
 	axLocalArray<wchar_t, LOCAL_BUF_SIZE>	buf_;
 };
+
+//@}
 
 #endif //__axLocalString_h__

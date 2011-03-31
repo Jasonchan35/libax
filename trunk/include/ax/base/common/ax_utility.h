@@ -5,7 +5,7 @@
 #include "ax_math_template.h"
 #include "axSize.h"
 
-//! \addtogroup common
+//! \ingroup base_common
 //@{
 
 #define	axPRINT_FUNC_NAME	printf("FUNC [%s]\n", axFUNC_NAME );

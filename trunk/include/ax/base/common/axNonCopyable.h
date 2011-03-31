@@ -2,7 +2,7 @@
 #ifndef __axNonCopyable_h__
 #define __axNonCopyable_h__
 
-//! \addtogroup common
+//! \ingroup base_common
 //@{
 
 class axNonCopyable {

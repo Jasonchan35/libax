@@ -15,6 +15,7 @@ if(MSVC)
 		SET( axPLATFORM_NAME  win32 )
 	endif()
 
+
 endif(MSVC)
 
 
@@ -23,7 +24,7 @@ if (CMAKE_COMPILER_IS_GNUCC)
 #	set( CMAKE_C_FLAGS   ${CMAKE_C_FLAGS}   ${MY_C_FLAGS} )
 #	set( CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} ${MY_C_FLAGS} )
 
-	SET( MY_DEFAULT_LIBS	dl pthread )
+	SET( my_default_libs ${my_default_libs}	dl pthread )
 endif()
 
 if( axPLATFORM_NAME )
@@ -32,4 +33,7 @@ if( axPLATFORM_NAME )
 else()
 #	message( FATAL_ERROR  "Unknown axPLATFORM_NAME" )
 endif()
+
+
+SET( my_default_libs ${my_default_libs} libpq )
 
