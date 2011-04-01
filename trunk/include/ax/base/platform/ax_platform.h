@@ -42,6 +42,12 @@
     #include "ax_os_unix.h"
 #endif
 
+
+#if axOS_MacOSX
+	#include "ax_os_mac.h"
+#endif
+
+
 #if axOS_WIN32 || axOS_WIN64 || axOS_WINCE || axOS_MinGW
 	#define axOS_WIN          1
     #include "ax_os_win.h"

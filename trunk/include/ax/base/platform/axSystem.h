@@ -66,7 +66,6 @@ axSize	axSystem::numberOfProcessors() {
 		#if 0
 		#pragma mark ================= Mac OS X ====================
 		#endif
-	
 		inline axSize	axSystem::numberOfProcessors() { return MPProcessors(); }
 	#else
 		#if 0
