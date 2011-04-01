@@ -1,7 +1,7 @@
 #ifndef __axDBO_pgsql_h__
 #define __axDBO_pgsql_h__
 
-#include <ax/core/database/axDBO_Driver.h>
+#include "axDBO_Driver.h"
 #include "libpq/libpq-fe.h"
 
 class axDBO_pgsql : public axDBO_Driver {

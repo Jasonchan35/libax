@@ -1,8 +1,10 @@
-#include <ax/core/database/axDBO.h>
+#include "axDBO_Driver.h"
 #include "axDBO_pgsql.h"
 
+#define	DEFINE_WRAPPER   axDBO_Driver* & p_ = (axDBO_Driver* &)(p__);
+
 axDBO::axDBO() {
-    p_ = NULL;
+    p__ = NULL;
 }
 
 axDBO::~axDBO() {
@@ -10,6 +12,8 @@ axDBO::~axDBO() {
 }
 
 axStatus axDBO::connect( const char* driver, const char* dsn ) {
+	DEFINE_WRAPPER
+
 	axStatus st;
 	close();
 
@@ -24,6 +28,7 @@ axStatus axDBO::connect( const char* driver, const char* dsn ) {
 }
 
 void axDBO::close() {
+	DEFINE_WRAPPER
 	if( p_ ) {
 		p_->close();
 		delete p_;
@@ -31,7 +36,8 @@ void axDBO::close() {
 	}
 }
 
-axStatus	axDBO::execSQL( const char* sql ) {
+axStatus	axDBO::execSQL( const char* sql, Result *res ) {
+	DEFINE_WRAPPER
 	if( ! p_ ) return axStatus::not_initialized;
-	return p_->execSQL( sql );
+	return p_->execSQL( sql, res );
 }
