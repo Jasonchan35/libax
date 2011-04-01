@@ -7,7 +7,7 @@
 //@{
 
 class axSpinLock {
-#if ax_OS_WIN
+#if axOS_WIN
 public:
 	axSpinLock	()		{ InitializeCriticalSection(&_spinlock); }
 	~axSpinLock	()		{ DeleteCriticalSection(&_spinlock); }
@@ -43,8 +43,22 @@ public:
 	void unlock	()		{ pthread_spin_unlock(&_spinlock); }
 private:
 	pthread_spinlock_t _spinlock;
+#else
+	#warning not support on this platform
 #endif
 }; 
+
+class axSpinLocker  : public axNonCopyable {
+public:
+	axSpinLocker	()							{ s_ = NULL; }
+	axSpinLocker	( axSpinLock &s )			{ s_ = NULL; lock(s); }
+	~axSpinLocker	()							{ unlock(); }
+	
+	void	lock	( axSpinLock &s )			{ s.unlock();	s.lock();	s_ = &s; }
+	void	unlock	()							{ if( s_ ) { s_->unlock(); s_=NULL; } }
+private:
+	axSpinLock *s_;
+};
 
 //@}
 

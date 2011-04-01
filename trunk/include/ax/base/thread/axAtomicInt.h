@@ -159,17 +159,17 @@ private:
 
 #else // Generic
 public:
-	void set ( int a )			{ ScopeSpinLock s(lock_); v=a; }
-	int  value() const			{ ScopeSpinLock s((SpinLock&)lock_); return v; }
+	void set ( int a )			{ axSpinLocker s(lock_); v=a; }
+	int  value() const			{ axSpinLocker s((SpinLock&)lock_); return v; }
 
-	void operator+=( int a )	{ ScopeSpinLock s(lock_); v+=a; }
-	void operator-=( int a )	{ ScopeSpinLock s(lock_); v-=a; }
+	void operator+=( int a )	{ axSpinLocker s(lock_); v+=a; }
+	void operator-=( int a )	{ axSpinLocker s(lock_); v-=a; }
 
-	int  operator++(int)		{ ScopeSpinLock s(lock_); return v++; }
-	int  operator--(int)		{ ScopeSpinLock s(lock_); return v--; }
+	int  operator++(int)		{ axSpinLocker s(lock_); return v++; }
+	int  operator--(int)		{ axSpinLocker s(lock_); return v--; }
 
-	int  operator++()			{ ScopeSpinLock s(lock_); return ++v; }
-	int  operator--()			{ ScopeSpinLock s(lock_); return --v; }
+	int  operator++()			{ axSpinLocker s(lock_); return ++v; }
+	int  operator--()			{ axSpinLocker s(lock_); return --v; }
 
 	//! add and return old value
 	int  fetchadd( int a )		{ ScopeSpinLock s(lock_); int old=v; v+=a; return old; }
