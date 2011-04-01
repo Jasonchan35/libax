@@ -33,7 +33,7 @@ axLocalArray<T,LOCAL_BUF_SIZE> :: axLocalArray() {
 
 template<class T, size_t LOCAL_BUF_SIZE>
 axLocalArray<T,LOCAL_BUF_SIZE> :: ~axLocalArray() {
-	B::free();
+	B::free(); // must call free here, becoz ~axArray() cannot call virtual function to free memory
 }
 
 //@}

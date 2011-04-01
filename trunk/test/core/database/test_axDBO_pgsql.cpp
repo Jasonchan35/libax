@@ -2,21 +2,21 @@
 
 axStatus test() {
 	axStatus st;
-	printf("test_axDBO_pgsql");
+	ax_print(L"testing {?}\n", __FILE__ );
 
 	axDBO	db;
-	st = db.connect( L"pgsql", L"host=127.0.0.1 dbname=lib_test user=testing password=1234" );
+	st = db.connect( L"pgsql", L"host=127.0.0.1 dbname=testdb user=testing password=1234" );
 	if( !st ) return st;
 
-	st = db.execSQL( L"select * from test" );
+	st = db.execSQL( L"select * from tbl_test" );
 
-	getchar();
 	return 0;
 }
 
 int main() {
     axStatus st = test();
-    printf("==== return %d %s====\n", st.code(), st.c_str() );
+    printf("==== return %d %s ====\n", st.code(), st.c_str() );
+	getchar();
     return 0;
 }
 

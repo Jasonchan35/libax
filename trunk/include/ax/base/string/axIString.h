@@ -63,6 +63,7 @@ public:
 	axStatus		toStringFormat( axStringFormat &f ) const { return axStringFormat_out( f, c_str() ); }
 
 //------- Arg List -------
+	axStatus		format			( const wchar_t* fmt )																																							{ ArgList list;													return format_ArgList( fmt, list ); }
 	axStatus		format			( const wchar_t* fmt,	const Arg &a0 )																																			{ ArgList list;	list<<a0;										return format_ArgList( fmt, list ); }
 	axStatus		format			( const wchar_t* fmt,	const Arg &a0, const Arg &a1 )																															{ ArgList list;	list<<a0<<a1;									return format_ArgList( fmt, list ); }
 	axStatus		format			( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2 )																											{ ArgList list;	list<<a0<<a1<<a2;								return format_ArgList( fmt, list ); }
@@ -74,6 +75,7 @@ public:
 	axStatus		format			( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8 )					{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8;		return format_ArgList( fmt, list ); }
 	axStatus		format			( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8, const Arg &a9 )	{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8<<a9;	return format_ArgList( fmt, list ); }
 
+	axStatus		formatAppend	( const wchar_t* fmt )																																							{ ArgList list;													return formatAppend_ArgList( fmt, list ); }
 	axStatus		formatAppend	( const wchar_t* fmt,	const Arg &a0 )																																			{ ArgList list;	list<<a0;										return formatAppend_ArgList( fmt, list ); }
 	axStatus		formatAppend	( const wchar_t* fmt,	const Arg &a0, const Arg &a1 )																															{ ArgList list;	list<<a0<<a1;									return formatAppend_ArgList( fmt, list ); }
 	axStatus		formatAppend	( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2 )																											{ ArgList list;	list<<a0<<a1<<a2;								return formatAppend_ArgList( fmt, list ); }

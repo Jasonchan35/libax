@@ -25,6 +25,11 @@ axStatus axStringFormat_out( axStringFormat &f, int64_t	value );
 axStatus axStringFormat_out( axStringFormat &f, const char*	  value );
 axStatus axStringFormat_out( axStringFormat &f, const wchar_t*  value );
 
+inline
+axStatus axStringFormat_out( axStringFormat &f, char*	  value ) { return axStringFormat_out( f, (const char*)value ); }
+inline
+axStatus axStringFormat_out( axStringFormat &f, wchar_t*  value ) { return axStringFormat_out( f, (const char*)value ); }
+
 
 template<class T> inline
 axStatus axStringFormat_out( axStringFormat &f, const T& value ) {

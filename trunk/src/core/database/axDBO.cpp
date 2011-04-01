@@ -1,5 +1,5 @@
 #include <ax/core/database/axDBO.h>
-#include <ax/core/database/axDBO_pgsql.h>
+#include "axDBO_pgsql.h"
 
 axDBO::axDBO() {
     p_ = NULL;
@@ -17,7 +17,6 @@ axStatus axDBO::connect( const wchar_t* driver, const wchar_t* dsn ) {
 	if( _driver->equals( L"pgsql" ) ) {
 		p_ = new axDBO_pgsql;
 		if( !p_ ) return axStatus::not_enough_memory;
-		return 0;
 	}else{
         return axStatus::not_found;
 	}

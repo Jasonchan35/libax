@@ -70,6 +70,7 @@ private:
 
 inline
 const char* axStatus :: c_str() const {
+	if( code_ == 0 ) return "success";
 	if( code_ > _std_start && code_ < _std_end ) {
 		switch( code_ ) {
 			#define axStatus_enum(n)   case n: return #n;

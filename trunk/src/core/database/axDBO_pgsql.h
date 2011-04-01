@@ -1,7 +1,8 @@
 #ifndef __axDBO_pgsql_h__
 #define __axDBO_pgsql_h__
 
-#include "axDBO_Driver.h"
+#include <ax/core/database/axDBO_Driver.h>
+#include "libpq/libpq-fe.h"
 
 class axDBO_pgsql : public axDBO_Driver {
 public:
@@ -13,7 +14,7 @@ public:
 	virtual axStatus	execSQL	( const wchar_t* sql );
 
 private:
-    void* conn_;
+    PGconn* conn_;
 };
 
 #endif //__axDBO_pgsql_h__

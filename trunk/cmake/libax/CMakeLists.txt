@@ -20,18 +20,19 @@ FIND_PACKAGE(Subversion)
 
 #----------
 
-SET( h_files_path   "../../include/ax" )
-SET( cpp_files_path "../../src" )
+SET( header_files_path   "../../include/ax" )
+SET( src_files_path "../../src" )
 INCLUDE_DIRECTORIES( ../../include )
 
 #-------
-FILE( GLOB_RECURSE  h_files   RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${h_files_path}/*.h" )
-FILE( GLOB_RECURSE  cpp_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${cpp_files_path}/*.cpp"  )
+FILE( GLOB_RECURSE  header_files	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}	"${header_files_path}/*.h" )
+FILE( GLOB_RECURSE  src_cpp_files	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}	"${src_files_path}/*.cpp"  )
+FILE( GLOB_RECURSE  src_h_files		RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}	"${src_files_path}/*.h"  )
 
-FOREACH( f IN LISTS h_files )
+FOREACH( f IN LISTS header_files )
 #	MESSAGE( STATUS "File: ${f}" )
 	GET_FILENAME_COMPONENT( g ${f} PATH )
-	STRING(REPLACE ${h_files_path} "" g "${g}" )
+	STRING(REPLACE ${header_files_path} "" g "${g}" )
 	STRING(REPLACE "/" "\\\\" g "${g}" )
 
 	if( "${g}" STREQUAL  "" )
@@ -44,10 +45,10 @@ FOREACH( f IN LISTS h_files )
 	ENDIF()
 ENDFOREACH()
 
-FOREACH( f IN LISTS cpp_files )
+FOREACH( f IN LISTS src_cpp_files  src_h_files )
 #	MESSAGE( STATUS "File: ${f}" )
 	GET_FILENAME_COMPONENT( g ${f} PATH )
-	STRING(REPLACE ${cpp_files_path} "" g "${g}" )
+	STRING(REPLACE ${src_files_path} "" g "${g}" )
 	STRING(REPLACE "/" "\\\\" g "${g}" )
 
 	IF( "${g}" STREQUAL  "" )
@@ -60,7 +61,7 @@ FOREACH( f IN LISTS cpp_files )
 	ENDIF()
 ENDFOREACH()
 
-ADD_LIBRARY( ax ${h_files} ${cpp_files} )
+ADD_LIBRARY( ax ${header_files} ${src_cpp_files} ${src_h_files} )
 SET_TARGET_PROPERTIES( ax PROPERTIES
 	ARCHIVE_OUTPUT_DIRECTORY ../../../lib/${axPLATFORM_NAME}
 )

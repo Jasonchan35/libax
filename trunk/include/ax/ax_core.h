@@ -6,7 +6,6 @@
 #include "core/system/axSOFile.h"
 
 #include "core/database/axDBO.h"
-#include "core/database/axDBO_pgsql.h"
 
 #ifdef _MSC_VER
 	#pragma comment( lib, "ax.lib" )

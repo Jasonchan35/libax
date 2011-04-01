@@ -16,6 +16,7 @@ class axExternalArray : public axIArray<T> {
 public:
 	axExternalArray() {}
 	axExternalArray( T* buf, axSize buf_len ) { setExternal( buf, buf_len); }
+	virtual ~axExternalArray();
 
 	void	setExternal( T* buf, axSize buf_len );
 private:
@@ -28,6 +29,11 @@ private:
 template< class T >
 void axExternalArray<T> :: setExternal( T* buf, axSize buf_len ) {
 	B::_init( buf, buf_len, buf_len );
+}
+
+template< class T >
+axExternalArray<T> :: ~axExternalArray() {
+	B::free(); // must call free here, becoz ~axArray() cannot call virtual function to free memory
 }
 
 //@}
