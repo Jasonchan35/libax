@@ -187,6 +187,20 @@ axStatus	axStringFormat::fill( wchar_t ch, axSize len )	{
 
 //----------------
 template<> inline
+axStatus	axIString<wchar_t> :: formatAppend_ArgList( const char* fmt, const ArgList &list ) {
+	axStringFormat	f;
+	f._setOutput( *this );
+	return f._process( fmt, list );
+}
+
+template<> inline
+axStatus	axIString<char> :: formatAppend_ArgList( const char* fmt, const ArgList &list ) {
+	axStringFormat	f;
+	f._setOutput( *this );
+	return f._process( fmt, list );
+}
+
+template<> inline
 axStatus	axIString<wchar_t> :: formatAppend_ArgList( const wchar_t* fmt, const ArgList &list ) {
 	axStringFormat	f;
 	f._setOutput( *this );
@@ -213,11 +227,8 @@ axStatus ax_print_ArgList( const wchar_t* fmt, const axStringFormat::ArgList &li
 inline
 axStatus ax_print_ArgList( const char* fmt, const axStringFormat::ArgList &list ) {
 	axStatus st;
-	axStringW_<1024>	_fmt;
-	st = _fmt.set( fmt );					if( !st ) return st;
-
 	axStringW_<1024>	tmp;
-	st = tmp.format_ArgList( _fmt, list );		if( !st ) return st;
+	st = tmp.format_ArgList( fmt, list );		if( !st ) return st;
 	std::wcout << tmp.c_str();
 	return 0;
 }

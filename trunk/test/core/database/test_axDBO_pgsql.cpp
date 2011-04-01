@@ -8,7 +8,9 @@ axStatus test() {
 	st = db.connect( "pgsql", "host=127.0.0.1 dbname=testdb user=testing password=1234" );
 	if( !st ) return st;
 
-	st = db.execSQL( "select * from tbl_test" );
+	axDBO_Result	res;
+	res = db.execSQL( "select * from tbl_test" );
+	res.print();
 
 	return 0;
 }

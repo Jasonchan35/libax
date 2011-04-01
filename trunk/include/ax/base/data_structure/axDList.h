@@ -16,9 +16,9 @@ public:
 	axDListNode();
 	~axDListNode() { removeFromList(); }
 
-	T*			prev() { return prev_; }
-	T*			next() { return next_; }
-	axDList<T>*	list() const				{ return (axDList<T>*) list_; }
+	T*			prev() { return _prev_; }
+	T*			next() { return _next_; }
+	axDList<T>*	list() const				{ return (axDList<T>*) _list_; }
 
 	axStatus	getIndex		( axSize &idx );
 	void	removeFromList	()				{ if( list() ) list()->remove( (T*)this ); }
@@ -26,15 +26,15 @@ public:
 	void	onDidAddToList()			{}
 	void	onWillRemoveFromList()		{}
 
-	void	setOwnedByDList( bool b )		{ ownedByDList_ = b; }
-	bool	isOwnedByDList()				{ return ownedByDList_; }
+	void	setOwnedByDList( bool b )		{ _ownedByDList_ = b; }
+	bool	isOwnedByDList()				{ return _ownedByDList_; }
 
 friend class axDList<T>;
 private:
-	T*		next_;
-	T*		prev_;
-	void*	list_;
-	bool	ownedByDList_;
+	T*		_next_;
+	T*		_prev_;
+	void*	_list_;
+	bool	_ownedByDList_;
 };
 
 //! double linked list template
@@ -44,11 +44,11 @@ public:
 	axDList();
 	~axDList();
 
-	T*		head		() const				{ return (T*)head_; }
-	T*		tail		() const				{ return (T*)tail_; }
+	T*		head		() const				{ return (T*)_head_; }
+	T*		tail		() const				{ return (T*)_tail_; }
 	T*		getNodeByIndex( axSize idx ) const;
 
-	T*		popHead	()							{ T* h = head_; if (h) remove( h ); return h; }
+	T*		popHead	()							{ T* h = _head_; if (h) remove( h ); return h; }
 
 	axStatus	takeOwnership ( axDList<T> &src );
 
@@ -67,18 +67,18 @@ public:
 	axSize	size() const						{ return size_; }
 
 private:
-	T*		head_;
-	T*		tail_;
-	axSize	size_;
+	T*		_head_;
+	T*		_tail_;
+	axSize	_size_;
 };
 
 //===================== inline ==========================
 
 template<class T>
 axDListNode<T>::axDListNode() {
-	list_ = NULL;
-	prev_ = next_ = NULL;
-	ownedByDList_ = true;
+	_list_ = NULL;
+	_prev_ = _next_ = NULL;
+	_ownedByDList_ = true;
 }
 
 template<class T>
@@ -110,9 +110,9 @@ axStatus axDList<T>::takeOwnership( axDList<T> &src ) {
 
 template<class T>
 axDList<T>::axDList() {
-	head_   = NULL;
-	tail_   = NULL;
-	size_	= 0;
+	_head_   = NULL;
+	_tail_   = NULL;
+	_size_	= 0;
 }
 
 template<class T>
@@ -124,7 +124,7 @@ template<class T>
 void axDList<T>::clear() {
 	T *n;
 	for( ;; ) {
-		n = head_;
+		n = _head_;
 		if( ! n ) return;
 		remove( n );
 		if( n->ownedByDList_ )
@@ -135,64 +135,64 @@ void axDList<T>::clear() {
 template<class T>
 void axDList<T>::insert( T *node, T *before ) {
 	if( !node )					{ assert( false ); return; }
-	if( node->_list )			{ assert( false ); return; } //already in other List ?
+	if( node->_list_ )			{ assert( false ); return; } //already in other List ?
 
 	if( ! before )				{ assert( false ); return; }
-	if( before->_list != this ) {
+	if( before->_list_ != this ) {
 		assert( false ); return;
 	} // before is not node of this list
 
 	size_++;
 
-	if( head_ == before ) {
-		head_ = node ;
+	if( _head_ == before ) {
+		_head_ = node ;
 	}
 	
-	if( before->prev_ ) {
-		before->prev_->next_ = node;
+	if( before->_prev_ ) {
+		before->_prev_->_next_ = node;
 	}
 	
-	node->prev_ = before->prev_;
-	node->next_ = before;
-	node->_list = this;
+	node->_prev_ = before->prev_;
+	node->_next_ = before;
+	node->_list_ = this;
 
-	before->prev_ = node;
+	before->_prev_ = node;
 
 	node->onDidAddToList();
 }
 
 template<class T>
 void axDList<T>::insert( T *node ) {
-	if( !node )		  { assert( false ); return; }
-	if( node->_list ) { assert( false ); return; } //node already in list
+	if( !node )		   { assert( false ); return; }
+	if( node->_list_ ) { assert( false ); return; } //node already in list
 
 	size_++;
-	node->next_ = head_;
-	node->prev_ = NULL;
-	node->_list = this;
-	if( !head_ ) {
-		tail_ = head_ = node;
+	node->_next_ = _head_;
+	node->_prev_ = NULL;
+	node->_list_ = this;
+	if( !_head_ ) {
+		_tail_ = _head_ = node;
 	}else{
-		head_->prev_ = node;
-		head_ = node;
+		_head_->_prev_ = node;
+		_head_ = node;
 	}
 	node->onDidAddToList();
 }
 
 template<class T>
 void axDList<T>::append( T *node ) {
-	if( !node )		  { assert( false ); return; }
-	if( node->list_ ) { assert( false ); return; } //node already in list
+	if( !node )		   { assert( false ); return; }
+	if( node->_list_ ) { assert( false ); return; } //node already in list
 
 	size_++;
-	node->next_ = NULL;
-	node->prev_ = tail_;
-	node->list_ = this;
-	if( !tail_ ) {
-		tail_ = head_ = node;
+	node->_next_ = NULL;
+	node->_prev_ = _tail_;
+	node->_list_ = this;
+	if( !_tail_ ) {
+		_tail_ = _head_ = node;
 	}else{
-		tail_->next_ = node;
-		tail_ = node;
+		_tail_->_next_ = node;
+		_tail_ = node;
 	}
 	node->onDidAddToList();
 }
@@ -200,24 +200,24 @@ void axDList<T>::append( T *node ) {
 template<class T>
 void axDList<T>::append( T* node, T* after ) {
 	if( !node )					{ assert( false ); return; }
-	if( node->_list )			{ assert( false ); return; } //already in other List ?
+	if( node->_list_ )			{ assert( false ); return; } //already in other List ?
 
 	if( ! after )				{ assert( false ); return; }
-	if( after->_list != this )  {
+	if( after->_list_ != this )  {
 		assert( false ); return;
 	} // after is not node of this list
 
 	size_++;
 
 	
-	if( tail_ == after ) {
-		tail_ = node;
+	if( _tail_ == after ) {
+		_tail_ = node;
 	}
 	
-	node->next_ = after->next_;
-	node->prev_ = after;
-	after->next_ = node;	
-	node->_list = this;
+	node->_next_ = after->_next_;
+	node->_prev_ = after;
+	after->_next_ = node;	
+	node->_list_ = this;
 
 	node->onDidAddToList();
 }
@@ -232,18 +232,18 @@ void axDList<T>::remove( T *node, bool call_onDListRemove ) {
 	size_--;
 	if( call_onDListRemove ) node->onWillRemoveFromList();
 
-	if( node->prev_ )
-		node->prev_->next_ = node->next_;
+	if( node->_prev_ )
+		node->_prev_->_next_ = node->_next_;
 	else
-		head_ = node->next_;
+		_head_ = node->_next_;
 
-	if( node->next_ )
-		node->next_->prev_ = node->prev_;
+	if( node->_next_ )
+		node->_next_->_prev_ = node->_prev_;
 	else
-		tail_ = node->prev_;
+		_tail_ = node->_prev_;
 
-	node->prev_ = node->next_ = NULL;
-	node->list_ = NULL;
+	node->_prev_ = node->_next_ = NULL;
+	node->_list_ = NULL;
 }
 
 template<class T>

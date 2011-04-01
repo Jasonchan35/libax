@@ -8,12 +8,14 @@
 #include "base/common/ax_common.h"
 
 #include "base/data_structure/axAutoPtr.h"
+#include "base/data_structure/axSharedPtr.h"
 #include "base/data_structure/axDList.h"
 #include "base/data_structure/axArray_types.h"
 
 #include "base/string/ax_string.h"
 #include "base/file_system/axFileSystem.h"
 
+#include "base/thread/axAtomicInt.h"
 
 #if axCOMPILER_VC 
 	#pragma comment( lib, "Ws2_32.lib" )
@@ -48,7 +50,9 @@
 /*!	\defgroup base_string	string
 	\ingroup base 
 */
-
+/*!	\defgroup base_thread	multi-thread
+	\ingroup base 
+*/
 
 
 #endif //__ax_h__

@@ -1,0 +1,51 @@
+#ifndef __axSpinLock_h__
+#define __axSpinLock_h__
+
+#include "../common/ax_common.h"
+
+//! \ingroup base_thread
+//@{
+
+class axSpinLock {
+#if ax_OS_WIN
+public:
+	axSpinLock	()		{ InitializeCriticalSection(&_spinlock); }
+	~axSpinLock	()		{ DeleteCriticalSection(&_spinlock); }
+	void lock	()		{ EnterCriticalSection(&_spinlock); }
+	void unlock	()		{ LeaveCriticalSection(&_spinlock); }
+private:
+	CRITICAL_SECTION _spinlock;
+
+#elif axOS_MacOSX 
+public:
+	axSpinLock	()		{ _spinlock = 0; }
+	~axSpinLock	()		{}
+	void lock	()		{ OSSpinLockLock(&_spinlock); }
+	void unlock	()		{ OSSpinLockUnlock(&_spinlock); }
+private:
+	OSSpinLock _spinlock;
+
+#elif axOS_iOS 
+public:
+	axSpinLock	()		{ _spinlock = 0; }
+	~axSpinLock	()		{}
+	void lock	()		{ OSSpinLockLock(&_spinlock); }
+	void unlock	()		{ OSSpinLockUnlock(&_spinlock); }
+private:
+	OSSpinLock _spinlock;
+	
+#elif axOS_Unix
+public:
+	axSpinLock	()		{ pthread_spin_init(&_spinlock, PTHREAD_PROCESS_PRIVATE); }
+	~axSpinLock	()		{ pthread_spin_destroy(&_spinlock); }
+
+	void lock	()		{ pthread_spin_lock(&_spinlock); }
+	void unlock	()		{ pthread_spin_unlock(&_spinlock); }
+private:
+	pthread_spinlock_t _spinlock;
+#endif
+}; 
+
+//@}
+
+#endif //__axSpinLock_h__
