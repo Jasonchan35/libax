@@ -6,12 +6,13 @@
 
 class axDBO_pgsql : public axDBO_Driver {
 public:
+
 	axDBO_pgsql();
 	virtual ~axDBO_pgsql();
 
-	virtual	axStatus	connect	( const wchar_t* dsn );
+	virtual	axStatus	connect	( const char* dsn );
 	virtual	void		close	();
-	virtual axStatus	execSQL	( const wchar_t* sql );
+	virtual axStatus	execSQL	( const char* sql );
 
 private:
     PGconn* conn_;

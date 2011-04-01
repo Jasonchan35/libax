@@ -3,6 +3,7 @@
 #define __axIString_h__
 
 #include "axStringFormat.h"
+#include "ax_utf8.h"
 
 //! \ingroup base_string
 //@{

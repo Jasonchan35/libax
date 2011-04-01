@@ -6,26 +6,19 @@
 
 #include "axDBO_Driver.h"
 
+//! Database Object
+/*!
+
+*/
 class axDBO : public axNonCopyable {
 public:
+
     axDBO();
     ~axDBO();
 
-	axStatus	connect( const wchar_t* driver, const wchar_t* dsn );
+	axStatus	connect( const char* driver, const char* dsn );
 	void		close();
-	axStatus	execSQL( const wchar_t* sql );
-
-	class Stmt {
-	public:
-	private:
-		void*	p_;
-	};
-
-	class Result {
-	public:
-	private:
-		void*	p_;
-	};
+	axStatus	execSQL(const char* sql );
 
 private:
 	axDBO_Driver*	p_;

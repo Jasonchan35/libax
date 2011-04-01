@@ -8,12 +8,10 @@ axDBO_pgsql::~axDBO_pgsql() {
 	close();
 }
 
-axStatus axDBO_pgsql::connect( const wchar_t* dsn ){
+axStatus axDBO_pgsql::connect( const char* dsn ){
     axStatus st;
-    axStringA_<1024>  _dsn;
-    st = _dsn.convert( dsn );       if( !st ) return st;
 
-    conn_ = PQconnectdb( _dsn );
+    conn_ = PQconnectdb( dsn );
     if( PQstatus( conn_ ) != CONNECTION_OK ) {
 		close();
 		return -1;
@@ -28,14 +26,11 @@ void axDBO_pgsql::close() {
 	}
 }
 
-axStatus axDBO_pgsql::execSQL	( const wchar_t* sql ) {
+axStatus axDBO_pgsql::execSQL	( const char* sql ) {
 	axStatus st;
 	if( ! conn_ ) return axStatus::not_initialized;
 	
-    axStringA_<1024>  _sql;
-    st = _sql.convert( sql );       if( !st ) return st;
-
-	PGresult* res = PQexec( conn_, _sql );
+	PGresult* res = PQexec( conn_, sql );
 
 	switch( PQresultStatus(res) ) {
 		case PGRES_TUPLES_OK:	ax_print(L"PGRES_TUPLES_OK\n");		break;
@@ -50,9 +45,9 @@ axStatus axDBO_pgsql::execSQL	( const wchar_t* sql ) {
 	int row_count = PQntuples( res );
 	int col_count = PQnfields( res );
 
-	ax_print( L"=== column === \n" );
+	ax_print( "=== column === \n" );
 	for( int c=0; c < col_count; c++ ) {
-		ax_print( L"{?} ", PQfname( res,c ) );
+		ax_print( "{?} ", PQfname( res,c ) );
 	}
 
 	ax_print( L"\n--- rows --- \n" );

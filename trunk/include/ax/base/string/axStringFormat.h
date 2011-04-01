@@ -2,8 +2,8 @@
 #ifndef __axStringFormat_h__
 #define __axStringFormat_h__
 
+#include "ax_c_str.h"
 #include "../data_structure/axLocalArray.h"
-#include "ax_string.h"
 
 //! \ingroup base_string
 //@{

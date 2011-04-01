@@ -5,12 +5,13 @@
 
 class axDBO_Driver {
 public:
+
 	axDBO_Driver() {}
 	virtual ~axDBO_Driver() {}
 
-	virtual	axStatus	connect	( const wchar_t* dsn ) = 0;
+	virtual	axStatus	connect	( const char* dsn ) = 0;
 	virtual	void		close	() = 0;
-	virtual axStatus	execSQL	( const wchar_t* sql ) = 0;
+	virtual axStatus	execSQL	( const char* sql ) = 0;
 };
 
 #endif //__axDBO_Driver_h__

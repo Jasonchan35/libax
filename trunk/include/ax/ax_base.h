@@ -11,12 +11,8 @@
 #include "base/data_structure/axDList.h"
 #include "base/data_structure/axArray_types.h"
 
-#include "base/string/axString.h"
-#include "base/string/axLocalString.h"
-#include "base/string/axConstString.h"
-
+#include "base/string/ax_string.h"
 #include "base/file_system/axFileSystem.h"
-
 
 
 #if axCOMPILER_VC 

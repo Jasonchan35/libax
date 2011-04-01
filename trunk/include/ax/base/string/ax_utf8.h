@@ -2,6 +2,8 @@
 #ifndef __ax_utf8_h__
 #define __ax_utf8_h__
 
+#include "ax_c_str.h"
+
 //! \ingroup base_string
 //@{
 

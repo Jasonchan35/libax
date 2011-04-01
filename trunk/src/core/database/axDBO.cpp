@@ -9,12 +9,11 @@ axDBO::~axDBO() {
     close();
 }
 
-axStatus axDBO::connect( const wchar_t* driver, const wchar_t* dsn ) {
+axStatus axDBO::connect( const char* driver, const char* dsn ) {
 	axStatus st;
 	close();
-	axConstStringW	_driver( driver );
 
-	if( _driver->equals( L"pgsql" ) ) {
+	if(  ax_strcmp( driver, "pgsql" ) == 0 ) {
 		p_ = new axDBO_pgsql;
 		if( !p_ ) return axStatus::not_enough_memory;
 	}else{
@@ -32,7 +31,7 @@ void axDBO::close() {
 	}
 }
 
-axStatus	axDBO::execSQL( const wchar_t* sql ) {
+axStatus	axDBO::execSQL( const char* sql ) {
 	if( ! p_ ) return axStatus::not_initialized;
 	return p_->execSQL( sql );
 }
