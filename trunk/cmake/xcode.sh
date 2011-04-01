@@ -1,4 +1,4 @@
-mkdir project_xcode
+mkdir -p project_xcode
 cd project_xcode
 cmake -G "Xcode" ..
 
