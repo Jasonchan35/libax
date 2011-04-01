@@ -25,7 +25,7 @@ public:
 
 private:
 
-#ifdef axOS_WIN32
+#ifdef axOS_WIN
     HMODULE handle_;
 #endif
 

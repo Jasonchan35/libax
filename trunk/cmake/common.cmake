@@ -1,3 +1,9 @@
+include(CheckTypeSize)
+CHECK_TYPE_SIZE(void* SIZEOF_PTR)
+message("size of pointer = ${SIZEOF_PTR}")
+
+
+SET( axPLATFORM_NAME  "noarch" )
 
 if(MSVC)
 	foreach(flag_var CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
@@ -9,10 +15,12 @@ if(MSVC)
 		endif(${flag_var} MATCHES "/MDd")
 	endforeach(flag_var)
 
-	if( CMAKE_CL64)
-		#SET( axPLATFORM_NAME  win64 )
+	if( SIZEOF_PTR EQUAL  4 )
+		SET( axPLATFORM_NAME  "Win32" )
+	elseif( SIZEOF_PTR EQUAL  8 )
+		SET( axPLATFORM_NAME  "Win64" )
 	else()
-		SET( axPLATFORM_NAME  win32 )
+		message( FATAL_ERROR "Unknown SIZEOF_PTR" )
 	endif()
 
 	SET( my_default_libs ${my_default_libs}	libpq )
@@ -27,11 +35,12 @@ if (CMAKE_COMPILER_IS_GNUCC)
 	SET( my_default_libs ${my_default_libs}	dl pthread pq )
 endif()
 
-if( axPLATFORM_NAME )
-	add_definitions( -D${axPLATFORM_NAME} )
-	message( STATUS "axPLATFORM_NAME: ${axPLATFORM_NAME}" )
-else()
-#	message( FATAL_ERROR  "Unknown axPLATFORM_NAME" )
-endif()
+add_definitions( -D${axPLATFORM_NAME} )
 
+message( "CMAKE_SYSTEM           = ${CMAKE_SYSTEM}" )
+message( "CMAKE_SYSTEM_NAME      = ${CMAKE_SYSTEM_NAME}" )
+message( "CMAKE_SYSTEM_PROCESSOR = ${CMAKE_SYSTEM_PROCESSOR}" )
+message( "CMAKE_SYSTEM_VERSION   = ${CMAKE_SYSTEM_VERSION}" )
+
+message( "axPLATFORM             = ${axPLATFORM_NAME}" )
 
