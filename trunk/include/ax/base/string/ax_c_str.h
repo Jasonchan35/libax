@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __ax_string_h__
-#define __ax_string_h__
+#ifndef __ax_c_string_h__
+#define __ax_c_string_h__
 
 #include "ax_utf8.h"
 
@@ -194,5 +194,5 @@ axSize ax_strnlen( const wchar_t* s, axSize len ) {
 
 #include "ax_str_to.h"
 
-#endif //__ax_string_h__
+#endif //__ax_c_string_h__
 

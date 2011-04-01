@@ -15,6 +15,7 @@ private:
 	axArray<char, LOCAL_BUF_SIZE>	buf_;
 };
 
+
 template< size_t LOCAL_BUF_SIZE >
 class axStringW_ : public axIString<wchar_t> {
 	typedef	axIString<wchar_t>	B;
@@ -26,13 +27,13 @@ private:
 
 //------------------
 
-template< class T >
+template< class T, size_t LOCAL_BUF_SIZE = 0 >
 class axString_ : public axIString<T> {
 	typedef	axIString<T>	B;
 public:
 	axString_() : B(buf_) { buf_.setChunkSize( B::defaultChunkSize ); } 
 private:
-	axArray<T>	buf_;
+	axArray<T,LOCAL_BUF_SIZE>	buf_;
 };
 
 typedef	axString_<char>				axStringA;

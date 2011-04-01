@@ -9,49 +9,51 @@
 
 class	axStringFormat : public axNonCopyable {
 public:
+	axStringFormat();
+
 	axStatus	out	( wchar_t wc );
 	axStatus	out	( const wchar_t* sz );
 	axStatus	out	( const wchar_t* sz, axSize len );
 	axStatus	fill( wchar_t ch, axSize len );
 
+	axStatus	out	( char wc );
+	axStatus	out	( const char* sz );
+	axStatus	out	( const char* sz, axSize len );
+	axStatus	fill( char ch, axSize len );
+
 	typedef	axStringFormat_Arg		Arg;
 	typedef	axStringFormat_ArgList	ArgList;
 
-	axStatus	_process( axIArray<wchar_t> &buf, const wchar_t* fmt, const ArgList &list );
+	template< class T >
+	axStatus	_process( const T* fmt, const ArgList &list );
 
-	axStringW_<64>		opt;
+	void		_setOutput( axIStringA &str )		{ strA_ = &str; }
+	void		_setOutput( axIStringW &str )		{ strW_ = &str; }
+
+	axStringA_<64>		opt;
 private:
-	axIArray<wchar_t>*	buf_;
+	axIStringA*		strA_;
+	axIStringW*		strW_;
 };
 
 //-------- axStringFormat implementation ---
 inline
-axStatus	axStringFormat::_process( axIArray<wchar_t> &buf, const wchar_t* fmt, const ArgList &list ) {
+axStringFormat::axStringFormat() {
+	strA_ = NULL;
+	strW_ = NULL;
+}
+
+
+template< class T > inline
+axStatus	axStringFormat::_process( const T* fmt, const ArgList &list ) {
 	axStatus st;
-	buf_ = &buf;
-	/*
-	wprintf(L"format %s\n", fmt );
-	for( int i=0; i<list.size(); i++ ) {
-		printf("arg[%d] \n", i );
-	}
-	*/
-
-	if( buf_->size() ) { //set the size at the string 'zero' character
-		axSize old_len = ax_strlen( buf_->ptr() );
-		st = buf_->resize( old_len+1 );			if( !st ) return st;
-		buf_->last() = 0;
-	}
-
-	//reserve some memory for performance
-	axSize fmt_len = ax_strlen( fmt );
-	st = buf_->reserve( fmt_len + list.size() * 8 );			if( !st ) return st;
 
 	if( ! fmt ) return axStatus::invalid_param;
 	//find '{' and '}'
-	const wchar_t *s = NULL; //start
-	const wchar_t *e = NULL; //end
-	const wchar_t* c = fmt;
-	const wchar_t *raw = fmt;
+	const T *s = NULL; //start
+	const T *e = NULL; //end
+	const T* c = fmt;
+	const T *raw = fmt;
 
 	int cur_index = 0;
 	int last_index = 0;
@@ -81,10 +83,11 @@ axStatus	axStringFormat::_process( axIArray<wchar_t> &buf, const wchar_t* fmt, c
 				int index = 0;
 				s++;
 
-				axStringW_<64>	param, part1;
+				axString_<T,64>	param, part1, part2;
 				param.set( s, e-s );
-				if( param.splitByChar( ':', part1, this->opt ) ) {
-					part1.decSize( 1 );
+				if( param.splitByChar( ':', part1, part2 ) ) {
+					st = part1.decSize( 1 );			if( !st ) return st;
+					st = this->opt.set( part2 );		if( !st ) return st;
 				}
 
 				//wprintf(L"arg = [%s] [%s] [%s]\n", param.c_str(), part1.c_str(), this->opt.c_str() );
@@ -123,77 +126,78 @@ axStatus	axStringFormat::_process( axIArray<wchar_t> &buf, const wchar_t* fmt, c
 }
 
 inline
-axStatus	axStringFormat::out( const wchar_t* sz, axSize len )		{ 
-	if( len <= 0 ) return 0;
-	axStatus st;
-	axSize	old_size = buf_->size();
-	if( old_size > 0 ) old_size--;
-
-	axSize	new_size = old_size + len;
-	st = buf_->resize( new_size+1 );		if( !st ) return st;
-
-	wchar_t* p = buf_->ptr() + old_size; 
-	memcpy( p, sz, len * sizeof(wchar_t) );
-	p[len] = 0;
+axStatus	axStringFormat::out( const char* sz, axSize len ) { 
+	if( strA_ ) strA_->append( sz, len );
+	if( strW_ ) strW_->append( sz, len );
+	return 0;
+}
+inline
+axStatus	axStringFormat::out( const char* sz ) { 
+	if( strA_ ) strA_->append( sz );
+	if( strW_ ) strW_->append( sz );
 	return 0;
 }
 
 inline
+axStatus	axStringFormat::out( const wchar_t* sz, axSize len ) { 
+	if( strA_ ) strA_->append( sz, len );
+	if( strW_ ) strW_->append( sz, len );
+	return 0;
+}
+inline
 axStatus	axStringFormat::out( const wchar_t* sz ) { 
-	return out( sz, ax_strlen( sz ) );
+	if( strA_ ) strA_->append( sz );
+	if( strW_ ) strW_->append( sz );
+	return 0;
+}
+
+inline 
+axStatus	axStringFormat::out( char ch ) { 
+	return fill( ch, 1 ); 
+}
+inline 
+axStatus	axStringFormat::out( wchar_t ch ) { 
+	return fill( ch, 1 ); 
 }
 
 inline
-axStatus	axStringFormat::out( wchar_t wc ) {
-	return fill( wc, 1 );
+axStatus	axStringFormat::fill( char ch, axSize len )	{ 
+	if( strA_ ) {
+		for( axSize i=0; i<len; i++ ) 
+			strA_->append( ch );
+	}
+	if( strW_ ) {
+		for( axSize i=0; i<len; i++ ) 
+			strW_->append( ch );
+	}
 }
 
 inline
 axStatus	axStringFormat::fill( wchar_t ch, axSize len )	{ 
-	if( len <= 0 ) return 0;
-	axStatus st;
-	axSize	old_size = buf_->size();
-	if( old_size > 0 ) old_size--;
-
-	axSize	new_size = old_size + len;
-	st = buf_->resize( new_size+1 );		if( !st ) return st;
-
-	wchar_t* p = buf_->ptr() + old_size; 
-	for( axSize i=0; i<len; i++ ) {
-		p[i] = ch;
+	if( strA_ ) {
+		for( axSize i=0; i<len; i++ ) 
+			strA_->append( ch );
 	}
-	p[len] = 0;
-	return 0;
+	if( strW_ ) {
+		for( axSize i=0; i<len; i++ ) 
+			strW_->append( ch );
+	}
 }
+
 
 //----------------
 template<> inline
 axStatus	axIString<wchar_t> :: formatAppend_ArgList( const wchar_t* fmt, const ArgList &list ) {
 	axStringFormat	f;
-	return f._process( buf_, fmt, list );
+	f._setOutput( *this );
+	return f._process( fmt, list );
 }
 
 template<> inline
 axStatus	axIString<char> :: formatAppend_ArgList( const wchar_t* fmt, const ArgList &list ) {
-	axStatus st;
-	axStringW_<1024>	w;
-	w.format_ArgList( fmt, list );
-	//convert back to UTF
-	axSize	n;
-	st = utf8_count_in_wchar( n, w );		if( !st ) return st;
-	st = resize( n, false );				if( !st ) return st;
-	axSize len = n;
-
-	char* p = buf_.ptr();
-	const wchar_t* wp = w;
-	int ret;
-	for( axSize i=0; i<n; i++ ) {
-		ret = wchar_to_utf8( p, len, *wp );
-		p   += ret;
-		len -= ret;
-		wp++;
-	}
-	return 0;
+	axStringFormat	f;
+	f._setOutput( *this );
+	return f._process( fmt, list );
 }
 
 //---------------------
@@ -205,6 +209,31 @@ axStatus ax_print_ArgList( const wchar_t* fmt, const axStringFormat::ArgList &li
 	std::wcout << tmp.c_str();
 	return 0;
 }
+
+inline
+axStatus ax_print_ArgList( const char* fmt, const axStringFormat::ArgList &list ) {
+	axStatus st;
+	axStringW_<1024>	_fmt;
+	st = _fmt.set( fmt );					if( !st ) return st;
+
+	axStringW_<1024>	tmp;
+	st = tmp.format_ArgList( _fmt, list );		if( !st ) return st;
+	std::wcout << tmp.c_str();
+	return 0;
+}
+
+
+inline axStatus 		ax_print	( const char* fmt )																																																																															{ axStringFormat::ArgList list;													return ax_print_ArgList( fmt, list ); }
+inline axStatus 		ax_print	( const char* fmt,	const axStringFormat::Arg &a0 )																																																																							{ axStringFormat::ArgList list;	list<<a0;										return ax_print_ArgList( fmt, list ); }
+inline axStatus 		ax_print	( const char* fmt,	const axStringFormat::Arg &a0, const axStringFormat::Arg &a1 )																																																															{ axStringFormat::ArgList list;	list<<a0<<a1;									return ax_print_ArgList( fmt, list ); }
+inline axStatus 		ax_print	( const char* fmt,	const axStringFormat::Arg &a0, const axStringFormat::Arg &a1, const axStringFormat::Arg &a2 )																																																							{ axStringFormat::ArgList list;	list<<a0<<a1<<a2;								return ax_print_ArgList( fmt, list ); }
+inline axStatus 		ax_print	( const char* fmt,	const axStringFormat::Arg &a0, const axStringFormat::Arg &a1, const axStringFormat::Arg &a2, const axStringFormat::Arg &a3 )																																															{ axStringFormat::ArgList list;	list<<a0<<a1<<a2<<a3;							return ax_print_ArgList( fmt, list ); }
+inline axStatus 		ax_print	( const char* fmt,	const axStringFormat::Arg &a0, const axStringFormat::Arg &a1, const axStringFormat::Arg &a2, const axStringFormat::Arg &a3, const axStringFormat::Arg &a4 )																																								{ axStringFormat::ArgList list;	list<<a0<<a1<<a2<<a3<<a4;						return ax_print_ArgList( fmt, list ); }
+inline axStatus 		ax_print	( const char* fmt,	const axStringFormat::Arg &a0, const axStringFormat::Arg &a1, const axStringFormat::Arg &a2, const axStringFormat::Arg &a3, const axStringFormat::Arg &a4, const axStringFormat::Arg &a5 )																																{ axStringFormat::ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5;					return ax_print_ArgList( fmt, list ); }
+inline axStatus 		ax_print	( const char* fmt,	const axStringFormat::Arg &a0, const axStringFormat::Arg &a1, const axStringFormat::Arg &a2, const axStringFormat::Arg &a3, const axStringFormat::Arg &a4, const axStringFormat::Arg &a5, const axStringFormat::Arg &a6 )																								{ axStringFormat::ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6;				return ax_print_ArgList( fmt, list ); }
+inline axStatus 		ax_print	( const char* fmt,	const axStringFormat::Arg &a0, const axStringFormat::Arg &a1, const axStringFormat::Arg &a2, const axStringFormat::Arg &a3, const axStringFormat::Arg &a4, const axStringFormat::Arg &a5, const axStringFormat::Arg &a6, const axStringFormat::Arg &a7 )																{ axStringFormat::ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7;			return ax_print_ArgList( fmt, list ); }
+inline axStatus 		ax_print	( const char* fmt,	const axStringFormat::Arg &a0, const axStringFormat::Arg &a1, const axStringFormat::Arg &a2, const axStringFormat::Arg &a3, const axStringFormat::Arg &a4, const axStringFormat::Arg &a5, const axStringFormat::Arg &a6, const axStringFormat::Arg &a7, const axStringFormat::Arg &a8 )									{ axStringFormat::ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8;		return ax_print_ArgList( fmt, list ); }
+inline axStatus 		ax_print	( const char* fmt,	const axStringFormat::Arg &a0, const axStringFormat::Arg &a1, const axStringFormat::Arg &a2, const axStringFormat::Arg &a3, const axStringFormat::Arg &a4, const axStringFormat::Arg &a5, const axStringFormat::Arg &a6, const axStringFormat::Arg &a7, const axStringFormat::Arg &a8, const axStringFormat::Arg &a9 )	{ axStringFormat::ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8<<a9;	return ax_print_ArgList( fmt, list ); }
 
 inline axStatus 		ax_print	( const wchar_t* fmt )																																																																															{ axStringFormat::ArgList list;													return ax_print_ArgList( fmt, list ); }
 inline axStatus 		ax_print	( const wchar_t* fmt,	const axStringFormat::Arg &a0 )																																																																							{ axStringFormat::ArgList list;	list<<a0;										return ax_print_ArgList( fmt, list ); }
