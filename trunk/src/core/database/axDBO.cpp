@@ -1,32 +1,39 @@
 #include <ax/core/database/axDBO.h>
 #include <ax/core/database/axDBO_pgsql.h>
 
+axDBO::axDBO() {
+    p_ = NULL;
+}
 
-axStatus axDBO::connect( const wchar_t* driver, 
-						 const wchar_t* host, const wchar_t* dbname, 
-						 const wchar_t* user, const wchar_t* passowrd ) 
-{
+axDBO::~axDBO() {
+    close();
+}
+
+axStatus axDBO::connect( const wchar_t* driver, const wchar_t* dsn ) {
 	axStatus st;
 	close();
 	axConstStringW	_driver( driver );
 
 	if( _driver->equals( L"pgsql" ) ) {
-		dri_ = new axDBO_pgsql;
+		p_ = new axDBO_pgsql;
+		if( !p_ ) return axStatus::not_enough_memory;
 		return 0;
+	}else{
+        return axStatus::not_found;
 	}
 
-	return axStatus::not_found;
+    return p_->connect( dsn );
 }
 
 void axDBO::close() {
-	if( dri_ ) {
-		dri_->close();
-		delete dri_;
-		dri_ = NULL;
+	if( p_ ) {
+		p_->close();
+		delete p_;
+		p_ = NULL;
 	}
 }
 
 axStatus	axDBO::execSQL( const wchar_t* sql ) {
-	if( ! dri_ ) return axStatus::not_initialized;
-	return dri_->execSQL( sql );
+	if( ! p_ ) return axStatus::not_initialized;
+	return p_->execSQL( sql );
 }

@@ -8,11 +8,11 @@
 
 class axDBO : public axNonCopyable {
 public:
-	axStatus	connect( const wchar_t* driver, 
-						 const wchar_t* host, const wchar_t* dbname, 
-						 const wchar_t* user, const wchar_t* passowrd );
-	void		close();
+    axDBO();
+    ~axDBO();
 
+	axStatus	connect( const wchar_t* driver, const wchar_t* dsn );
+	void		close();
 	axStatus	execSQL( const wchar_t* sql );
 
 	class Stmt {
@@ -28,7 +28,7 @@ public:
 	};
 
 private:
-	void*	p_;
+	axDBO_Driver*	p_;
 };
 
 

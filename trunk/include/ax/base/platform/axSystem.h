@@ -68,7 +68,7 @@ axSize	axSystem::numberOfProcessors() {
 		#endif
 	
 		inline axSize	axSystem::numberOfProcessors() { return MPProcessors(); }
-	#elif
+	#else
 		#if 0
 		#pragma mark ================= UNIX ====================
 		#endif

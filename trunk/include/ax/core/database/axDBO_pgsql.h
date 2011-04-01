@@ -8,8 +8,7 @@ public:
 	axDBO_pgsql();
 	virtual ~axDBO_pgsql();
 
-	virtual	axStatus	connect	( const wchar_t* host, const wchar_t* dbname, 
-								  const wchar_t* user, const wchar_t* password );
+	virtual	axStatus	connect	( const wchar_t* dsn );
 	virtual	void		close	();
 	virtual axStatus	execSQL	( const wchar_t* sql );
 

@@ -1,14 +1,23 @@
 #include <ax/ax_core.h>
 
-int main() {
+axStatus test() {
 	axStatus st;
 	printf("test_axDBO_pgsql");
 
 	axDBO	db;
-	db.connect( L"pgsql", L"192.168.1.36", L"aweweb", L"aweweb", L"1234" );
+	st = db.connect( L"pgsql", L"host=127.0.0.1 dbname=lib_test user=testing password=1234" );
+	if( !st ) return st;
 
 	st = db.execSQL( L"select * from test" );
 
 	getchar();
 	return 0;
 }
+
+int main() {
+    axStatus st = test();
+    printf("==== return %d %s====\n", st.code(), st.c_str() );
+    return 0;
+}
+
+
