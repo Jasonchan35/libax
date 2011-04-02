@@ -52,15 +52,21 @@ inline
 axStatus utf8_count_in_wchar( axSize &out_len, const wchar_t* wcs ) {
 	out_len = 0;
 	for( ; *wcs; wcs++ ) {
-		if( *wcs <= 0x7F ) {
-			out_len++;
-			continue;
-		}
-		if( *wcs <= 0x7FF ) {
-			out_len+=2;
-			continue;
-		}
+		if( *wcs <= 0x7F  ) { out_len++;  continue; }
+		if( *wcs <= 0x7FF ) { out_len+=2; continue;	}
 		out_len+=3;
+	}
+	return 0;
+}
+
+inline
+axStatus utf8_count_in_wchar( axSize &out_len, wchar_t wc ) {
+	if( wc <= 0x7F ) {
+		out_len = 1;
+	}else if( wc <= 0x7FF ) {
+		out_len = 2;
+	}else{
+		out_len = 3;
 	}
 	return 0;
 }
@@ -70,14 +76,8 @@ axStatus utf8_count_in_wchar( axSize &out_len, const wchar_t* wcs, axSize wcs_le
 	axSize i;
 	out_len = 0;
 	for( i=0; i<wcs_len && *wcs; i++, wcs++ ) {
-		if( *wcs <= 0x7F ) {
-			out_len++;
-			continue;
-		}
-		if( *wcs <= 0x7FF ) {
-			out_len+=2;
-			continue;
-		}
+		if( *wcs <= 0x7F  ) { out_len++;  continue; }
+		if( *wcs <= 0x7FF ) { out_len+=2; continue; }
 		out_len+=3;
 	}
 	return 0;
@@ -86,20 +86,17 @@ axStatus utf8_count_in_wchar( axSize &out_len, const wchar_t* wcs, axSize wcs_le
 inline
 axStatus wchar_count_in_utf8( axSize &out_len, const char* utf8 ) {
 	out_len = 0;
-	for( ; *utf8; utf8++ ) {
+	for( ; *utf8; utf8++, out_len++ ) {
 		if( (*utf8 & 0x80) == 0 ) {
-			out_len++;
 			continue;
 		}
 		if( (*utf8 & 0xE0) == 0xC0 ) {
 			utf8++;	if( *utf8 == 0 ) return axStatus::invalid_param;
-			out_len+=2;
 			continue;
 		}
 		if( (*utf8 & 0xF0) == 0xE0 ) {
 			utf8++;	if( *utf8 == 0 ) return axStatus::invalid_param;
 			utf8++;	if( *utf8 == 0 ) return axStatus::invalid_param;
-			out_len+=3;
 			continue;
 		}
 	}
@@ -110,20 +107,17 @@ inline
 axStatus wchar_count_in_utf8( axSize &out_len, const char* utf8, axSize utf8_len ) {
 	out_len = 0;
 	axSize i;
-	for( i=0; i<utf8_len && *utf8; i++, utf8++ ) {
+	for( i=0; i<utf8_len && *utf8; i++, utf8++, out_len++ ) {
 		if( (*utf8 & 0x80) == 0 ) {
-			out_len++;
 			continue;
 		}
 		if( (*utf8 & 0xE0) == 0xC0 ) {
 			utf8++;	if( *utf8 == 0 ) return axStatus::invalid_param;
-			out_len+=2;
 			continue;
 		}
 		if( (*utf8 & 0xF0) == 0xE0 ) {
 			utf8++;	if( *utf8 == 0 ) return axStatus::invalid_param;
 			utf8++;	if( *utf8 == 0 ) return axStatus::invalid_param;
-			out_len+=3;
 			continue;
 		}
 	}

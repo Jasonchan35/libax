@@ -27,8 +27,8 @@ void axDBO_pgsql::close() {
 }
 
 axStatus	axDBO_pgsql::execSQL ( axDBO_Driver_ResultSP &out, const char* sql ) {
+	if( ! conn_ ) return axStatus::not_initialized;
 	axStatus st;
-	if( ! conn_ ) return -1;
 	
 	PGresult* res = PQexec( conn_, sql );
 	if( ! res ) return -1;
@@ -44,14 +44,14 @@ axStatus	axDBO_pgsql::execSQL ( axDBO_Driver_ResultSP &out, const char* sql ) {
 	}
 
 
-	axDBO_pgsql_Result* r = new axDBO_pgsql_Result;
-	if( ! r ) return axStatus::not_enough_memory;
+	axDBO_pgsql_Result* p = new axDBO_pgsql_Result;
+	if( ! p ) return axStatus::not_enough_memory;
 
-	r->res_ = res;
-	out.ref( r );
+	p->res_ = res;
+	out.ref( p );
 
-	r->rowCount_ = PQntuples( res );
-	r->colCount_ = PQnfields( res );
+	p->rowCount_ = PQntuples( res );
+	p->colCount_ = PQnfields( res );
 
 	/*
 	int row_count = PQntuples( _res );
@@ -70,5 +70,27 @@ axStatus	axDBO_pgsql::execSQL ( axDBO_Driver_ResultSP &out, const char* sql ) {
 		ax_print(L"\n");
 	}
 */
+	return 0;
+}
+
+
+//virtual 
+axStatus axDBO_pgsql::prepareStmt_ParamList ( axDBO_Driver_StmtSP &out, const char* sql, const axDBO_ParamList &list ) {
+	if( ! conn_ ) return axStatus::not_initialized;
+	axStatus st;
+
+	axDBO_pgsql_Stmt* p = new axDBO_pgsql_Stmt;
+	if( ! p ) return axStatus::not_enough_memory;
+
+	axStringA_<256>	name;
+	//using pointer as stmt name
+	st = name.format( "{?}", (const void*)p );		if( !st ) return st;
+
+
+
+	PQprepare( conn_, name, sql, (int)list.size(), NULL );
+
+//	PQexecPrepared( conn_, name, nParam, &val
+
 	return 0;
 }

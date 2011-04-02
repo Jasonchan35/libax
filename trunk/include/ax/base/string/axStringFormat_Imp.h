@@ -162,26 +162,34 @@ axStatus	axStringFormat::out( wchar_t ch ) {
 
 inline
 axStatus	axStringFormat::fill( char ch, axSize len )	{ 
+	axStatus st;
 	if( strA_ ) {
-		for( axSize i=0; i<len; i++ ) 
-			strA_->append( ch );
+		for( axSize i=0; i<len; i++ ) {
+			st = strA_->append( ch );		if( !st ) return st;
+		}
 	}
 	if( strW_ ) {
-		for( axSize i=0; i<len; i++ ) 
-			strW_->append( ch );
+		for( axSize i=0; i<len; i++ ) {
+			st = strW_->append( ch );		if( !st ) return st;
+		}
 	}
+	return 0;
 }
 
 inline
 axStatus	axStringFormat::fill( wchar_t ch, axSize len )	{ 
+	axStatus st;
 	if( strA_ ) {
-		for( axSize i=0; i<len; i++ ) 
-			strA_->append( ch );
+		for( axSize i=0; i<len; i++ ) {
+			st = strA_->append( ch );		if( !st ) return st;
+		}
 	}
 	if( strW_ ) {
-		for( axSize i=0; i<len; i++ ) 
-			strW_->append( ch );
+		for( axSize i=0; i<len; i++ ) {
+			st = strW_->append( ch );		if( !st ) return st;
+		}
 	}
+	return 0;
 }
 
 

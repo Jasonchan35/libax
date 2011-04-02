@@ -29,9 +29,17 @@ void axDBO::close() {
 
 axDBO_Result axDBO::execSQL( const char* sql ) {
 	axDBO_Result	res;
-	p_->execSQL( res.p_, sql );
+	if( !p_ ) return res;
 
+	p_->execSQL( res.p_, sql );
 	return res;
+}
+
+axDBO_Stmt  axDBO::prepareStmt_ParamList( const char* sql, const axDBO_ParamList &list ) {
+	axDBO_Stmt	stmt;
+	if( !p_ ) return stmt;
+	p_->prepareStmt_ParamList( stmt.p_, sql, list );
+	return stmt;
 }
 
 axDBO_Result::axDBO_Result() {
@@ -40,7 +48,7 @@ axDBO_Result::axDBO_Result() {
 axDBO_Result::~axDBO_Result() {
 }
 
-axDBO_Result :: operator	axStatus () const { 
+axStatus axDBO_Result :: status () const { 
 	return (p_) ? p_->status() : axStatus::not_initialized; 
 }
 

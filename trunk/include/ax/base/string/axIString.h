@@ -190,6 +190,34 @@ axStatus	axIString<wchar_t> :: append( const wchar_t *src, axSize src_len ) {
 	return 1;
 }
 
+template<> inline axStatus	axIString<wchar_t> :: append( char    ch ) { return append( (wchar_t)ch );  }
+
+template<> inline
+axStatus	axIString<wchar_t> :: append( wchar_t ch ) { 
+	axStatus st;
+	st = incSize( 1 );		if( !st ) return st;
+	buf_.last(1) = ch;
+	return 0;
+}
+
+template<> inline	
+axStatus	axIString<char>    :: append( char    ch ) { 
+	axStatus st;
+	st = incSize( 1 );		if( !st ) return st;
+	buf_.last(1) = ch;
+	return 0;
+}
+
+template<> inline	
+axStatus axIString<char> :: append( wchar_t ch ) { 
+	axStatus st;
+	axSize n;
+	st = utf8_count_in_wchar( n, ch );	if( !st ) return st;
+	st = incSize( n );					if( !st ) return st;
+	wchar_to_utf8( &buf_.last(n), n, ch );
+	return 0;
+}
+
 
 //wchar => utf8
 template<> inline

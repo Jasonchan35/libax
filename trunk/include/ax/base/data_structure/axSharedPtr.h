@@ -6,21 +6,14 @@
 
 template <class T>	class axSharedPtr;
 
-class axSharedObject {
+class axSharedPtrBase {
 public:
-	axSharedObject()			{ refCount_ = 0; }
-	virtual	~axSharedObject()	{ }
+	axSharedPtrBase()				{ refCount_ = 0; }
+	virtual	~axSharedPtrBase()		{ }
 
-	void incRefCount() {
-		++refCount_;
-	}
-
-	void decRefCount() {
-		int n = --refCount_;
-		if( !n ) delete this;
-	}
-
-	int refCount()			{ return refCount_.value(); }
+	void	incRefCount()			{ ++refCount_; }
+	void	decRefCount()			{ int n = --refCount_; if( !n ) delete this; }
+	int		refCount() const		{ return refCount_.value(); }
 
 private:
 	axAtomicInt		refCount_;
