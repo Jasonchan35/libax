@@ -12,6 +12,10 @@ axStatus test() {
 	res = db.execSQL( "select * from tbl_test" );
 	res.print();
 
+	int p0 = 2345;
+
+	axDBO_Stmt stmt = db.prepareSQL( "insert into tbl_test ( name, number ) values( $1, $2 )", p0 );
+
 	return 0;
 }
 

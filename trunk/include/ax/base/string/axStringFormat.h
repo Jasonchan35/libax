@@ -31,12 +31,14 @@ inline
 axStatus axStringFormat_out( axStringFormat &f, wchar_t*  value ) { return axStringFormat_out( f, (const char*)value ); }
 
 
-template<class T> inline
-axStatus axStringFormat_out( axStringFormat &f, const T& value ) {
-	return value.toStringFormat( f );
-}
+axStatus axStringFormat_out( axStringFormat &f, const void* p );
 
-/// @cond ax_internal
+template<class T> inline
+axStatus axStringFormat_out( axStringFormat &f, T*	  value ) { return axStringFormat_out( f, (const void* &)value ); }
+
+
+template<class T> inline
+axStatus axStringFormat_out( axStringFormat &f, const T& value ) { return value.toStringFormat( f ); }
 
 class axStringFormat_FuncClass {
 public:
@@ -83,8 +85,6 @@ public:
 		return *this; 
 	}
 };
-
-/// @endcond
 
 //@}
 

@@ -44,7 +44,7 @@ public:
 	axDBO_Param() { data_=NULL; }
 
 	template<class T> 
-	axDBO_Param( const T &v )	{ 
+	axDBO_Param( T &v )	{ 
 		data_ = &v;
 	}
 
@@ -77,19 +77,19 @@ public:
 	typedef	axDBO_Param			Param;
 	typedef axDBO_ParamList		ParamList;
 
-	axDBO_Stmt		prepareStmt_ParamList( const char* sql, const axDBO_ParamList &list );
+	axDBO_Stmt		prepareSQL_ParamList( const char* sql, const axDBO_ParamList &list );
 
-	axDBO_Stmt		prepareStmt			( const char* sql )																																												{ ParamList list;													return prepareStmt_ParamList( sql, list ); }
-	axDBO_Stmt		prepareStmt			( const char* sql,	const Param &a0 )																																							{ ParamList list;	list<<a0;										return prepareStmt_ParamList( sql, list ); }
-	axDBO_Stmt		prepareStmt			( const char* sql,	const Param &a0, const Param &a1 )																																			{ ParamList list;	list<<a0<<a1;									return prepareStmt_ParamList( sql, list ); }
-	axDBO_Stmt		prepareStmt			( const char* sql,	const Param &a0, const Param &a1, const Param &a2 )																															{ ParamList list;	list<<a0<<a1<<a2;								return prepareStmt_ParamList( sql, list ); }
-	axDBO_Stmt		prepareStmt			( const char* sql,	const Param &a0, const Param &a1, const Param &a2, const Param &a3 )																										{ ParamList list;	list<<a0<<a1<<a2<<a3;							return prepareStmt_ParamList( sql, list ); }
-	axDBO_Stmt		prepareStmt			( const char* sql,	const Param &a0, const Param &a1, const Param &a2, const Param &a3, const Param &a4 )																						{ ParamList list;	list<<a0<<a1<<a2<<a3<<a4;						return prepareStmt_ParamList( sql, list ); }
-	axDBO_Stmt		prepareStmt			( const char* sql,	const Param &a0, const Param &a1, const Param &a2, const Param &a3, const Param &a4, const Param &a5 )																		{ ParamList list;	list<<a0<<a1<<a2<<a3<<a4<<a5;					return prepareStmt_ParamList( sql, list ); }
-	axDBO_Stmt		prepareStmt			( const char* sql,	const Param &a0, const Param &a1, const Param &a2, const Param &a3, const Param &a4, const Param &a5, const Param &a6 )														{ ParamList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6;				return prepareStmt_ParamList( sql, list ); }
-	axDBO_Stmt		prepareStmt			( const char* sql,	const Param &a0, const Param &a1, const Param &a2, const Param &a3, const Param &a4, const Param &a5, const Param &a6, const Param &a7 )									{ ParamList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7;			return prepareStmt_ParamList( sql, list ); }
-	axDBO_Stmt		prepareStmt			( const char* sql,	const Param &a0, const Param &a1, const Param &a2, const Param &a3, const Param &a4, const Param &a5, const Param &a6, const Param &a7, const Param &a8 )					{ ParamList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8;		return prepareStmt_ParamList( sql, list ); }
-	axDBO_Stmt		prepareStmt			( const char* sql,	const Param &a0, const Param &a1, const Param &a2, const Param &a3, const Param &a4, const Param &a5, const Param &a6, const Param &a7, const Param &a8, const Param &a9 )	{ ParamList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8<<a9;	return prepareStmt_ParamList( sql, list ); }
+	axDBO_Stmt		prepareSQL			( const char* sql )																																												{ ParamList list;													return prepareSQL_ParamList( sql, list ); }
+	axDBO_Stmt		prepareSQL			( const char* sql,	const Param &a0 )																																							{ ParamList list;	list<<a0;										return prepareSQL_ParamList( sql, list ); }
+	axDBO_Stmt		prepareSQL			( const char* sql,	const Param &a0, const Param &a1 )																																			{ ParamList list;	list<<a0<<a1;									return prepareSQL_ParamList( sql, list ); }
+	axDBO_Stmt		prepareSQL			( const char* sql,	const Param &a0, const Param &a1, const Param &a2 )																															{ ParamList list;	list<<a0<<a1<<a2;								return prepareSQL_ParamList( sql, list ); }
+	axDBO_Stmt		prepareSQL			( const char* sql,	const Param &a0, const Param &a1, const Param &a2, const Param &a3 )																										{ ParamList list;	list<<a0<<a1<<a2<<a3;							return prepareSQL_ParamList( sql, list ); }
+	axDBO_Stmt		prepareSQL			( const char* sql,	const Param &a0, const Param &a1, const Param &a2, const Param &a3, const Param &a4 )																						{ ParamList list;	list<<a0<<a1<<a2<<a3<<a4;						return prepareSQL_ParamList( sql, list ); }
+	axDBO_Stmt		prepareSQL			( const char* sql,	const Param &a0, const Param &a1, const Param &a2, const Param &a3, const Param &a4, const Param &a5 )																		{ ParamList list;	list<<a0<<a1<<a2<<a3<<a4<<a5;					return prepareSQL_ParamList( sql, list ); }
+	axDBO_Stmt		prepareSQL			( const char* sql,	const Param &a0, const Param &a1, const Param &a2, const Param &a3, const Param &a4, const Param &a5, const Param &a6 )														{ ParamList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6;				return prepareSQL_ParamList( sql, list ); }
+	axDBO_Stmt		prepareSQL			( const char* sql,	const Param &a0, const Param &a1, const Param &a2, const Param &a3, const Param &a4, const Param &a5, const Param &a6, const Param &a7 )									{ ParamList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7;			return prepareSQL_ParamList( sql, list ); }
+	axDBO_Stmt		prepareSQL			( const char* sql,	const Param &a0, const Param &a1, const Param &a2, const Param &a3, const Param &a4, const Param &a5, const Param &a6, const Param &a7, const Param &a8 )					{ ParamList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8;		return prepareSQL_ParamList( sql, list ); }
+	axDBO_Stmt		prepareSQL			( const char* sql,	const Param &a0, const Param &a1, const Param &a2, const Param &a3, const Param &a4, const Param &a5, const Param &a6, const Param &a7, const Param &a8, const Param &a9 )	{ ParamList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8<<a9;	return prepareSQL_ParamList( sql, list ); }
 
 
 private:

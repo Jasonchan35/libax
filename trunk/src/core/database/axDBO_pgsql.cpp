@@ -26,32 +26,34 @@ void axDBO_pgsql::close() {
 	}
 }
 
+axStatus	axDBO_pgsql_Result::pgStatus() const {
+	if( ! res_ ) return axStatus::not_initialized;
+	ExecStatusType e = PQresultStatus( res_ );
+	switch( e ) {
+		case PGRES_TUPLES_OK:	return 0;
+		case PGRES_COMMAND_OK:	return 0;
+	}
+
+#ifdef _DEBUG
+	ax_print( "psql Error: {?}\n", PQresultErrorMessage( res_ ) );
+#endif
+	return -1;
+}
+
 axStatus	axDBO_pgsql::execSQL ( axDBO_Driver_ResultSP &out, const char* sql ) {
 	if( ! conn_ ) return axStatus::not_initialized;
 	axStatus st;
-	
-	PGresult* res = PQexec( conn_, sql );
-	if( ! res ) return -1;
 
-	switch( PQresultStatus( res ) ) {
-		case PGRES_TUPLES_OK:	ax_print(L"PGRES_TUPLES_OK\n");		break;
-		case PGRES_COMMAND_OK:	ax_print(L"PGRES_COMMAND_OK\n");	break;
-		default: {
-			fprintf(stderr, "BEGIN command failed: %s", PQerrorMessage(conn_) );
-			PQclear( res );
-			return -1;
-		}break;
-	}
+	axDBO_pgsql_Result* res = new axDBO_pgsql_Result;
+	if( ! res ) return axStatus::not_enough_memory;
+	out.ref( res );
+	res->dbo_ = this;
 
+	*res = PQexec( conn_, sql );
+	st = res->pgStatus();		if( !st ) return st; 
 
-	axDBO_pgsql_Result* p = new axDBO_pgsql_Result;
-	if( ! p ) return axStatus::not_enough_memory;
-
-	p->res_ = res;
-	out.ref( p );
-
-	p->rowCount_ = PQntuples( res );
-	p->colCount_ = PQnfields( res );
+	res->rowCount_ = PQntuples( *res );
+	res->colCount_ = PQnfields( *res );
 
 	/*
 	int row_count = PQntuples( _res );
@@ -75,22 +77,65 @@ axStatus	axDBO_pgsql::execSQL ( axDBO_Driver_ResultSP &out, const char* sql ) {
 
 
 //virtual 
-axStatus axDBO_pgsql::prepareStmt_ParamList ( axDBO_Driver_StmtSP &out, const char* sql, const axDBO_ParamList &list ) {
+axStatus axDBO_pgsql::prepareSQL_ParamList ( axDBO_Driver_StmtSP &out, const char* sql, const axDBO_ParamList &list ) {
 	if( ! conn_ ) return axStatus::not_initialized;
 	axStatus st;
 
-	axDBO_pgsql_Stmt* p = new axDBO_pgsql_Stmt;
-	if( ! p ) return axStatus::not_enough_memory;
+	axDBO_pgsql_Stmt* stmt = new axDBO_pgsql_Stmt;
+	if( ! stmt ) return axStatus::not_enough_memory;
+	out.ref( stmt );
 
-	axStringA_<256>	name;
+	axStringA_<64>	stmt_name;
+
 	//using pointer as stmt name
-	st = name.format( "{?}", (const void*)p );		if( !st ) return st;
+	stmt->dbo_.ref( this );
+	st = stmt_name.format( "{?}", stmt );		if( !st ) return st;
+
+	axDBO_pgsql_Result res;
 
 
+	res = PQprepare( conn_, stmt_name, sql, (int)list.size(), NULL );
+	st = res.pgStatus();		if( !st ) return st;
 
-	PQprepare( conn_, name, sql, (int)list.size(), NULL );
+	res = PQdescribePrepared ( conn_, stmt_name );
+	st = res.pgStatus();		if( !st ) return st;
+
+	axSize n_param = (axSize) PQnparams( res );
+
+	st = stmt->paramList_.resize( n_param );		if( !st ) return st;
+
+	axSize i;
+	for( i=0; i<n_param; i++ ) {
+		axDBO_pgsql_Stmt::Param	&pa = stmt->paramList_[i];
+		pa.type_ = PQparamtype ( res, (int)i );
+
+		ax_print( "param type {?}\n", pa.type_ );
+	}
 
 //	PQexecPrepared( conn_, name, nParam, &val
 
+	st = stmt->stmtName_.set( stmt_name );		if( !st ) return st;
 	return 0;
+}
+
+
+void axDBO_pgsql_Stmt::release() {
+	axStatus st;
+	axStringA_<128> sql;
+
+	if( ! stmtName_ ) return;
+
+	st = sql.format( "DEALLOCATE \"{?}\" ", stmtName_ );
+	stmtName_.clear();
+
+	if( ! dbo_ ) { assert(false); return; }
+	if( ! dbo_->conn_ ) { assert(false); return; }
+
+	if( !st ) { assert(false); return; }
+
+	PGresult *res = PQexec( dbo_->conn_, sql );
+	if ( !res ) { assert( false ); return; }
+
+	ExecStatusType s = PQresultStatus( res );
+//	if( s != PGRES_TUPLES_OK  ) assert( false );
 }

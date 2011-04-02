@@ -35,10 +35,10 @@ axDBO_Result axDBO::execSQL( const char* sql ) {
 	return res;
 }
 
-axDBO_Stmt  axDBO::prepareStmt_ParamList( const char* sql, const axDBO_ParamList &list ) {
+axDBO_Stmt  axDBO::prepareSQL_ParamList( const char* sql, const axDBO_ParamList &list ) {
 	axDBO_Stmt	stmt;
 	if( !p_ ) return stmt;
-	p_->prepareStmt_ParamList( stmt.p_, sql, list );
+	p_->prepareSQL_ParamList( stmt.p_, sql, list );
 	return stmt;
 }
 

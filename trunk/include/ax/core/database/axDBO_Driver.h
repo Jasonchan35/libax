@@ -41,7 +41,7 @@ public:
 	virtual	axStatus	connect		( const char* dsn ) = 0;
 	virtual	void		close		() = 0;
 	virtual axStatus	execSQL		( axDBO_Driver_ResultSP &out, const char* sql ) = 0;
-	virtual axStatus	prepareStmt_ParamList ( axDBO_Driver_StmtSP	&out, const char* sql, const axDBO_ParamList &list ) = 0;
+	virtual axStatus	prepareSQL_ParamList ( axDBO_Driver_StmtSP	&out, const char* sql, const axDBO_ParamList &list ) = 0;
 };
 
 

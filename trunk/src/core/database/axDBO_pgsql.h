@@ -7,28 +7,31 @@
 
 //from "libpq/server/pg_type.h"
 enum PGType {
-	BOOLOID		= 16,		// boolean
-	BYTEA		= 17,			// bytea
-	NAMEOID		= 19,		// name
-	INT8OID		= 20,		// bigint
-	INT2OID		= 21,		// smallint
-	INT4OID		= 23,		// integer
-	TEXTOID		= 25,		// character varying without length
-	OIDOID		= 26,		// oid
+	BOOLOID		= 16,	// boolean
+	BYTEA		= 17,	// bytea
+	NAMEOID		= 19,	// name
+	INT8OID		= 20,	// bigint
+	INT2OID		= 21,	// smallint
+	INT4OID		= 23,	// integer
+	TEXTOID		= 25,	// character varying without length
+	OIDOID		= 26,	// oid
 	FLOAT4OID	= 700,	// real
 	FLOAT8OID	= 701,	// double precision
 	BPCHAROID	= 1042,	// character ( fix length )
 	VARCHAROID	= 1043,	// character varying
-	TIMESTAMPOID = 1114, // timestamp without time zone
+	TIMESTAMPOID = 1114,// timestamp without time zone
 };
 
 
 class axDBO_pgsql;
+typedef	axSharedPtr< axDBO_pgsql >	axDBO_pgsqlSP;
 
 class axDBO_pgsql_Result : public axDBO_Driver_Result {
 public:
-	axDBO_pgsql_Result() { res_ = NULL; }
-	virtual	~axDBO_pgsql_Result() { 
+	axDBO_pgsql_Result()				{ res_ = NULL; }
+	virtual	~axDBO_pgsql_Result()		{ release(); }
+
+	void release() {
 		if( res_ ) {
 			PQclear( res_ );
 			res_ = NULL;
@@ -52,8 +55,14 @@ public:
 		return str_to( _getValue(row,col), value );
 	}
 
-friend class axDBO_pgsql;
-protected:
+	axStatus	pgStatus() const;
+
+	void operator = ( PGresult* p ) { release(); res_=p; }
+	     operator PGresult* () { return res_; }
+
+
+	axDBO_pgsqlSP	dbo_;
+private:
 	const char*	_getValue( axSize row, axSize col ) const {
 		if( row >= axTypeOf<int>::max() ) return NULL;
 		if( col >= axTypeOf<int>::max() ) return NULL;
@@ -61,13 +70,26 @@ protected:
 		int c = (int)col;
 		return PQgetvalue( res_, r, c );
 	}
-	PGresult*	res_;
+	PGresult*		res_;
 };
 
 
 class axDBO_pgsql_Stmt : public axDBO_Driver_Stmt { 
 public:
 
+	virtual ~axDBO_pgsql_Stmt() { release(); }
+	void release();
+
+	axDBO_pgsqlSP	dbo_;
+	axStringA_<32>	stmtName_;
+
+	class	Param {
+	public:
+		axStatus	takeOwnership( Param &src ) { operator=( src ); return 0; }	
+		Oid			type_;
+	};
+
+	axLocalArray< Param, axDBO_ParamListMaxSize >	paramList_;
 };
 
 
@@ -80,9 +102,8 @@ public:
 	virtual	axStatus	connect		( const char* dsn );
 	virtual	void		close		();
 	virtual axStatus	execSQL		( axDBO_Driver_ResultSP &out, const char* sql );
-	virtual axStatus	prepareStmt_ParamList ( axDBO_Driver_StmtSP	&out, const char* sql, const axDBO_ParamList &list );
+	virtual axStatus	prepareSQL_ParamList ( axDBO_Driver_StmtSP	&out, const char* sql, const axDBO_ParamList &list );
 
-private:
     PGconn* conn_;
 };
 
