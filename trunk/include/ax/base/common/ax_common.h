@@ -5,7 +5,7 @@
 #include "axStatus.h"
 #include "ax_utility.h"
 #include "axNonCopyable.h"
-#include "axTypeOf.h"
+#include "ax_byteorder.h"
 #include "axSize.h"
 
 

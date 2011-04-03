@@ -21,15 +21,33 @@
 
 #if axCPU_x86_64
 	#define axCPU_LP64        1
+	#define axCPU_LITTLE_ENDIAN	1
 #endif
 
-#if axCPU_x86 || axCPU_PowerPC || axCPU_ARM
+#if axCPU_x86
 	#define axCPU_LP32        1
+	#define axCPU_LITTLE_ENDIAN	1
+#endif
+
+#if axCPU_ARM
+	#define axCPU_LP32        1
+	#define axCPU_LITTLE_ENDIAN	1
+#endif
+
+#if axCPU_PowerPC
+	#define axCPU_LP32        1
+	#define axCPU_BIG_ENDIAN	1
 #endif
 
 #if axCPU_LP32 + axCPU_LP64 != 1
 	#error CPU bits should be specified
 #endif
+
+
+#if axCPU_BIG_ENDIAN + axCPU_LITTLE_ENDIAN != 1
+	#error CPU byte order should be specified
+#endif
+
 //======== OS ===============
 #if   axOS_WIN32   + axOS_WIN64 + axOS_WINCE \
 		+ axOS_FreeBSD + axOS_Linux + axOS_Solaris \

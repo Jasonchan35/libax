@@ -56,6 +56,8 @@ public:
 			T&			last		( axSize i = 0 )			{ return element( size_-i-1 ); }
 	const	T&			last		( axSize i = 0 ) const		{ return element( size_-i-1 ); }
 
+			axStatus	copy		( const axIArray<T> &src )	{ clear(); return append( src ); }
+
 			axStatus	append		( const T& value )			{ axStatus st = incSize(1); if( !st ) return st; last() = value; return 0; }
 			axStatus	append		( const axIArray<T> &src )	{ return append_n( src.ptr(), src.size() ); }
 			axStatus	append_n	( const T* src, axSize count );
@@ -69,6 +71,7 @@ public:
 			
 			void		free		();	//!< free all memory		
 			axStatus	shrink		();	//!< free unused memory <TODO>
+
 
 protected:
 	void	_init( T* p, axSize size, axSize capacity );
@@ -190,15 +193,6 @@ axStatus	axIArray<T>::reserve( axSize new_size, bool keep_data ) {
 	return 0;
 }
 
-template< class T >
-axStatus	axIArray<T>::append_n	( const T* src, axSize count ) {
-	axStatus	st;
-	st = incSize( count );						if( !st ) return st;
-	st = array_copy( p_ + size_, src, count );	if( !st ) return st;
-	return 0;
-}
-
-
 
 //==========
 template<class T> inline
@@ -227,7 +221,7 @@ axStatus _array_copy( T* dst, const T* src, axSize n ) {
 	}else{
 		const T* end = src + n;
 		for( ; src < end; src++, dst++ ) {
-			st = copy( *dst, *src );	if( !st ) return st;
+			*dst = *src;
 		}
 	}
 	return 0;
@@ -251,6 +245,17 @@ axStatus _array_take( T* dst, T* src, axSize n ) {
 	}
 	return 0;
 }
+
+template< class T >
+axStatus	axIArray<T>::append_n	( const T* src, axSize count ) {
+	axStatus	st;
+	st = incSize( count );						if( !st ) return st;
+	st = _array_copy( p_ + size_, src, count );	if( !st ) return st;
+	return 0;
+}
+
+
+
 
 //@}
 

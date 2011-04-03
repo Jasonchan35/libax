@@ -9,12 +9,21 @@ axStatus test() {
 	if( !st ) return st;
 
 	axDBO_Result	res;
+
+//	axDBO_Stmt stmt = db.prepareSQL( "insert into tbl_test ( name, number ) values( 'p0', $1 )", p0 );
+//	stmt.exec();
+
+	ax_print("---- test insert ---- \n");
+
+	int p0 = 2345;
+	res = db.execSQL( "insert into tbl_test ( name, number ) values( 'p0', $1 )", 12345 );
+	res.print();
+
+
+	ax_print("---- test select ---- \n");
 	res = db.execSQL( "select * from tbl_test" );
 	res.print();
 
-	int p0 = 2345;
-
-	axDBO_Stmt stmt = db.prepareSQL( "insert into tbl_test ( name, number ) values( $1, $2 )", p0 );
 
 	return 0;
 }

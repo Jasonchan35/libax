@@ -26,7 +26,7 @@ void axDBO_pgsql::close() {
 	}
 }
 
-axStatus	axDBO_pgsql_Result::pgStatus() const {
+axStatus	axDBO_pgsql_Result::status() const {
 	if( ! res_ ) return axStatus::not_initialized;
 	ExecStatusType e = PQresultStatus( res_ );
 	switch( e ) {
@@ -40,7 +40,44 @@ axStatus	axDBO_pgsql_Result::pgStatus() const {
 	return -1;
 }
 
-axStatus	axDBO_pgsql::execSQL ( axDBO_Driver_ResultSP &out, const char* sql ) {
+axSize	axDBO_pgsql_Result::rowCount() const {
+	if( ! res_ ) return 0;
+	return PQntuples( res_ );
+}
+
+axSize	axDBO_pgsql_Result::colCount() const {
+	if( ! res_ ) return 0;
+	return PQnfields( res_ );
+}
+
+axStatus	axDBO_pgsql_Result::getValue( axIStringA & value, axSize row, axSize col ) const {
+	value.clear();
+	if( !res_) return axStatus::not_initialized;
+	return value.set( _getValue(row,col) );
+}
+
+axStatus	axDBO_pgsql_Result::getValue( axIStringW & value, axSize row, axSize col ) const {
+	value.clear();
+	if( !res_) return axStatus::not_initialized;
+	return value.set( _getValue(row,col) );
+}
+
+axStatus	axDBO_pgsql_Result::getValue( int16_t &	value, axSize row, axSize col ) const {
+	if( !res_) return axStatus::not_initialized;
+	return str_to( _getValue(row,col), value );
+}
+
+axStatus	axDBO_pgsql_Result::getValue( int32_t &	value, axSize row, axSize col ) const {
+	if( !res_) return axStatus::not_initialized;
+	return str_to( _getValue(row,col), value );
+}
+
+axStatus	axDBO_pgsql_Result::getValue( int64_t &	value, axSize row, axSize col ) const {
+	if( !res_) return axStatus::not_initialized;
+	return str_to( _getValue(row,col), value );
+}
+
+axStatus	axDBO_pgsql::execSQL_ParamList ( axDBO_Driver_ResultSP &out, const char* sql, const axDBO_ParamList &list ) {
 	if( ! conn_ ) return axStatus::not_initialized;
 	axStatus st;
 
@@ -49,11 +86,33 @@ axStatus	axDBO_pgsql::execSQL ( axDBO_Driver_ResultSP &out, const char* sql ) {
 	out.ref( res );
 	res->dbo_ = this;
 
-	*res = PQexec( conn_, sql );
-	st = res->pgStatus();		if( !st ) return st; 
+	if( list.size() == 0 ) {
+		*res = PQexec( conn_, sql );
+	}else{
 
-	res->rowCount_ = PQntuples( *res );
-	res->colCount_ = PQnfields( *res );
+		axSize i;
+		for( i=0; i<list.size(); i++ ) {
+			const axDBO_Param &p = list[i];
+			switch( p.type() ) {
+				case axDBO_c_type_int32: {
+					_param_values [i].int32_ = ax_host_to_be( *(int*) p.data() );
+					_param_pvalues[i] = (const char*)&_param_values[i];
+					_param_types  [i] = INT4OID;
+					_param_lengths[i] = sizeof( int32_t );
+					_param_formats[i] = BINARY_FORMAT;
+				}break;
+				default: {
+					assert( false );
+					return -100;
+				}break;
+			}
+		}
+
+		*res = PQexecParams( conn_, sql, (int)list.size(), 
+							 _param_types, _param_pvalues, _param_lengths, _param_formats, BINARY_FORMAT );
+	}
+
+	st = res->status();		if( !st ) return st; 
 
 	/*
 	int row_count = PQntuples( _res );
@@ -95,23 +154,24 @@ axStatus axDBO_pgsql::prepareSQL_ParamList ( axDBO_Driver_StmtSP &out, const cha
 
 
 	res = PQprepare( conn_, stmt_name, sql, (int)list.size(), NULL );
-	st = res.pgStatus();		if( !st ) return st;
+	st = res.status();		if( !st ) return st;
 
 	res = PQdescribePrepared ( conn_, stmt_name );
-	st = res.pgStatus();		if( !st ) return st;
+	st = res.status();		if( !st ) return st;
 
 	axSize n_param = (axSize) PQnparams( res );
 
-	st = stmt->paramList_.resize( n_param );		if( !st ) return st;
-
+	st = stmt->paramList_.copy( list );		if( !st ) return st;
+/*
 	axSize i;
 	for( i=0; i<n_param; i++ ) {
-		axDBO_pgsql_Stmt::Param	&pa = stmt->paramList_[i];
-		pa.type_ = PQparamtype ( res, (int)i );
+		Oid t = PQparamtype ( res, (int)i );
+		ax_print( "param type {?}\n", t );
 
-		ax_print( "param type {?}\n", pa.type_ );
+		st = stmt->bindParam( list[i] );
+		if( !st ) return st;
 	}
-
+*/
 //	PQexecPrepared( conn_, name, nParam, &val
 
 	st = stmt->stmtName_.set( stmt_name );		if( !st ) return st;
@@ -138,4 +198,15 @@ void axDBO_pgsql_Stmt::release() {
 
 	ExecStatusType s = PQresultStatus( res );
 //	if( s != PGRES_TUPLES_OK  ) assert( false );
+}
+
+axStatus axDBO_pgsql_Stmt::exec() {
+	if( ! stmtName_ ) return axStatus::not_initialized;
+	if( ! dbo_ ) return axStatus::not_initialized;
+	if( ! dbo_->conn_ ) return axStatus::not_initialized;
+
+	axDBO_pgsql_Result	res;
+//	res = PQexecPrepared( dbo_->conn_, stmtName_, paramList_.size(), 
+//							paramValues_, paramLengths_, paramFormats_, 1 );
+	return 0;
 }

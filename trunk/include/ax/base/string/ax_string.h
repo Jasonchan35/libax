@@ -12,6 +12,7 @@
 #include "ax_str_to.h"
 
 #include "axStringFormat_out_Imp.h"
+#include "ax_print.h"
 
 #endif //__ax_string_h__
 

@@ -22,6 +22,9 @@ enum PGType {
 	TIMESTAMPOID = 1114,// timestamp without time zone
 };
 
+enum {
+	BINARY_FORMAT = 1,
+};
 
 class axDBO_pgsql;
 typedef	axSharedPtr< axDBO_pgsql >	axDBO_pgsqlSP;
@@ -31,6 +34,11 @@ public:
 	axDBO_pgsql_Result()				{ res_ = NULL; }
 	virtual	~axDBO_pgsql_Result()		{ release(); }
 
+	virtual	axStatus	status	() const;
+	virtual	axSize		rowCount() const;
+	virtual	axSize		colCount() const;
+
+
 	void release() {
 		if( res_ ) {
 			PQclear( res_ );
@@ -38,36 +46,23 @@ public:
 		}
 	}
 
-	virtual	axStatus	getValue( axIStringA & value, axSize row, axSize col ) const {
-		value.clear();
-		if( !res_) return axStatus::not_initialized;
-		return value.set( _getValue(row,col) );
-	}
-	
-	virtual	axStatus	getValue( axIStringW & value, axSize row, axSize col ) const {
-		value.clear();
-		if( !res_) return axStatus::not_initialized;
-		return value.set( _getValue(row,col) );
-	}
-
-	virtual	axStatus	getValue( int32_t &	value, axSize row, axSize col ) const {
-		if( !res_) return axStatus::not_initialized;
-		return str_to( _getValue(row,col), value );
-	}
-
-	axStatus	pgStatus() const;
+	virtual	axStatus	getValue( axIStringA & value, axSize row, axSize col ) const;
+	virtual	axStatus	getValue( axIStringW & value, axSize row, axSize col ) const;
+	virtual	axStatus	getValue( int16_t	 & value, axSize row, axSize col ) const;
+	virtual	axStatus	getValue( int32_t	 & value, axSize row, axSize col ) const;
+	virtual	axStatus	getValue( int64_t	 & value, axSize row, axSize col ) const;
 
 	void operator = ( PGresult* p ) { release(); res_=p; }
-	     operator PGresult* () { return res_; }
+	 operator PGresult* () { return res_; }
 
 
 	axDBO_pgsqlSP	dbo_;
 private:
 	const char*	_getValue( axSize row, axSize col ) const {
-		if( row >= axTypeOf<int>::max() ) return NULL;
-		if( col >= axTypeOf<int>::max() ) return NULL;
-		int r = (int)row;
-		int c = (int)col;
+		axStatus st;
+		int r,c;
+		st = ax_safe_assign( r, row );		if( !st ) return NULL;
+		st = ax_safe_assign( c, col );		if( !st ) return NULL;
 		return PQgetvalue( res_, r, c );
 	}
 	PGresult*		res_;
@@ -76,20 +71,19 @@ private:
 
 class axDBO_pgsql_Stmt : public axDBO_Driver_Stmt { 
 public:
-
 	virtual ~axDBO_pgsql_Stmt() { release(); }
 	void release();
+
+	virtual	axStatus exec();
 
 	axDBO_pgsqlSP	dbo_;
 	axStringA_<32>	stmtName_;
 
-	class	Param {
-	public:
-		axStatus	takeOwnership( Param &src ) { operator=( src ); return 0; }	
-		Oid			type_;
-	};
 
-	axLocalArray< Param, axDBO_ParamListMaxSize >	paramList_;
+	axDBO_ParamList paramList_;
+//	const char* paramValues_ [axDBO_ParamListMaxSize];
+//	const int	paramLengths_[axDBO_ParamListMaxSize];
+//	const int	paramFormats_[axDBO_ParamListMaxSize];
 };
 
 
@@ -101,10 +95,29 @@ public:
 
 	virtual	axStatus	connect		( const char* dsn );
 	virtual	void		close		();
-	virtual axStatus	execSQL		( axDBO_Driver_ResultSP &out, const char* sql );
-	virtual axStatus	prepareSQL_ParamList ( axDBO_Driver_StmtSP	&out, const char* sql, const axDBO_ParamList &list );
+	virtual axStatus	execSQL_ParamList	( axDBO_Driver_ResultSP &out, const char* sql, const axDBO_ParamList &list );
+	virtual axStatus	prepareSQL_ParamList( axDBO_Driver_StmtSP	&out, const char* sql, const axDBO_ParamList &list );
 
     PGconn* conn_;
+
+//used for execSQL_ParamList or prepareSQL_ParamList
+	struct union_t {
+		union {
+			bool	bool_;
+			int16_t int16_;
+			int32_t int32_;
+			int64_t int64_;
+			double	double_;
+			float	float_;
+		};
+	};
+
+	Oid			_param_types	[ axDBO_ParamListMaxSize ];
+	union_t		_param_values	[ axDBO_ParamListMaxSize ];
+	const char* _param_pvalues	[ axDBO_ParamListMaxSize ];
+	int			_param_lengths	[ axDBO_ParamListMaxSize ];
+	int			_param_formats	[ axDBO_ParamListMaxSize ];
+
 };
 
 #endif //__axDBO_pgsql_h__

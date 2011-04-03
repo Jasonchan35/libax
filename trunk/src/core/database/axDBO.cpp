@@ -27,11 +27,11 @@ void axDBO::close() {
 	p_.unref();
 }
 
-axDBO_Result axDBO::execSQL( const char* sql ) {
+axDBO_Result axDBO::execSQL_ParamList( const char* sql, const axDBO_ParamList &list ) {
 	axDBO_Result	res;
 	if( !p_ ) return res;
 
-	p_->execSQL( res.p_, sql );
+	p_->execSQL_ParamList( res.p_, sql, list );
 	return res;
 }
 
