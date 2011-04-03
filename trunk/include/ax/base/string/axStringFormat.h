@@ -23,6 +23,7 @@ axStatus axStringFormat_out( axStringFormat &f, int32_t		value );
 axStatus axStringFormat_out( axStringFormat &f, int64_t		value );
 axStatus axStringFormat_out( axStringFormat &f, float		value );
 axStatus axStringFormat_out( axStringFormat &f, double		value );
+axStatus axStringFormat_out( axStringFormat &f, bool		value );
 
 axStatus axStringFormat_out( axStringFormat &f, const char*		value );
 axStatus axStringFormat_out( axStringFormat &f, const wchar_t*  value );

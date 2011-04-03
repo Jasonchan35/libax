@@ -49,6 +49,8 @@ public:
 	virtual	axStatus	getValue( float		 & value, axSize row, axSize col ) const;
 	virtual	axStatus	getValue( double	 & value, axSize row, axSize col ) const;
 
+	virtual	axStatus	getValue( bool		 & value, axSize row, axSize col ) const;
+
 	virtual int			getColumnType( axSize col ) const;
 
 	void operator = ( PGresult* p ) { release(); res_=p; }

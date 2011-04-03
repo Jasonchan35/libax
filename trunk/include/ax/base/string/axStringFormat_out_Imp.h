@@ -286,6 +286,10 @@ inline int axStringFormat_to_digi( char* buf, const int max_digi, double  value,
 	return axStringFormat_to_digi_floating( buf, max_digi, value, base, exponent, precision, table ); 
 }
 
+inline axStatus axStringFormat_out( axStringFormat &f, bool value ) {
+	return (value) ? f.out("true") : f.out("false");
+}
+
 
 //@}
 

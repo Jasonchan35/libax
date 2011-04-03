@@ -25,6 +25,8 @@ public:
 	axStatus	getValue( int64_t	 & value, axSize row, axSize col ) const;
 	axStatus	getValue( float		 & value, axSize row, axSize col ) const;
 	axStatus	getValue( double	 & value, axSize row, axSize col ) const;
+	axStatus	getValue( bool	     & value, axSize row, axSize col ) const;
+
 
 	int			getColumnType( axSize col ) const;
 

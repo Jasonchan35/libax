@@ -19,6 +19,8 @@ axStatus	axDBO_Result :: getValue( int32_t	 & value, axSize row, axSize col ) co
 axStatus	axDBO_Result :: getValue( int64_t	 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
 axStatus	axDBO_Result :: getValue( float		 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
 axStatus	axDBO_Result :: getValue( double	 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
+axStatus	axDBO_Result :: getValue( bool 		 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
+
 
 template<class T> inline
 axStatus axDBO_Result :: _getValueInStringA( axIStringA &value, axSize row, axSize col ) const {
@@ -41,6 +43,7 @@ axStatus	axDBO_Result :: getValueInString( axIStringA & value, axSize row, axSiz
 	value.clear();
 	axStatus st;
 	switch( getColumnType( col ) ) {
+		case axDBO_c_type_bool:		return _getValueInStringA<bool>	  ( value, row, col );
 		case axDBO_c_type_int16:	return _getValueInStringA<int16_t>( value, row, col );
 		case axDBO_c_type_int32:	return _getValueInStringA<int32_t>( value, row, col );
 		case axDBO_c_type_int64:	return _getValueInStringA<int64_t>( value, row, col );

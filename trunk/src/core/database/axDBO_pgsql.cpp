@@ -54,6 +54,7 @@ int	axDBO_pgsql_Result::getColumnType( axSize col ) const {
 	if( !res_) return axDBO_c_type_null;
 	Oid oid = PQftype( res_, col );
 	switch( oid ) {
+		case BOOLOID:	return axDBO_c_type_bool;
 		case INT2OID:	return axDBO_c_type_int16;
 		case INT4OID:	return axDBO_c_type_int32;
 		case INT8OID:	return axDBO_c_type_int64;
@@ -108,6 +109,16 @@ axStatus	axDBO_pgsql_Result::getValue( int64_t &	value, axSize row, axSize col )
 
 axStatus	axDBO_pgsql_Result::getValue( float   &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, FLOAT4OID, row, col ); }
 axStatus	axDBO_pgsql_Result::getValue( double  &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, FLOAT8OID, row, col ); }
+
+axStatus	axDBO_pgsql_Result::getValue( bool    &	value, axSize row, axSize col ) const { 
+	if( !res_) return axStatus::not_initialized;
+	if( PQftype( res_, col ) != BOOLOID ) return -1;
+	char* p = PQgetvalue( res_, row, col );
+	if( !p ) { value = 0; return 0; } //is null 
+	value = (*p) ? true: false;
+	return 1;
+}
+
 
 axStatus	axDBO_pgsql::execSQL_ParamList ( axDBO_Driver_ResultSP &out, const char* sql, const axDBO_ParamList &list ) {
 	if( ! conn_ ) return axStatus::not_initialized;

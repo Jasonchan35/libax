@@ -7,6 +7,7 @@ class axDBO;
 
 enum {
 	axDBO_c_type_null = 0,
+	axDBO_c_type_bool,
 	axDBO_c_type_int16,
 	axDBO_c_type_int32,
 	axDBO_c_type_int64,
@@ -16,7 +17,12 @@ enum {
 	axDBO_c_type_StringW,
 };
 
+inline int axDBO_c_typeof( const bool		&v) { return axDBO_c_type_bool; }
+inline int axDBO_c_typeof( const float		&v) { return axDBO_c_type_float; }
+inline int axDBO_c_typeof( const double		&v) { return axDBO_c_type_double; }
+inline int axDBO_c_typeof( const int16_t	&v) { return axDBO_c_type_int16; }
 inline int axDBO_c_typeof( const int32_t	&v) { return axDBO_c_type_int32; }
+inline int axDBO_c_typeof( const int64_t	&v) { return axDBO_c_type_int64; }
 inline int axDBO_c_typeof( const axIStringA &v) { return axDBO_c_type_StringA; }
 inline int axDBO_c_typeof( const axIStringW &v) { return axDBO_c_type_StringW; }
 
@@ -67,7 +73,7 @@ public:
 	virtual	axStatus	getValue( int64_t	 & value, axSize row, axSize col ) const = 0;
 	virtual	axStatus	getValue( float		 & value, axSize row, axSize col ) const = 0;
 	virtual	axStatus	getValue( double	 & value, axSize row, axSize col ) const = 0;
-
+	virtual	axStatus	getValue( bool		 & value, axSize row, axSize col ) const = 0;
 	virtual	int			getColumnType( axSize col ) const = 0;
 
 private:
