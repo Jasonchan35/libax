@@ -95,7 +95,7 @@ axStatus	ax_safe_assign( DST &dst, const SRC &src ) {
 	}
 	//avoid overflow
 	if( src != (SRC)tmp ) return axStatus::non_safe_assign;
-	dst = src;
+	dst = (DST)src;
 	return 0;
 }
 

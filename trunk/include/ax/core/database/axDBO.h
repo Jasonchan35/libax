@@ -9,6 +9,18 @@
 
 //! Database Object
 /*!
+	The prepareSQL stmt will be using libax format just like ax_print() did \n
+	\bfor example:
+	\code
+		prepareSQL( "insert into my_table ( field1, field2 ) values( {?}, {?} ); " )
+	\endcode
+	
+
+	since differnt Database using different prepareSQL syntax
+	\li pgSQL  $1, $2
+	\li mySQL	?, ?
+	\li ODBC	?, ?
+	\li SQLite	?, ?NNN
 
 */
 class axDBO : public axNonCopyable {
