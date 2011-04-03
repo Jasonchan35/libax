@@ -39,18 +39,17 @@ public:
 	virtual	axSize		colCount() const;
 
 
-	void release() {
-		if( res_ ) {
-			PQclear( res_ );
-			res_ = NULL;
-		}
-	}
+	void release()						{ if( res_ ) { PQclear( res_ ); res_ = NULL; } }
 
 	virtual	axStatus	getValue( axIStringA & value, axSize row, axSize col ) const;
 	virtual	axStatus	getValue( axIStringW & value, axSize row, axSize col ) const;
 	virtual	axStatus	getValue( int16_t	 & value, axSize row, axSize col ) const;
 	virtual	axStatus	getValue( int32_t	 & value, axSize row, axSize col ) const;
 	virtual	axStatus	getValue( int64_t	 & value, axSize row, axSize col ) const;
+	virtual	axStatus	getValue( float		 & value, axSize row, axSize col ) const;
+	virtual	axStatus	getValue( double	 & value, axSize row, axSize col ) const;
+
+	virtual int			getColumnType( axSize col ) const;
 
 	void operator = ( PGresult* p ) { release(); res_=p; }
 	 operator PGresult* () { return res_; }

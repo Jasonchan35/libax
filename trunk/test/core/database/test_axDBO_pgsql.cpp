@@ -21,7 +21,7 @@ axStatus test() {
 
 
 	ax_print("---- test select ---- \n");
-	res = db.execSQL( "select * from tbl_test" );
+	res = db.execSQL( "select * from tbl_test order by _id" );
 	res.print();
 
 

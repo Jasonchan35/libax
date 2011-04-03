@@ -18,9 +18,25 @@ public:
 
 	operator	axStatus() const		{ return status(); }
 
+	axStatus	getValue( axIStringA & value, axSize row, axSize col ) const;
+	axStatus	getValue( axIStringW & value, axSize row, axSize col ) const;
+	axStatus	getValue( int16_t	 & value, axSize row, axSize col ) const;
+	axStatus	getValue( int32_t	 & value, axSize row, axSize col ) const;
+	axStatus	getValue( int64_t	 & value, axSize row, axSize col ) const;
+	axStatus	getValue( float		 & value, axSize row, axSize col ) const;
+	axStatus	getValue( double	 & value, axSize row, axSize col ) const;
+
+	int			getColumnType( axSize col ) const;
+
+	axStatus	getValueInString( axIStringA & value, axSize row, axSize col ) const;
+	axStatus	getValueInString( axIStringW & value, axSize row, axSize col ) const;
+
 friend class axDBO;
 protected:
 	axSharedPtr< axDBO_Driver_Result >	p_;
+private:
+	template<class T> axStatus _getValueInStringA( axIStringA &value, axSize row, axSize col ) const;
+	template<class T> axStatus _getValueInStringW( axIStringW &value, axSize row, axSize col ) const;
 };
 
 //@}

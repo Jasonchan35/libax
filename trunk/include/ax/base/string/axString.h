@@ -39,6 +39,10 @@ private:
 typedef	axString_<char>				axStringA;
 typedef	axString_<wchar_t>			axStringW;
 
+const size_t axTempString_localBufSize = 1024;
+typedef axString_<char,		axTempString_localBufSize>		axTempStringA;
+typedef axString_<wchar_t,	axTempString_localBufSize>		axTempStringW;
+
 //@}
 
 #include "axStringFormat_out_Imp.h"

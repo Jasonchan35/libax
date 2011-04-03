@@ -50,32 +50,64 @@ axSize	axDBO_pgsql_Result::colCount() const {
 	return PQnfields( res_ );
 }
 
+int	axDBO_pgsql_Result::getColumnType( axSize col ) const {
+	if( !res_) return axDBO_c_type_null;
+	Oid oid = PQftype( res_, col );
+	switch( oid ) {
+		case INT2OID:	return axDBO_c_type_int16;
+		case INT4OID:	return axDBO_c_type_int32;
+		case INT8OID:	return axDBO_c_type_int64;
+		case FLOAT4OID: return axDBO_c_type_float;
+		case FLOAT8OID: return axDBO_c_type_double;
+		//string
+		case VARCHAROID:
+		case BPCHAROID:
+		case NAMEOID:
+		case TEXTOID: {
+			return axDBO_c_type_StringA;
+		}break;
+	}
+	return axDBO_c_type_null;
+}
+
 axStatus	axDBO_pgsql_Result::getValue( axIStringA & value, axSize row, axSize col ) const {
 	value.clear();
 	if( !res_) return axStatus::not_initialized;
-	return value.set( _getValue(row,col) );
+	Oid oid = PQftype( res_, col );
+	if( oid != VARCHAROID && oid != BPCHAROID && oid != NAMEOID && oid != TEXTOID ) return -1;
+	char* p = PQgetvalue( res_, row, col );
+	if( !p ) { return 0; } //is null 
+	value.set( p );
+	return 1;
 }
 
 axStatus	axDBO_pgsql_Result::getValue( axIStringW & value, axSize row, axSize col ) const {
 	value.clear();
 	if( !res_) return axStatus::not_initialized;
-	return value.set( _getValue(row,col) );
+	Oid oid = PQftype( res_, col );
+	if( oid != VARCHAROID && oid != BPCHAROID && oid != NAMEOID && oid != TEXTOID ) return -1;
+	char* p = PQgetvalue( res_, row, col );
+	if( !p ) { return 0; } //is null 
+	value.set( p );
+	return 1;
 }
 
-axStatus	axDBO_pgsql_Result::getValue( int16_t &	value, axSize row, axSize col ) const {
+template<class T> inline static
+axStatus	_getNumberValue( PGresult* res_, T &value, Oid oid, axSize row, axSize col ) {
 	if( !res_) return axStatus::not_initialized;
-	return str_to( _getValue(row,col), value );
+	if( PQftype( res_, col ) != oid ) return -1;
+	char* p = PQgetvalue( res_, row, col );
+	if( !p ) { value = 0; return 0; } //is null 
+	value = ax_be_to_host( *(T*)p );
+	return 1;
 }
 
-axStatus	axDBO_pgsql_Result::getValue( int32_t &	value, axSize row, axSize col ) const {
-	if( !res_) return axStatus::not_initialized;
-	return str_to( _getValue(row,col), value );
-}
+axStatus	axDBO_pgsql_Result::getValue( int16_t &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, INT2OID,   row, col ); }
+axStatus	axDBO_pgsql_Result::getValue( int32_t &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, INT4OID,   row, col ); }
+axStatus	axDBO_pgsql_Result::getValue( int64_t &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, INT8OID,   row, col ); }
 
-axStatus	axDBO_pgsql_Result::getValue( int64_t &	value, axSize row, axSize col ) const {
-	if( !res_) return axStatus::not_initialized;
-	return str_to( _getValue(row,col), value );
-}
+axStatus	axDBO_pgsql_Result::getValue( float   &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, FLOAT4OID, row, col ); }
+axStatus	axDBO_pgsql_Result::getValue( double  &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, FLOAT8OID, row, col ); }
 
 axStatus	axDBO_pgsql::execSQL_ParamList ( axDBO_Driver_ResultSP &out, const char* sql, const axDBO_ParamList &list ) {
 	if( ! conn_ ) return axStatus::not_initialized;
@@ -86,31 +118,26 @@ axStatus	axDBO_pgsql::execSQL_ParamList ( axDBO_Driver_ResultSP &out, const char
 	out.ref( res );
 	res->dbo_ = this;
 
-	if( list.size() == 0 ) {
-		*res = PQexec( conn_, sql );
-	}else{
-
-		axSize i;
-		for( i=0; i<list.size(); i++ ) {
-			const axDBO_Param &p = list[i];
-			switch( p.type() ) {
-				case axDBO_c_type_int32: {
-					_param_values [i].int32_ = ax_host_to_be( *(int*) p.data() );
-					_param_pvalues[i] = (const char*)&_param_values[i];
-					_param_types  [i] = INT4OID;
-					_param_lengths[i] = sizeof( int32_t );
-					_param_formats[i] = BINARY_FORMAT;
-				}break;
-				default: {
-					assert( false );
-					return -100;
-				}break;
-			}
+	axSize i;
+	for( i=0; i<list.size(); i++ ) {
+		const axDBO_Param &p = list[i];
+		switch( p.type() ) {
+			case axDBO_c_type_int32: {
+				_param_values [i].int32_ = ax_host_to_be( *(int*) p.data() );
+				_param_pvalues[i] = (const char*)&_param_values[i];
+				_param_types  [i] = INT4OID;
+				_param_lengths[i] = sizeof( int32_t );
+				_param_formats[i] = BINARY_FORMAT;
+			}break;
+			default: {
+				assert( false );
+				return -100;
+			}break;
 		}
-
-		*res = PQexecParams( conn_, sql, (int)list.size(), 
-							 _param_types, _param_pvalues, _param_lengths, _param_formats, BINARY_FORMAT );
 	}
+
+	*res = PQexecParams( conn_, sql, (int)list.size(), 
+						 _param_types, _param_pvalues, _param_lengths, _param_formats, BINARY_FORMAT );
 
 	st = res->status();		if( !st ) return st; 
 

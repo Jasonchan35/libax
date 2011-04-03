@@ -7,26 +7,19 @@
 //! \ingroup base_string
 //@{
 
-#ifdef axOS_WIN
-	inline int	 strncasecmp( const char* s1, const char* s2, axSize n )			{ return _strnicmp(s1,s2,n); }
-	inline int	 strcasecmp ( const char* s1, const char* s2 )					{ return _stricmp(s1,s2); }
-	inline int	 wcsncasecmp( const wchar_t* s1, const wchar_t* s2, axSize n )	{ return _wcsnicmp(s1,s2,n); }
-	inline int	 wcscasecmp ( const wchar_t* s1, const wchar_t* s2 )			{ return _wcsicmp(s1,s2); }
-#endif //axOS_WIN
-
 inline size_t ax_strlen( const char*    sz )	{ return strlen(sz); }
 inline size_t ax_strlen( const wchar_t* sz )	{ return wcslen(sz); }
 
-inline int ax_strcmp( const char*    a, const char* b )	{ return strcmp(a,b); }
+inline int ax_strcmp( const char*    a, const char*    b )	{ return strcmp(a,b); }
 inline int ax_strcmp( const wchar_t* a, const wchar_t* b )	{ return wcscmp(a,b); }
 
-inline int ax_strncmp( const char*    a, const char* b, axSize n )		{ return strncmp(a,b,n); }
+inline int ax_strncmp( const char*    a, const char*    b, axSize n )		{ return strncmp(a,b,n); }
 inline int ax_strncmp( const wchar_t* a, const wchar_t* b, axSize n )		{ return wcsncmp(a,b,n); }
 
-inline int ax_strcasecmp( const char*    a, const char* b )				{ return strcasecmp(a,b); }
+inline int ax_strcasecmp( const char*    a, const char*    b );
 inline int ax_strcasecmp( const wchar_t* a, const wchar_t* b );
 
-inline int ax_strncasecmp( const char*    a, const char* b, axSize n )	{ return strncasecmp(a,b,n); }
+inline int ax_strncasecmp( const char*    a, const char*    b, axSize n );
 inline int ax_strncasecmp( const wchar_t* a, const wchar_t* b, axSize n );
 
 inline char*	ax_strncpy( char*    dest, const char*    src, axSize n ) { return strncpy(dest,src,n); }
@@ -46,6 +39,16 @@ inline int ax_isalpha( wchar_t  ch ) { return iswalpha(ch); }
 
 inline int ax_isdigit( char     ch ) { return isdigit(ch); }
 inline int ax_isdigit( wchar_t  ch ) { return iswdigit(ch); }
+
+inline int ax_toupper( char     ch ) { return toupper (ch); }
+inline int ax_toupper( wchar_t  ch ) { return towupper(ch); }
+inline int ax_tolower( char     ch ) { return tolower (ch); }
+inline int ax_tolower( wchar_t  ch ) { return towlower(ch); }
+
+inline int ax_isupper( char     ch ) { return isupper (ch); }
+inline int ax_isupper( wchar_t  ch ) { return iswupper(ch); }
+inline int ax_islower( char     ch ) { return islower (ch); }
+inline int ax_islower( wchar_t  ch ) { return iswlower(ch); }
 
 inline
 wchar_t* ax_strcasestr( const wchar_t *big, const wchar_t* little ) {
@@ -144,9 +147,28 @@ char* ax_strcasestr( const char* big, const char* little ) {
 }
 
 inline
+int	 ax_strcasecmp ( const char* s1, const char* s2 ) {
+	for( ;; s1++, s2++ ) {
+		if( ax_toupper(*s1) != ax_toupper(*s2) ) return (*s1 - *s2);
+		if( *s1 == 0 || *s2 == 0 ) break;
+	}
+	return 0;
+}
+
+inline
+int	 ax_strncasecmp( const char* s1, const char* s2, axSize n ) {
+	axSize i;
+	for( i=0; i<n; s1++, s2++, i++ ) {
+		if( ax_toupper(*s1) != ax_toupper(*s2) ) return (*s1 - *s2);
+		if( *s1 == 0 || *s2 == 0 ) break;
+	}
+	return 0;
+}
+
+inline
 int	 ax_strcasecmp ( const wchar_t* s1, const wchar_t* s2 ) {
 	for( ;; s1++, s2++ ) {
-		if( towupper(*s1) != towupper(*s2) ) return (*s1 - *s2);
+		if( ax_toupper(*s1) != ax_toupper(*s2) ) return (*s1 - *s2);
 		if( *s1 == 0 || *s2 == 0 ) break;
 	}
 	return 0;
@@ -156,7 +178,7 @@ inline
 int	 ax_strncasecmp( const wchar_t* s1, const wchar_t* s2, axSize n ) {
 	axSize i;
 	for( i=0; i<n; s1++, s2++, i++ ) {
-		if( towupper(*s1) != towupper(*s2) ) return (*s1 - *s2);
+		if( ax_toupper(*s1) != ax_toupper(*s2) ) return (*s1 - *s2);
 		if( *s1 == 0 || *s2 == 0 ) break;
 	}
 	return 0;

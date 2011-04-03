@@ -3,19 +3,6 @@
 
 #include "axTypeOf.h"
 
-inline int8_t  ax_byte_swap( int8_t  x ) { return x; }
-inline int16_t ax_byte_swap( int16_t x ) { return (x>>8) | (x<<8); }
-inline int32_t ax_byte_swap( int32_t x ) { 
-	x= ((x<< 8)&0xFF00FF00UL) | ((x>> 8)&0x00FF00FFUL); 
-	return (x>>16) | (x<<16); 
-}
-
-inline int64_t ax_byte_swap( int64_t x ) {
-	x= ((x<< 8)&0xFF00FF00FF00FF00ULL) | ((x>> 8)&0x00FF00FF00FF00FFULL);
-	x= ((x<<16)&0xFFFF0000FFFF0000ULL) | ((x>>16)&0x0000FFFF0000FFFFULL);
-	return (x>>32) | (x<<32);
-}
-
 inline uint8_t  ax_byte_swap( uint8_t  x ) { return x; }
 inline uint16_t ax_byte_swap( uint16_t x ) { return (x>>8) | (x<<8); }
 inline uint32_t ax_byte_swap( uint32_t x ) { 
@@ -29,55 +16,52 @@ inline uint64_t ax_byte_swap( uint64_t x ) {
 	return (x>>32) | (x<<32);
 }
 
+inline int8_t   ax_byte_swap( int8_t  x ) { return (int8_t ) ax_byte_swap( (uint8_t )x ); }
+inline int16_t  ax_byte_swap( int16_t x ) { return (int16_t) ax_byte_swap( (uint16_t)x ); }
+inline int32_t  ax_byte_swap( int32_t x ) { return (int32_t) ax_byte_swap( (uint32_t)x ); }
+inline int64_t  ax_byte_swap( int64_t x ) { return (int64_t) ax_byte_swap( (uint64_t)x ); }
+
+inline float    ax_byte_swap( float   x ) { return (float  ) ax_byte_swap( (uint32_t)x ); }
+inline double   ax_byte_swap( double  x ) { return (double ) ax_byte_swap( (uint64_t)x ); }
 
 #ifdef axCPU_LITTLE_ENDIAN
-// ---- host to big endian
-inline	int8_t		ax_host_to_be( int8_t   v ) { return ax_byte_swap(v); }
-inline	int16_t		ax_host_to_be( int16_t  v ) { return ax_byte_swap(v); }
-inline	int32_t		ax_host_to_be( int32_t  v ) { return ax_byte_swap(v); }
-inline	int64_t		ax_host_to_be( int64_t  v ) { return ax_byte_swap(v); }
-
-inline	uint8_t		ax_host_to_be( uint8_t  v ) { return ax_byte_swap(v); }
-inline	uint16_t	ax_host_to_be( uint16_t v ) { return ax_byte_swap(v); }
-inline	uint32_t	ax_host_to_be( uint32_t v ) { return ax_byte_swap(v); }
-inline	uint64_t	ax_host_to_be( uint64_t v ) { return ax_byte_swap(v); }
-
-// ---- host to little endian
-inline	int8_t		ax_host_to_le( int8_t   v ) { return v; }
-inline	int16_t		ax_host_to_le( int16_t  v ) { return v; }
-inline	int32_t		ax_host_to_le( int32_t  v ) { return v; }
-inline	int64_t		ax_host_to_le( int64_t  v ) { return v; }
-
-inline	uint8_t		ax_host_to_le( uint8_t  v ) { return v; }
-inline	uint16_t	ax_host_to_le( uint16_t v ) { return v; }
-inline	uint32_t	ax_host_to_le( uint32_t v ) { return v; }
-inline	uint64_t	ax_host_to_le( uint64_t v ) { return v; }
-
+	#define axTYPE_LIST(T) \
+		inline T ax_host_to_be( T v ) { return ax_byte_swap(v); } \
+		inline T ax_host_to_le( T v ) { return v; } \
+		inline T ax_be_to_host( T v ) { return ax_byte_swap(v); } \
+		inline T ax_le_to_host( T v ) { return v; } \
+	//--
+		axTYPE_LIST( int8_t )
+		axTYPE_LIST( int16_t )
+		axTYPE_LIST( int32_t )
+		axTYPE_LIST( int64_t )
+		axTYPE_LIST( uint8_t )
+		axTYPE_LIST( uint16_t )
+		axTYPE_LIST( uint32_t )
+		axTYPE_LIST( uint64_t )
+		axTYPE_LIST( float )
+		axTYPE_LIST( double )
+	#undef axTYPE_LIST
 #endif //axCPU_LITTLE_ENDIAN
 
-
 #ifdef axCPU_BIG_ENDIAN
-// ---- host to big endian
-inline	int8_t		ax_host_to_be( int8_t   v ) { return v; }
-inline	int16_t		ax_host_to_be( int16_t  v ) { return v; }
-inline	int32_t		ax_host_to_be( int32_t  v ) { return v; }
-inline	int64_t		ax_host_to_be( int64_t  v ) { return v; }
-
-inline	uint8_t		ax_host_to_be( uint8_t  v ) { return v; }
-inline	uint16_t	ax_host_to_be( uint16_t v ) { return v; }
-inline	uint32_t	ax_host_to_be( uint32_t v ) { return v; }
-inline	uint64_t	ax_host_to_be( uint64_t v ) { return v; }
-
-// ---- host to little endian
-inline	int8_t		ax_host_to_le( int8_t   v ) { return ax_byte_swap(v); }
-inline	int16_t		ax_host_to_le( int16_t  v ) { return ax_byte_swap(v); }
-inline	int32_t		ax_host_to_le( int32_t  v ) { return ax_byte_swap(v); }
-inline	int64_t		ax_host_to_le( int64_t  v ) { return ax_byte_swap(v); }
-
-inline	uint8_t		ax_host_to_le( uint8_t  v ) { return ax_byte_swap(v); }
-inline	uint16_t	ax_host_to_le( uint16_t v ) { return ax_byte_swap(v); }
-inline	uint32_t	ax_host_to_le( uint32_t v ) { return ax_byte_swap(v); }
-inline	uint64_t	ax_host_to_le( uint64_t v ) { return ax_byte_swap(v); }
+	#define axTYPE_LIST(T) \
+		inline T ax_host_to_be( T v ) { return v; } \
+		inline T ax_host_to_le( T v ) { return ax_byte_swap(v); } \
+		inline T ax_be_to_host( T v ) { return v; } \
+		inline T ax_le_to_host( T v ) { return ax_byte_swap(v); } \
+	//--
+		axTYPE_LIST( int8_t )
+		axTYPE_LIST( int16_t )
+		axTYPE_LIST( int32_t )
+		axTYPE_LIST( int64_t )
+		axTYPE_LIST( uint8_t )
+		axTYPE_LIST( uint16_t )
+		axTYPE_LIST( uint32_t )
+		axTYPE_LIST( uint64_t )
+		axTYPE_LIST( float )
+		axTYPE_LIST( double )
+	#undef axTYPE_LIST
 #endif //axCPU_LITTLE_ENDIAN
 
 

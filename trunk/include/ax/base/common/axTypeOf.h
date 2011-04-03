@@ -32,7 +32,12 @@ template<class T>	bool  ax_lessThan0( T value );
 	inline	axStatus	ax_takeOwnership( T &a, T &b )		{ a=b; return 0; } \
 	inline	bool		ax_lessThan0( T value )				{ return value < 0; } \
 //-------
-	#include "axTYPE_LIST_int.h"
+	axTYPE_LIST( int8_t )
+	axTYPE_LIST( int16_t )
+	axTYPE_LIST( int32_t )
+	axTYPE_LIST( int64_t )
+	axTYPE_LIST( float )
+	axTYPE_LIST( double )
 #undef		axTYPE_LIST
 
 
@@ -42,7 +47,10 @@ template<class T>	bool  ax_lessThan0( T value );
 	inline	axStatus	ax_takeOwnership( T &a, T &b )	{ a=b; return 0; } \
 	inline	bool		ax_lessThan0( T value )				{ return false; } \
 //-------
-	#include "axTYPE_LIST_uint.h"
+	axTYPE_LIST( uint8_t )
+	axTYPE_LIST( uint16_t )
+	axTYPE_LIST( uint32_t )
+	axTYPE_LIST( uint64_t )
 #undef		axTYPE_LIST
 
 template<> inline	uint8_t		axTypeOf<uint8_t>::min()		{ return 0; }

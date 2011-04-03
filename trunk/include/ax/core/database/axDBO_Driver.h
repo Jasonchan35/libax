@@ -7,7 +7,11 @@ class axDBO;
 
 enum {
 	axDBO_c_type_null = 0,
+	axDBO_c_type_int16,
 	axDBO_c_type_int32,
+	axDBO_c_type_int64,
+	axDBO_c_type_float,
+	axDBO_c_type_double,
 	axDBO_c_type_StringA,
 	axDBO_c_type_StringW,
 };
@@ -61,6 +65,13 @@ public:
 	virtual	axStatus	getValue( int16_t	 & value, axSize row, axSize col ) const = 0;
 	virtual	axStatus	getValue( int32_t	 & value, axSize row, axSize col ) const = 0;
 	virtual	axStatus	getValue( int64_t	 & value, axSize row, axSize col ) const = 0;
+	virtual	axStatus	getValue( float		 & value, axSize row, axSize col ) const = 0;
+	virtual	axStatus	getValue( double	 & value, axSize row, axSize col ) const = 0;
+
+	virtual	int			getColumnType( axSize col ) const = 0;
+
+private:
+
 };
 typedef axSharedPtr< axDBO_Driver_Result >		axDBO_Driver_ResultSP;
 
