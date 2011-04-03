@@ -49,9 +49,11 @@ public:
 	virtual	axStatus	getValue( bool		 & value, axSize row, axSize col ) const;
 
 	virtual	axStatus	getValue( char		 & value, axSize row, axSize col ) const;
+	virtual	axStatus	getValue( int8_t	 & value, axSize row, axSize col ) const;
 	virtual	axStatus	getValue( int16_t	 & value, axSize row, axSize col ) const;
 	virtual	axStatus	getValue( int32_t	 & value, axSize row, axSize col ) const;
 	virtual	axStatus	getValue( int64_t	 & value, axSize row, axSize col ) const;
+
 
 	virtual	axStatus	getValue( axIStringA & value, axSize row, axSize col ) const;
 	virtual	axStatus	getValue( axIStringW & value, axSize row, axSize col ) const;
@@ -120,6 +122,8 @@ public:
 			float	float_;
 		};
 	};
+
+	axStatus		_convertPrepareSQL( axIStringA &out, const char* inSQL );
 
 	Oid				_param_types	[ axDBO_ParamListMaxSize ];
 	const char*		_param_pvalues	[ axDBO_ParamListMaxSize ];

@@ -290,6 +290,8 @@ inline axStatus axStringFormat_out( axStringFormat &f, bool value ) {
 	return (value) ? f.out("true") : f.out("false");
 }
 
+inline axStatus axStringFormat_out( axStringFormat &f, char		value ) { return f.out( value ); }
+inline axStatus axStringFormat_out( axStringFormat &f, wchar_t	value ) { return f.out( value ); }
 
 //@}
 

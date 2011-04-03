@@ -9,6 +9,7 @@ enum {
 	axDBO_c_type_null = 0,
 	axDBO_c_type_bool,
 	axDBO_c_type_char,
+	axDBO_c_type_int8,
 	axDBO_c_type_int16,
 	axDBO_c_type_int32,
 	axDBO_c_type_int64,
@@ -28,6 +29,7 @@ inline int axDBO_c_typeof( const bool			&v) { return axDBO_c_type_bool; }
 inline int axDBO_c_typeof( const float			&v) { return axDBO_c_type_float; }
 inline int axDBO_c_typeof( const double			&v) { return axDBO_c_type_double; }
 inline int axDBO_c_typeof( const char			&v) { return axDBO_c_type_char; }
+inline int axDBO_c_typeof( const int8_t			&v) { return axDBO_c_type_int8; }
 inline int axDBO_c_typeof( const int16_t		&v) { return axDBO_c_type_int16; }
 inline int axDBO_c_typeof( const int32_t		&v) { return axDBO_c_type_int32; }
 inline int axDBO_c_typeof( const int64_t		&v) { return axDBO_c_type_int64; }
@@ -88,6 +90,7 @@ public:
 	virtual	axStatus	getValue( bool		 & value, axSize row, axSize col ) const = 0;
 
 	virtual	axStatus	getValue( char		 & value, axSize row, axSize col ) const = 0;
+	virtual	axStatus	getValue( int8_t	 & value, axSize row, axSize col ) const = 0;
 	virtual	axStatus	getValue( int16_t	 & value, axSize row, axSize col ) const = 0;
 	virtual	axStatus	getValue( int32_t	 & value, axSize row, axSize col ) const = 0;
 	virtual	axStatus	getValue( int64_t	 & value, axSize row, axSize col ) const = 0;

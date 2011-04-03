@@ -25,6 +25,8 @@ axStatus test() {
 		return -1;
 	}
 
+	ax_print("{1} {0}", 'a', 'b' );
+
 	return 0;
 }
 

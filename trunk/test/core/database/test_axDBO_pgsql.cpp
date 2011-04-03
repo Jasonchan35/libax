@@ -30,7 +30,7 @@ axStatus test() {
 					  " test_char, test_int16, test_int32, test_int64, "
 					  " test_char_str, test_wchar_str, test_stringa, test_stringw,"
 					  " test_bool, test_bytearray "
-					  " ) values( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10 )", 
+					  " ) values( {?}, {?}, {2}, {?}, {?}, {?}, {?}, {?}, {?}, {?} )", 
 						'X', 12345, 12345678, 123456789123456789,
 						"testing", L"testing", str_a, str_w,
 						false, bytea );

@@ -134,6 +134,14 @@ axStatus	axDBO_pgsql_Result::getValue( int64_t &	value, axSize row, axSize col )
 axStatus	axDBO_pgsql_Result::getValue( float   &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, FLOAT4OID, row, col ); }
 axStatus	axDBO_pgsql_Result::getValue( double  &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, FLOAT8OID, row, col ); }
 
+axStatus	axDBO_pgsql_Result::getValue( int8_t & value, axSize row, axSize col ) const {
+	axStatus st;
+	int16_t	v;
+	st = getValue( v, row, col );		if( !st ) return st;
+	return ax_safe_assign( value, v );
+}
+
+
 axStatus	axDBO_pgsql_Result::getValue( bool    &	value, axSize row, axSize col ) const { 
 	if( !res_) return axStatus::not_initialized;
 	if( PQftype( res_, col ) != BOOLOID ) return -1;
@@ -157,6 +165,13 @@ axStatus	axDBO_pgsql::execSQL_ParamList ( axDBO_Driver_ResultSP &out, const char
 	for( i=0; i<list.size(); i++ ) {
 		const axDBO_Param &p = list[i];
 		switch( p.type() ) {
+			case axDBO_c_type_int8: { //pgSQL doesn't support int8. so we convert to int16
+				_param_tmp	  [i].int16_ = (int16_t)( *(int8_t*) p.data() );
+				_param_pvalues[i] = (const char*)&_param_tmp[i];
+				_param_lengths[i] = sizeof( int16_t );
+				_param_types  [i] = INT2OID;
+				_param_formats[i] = BINARY_FORMAT;
+			}break;
 			case axDBO_c_type_int16: {
 				_param_tmp	  [i].int16_ = ax_host_to_be( *(int16_t*) p.data() );
 				_param_pvalues[i] = (const char*)&_param_tmp[i];
@@ -252,7 +267,11 @@ axStatus	axDBO_pgsql::execSQL_ParamList ( axDBO_Driver_ResultSP &out, const char
 		}
 	}
 
-	*res = PQexecParams( conn_, sql, (int)list.size(), 
+	axTempStringA &_sql = _param_tmp_str[0];
+	st = _convertPrepareSQL( _sql, sql );				if( !st ) return st;
+//	ax_print( "SQL: {?}\n TO: {?} \n", sql, _sql );
+
+	*res = PQexecParams( conn_, _sql, (int)list.size(), 
 						 _param_types, _param_pvalues, _param_lengths, _param_formats, BINARY_FORMAT );
 
 	st = res->status();		if( !st ) return st; 
@@ -278,6 +297,133 @@ axStatus	axDBO_pgsql::execSQL_ParamList ( axDBO_Driver_ResultSP &out, const char
 }
 
 
+axStatus axDBO_pgsql::_convertPrepareSQL( axIStringA &out, const char* inSQL ) {
+	out.clear();
+	axStatus st;
+
+	if( ! inSQL ) return axStatus::invalid_param;
+	//find '{' and '}'
+	const char *s = NULL; //start
+	const char *e = NULL; //end
+	const char* c = inSQL;
+	const char *raw = inSQL;
+
+	int cur_index = 0;
+	int last_index = 0;
+
+	char  in_quote = 0;
+
+	for( ; *c; c++ ) {
+		if( in_quote ) {
+			switch( in_quote ) {
+				case '\'': {
+					//flush out
+					if( *c == '\'' ) {
+						axSize len = c-raw;
+						st = out.append( raw, len );	if( !st ) return st;
+						raw = c+1;
+						st = out.append( '\'');			if( !st ) return st;
+						in_quote = false;
+					}
+				}break;
+				case '"': {
+					//flush out
+					if( *c == '"' ) {
+						axSize len = c-raw;
+						st = out.append( raw, len );	if( !st ) return st;
+						raw = c+1;
+						st = out.append( '"');			if( !st ) return st;
+						in_quote = 0;
+					}
+				}break;
+			}
+		}else{
+			switch( *c ) {
+				case '\'': {
+					//flush out
+					axSize len = c-raw;
+					st = out.append( raw, len );	if( !st ) return st;
+					raw = c+1;					
+					st = out.append( '\'');			if( !st ) return st;
+					in_quote = '\'';
+				}break;
+
+				case '"': {
+					//flush out
+					axSize len = c-raw;
+					st = out.append( raw, len );	if( !st ) return st;
+					raw = c+1;					
+					st = out.append( '"');			if( !st ) return st;
+					in_quote = '"';
+				}break;
+
+				case '$': {
+					//flush out
+					axSize len = c-raw;
+					st = out.append( raw, len );	if( !st ) return st;
+					raw = c+1;
+					st = out.append( "$$" );			if( !st ) return st;
+				}break;
+
+				case '{': {
+					if( c[1] == '{' ) {
+						c++;
+					}else{
+						s=c;
+					}
+					//flush out
+					axSize len = c-raw;
+					st = out.append( raw, len );	if( !st ) return st;
+					raw = c+1;
+				}break;
+
+				case '}': {
+					raw = c+1;
+					if( !s ) { //found '}' before '{'
+						st = out.append( c, 1 );	if( !st ) return st;
+						continue;
+					}
+					e=c;
+
+					int index = 0;
+					s++;
+
+					axStringA_<64>	param, part1, part2;
+					param.set( s, e-s );
+					if( param.splitByChar( ':', part1, part2 ) ) {
+						st = part1.decSize( 1 );			if( !st ) return st;
+					//	st = this->opt.set( part2 );		if( !st ) return st;
+					}
+
+					//wprintf(L"arg = [%s] [%s] [%s]\n", param.c_str(), part1.c_str(), this->opt.c_str() );
+
+					switch( *s ) {
+						case '?':	index = cur_index;			break;
+						case '+':	index = last_index + 1;		break;
+						default:	{
+							st = str_to( s, index );	
+							if( !st ) index = -1;
+						}break;
+					}
+
+					cur_index++;
+					last_index = index;
+					out.formatAppend( " ${?} ", index+1 );
+					s = NULL;
+
+				}break;
+			}
+		}
+	}
+
+	if( !s ) {
+		axSize len = c-raw;
+		return out.append( raw, len );
+	}
+	assert( false ); //not end of '}'
+	return axStatus::invalid_param;
+}
+
 //virtual 
 axStatus axDBO_pgsql::prepareSQL_ParamList ( axDBO_Driver_StmtSP &out, const char* sql, const axDBO_ParamList &list ) {
 	if( ! conn_ ) return axStatus::not_initialized;
@@ -295,8 +441,10 @@ axStatus axDBO_pgsql::prepareSQL_ParamList ( axDBO_Driver_StmtSP &out, const cha
 
 	axDBO_pgsql_Result res;
 
+	axTempStringA &_sql = _param_tmp_str[0];
+	st = _convertPrepareSQL( _sql, sql );		if( !st ) return st;
 
-	res = PQprepare( conn_, stmt_name, sql, (int)list.size(), NULL );
+	res = PQprepare( conn_, stmt_name, _sql, (int)list.size(), NULL );
 	st = res.status();		if( !st ) return st;
 
 	res = PQdescribePrepared ( conn_, stmt_name );
