@@ -55,27 +55,50 @@ int	axDBO_pgsql_Result::getColumnType( axSize col ) const {
 	Oid oid = PQftype( res_, col );
 	switch( oid ) {
 		case BOOLOID:	return axDBO_c_type_bool;
+		case BYTEAOID:	return axDBO_c_type_ByteArray;
+		case CHAROID:	return axDBO_c_type_char;
+		case INT8OID:	return axDBO_c_type_int64;
 		case INT2OID:	return axDBO_c_type_int16;
 		case INT4OID:	return axDBO_c_type_int32;
-		case INT8OID:	return axDBO_c_type_int64;
 		case FLOAT4OID: return axDBO_c_type_float;
 		case FLOAT8OID: return axDBO_c_type_double;
 		//string
-		case VARCHAROID:
 		case BPCHAROID:
-		case NAMEOID:
+		case VARCHAROID:
 		case TEXTOID: {
 			return axDBO_c_type_StringA;
 		}break;
+		case DATEOID:	return axDBO_c_type_Date;
+		case TIMEOID:	return axDBO_c_type_Time;
+		case TIMETZOID:	return axDBO_c_type_Time;
+		case TIMESTAMPOID:		return axDBO_c_type_TimeStamp;
+		case TIMESTAMPTZOID:	return axDBO_c_type_TimeStamp;
 	}
+	assert(false);
 	return axDBO_c_type_null;
+}
+
+axStatus	axDBO_pgsql_Result::getValue( axIByteArray & value, axSize row, axSize col ) const {
+	value.clear();
+	if( !res_) return axStatus::not_initialized;
+	Oid oid = PQftype( res_, col );
+	if( oid != BYTEAOID ) return -1;
+	char* p = PQgetvalue( res_, row, col );
+	if( !p ) { return 0; } //is null 
+
+	axStatus st;
+	size_t n;
+	st = ax_safe_assign( n, PQgetlength( res_, row, col ) );	if( !st ) return st;
+	st = value.resize( n, false );								if( !st ) return st;
+	memcpy( value.ptr(), p, n );
+	return 1;
 }
 
 axStatus	axDBO_pgsql_Result::getValue( axIStringA & value, axSize row, axSize col ) const {
 	value.clear();
 	if( !res_) return axStatus::not_initialized;
 	Oid oid = PQftype( res_, col );
-	if( oid != VARCHAROID && oid != BPCHAROID && oid != NAMEOID && oid != TEXTOID ) return -1;
+	if( oid != VARCHAROID && oid != BPCHAROID && oid != TEXTOID ) return -1;
 	char* p = PQgetvalue( res_, row, col );
 	if( !p ) { return 0; } //is null 
 	value.set( p );
@@ -86,7 +109,7 @@ axStatus	axDBO_pgsql_Result::getValue( axIStringW & value, axSize row, axSize co
 	value.clear();
 	if( !res_) return axStatus::not_initialized;
 	Oid oid = PQftype( res_, col );
-	if( oid != VARCHAROID && oid != BPCHAROID && oid != NAMEOID && oid != TEXTOID ) return -1;
+	if( oid != VARCHAROID && oid != BPCHAROID && oid != TEXTOID ) return -1;
 	char* p = PQgetvalue( res_, row, col );
 	if( !p ) { return 0; } //is null 
 	value.set( p );
@@ -103,6 +126,7 @@ axStatus	_getNumberValue( PGresult* res_, T &value, Oid oid, axSize row, axSize 
 	return 1;
 }
 
+axStatus	axDBO_pgsql_Result::getValue( char    &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, CHAROID,	row, col ); }
 axStatus	axDBO_pgsql_Result::getValue( int16_t &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, INT2OID,   row, col ); }
 axStatus	axDBO_pgsql_Result::getValue( int32_t &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, INT4OID,   row, col ); }
 axStatus	axDBO_pgsql_Result::getValue( int64_t &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, INT8OID,   row, col ); }
@@ -133,13 +157,94 @@ axStatus	axDBO_pgsql::execSQL_ParamList ( axDBO_Driver_ResultSP &out, const char
 	for( i=0; i<list.size(); i++ ) {
 		const axDBO_Param &p = list[i];
 		switch( p.type() ) {
-			case axDBO_c_type_int32: {
-				_param_values [i].int32_ = ax_host_to_be( *(int*) p.data() );
-				_param_pvalues[i] = (const char*)&_param_values[i];
-				_param_types  [i] = INT4OID;
-				_param_lengths[i] = sizeof( int32_t );
+			case axDBO_c_type_int16: {
+				_param_tmp	  [i].int16_ = ax_host_to_be( *(int16_t*) p.data() );
+				_param_pvalues[i] = (const char*)&_param_tmp[i];
+				_param_lengths[i] = sizeof( int16_t );
+				_param_types  [i] = INT2OID;
 				_param_formats[i] = BINARY_FORMAT;
 			}break;
+			case axDBO_c_type_int32: {
+				_param_tmp	  [i].int32_ = ax_host_to_be( *(int32_t*) p.data() );
+				_param_pvalues[i] = (const char*)&_param_tmp[i];
+				_param_lengths[i] = sizeof( int32_t );
+				_param_types  [i] = INT4OID;
+				_param_formats[i] = BINARY_FORMAT;
+			}break;
+			case axDBO_c_type_int64: {
+				_param_tmp	  [i].int64_ = ax_host_to_be( *(int64_t*) p.data() );
+				_param_pvalues[i] = (const char*)&_param_tmp[i];
+				_param_lengths[i] = sizeof( int64_t );
+				_param_types  [i] = INT8OID;
+				_param_formats[i] = BINARY_FORMAT;
+			}break;
+			case axDBO_c_type_bool: {
+				_param_tmp	  [i].char_ = (*(bool*)p.data()) ? 1: 0;
+				_param_pvalues[i] = (const char*)&_param_tmp[i];
+				_param_lengths[i] = sizeof( int8_t );
+				_param_types  [i] = BOOLOID;
+				_param_formats[i] = BINARY_FORMAT;
+			}break;
+			case axDBO_c_type_float: {
+				_param_tmp	  [i].float_ = ax_host_to_be( *(float*) p.data() );
+				_param_pvalues[i] = (const char*)&_param_tmp[i];
+				_param_lengths[i] = sizeof( float );
+				_param_types  [i] = FLOAT4OID;
+				_param_formats[i] = BINARY_FORMAT;
+			}break;
+			case axDBO_c_type_double: {
+				_param_tmp	  [i].double_ = ax_host_to_be( *(double*) p.data() );
+				_param_pvalues[i] = (const char*)&_param_tmp[i];
+				_param_lengths[i] = sizeof( double );
+				_param_types  [i] = FLOAT8OID;
+				_param_formats[i] = BINARY_FORMAT;
+			}break;
+			case axDBO_c_type_char: {
+				_param_pvalues[i] = (const char*) p.data();
+				_param_lengths[i] = sizeof(char);
+				_param_types  [i] = CHAROID;
+				_param_formats[i] = BINARY_FORMAT;
+			}break;
+			case axDBO_c_type_char_str: {
+				const char* sz = (const char*)p.data();
+				_param_pvalues[i] = sz;
+				_param_lengths[i] = ax_strlen( sz );
+				_param_types  [i] = VARCHAROID;
+				_param_formats[i] = BINARY_FORMAT;
+			}break;
+			case axDBO_c_type_wchar_str: {
+				//convert to StringA
+				_param_tmp_str[i].set( (const wchar_t*) p.data() );
+				_param_pvalues[i] = _param_tmp_str[i].c_str();
+				_param_lengths[i] = _param_tmp_str[i].size();
+				_param_types  [i] = VARCHAROID;
+				_param_formats[i] = BINARY_FORMAT;
+			}break;
+			case axDBO_c_type_StringA: {
+				const axIStringA* v = (const axIStringA*)p.data();
+				_param_pvalues[i] = v->c_str();
+				_param_lengths[i] = v->size();
+				_param_types  [i] = VARCHAROID;
+				_param_formats[i] = BINARY_FORMAT;
+			}break;
+			case axDBO_c_type_StringW: {
+				const axIStringW* v = (const axIStringW*)p.data();
+				//convert to StringA
+				_param_tmp_str[i].set( v->c_str() );
+				_param_pvalues[i] = _param_tmp_str[i].c_str();
+				_param_lengths[i] = _param_tmp_str[i].size();
+				_param_types  [i] = VARCHAROID;
+				_param_formats[i] = BINARY_FORMAT;
+			}break;
+
+			case axDBO_c_type_ByteArray: {
+				const axIByteArray* v = (const axIByteArray*)p.data();
+				_param_pvalues[i] = (const char*) v->ptr();
+				_param_types  [i] = BYTEAOID;
+				_param_lengths[i] = v->size();
+				_param_formats[i] = BINARY_FORMAT;
+			}break;
+
 			default: {
 				assert( false );
 				return -100;

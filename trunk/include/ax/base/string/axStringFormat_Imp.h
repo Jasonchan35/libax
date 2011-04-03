@@ -9,26 +9,53 @@
 
 class	axStringFormat : public axNonCopyable {
 public:
+	typedef	axStringFormat_Arg		Arg;
+	typedef	axStringFormat_ArgList	ArgList;
+
 	axStringFormat();
 
 	axStatus	out	( wchar_t wc );
 	axStatus	out	( const wchar_t* sz );
 	axStatus	out	( const wchar_t* sz, axSize len );
 	axStatus	fill( wchar_t ch, axSize len );
+	axStatus	format_ArgList( const wchar_t* fmt, const ArgList &list );
 
 	axStatus	out	( char wc );
 	axStatus	out	( const char* sz );
 	axStatus	out	( const char* sz, axSize len );
 	axStatus	fill( char ch, axSize len );
-
-	typedef	axStringFormat_Arg		Arg;
-	typedef	axStringFormat_ArgList	ArgList;
+	axStatus	format_ArgList( const char* fmt, const ArgList &list );
 
 	template< class T >
 	axStatus	_process( const T* fmt, const ArgList &list );
 
 	void		_setOutput( axIStringA &str )		{ strA_ = &str; }
 	void		_setOutput( axIStringW &str )		{ strW_ = &str; }
+
+	axStatus		format			( const char* fmt )																																							{ ArgList list;													return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0 )																																			{ ArgList list;	list<<a0;										return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1 )																															{ ArgList list;	list<<a0<<a1;									return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2 )																											{ ArgList list;	list<<a0<<a1<<a2;								return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3 )																							{ ArgList list;	list<<a0<<a1<<a2<<a3;							return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4 )																				{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4;						return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5 )																{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5;					return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6 )												{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6;				return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7 )								{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7;			return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8 )					{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8;		return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8, const Arg &a9 )	{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8<<a9;	return format_ArgList( fmt, list ); }
+
+	axStatus		format			( const wchar_t* fmt )																																							{ ArgList list;													return format_ArgList( fmt, list ); }
+	axStatus		format			( const wchar_t* fmt,	const Arg &a0 )																																			{ ArgList list;	list<<a0;										return format_ArgList( fmt, list ); }
+	axStatus		format			( const wchar_t* fmt,	const Arg &a0, const Arg &a1 )																															{ ArgList list;	list<<a0<<a1;									return format_ArgList( fmt, list ); }
+	axStatus		format			( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2 )																											{ ArgList list;	list<<a0<<a1<<a2;								return format_ArgList( fmt, list ); }
+	axStatus		format			( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3 )																							{ ArgList list;	list<<a0<<a1<<a2<<a3;							return format_ArgList( fmt, list ); }
+	axStatus		format			( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4 )																				{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4;						return format_ArgList( fmt, list ); }
+	axStatus		format			( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5 )																{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5;					return format_ArgList( fmt, list ); }
+	axStatus		format			( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6 )												{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6;				return format_ArgList( fmt, list ); }
+	axStatus		format			( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7 )								{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7;			return format_ArgList( fmt, list ); }
+	axStatus		format			( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8 )					{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8;		return format_ArgList( fmt, list ); }
+	axStatus		format			( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8, const Arg &a9 )	{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8<<a9;	return format_ArgList( fmt, list ); }
+
 
 	axStringA_<64>		opt;
 private:
@@ -105,6 +132,8 @@ axStatus	axStringFormat::_process( const T* fmt, const ArgList &list ) {
 				last_index = index;
 
 				if( list.inBound( index ) ) {
+					assert( list[index].data() != (void*)strA_ ); //cannot be itself
+					assert( list[index].data() != (void*)strW_ ); //cannot be itself
 					st = list[index].call( *this );	if( !st ) return st;
 				}else{
 					// out "{?} directly"
@@ -190,6 +219,22 @@ axStatus	axStringFormat::fill( wchar_t ch, axSize len )	{
 		}
 	}
 	return 0;
+}
+
+inline
+axStatus	axStringFormat::format_ArgList( const char* fmt, const ArgList &list ) {
+	axStringFormat	f;
+	f._setOutput( *this->strA_ );
+	f._setOutput( *this->strW_ );
+	return f._process( fmt, list );
+}
+
+inline
+axStatus	axStringFormat::format_ArgList( const wchar_t* fmt, const ArgList &list ) {
+	axStringFormat	f;
+	f._setOutput( *this->strA_ );
+	f._setOutput( *this->strW_ );
+	return f._process( fmt, list );
 }
 
 

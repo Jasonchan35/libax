@@ -5,21 +5,24 @@
 #include "libpq/libpq-fe.h"
 
 
-//from "libpq/server/pg_type.h"
+//from "libpq/server/catalog/pg_type.h"
 enum PGType {
-	BOOLOID		= 16,	// boolean
-	BYTEA		= 17,	// bytea
-	NAMEOID		= 19,	// name
-	INT8OID		= 20,	// bigint
-	INT2OID		= 21,	// smallint
-	INT4OID		= 23,	// integer
-	TEXTOID		= 25,	// character varying without length
-	OIDOID		= 26,	// oid
-	FLOAT4OID	= 700,	// real
-	FLOAT8OID	= 701,	// double precision
-	BPCHAROID	= 1042,	// character ( fix length )
-	VARCHAROID	= 1043,	// character varying
-	TIMESTAMPOID = 1114,// timestamp without time zone
+	BOOLOID			= 16,	// boolean
+	BYTEAOID		= 17,	// bytea ( ByteArray )
+	CHAROID			= 18,	// char
+	INT8OID			= 20,	// bigint
+	INT2OID			= 21,	// smallint
+	INT4OID			= 23,	// integer
+	TEXTOID			= 25,	// character varying without length
+	FLOAT4OID		= 700,	// real
+	FLOAT8OID		= 701,	// double precision
+	BPCHAROID		= 1042,	// character ( fix length ) blank-padded string, fixed storage length
+	VARCHAROID		= 1043,	// character varying
+	DATEOID			= 1082, // date
+	TIMEOID			= 1083, // time
+	TIMESTAMPOID	= 1114, // timestamp without time zone
+	TIMESTAMPTZOID	= 1184, // timestamp with time zone
+	TIMETZOID		= 1266, // time of day with time zone
 };
 
 enum {
@@ -41,15 +44,19 @@ public:
 
 	void release()						{ if( res_ ) { PQclear( res_ ); res_ = NULL; } }
 
-	virtual	axStatus	getValue( axIStringA & value, axSize row, axSize col ) const;
-	virtual	axStatus	getValue( axIStringW & value, axSize row, axSize col ) const;
+	virtual	axStatus	getValue( float		 & value, axSize row, axSize col ) const;
+	virtual	axStatus	getValue( double	 & value, axSize row, axSize col ) const;
+	virtual	axStatus	getValue( bool		 & value, axSize row, axSize col ) const;
+
+	virtual	axStatus	getValue( char		 & value, axSize row, axSize col ) const;
 	virtual	axStatus	getValue( int16_t	 & value, axSize row, axSize col ) const;
 	virtual	axStatus	getValue( int32_t	 & value, axSize row, axSize col ) const;
 	virtual	axStatus	getValue( int64_t	 & value, axSize row, axSize col ) const;
-	virtual	axStatus	getValue( float		 & value, axSize row, axSize col ) const;
-	virtual	axStatus	getValue( double	 & value, axSize row, axSize col ) const;
 
-	virtual	axStatus	getValue( bool		 & value, axSize row, axSize col ) const;
+	virtual	axStatus	getValue( axIStringA & value, axSize row, axSize col ) const;
+	virtual	axStatus	getValue( axIStringW & value, axSize row, axSize col ) const;
+
+	virtual	axStatus	getValue( axIByteArray & value, axSize row, axSize col ) const;
 
 	virtual int			getColumnType( axSize col ) const;
 
@@ -105,6 +112,7 @@ public:
 	struct union_t {
 		union {
 			bool	bool_;
+			char	char_;
 			int16_t int16_;
 			int32_t int32_;
 			int64_t int64_;
@@ -113,12 +121,12 @@ public:
 		};
 	};
 
-	Oid			_param_types	[ axDBO_ParamListMaxSize ];
-	union_t		_param_values	[ axDBO_ParamListMaxSize ];
-	const char* _param_pvalues	[ axDBO_ParamListMaxSize ];
-	int			_param_lengths	[ axDBO_ParamListMaxSize ];
-	int			_param_formats	[ axDBO_ParamListMaxSize ];
-
+	Oid				_param_types	[ axDBO_ParamListMaxSize ];
+	const char*		_param_pvalues	[ axDBO_ParamListMaxSize ];
+	int				_param_lengths	[ axDBO_ParamListMaxSize ];
+	int				_param_formats	[ axDBO_ParamListMaxSize ];
+	union_t			_param_tmp		[ axDBO_ParamListMaxSize ];
+	axTempStringA	_param_tmp_str	[ axDBO_ParamListMaxSize ];
 };
 
 #endif //__axDBO_pgsql_h__

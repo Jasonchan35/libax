@@ -17,6 +17,10 @@
 
 #include "base/thread/axAtomicInt.h"
 
+#include "base/time/axDate.h"
+#include "base/time/axTime.h"
+#include "base/time/axTimeStamp.h"
+
 #if axCOMPILER_VC 
 	#pragma comment( lib, "Ws2_32.lib" )
 	#pragma comment( lib, "User32.lib" )

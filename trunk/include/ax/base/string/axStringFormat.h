@@ -74,6 +74,7 @@ public:
 	}
 
 	axStatus	takeOwnership( axStringFormat_Arg &src ) { operator=( src ); return 0; }
+	const void*	data() const { return data_; }
 private:
 	const void*			data_;
 	StringFormat_Func	callback_;

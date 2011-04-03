@@ -15,14 +15,35 @@ axStatus test() {
 
 	ax_print("---- test insert ---- \n");
 
-	int p0 = 2345;
-	res = db.execSQL( "insert into tbl_test ( name, number ) values( 'p0', $1 )", 12345 );
-	res.print();
+	axStringA str_a;
+	str_a.set( "testing" );
+	axStringW str_w;
+	str_w.set( L"testing" );
+	axByteArray	bytea;
+	st = bytea.resize( 10 );	assert( st );
+	axSize i;
+	for( i=0; i<bytea.size(); i++ ) {
+		bytea[i] = i*3;
+	}
+
+	res = db.execSQL( "insert into tbl_test ( "
+					  " test_char, test_int16, test_int32, test_int64, "
+					  " test_char_str, test_wchar_str, test_stringa, test_stringw,"
+					  " test_bool, test_bytearray "
+					  " ) values( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10 )", 
+						'X', 12345, 12345678, 123456789123456789,
+						"testing", L"testing", str_a, str_w,
+						false, bytea );
+	ax_print( "{?}", res );
 
 
 	ax_print("---- test select ---- \n");
-	res = db.execSQL( "select * from tbl_test order by _id" );
-	res.print();
+	res = db.execSQL( "select "
+					  " test_char, test_int16, test_int32, test_int64, "
+					  " test_char_str, test_wchar_str, test_stringa, test_stringw,"
+					  " test_bool, test_bytearray "		
+					  " from tbl_test order by _id" );
+	ax_print( "{?}", res );
 
 
 	return 0;

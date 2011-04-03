@@ -8,23 +8,40 @@ class axDBO;
 enum {
 	axDBO_c_type_null = 0,
 	axDBO_c_type_bool,
+	axDBO_c_type_char,
 	axDBO_c_type_int16,
 	axDBO_c_type_int32,
 	axDBO_c_type_int64,
 	axDBO_c_type_float,
 	axDBO_c_type_double,
+	axDBO_c_type_char_str,
+	axDBO_c_type_wchar_str,
 	axDBO_c_type_StringA,
 	axDBO_c_type_StringW,
+	axDBO_c_type_ByteArray,
+	axDBO_c_type_Date,
+	axDBO_c_type_Time,
+	axDBO_c_type_TimeStamp,
 };
 
-inline int axDBO_c_typeof( const bool		&v) { return axDBO_c_type_bool; }
-inline int axDBO_c_typeof( const float		&v) { return axDBO_c_type_float; }
-inline int axDBO_c_typeof( const double		&v) { return axDBO_c_type_double; }
-inline int axDBO_c_typeof( const int16_t	&v) { return axDBO_c_type_int16; }
-inline int axDBO_c_typeof( const int32_t	&v) { return axDBO_c_type_int32; }
-inline int axDBO_c_typeof( const int64_t	&v) { return axDBO_c_type_int64; }
-inline int axDBO_c_typeof( const axIStringA &v) { return axDBO_c_type_StringA; }
-inline int axDBO_c_typeof( const axIStringW &v) { return axDBO_c_type_StringW; }
+inline int axDBO_c_typeof( const bool			&v) { return axDBO_c_type_bool; }
+inline int axDBO_c_typeof( const float			&v) { return axDBO_c_type_float; }
+inline int axDBO_c_typeof( const double			&v) { return axDBO_c_type_double; }
+inline int axDBO_c_typeof( const char			&v) { return axDBO_c_type_char; }
+inline int axDBO_c_typeof( const int16_t		&v) { return axDBO_c_type_int16; }
+inline int axDBO_c_typeof( const int32_t		&v) { return axDBO_c_type_int32; }
+inline int axDBO_c_typeof( const int64_t		&v) { return axDBO_c_type_int64; }
+
+inline int axDBO_c_typeof( const char*			 v) { return axDBO_c_type_char_str; }
+inline int axDBO_c_typeof( const wchar_t*		 v) { return axDBO_c_type_wchar_str; }
+
+inline int axDBO_c_typeof( const axIByteArray	&v) { return axDBO_c_type_ByteArray; }
+inline int axDBO_c_typeof( const axDate			&v) { return axDBO_c_type_Date; }
+inline int axDBO_c_typeof( const axTime			&v) { return axDBO_c_type_Time; }
+inline int axDBO_c_typeof( const axTimeStamp	&v) { return axDBO_c_type_TimeStamp; }
+inline int axDBO_c_typeof( const axIStringA		&v) { return axDBO_c_type_StringA; }
+inline int axDBO_c_typeof( const axIStringW		&v) { return axDBO_c_type_StringW; }
+
 
 class axDBO_Param {
 public:
@@ -66,14 +83,20 @@ public:
 	virtual	axSize		rowCount() const = 0;
 	virtual	axSize		colCount() const = 0;
 
-	virtual	axStatus	getValue( axIStringA & value, axSize row, axSize col ) const = 0;
-	virtual	axStatus	getValue( axIStringW & value, axSize row, axSize col ) const = 0;
-	virtual	axStatus	getValue( int16_t	 & value, axSize row, axSize col ) const = 0;
-	virtual	axStatus	getValue( int32_t	 & value, axSize row, axSize col ) const = 0;
-	virtual	axStatus	getValue( int64_t	 & value, axSize row, axSize col ) const = 0;
 	virtual	axStatus	getValue( float		 & value, axSize row, axSize col ) const = 0;
 	virtual	axStatus	getValue( double	 & value, axSize row, axSize col ) const = 0;
 	virtual	axStatus	getValue( bool		 & value, axSize row, axSize col ) const = 0;
+
+	virtual	axStatus	getValue( char		 & value, axSize row, axSize col ) const = 0;
+	virtual	axStatus	getValue( int16_t	 & value, axSize row, axSize col ) const = 0;
+	virtual	axStatus	getValue( int32_t	 & value, axSize row, axSize col ) const = 0;
+	virtual	axStatus	getValue( int64_t	 & value, axSize row, axSize col ) const = 0;
+
+	virtual	axStatus	getValue( axIStringA & value, axSize row, axSize col ) const = 0;
+	virtual	axStatus	getValue( axIStringW & value, axSize row, axSize col ) const = 0;
+
+	virtual	axStatus	getValue( axIByteArray & value, axSize row, axSize col ) const = 0;
+
 	virtual	int			getColumnType( axSize col ) const = 0;
 
 private:

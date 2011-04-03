@@ -12,14 +12,17 @@ axSize axDBO_Result :: rowCount() const { return p_ ? p_->rowCount() : 0; }
 axSize axDBO_Result :: colCount() const { return p_ ? p_->colCount() : 0; }
 int	axDBO_Result :: getColumnType( axSize col ) const { return (p_) ? p_->getColumnType( col ) : axStatus::not_initialized;  }
 
-axStatus	axDBO_Result :: getValue( axIStringA & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
-axStatus	axDBO_Result :: getValue( axIStringW & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
 axStatus	axDBO_Result :: getValue( int16_t	 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
 axStatus	axDBO_Result :: getValue( int32_t	 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
 axStatus	axDBO_Result :: getValue( int64_t	 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
+axStatus	axDBO_Result :: getValue( char		 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
 axStatus	axDBO_Result :: getValue( float		 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
 axStatus	axDBO_Result :: getValue( double	 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
 axStatus	axDBO_Result :: getValue( bool 		 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
+
+axStatus	axDBO_Result :: getValue( axIStringA   & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
+axStatus	axDBO_Result :: getValue( axIStringW   & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
+axStatus	axDBO_Result :: getValue( axIByteArray & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
 
 
 template<class T> inline
@@ -51,11 +54,17 @@ axStatus	axDBO_Result :: getValueInString( axIStringA & value, axSize row, axSiz
 		case axDBO_c_type_double:	return _getValueInStringA<double >( value, row, col );
 		case axDBO_c_type_StringA:	return  getValue( value, row, col );
 		case axDBO_c_type_StringW: {
-			axStringW_<512> v; 
+			axTempStringW v; 
+			st = getValue( v, row, col );	if( !st ) return st; 
+			return value.convert( v );
+		}break;
+		case axDBO_c_type_ByteArray: {
+			axArray<uint8_t, 256 >	v;
 			st = getValue( v, row, col );	if( !st ) return st; 
 			return value.convert( v );
 		}break;
 	}
+	assert(false);
 	return axStatus::unsupported_format;
 }
 
@@ -64,6 +73,7 @@ axStatus	axDBO_Result :: getValueInString( axIStringW & value, axSize row, axSiz
 	value.clear();
 	axStatus st;
 	switch( getColumnType( col ) ) {
+		case axDBO_c_type_bool:		return _getValueInStringW<bool>	  ( value, row, col );
 		case axDBO_c_type_int16:	return _getValueInStringW<int16_t>( value, row, col );
 		case axDBO_c_type_int32:	return _getValueInStringW<int32_t>( value, row, col );
 		case axDBO_c_type_int64:	return _getValueInStringW<int64_t>( value, row, col );
@@ -76,10 +86,11 @@ axStatus	axDBO_Result :: getValueInString( axIStringW & value, axSize row, axSiz
 			return value.convert( v );
 		}break;
 	}
+	assert(false);
 	return axStatus::unsupported_format;
 }
 
-axStatus axDBO_Result :: print() const {
+axStatus	axDBO_Result :: toStringFormat( axStringFormat &f ) const {
 	if( !p_ ) return axStatus::not_initialized;
 	axStatus st;
 
@@ -93,10 +104,11 @@ axStatus axDBO_Result :: print() const {
 
 	for( r=0; r<nr; r++ ) {
 		for( c=0; c<nc; c++ ) {
+			if( c > 0 ) f.out( ", " );
 			st = getValueInString( value, r, c );	if( !st ) return st;
-			ax_print("{?},", value );
+			f.format( "{?}", value );
 		}
-		ax_print("\n");
+		f.out('\n');
 	}
 	return 0;
 }

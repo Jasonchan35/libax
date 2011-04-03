@@ -12,26 +12,30 @@ public:
 	~axDBO_Result();
 
 	axStatus	status	() const;
-	axStatus	print	() const;
 	axSize		rowCount() const;
 	axSize		colCount() const;
 
 	operator	axStatus() const		{ return status(); }
 
-	axStatus	getValue( axIStringA & value, axSize row, axSize col ) const;
-	axStatus	getValue( axIStringW & value, axSize row, axSize col ) const;
 	axStatus	getValue( int16_t	 & value, axSize row, axSize col ) const;
 	axStatus	getValue( int32_t	 & value, axSize row, axSize col ) const;
 	axStatus	getValue( int64_t	 & value, axSize row, axSize col ) const;
+
+	axStatus	getValue( char		 & value, axSize row, axSize col ) const;
 	axStatus	getValue( float		 & value, axSize row, axSize col ) const;
 	axStatus	getValue( double	 & value, axSize row, axSize col ) const;
 	axStatus	getValue( bool	     & value, axSize row, axSize col ) const;
 
-
-	int			getColumnType( axSize col ) const;
+	axStatus	getValue( axIStringA & value, axSize row, axSize col ) const;
+	axStatus	getValue( axIStringW & value, axSize row, axSize col ) const;
 
 	axStatus	getValueInString( axIStringA & value, axSize row, axSize col ) const;
 	axStatus	getValueInString( axIStringW & value, axSize row, axSize col ) const;
+	axStatus	getValue( axIByteArray & value, axSize row, axSize col ) const;
+
+	int			getColumnType( axSize col ) const;
+
+	axStatus	toStringFormat( axStringFormat &f ) const;
 
 friend class axDBO;
 protected:
@@ -42,6 +46,7 @@ private:
 };
 
 //@}
+
 
 #endif //__axDBO_Result_h__
 

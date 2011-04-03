@@ -3,6 +3,7 @@
 #define __axIArray_h__
 
 #include "../common/ax_common.h"
+class axStringFormat;
 
 //! \ingroup base_data_structure
 //@{
@@ -72,6 +73,7 @@ public:
 			void		free		();	//!< free all memory		
 			axStatus	shrink		();	//!< free unused memory <TODO>
 
+			axStatus	toStringFormat( axStringFormat &f ) const;
 
 protected:
 	void	_init( T* p, axSize size, axSize capacity );
@@ -129,6 +131,18 @@ void axIArray<T>::free() {
 		p_ = NULL; 
 		capacity_ = 0; 
 	}
+}
+
+template< class T > inline
+axStatus	axIArray<T>::toStringFormat( axStringFormat &f ) const {
+	axSize i;
+	f.out( '[' );
+	for( i=0; i<size(); i++ ) {
+		if( i > 0 ) f.out( ", " );
+		f.format( "{?}", element(i) );
+	}
+	f.out( ']' );
+	return 0;
 }
 
 template< class T >
