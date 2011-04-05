@@ -24,6 +24,7 @@ public:
 	virtual	~axArray();
 
 	void	setChunkSize		( axSize	n );
+	void	setAutoChunkSize	()							{ setChunkSize(0); }
 
 protected:
 	virtual	axStatus	on_malloc	( axSize req_size, T* &out_ptr, axSize &out_size );
