@@ -13,9 +13,48 @@ public:
 	static	double		availableMemoryInKiloByte()						{ return (double)availableMemory() / 1024.0; }
 	static	double		availableMemoryInMegaByte()						{ return (double)availableMemory() / 1024.0 / 1024.0; }
 			axStatus	getMachineName		( axIStringA &str );
+
+	enum Endianness {
+		Endianness_Unknown,
+		Endianness_BigEndian,
+		Endianness_LittleEndian,
+	};
+			Endianness	getEndianness		();
+			bool		isBigEndian			();
+			bool		isLittleEndian		();
 };
 
 //@}
+
+inline
+axSystem::Endianness	axSystem::getEndianness		() {
+	#if axCPU_LITTLE_ENDIAN
+		return Endianness_LittleEndian;
+	#elif axCPU_BIG_ENDIAN
+		return Endianness_BigEndian;
+	#else
+		return Endianness_Unknown;
+	#endif
+}
+
+inline
+bool		axSystem::isBigEndian			() {
+	#if axCPU_BIG_ENDIAN
+		return true;
+	#else
+		return false;
+	#endif
+}
+
+inline
+bool		axSystem::isLittleEndian		() {
+	#if axCPU_LITTLE_ENDIAN
+		return true;
+	#else
+		return false;
+	#endif
+}
+
 
 #if 0
 #pragma mark ================= MS Win ====================
