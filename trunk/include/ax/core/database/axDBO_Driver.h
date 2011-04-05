@@ -79,7 +79,7 @@ public:
 class axDBO_Driver;
 typedef axSharedPtr< axDBO_Driver >		axDBO_DriverSP;
 
-class axDBO_Driver_Result : public axNonCopyable, public axSharedPtrBase {
+class axDBO_Driver_Result : public axNonCopyable, public axSharedPte {
 public:
 	virtual	axStatus	status	() const = 0;
 	virtual	axSize		rowCount() const = 0;
@@ -108,14 +108,14 @@ private:
 typedef axSharedPtr< axDBO_Driver_Result >		axDBO_Driver_ResultSP;
 
 //------------
-class axDBO_Driver_Stmt :  public axNonCopyable, public axSharedPtrBase {
+class axDBO_Driver_Stmt :  public axNonCopyable, public axSharedPte {
 public:
 	virtual	axStatus	exec() = 0;
 };
 typedef axSharedPtr< axDBO_Driver_Stmt >		axDBO_Driver_StmtSP;
 
 //------------
-class axDBO_Driver : public axNonCopyable, public axSharedPtrBase {
+class axDBO_Driver : public axNonCopyable, public axSharedPte {
 public:
 	axDBO_Driver() {}
 	virtual ~axDBO_Driver() {}

@@ -6,10 +6,10 @@
 
 template <class T>	class axSharedPtr;
 
-class axSharedPtrBase {
+class axSharedPte {
 public:
-	axSharedPtrBase()				{ refCount_ = 0; }
-	virtual	~axSharedPtrBase()		{ }
+	axSharedPte()					{ refCount_ = 0; }
+	virtual	~axSharedPte()			{ }
 
 	void	incRefCount()			{ ++refCount_; }
 	void	decRefCount()			{ int n = --refCount_; if( !n ) delete this; }

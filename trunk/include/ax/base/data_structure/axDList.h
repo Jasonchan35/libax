@@ -127,7 +127,7 @@ void axDList<T>::clear() {
 		n = _head_;
 		if( ! n ) return;
 		remove( n );
-		if( n->ownedByDList_ )
+		if( n->_ownedByDList_ )
 			delete n;
 	}
 }
@@ -184,7 +184,7 @@ void axDList<T>::append( T *node ) {
 	if( !node )		   { assert( false ); return; }
 	if( node->_list_ ) { assert( false ); return; } //node already in list
 
-	size_++;
+	_size_++;
 	node->_next_ = NULL;
 	node->_prev_ = _tail_;
 	node->_list_ = this;
@@ -229,7 +229,7 @@ void axDList<T>::remove( T *node, bool call_onDListRemove ) {
 		assert( false ); return;
 	}  // node is not belongs to this list !!
 	
-	size_--;
+	_size_--;
 	if( call_onDListRemove ) node->onWillRemoveFromList();
 
 	if( node->_prev_ )
