@@ -11,6 +11,7 @@ public:
 	const T*	dir				() const; //!< directory
 	const T*	filename		() const; //!< filename with extension but without directory part
 	const T*	ext				() const; //!< file extension
+	axStatus	getBasename		( axIString &out ) const; //!< filename without extension
 
 	axStatus	getFullPath		( axIString_<T>	&out );
 
@@ -25,13 +26,14 @@ public:
 
 	axStatus	setDir			( const T* sz );
 	axStatus	setFilename		( const T* sz );
+	axStatus	setBasename		( const T* sz ); //!< filename without extension
 	axStatus	setExt			( const T* sz );
 
 	void		clearDir		();
 	void		clearFilename	();
 	void		clearExt		();
 
-	void		clear	();
+	void		clear			();
 
 	static	const	T*	dirSeparatorList;
 

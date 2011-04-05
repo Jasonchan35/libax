@@ -31,14 +31,14 @@ public:
 	axStatus		incSize		( axSize n, bool keep_data = true )		{ return resize( size() + n, keep_data ); }
 	axStatus		decSize		( axSize n, bool keep_data = true )		{ return resize( size() - n, keep_data ); }
 
-	void		clear		();
-	void		free		();
+	void			clear		();
+	void			free		();
 
-	const T*	c_str		() const;
-	operator const T*		() const	{ return c_str(); }
+	const T*	c_str	() const;
+	operator const T*	() const	{ return c_str(); }
 
-	T			charAt		( axSize idx     ) const;
-	T			lastChar	( axSize idx = 0 ) const;
+	T				charAt		( axSize idx     ) const;
+	T				lastChar	( axSize idx = 0 ) const;
 
 	//! Must keep the buf end with zero
 	T*				getInternalBufferPtr();
