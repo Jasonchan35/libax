@@ -9,7 +9,7 @@
 //@{
 
 template< class T >
-class axIString : public axNonCopyable {
+class axIString_ : public axNonCopyable {
 public:
 	typedef	T	Type;
 	enum { defaultChunkSize = 0 };
@@ -41,7 +41,7 @@ public:
 	T			lastChar	( axSize idx = 0 ) const;
 
 	//! Must keep the buf end with zero
-	axStatus		getBufferPtr( axIArray<T>* &buf );
+	T*				getInternalBufferPtr();
 
 	axStatus		append			( char ch );
 	axStatus		append			( const char* src )						{ return append( src, (axSize)ax_strlen(src) ); }
@@ -51,15 +51,15 @@ public:
 	axStatus		append			( const wchar_t* src )					{ return append( src, (axSize)ax_strlen(src) ); }
 	axStatus		append			( const wchar_t* src, axSize src_len );
 
-	axStatus		clone			( const axIString &src );
+	axStatus		clone			( const axIString_<T> &src );
 
 	axStatus		find			( T ch, axSize &pos, axSize start_from = 0     ) const;
 	axStatus		findFromEnd		( T ch, axSize &pos, axSize	start_from_end = 0 ) const;
 
-	axStatus		splitByIndex	( axSize index, axIString<T> &part1, axIString<T> &part2 ) const;
-	axStatus		splitByChar		( T ch, axIString<T> &part1, axIString<T> &part2 ) const;
+	axStatus		splitByIndex	( axSize index, axIString_<T> &part1, axIString_<T> &part2 ) const;
+	axStatus		splitByChar		( T ch,         axIString_<T> &part1, axIString_<T> &part2 ) const;
 
-	axStatus		substring		( axSize start, axSize count, axIString<T> &out ) const;
+	axStatus		substring		( axSize start, axSize count, axIString_<T> &out ) const;
 
 	bool			equals			( const T* src ) const;
 
@@ -126,38 +126,37 @@ public:
 
 protected:
 	axIArray<T>&	buf_;
-	axIString( axIArray<T> &buf ) : buf_(buf) {}
+	axIString_( axIArray<T> &buf ) : buf_(buf) {}
 };
 
-typedef	axIString<char>		axIStringA;
-typedef	axIString<wchar_t>	axIStringW;
-
+typedef	axIString_<char>		axIStringA;
+typedef	axIString_<wchar_t>		axIStringW;
 
 // ---------
 
 template< class T > inline
-axStatus	axIString<T> :: set( const char* sz ) {
+axStatus	axIString_<T> :: set( const char* sz ) {
 	clear(); return append( sz );
 }
 
 template< class T > inline
-axStatus	axIString<T> :: set( const char* sz, axSize len ) {
+axStatus	axIString_<T> :: set( const char* sz, axSize len ) {
+	clear(); return append( sz, len );
+}
+
+template< class T > inline
+axStatus	axIString_<T> :: set( const wchar_t* sz ) {
 	clear(); return append( sz );
 }
 
 template< class T > inline
-axStatus	axIString<T> :: set( const wchar_t* sz ) {
-	clear(); return append( sz );
-}
-
-template< class T > inline
-axStatus	axIString<T> :: set( const wchar_t* sz, axSize len ) {
-	clear(); return append( sz );
+axStatus	axIString_<T> :: set( const wchar_t* sz, axSize len ) {
+	clear(); return append( sz, len );
 }
 
 
 template<> inline
-axStatus	axIString<char> :: append( const char *src, axSize src_len ) {
+axStatus	axIString_<char> :: append( const char *src, axSize src_len ) {
 	if( ! src ) return 1;
 	if( src_len <= 0 ) return 1;
 
@@ -174,7 +173,7 @@ axStatus	axIString<char> :: append( const char *src, axSize src_len ) {
 }
 
 template<> inline
-axStatus	axIString<wchar_t> :: append( const wchar_t *src, axSize src_len ) {
+axStatus	axIString_<wchar_t> :: append( const wchar_t *src, axSize src_len ) {
 	if( ! src ) return 1;
 	if( src_len <= 0 ) return 1;
 
@@ -190,10 +189,10 @@ axStatus	axIString<wchar_t> :: append( const wchar_t *src, axSize src_len ) {
 	return 1;
 }
 
-template<> inline axStatus	axIString<wchar_t> :: append( char    ch ) { return append( (wchar_t)ch );  }
+template<> inline axStatus	axIString_<wchar_t> :: append( char    ch ) { return append( (wchar_t)ch );  }
 
 template<> inline
-axStatus	axIString<wchar_t> :: append( wchar_t ch ) { 
+axStatus	axIString_<wchar_t> :: append( wchar_t ch ) { 
 	axStatus st;
 	st = incSize( 1 );		if( !st ) return st;
 	buf_.last(1) = ch;
@@ -201,7 +200,7 @@ axStatus	axIString<wchar_t> :: append( wchar_t ch ) {
 }
 
 template<> inline	
-axStatus	axIString<char>    :: append( char    ch ) { 
+axStatus	axIString_<char>    :: append( char    ch ) { 
 	axStatus st;
 	st = incSize( 1 );		if( !st ) return st;
 	buf_.last(1) = ch;
@@ -209,7 +208,7 @@ axStatus	axIString<char>    :: append( char    ch ) {
 }
 
 template<> inline	
-axStatus axIString<char> :: append( wchar_t ch ) { 
+axStatus axIString_<char> :: append( wchar_t ch ) { 
 	axStatus st;
 	axSize n;
 	st = utf8_count_in_wchar( n, ch );	if( !st ) return st;
@@ -221,7 +220,7 @@ axStatus axIString<char> :: append( wchar_t ch ) {
 
 //wchar => utf8
 template<> inline
-axStatus	axIString<char> :: append( const wchar_t *src, axSize src_len ) {
+axStatus	axIString_<char> :: append( const wchar_t *src, axSize src_len ) {
 	if( ! src ) return 1;
 	if( src_len <= 0 ) return 1;
 
@@ -250,7 +249,7 @@ axStatus	axIString<char> :: append( const wchar_t *src, axSize src_len ) {
 
 //wchar <= utf8
 template<> inline
-axStatus	axIString<wchar_t> :: append( const char *src, axSize src_len ) {
+axStatus	axIString_<wchar_t> :: append( const char *src, axSize src_len ) {
 	if( ! src ) return 1;
 	if( src_len <= 0 ) return 1;
 
@@ -279,29 +278,28 @@ axStatus	axIString<wchar_t> :: append( const char *src, axSize src_len ) {
 
 
 template< class T > inline
-const T* axIString<T>::c_str() const {
+const T* axIString_<T>::c_str() const {
 	return buf_.size() ? buf_.ptr() : ax_empty_c_str( (T*)0 ) ;
 }
 
 template< class T > inline
-axStatus	axIString<T> :: getBufferPtr( axIArray<T>* &buf ) { 
-	buf = &buf_;
-	return 0;
+T*	axIString_<T> :: getInternalBufferPtr() { 
+	return buf_.ptr();
 }
 
 template< class T > inline
 
-void axIString<T> :: clear() {
+void axIString_<T> :: clear() {
 	buf_.clear();
 }
 
 template< class T > inline
-void axIString<T> :: free	() {
+void axIString_<T> :: free	() {
 	buf_.free();
 }
 
 template< class T > inline
-axStatus	axIString<T> :: resize( axSize new_size, bool keep_data ) { 
+axStatus	axIString_<T> :: resize( axSize new_size, bool keep_data ) { 
 	axStatus st;
 	st = buf_.resize( new_size+1, keep_data );		if( !st ) return st;
 	buf_.last() = 0;
@@ -310,7 +308,7 @@ axStatus	axIString<T> :: resize( axSize new_size, bool keep_data ) {
 
 
 template< class T > inline
-axStatus	axIString<T> :: reserve( axSize new_size, bool keep_data ) { 
+axStatus	axIString_<T> :: reserve( axSize new_size, bool keep_data ) { 
 	axStatus st;
 	st = buf_.reserve( new_size+1, keep_data );		if( !st ) return st;
 	if( buf_.capacity() ) {
@@ -320,17 +318,17 @@ axStatus	axIString<T> :: reserve( axSize new_size, bool keep_data ) {
 }
 
 template< class T > inline
-axSize	axIString<T> :: size	() const { 
+axSize	axIString_<T> :: size	() const { 
 	return ( buf_.size() ) ? ( buf_.size()-1 ) : 0;
 }
 
 template< class T > inline
-axStatus	axIString<T> :: clone( const axIString<T> &src ) {
+axStatus	axIString_<T> :: clone( const axIString_<T> &src ) {
 	return set( src.c_str() );
 }
 
 template< class T > inline
-T	axIString<T> :: charAt  ( axSize idx   ) const { 
+T	axIString_<T> :: charAt  ( axSize idx   ) const { 
 	if( idx >= buf_.size() ) {
 		assert( false );
 		return 0;
@@ -340,7 +338,7 @@ T	axIString<T> :: charAt  ( axSize idx   ) const {
 }
 
 template< class T > inline
-T	axIString<T> :: lastChar	( axSize idx ) const { 
+T	axIString_<T> :: lastChar	( axSize idx ) const { 
 	if( idx >= buf_.size() ) {
 		assert( false );
 		return 0;
@@ -351,14 +349,14 @@ T	axIString<T> :: lastChar	( axSize idx ) const {
 
 
 template< class T > inline
-axStatus	axIString<T> :: substring( axSize start, axSize count, axIString<T> &out ) const {
+axStatus	axIString_<T> :: substring( axSize start, axSize count, axIString_<T> &out ) const {
 	out.clear();
 	if( start >= size() ) return axStatus::invalid_param;
 	return out.set( &buf_[start], count );
 }
 
 template< class T > inline
-axStatus	axIString<T> :: find ( T ch, axSize &out_index, axSize start_from ) const {
+axStatus	axIString_<T> :: find ( T ch, axSize &out_index, axSize start_from ) const {
 	if( start_from >= size() ) return axStatus::invalid_param;
 	const T* s = &buf_[start_from];
 	const T* e = &buf_.last();
@@ -372,7 +370,7 @@ axStatus	axIString<T> :: find ( T ch, axSize &out_index, axSize start_from ) con
 }
 
 template< class T > inline
-axStatus	axIString<T> :: findFromEnd	( T ch, axSize &out_index, axSize	start_from_end ) const {
+axStatus	axIString_<T> :: findFromEnd	( T ch, axSize &out_index, axSize	start_from_end ) const {
 	if( start_from_end >= size() ) return axStatus::invalid_param;
 	axSize n = size() - start_from_end;
 
@@ -388,7 +386,7 @@ axStatus	axIString<T> :: findFromEnd	( T ch, axSize &out_index, axSize	start_fro
 }
 
 template< class T > inline
-axStatus	axIString<T> :: splitByChar( T ch, axIString<T> &part1, axIString<T> &part2 ) const {
+axStatus	axIString_<T> :: splitByChar( T ch, axIString_<T> &part1, axIString_<T> &part2 ) const {
 	axStatus st;
 	part1.clear();
 	part2.clear();
@@ -402,7 +400,7 @@ axStatus	axIString<T> :: splitByChar( T ch, axIString<T> &part1, axIString<T> &p
 }
 
 template< class T > inline
-axStatus	axIString<T> :: splitByIndex( axSize index, axIString<T> &part1, axIString<T> &part2 ) const {
+axStatus	axIString_<T> :: splitByIndex( axSize index, axIString_<T> &part1, axIString_<T> &part2 ) const {
 	part1.clear();
 	part2.clear();
 	axStatus	st;
@@ -415,7 +413,7 @@ axStatus	axIString<T> :: splitByIndex( axSize index, axIString<T> &part1, axIStr
 }
 
 template< class T > inline
-bool axIString<T> :: equals	( const T* src ) const {
+bool axIString_<T> :: equals	( const T* src ) const {
 	return ( 0 == ax_strcmp( c_str(), src ) );
 }
 

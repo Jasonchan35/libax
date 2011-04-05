@@ -7,28 +7,28 @@
 //@{
 
 template< class T, size_t LOCAL_BUF_SIZE >
-class axLocalString_ : public axIString<T> {
-	typedef	axIString<T>	B;
+class axLocalString_ : public axIString_<T> {
+	typedef	axIString_<T>	B;
 public:
-	axLocalString_()	: axIString<T>(buf_) {} 
+	axLocalString_()	: axIString_<T>(buf_) {} 
 private:
 	axLocalArray<T, LOCAL_BUF_SIZE>	buf_;
 };
 
 //-----------
 template< size_t LOCAL_BUF_SIZE >
-class axLocalStringA : public axIString<char> {
-	typedef	axIString<char>	B;
+class axLocalStringA : public axIString_<char> {
+	typedef	axIString_<char>	B;
 public:
-	axLocalStringA()	: axIString<char>(buf_) {} 
+	axLocalStringA()	: axIString_<char>(buf_) {} 
 private:
 	axLocalArray<char, LOCAL_BUF_SIZE>	buf_;
 };
 
 //-----------
 template< size_t LOCAL_BUF_SIZE >
-class axLocalStringW : public axIString<wchar_t> {
-	typedef	axIString<wchar_t>	B;
+class axLocalStringW : public axIString_<wchar_t> {
+	typedef	axIString_<wchar_t>	B;
 public:
 	axLocalStringW()	: axIString<wchar_t>(buf_) {} 
 private:

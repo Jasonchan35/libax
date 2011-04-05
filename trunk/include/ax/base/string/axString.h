@@ -7,8 +7,8 @@
 //@{
 
 template< size_t LOCAL_BUF_SIZE >
-class axStringA_ : public axIString<char> {
-	typedef	axIString<char>	B;
+class axStringA_ : public axIString_<char> {
+	typedef	axIString_<char>	B;
 public:
 	axStringA_() : B(buf_) { buf_.setChunkSize( defaultChunkSize ); } 
 private:
@@ -17,8 +17,8 @@ private:
 
 
 template< size_t LOCAL_BUF_SIZE >
-class axStringW_ : public axIString<wchar_t> {
-	typedef	axIString<wchar_t>	B;
+class axStringW_ : public axIString_<wchar_t> {
+	typedef	axIString_<wchar_t>	B;
 public:
 	axStringW_() : B(buf_) { buf_.setChunkSize( defaultChunkSize ); } 
 private:
@@ -28,8 +28,8 @@ private:
 //------------------
 
 template< class T, size_t LOCAL_BUF_SIZE = 0 >
-class axString_ : public axIString<T> {
-	typedef	axIString<T>	B;
+class axString_ : public axIString_<T> {
+	typedef	axIString_<T>	B;
 public:
 	axString_() : B(buf_) { buf_.setChunkSize( B::defaultChunkSize ); } 
 private:

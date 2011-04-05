@@ -19,7 +19,7 @@ public:
 		Endianness_BigEndian,
 		Endianness_LittleEndian,
 	};
-			Endianness	getEndianness		();
+			Endianness	endianness			();
 			bool		isBigEndian			();
 			bool		isLittleEndian		();
 };
@@ -27,7 +27,7 @@ public:
 //@}
 
 inline
-axSystem::Endianness	axSystem::getEndianness		() {
+axSystem::Endianness	axSystem::endianness		() {
 	#if axCPU_LITTLE_ENDIAN
 		return Endianness_LittleEndian;
 	#elif axCPU_BIG_ENDIAN

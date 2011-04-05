@@ -240,28 +240,28 @@ axStatus	axStringFormat::format_ArgList( const wchar_t* fmt, const ArgList &list
 
 //----------------
 template<> inline
-axStatus	axIString<wchar_t> :: formatAppend_ArgList( const char* fmt, const ArgList &list ) {
+axStatus	axIString_<wchar_t> :: formatAppend_ArgList( const char* fmt, const ArgList &list ) {
 	axStringFormat	f;
 	f._setOutput( *this );
 	return f._process( fmt, list );
 }
 
 template<> inline
-axStatus	axIString<char> :: formatAppend_ArgList( const char* fmt, const ArgList &list ) {
+axStatus	axIString_<char> :: formatAppend_ArgList( const char* fmt, const ArgList &list ) {
 	axStringFormat	f;
 	f._setOutput( *this );
 	return f._process( fmt, list );
 }
 
 template<> inline
-axStatus	axIString<wchar_t> :: formatAppend_ArgList( const wchar_t* fmt, const ArgList &list ) {
+axStatus	axIString_<wchar_t> :: formatAppend_ArgList( const wchar_t* fmt, const ArgList &list ) {
 	axStringFormat	f;
 	f._setOutput( *this );
 	return f._process( fmt, list );
 }
 
 template<> inline
-axStatus	axIString<char> :: formatAppend_ArgList( const wchar_t* fmt, const ArgList &list ) {
+axStatus	axIString_<char> :: formatAppend_ArgList( const wchar_t* fmt, const ArgList &list ) {
 	axStringFormat	f;
 	f._setOutput( *this );
 	return f._process( fmt, list );

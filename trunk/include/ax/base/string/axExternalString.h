@@ -8,11 +8,11 @@
 
 
 template< class T >
-class axExternalString_ : public axIString<T> {
-	typedef	axIString<T>	B;
+class axExternalString_ : public axIString_<T> {
+	typedef	axIString_<T>	B;
 public:
-	axExternalString_( T* sz=NULL )	: axIString<T>(buf_) { if( sz ) setExternal( sz ); } 
-	void setExternal( T* sz )				{ buf_.setExternal( sz, ax_strlen(sz) ); }
+	axExternalString_( T* sz=NULL )	: axIString_<T>(buf_)	{ if( sz ) setExternal( sz ); } 
+	void setExternal( T* sz )								{ buf_.setExternal( sz, ax_strlen(sz) ); }
 
 private:
 	axExternalArray<T>	buf_;
