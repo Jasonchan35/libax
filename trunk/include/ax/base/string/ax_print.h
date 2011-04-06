@@ -13,10 +13,15 @@ axStatus ax_print_ArgList( const char*    fmt, const axStringFormat::ArgList &li
 	\b Features
 	\li Unicode support
 	\li Type Safe
+	\li formatting with position   
+		just like 'gettext' - autosprintf("%2$d %1$d"), 
+		but we using {<pos>} such as ax_print( "{2}" ) for the 3th parameter ( since the <pos> start from 0 )
 
 	int a	  = 1;
 	int64_t b = 2;
 	ax_print( "{1} {?}", a, b );
+
+
 */
 inline axStatus 		ax_print	( const char* fmt )																																																																													{ axStringFormat_ArgList list;													return ax_print_ArgList( fmt, list ); }
 inline axStatus 		ax_print	( const char* fmt,	const axStringFormat_Arg &a0 )																																																																					{ axStringFormat_ArgList list;	list<<a0;										return ax_print_ArgList( fmt, list ); }
