@@ -11,7 +11,7 @@ public:
 	const T*	dir				() const; //!< directory
 	const T*	filename		() const; //!< filename with extension but without directory part
 	const T*	ext				() const; //!< file extension
-	axStatus	getBasename		( axIString &out ) const; //!< filename without extension
+	axStatus	getBasename		( axIStringW &out ) const; //!< filename without extension
 
 	axStatus	getFullPath		( axIString_<T>	&out );
 
