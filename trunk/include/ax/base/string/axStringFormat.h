@@ -31,10 +31,9 @@ axStatus axStringFormat_out( axStringFormat &f, wchar_t		value );
 axStatus axStringFormat_out( axStringFormat &f, const char*		value );
 axStatus axStringFormat_out( axStringFormat &f, const wchar_t*  value );
 
-inline
-axStatus axStringFormat_out( axStringFormat &f, char*	  value ) { return axStringFormat_out( f, (const char*)value ); }
-inline
-axStatus axStringFormat_out( axStringFormat &f, wchar_t*  value ) { return axStringFormat_out( f, (const char*)value ); }
+inline axStatus axStringFormat_out( axStringFormat &f, axSize	value ) { return axStringFormat_out( f, value.native() ); }
+inline axStatus axStringFormat_out( axStringFormat &f, char*	value ) { return axStringFormat_out( f, (const char*)value ); }
+inline axStatus axStringFormat_out( axStringFormat &f, wchar_t*	value ) { return axStringFormat_out( f, (const char*)value ); }
 
 
 axStatus axStringFormat_out( axStringFormat &f, const void* p );
@@ -91,6 +90,9 @@ public:
 		st = B::append( a );	assert( st );
 		return *this; 
 	}
+
+private:
+	axStatus	toStringFormat( axStringFormat &f ) const { assert(false); } // ArgList.toString is not allowed
 };
 
 //@}

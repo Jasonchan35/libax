@@ -149,7 +149,7 @@ axStatus axStringFormat_out_NumberT( axStringFormat &f, T value ) {
 	}
 	
 	if( ! align_left ) { //fill space at the front
-		st = f.fill( fill_ch, space );	if( !st ) return st;
+		st = f.repeat( fill_ch, space );	if( !st ) return st;
 	}
 	
 	if( plus_sign ) {
@@ -159,7 +159,7 @@ axStatus axStringFormat_out_NumberT( axStringFormat &f, T value ) {
 	st = f.out( ch,digi );	if( !st ) return st;
 	
 	if( align_left ) { //fill space at the end
-		st = f.fill( fill_ch, space );	if( !st ) return st;
+		st = f.repeat( fill_ch, space );	if( !st ) return st;
 	}
 	
 	//printf("\n str = [%ls] \n\n", str.sz() );

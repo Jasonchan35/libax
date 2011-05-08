@@ -57,11 +57,11 @@ public:
 			T&			last		( axSize i = 0 )			{ return element( size_-i-1 ); }
 	const	T&			last		( axSize i = 0 ) const		{ return element( size_-i-1 ); }
 
-			axStatus	copy		( const axIArray<T> &src )	{ clear(); return append( src ); }
+			axStatus	copy		( const axIArray<T> &src )	{ clear(); return appendArray( src ); }
 
 			axStatus	append		( const T& value )			{ axStatus st = incSize(1); if( !st ) return st; last() = value; return 0; }
-			axStatus	append		( const axIArray<T> &src )	{ return append_n( src.ptr(), src.size() ); }
-			axStatus	append_n	( const T* src, axSize count );
+			axStatus	appendArray	( const axIArray<T> &src )	{ return appendArray( src.ptr(), src.size() ); }
+			axStatus	appendArray	( const T* src, axSize count );
 
 			T*			ptr()									{ return p_; }
 	const	T*			ptr() const								{ return p_; }
@@ -71,7 +71,9 @@ public:
 			void		clear		();
 			
 			void		free		();	//!< free all memory		
-			axStatus	shrink		();	//!< free unused memory <TODO>
+			axStatus	shrink		();	//!< \todo free unused memory
+
+			axStatus	remove		( axSize index, axSize count=1 ); //!< \todo
 
 			axStatus	toStringFormat( axStringFormat &f ) const;
 
@@ -261,7 +263,7 @@ axStatus _array_take( T* dst, T* src, axSize n ) {
 }
 
 template< class T >
-axStatus	axIArray<T>::append_n	( const T* src, axSize count ) {
+axStatus	axIArray<T>::appendArray ( const T* src, axSize count ) {
 	axStatus	st;
 	st = incSize( count );						if( !st ) return st;
 	st = _array_copy( p_ + size_, src, count );	if( !st ) return st;

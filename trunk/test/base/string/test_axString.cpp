@@ -1,4 +1,4 @@
-#include <ax/ax_core.h>
+#include <ax/ax_base.h>
 
 axStatus test() {
 	axStatus st;
@@ -25,7 +25,17 @@ axStatus test() {
 		return -1;
 	}
 
-	ax_print("{1} {0}", 'a', 'b' );
+	ax_print("{1} {0}\n", 'a', 'b' );
+
+//===========
+
+	axArray< axStringA >	str_array;
+	str_array.resize( 5 );
+	for( axSize i=0; i<str_array.size(); i++ ) {
+		str_array[i].format( "str({?})", i );
+	}
+
+	ax_print( "str_array = {?}\n", str_array );
 
 	return 0;
 }

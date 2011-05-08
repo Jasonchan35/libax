@@ -26,9 +26,23 @@ public:
 	void	setChunkSize		( axSize	n );
 	void	setAutoChunkSize	()							{ setChunkSize(0); }
 
+	axStatus	takeOwnership( axArray<T>	&src )	{  
+		axStatus	st;
+		if( src.size() < LOCAL_BUF_SIZE ) {
+			st = copy( src );	if( !st ) return st;
+			src.clear();
+			return 0;
+		}
+
+		B::_init ( src.ptr(), src.size(), src.capacity() );
+		src._init( NULL, 0, 0 );
+		return 0;
+	}
+
+
 protected:
 	virtual	axStatus	on_malloc	( axSize req_size, T* &out_ptr, axSize &out_size );
-	virtual void	on_free		(  T* p  );
+	virtual void		on_free		(  T* p  );
 
 private:
 	axSize	chunkSize_;

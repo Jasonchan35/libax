@@ -32,6 +32,8 @@ class axString_ : public axIString_<T> {
 	typedef	axIString_<T>	B;
 public:
 	axString_() : B(buf_) { buf_.setChunkSize( B::defaultChunkSize ); } 
+
+	axStatus	takeOwnership( axString_<T>	&src )	{  return buf_.takeOwnership( src.buf_ ); }
 private:
 	axArray<T,LOCAL_BUF_SIZE>	buf_;
 };

@@ -17,13 +17,13 @@ public:
 	axStatus	out	( wchar_t wc );
 	axStatus	out	( const wchar_t* sz );
 	axStatus	out	( const wchar_t* sz, axSize len );
-	axStatus	fill( wchar_t ch, axSize len );
+	axStatus	repeat( wchar_t ch, axSize len );
 	axStatus	format_ArgList( const wchar_t* fmt, const ArgList &list );
 
 	axStatus	out	( char wc );
 	axStatus	out	( const char* sz );
 	axStatus	out	( const char* sz, axSize len );
-	axStatus	fill( char ch, axSize len );
+	axStatus	repeat( char ch, axSize len );
 	axStatus	format_ArgList( const char* fmt, const ArgList &list );
 
 	template< class T >
@@ -182,15 +182,15 @@ axStatus	axStringFormat::out( const wchar_t* sz ) {
 
 inline 
 axStatus	axStringFormat::out( char ch ) { 
-	return fill( ch, 1 ); 
+	return repeat( ch, 1 ); 
 }
 inline 
 axStatus	axStringFormat::out( wchar_t ch ) { 
-	return fill( ch, 1 ); 
+	return repeat( ch, 1 ); 
 }
 
 inline
-axStatus	axStringFormat::fill( char ch, axSize len )	{ 
+axStatus	axStringFormat::repeat( char ch, axSize len )	{ 
 	axStatus st;
 	if( strA_ ) {
 		for( axSize i=0; i<len; i++ ) {
@@ -206,7 +206,7 @@ axStatus	axStringFormat::fill( char ch, axSize len )	{
 }
 
 inline
-axStatus	axStringFormat::fill( wchar_t ch, axSize len )	{ 
+axStatus	axStringFormat::repeat( wchar_t ch, axSize len )	{ 
 	axStatus st;
 	if( strA_ ) {
 		for( axSize i=0; i<len; i++ ) {

@@ -6,8 +6,13 @@
 //@{
 #ifdef axOS_WIN
 
+#ifndef UNICODE 
 #define UNICODE
+#endif
+
+#ifndef _UNICODE
 #define _UNICODE
+#endif
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #define NOMINMAX // no min and max macro in windows.h

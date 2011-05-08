@@ -2,6 +2,7 @@
 
 axStatus test() {
 	axStatus st;
+
 	ax_print(L"testing {?}\n", __FILE__ );
 
 	axDBO	db;

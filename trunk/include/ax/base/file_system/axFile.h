@@ -1,0 +1,130 @@
+#ifndef __axFile_h__
+#define __axFile_h__
+
+#include "axFileSystem.h"
+
+class axFile {
+public:
+	axFile();
+	~axFile();
+
+	axStatus	open		( const wchar_t* filename, const char* mode = "rb" );
+	axStatus	open		( const char*    filename, const char* mode = "rb" );
+	void		close		();
+
+	FILE*		file_ptr	()	{ return p_; }
+
+	bool		eof			() const					{ return ( feof( p_ ) != 0 ) ; }
+	axStatus	setPos		( fpos_t  n )				{ return fsetpos( p_, &n ); }
+	axStatus	getPos		( fpos_t &n ) const			{ return fgetpos( p_, &n ); }
+
+	axStatus	write		( axIByteArray &buf )		{ return writeBytes( buf.ptr(), buf.size() ); }
+	axStatus	writeBytes	( const void* buf, axSize buf_len );
+
+	axStatus	writeString	( const char* sz );
+
+	typedef axStringFormat_Arg			Arg;
+	typedef	axStringFormat_ArgList		ArgList;
+
+	axStatus		format_ArgList	( const char* fmt, const ArgList &list );
+
+	axStatus		format			( const char* fmt )																																							{ ArgList list;													return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0 )																																			{ ArgList list;	list<<a0;										return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1 )																															{ ArgList list;	list<<a0<<a1;									return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2 )																											{ ArgList list;	list<<a0<<a1<<a2;								return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3 )																							{ ArgList list;	list<<a0<<a1<<a2<<a3;							return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4 )																				{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4;						return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5 )																{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5;					return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6 )												{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6;				return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7 )								{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7;			return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8 )					{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8;		return format_ArgList( fmt, list ); }
+	axStatus		format			( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8, const Arg &a9 )	{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8<<a9;	return format_ArgList( fmt, list ); }
+
+
+private:
+	FILE*	p_;
+};
+
+//----inline ----
+
+inline
+axFile::axFile() {
+	p_ = NULL;
+}
+
+inline
+axFile::~axFile() {
+	close();
+}
+
+inline
+void axFile::close() {
+	if( p_ ) {
+		fclose( p_ );
+		p_ = NULL;
+	}
+}
+
+inline
+axStatus axFile::format_ArgList	( const char* fmt, const ArgList &list ) {
+	axStringA_<1024>	str;
+	axStatus	st;
+	st = str.format_ArgList( fmt, list );	if( !st ) return st;
+	writeBytes( str.c_str(), str.size() );
+	return 0;
+}
+
+inline
+axStatus axFile::writeString( const char* sz ) {
+	size_t n = ax_strlen( sz );
+	return writeBytes( sz, n );
+}
+
+inline
+axStatus axFile::writeBytes( const void* buf, axSize buf_len ) {
+	if( buf_len <= 0 ) return 0;
+	size_t n = fwrite( buf, buf_len, 1, p_ );
+	if( n != 1 ) return -1;
+	return 0;
+}
+
+inline
+axStatus axFile::open( const wchar_t* filename, const char* mode ) {
+	close();
+	axStatus st;
+#ifdef _WIN32
+	axStringW_< 200 > mode_w;
+	st = mode_w.set( mode );				if( !st ) return st;
+	p_ = _wfopen( filename, mode_w );
+#else
+	axStringA_< 200 > filename_a;
+	st = filename_a.set( filename );		if( !st ) return st;
+	p_ = fopen( filename_a, mode );
+#endif
+
+	if( ! p_ ) return -1;
+	return 0;
+}
+
+inline
+axStatus axFile::open( const char* filename, const char* mode ) {
+	close();
+	axStatus st;
+
+#ifdef _WIN32
+	axStringW_<200>	filename_w;
+	axStringW_<200>	mode_w;
+
+	st = filename_w.set( filename );		if( !st ) return st;
+	st = mode_w.set( mode );				if( !st ) return st;
+	p_ = _wfopen( filename_w, mode_w );
+#else
+	p_ = fopen( filename, mode );
+#endif
+
+	if( ! p_ ) return -1;
+	return 0;
+}
+
+#endif //__axFile_h__
+
