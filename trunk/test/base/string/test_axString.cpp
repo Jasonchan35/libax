@@ -29,11 +29,13 @@ axStatus test() {
 
 //===========
 
-	axArray< axStringA >	str_array;
+	axArray< axStringA_<10>, 2 >	str_array;
 	str_array.resize( 5 );
 	for( axSize i=0; i<str_array.size(); i++ ) {
-		str_array[i].format( "str({?})", i );
+		str_array[i].format( "str({?}).........\n", i );
 	}
+
+	str_array.resize( 6 );
 
 	ax_print( "str_array = {?}\n", str_array );
 

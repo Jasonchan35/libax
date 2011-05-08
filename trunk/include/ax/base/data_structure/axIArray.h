@@ -265,8 +265,9 @@ axStatus _array_take( T* dst, T* src, axSize n ) {
 template< class T >
 axStatus	axIArray<T>::appendArray ( const T* src, axSize count ) {
 	axStatus	st;
-	st = incSize( count );						if( !st ) return st;
-	st = _array_copy( p_ + size_, src, count );	if( !st ) return st;
+	axSize	old_size = size();
+	st = incSize( count );							if( !st ) return st;
+	st = _array_copy( p_ + old_size, src, count );	if( !st ) return st;
 	return 0;
 }
 

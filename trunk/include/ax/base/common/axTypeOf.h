@@ -45,13 +45,24 @@ template<class T>	bool  ax_lessThan0( T value );
 	template<> inline	bool		axTypeOf<T>::isPrimitive()			{ return true; } \
 	template<> inline	bool		axTypeOf<T>::isUnsigned()			{ return true; } \
 	inline	axStatus	ax_takeOwnership( T &a, T &b )	{ a=b; return 0; } \
-	inline	bool		ax_lessThan0( T value )				{ return false; } \
+	inline	bool		ax_lessThan0( T value )			{ return false; } \
 //-------
 	axTYPE_LIST( uint8_t )
 	axTYPE_LIST( uint16_t )
 	axTYPE_LIST( uint32_t )
 	axTYPE_LIST( uint64_t )
 #undef		axTYPE_LIST
+
+
+#define	axTYPE_LIST(T)	\
+	template<> inline	bool		axTypeOf<T>::isPrimitive()			{ return true; } \
+	inline	axStatus	ax_takeOwnership( T &a, T &b )	{ a=b; return 0; } \
+//-------
+	axTYPE_LIST( char )
+	axTYPE_LIST( wchar_t )
+#undef		axTYPE_LIST
+
+
 
 template<> inline	uint8_t		axTypeOf<uint8_t>::min()		{ return 0; }
 template<> inline	uint8_t		axTypeOf<uint8_t>::max()		{ return 0xff; }
