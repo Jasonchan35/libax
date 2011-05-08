@@ -15,17 +15,7 @@ public:
 
 	static	bool	isUnsigned();
 	static	bool	isPrimitive()	{ return false; }
-
-	typedef	int (*CompareFunc)( const T &a, const T &b );
 };
-
-template<class T> inline 
-int	ax_compare( const T &a, const T &b ) {
-	if( a < b ) return -1;
-	if( b < a ) return 1;
-	return 0;
-}
-
 
 template< class T >	inline	axStatus	ax_takeOwnership( T &a, T &b )  { return a.takeOwnership(b); }
 

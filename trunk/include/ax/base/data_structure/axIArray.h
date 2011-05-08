@@ -76,7 +76,7 @@ public:
 			axStatus	remove		( axSize index, axSize count=1 );
 			axStatus	toStringFormat( axStringFormat &f ) const;
 
-			axStatus	sortIt		( bool ascending = true, typename axTypeOf<T>::CompareFunc func = &ax_compare<T> );
+			axStatus	sort		( bool ascending = true );
 
 protected:
 	void	_init( T* p, axSize size, axSize capacity );
@@ -201,12 +201,12 @@ axStatus	axIArray<T>::remove( axSize index, axSize count ) {
 }
 
 template< class T >
-axStatus	axIArray<T>::sortIt( bool ascending, typename axTypeOf<T>::CompareFunc func ) {
+axStatus	axIArray<T>::sort( bool ascending ) {
 	axSize n = size();
 	if( ascending ) {
 		for( axSize i=0; i<n; i++ ) {
 			for( axSize j=i+1; j<n; j++ ) {
-				if( func( p_[i], p_[j] ) > 0 ) {
+				if( p_[i] > p_[j] ) {
 					ax_swap( p_[i], p_[j] );
 				}
 			}
@@ -214,7 +214,7 @@ axStatus	axIArray<T>::sortIt( bool ascending, typename axTypeOf<T>::CompareFunc 
 	}else{
 		for( axSize i=0; i<n; i++ ) {
 			for( axSize j=i+1; j<n; j++ ) {
-				if( func( p_[i], p_[j] ) < 0 ) {
+				if( p_[i] < p_[j] ) {
 					ax_swap( p_[i], p_[j] );
 				}
 			}
@@ -222,7 +222,6 @@ axStatus	axIArray<T>::sortIt( bool ascending, typename axTypeOf<T>::CompareFunc 
 	}
 	return 0;
 }
-
 
 template< class T >
 axStatus	axIArray<T>::reserve( axSize new_size, bool keep_data ) {

@@ -46,6 +46,7 @@ const size_t axTempString_localBufSize = 1024;
 typedef axString_<char,		axTempString_localBufSize>		axTempStringA;
 typedef axString_<wchar_t,	axTempString_localBufSize>		axTempStringW;
 
+
 //@}
 
 #include "axStringFormat_out_Imp.h"

@@ -37,6 +37,12 @@ public:
 	const T*	c_str	() const;
 	operator const T*	() const	{ return c_str(); }
 
+	int				compareTo			( const T* sz ) const		{ return ax_strcmp( this->c_str(), sz ); }
+	int				compareToIgnoreCase	( const T* sz ) const		{ return ax_strcasecmp( this->c_str(), sz ); }
+
+	bool			equals				( const T* sz ) const		{ return compareTo(sz) == 0; }
+	bool			equalsIgnoreCase	( const T* sz ) const		{ return compareToIgnoreCase(sz) == 0; }
+
 	T				charAt		( axSize idx     ) const;
 	T				lastChar	( axSize idx = 0 ) const;
 
@@ -60,8 +66,6 @@ public:
 	axStatus		splitByChar		( T ch,         axIString_<T> &part1, axIString_<T> &part2 ) const;
 
 	axStatus		substring		( axSize start, axSize count, axIString_<T> &out ) const;
-
-	bool			equals			( const T* src ) const;
 
 	typedef axStringFormat_Arg			Arg;
 	typedef	axStringFormat_ArgList		ArgList;
@@ -127,6 +131,13 @@ public:
 protected:
 	axIArray<T>&	buf_;
 	axIString_( axIArray<T> &buf ) : buf_(buf) {}
+
+private:
+	bool operator ==	( const T* sz ) const;	// please using equals()
+	bool operator <		( const T* sz ) const;	// please using compareTo() < 0
+	bool operator >		( const T* sz ) const;	// please using compareTo() > 0
+	bool operator <=	( const T* sz ) const;	// please using compareTo() <= 0
+	bool operator >=	( const T* sz ) const;	// please using compareTo() >= 0
 };
 
 typedef	axIString_<char>		axIStringA;
@@ -298,6 +309,13 @@ void axIString_<T> :: free	() {
 	buf_.free();
 }
 
+template< class T > inline bool axIString_<T> :: operator == ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) == 0; }
+template< class T > inline bool axIString_<T> :: operator <  ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) <  0; }
+template< class T > inline bool axIString_<T> :: operator >  ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) >  0; }
+template< class T > inline bool axIString_<T> :: operator <= ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) <= 0; }
+template< class T > inline bool axIString_<T> :: operator >= ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) >= 0; }
+
+
 template< class T > inline
 axStatus	axIString_<T> :: resize( axSize new_size, bool keep_data ) { 
 	axStatus st;
@@ -408,15 +426,9 @@ axStatus	axIString_<T> :: splitByIndex( axSize index, axIString_<T> &part1, axIS
 	if( index >= n ) return axStatus::invalid_param;
 	index++;
 	st = substring( 0, index, part1 );			if( !st ) return st;
-	st = substring( index, n-index-1, part2 );	if( !st ) return st;
+	st = substring( index, n-index, part2 );	if( !st ) return st;
 	return 0;
 }
-
-template< class T > inline
-bool axIString_<T> :: equals	( const T* src ) const {
-	return ( 0 == ax_strcmp( c_str(), src ) );
-}
-
 
 //@}
 

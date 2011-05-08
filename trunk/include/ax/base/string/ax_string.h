@@ -10,6 +10,7 @@
 #include "axExternalString.h"
 #include "axLocalString.h"
 #include "axString.h"
+#include "axString_Array.h"
 #include "ax_str_to.h"
 
 #include "axStringFormat_out_Imp.h"

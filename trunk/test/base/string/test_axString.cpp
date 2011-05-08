@@ -29,21 +29,25 @@ axStatus test() {
 
 //===========
 
-	axArray< axStringA, 4 >	str_array;
-	str_array.resize( 10 );
+	axStringA_Array	str_array;
+	str_array.resize( 16 );
 	for( axSize i=0; i<str_array.size(); i++ ) {
-		str_array[i].format( "{?}", i );
+		if( i % 2 ) {
+			str_array[i].format( "{0:c}{0:c}", ('p' - i) );
+		}else{
+			str_array[i].format( "{0:c}{0:c}", ('P' - i) );
+		}
 	}
 
-	ax_print( "str_array = {?}\n", str_array );
-	str_array.remove( 2, 3 );
-	ax_print( "after remove str_array = {?}\n", str_array );
+	ax_print( "str_array = \n{?}\n\n", str_array );
+//	str_array.remove( 2, 3 );
+	ax_print( "after remove str_array = \n{?}\n\n", str_array );
 
-	str_array.sortIt( true );
-	ax_print( "after sort ascending  str_array = {?}\n", str_array );
+	str_array.sortIgnoreCase( true );
+	ax_print( "after sort ascending  str_array = \n{?}\n\n", str_array );
 
-	str_array.sortIt( false );
-	ax_print( "after sort descending str_array = {?}\n", str_array );
+	str_array.sortIgnoreCase( false );
+	ax_print( "after sort descending str_array = \n{?}\n\n", str_array );
 
 	return 0;
 }
