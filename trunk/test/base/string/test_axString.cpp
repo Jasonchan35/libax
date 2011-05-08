@@ -47,6 +47,10 @@ axStatus test() {
 	ax_print( "after sort ascending  str_array = \n{?}\n\n", str_array );
 
 	str_array.sortIgnoreCase( false );
+
+	for( axSize i=0; i<str_array.size(); i++ ) {
+		str_array[i].toUpperCase();
+	}
 	ax_print( "after sort descending str_array = \n{?}\n\n", str_array );
 
 	return 0;

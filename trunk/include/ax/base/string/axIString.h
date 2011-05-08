@@ -67,6 +67,9 @@ public:
 
 	axStatus		substring		( axSize start, axSize count, axIString_<T> &out ) const;
 
+	axStatus		toUpperCase		();
+	axStatus		toLowerCase		();
+
 	typedef axStringFormat_Arg			Arg;
 	typedef	axStringFormat_ArgList		ArgList;
 
@@ -315,6 +318,23 @@ template< class T > inline bool axIString_<T> :: operator >  ( const T* sz ) con
 template< class T > inline bool axIString_<T> :: operator <= ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) <= 0; }
 template< class T > inline bool axIString_<T> :: operator >= ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) >= 0; }
 
+template< class T > inline
+axStatus	axIString_<T> :: toUpperCase () {
+	axSize	n = size();
+	for( axSize i=0; i<n; i++ ) {
+		buf_[i] = ax_toupper( buf_[i] );
+	}
+	return 0;
+}
+
+template< class T > inline
+axStatus	axIString_<T> :: toLowerCase () {
+	axSize	n = size();
+	for( axSize i=0; i<n; i++ ) {
+		buf_[i] = ax_tolower( buf_[i] );
+	}
+	return 0;
+}
 
 template< class T > inline
 axStatus	axIString_<T> :: resize( axSize new_size, bool keep_data ) { 
