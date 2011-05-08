@@ -7,6 +7,9 @@
 
 #include "core/database/axDBO.h"
 
+#include "core/parser/axCSVParser.h"
+
+
 #ifdef _MSC_VER
 	#pragma comment( lib, "ax.lib" )
 #endif

@@ -4,6 +4,7 @@
 #define __axArray_types_h__
 
 #include "axArray.h"
+#include "axArray0.h"
 #include "axExternalArray.h"
 #include "axLocalArray.h"
 

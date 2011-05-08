@@ -20,8 +20,9 @@ public:
 
 	axStatus	write		( axIByteArray &buf )		{ return writeBytes( buf.ptr(), buf.size() ); }
 	axStatus	writeBytes	( const void* buf, axSize buf_len );
-
 	axStatus	writeString	( const char* sz );
+
+	axStatus	readLine	( axStringA &buf, axSize buf_max_size );
 
 	typedef axStringFormat_Arg			Arg;
 	typedef	axStringFormat_ArgList		ArgList;
@@ -82,9 +83,28 @@ axStatus axFile::writeString( const char* sz ) {
 
 inline
 axStatus axFile::writeBytes( const void* buf, axSize buf_len ) {
+	if( !p_ ) { assert(false); return axStatus::not_initialized; }
+
 	if( buf_len <= 0 ) return 0;
 	size_t n = fwrite( buf, buf_len, 1, p_ );
 	if( n != 1 ) return -1;
+	return 0;
+}
+
+inline
+axStatus axFile::readLine ( axStringA &buf, axSize buf_max_size ) {
+	if( !p_ ) { assert(false); return axStatus::not_initialized; }
+
+	axStatus st;
+	st = buf.resize(buf_max_size);				if( !st ) return st;
+	int n;
+	st = ax_safe_assign( n, buf.size() );		if( !st ) return st;
+	if( NULL == fgets( buf._getInternalBufferPtr(), n, p_ ) ) {
+		if( feof(p_) ) return axStatus::end_of_file;
+		return -1;
+	}
+
+	st = buf._recalcSizeByZeroEnd();			if( !st ) return st;
 	return 0;
 }
 

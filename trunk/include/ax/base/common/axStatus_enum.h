@@ -16,4 +16,6 @@ axStatus_enum( non_safe_assign )
 axStatus_enum( cannot_be_itself )
 axStatus_enum( will_cause_recursion )
 axStatus_enum( timed_out )
+axStatus_enum( end_of_file )
+axStatus_enum( data_corrupted )
 

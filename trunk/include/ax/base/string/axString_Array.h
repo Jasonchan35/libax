@@ -4,8 +4,8 @@
 #include "axString.h"
 
 template< class T >
-class axString_Array : public axArray< axString_<T>, 16 > {
-	typedef axArray< axString_<T>, 16 > B;
+class axString_Array : public axArray< axString_<T>, 8 > {
+	typedef axArray< axString_<T>, 8 > B;
 public:
 	axStatus	sortIgnoreCase( bool ascending = true );
 };

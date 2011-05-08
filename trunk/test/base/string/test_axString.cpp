@@ -1,9 +1,21 @@
-#include <ax/ax_base.h>
+#include <ax/ax_core.h>
+
 
 axStatus test() {
 	axStatus st;
 	axStringA	a;
 	axStringW	w;
+
+	axCSVFileParser	csv;
+	csv.open(L"test.csv");
+
+	axStringA_Array	row;
+	while( csv.getRow( row ) ) {
+		ax_print( "row = {?}\n", row );
+	}
+
+	ax_print( "=== end CSV ==\n" );
+
 
 	st = a.set( "abcd" );	if( !st ) return st;
 

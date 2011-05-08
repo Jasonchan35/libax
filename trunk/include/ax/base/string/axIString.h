@@ -34,7 +34,7 @@ public:
 	void			clear		();
 	void			free		();
 
-	const T*	c_str	() const;
+	const T*	c_str	( axSize offset=0 ) const;
 	operator const T*	() const	{ return c_str(); }
 
 	int				compareTo			( const T* sz ) const		{ return ax_strcmp( this->c_str(), sz ); }
@@ -46,8 +46,9 @@ public:
 	T				charAt		( axSize idx     ) const;
 	T				lastChar	( axSize idx = 0 ) const;
 
-	//! Must keep the buf end with zero
-	T*				getInternalBufferPtr();
+	//! Must keep the buf end with zero and size is correct
+	T*				_getInternalBufferPtr	();
+	axStatus		_recalcSizeByZeroEnd	();
 
 	axStatus		append			( char ch );
 	axStatus		append			( const char* src )						{ return append( src, (axSize)ax_strlen(src) ); }
@@ -59,8 +60,9 @@ public:
 
 	axStatus		clone			( const axIString_<T> &src );
 
-	axStatus		find			( T ch, axSize &pos, axSize start_from = 0     ) const;
-	axStatus		findFromEnd		( T ch, axSize &pos, axSize	start_from_end = 0 ) const;
+	axStatus		findChar		( T ch, axSize &pos, axSize start_from = 0     ) const;
+	axStatus		findCharFromEnd	( T ch, axSize &pos, axSize	start_from_end = 0 ) const;
+	axStatus		findAnyChar		( const T* char_list, axSize &pos, axSize start_from = 0 ) const;
 
 	axStatus		splitByIndex	( axSize index, axIString_<T> &part1, axIString_<T> &part2 ) const;
 	axStatus		splitByChar		( T ch,         axIString_<T> &part1, axIString_<T> &part2 ) const;
@@ -292,13 +294,22 @@ axStatus	axIString_<wchar_t> :: append( const char *src, axSize src_len ) {
 
 
 template< class T > inline
-const T* axIString_<T>::c_str() const {
-	return buf_.size() ? buf_.ptr() : ax_empty_c_str( (T*)0 ) ;
+const T* axIString_<T>::c_str( axSize offset ) const {
+	if( offset <= buf_.size() ) {
+		return buf_.ptr() + offset;
+	}else{
+		return ax_empty_c_str( (T*)0 );
+	}
 }
 
 template< class T > inline
-T*	axIString_<T> :: getInternalBufferPtr() { 
+T*	axIString_<T> :: _getInternalBufferPtr() { 
 	return buf_.ptr();
+}
+
+template< class T > inline
+axStatus axIString_<T> :: _recalcSizeByZeroEnd() {
+	return resize( ax_strlen( c_str() ) );
 }
 
 template< class T > inline
@@ -394,7 +405,7 @@ axStatus	axIString_<T> :: substring( axSize start, axSize count, axIString_<T> &
 }
 
 template< class T > inline
-axStatus	axIString_<T> :: find ( T ch, axSize &out_index, axSize start_from ) const {
+axStatus	axIString_<T> :: findChar ( T ch, axSize &out_index, axSize start_from ) const {
 	if( start_from >= size() ) return axStatus::invalid_param;
 	const T* s = &buf_[start_from];
 	const T* e = &buf_.last();
@@ -408,7 +419,7 @@ axStatus	axIString_<T> :: find ( T ch, axSize &out_index, axSize start_from ) co
 }
 
 template< class T > inline
-axStatus	axIString_<T> :: findFromEnd	( T ch, axSize &out_index, axSize	start_from_end ) const {
+axStatus	axIString_<T> :: findCharFromEnd	( T ch, axSize &out_index, axSize	start_from_end ) const {
 	if( start_from_end >= size() ) return axStatus::invalid_param;
 	axSize n = size() - start_from_end;
 
@@ -429,7 +440,7 @@ axStatus	axIString_<T> :: splitByChar( T ch, axIString_<T> &part1, axIString_<T>
 	part1.clear();
 	part2.clear();
 	axSize idx = 0;
-	if( find( ch, idx ) ) {
+	if( findChar( ch, idx ) ) {
 		return splitByIndex( idx, part1, part2 );
 	}else{
 		st = part1.clone( *this );		if( !st ) return st;

@@ -16,7 +16,7 @@
 	- memory chunk when resize
 	- auto memory grow by 1.5x of orginal size ( when chuck size = 0 )
 */
-template<class T, size_t LOCAL_BUF_SIZE = 0 >
+template<class T, size_t LOCAL_BUF_SIZE = 0>
 class axArray : public axIArray<T> {
 	typedef axIArray<T>	B;
 public:
@@ -27,7 +27,6 @@ public:
 	void	setAutoChunkSize	()							{ setChunkSize(0); }
 
 	axStatus	takeOwnership( axArray<T, LOCAL_BUF_SIZE>	&src );
-
 
 protected:
 	virtual	axStatus	on_malloc	( axSize req_size, T* &out_ptr, axSize &out_size );

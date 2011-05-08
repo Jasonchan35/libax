@@ -10,41 +10,28 @@
 
 #define	axPRINT_FUNC_NAME	printf("FUNC [%s]\n", axFUNC_NAME );
 
-inline void toggle_bool( bool &b ) { b = !b; }
+inline void ax_toggle( bool &b ) { b = !b; }
 
 //--- 32 bits ---
-inline bool has_any_bit	( uint32_t value, uint32_t bit )			{ return (value & bit) != 0;   }
-inline bool has_all_bit	( uint32_t value, uint32_t bit )			{ return (value & bit) == bit; }
 
-inline void set_bit		( uint32_t &value, uint32_t bit )			{ value |= bit; }
-inline void unset_bit	( uint32_t &value, uint32_t bit )			{ value &= ~bit; }
-inline void toggle_bit	( uint32_t &value, uint32_t bit )			{ value ^= bit; }
-inline void set_bit		( uint32_t &value, uint32_t bit, bool b )	{ if( b ) set_bit ( value, bit ); else unset_bit( value, bit ); }
+#define	axTYPE_LIST( T ) \
+	inline void ax_set_bits		( T &value, T bits )			{ value |= bits; }	\
+	inline void ax_unset_bits	( T &value, T bits )			{ value &= ~bits; }	\
+	inline void ax_set_bits		( T &value, T bits, bool b )	{ if( b ) ax_set_bits ( value, bits ); else ax_unset_bits( value, bits ); }	\
+	inline void ax_toggle_bits	( T &value, T bits )			{ value ^= bits; }	\
+	inline bool ax_any_bit_on	( T value,  T bits )			{ return (value & bits) != 0;   }	\
+	inline bool ax_all_bits_on	( T value,  T bits )			{ return (value & bits) == bits; }	\
+//-----
+	axTYPE_LIST( uint64_t );
+	axTYPE_LIST( uint32_t );
+	axTYPE_LIST( uint16_t );
+	axTYPE_LIST( uint8_t  );
+#undef axTYPE_LIST
 
-//--- 16 bits ---
-inline bool has_any_bit	( uint16_t value, uint16_t bit )			{ return (value & bit) != 0;   }
-inline bool has_all_bit	( uint16_t value, uint16_t bit )			{ return (value & bit) == bit; }
-
-inline void set_bit		( uint16_t &value, uint16_t bit )			{ value |= bit; }
-inline void unset_bit	( uint16_t &value, uint16_t bit )			{ value &= ~bit; }
-inline void toggle_bit	( uint16_t &value, uint16_t bit )			{ value ^= bit; }
-inline void set_bit		( uint16_t &value, uint16_t bit, bool b )	{ if( b ) set_bit ( value, bit ); else unset_bit( value, bit ); }
-
-//--- 8 bits ---
-inline bool has_any_bit	( uint8_t value, uint8_t bit )				{ return (value & bit) != 0;   }
-inline bool has_all_bit	( uint8_t value, uint8_t bit )				{ return (value & bit) == bit; }
-
-inline void set_bit		( uint8_t &value, uint8_t bit )				{ value |= bit; }
-inline void unset_bit	( uint8_t &value, uint8_t bit )				{ value &= ~bit; }
-inline void toggle_bit	( uint8_t &value, uint8_t bit )				{ value ^= bit; }
-inline void set_bit		( uint8_t &value, uint8_t bit, bool b )		{ if( b ) set_bit ( value, bit ); else unset_bit( value, bit ); }
-
-
-using ::memset;
-template< class T> void memset( T &o, int value ) { ::memset( &o, value, sizeof(o) ); }
+template< class T> void ax_memset( T &o, int value ) { ::memset( &o, value, sizeof(o) ); }
 
 inline
-void dumpHexRaw( const void* buf, axSize len, FILE* s = stdout ) {
+void ax_dumpBufferHex( const void* buf, axSize len, FILE* s = stdout ) {
 	const char *non_print = "\t\n\r";
 
 	axSize i;
@@ -86,8 +73,7 @@ void dumpHexRaw( const void* buf, axSize len, FILE* s = stdout ) {
 	fprintf(s, "\n\n");
 }
 
-
-inline	void*	ax_malloc( size_t n )	{ return ::malloc(n); }
-inline	void	ax_free	( void* p  )	{ return ::free(p); }
+inline void*	ax_malloc( size_t n )	{ return ::malloc(n); }
+inline void		ax_free	( void* p  )	{ return ::free(p); }
 
 #endif //__ax_utility_h__

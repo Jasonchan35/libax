@@ -7,6 +7,9 @@
 //! \ingroup base_string
 //@{
 
+inline void		ax_dumpStringHex( const char*    sz, FILE* file = stdout ) { ax_dumpBufferHex( sz, ax_strlen(sz), file ); }
+inline void		ax_dumpStringHex( const wchar_t* sz, FILE* file = stdout ) { ax_dumpBufferHex( sz, ax_strlen(sz)*sizeof(wchar_t), file ); }
+
 //==================  str_to char ============================
 inline
 axStatus str_to( const char* sz, bool &v ) {

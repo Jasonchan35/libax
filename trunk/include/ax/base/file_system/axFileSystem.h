@@ -32,7 +32,7 @@ axStatus	axFileSystem::getCurrentDir ( axIStringW	&out ) {
 	axStatus st;
 	DWORD	n = kPathMax;
 	st = out.resize( n, false );					if( !st ) return st;
-	wchar_t* p = out.getInternalBufferPtr();		if( !p ) return -1;
+	wchar_t* p = out._getInternalBufferPtr();		if( !p ) return -1;
 	n = ::GetCurrentDirectory( n, p );
 	if( n==0 ) { out.clear(); return -1; }
 	return out.resize(n);
@@ -46,7 +46,7 @@ axStatus	axFileSystem::getExecutablePath ( axFilePathW	&out ) {
 
 	DWORD n = kPathMax;
 	st = tmp.resize( n, false );				if( !st ) return st;
-	wchar_t *p = tmp.getInternalBufferPtr();	if( !p  ) return -1;
+	wchar_t *p = tmp._getInternalBufferPtr();	if( !p  ) return -1;
 	n = ::GetModuleFileName( NULL, p, n );
 	if( n==0 ) return -1;
 	st = tmp.resize(n);							if( !st ) return st;
