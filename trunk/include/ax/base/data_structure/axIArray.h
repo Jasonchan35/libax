@@ -73,9 +73,10 @@ public:
 			void		free		();	//!< free all memory		
 			axStatus	shrink		();	//!< \todo free unused memory
 
-			axStatus	remove		( axSize index, axSize count=1 ); //!< \todo
-
+			axStatus	remove		( axSize index, axSize count=1 );
 			axStatus	toStringFormat( axStringFormat &f ) const;
+
+			axStatus	sortIt		( bool ascending = true, typename axTypeOf<T>::CompareFunc func = &ax_compare<T> );
 
 protected:
 	void	_init( T* p, axSize size, axSize capacity );
@@ -176,6 +177,52 @@ axStatus	axIArray<T>::resize( axSize new_size, bool keep_data ) {
 	size_ = new_size;
 	return 0;
 }
+
+template< class T >
+axStatus	axIArray<T>::remove( axSize index, axSize count ) {
+	axStatus	st;
+	axSize	e = index + count;
+	if( e >= size() ) {
+		st = resize( index );	if( !st ) return st;
+		return 0;
+	}
+
+	T* src = &p_[ index ];
+	T* dst = &p_[ e ];
+	axSize n = size() - e;
+	for( axSize i=0; i<n; i++ ) {
+		ax_swap( *src, *dst );
+		src++;
+		dst++;
+	}
+
+	st = resize( index + n );		if( !st ) return st;
+	return 0;
+}
+
+template< class T >
+axStatus	axIArray<T>::sortIt( bool ascending, typename axTypeOf<T>::CompareFunc func ) {
+	axSize n = size();
+	if( ascending ) {
+		for( axSize i=0; i<n; i++ ) {
+			for( axSize j=i+1; j<n; j++ ) {
+				if( func( p_[i], p_[j] ) > 0 ) {
+					ax_swap( p_[i], p_[j] );
+				}
+			}
+		}
+	}else{
+		for( axSize i=0; i<n; i++ ) {
+			for( axSize j=i+1; j<n; j++ ) {
+				if( func( p_[i], p_[j] ) < 0 ) {
+					ax_swap( p_[i], p_[j] );
+				}
+			}
+		}
+	}
+	return 0;
+}
+
 
 template< class T >
 axStatus	axIArray<T>::reserve( axSize new_size, bool keep_data ) {

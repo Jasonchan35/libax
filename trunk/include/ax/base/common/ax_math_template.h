@@ -7,7 +7,7 @@
 //! \ingroup base_common
 //@{
 
-template<class T> inline void ax_swap( T &a, T &b )			{ T tmp; ax_takeOwnership(tmp,a); ax_takeOwnership(a,b); ax_takeOwnership(b,tmp); }
+template<class T> inline void	ax_swap( T &a, T &b )			{ T tmp; ax_takeOwnership(tmp,a); ax_takeOwnership(a,b); ax_takeOwnership(b,tmp); }
 
 template<class T> inline T ax_sign( T a )					{ if( a == 0 ) return 0; return ax_lessThan0(a) ? -1: 1; }
 

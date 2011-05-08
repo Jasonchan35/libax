@@ -29,15 +29,21 @@ axStatus test() {
 
 //===========
 
-	axArray< axStringA_<10>, 2 >	str_array;
-	str_array.resize( 5 );
+	axArray< axStringA, 4 >	str_array;
+	str_array.resize( 10 );
 	for( axSize i=0; i<str_array.size(); i++ ) {
-		str_array[i].format( "str({?}).........\n", i );
+		str_array[i].format( "{?}", i );
 	}
 
-	str_array.resize( 6 );
-
 	ax_print( "str_array = {?}\n", str_array );
+	str_array.remove( 2, 3 );
+	ax_print( "after remove str_array = {?}\n", str_array );
+
+	str_array.sortIt( true );
+	ax_print( "after sort ascending  str_array = {?}\n", str_array );
+
+	str_array.sortIt( false );
+	ax_print( "after sort descending str_array = {?}\n", str_array );
 
 	return 0;
 }
