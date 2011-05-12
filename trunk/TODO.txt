@@ -1,0 +1,5 @@
+== Base ==
+- Serializer
+
+== Core ==
+- OpenImageIO as image lib
