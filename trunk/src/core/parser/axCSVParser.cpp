@@ -56,6 +56,7 @@ axStatus axCSVParserBase::getCell( axStringA &cell ) {
 
 	axSize	slen = 0;
 	cell.clear();
+	st = cell.reserve( 32 );		if( !st ) return st;
 
 	if( s[0] == '"' ) {
 		slen++; //open ["]
