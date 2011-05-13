@@ -89,6 +89,10 @@ template<> inline	int32_t		axTypeOf<int32_t>::max()		{ return 0x7fffffff; }
 template<> inline	int64_t		axTypeOf<int64_t>::min()		{ return (-0x7fffffffffffffffLL-1); }
 template<> inline	int64_t		axTypeOf<int64_t>::max()		{ return 0x7fffffffffffffffLL; }
 
+#ifdef axCOMPILER_VC
+	#pragma warning( push )
+	#pragma warning( disable : 4244 )
+#endif
 
 template<class DST, class SRC> inline 
 axStatus	ax_safe_assign( DST &dst, const SRC &src ) {
@@ -109,6 +113,9 @@ axStatus	ax_safe_assign( DST &dst, const SRC &src ) {
 	dst = (DST)src;
 	return 0;
 }
+#ifdef axCOMPILER_VC
+	#pragma warning( pop )
+#endif
 
 //@}
 

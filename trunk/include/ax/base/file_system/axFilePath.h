@@ -63,11 +63,11 @@ axStatus	axFilePath_<T>::set( const T* full_path ) {
 	axSize	len = ax_strlen( full_path );
 	const T* sep = ax_strrchrs( full_path, dirSeparatorList );
 	if( sep ) {
-		st = dir_.set( full_path, sep - full_path + 1 );	if( !st ) return st;
-		st = filename_.set( sep+1 );						if( !st ) return st;
+		st = dir_.set( full_path, sep - full_path );	if( !st ) return st;
+		st = filename_.set( sep+1 );					if( !st ) return st;
 	}else{
 		dir_.clear();
-		st = filename_.set( full_path );					if( !st ) return st;
+		st = filename_.set( full_path );				if( !st ) return st;
 	}
 	return 0;
 }

@@ -6,7 +6,9 @@
 //@{
 #ifdef	_MSC_VER
 
-#define	_CRT_SECURE_NO_WARNINGS	 1
+#ifndef _CRT_SECURE_NO_WARNINGS
+	#define	_CRT_SECURE_NO_WARNINGS	 1
+#endif
 
 #define	axCOMPILER_VC	1
 #define axEXPORT		_declspec (dllexport)
