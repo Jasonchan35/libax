@@ -4,6 +4,9 @@ MESSAGE( "======== ${PROJECT_NAME} ============" )
 
 INCLUDE( ../common.cmake )
 
+find_package( PostgreSQL )
+INCLUDE_DIRECTORIES( ${PostgreSQL_INCLUDE_DIR} )
+
 ENABLE_TESTING()
 
 INCLUDE_DIRECTORIES( ../../include )
@@ -19,15 +22,15 @@ FOREACH( f IN LISTS src_cpp_files  )
 	GET_FILENAME_COMPONENT( path ${f} PATH )
 	GET_FILENAME_COMPONENT( name ${f} NAME )
 
-	
+
 	ADD_EXECUTABLE( ${name} ${f} )
 	SET_TARGET_PROPERTIES( ${name} PROPERTIES
 		RUNTIME_OUTPUT_DIRECTORY ../../../bin/${axPLATFORM_NAME}
 	)
 
-	TARGET_LINK_LIBRARIES( ${name} ${my_libs} )
-	
-	
+	TARGET_LINK_LIBRARIES( ${name} ${my_libs} ${PostgreSQL_LIBRARIES} )
+
+
 	ADD_TEST( ${name} "${EXECUTABLE_OUTPUT_PATH}/${name}" Hello )
-	
+
 ENDFOREACH()

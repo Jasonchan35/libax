@@ -7,7 +7,7 @@ template<class T>
 class axFilePath_ : public axNonCopyable {
 public:
 	axStatus	set( const T* full_path );
-	
+
 	const T*	dir				() const; //!< directory
 	const T*	filename		() const; //!< filename with extension but without directory part
 	const T*	ext				() const; //!< file extension
@@ -35,7 +35,7 @@ public:
 
 	void		clear			();
 
-	static	const	T*	dirSeparatorList;
+	static  const	T*	dirSeparatorList();
 
 #if axOS_WIN
 	enum { kNativeSeparator = '\\' };
@@ -52,8 +52,8 @@ private:
 typedef axFilePath_<char>		axFilePathA;
 typedef axFilePath_<wchar_t>	axFilePathW;
 
-template<>	const char*		axFilePath_<char>	:: dirSeparatorList	= "/\\";
-template<>	const wchar_t*	axFilePath_<wchar_t>:: dirSeparatorList	= L"/\\";
+template<>	inline const char*		axFilePath_<char>	:: dirSeparatorList() { return "/\\"; }
+template<>	inline const wchar_t*	axFilePath_<wchar_t>:: dirSeparatorList() { return L"/\\"; }
 
 
 //------- inline ----
@@ -61,7 +61,7 @@ template<class T> inline
 axStatus	axFilePath_<T>::set( const T* full_path ) {
 	axStatus	st;
 	axSize	len = ax_strlen( full_path );
-	const T* sep = ax_strrchrs( full_path, dirSeparatorList );
+	const T* sep = ax_strrchrs( full_path, dirSeparatorList() );
 	if( sep ) {
 		st = dir_.set( full_path, sep - full_path );	if( !st ) return st;
 		st = filename_.set( sep+1 );					if( !st ) return st;

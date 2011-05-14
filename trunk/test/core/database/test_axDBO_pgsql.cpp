@@ -9,7 +9,7 @@ axStatus test() {
 	st = db.connect( "pgsql", "host=127.0.0.1 dbname=testdb user=testing password=1234" );
 	if( !st ) return st;
 
-	axDBO_Result	res;
+	axDBO_DataSet	data_set;
 
 //	axDBO_Stmt stmt = db.prepareSQL( "insert into tbl_test ( name, number ) values( 'p0', $1 )", p0 );
 //	stmt.exec();
@@ -27,24 +27,26 @@ axStatus test() {
 		bytea[i] = i*3;
 	}
 
-	res = db.execSQL( "insert into tbl_test ( "
+	st = db.execSQL( data_set,
+                      "insert into tbl_test ( "
 					  " test_char, test_int16, test_int32, test_int64, "
 					  " test_char_str, test_wchar_str, test_stringa, test_stringw,"
 					  " test_bool, test_bytearray "
-					  " ) values( {?}, {?}, {2}, {?}, {?}, {?}, {?}, {?}, {?}, {?} )", 
-						'X', 12345, 12345678, 123456789123456789,
+					  " ) values( {?}, {?}, {2}, {?}, {?}, {?}, {?}, {?}, {?}, {?} )",
+						'X', 12345, 12345678, 123456789123456789LL,
 						"testing", L"testing", str_a, str_w,
 						false, bytea );
-	ax_print( "{?}", res );
+	ax_print( "{?}", data_set );
 
 
 	ax_print("---- test select ---- \n");
-	res = db.execSQL( "select "
+	st = db.execSQL( data_set,
+                      "select "
 					  " test_char, test_int16, test_int32, test_int64, "
 					  " test_char_str, test_wchar_str, test_stringa, test_stringw,"
-					  " test_bool, test_bytearray "		
+					  " test_bool, test_bytearray "
 					  " from tbl_test order by _id" );
-	ax_print( "{?}", res );
+	ax_print( "{?}", data_set );
 
 
 	return 0;
