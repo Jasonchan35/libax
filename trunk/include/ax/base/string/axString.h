@@ -13,7 +13,7 @@ public:
 	axStringA_() : B(buf_) { buf_.setChunkSize( defaultChunkSize ); } 
 	axStatus	takeOwnership( axStringA_<LOCAL_BUF_SIZE> &src )	{  return buf_.takeOwnership( src.buf_ ); }
 private:
-	axArray<char, LOCAL_BUF_SIZE>	buf_;
+	axArray<char, LOCAL_BUF_SIZE+1>	buf_;
 };
 
 
@@ -24,7 +24,7 @@ public:
 	axStringW_() : B(buf_) { buf_.setChunkSize( defaultChunkSize ); } 
 	axStatus	takeOwnership( axStringW_<LOCAL_BUF_SIZE> &src )	{  return buf_.takeOwnership( src.buf_ ); }
 private:
-	axArray<wchar_t, LOCAL_BUF_SIZE>	buf_;
+	axArray<wchar_t, LOCAL_BUF_SIZE+1>	buf_;
 };
 
 //------------------
@@ -36,7 +36,7 @@ public:
 	axString_() : B(buf_) { buf_.setChunkSize( B::defaultChunkSize ); } 
 	axStatus	takeOwnership( axString_<T, LOCAL_BUF_SIZE>	&src )	{  return buf_.takeOwnership( src.buf_ ); }
 private:
-	axArray<T,LOCAL_BUF_SIZE>	buf_;
+	axArray<T,LOCAL_BUF_SIZE+1>	buf_;
 };
 
 typedef	axString_<char>				axStringA;
