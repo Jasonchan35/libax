@@ -16,6 +16,7 @@
 #include "base/file_system/axFileSystem.h"
 #include "base/file_system/axFile.h"
 #include "base/file_system/axFilePath.h"
+#include "base/file_system/axMemMap.h"
 
 #include "base/thread/axAtomicInt.h"
 

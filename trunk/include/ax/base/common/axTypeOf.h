@@ -51,6 +51,7 @@ template<class T>	bool  ax_lessThan0( T value );
 	axTYPE_LIST( uint16_t )
 	axTYPE_LIST( uint32_t )
 	axTYPE_LIST( uint64_t )
+	axTYPE_LIST( unsigned long )
 #undef		axTYPE_LIST
 
 
