@@ -4,9 +4,14 @@
 #include <ax/core/database/axDBO.h>
 
 #ifdef _WIN32
-#include "libpq/libpq-fe.h"
+	#include <ax/external/pgsql-9.0.4/Win32/libpq-fe.h>
+
+	#ifdef _MSC_VER
+		#pragma comment( lib, "libpqport.lib" )
+	#endif
+
 #else
-#include "libpq-fe.h"
+	#include "libpq-fe.h"
 #endif
 
 //from "libpq/server/catalog/pg_type.h"
