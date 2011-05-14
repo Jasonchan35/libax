@@ -32,10 +32,10 @@ enum {
 class axDBO_pgsql;
 typedef	axSharedPtr< axDBO_pgsql >	axDBO_pgsqlSP;
 
-class axDBO_pgsql_Result : public axDBO_Driver_Result {
+class axDBO_pgsql_DataSet : public axDBO_Driver_Result {
 public:
-	axDBO_pgsql_Result()				{ res_ = NULL; }
-	virtual	~axDBO_pgsql_Result()		{ release(); }
+	axDBO_pgsql_DataSet()				{ res_ = NULL; }
+	virtual	~axDBO_pgsql_DataSet()		{ release(); }
 
 	virtual	axStatus	status	() const;
 	virtual	axSize		rowCount() const;

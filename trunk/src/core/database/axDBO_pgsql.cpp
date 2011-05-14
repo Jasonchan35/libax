@@ -26,7 +26,7 @@ void axDBO_pgsql::close() {
 	}
 }
 
-axStatus	axDBO_pgsql_Result::status() const {
+axStatus	axDBO_pgsql_DataSet::status() const {
 	if( ! res_ ) return axStatus::not_initialized;
 	ExecStatusType e = PQresultStatus( res_ );
 	switch( e ) {
@@ -40,17 +40,17 @@ axStatus	axDBO_pgsql_Result::status() const {
 	return -1;
 }
 
-axSize	axDBO_pgsql_Result::rowCount() const {
+axSize	axDBO_pgsql_DataSet::rowCount() const {
 	if( ! res_ ) return 0;
 	return PQntuples( res_ );
 }
 
-axSize	axDBO_pgsql_Result::colCount() const {
+axSize	axDBO_pgsql_DataSet::colCount() const {
 	if( ! res_ ) return 0;
 	return PQnfields( res_ );
 }
 
-int	axDBO_pgsql_Result::getColumnType( axSize col ) const {
+int	axDBO_pgsql_DataSet::getColumnType( axSize col ) const {
 	if( !res_) return axDBO_c_type_null;
 	Oid oid = PQftype( res_, col );
 	switch( oid ) {
@@ -78,7 +78,7 @@ int	axDBO_pgsql_Result::getColumnType( axSize col ) const {
 	return axDBO_c_type_null;
 }
 
-axStatus	axDBO_pgsql_Result::getValue( axIByteArray & value, axSize row, axSize col ) const {
+axStatus	axDBO_pgsql_DataSet::getValue( axIByteArray & value, axSize row, axSize col ) const {
 	value.clear();
 	if( !res_) return axStatus::not_initialized;
 	Oid oid = PQftype( res_, col );
@@ -94,7 +94,7 @@ axStatus	axDBO_pgsql_Result::getValue( axIByteArray & value, axSize row, axSize 
 	return 1;
 }
 
-axStatus	axDBO_pgsql_Result::getValue( axIStringA & value, axSize row, axSize col ) const {
+axStatus	axDBO_pgsql_DataSet::getValue( axIStringA & value, axSize row, axSize col ) const {
 	value.clear();
 	if( !res_) return axStatus::not_initialized;
 	Oid oid = PQftype( res_, col );
@@ -105,7 +105,7 @@ axStatus	axDBO_pgsql_Result::getValue( axIStringA & value, axSize row, axSize co
 	return 1;
 }
 
-axStatus	axDBO_pgsql_Result::getValue( axIStringW & value, axSize row, axSize col ) const {
+axStatus	axDBO_pgsql_DataSet::getValue( axIStringW & value, axSize row, axSize col ) const {
 	value.clear();
 	if( !res_) return axStatus::not_initialized;
 	Oid oid = PQftype( res_, col );
@@ -126,15 +126,15 @@ axStatus	_getNumberValue( PGresult* res_, T &value, Oid oid, axSize row, axSize 
 	return 1;
 }
 
-axStatus	axDBO_pgsql_Result::getValue( char    &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, CHAROID,	row, col ); }
-axStatus	axDBO_pgsql_Result::getValue( int16_t &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, INT2OID,   row, col ); }
-axStatus	axDBO_pgsql_Result::getValue( int32_t &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, INT4OID,   row, col ); }
-axStatus	axDBO_pgsql_Result::getValue( int64_t &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, INT8OID,   row, col ); }
+axStatus	axDBO_pgsql_DataSet::getValue( char    &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, CHAROID,	row, col ); }
+axStatus	axDBO_pgsql_DataSet::getValue( int16_t &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, INT2OID,   row, col ); }
+axStatus	axDBO_pgsql_DataSet::getValue( int32_t &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, INT4OID,   row, col ); }
+axStatus	axDBO_pgsql_DataSet::getValue( int64_t &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, INT8OID,   row, col ); }
 
-axStatus	axDBO_pgsql_Result::getValue( float   &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, FLOAT4OID, row, col ); }
-axStatus	axDBO_pgsql_Result::getValue( double  &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, FLOAT8OID, row, col ); }
+axStatus	axDBO_pgsql_DataSet::getValue( float   &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, FLOAT4OID, row, col ); }
+axStatus	axDBO_pgsql_DataSet::getValue( double  &	value, axSize row, axSize col ) const { return _getNumberValue( res_, value, FLOAT8OID, row, col ); }
 
-axStatus	axDBO_pgsql_Result::getValue( int8_t & value, axSize row, axSize col ) const {
+axStatus	axDBO_pgsql_DataSet::getValue( int8_t & value, axSize row, axSize col ) const {
 	axStatus st;
 	int16_t	v;
 	st = getValue( v, row, col );		if( !st ) return st;
@@ -142,7 +142,7 @@ axStatus	axDBO_pgsql_Result::getValue( int8_t & value, axSize row, axSize col ) 
 }
 
 
-axStatus	axDBO_pgsql_Result::getValue( bool    &	value, axSize row, axSize col ) const { 
+axStatus	axDBO_pgsql_DataSet::getValue( bool    &	value, axSize row, axSize col ) const { 
 	if( !res_) return axStatus::not_initialized;
 	if( PQftype( res_, col ) != BOOLOID ) return -1;
 	char* p = PQgetvalue( res_, row, col );
@@ -156,7 +156,7 @@ axStatus	axDBO_pgsql::execSQL_ParamList ( axDBO_Driver_ResultSP &out, const char
 	if( ! conn_ ) return axStatus::not_initialized;
 	axStatus st;
 
-	axDBO_pgsql_Result* res = new axDBO_pgsql_Result;
+	axDBO_pgsql_DataSet* res = new axDBO_pgsql_DataSet;
 	if( ! res ) return axStatus::not_enough_memory;
 	out.ref( res );
 	res->dbo_ = this;
@@ -439,7 +439,7 @@ axStatus axDBO_pgsql::prepareSQL_ParamList ( axDBO_Driver_StmtSP &out, const cha
 	stmt->dbo_.ref( this );
 	st = stmt_name.format( "{?}", stmt );		if( !st ) return st;
 
-	axDBO_pgsql_Result res;
+	axDBO_pgsql_DataSet res;
 
 	axTempStringA &_sql = _param_tmp_str[0];
 	st = _convertPrepareSQL( _sql, sql );		if( !st ) return st;
@@ -496,7 +496,7 @@ axStatus axDBO_pgsql_Stmt::exec() {
 	if( ! dbo_ ) return axStatus::not_initialized;
 	if( ! dbo_->conn_ ) return axStatus::not_initialized;
 
-	axDBO_pgsql_Result	res;
+	axDBO_pgsql_DataSet	res;
 //	res = PQexecPrepared( dbo_->conn_, stmtName_, paramList_.size(), 
 //							paramValues_, paramLengths_, paramFormats_, 1 );
 	return 0;

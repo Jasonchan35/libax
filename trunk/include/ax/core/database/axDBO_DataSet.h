@@ -1,15 +1,15 @@
-#ifndef __axDBO_Result_h__
-#define __axDBO_Result_h__
+#ifndef __axDBO_DataSet_h__
+#define __axDBO_DataSet_h__
 
 #include "axDBO_Driver.h"
 
 
 //! \ingroup core_database
 //@{
-class axDBO_Result {
+class axDBO_DataSet {
 public:
-	axDBO_Result();
-	~axDBO_Result();
+	axDBO_DataSet();
+	~axDBO_DataSet();
 
 	axStatus	status	() const;
 	axSize		rowCount() const;
@@ -48,5 +48,5 @@ private:
 //@}
 
 
-#endif //__axDBO_Result_h__
+#endif //__axDBO_DataSet_h__
 
