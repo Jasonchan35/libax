@@ -30,8 +30,8 @@ inline
 axStatus	axFileSystem::getCurrentDir ( axIStringW	&out ) {
     wchar_t tmp[kPathMax+1];
     DWORD n;
-    n = ::GetCurrentDirectory( kPathMax, tmp )
-	if( n==0 ) return -1;
+    n = ::GetCurrentDirectory( kPathMax, tmp );
+	if( n == 0 ) return -1;
 	tmp[n] = 0;
 	return out.set( tmp );
 }

@@ -120,7 +120,7 @@ axStatus axFile::getPos( axFileSize &n ) const {
 #ifdef axOS_Linux
     n = t.__pos;
 #else
-    n = t;
+    n = (axFileSize) t;
 #endif
     return 0;
 }

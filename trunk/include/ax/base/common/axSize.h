@@ -52,7 +52,7 @@ private:
 	size_t	value_;
 };
 
-typedef off_t   axFileSize;
+typedef uint64_t axFileSize;
 
 inline bool		ax_lessThan0( axSize  value )		{ return false; }
 inline axSize	ax_min		( axSize a, axSize b )	{ return (a<b)?a:b; }
