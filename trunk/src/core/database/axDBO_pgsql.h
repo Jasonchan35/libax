@@ -2,8 +2,12 @@
 #define __axDBO_pgsql_h__
 
 #include <ax/core/database/axDBO.h>
-#include "libpq/libpq-fe.h"
 
+#ifdef _WIN32
+#include "libpq/libpq-fe.h"
+#else
+#include "libpq-fe.h"
+#endif
 
 //from "libpq/server/catalog/pg_type.h"
 enum PGType {
@@ -79,7 +83,7 @@ private:
 };
 
 
-class axDBO_pgsql_Stmt : public axDBO_Driver_Stmt { 
+class axDBO_pgsql_Stmt : public axDBO_Driver_Stmt {
 public:
 	virtual ~axDBO_pgsql_Stmt() { release(); }
 	void release();
