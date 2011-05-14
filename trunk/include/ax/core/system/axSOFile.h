@@ -18,7 +18,7 @@ public:
     ~axSOFile();
 
     axStatus	load( const char* filename );
-    void	unload();
+    void	    unload();
 
     template<class FUNC>
     axStatus  getProc( FUNC &func, const char* proc_name );

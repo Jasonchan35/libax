@@ -60,6 +60,15 @@ axStatus	axFileSystem::getExecutablePath ( axFilePathW	&out ) {
     return 0;
 }
 
+inline
+axStatus    axFileSystem::setCurrentDir( const wchar_t* dir ) {
+    axStatus    st;
+    axStringA_<kPathMax>    tmp;
+    st = tmp.set( dir );       if( !st ) return st;
+    st = chdir(tmp);           if( !st ) return st;
+    return 0;
+}
+
 #endif // else axOS_WIN
 
 //@}
