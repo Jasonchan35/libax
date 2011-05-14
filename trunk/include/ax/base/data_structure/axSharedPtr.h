@@ -29,11 +29,11 @@ public:
 	axSharedPtr( axSharedPtr &s )		{ p = NULL; ref( s.ptr() );	}
 
 	~axSharedPtr()						{ unref();	}
-	axStatus	new_if_null()			{ return p ? Status(0) : new_obj(); }
+	axStatus	new_if_null()			{ return p ? 0 : newIt(); }
 
 	axStatus	newIt() {
 		T* t = new T;
-		if(!t) return Status::not_enough_memory;
+		if(!t) return axStatus::not_enough_memory;
 		ref( t );
 		return 0;
 	}

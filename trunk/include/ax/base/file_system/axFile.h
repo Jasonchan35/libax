@@ -17,10 +17,10 @@ public:
 
 				FILE*		file_ptr		()	{ return p_; }
 
-				bool		isEnd			() const					{ return ( feof( p_ ) != 0 ) ; }
-				axStatus	setPos			( fpos_t  n )				{ return fsetpos( p_, &n ); }
-				axStatus	getPos			( fpos_t &n ) const			{ return fgetpos( p_, &n ); }
-				axStatus	getFileSize		( fpos_t &n ) const;
+				bool		isEnd			() const					    { return ( feof( p_ ) != 0 ) ; }
+				axStatus	setPos			( axFileSize  n );
+				axStatus	getPos			( axFileSize &n ) const;
+				axStatus	getFileSize		( axFileSize &n ) const;
 
 				axStatus	writeBytes		( const axIByteArray &buf )		{ return writeBytes( buf.ptr(), buf.size() ); }
 				axStatus	writeBytes		( const void* buf, axSize buf_len );
@@ -77,12 +77,12 @@ axStatus axFile::readWholeFile ( axIStringA &out ) {
 	if( !p_ ) { assert(false); return axStatus::not_initialized; }
 	axStatus st;
 
-	fpos_t cur;
+	axFileSize cur;
 	st = getPos( cur );						if( !st ) return st;
 
-	fpos_t file_size;
+	axFileSize file_size;
 	st = getFileSize( file_size );			if( !st ) return st;
-		
+
 	axSize size;
 	st = ax_safe_assign( size, file_size );		if( !st ) return st;
 	st = out.resize( size );					if( !st ) return st;
@@ -113,16 +113,42 @@ axStatus axFile::loadFile( const char* filename, axIStringA &out ) {
 }
 
 inline
-axStatus axFile::getFileSize ( fpos_t &n ) const {
-	n = 0;
+axStatus axFile::getPos( axFileSize &n ) const {
+	if( !p_ ) { assert(false); return axStatus::not_initialized; }
+    fpos_t  t;
+    fgetpos( p_, &t );
+#ifdef axOS_Linux
+    n = t.__pos;
+#else
+    n = t;
+#endif
+    return 0;
+}
+
+inline
+axStatus axFile::setPos( axFileSize n ) {
+	if( !p_ ) { assert(false); return axStatus::not_initialized; }
+    fpos_t  t;
+#ifdef axOS_Linux
+    t.__pos = n;
+#else
+    t = n;
+#endif
+    fsetpos( p_, &t );
+    return 0;
+}
+
+inline
+axStatus axFile::getFileSize ( axFileSize &n ) const {
 	if( !p_ ) { assert(false); return axStatus::not_initialized; }
 
-	fpos_t cur;
-	fgetpos( p_, &cur );
+	fpos_t old_pos;
+	fgetpos( p_, &old_pos );
+
 	fseek( p_, 0, SEEK_END );
-	
-	fgetpos( p_, &n );
-	fsetpos( p_, &cur );
+    getPos(n);
+
+	fsetpos( p_, &old_pos );
 	return 0;
 }
 

@@ -15,22 +15,22 @@ typedef axString_Array<wchar_t>		axStringW_Array;
 
 //----- inline -------
 
-inline
-axStatus	axStringA_Array::sortIgnoreCase( bool ascending ) {
+template< class T > inline
+axStatus	axString_Array<T>::sortIgnoreCase( bool ascending ) {
 	axSize n = B::size();
 	if( ascending ) {
 		for( axSize i=0; i<n; i++ ) {
 			for( axSize j=i+1; j<n; j++ ) {
-				if( element(i).compareToIgnoreCase( element(j) ) > 0 ) {
-					ax_swap( element(i), element(j) );
+				if( B::element(i).compareToIgnoreCase( B::element(j) ) > 0 ) {
+					ax_swap( B::element(i), B::element(j) );
 				}
 			}
 		}
 	}else{
 		for( axSize i=0; i<n; i++ ) {
 			for( axSize j=i+1; j<n; j++ ) {
-				if( element(i).compareToIgnoreCase( element(j) ) < 0 ) {
-					ax_swap( element(i), element(j) );
+				if( B::element(i).compareToIgnoreCase( B::element(j) ) < 0 ) {
+					ax_swap( B::element(i), B::element(j) );
 				}
 			}
 		}

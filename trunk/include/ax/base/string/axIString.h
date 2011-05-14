@@ -205,26 +205,28 @@ axStatus	axIString_<wchar_t> :: append( const wchar_t *src, axSize src_len ) {
 	return 1;
 }
 
-template<> inline axStatus	axIString_<wchar_t> :: append( char    ch ) { return append( (wchar_t)ch );  }
+template<> inline
+axStatus	axIString_<wchar_t> :: append( wchar_t ch ) {
+	axStatus st;
+	st = incSize( 1 );		if( !st ) return st;
+	buf_.last(1) = ch;
+	return 0;
+}
+
+template<> inline axStatus	axIString_<wchar_t> :: append( char    ch ) {
+    return append( (wchar_t)ch );
+}
 
 template<> inline
-axStatus	axIString_<wchar_t> :: append( wchar_t ch ) { 
+axStatus	axIString_<char>    :: append( char    ch ) {
 	axStatus st;
 	st = incSize( 1 );		if( !st ) return st;
 	buf_.last(1) = ch;
 	return 0;
 }
 
-template<> inline	
-axStatus	axIString_<char>    :: append( char    ch ) { 
-	axStatus st;
-	st = incSize( 1 );		if( !st ) return st;
-	buf_.last(1) = ch;
-	return 0;
-}
-
-template<> inline	
-axStatus axIString_<char> :: append( wchar_t ch ) { 
+template<> inline
+axStatus axIString_<char> :: append( wchar_t ch ) {
 	axStatus st;
 	axSize n;
 	st = utf8_count_in_wchar( n, ch );	if( !st ) return st;
@@ -303,7 +305,7 @@ const T* axIString_<T>::c_str( axSize offset ) const {
 }
 
 template< class T > inline
-T*	axIString_<T> :: _getInternalBufferPtr() { 
+T*	axIString_<T> :: _getInternalBufferPtr() {
 	return buf_.ptr();
 }
 
@@ -348,7 +350,7 @@ axStatus	axIString_<T> :: toLowerCase () {
 }
 
 template< class T > inline
-axStatus	axIString_<T> :: resize( axSize new_size, bool keep_data ) { 
+axStatus	axIString_<T> :: resize( axSize new_size, bool keep_data ) {
 	axStatus st;
 	st = buf_.resize( new_size+1, keep_data );		if( !st ) return st;
 	buf_.last() = 0;
@@ -357,7 +359,7 @@ axStatus	axIString_<T> :: resize( axSize new_size, bool keep_data ) {
 
 
 template< class T > inline
-axStatus	axIString_<T> :: reserve( axSize new_size, bool keep_data ) { 
+axStatus	axIString_<T> :: reserve( axSize new_size, bool keep_data ) {
 	axStatus st;
 	st = buf_.reserve( new_size+1, keep_data );		if( !st ) return st;
 	if( buf_.capacity() ) {
@@ -367,7 +369,7 @@ axStatus	axIString_<T> :: reserve( axSize new_size, bool keep_data ) {
 }
 
 template< class T > inline
-axSize	axIString_<T> :: size	() const { 
+axSize	axIString_<T> :: size	() const {
 	return ( buf_.size() ) ? ( buf_.size()-1 ) : 0;
 }
 
@@ -377,7 +379,7 @@ axStatus	axIString_<T> :: clone( const axIString_<T> &src ) {
 }
 
 template< class T > inline
-T	axIString_<T> :: charAt  ( axSize idx   ) const { 
+T	axIString_<T> :: charAt  ( axSize idx   ) const {
 	if( idx >= buf_.size() ) {
 		assert( false );
 		return 0;
@@ -387,7 +389,7 @@ T	axIString_<T> :: charAt  ( axSize idx   ) const {
 }
 
 template< class T > inline
-T	axIString_<T> :: lastChar	( axSize idx ) const { 
+T	axIString_<T> :: lastChar	( axSize idx ) const {
 	if( idx >= buf_.size() ) {
 		assert( false );
 		return 0;

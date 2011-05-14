@@ -64,7 +64,7 @@ public:
 
 	void	clear		();
 
-	axSize	size() const						{ return size_; }
+	axSize	size() const						{ return _size_; }
 
 private:
 	T*		_head_;
@@ -142,16 +142,16 @@ void axDList<T>::insert( T *node, T *before ) {
 		assert( false ); return;
 	} // before is not node of this list
 
-	size_++;
+	_size_++;
 
 	if( _head_ == before ) {
 		_head_ = node ;
 	}
-	
+
 	if( before->_prev_ ) {
 		before->_prev_->_next_ = node;
 	}
-	
+
 	node->_prev_ = before->prev_;
 	node->_next_ = before;
 	node->_list_ = this;
@@ -166,7 +166,7 @@ void axDList<T>::insert( T *node ) {
 	if( !node )		   { assert( false ); return; }
 	if( node->_list_ ) { assert( false ); return; } //node already in list
 
-	size_++;
+	_size_++;
 	node->_next_ = _head_;
 	node->_prev_ = NULL;
 	node->_list_ = this;
@@ -207,16 +207,16 @@ void axDList<T>::append( T* node, T* after ) {
 		assert( false ); return;
 	} // after is not node of this list
 
-	size_++;
+	_size_++;
 
-	
+
 	if( _tail_ == after ) {
 		_tail_ = node;
 	}
-	
+
 	node->_next_ = after->_next_;
 	node->_prev_ = after;
-	after->_next_ = node;	
+	after->_next_ = node;
 	node->_list_ = this;
 
 	node->onDidAddToList();
@@ -228,7 +228,7 @@ void axDList<T>::remove( T *node, bool call_onDListRemove ) {
 	if( node->list() != this ) {
 		assert( false ); return;
 	}  // node is not belongs to this list !!
-	
+
 	_size_--;
 	if( call_onDListRemove ) node->onWillRemoveFromList();
 

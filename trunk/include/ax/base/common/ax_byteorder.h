@@ -5,9 +5,9 @@
 
 inline uint8_t  ax_byte_swap( uint8_t  x ) { return x; }
 inline uint16_t ax_byte_swap( uint16_t x ) { return (x>>8) | (x<<8); }
-inline uint32_t ax_byte_swap( uint32_t x ) { 
-	x= ((x<< 8)&0xFF00FF00UL) | ((x>> 8)&0x00FF00FFUL); 
-	return (x>>16) | (x<<16); 
+inline uint32_t ax_byte_swap( uint32_t x ) {
+	x= ((x<< 8)&0xFF00FF00UL) | ((x>> 8)&0x00FF00FFUL);
+	return (x>>16) | (x<<16);
 }
 
 inline uint64_t ax_byte_swap( uint64_t x ) {

@@ -9,7 +9,7 @@ class axStringFormat;
 //@{
 
 //! Array Interface Class
-/*! 
+/*!
 	\b Feature:
 	\li call constructor / destructor when Type is not primitive
 	\li separate 'size'(current data size) and 'capacity' (memory size)
@@ -36,7 +36,7 @@ public:
 
 	axIArray();
 	virtual	~axIArray();
-	
+
 			bool	inBound		( axSize i ) const			{ return i < size_; }
 
 			axStatus	resize		( axSize new_size, bool keep_data = true );
@@ -53,7 +53,7 @@ public:
 
 			T&			operator[]	( axSize i )				{ return element(i); }
 	const	T&			operator[]	( axSize i ) const			{ return element(i); }
-	
+
 			T&			last		( axSize i = 0 )			{ return element( size_-i-1 ); }
 	const	T&			last		( axSize i = 0 ) const		{ return element( size_-i-1 ); }
 
@@ -69,8 +69,8 @@ public:
 			axSize		capacity	() const					{ return capacity_; }
 
 			void		clear		();
-			
-			void		free		();	//!< free all memory		
+
+			void		free		();	//!< free all memory
 			axStatus	shrink		();	//!< \todo free unused memory
 
 			axStatus	remove		( axSize index, axSize count=1 );
@@ -90,7 +90,7 @@ private:
 	T*		p_;
 };
 
-template< class T > inline 
+template< class T > inline
 void dumpHex( const axIArray<T> &buf, FILE* f = stdout ) {
 	dumpHexRaw( buf.ptr(), buf.size(), f );
 }
@@ -129,23 +129,11 @@ void axIArray<T>::clear() {
 template< class T >
 void axIArray<T>::free() {
 	clear();
-	if( p_ ) { 
-		on_free( p_ ); 
-		p_ = NULL; 
-		capacity_ = 0; 
+	if( p_ ) {
+		on_free( p_ );
+		p_ = NULL;
+		capacity_ = 0;
 	}
-}
-
-template< class T > inline
-axStatus	axIArray<T>::toStringFormat( axStringFormat &f ) const {
-	axSize i;
-	f.out( '[' );
-	for( i=0; i<size(); i++ ) {
-		if( i > 0 ) f.out( ", " );
-		f.format( "{?}", element(i) );
-	}
-	f.out( ']' );
-	return 0;
 }
 
 template< class T >
@@ -232,7 +220,7 @@ axStatus	axIArray<T>::reserve( axSize new_size, bool keep_data ) {
 	st = on_malloc( new_size, np, capacity_ );		if( !st ) return st;
 
 	if( p_ ) {
-		if( axTypeOf<T>::isPrimitive() ) { 
+		if( axTypeOf<T>::isPrimitive() ) {
 			memcpy( np, p_, size_ * sizeof(T) );
 		}else{
 			T* o = p_; //old data
@@ -270,7 +258,7 @@ bool _array_equal( const T* dst, const T* src, axSize n ) {
 	return true;
 }
 
-template<class T> inline 
+template<class T> inline
 axStatus _array_copy( T* dst, const T* src, axSize n ) {
 	if( dst+n > src && dst < src+n ) {
 		assert( false );
@@ -289,7 +277,7 @@ axStatus _array_copy( T* dst, const T* src, axSize n ) {
 	return 0;
 }
 
-template<class T> inline 
+template<class T> inline
 axStatus _array_take( T* dst, T* src, axSize n ) {
 	if( dst+n > src && dst < src+n ) {
 		assert( false );

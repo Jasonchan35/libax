@@ -14,7 +14,7 @@
 	\code
 		prepareSQL( "insert into my_table ( field1, field2 ) values( {?}, {?} ); " )
 	\endcode
-	
+
 
 	since differnt Database using different prepareSQL syntax
 	\li pgSQL  $1, $2

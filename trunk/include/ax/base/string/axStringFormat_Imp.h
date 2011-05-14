@@ -123,7 +123,7 @@ axStatus	axStringFormat::_process( const T* fmt, const ArgList &list ) {
 					case '?':	index = cur_index;			break;
 					case '+':	index = last_index + 1;		break;
 					default:	{
-						st = str_to( s, index );	
+						st = str_to( s, index );
 						if( !st ) index = -1;
 					}break;
 				}
@@ -155,42 +155,42 @@ axStatus	axStringFormat::_process( const T* fmt, const ArgList &list ) {
 }
 
 inline
-axStatus	axStringFormat::out( const char* sz, axSize len ) { 
+axStatus	axStringFormat::out( const char* sz, axSize len ) {
 	if( strA_ ) strA_->append( sz, len );
 	if( strW_ ) strW_->append( sz, len );
 	return 0;
 }
 inline
-axStatus	axStringFormat::out( const char* sz ) { 
+axStatus	axStringFormat::out( const char* sz ) {
 	if( strA_ ) strA_->append( sz );
 	if( strW_ ) strW_->append( sz );
 	return 0;
 }
 
 inline
-axStatus	axStringFormat::out( const wchar_t* sz, axSize len ) { 
+axStatus	axStringFormat::out( const wchar_t* sz, axSize len ) {
 	if( strA_ ) strA_->append( sz, len );
 	if( strW_ ) strW_->append( sz, len );
 	return 0;
 }
 inline
-axStatus	axStringFormat::out( const wchar_t* sz ) { 
+axStatus	axStringFormat::out( const wchar_t* sz ) {
 	if( strA_ ) strA_->append( sz );
 	if( strW_ ) strW_->append( sz );
 	return 0;
 }
 
-inline 
-axStatus	axStringFormat::out( char ch ) { 
-	return repeat( ch, 1 ); 
+inline
+axStatus	axStringFormat::out( char ch ) {
+	return repeat( ch, 1 );
 }
-inline 
-axStatus	axStringFormat::out( wchar_t ch ) { 
-	return repeat( ch, 1 ); 
+inline
+axStatus	axStringFormat::out( wchar_t ch ) {
+	return repeat( ch, 1 );
 }
 
 inline
-axStatus	axStringFormat::repeat( char ch, axSize len )	{ 
+axStatus	axStringFormat::repeat( char ch, axSize len )	{
 	axStatus st;
 	if( strA_ ) {
 		for( axSize i=0; i<len; i++ ) {
@@ -206,7 +206,7 @@ axStatus	axStringFormat::repeat( char ch, axSize len )	{
 }
 
 inline
-axStatus	axStringFormat::repeat( wchar_t ch, axSize len )	{ 
+axStatus	axStringFormat::repeat( wchar_t ch, axSize len )	{
 	axStatus st;
 	if( strA_ ) {
 		for( axSize i=0; i<len; i++ ) {
@@ -265,6 +265,18 @@ axStatus	axIString_<char> :: formatAppend_ArgList( const wchar_t* fmt, const Arg
 	axStringFormat	f;
 	f._setOutput( *this );
 	return f._process( fmt, list );
+}
+
+template< class T > inline
+axStatus	axIArray<T>::toStringFormat( axStringFormat &f ) const {
+	axSize i;
+	f.out( '[' );
+	for( i=0; i<size(); i++ ) {
+		if( i > 0 ) f.out( ", " );
+		f.format( "{?}", element(i) );
+	}
+	f.out( ']' );
+	return 0;
 }
 
 //@}

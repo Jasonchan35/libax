@@ -33,8 +33,8 @@ public:
 	uint64_t	native() const			{ return (uint64_t) value_; }
 #else
 	#error
-#endif	
-	
+#endif
+
 	operator size_t() const				{ return value_; }
 
 	axSize	operator++(int)					{ axSize o=value_; value_++; return o; }
@@ -51,6 +51,8 @@ public:
 private:
 	size_t	value_;
 };
+
+typedef off_t   axFileSize;
 
 inline bool		ax_lessThan0( axSize  value )		{ return false; }
 inline axSize	ax_min		( axSize a, axSize b )	{ return (a<b)?a:b; }
