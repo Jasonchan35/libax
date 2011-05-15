@@ -447,13 +447,11 @@ axStatus axDBO_pgsql::prepareSQL_ParamList ( axDBO_Driver_StmtSP &out, const cha
 	res = PQprepare( conn_, stmt_name, _sql, (int)list.size(), NULL );
 	st = res.status();		if( !st ) return st;
 
-#warning
-/*
 	res = PQdescribePrepared ( conn_, stmt_name );
 	st = res.status();		if( !st ) return st;
 
 	axSize n_param = (axSize) PQnparams( res );
-*/
+
 	st = stmt->paramList_.copy( list );		if( !st ) return st;
 /*
 	axSize i;
