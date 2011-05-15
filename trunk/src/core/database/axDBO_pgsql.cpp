@@ -84,7 +84,7 @@ axStatus	axDBO_pgsql_DataSet::getValue( axIByteArray & value, axSize row, axSize
 	Oid oid = PQftype( res_, col );
 	if( oid != BYTEAOID ) return -1;
 	char* p = PQgetvalue( res_, row, col );
-	if( !p ) { return 0; } //is null 
+	if( !p ) { return 0; } //is null
 
 	axStatus st;
 	size_t n;
@@ -100,7 +100,7 @@ axStatus	axDBO_pgsql_DataSet::getValue( axIStringA & value, axSize row, axSize c
 	Oid oid = PQftype( res_, col );
 	if( oid != VARCHAROID && oid != BPCHAROID && oid != TEXTOID ) return -1;
 	char* p = PQgetvalue( res_, row, col );
-	if( !p ) { return 0; } //is null 
+	if( !p ) { return 0; } //is null
 	value.set( p );
 	return 1;
 }
@@ -111,7 +111,7 @@ axStatus	axDBO_pgsql_DataSet::getValue( axIStringW & value, axSize row, axSize c
 	Oid oid = PQftype( res_, col );
 	if( oid != VARCHAROID && oid != BPCHAROID && oid != TEXTOID ) return -1;
 	char* p = PQgetvalue( res_, row, col );
-	if( !p ) { return 0; } //is null 
+	if( !p ) { return 0; } //is null
 	value.set( p );
 	return 1;
 }
@@ -121,7 +121,7 @@ axStatus	_getNumberValue( PGresult* res_, T &value, Oid oid, axSize row, axSize 
 	if( !res_) return axStatus::not_initialized;
 	if( PQftype( res_, col ) != oid ) return -1;
 	char* p = PQgetvalue( res_, row, col );
-	if( !p ) { value = 0; return 0; } //is null 
+	if( !p ) { value = 0; return 0; } //is null
 	value = ax_be_to_host( *(T*)p );
 	return 1;
 }
@@ -142,11 +142,11 @@ axStatus	axDBO_pgsql_DataSet::getValue( int8_t & value, axSize row, axSize col )
 }
 
 
-axStatus	axDBO_pgsql_DataSet::getValue( bool    &	value, axSize row, axSize col ) const { 
+axStatus	axDBO_pgsql_DataSet::getValue( bool    &	value, axSize row, axSize col ) const {
 	if( !res_) return axStatus::not_initialized;
 	if( PQftype( res_, col ) != BOOLOID ) return -1;
 	char* p = PQgetvalue( res_, row, col );
-	if( !p ) { value = 0; return 0; } //is null 
+	if( !p ) { value = 0; return 0; } //is null
 	value = (*p) ? true: false;
 	return 1;
 }
@@ -271,10 +271,10 @@ axStatus	axDBO_pgsql::execSQL_ParamList ( axDBO_Driver_ResultSP &out, const char
 	st = _convertPrepareSQL( _sql, sql );				if( !st ) return st;
 //	ax_print( "SQL: {?}\n TO: {?} \n", sql, _sql );
 
-	*res = PQexecParams( conn_, _sql, (int)list.size(), 
+	*res = PQexecParams( conn_, _sql, (int)list.size(),
 						 _param_types, _param_pvalues, _param_lengths, _param_formats, BINARY_FORMAT );
 
-	st = res->status();		if( !st ) return st; 
+	st = res->status();		if( !st ) return st;
 
 	/*
 	int row_count = PQntuples( _res );
@@ -343,7 +343,7 @@ axStatus axDBO_pgsql::_convertPrepareSQL( axIStringA &out, const char* inSQL ) {
 					//flush out
 					axSize len = c-raw;
 					st = out.append( raw, len );	if( !st ) return st;
-					raw = c+1;					
+					raw = c+1;
 					st = out.append( '\'');			if( !st ) return st;
 					in_quote = '\'';
 				}break;
@@ -352,7 +352,7 @@ axStatus axDBO_pgsql::_convertPrepareSQL( axIStringA &out, const char* inSQL ) {
 					//flush out
 					axSize len = c-raw;
 					st = out.append( raw, len );	if( !st ) return st;
-					raw = c+1;					
+					raw = c+1;
 					st = out.append( '"');			if( !st ) return st;
 					in_quote = '"';
 				}break;
@@ -401,7 +401,7 @@ axStatus axDBO_pgsql::_convertPrepareSQL( axIStringA &out, const char* inSQL ) {
 						case '?':	index = cur_index;			break;
 						case '+':	index = last_index + 1;		break;
 						default:	{
-							st = str_to( s, index );	
+							st = str_to( s, index );
 							if( !st ) index = -1;
 						}break;
 					}
@@ -424,7 +424,7 @@ axStatus axDBO_pgsql::_convertPrepareSQL( axIStringA &out, const char* inSQL ) {
 	return axStatus::invalid_param;
 }
 
-//virtual 
+//virtual
 axStatus axDBO_pgsql::prepareSQL_ParamList ( axDBO_Driver_StmtSP &out, const char* sql, const axDBO_ParamList &list ) {
 	if( ! conn_ ) return axStatus::not_initialized;
 	axStatus st;
@@ -447,11 +447,13 @@ axStatus axDBO_pgsql::prepareSQL_ParamList ( axDBO_Driver_StmtSP &out, const cha
 	res = PQprepare( conn_, stmt_name, _sql, (int)list.size(), NULL );
 	st = res.status();		if( !st ) return st;
 
+#warning
+/*
 	res = PQdescribePrepared ( conn_, stmt_name );
 	st = res.status();		if( !st ) return st;
 
 	axSize n_param = (axSize) PQnparams( res );
-
+*/
 	st = stmt->paramList_.copy( list );		if( !st ) return st;
 /*
 	axSize i;
@@ -497,7 +499,7 @@ axStatus axDBO_pgsql_Stmt::exec() {
 	if( ! dbo_->conn_ ) return axStatus::not_initialized;
 
 	axDBO_pgsql_DataSet	res;
-//	res = PQexecPrepared( dbo_->conn_, stmtName_, paramList_.size(), 
+//	res = PQexecPrepared( dbo_->conn_, stmtName_, paramList_.size(),
 //							paramValues_, paramLengths_, paramFormats_, 1 );
 	return 0;
 }

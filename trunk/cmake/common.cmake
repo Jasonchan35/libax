@@ -23,7 +23,7 @@ if(MSVC)
 		message( FATAL_ERROR "Unknown SIZEOF_PTR" )
 	endif()
 
-	SET( my_default_libs ${my_default_libs}	libpq )
+#	SET( axLIBS ${axLIBS} ws2.lib )
 endif(MSVC)
 
 
@@ -32,7 +32,7 @@ if (CMAKE_COMPILER_IS_GNUCC)
 #	set( CMAKE_C_FLAGS   ${CMAKE_C_FLAGS}   ${MY_C_FLAGS} )
 #	set( CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} ${MY_C_FLAGS} )
 
-	SET( my_default_libs ${my_default_libs}	dl pthread pq )
+	SET( axLIBS ${axLIBS} ax dl pthread )
 endif()
 
 add_definitions( -D${axPLATFORM_NAME} )

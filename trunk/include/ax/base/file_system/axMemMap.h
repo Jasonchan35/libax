@@ -36,9 +36,9 @@ friend class axMemMapView;
 		HANDLE	h_;
 		HANDLE	mapping_;
 		DWORD	dwAllocationGranularity_;
-	#else 
+	#else
 		int		file_no_;
-		File	file_;
+		axFile	file_;
 	#endif
 };
 
@@ -65,7 +65,7 @@ private:
 	#else
 		uint8_t*	view_;
 	#endif // _awenix_OS_WIN32
-	
+
 	axMemMapFile*	memfile_;
 };
 
@@ -285,9 +285,9 @@ axStatus axMemMapView::_openWrite( axMemMapFile &memfile ) {
 #include <sys/mman.h>
 inline
 axMemMapFile::axMemMapFile() {
-	access = access_null;
-	_size = 0;
-	ref_count = 0;
+	access_ = access_null;
+	size_ = 0;
+	ref_count_ = 0;
 }
 
 inline
@@ -298,53 +298,63 @@ axMemMapFile::~axMemMapFile() {
 
 inline
 void axMemMapFile::close() {
-	file.close();
-	_size = 0;
-	if( ref_count != 0 ) { assert(false); }
+	file_.close();
+	size_ = 0;
+	if( ref_count_ != 0 ) { assert(false); }
+}
+
+inline
+axStatus axMemMapFile::openRead( const char *filename ) {
+    axStatus st;
+    axStringW_<1024>    tmp;
+    st = tmp.set( filename );   if( !st ) return st;
+    return openRead( tmp );
 }
 
 inline
 axStatus axMemMapFile::openRead( const wchar_t *filename ) {
-	Status st;
-	LStringA<k_path_max> _filename;
-	st = _filename.set( filename ); if( !st ) return st;
-	st = file.open( _filename );	if( !st ) return st;	
+    axStatus st;
+	st = file_.open( filename );	if( !st ) return st;
 	axFileSize file_size;
-	file.getFileSize( file_size );	
-	st = ax_safe_assign( _size, file_size );	if( !st ) return st;	
-	access = access_read;
+	file_.getFileSize( file_size );
+	st = ax_safe_assign( size_, file_size );	if( !st ) return st;
+	access_ = access_read;
 	return 0;
 }
 
 inline
-Status axMemMapFile::openWrite( const wchar_t *filename, Size_t size ) {
-	Status st;
-	LStringA<k_path_max> _filename;
-	st = _filename.set( filename ); if( !st ) return st;
+axStatus axMemMapFile::openWrite( const char *filename, axSize size ) {
+    axStatus st;
+    axStringW_<1024>    tmp;
+    st = tmp.set( filename );   if( !st ) return st;
+    return openWrite( tmp, size );
+}
 
-	st = file.open( _filename, "wb+" );	if( !st ) return st;
-	
+inline
+axStatus axMemMapFile::openWrite( const wchar_t *filename, axSize size ) {
+    axStatus st;
+	st = file_.open( filename, "wb+" );	if( !st ) return st;
+
 	axFileSize	off;
-	
 	st = ax_safe_assign( off, size );	if( !st ) return st;
-	
-	st = file.setPos( off-1 );		if( !st ) return st;
-	st = file.write( "", 1 );		if( !st ) return st;
-	st = file.setPos( 0 );			if( !st ) return st;
-	access = access_write;
+
+	st = file_.setPos( off-1 ); 		if( !st ) return st;
+	st = file_.writeBytes( "", 1 );		if( !st ) return st;
+	st = file_.setPos( 0 );		    	if( !st ) return st;
+	access_ = access_write;
 	return 0;
 }
 
 
 inline
 bool axMemMapFile::isOpened() {
-	return file.isOpened();
+	return file_.isOpened();
 }
 
 inline
 axMemMapView::axMemMapView() {
-	view=NULL;
-	memfile = NULL;
+	view_=NULL;
+	memfile_ = NULL;
 }
 
 inline
@@ -354,14 +364,14 @@ axMemMapView::~axMemMapView() {
 
 inline
 void axMemMapView::close() {
-	if( view ) {
-		munmap( view, memfile->_size );
-		view=NULL;
+	if( view_ ) {
+		munmap( view_, memfile_->size_ );
+		view_=NULL;
 	}
 
-	if( memfile ) {
-		memfile->ref_count--;
-		memfile = NULL;
+	if( memfile_ ) {
+		memfile_->ref_count_--;
+		memfile_ = NULL;
 	}
 	return;
 }
@@ -369,13 +379,13 @@ void axMemMapView::close() {
 inline
 axStatus axMemMapView::_openRead( axMemMapFile &memfile ) {
 	close();
-	view = (byte*) mmap ( 0, memfile._size, PROT_READ, MAP_SHARED, fileno( memfile.file.file_ptr() ), 0 );
-	if ( view == MAP_FAILED || view == NULL ) {
-		view = NULL;
+	view_ = (uint8_t*) mmap ( 0, memfile.size_, PROT_READ, MAP_SHARED, fileno( memfile.file_.file_ptr() ), 0 );
+	if ( view_ == MAP_FAILED || view_ == NULL ) {
+		view_ = NULL;
 		return -1;
 	}
-	this->memfile = &memfile;
-	this->memfile->ref_count++;
+	this->memfile_ = &memfile;
+	this->memfile_->ref_count_++;
 
 	return 0;
 }
@@ -383,13 +393,13 @@ axStatus axMemMapView::_openRead( axMemMapFile &memfile ) {
 inline
 axStatus axMemMapView::_openWrite( axMemMapFile &memfile ) {
 	close();
-	view = (byte*) mmap ( 0, memfile._size, PROT_READ | PROT_WRITE, MAP_SHARED, fileno( memfile.file.file_ptr() ), 0 );
-	if ( view == MAP_FAILED || view == NULL ) {
-		view = NULL;
+	view_ = (uint8_t*) mmap ( 0, memfile.size_, PROT_READ | PROT_WRITE, MAP_SHARED, fileno( memfile.file_.file_ptr() ), 0 );
+	if ( view_ == MAP_FAILED || view_ == NULL ) {
+		view_ = NULL;
 		return -1;
 	}
-	this->memfile = &memfile;
-	this->memfile->ref_count++;
+	this->memfile_ = &memfile;
+	this->memfile_->ref_count_++;
 	return 0;
 }
 

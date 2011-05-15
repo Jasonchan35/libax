@@ -16,8 +16,9 @@ public:
 				void		close			();
 
 				FILE*		file_ptr		()	{ return p_; }
+				bool        isOpened        () const;
 
-				bool		isEnd			() const					    { return ( feof( p_ ) != 0 ) ; }
+				bool		isEnded 		() const					    { return ( feof( p_ ) != 0 ) ; }
 				axStatus	setPos			( axFileSize  n );
 				axStatus	getPos			( axFileSize &n ) const;
 				axStatus	getFileSize		( axFileSize &n ) const;
@@ -70,6 +71,11 @@ void axFile::close() {
 		fclose( p_ );
 		p_ = NULL;
 	}
+}
+
+inline
+bool axFile::isOpened() const {
+    return p_ != NULL;
 }
 
 inline
