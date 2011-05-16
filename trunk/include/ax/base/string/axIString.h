@@ -297,7 +297,7 @@ axStatus	axIString_<wchar_t> :: append( const char *src, axSize src_len ) {
 
 template< class T > inline
 const T* axIString_<T>::c_str( axSize offset ) const {
-	if( offset <= buf_.size() ) {
+	if( offset < buf_.size() ) {
 		return buf_.ptr() + offset;
 	}else{
 		return ax_empty_c_str( (T*)0 );
