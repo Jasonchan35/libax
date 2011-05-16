@@ -81,6 +81,7 @@
 #include <assert.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <errno.h>
 
 //C++ define
 #include <cstddef>

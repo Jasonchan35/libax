@@ -75,7 +75,7 @@ template< class T > inline
 axStatus	axStringFormat::_process( const T* fmt, const ArgList &list ) {
 	axStatus st;
 
-	if( ! fmt ) return axStatus::invalid_param;
+	if( ! fmt ) return axStatus::code_invalid_parameter;
 	//find '{' and '}'
 	const T *s = NULL; //start
 	const T *e = NULL; //end
@@ -151,7 +151,7 @@ axStatus	axStringFormat::_process( const T* fmt, const ArgList &list ) {
 		return out( raw, len );
 	}
 	assert( false ); //not end of '}'
-	return axStatus::invalid_param;
+	return axStatus::code_invalid_parameter;
 }
 
 inline
@@ -240,28 +240,28 @@ axStatus	axStringFormat::format_ArgList( const wchar_t* fmt, const ArgList &list
 
 //----------------
 template<> inline
-axStatus	axIString_<wchar_t> :: formatAppend_ArgList( const char* fmt, const ArgList &list ) {
+axStatus	axIString_<wchar_t> :: appendFormat_ArgList( const char* fmt, const ArgList &list ) {
 	axStringFormat	f;
 	f._setOutput( *this );
 	return f._process( fmt, list );
 }
 
 template<> inline
-axStatus	axIString_<char> :: formatAppend_ArgList( const char* fmt, const ArgList &list ) {
+axStatus	axIString_<char> :: appendFormat_ArgList( const char* fmt, const ArgList &list ) {
 	axStringFormat	f;
 	f._setOutput( *this );
 	return f._process( fmt, list );
 }
 
 template<> inline
-axStatus	axIString_<wchar_t> :: formatAppend_ArgList( const wchar_t* fmt, const ArgList &list ) {
+axStatus	axIString_<wchar_t> :: appendFormat_ArgList( const wchar_t* fmt, const ArgList &list ) {
 	axStringFormat	f;
 	f._setOutput( *this );
 	return f._process( fmt, list );
 }
 
 template<> inline
-axStatus	axIString_<char> :: formatAppend_ArgList( const wchar_t* fmt, const ArgList &list ) {
+axStatus	axIString_<char> :: appendFormat_ArgList( const wchar_t* fmt, const ArgList &list ) {
 	axStringFormat	f;
 	f._setOutput( *this );
 	return f._process( fmt, list );

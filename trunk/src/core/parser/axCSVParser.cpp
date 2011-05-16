@@ -65,7 +65,7 @@ axStatus axCSVParserBase::getCell( axStringA &cell ) {
 				if( ! readLine() ) {
 					ax_print("error: unexpected end of line\n" );
 					assert( false );
-					return axStatus::data_corrupted;
+					return axStatus::code_data_corrupted;
 				}
 				slen = 0;
 				s = line_buf_.c_str();
@@ -83,7 +83,7 @@ axStatus axCSVParserBase::getCell( axStringA &cell ) {
 		if( ! ax_strchr( seperators_, s[slen] ) ) {
 			ax_print("error: expected seperator after close quote\n" );
 			assert( false );
-			return axStatus::data_corrupted;
+			return axStatus::code_data_corrupted;
 		}
 
 	}else { //direct copy

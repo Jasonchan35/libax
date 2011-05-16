@@ -83,7 +83,7 @@ axDListNode<T>::axDListNode() {
 
 template<class T>
 axStatus	axDListNode<T> :: getIndex( axSize &idx ) {
-	if( ! list() ) return axStatus::invalid_param;
+	if( ! list() ) return axStatus::code_invalid_parameter;
 	T* n = list()->head();
 	axSize i = 0;
 	for( ; n; n=n->next(), i++ ) {

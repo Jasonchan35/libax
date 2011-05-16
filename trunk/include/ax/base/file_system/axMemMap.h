@@ -137,7 +137,7 @@ axStatus axMemMapView::open( axMemMapFile &mmfile ) {
 	}else if( mmfile.access_  == axMemMapFile::access_write ) {
 		return _openWrite( mmfile );
 	}
-	return axStatus::invalid_param;
+	return axStatus::code_invalid_parameter;
 }
 
 
@@ -170,10 +170,14 @@ axStatus axMemMapFile::openRead( const wchar_t *filename ) {
 	close();
 	h_ = CreateFile( filename, GENERIC_READ,FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 	if( h_ == INVALID_HANDLE_VALUE ) {
-		close(); return -1;
+		DWORD err = GetLastError();
+		switch( err ) {
+			case ERROR_FILE_NOT_FOUND:	return axStatus::code_file_not_found;
+			case ERROR_ACCESS_DENIED:	return axStatus::code_file_access_denied;
+		}
+		return -1;
 	}
 	size_ = GetFileSize( h_, NULL );
-	if( size_ == 0 ) { close(); return 0; }
 	access_ = access_read;
 	return 0;
 }
@@ -191,7 +195,14 @@ inline
 axStatus axMemMapFile::openWrite( const wchar_t* filename, axSize size ) {
 	close();
 	h_ = CreateFile( filename, GENERIC_READ|GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, 0 );
-	if( h_ == INVALID_HANDLE_VALUE ) { assert(false); close(); return -1; }
+	if( h_ == INVALID_HANDLE_VALUE ) {
+		DWORD err = GetLastError();
+		switch( err ) {
+			case ERROR_FILE_NOT_FOUND:	return axStatus::code_file_not_found;
+			case ERROR_ACCESS_DENIED:	return axStatus::code_file_access_denied;
+		}
+		return -1;
+	}
 	size_ = size;
 	access_ = access_write;
 	return 0;

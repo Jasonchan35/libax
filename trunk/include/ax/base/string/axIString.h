@@ -75,11 +75,11 @@ public:
 	typedef axStringFormat_Arg			Arg;
 	typedef	axStringFormat_ArgList		ArgList;
 
-	axStatus		format_ArgList			( const char* fmt, const ArgList &list )			{ clear(); return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend_ArgList	( const char* fmt, const ArgList &list );
+	axStatus		format_ArgList			( const char* fmt, const ArgList &list )			{ clear(); return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat_ArgList	( const char* fmt, const ArgList &list );
 
-	axStatus		format_ArgList			( const wchar_t* fmt, const ArgList &list )			{ clear(); return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend_ArgList	( const wchar_t* fmt, const ArgList &list );
+	axStatus		format_ArgList			( const wchar_t* fmt, const ArgList &list )			{ clear(); return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat_ArgList	( const wchar_t* fmt, const ArgList &list );
 
 	axStatus		toStringFormat( axStringFormat &f ) const { return axStringFormat_out( f, c_str() ); }
 
@@ -108,30 +108,30 @@ public:
 	axStatus		format			( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8 )					{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8;		return format_ArgList( fmt, list ); }
 	axStatus		format			( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8, const Arg &a9 )	{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8<<a9;	return format_ArgList( fmt, list ); }
 
-	axStatus		formatAppend	( const char* fmt )																																							{ ArgList list;													return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const char* fmt,	const Arg &a0 )																																			{ ArgList list;	list<<a0;										return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const char* fmt,	const Arg &a0, const Arg &a1 )																															{ ArgList list;	list<<a0<<a1;									return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2 )																											{ ArgList list;	list<<a0<<a1<<a2;								return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3 )																							{ ArgList list;	list<<a0<<a1<<a2<<a3;							return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4 )																				{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4;						return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5 )																{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5;					return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6 )												{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6;				return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7 )								{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7;			return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8 )					{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8;		return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8, const Arg &a9 )	{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8<<a9;	return formatAppend_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const char* fmt )																																							{ ArgList list;													return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const char* fmt,	const Arg &a0 )																																			{ ArgList list;	list<<a0;										return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const char* fmt,	const Arg &a0, const Arg &a1 )																															{ ArgList list;	list<<a0<<a1;									return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2 )																											{ ArgList list;	list<<a0<<a1<<a2;								return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3 )																							{ ArgList list;	list<<a0<<a1<<a2<<a3;							return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4 )																				{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4;						return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5 )																{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5;					return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6 )												{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6;				return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7 )								{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7;			return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8 )					{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8;		return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const char* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8, const Arg &a9 )	{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8<<a9;	return appendFormat_ArgList( fmt, list ); }
 
 
-	axStatus		formatAppend	( const wchar_t* fmt )																																							{ ArgList list;													return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const wchar_t* fmt,	const Arg &a0 )																																			{ ArgList list;	list<<a0;										return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const wchar_t* fmt,	const Arg &a0, const Arg &a1 )																															{ ArgList list;	list<<a0<<a1;									return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2 )																											{ ArgList list;	list<<a0<<a1<<a2;								return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3 )																							{ ArgList list;	list<<a0<<a1<<a2<<a3;							return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4 )																				{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4;						return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5 )																{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5;					return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6 )												{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6;				return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7 )								{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7;			return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8 )					{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8;		return formatAppend_ArgList( fmt, list ); }
-	axStatus		formatAppend	( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8, const Arg &a9 )	{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8<<a9;	return formatAppend_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const wchar_t* fmt )																																							{ ArgList list;													return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const wchar_t* fmt,	const Arg &a0 )																																			{ ArgList list;	list<<a0;										return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const wchar_t* fmt,	const Arg &a0, const Arg &a1 )																															{ ArgList list;	list<<a0<<a1;									return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2 )																											{ ArgList list;	list<<a0<<a1<<a2;								return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3 )																							{ ArgList list;	list<<a0<<a1<<a2<<a3;							return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4 )																				{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4;						return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5 )																{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5;					return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6 )												{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6;				return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7 )								{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7;			return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8 )					{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8;		return appendFormat_ArgList( fmt, list ); }
+	axStatus		appendFormat	( const wchar_t* fmt,	const Arg &a0, const Arg &a1, const Arg &a2, const Arg &a3, const Arg &a4, const Arg &a5, const Arg &a6, const Arg &a7, const Arg &a8, const Arg &a9 )	{ ArgList list;	list<<a0<<a1<<a2<<a3<<a4<<a5<<a6<<a7<<a8<<a9;	return appendFormat_ArgList( fmt, list ); }
 
 protected:
 	axIArray<T>&	buf_;
@@ -181,7 +181,7 @@ axStatus	axIString_<char> :: append( const char *src, axSize src_len ) {
 	if( new_len <= 0 ) return 0;
 
 	axStatus st = resize( new_len );
-	if( !st ) return axStatus::not_enough_memory;
+	if( !st ) return axStatus::code_not_enough_memory;
 
 	memcpy( &buf_[old_len], src, src_len * sizeof(Type) );
 	buf_[new_len]=0;
@@ -198,7 +198,7 @@ axStatus	axIString_<wchar_t> :: append( const wchar_t *src, axSize src_len ) {
 	if( new_len <= 0 ) return 0;
 
 	axStatus st = resize( new_len );
-	if( !st ) return axStatus::not_enough_memory;
+	if( !st ) return axStatus::code_not_enough_memory;
 
 	memcpy( &buf_[old_len], src, src_len * sizeof(Type) );
 	buf_[new_len]=0;
@@ -402,13 +402,13 @@ T	axIString_<T> :: lastChar	( axSize idx ) const {
 template< class T > inline
 axStatus	axIString_<T> :: substring( axSize start, axSize count, axIString_<T> &out ) const {
 	out.clear();
-	if( start >= size() ) return axStatus::invalid_param;
+	if( start >= size() ) return axStatus::code_invalid_parameter;
 	return out.set( &buf_[start], count );
 }
 
 template< class T > inline
 axStatus	axIString_<T> :: findChar ( T ch, axSize &out_index, axSize start_from ) const {
-	if( start_from >= size() ) return axStatus::invalid_param;
+	if( start_from >= size() ) return axStatus::code_invalid_parameter;
 	const T* s = &buf_[start_from];
 	const T* e = &buf_.last();
 	for( ; s<e; s++ ) {
@@ -417,12 +417,12 @@ axStatus	axIString_<T> :: findChar ( T ch, axSize &out_index, axSize start_from 
 			return 0;
 		}
 	}
-	return axStatus::not_found;
+	return axStatus::code_not_found;
 }
 
 template< class T > inline
 axStatus	axIString_<T> :: findCharFromEnd	( T ch, axSize &out_index, axSize	start_from_end ) const {
-	if( start_from_end >= size() ) return axStatus::invalid_param;
+	if( start_from_end >= size() ) return axStatus::code_invalid_parameter;
 	axSize n = size() - start_from_end;
 
 	const T* s = &buf_.last( start_from_end );
@@ -446,7 +446,7 @@ axStatus	axIString_<T> :: splitByChar( T ch, axIString_<T> &part1, axIString_<T>
 		return splitByIndex( idx, part1, part2 );
 	}else{
 		st = part1.clone( *this );		if( !st ) return st;
-		return axStatus::not_found;
+		return axStatus::code_not_found;
 	}
 }
 
@@ -456,7 +456,7 @@ axStatus	axIString_<T> :: splitByIndex( axSize index, axIString_<T> &part1, axIS
 	part2.clear();
 	axStatus	st;
 	axSize n = size();
-	if( index >= n ) return axStatus::invalid_param;
+	if( index >= n ) return axStatus::code_invalid_parameter;
 	index++;
 	st = substring( 0, index, part1 );			if( !st ) return st;
 	st = substring( index, n-index, part2 );	if( !st ) return st;

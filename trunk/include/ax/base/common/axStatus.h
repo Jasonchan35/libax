@@ -27,15 +27,15 @@
 	Standard Error Code:
 	\li  undefined 
 	\li  not_implement 
-	\li  not_enough_memory 
+	\li  code_not_enough_memory 
 	\li  not_found 
 	\li  out_of_bound 
 	\li  unsupported_format 
-	\li  invalid_param 
+	\li  code_invalid_parameter 
 	\li  already_exist 
 	\li  the_end 
 	\li  should_not_be_here 
-	\li  not_initialized 
+	\li  code_not_initialized 
 	\li  unsupported_opengl_extension 
 	\li  pointer_is_null 
 	\li  not_available 
@@ -47,12 +47,12 @@
 */
 class axStatus {
 public:
-	axStatus()						{ code_ = undefined; }
-	axStatus( const axStatus &src )		{ code_ = src.code(); }
-	axStatus( int n )					{ code_ = n; }
+	axStatus()						{ code_ = code_undefined; }
+	axStatus( const axStatus &src )	{ code_ = src.code(); }
+	axStatus( int n )				{ code_ = n; }
 
 	enum {
-		#define axStatus_enum(n)   n,
+		#define axStatus_enum(n)   code_##n,
 		_std_start = -9000, //standard error -9000 ~ -8001
 		#include "axStatus_enum.h"
 		_std_end = -8001,
@@ -73,7 +73,7 @@ const char* axStatus :: c_str() const {
 	if( code_ == 0 ) return "success";
 	if( code_ > _std_start && code_ < _std_end ) {
 		switch( code_ ) {
-			#define axStatus_enum(n)   case n: return #n;
+			#define axStatus_enum(n)   case code_##n: return #n;
 			#include "axStatus_enum.h"
 			#undef axStatus_enum
 		}

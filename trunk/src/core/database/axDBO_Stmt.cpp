@@ -2,6 +2,6 @@
 
 
 axStatus axDBO_Stmt::exec() {
-	if( !p_ ) return axStatus::not_initialized;
+	if( !p_ ) return axStatus::code_not_initialized;
 	return p_->exec();
 }

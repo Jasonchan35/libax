@@ -17,7 +17,7 @@ public:
 	virtual	~axLocalArray();
 
 private:
-	virtual	axStatus	on_malloc	( axSize req_size, T* &out_ptr, axSize &out_size ) { return axStatus::not_enough_memory; }
+	virtual	axStatus	on_malloc	( axSize req_size, T* &out_ptr, axSize &out_size ) { return axStatus::code_not_enough_memory; }
 	virtual void		on_free		(  T* p  ) {}
 
 	char	local_[ LOCAL_BUF_SIZE * sizeof(T) ];

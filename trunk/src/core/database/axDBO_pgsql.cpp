@@ -27,7 +27,7 @@ void axDBO_pgsql::close() {
 }
 
 axStatus	axDBO_pgsql_DataSet::status() const {
-	if( ! res_ ) return axStatus::not_initialized;
+	if( ! res_ ) return axStatus::code_not_initialized;
 	ExecStatusType e = PQresultStatus( res_ );
 	switch( e ) {
 		case PGRES_TUPLES_OK:	return 0;
@@ -80,7 +80,7 @@ int	axDBO_pgsql_DataSet::getColumnType( axSize col ) const {
 
 axStatus	axDBO_pgsql_DataSet::getValue( axIByteArray & value, axSize row, axSize col ) const {
 	value.clear();
-	if( !res_) return axStatus::not_initialized;
+	if( !res_) return axStatus::code_not_initialized;
 	Oid oid = PQftype( res_, col );
 	if( oid != BYTEAOID ) return -1;
 	char* p = PQgetvalue( res_, row, col );
@@ -96,7 +96,7 @@ axStatus	axDBO_pgsql_DataSet::getValue( axIByteArray & value, axSize row, axSize
 
 axStatus	axDBO_pgsql_DataSet::getValue( axIStringA & value, axSize row, axSize col ) const {
 	value.clear();
-	if( !res_) return axStatus::not_initialized;
+	if( !res_) return axStatus::code_not_initialized;
 	Oid oid = PQftype( res_, col );
 	if( oid != VARCHAROID && oid != BPCHAROID && oid != TEXTOID ) return -1;
 	char* p = PQgetvalue( res_, row, col );
@@ -107,7 +107,7 @@ axStatus	axDBO_pgsql_DataSet::getValue( axIStringA & value, axSize row, axSize c
 
 axStatus	axDBO_pgsql_DataSet::getValue( axIStringW & value, axSize row, axSize col ) const {
 	value.clear();
-	if( !res_) return axStatus::not_initialized;
+	if( !res_) return axStatus::code_not_initialized;
 	Oid oid = PQftype( res_, col );
 	if( oid != VARCHAROID && oid != BPCHAROID && oid != TEXTOID ) return -1;
 	char* p = PQgetvalue( res_, row, col );
@@ -118,7 +118,7 @@ axStatus	axDBO_pgsql_DataSet::getValue( axIStringW & value, axSize row, axSize c
 
 template<class T> inline static
 axStatus	_getNumberValue( PGresult* res_, T &value, Oid oid, axSize row, axSize col ) {
-	if( !res_) return axStatus::not_initialized;
+	if( !res_) return axStatus::code_not_initialized;
 	if( PQftype( res_, col ) != oid ) return -1;
 	char* p = PQgetvalue( res_, row, col );
 	if( !p ) { value = 0; return 0; } //is null
@@ -143,7 +143,7 @@ axStatus	axDBO_pgsql_DataSet::getValue( int8_t & value, axSize row, axSize col )
 
 
 axStatus	axDBO_pgsql_DataSet::getValue( bool    &	value, axSize row, axSize col ) const {
-	if( !res_) return axStatus::not_initialized;
+	if( !res_) return axStatus::code_not_initialized;
 	if( PQftype( res_, col ) != BOOLOID ) return -1;
 	char* p = PQgetvalue( res_, row, col );
 	if( !p ) { value = 0; return 0; } //is null
@@ -153,11 +153,11 @@ axStatus	axDBO_pgsql_DataSet::getValue( bool    &	value, axSize row, axSize col 
 
 
 axStatus	axDBO_pgsql::execSQL_ParamList ( axDBO_Driver_ResultSP &out, const char* sql, const axDBO_ParamList &list ) {
-	if( ! conn_ ) return axStatus::not_initialized;
+	if( ! conn_ ) return axStatus::code_not_initialized;
 	axStatus st;
 
 	axDBO_pgsql_DataSet* res = new axDBO_pgsql_DataSet;
-	if( ! res ) return axStatus::not_enough_memory;
+	if( ! res ) return axStatus::code_not_enough_memory;
 	out.ref( res );
 	res->dbo_ = this;
 
@@ -301,7 +301,7 @@ axStatus axDBO_pgsql::_convertPrepareSQL( axIStringA &out, const char* inSQL ) {
 	out.clear();
 	axStatus st;
 
-	if( ! inSQL ) return axStatus::invalid_param;
+	if( ! inSQL ) return axStatus::code_invalid_parameter;
 	//find '{' and '}'
 	const char *s = NULL; //start
 	const char *e = NULL; //end
@@ -408,7 +408,7 @@ axStatus axDBO_pgsql::_convertPrepareSQL( axIStringA &out, const char* inSQL ) {
 
 					cur_index++;
 					last_index = index;
-					out.formatAppend( " ${?} ", index+1 );
+					out.appendFormat( " ${?} ", index+1 );
 					s = NULL;
 
 				}break;
@@ -421,16 +421,16 @@ axStatus axDBO_pgsql::_convertPrepareSQL( axIStringA &out, const char* inSQL ) {
 		return out.append( raw, len );
 	}
 	assert( false ); //not end of '}'
-	return axStatus::invalid_param;
+	return axStatus::code_invalid_parameter;
 }
 
 //virtual
 axStatus axDBO_pgsql::prepareSQL_ParamList ( axDBO_Driver_StmtSP &out, const char* sql, const axDBO_ParamList &list ) {
-	if( ! conn_ ) return axStatus::not_initialized;
+	if( ! conn_ ) return axStatus::code_not_initialized;
 	axStatus st;
 
 	axDBO_pgsql_Stmt* stmt = new axDBO_pgsql_Stmt;
-	if( ! stmt ) return axStatus::not_enough_memory;
+	if( ! stmt ) return axStatus::code_not_enough_memory;
 	out.ref( stmt );
 
 	axStringA_<64>	stmt_name;
@@ -492,9 +492,9 @@ void axDBO_pgsql_Stmt::release() {
 }
 
 axStatus axDBO_pgsql_Stmt::exec() {
-	if( ! stmtName_ ) return axStatus::not_initialized;
-	if( ! dbo_ ) return axStatus::not_initialized;
-	if( ! dbo_->conn_ ) return axStatus::not_initialized;
+	if( ! stmtName_ ) return axStatus::code_not_initialized;
+	if( ! dbo_ ) return axStatus::code_not_initialized;
+	if( ! dbo_->conn_ ) return axStatus::code_not_initialized;
 
 	axDBO_pgsql_DataSet	res;
 //	res = PQexecPrepared( dbo_->conn_, stmtName_, paramList_.size(),

@@ -91,12 +91,12 @@ axStatus wchar_count_in_utf8( axSize &out_len, const char* utf8 ) {
 			continue;
 		}
 		if( (*utf8 & 0xE0) == 0xC0 ) {
-			utf8++;	if( *utf8 == 0 ) return axStatus::invalid_param;
+			utf8++;	if( *utf8 == 0 ) return axStatus::code_invalid_parameter;
 			continue;
 		}
 		if( (*utf8 & 0xF0) == 0xE0 ) {
-			utf8++;	if( *utf8 == 0 ) return axStatus::invalid_param;
-			utf8++;	if( *utf8 == 0 ) return axStatus::invalid_param;
+			utf8++;	if( *utf8 == 0 ) return axStatus::code_invalid_parameter;
+			utf8++;	if( *utf8 == 0 ) return axStatus::code_invalid_parameter;
 			continue;
 		}
 	}
@@ -112,12 +112,12 @@ axStatus wchar_count_in_utf8( axSize &out_len, const char* utf8, axSize utf8_len
 			continue;
 		}
 		if( (*utf8 & 0xE0) == 0xC0 ) {
-			utf8++;	if( *utf8 == 0 ) return axStatus::invalid_param;
+			utf8++;	if( *utf8 == 0 ) return axStatus::code_invalid_parameter;
 			continue;
 		}
 		if( (*utf8 & 0xF0) == 0xE0 ) {
-			utf8++;	if( *utf8 == 0 ) return axStatus::invalid_param;
-			utf8++;	if( *utf8 == 0 ) return axStatus::invalid_param;
+			utf8++;	if( *utf8 == 0 ) return axStatus::code_invalid_parameter;
+			utf8++;	if( *utf8 == 0 ) return axStatus::code_invalid_parameter;
 			continue;
 		}
 	}

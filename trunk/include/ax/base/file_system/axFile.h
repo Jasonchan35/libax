@@ -80,7 +80,7 @@ bool axFile::isOpened() const {
 
 inline
 axStatus axFile::readWholeFile ( axIStringA &out ) {
-	if( !p_ ) { assert(false); return axStatus::not_initialized; }
+	if( !p_ ) { assert(false); return axStatus::code_not_initialized; }
 	axStatus st;
 
 	axFileSize cur;
@@ -120,7 +120,7 @@ axStatus axFile::loadFile( const char* filename, axIStringA &out ) {
 
 inline
 axStatus axFile::getPos( axFileSize &n ) const {
-	if( !p_ ) { assert(false); return axStatus::not_initialized; }
+	if( !p_ ) { assert(false); return axStatus::code_not_initialized; }
     fpos_t  t;
     fgetpos( p_, &t );
 #ifdef axOS_Linux
@@ -133,7 +133,7 @@ axStatus axFile::getPos( axFileSize &n ) const {
 
 inline
 axStatus axFile::setPos( axFileSize n ) {
-	if( !p_ ) { assert(false); return axStatus::not_initialized; }
+	if( !p_ ) { assert(false); return axStatus::code_not_initialized; }
     fpos_t  t;
 #ifdef axOS_Linux
     t.__pos = n;
@@ -146,7 +146,7 @@ axStatus axFile::setPos( axFileSize n ) {
 
 inline
 axStatus axFile::getFileSize ( axFileSize &n ) const {
-	if( !p_ ) { assert(false); return axStatus::not_initialized; }
+	if( !p_ ) { assert(false); return axStatus::code_not_initialized; }
 
 	fpos_t old_pos;
 	fgetpos( p_, &old_pos );
@@ -175,7 +175,7 @@ axStatus axFile::writeString( const char* sz ) {
 
 inline
 axStatus axFile::writeBytes( const void* buf, axSize buf_len ) {
-	if( !p_ ) { assert(false); return axStatus::not_initialized; }
+	if( !p_ ) { assert(false); return axStatus::code_not_initialized; }
 
 	if( buf_len <= 0 ) return 0;
 	size_t n = fwrite( buf, buf_len, 1, p_ );
@@ -185,7 +185,7 @@ axStatus axFile::writeBytes( const void* buf, axSize buf_len ) {
 
 inline
 axStatus axFile::readBytes	( void* buf, axSize buf_len ) {
-	if( !p_ ) { assert(false); return axStatus::not_initialized; }
+	if( !p_ ) { assert(false); return axStatus::code_not_initialized; }
 	if( buf_len <= 0 ) return 0;
 
 	size_t n = fread( buf, buf_len, 1, p_ );
@@ -195,14 +195,14 @@ axStatus axFile::readBytes	( void* buf, axSize buf_len ) {
 
 inline
 axStatus axFile::readLine ( axIStringA &buf, axSize buf_max_size ) {
-	if( !p_ ) { assert(false); return axStatus::not_initialized; }
+	if( !p_ ) { assert(false); return axStatus::code_not_initialized; }
 
 	axStatus st;
 	st = buf.resize(buf_max_size);				if( !st ) return st;
 	int n;
 	st = ax_safe_assign( n, buf.size() );		if( !st ) return st;
 	if( NULL == fgets( buf._getInternalBufferPtr(), n, p_ ) ) {
-		if( feof(p_) ) return axStatus::end_of_file;
+		if( feof(p_) ) return axStatus::code_file_ended;
 		return -1;
 	}
 
@@ -243,8 +243,13 @@ axStatus axFile::open( const char* filename, const char* mode ) {
 #else
 	p_ = fopen( filename, mode );
 #endif
-
-	if( ! p_ ) return -1;
+	if( ! p_ ) {
+		switch( errno ) {
+			case ENOENT: return axStatus::code_file_not_found;
+			case EACCES: return axStatus::code_file_access_denied;
+		}
+		return -1;
+	}
 	return 0;
 }
 

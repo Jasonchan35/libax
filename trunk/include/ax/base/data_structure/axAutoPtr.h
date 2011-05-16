@@ -36,7 +36,7 @@ public:
 
 	axStatus	takeOwnership( axAutoPtr<T> &o )	{ ref(o.ptr()); o.deleteIt(); return 0; }
 
-	axStatus	newIt()					{ ref( new T ); return (p_)? 0 : axStatus::not_enough_memory; }
+	axStatus	newIt()					{ ref( new T ); return (p_)? 0 : axStatus::code_not_enough_memory; }
 	void	deleteIt()				{ if( p_ ) { delete p_; p_=NULL; } }
 private:
 	T* p_;

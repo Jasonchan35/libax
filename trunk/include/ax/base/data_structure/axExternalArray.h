@@ -20,7 +20,7 @@ public:
 
 	void	setExternal( T* buf, axSize buf_len );
 private:
-	virtual	axStatus	on_malloc	( axSize req_size, T* &out_ptr, axSize &out_size ) { return axStatus::not_enough_memory; }
+	virtual	axStatus	on_malloc	( axSize req_size, T* &out_ptr, axSize &out_size ) { return axStatus::code_not_enough_memory; }
 	virtual void		on_free		(  T* p  ) {}
 };
 

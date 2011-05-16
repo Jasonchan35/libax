@@ -7,22 +7,22 @@ axDBO_DataSet::axDBO_DataSet() {
 axDBO_DataSet::~axDBO_DataSet() {
 }
 
-axStatus axDBO_DataSet :: status() const { return (p_) ? p_->status() : axStatus::not_initialized;  }
+axStatus axDBO_DataSet :: status() const { return (p_) ? p_->status() : axStatus::code_not_initialized;  }
 axSize axDBO_DataSet :: rowCount() const { return p_ ? p_->rowCount() : axSize(0); }
 axSize axDBO_DataSet :: colCount() const { return p_ ? p_->colCount() : axSize(0); }
-int	axDBO_DataSet :: getColumnType( axSize col ) const { return (p_) ? p_->getColumnType( col ) : axStatus::not_initialized;  }
+int	axDBO_DataSet :: getColumnType( axSize col ) const { return (p_) ? p_->getColumnType( col ) : axStatus::code_not_initialized;  }
 
-axStatus	axDBO_DataSet :: getValue( int16_t	 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
-axStatus	axDBO_DataSet :: getValue( int32_t	 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
-axStatus	axDBO_DataSet :: getValue( int64_t	 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
-axStatus	axDBO_DataSet :: getValue( char		 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
-axStatus	axDBO_DataSet :: getValue( float		 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
-axStatus	axDBO_DataSet :: getValue( double	 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
-axStatus	axDBO_DataSet :: getValue( bool 		 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
+axStatus	axDBO_DataSet :: getValue( int16_t	 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::code_not_initialized; }
+axStatus	axDBO_DataSet :: getValue( int32_t	 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::code_not_initialized; }
+axStatus	axDBO_DataSet :: getValue( int64_t	 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::code_not_initialized; }
+axStatus	axDBO_DataSet :: getValue( char		 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::code_not_initialized; }
+axStatus	axDBO_DataSet :: getValue( float		 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::code_not_initialized; }
+axStatus	axDBO_DataSet :: getValue( double	 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::code_not_initialized; }
+axStatus	axDBO_DataSet :: getValue( bool 		 & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::code_not_initialized; }
 
-axStatus	axDBO_DataSet :: getValue( axIStringA   & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
-axStatus	axDBO_DataSet :: getValue( axIStringW   & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
-axStatus	axDBO_DataSet :: getValue( axIByteArray & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::not_initialized; }
+axStatus	axDBO_DataSet :: getValue( axIStringA   & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::code_not_initialized; }
+axStatus	axDBO_DataSet :: getValue( axIStringW   & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::code_not_initialized; }
+axStatus	axDBO_DataSet :: getValue( axIByteArray & value, axSize row, axSize col ) const { return (p_) ? p_->getValue(value,row,col) : axStatus::code_not_initialized; }
 
 
 template<class T> inline
@@ -42,7 +42,7 @@ axStatus axDBO_DataSet :: _getValueInStringW( axIStringW &value, axSize row, axS
 }
 
 axStatus	axDBO_DataSet :: getValueInString( axIStringA & value, axSize row, axSize col ) const {
-	if( ! p_ ) return axStatus::not_initialized;
+	if( ! p_ ) return axStatus::code_not_initialized;
 	value.clear();
 	axStatus st;
 	switch( getColumnType( col ) ) {
@@ -65,11 +65,11 @@ axStatus	axDBO_DataSet :: getValueInString( axIStringA & value, axSize row, axSi
 		}break;
 	}
 	assert(false);
-	return axStatus::unsupported_format;
+	return axStatus::code_unsupported_type;
 }
 
 axStatus	axDBO_DataSet :: getValueInString( axIStringW & value, axSize row, axSize col ) const {
-	if( ! p_ ) return axStatus::not_initialized;
+	if( ! p_ ) return axStatus::code_not_initialized;
 	value.clear();
 	axStatus st;
 	switch( getColumnType( col ) ) {
@@ -87,11 +87,11 @@ axStatus	axDBO_DataSet :: getValueInString( axIStringW & value, axSize row, axSi
 		}break;
 	}
 	assert(false);
-	return axStatus::unsupported_format;
+	return axStatus::code_unsupported_type;
 }
 
 axStatus	axDBO_DataSet :: toStringFormat( axStringFormat &f ) const {
-	if( !p_ ) return axStatus::not_initialized;
+	if( !p_ ) return axStatus::code_not_initialized;
 	axStatus st;
 
 	st = p_->status();			if( !st ) return st;

@@ -84,7 +84,7 @@ axStatus	axArray< T, LOCAL_BUF_SIZE >::on_malloc( axSize req_size, T* &out_ptr, 
 	}
 
 	out_ptr = (T*) ax_malloc( sizeof(T) * n );
-	if( ! out_ptr ) return axStatus::not_enough_memory;
+	if( ! out_ptr ) return axStatus::code_not_enough_memory;
 
 	out_size = n;
 	return 0;

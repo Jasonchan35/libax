@@ -33,7 +33,7 @@ public:
 
 	axStatus	newIt() {
 		T* t = new T;
-		if(!t) return axStatus::not_enough_memory;
+		if(!t) return axStatus::code_not_enough_memory;
 		ref( t );
 		return 0;
 	}
