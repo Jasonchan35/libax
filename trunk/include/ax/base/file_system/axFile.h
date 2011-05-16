@@ -10,6 +10,8 @@ public:
 
 	static		axStatus	loadFile		( const wchar_t* filename, axIStringA &out );
 	static		axStatus	loadFile		( const char*	 filename, axIStringA &out );
+	static		axStatus	loadFile		( const wchar_t* filename, axIByteArray &out );
+	static		axStatus	loadFile		( const char*	 filename, axIByteArray &out );
 
 				axStatus	open			( const wchar_t* filename, const char* mode = "rb" );
 				axStatus	open			( const char*    filename, const char* mode = "rb" );
@@ -30,6 +32,8 @@ public:
 				axStatus	readBytes		( void* buf, axSize buf_len );
 				axStatus	readLine		( axIStringA &buf, axSize buf_max_size );
 				axStatus	readWholeFile	( axIStringA &out );
+
+				axStatus	readWholeFile	( axIByteArray &out );
 
 				typedef axStringFormat_Arg			Arg;
 				typedef	axStringFormat_ArgList		ArgList;
@@ -101,6 +105,29 @@ axStatus axFile::readWholeFile ( axIStringA &out ) {
 }
 
 inline
+axStatus axFile::readWholeFile	( axIByteArray &out ) {
+	if( !p_ ) { assert(false); return axStatus::code_not_initialized; }
+	axStatus st;
+
+	axFileSize cur;
+	st = getPos( cur );						if( !st ) return st;
+
+	axFileSize file_size;
+	st = getFileSize( file_size );			if( !st ) return st;
+
+	axSize size;
+	st = ax_safe_assign( size, file_size );		if( !st ) return st;
+	st = out.resize( size );					if( !st ) return st;
+
+	fseek( p_, 0, SEEK_SET );
+	st = readBytes( out.ptr(), size );			if( !st ) return st;
+	st = setPos( cur );							if( !st ) return st;
+
+	return 0;
+}
+
+
+inline
 axStatus axFile::loadFile( const wchar_t* filename, axIStringA &out ) {
 	axStatus st;
 	axFile	f;
@@ -117,6 +144,25 @@ axStatus axFile::loadFile( const char* filename, axIStringA &out ) {
 	st = f.readWholeFile( out );	if( !st ) return st;
 	return 0;
 }
+
+inline
+axStatus	axFile::loadFile		( const wchar_t* filename, axIByteArray &out ) {
+	axStatus	st;
+	axFile	f;
+	st = f.open( filename );		if( !st ) return st;
+	st = f.readWholeFile( out );	if( !st ) return st;
+	return 0;
+}
+
+inline
+axStatus	axFile::loadFile		( const char*	 filename, axIByteArray &out ) {
+	axStatus	st;
+	axFile	f;
+	st = f.open( filename );		if( !st ) return st;
+	st = f.readWholeFile( out );	if( !st ) return st;
+	return 0;
+}
+
 
 inline
 axStatus axFile::getPos( axFileSize &n ) const {
