@@ -53,6 +53,35 @@ private:
 	axCondVar*	cv_; //!< condvar in lock
 };
 
+template< class T > class axScopeCondVarProtected;
+
+template< class T >
+class axCondVarProtected : protected T {
+friend class axScopeCondVarProtected<T>;
+protected:
+	axCondVar cv_;
+}; 
+
+template< class T >
+class axScopeCondVarProtected : public axNonCopyable {
+public:
+	axScopeCondVarProtected( axCondVarProtected<T> &data ) : scv_( data.cv_ ), data_( data ) {}
+	T& operator*	()	{ return *data(); }
+	T* operator->	()	{ return data(); }
+	T* data			()	{ return (T*) &data_; }
+
+	void	signal		()								{ scv_.signal(); }
+	void	broadcast	()								{ scv_.broadcast(); }
+	void	wait		()								{ scv_.wait(); }
+	bool	timedWait	( uint32_t microseconds )		{ return scv_.timedWait( microseconds ); }
+private:
+	axScopeCondVar	scv_;
+	axCondVarProtected<T> &data_;
+};
+
+
+
+
 #ifdef axUSE_PTHREAD
 inline
 axCondVar::axCondVar() : axMutex(true)	{ pthread_cond_init( &c, NULL ); }
