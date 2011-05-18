@@ -76,4 +76,11 @@ void ax_dumpBufferHex( const void* buf, axSize len, FILE* s = stdout ) {
 inline void*	ax_malloc( size_t n )	{ return ::malloc(n); }
 inline void		ax_free	( void* p  )	{ return ::free(p); }
 
+#ifdef axOS_WIN
+
+inline void ax_sleep_ms( uint32_t millisecond )	{ Sleep( millisecond );   }
+
+#endif //axOS_WIN
+
+
 #endif //__ax_utility_h__
