@@ -1,24 +1,73 @@
 #ifndef __axTimer_h__
 #define __axTimer_h__
 
-#include "../common/axStatus.h"
+#include "../thread/axThread.h"
+#include <signal.h>
 
-class axTimer {
+class axTimer : public axNonCopyable {
 public:
     axTimer();
     virtual ~axTimer();
-
-    typedef void (*CALLBACK)();
-
             axStatus	start   ( uint32_t	second, bool repeat );
             void        stop    ();
-	virtual void        onTimer ();
+	virtual void        onTimer () {}
 
 private:
-    CALLBACK            cb_;
-    timer_t             id_;
+	uint32_t			second_;
     bool                repeat_;
+
+#ifdef axOS_WIN
+	class Thread : public axThread {
+	public:
+		virtual void onThreadProc();
+		axTimer*		timer_;
+		axAtomicInt		running_;
+	};
+	Thread	thread_;
+#endif// axOS_WIN
+
+#ifdef axOS_UNIX
+    timer_t             id_;
+#endif// axOS_UNIX
 };
+
+#ifdef axOS_WIN
+
+inline
+axTimer::axTimer() {
+	thread_.timer_ = this;
+	thread_.running_ = 1;
+}
+
+inline
+axTimer::~axTimer() {
+	stop();
+}
+
+inline
+axStatus axTimer::start( uint32_t	second, bool repeat ) {
+	second_ = second;
+	thread_.create();
+	return 0;
+}
+
+inline
+void	axTimer::stop() {
+	thread_.running_ = 0;
+	thread_.destroy();
+}
+
+inline
+void axTimer::Thread::onThreadProc() {
+	while( running_ ) {
+		ax_sleep_ms( timer_->second_ * 1000 );
+		timer_->onTimer();
+	}
+}
+	
+#endif//axOS_WIN
+
+
 
 #ifdef axOS_UNIX
 
@@ -37,12 +86,6 @@ inline static
 void alarm_cb2(int signum, siginfo_t *info, void *user_data ) {
     axTimer* This = (axTimer*) info->si_value.sival_ptr;
     if( This ) This->onTimer();
-}
-
-inline
-void axTimer::onTimer() {
-    printf("onTimer\n");
-    if( cb_ ) cb_();
 }
 
 inline
@@ -95,8 +138,7 @@ axStatus axTimer::start( uint32_t second, bool repeat ) {
     return 0;
 }
 
-#endif
-
+#endif//axOS_UNIX
 
 
 
