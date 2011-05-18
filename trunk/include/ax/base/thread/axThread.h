@@ -11,12 +11,7 @@ public:
 			axStatus	create();
 			void		destroy();
 
-	virtual	void		onThreadProc() {
-		for(;;) {
-			printf("t");
-			ax_sleep_ms( 2000 );
-		}
-	}
+	virtual	void		onThreadProc() = 0;
 
 private:
 #ifdef axOS_WIN
@@ -57,9 +52,11 @@ axStatus axThread::create() {
 
 inline
 void axThread::destroy() {
-	WaitForSingleObject( h_, INFINITE );
-	CloseHandle( h_ );
-	h_ = NULL;
+	if( h_ ) {
+		WaitForSingleObject( h_, INFINITE );
+		CloseHandle( h_ );
+		h_ = NULL;
+	}
 }
 
 #endif//axOS_WIN

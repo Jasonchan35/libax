@@ -77,10 +77,24 @@ inline void*	ax_malloc( size_t n )	{ return ::malloc(n); }
 inline void		ax_free	( void* p  )	{ return ::free(p); }
 
 #ifdef axOS_WIN
-
-inline void ax_sleep_ms( uint32_t millisecond )	{ Sleep( millisecond );   }
+	inline void ax_sleep( uint32_t seconds )	{ Sleep( seconds * 1000 ); }
+	inline void ax_sleep( double   seconds )	{ if( seconds <= 0 ) return; Sleep( (DWORD)(seconds * 1000.0 ) ); }
 
 #endif //axOS_WIN
 
+#ifdef axOS_UNIX
+	inline void ax_sleep( uint32_t seconds )	{ sleep( seconds ); }
+	inline void ax_sleep( double   seconds )	{
+		if( seconds <= 0 ) return;
+		if( seconds <= 10.0 ) {
+			usleep( (useconds_t)( seconds * 1000000) );
+		}else{
+			double &int_part;
+			double f = modf( seconds, int_part );
+			sleep( int_part );
+			usleep( (useconds_t)( f * 1000000) );
+		}
+	}
+#endif //axOS_UNIX
 
 #endif //__ax_utility_h__
