@@ -92,7 +92,7 @@ axStatus	axDListNode<T> :: getIndex( axSize &idx ) {
 			return 0;
 		}
 	}
-	return axStatus::not_found;
+	return axStatus::code_not_found;
 }
 
 template<class T>

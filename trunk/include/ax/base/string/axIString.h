@@ -433,7 +433,7 @@ axStatus	axIString_<T> :: findCharFromEnd	( T ch, axSize &out_index, axSize	star
 			return 0;
 		}
 	}
-	return axStatus::not_found;
+	return axStatus::code_not_found;
 }
 
 template< class T > inline

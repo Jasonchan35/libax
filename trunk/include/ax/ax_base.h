@@ -22,9 +22,10 @@
 
 #include "base/time/axDate.h"
 #include "base/time/axTime.h"
+//#include "base/time/axTimer.h"
 #include "base/time/axTimeStamp.h"
 
-#if axCOMPILER_VC 
+#if axCOMPILER_VC
 	#pragma comment( lib, "Ws2_32.lib" )
 	#pragma comment( lib, "User32.lib" )
 	#pragma comment( lib, "gdi32.lib" )
@@ -40,25 +41,25 @@
 	#pragma comment( lib, "Advapi32.lib" )
 #endif
 
-/*!	\defgroup base 
+/*!	\defgroup base
 */
 /*!	\defgroup base_common	common
-	\ingroup base 
+	\ingroup base
 */
 /*!	\defgroup base_data_structure	data structure
-	\ingroup base 
+	\ingroup base
 */
 /*!	\defgroup base_file_system	file system
-	\ingroup base 
+	\ingroup base
 */
 /*!	\defgroup base_platform	platform
-	\ingroup base 
+	\ingroup base
 */
 /*!	\defgroup base_string	string
-	\ingroup base 
+	\ingroup base
 */
 /*!	\defgroup base_thread	multi-thread
-	\ingroup base 
+	\ingroup base
 */
 
 

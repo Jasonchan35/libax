@@ -63,7 +63,7 @@ axStatus	axSOFile::load( const char* filename ) {
     handle_ = dlopen( filename, RTLD_LAZY );
     if( ! handle_ ) {
         printf( "unable to load %s\n", filename );
-        return axStatus::not_found;
+        return axStatus::code_not_found;
     }
     return 0;
 }

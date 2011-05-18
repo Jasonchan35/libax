@@ -32,7 +32,7 @@ if (CMAKE_COMPILER_IS_GNUCC)
 #	set( CMAKE_C_FLAGS   ${CMAKE_C_FLAGS}   ${MY_C_FLAGS} )
 #	set( CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} ${MY_C_FLAGS} )
 
-	SET( axLIBS ${axLIBS} ax dl pthread )
+	SET( axLIBS ${axLIBS} ax dl pthread rt )
 endif()
 
 add_definitions( -D${axPLATFORM_NAME} )

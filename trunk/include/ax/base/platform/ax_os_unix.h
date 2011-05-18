@@ -16,6 +16,8 @@
 #include <wctype.h>
 #include <dlfcn.h>
 #include <sys/types.h>
+#include <time.h>
+#include <signal.h>
 
 #define axEXE_SUFFIX ".exe"
 #define	axSO_SUFFIX  ".so"

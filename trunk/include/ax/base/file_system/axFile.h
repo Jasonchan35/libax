@@ -3,6 +3,10 @@
 
 #include "axFileSystem.h"
 
+/*!
+    @error  axStatus::code_file_not_found
+            axStatus::code_file_access_denied
+*/
 class axFile {
 public:
 	axFile();

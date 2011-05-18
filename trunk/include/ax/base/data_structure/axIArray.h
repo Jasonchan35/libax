@@ -281,7 +281,7 @@ template<class T> inline
 axStatus _array_take( T* dst, T* src, axSize n ) {
 	if( dst+n > src && dst < src+n ) {
 		assert( false );
-		return axStatus::cannot_be_itself;
+		return axStatus::code_cannot_be_itself;
 	}
 
 	axStatus st;

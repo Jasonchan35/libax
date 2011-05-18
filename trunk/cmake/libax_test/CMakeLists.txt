@@ -12,7 +12,6 @@ ENABLE_TESTING()
 INCLUDE_DIRECTORIES( ../../include )
 LINK_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/../../lib/${axPLATFORM_NAME} )
 
-SET( my_libs  ${my_default_libs} ax )
 SET( src_files_path  ${CMAKE_CURRENT_SOURCE_DIR}/../../test )
 
 FILE( GLOB_RECURSE  src_cpp_files	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}	"${src_files_path}/*.cpp"  )
@@ -28,7 +27,7 @@ FOREACH( f IN LISTS src_cpp_files  )
 		RUNTIME_OUTPUT_DIRECTORY ../../../bin/${axPLATFORM_NAME}
 	)
 
-	TARGET_LINK_LIBRARIES( ${name} ${my_libs} ${PostgreSQL_LIBRARIES} )
+	TARGET_LINK_LIBRARIES( ${name} ${axLIBS} ${PostgreSQL_LIBRARIES} )
 
 
 	ADD_TEST( ${name} "${EXECUTABLE_OUTPUT_PATH}/${name}" Hello )
