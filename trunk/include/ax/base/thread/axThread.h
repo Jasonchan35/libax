@@ -20,7 +20,6 @@ private:
 
 };
 
-
 #ifdef axOS_WIN
 
 inline
@@ -30,8 +29,9 @@ axThread::axThread() {
 
 inline
 axThread::~axThread() {
-	destroy();
+	assert( h_ == NULL ); //the thread still running, please call destroy before destructor
 }
+
 
 inline static 
 DWORD WINAPI axThread_onThreadProc( LPVOID* p ) {

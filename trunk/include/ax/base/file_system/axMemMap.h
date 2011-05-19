@@ -172,7 +172,10 @@ axStatus axMemMapFile::openRead( const wchar_t *filename ) {
 	if( h_ == INVALID_HANDLE_VALUE ) {
 		DWORD err = GetLastError();
 		switch( err ) {
-			case ERROR_FILE_NOT_FOUND:	return axStatus::code_file_not_found;
+			case ERROR_PATH_NOT_FOUND:
+			case ERROR_FILE_NOT_FOUND:	{
+				return axStatus::code_file_not_found;
+			}break;
 			case ERROR_ACCESS_DENIED:	return axStatus::code_file_access_denied;
 		}
 		return -1;
