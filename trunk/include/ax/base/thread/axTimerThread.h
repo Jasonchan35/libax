@@ -2,7 +2,6 @@
 #define __axTimerThread_h__
 
 #include "axThread.h"
-#include "axAtomicData.h"
 #include "../time/axStopWatch.h"
 
 
@@ -51,9 +50,9 @@ void	axTimerThread::destroy() {
 
 inline
 void axTimerThread::onThreadProc() {
-	axStopWatch		watch;
 	double			r = interval_;
-	for(;;) {
+	axStopWatch		watch;
+	while( running_ ) {
 		double d = watch.get();
 		if( d >= r ) {
 			r -= interval_;

@@ -28,9 +28,8 @@ private:
 	#endif //_DEBUG
 #elif	axOS_WIN
 	CRITICAL_SECTION m_;
-	bool	recursive_;
 #endif
-
+	bool	recursive_;
 	int		lockedCount_; // only used on debug
 };
 	
@@ -47,6 +46,33 @@ public:
 
 private:
 	axMutex*	m_; //!< mutex in lock
+};
+
+
+
+template< class T > class axMutexProtectedAccessor;
+
+template< class T >
+class axMutexProtected : protected T {
+public:
+	typedef	axMutexProtectedAccessor<T>	Accessor;
+
+friend class axMutexProtectedAccessor<T>;
+protected:
+	axMutex p_;
+}; 
+
+template< class T >
+class axMutexProtectedAccessor : public axNonCopyable {
+public:
+	axMutexProtectedAccessor( axMutexProtected<T> &data ) : s_( data.p_ ), data_( data ) {}
+	T& operator*	()	{ return *data(); }
+	T* operator->	()	{ return data(); }
+	T* data			()	{ return (T*) &data_; }
+
+private:
+	axScopeMutex	s_;
+	axMutexProtected<T> &data_;
 };
 
 
@@ -73,6 +99,7 @@ axMutex::RecursiveAttr* axMutex::RecursiveAttr::getStatic() {
 inline
 axMutex::axMutex( bool recursive ) {
 	lockedCount_ = 0;
+	recursive_ = recursive;
 	if( recursive ) {
 		RecursiveAttr* ra = getStatic();
 		pthread_mutex_init( &m_, &ra->p );
@@ -83,13 +110,16 @@ axMutex::axMutex( bool recursive ) {
 
 inline
 axMutex::~axMutex()	{
-	assert( lockedCount_ == 0 ); // delete before unlock
+	assert( lockedCount_ == 0 ); // forgot to unlock ?
 	pthread_mutex_destroy( &m_ );
 }
 
 inline
 void axMutex::lock() {
 	pthread_mutex_lock( &m_ );
+	if( ! recursive_ ) {
+		assert( lockedCount_ == 0 ); //double lock ?
+	}
 	lockedCount_++;
 }
 
@@ -117,16 +147,15 @@ axMutex::axMutex( bool recursive ) {
 
 inline
 axMutex::~axMutex()	{
-	assert( lockedCount_ != 0 ); // delete before unlock
+	assert( lockedCount_ == 0 ); // forgot to unlock ?
 	DeleteCriticalSection(&m_);
 }
 
 inline
 void axMutex::lock() {
 	EnterCriticalSection(&m_);
-
 	if( ! recursive_ ) {
-		assert( lockedCount_ == 0 ); //double lock
+		assert( lockedCount_ == 0 ); //double lock ?
 	}
 	lockedCount_++;
 }

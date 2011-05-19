@@ -53,29 +53,32 @@ private:
 	axCondVar*	cv_; //!< condvar in lock
 };
 
-template< class T > class axScopeCondVarProtected;
+template< class T > class axCondVarProtectedAccessor;
 
 template< class T >
 class axCondVarProtected : protected T {
-friend class axScopeCondVarProtected<T>;
+public:
+	typedef	axCondVarProtectedAccessor<T>	Accessor;
+
+friend class axCondVarProtectedAccessor<T>;
 protected:
-	axCondVar cv_;
+	axCondVar p_;
 }; 
 
 template< class T >
-class axScopeCondVarProtected : public axNonCopyable {
+class axCondVarProtectedAccessor : public axNonCopyable {
 public:
-	axScopeCondVarProtected( axCondVarProtected<T> &data ) : scv_( data.cv_ ), data_( data ) {}
+	axCondVarProtectedAccessor( axCondVarProtected<T> &data ) : s_( data.p_ ), data_( data ) {}
 	T& operator*	()	{ return *data(); }
 	T* operator->	()	{ return data(); }
 	T* data			()	{ return (T*) &data_; }
 
-	void	signal		()								{ scv_.signal(); }
-	void	broadcast	()								{ scv_.broadcast(); }
-	void	wait		()								{ scv_.wait(); }
-	bool	timedWait	( uint32_t microseconds )		{ return scv_.timedWait( microseconds ); }
+	void	signal		()								{ s_.signal(); }
+	void	broadcast	()								{ s_.broadcast(); }
+	void	wait		()								{ s_.wait(); }
+	bool	timedWait	( uint32_t microseconds )		{ return s_.timedWait( microseconds ); }
 private:
-	axScopeCondVar	scv_;
+	axScopeCondVar	s_;
 	axCondVarProtected<T> &data_;
 };
 

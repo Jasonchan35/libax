@@ -83,6 +83,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <errno.h>
+#include <math.h>
 
 //C++ define
 #include <cstddef>

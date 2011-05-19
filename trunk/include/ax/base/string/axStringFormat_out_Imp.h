@@ -172,10 +172,11 @@ axStatus axStringFormat_out_NumberT( axStringFormat &f, T value ) {
 //pointer
 inline
 axStatus axStringFormat_out( axStringFormat &f, const void* p ) {
-	f.opt.set( "X" );
 #ifdef axCPU_LP32
+	f.opt.set( "08X" );
 	return axStringFormat_out_NumberT( f, (uint32_t)(uintptr_t)p );
 #elif axCPU_LP64
+	f.opt.set( "016X" );
 	return axStringFormat_out_NumberT( f, (uint64_t)(uintptr_t)p );
 #else
 	#error

@@ -14,6 +14,8 @@ public:
 	static	double		availableMemoryInMegaByte()						{ return (double)availableMemory() / 1024.0 / 1024.0; }
 			axStatus	getMachineName		( axIStringA &str );
 
+	static	void*		getCurrentThreadID	();
+
 	enum Endianness {
 		Endianness_Unknown,
 		Endianness_BigEndian,
@@ -68,7 +70,12 @@ axSize	axSystem::numberOfProcessors() {
 	return info.dwNumberOfProcessors;
 }	
 
-#endif
+inline
+void* axSystem::getCurrentThreadID() {
+	return (void*) GetCurrentThreadId();
+}
+
+#endif //axOS_WIN
 	
 #if axOS_UNIX
 	#if axOS_iOS	

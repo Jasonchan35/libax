@@ -16,7 +16,7 @@ public:
 private:
 	CRITICAL_SECTION _spinlock;
 
-#elif axOS_MacOSX
+#elif axOS_MacOSX || axOS_iOS
 public:
 	axSpinLock	()		{ _spinlock = 0; }
 	~axSpinLock	()		{}
@@ -25,16 +25,7 @@ public:
 private:
 	OSSpinLock _spinlock;
 
-#elif axOS_iOS
-public:
-	axSpinLock	()		{ _spinlock = 0; }
-	~axSpinLock	()		{}
-	void lock	()		{ OSSpinLockLock(&_spinlock); }
-	void unlock	()		{ OSSpinLockUnlock(&_spinlock); }
-private:
-	OSSpinLock _spinlock;
-
-#elif axOS_UNIX
+#elif axUSE_PTHREAD
 public:
 	axSpinLock	()		{ pthread_spin_init(&_spinlock, PTHREAD_PROCESS_PRIVATE); }
 	~axSpinLock	()		{ pthread_spin_destroy(&_spinlock); }
@@ -48,17 +39,46 @@ private:
 #endif
 };
 
-class axSpinLocker  : public axNonCopyable {
+class axScopeSpinLock  : public axNonCopyable {
 public:
-	axSpinLocker	()							{ s_ = NULL; }
-	axSpinLocker	( axSpinLock &s )			{ s_ = NULL; lock(s); }
-	~axSpinLocker	()							{ unlock(); }
+	axScopeSpinLock	()							{ s_ = NULL; }
+	axScopeSpinLock	( axSpinLock &s )			{ s_ = NULL; lock(s); }
+	~axScopeSpinLock()							{ unlock(); }
 
 	void	lock	( axSpinLock &s )			{ s.unlock();	s.lock();	s_ = &s; }
 	void	unlock	()							{ if( s_ ) { s_->unlock(); s_=NULL; } }
 private:
 	axSpinLock *s_;
 };
+
+
+template< class T > class axSpinLockProtectedAccessor;
+
+template< class T >
+class axSpinLockProtected : protected T {
+public:
+	typedef	axSpinLockProtectedAccessor<T>	Accessor;
+
+friend class axSpinLockProtectedAccessor<T>;
+protected:
+	axSpinLock p_;
+}; 
+
+template< class T >
+class axSpinLockProtectedAccessor : public axNonCopyable {
+public:
+	axSpinLockProtectedAccessor( axSpinLockProtected<T> &data ) : s_( data.p_ ), data_( data ) {}
+	T& operator*	()	{ return *data(); }
+	T* operator->	()	{ return data(); }
+	T* data			()	{ return (T*) &data_; }
+
+private:
+	axScopeSpinLock	s_;
+	axSpinLockProtected<T> &data_;
+};
+
+
+
 
 //@}
 

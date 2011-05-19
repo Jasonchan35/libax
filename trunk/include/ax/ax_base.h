@@ -19,11 +19,12 @@
 #include "base/file_system/axMemMap.h"
 
 #include "base/thread/axAtomicInt.h"
+#include "base/thread/axTimerThread.h"
+#include "base/thread/axCondVar.h"
 
 #include "base/time/axDate.h"
 #include "base/time/axTime.h"
 #include "base/time/axTimeStamp.h"
-#include "base/time/axTimer.h"
 
 #if axCOMPILER_VC
 	#pragma comment( lib, "Ws2_32.lib" )
