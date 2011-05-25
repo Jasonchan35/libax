@@ -1,4 +1,5 @@
-/*
+#ifdef axUSE_PGSQL
+
 #ifndef __axDBO_pgsql_h__
 #define __axDBO_pgsql_h__
 
@@ -6,7 +7,6 @@
 
 #ifdef _WIN32
 	#include <ax/external/pgsql-9.0.4/Win32/libpq-fe.h>
-
 	#ifdef _MSC_VER
 		#pragma comment( lib, "libpqport.lib" )
 	#endif
@@ -144,4 +144,5 @@ public:
 };
 
 #endif //__axDBO_pgsql_h__
- */
+#endif //axUSE_PGSQL
+

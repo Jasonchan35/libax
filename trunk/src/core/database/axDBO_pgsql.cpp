@@ -1,5 +1,4 @@
-#if 0
-
+#ifdef axUSE_PGSQL
 
 #include "axDBO_pgsql.h"
 
@@ -510,4 +509,4 @@ axStatus axDBO_pgsql_Stmt::exec() {
 	return 0;
 }
 
-#endif //0
+#endif //axUSE_PGSQL
