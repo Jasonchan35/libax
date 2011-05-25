@@ -33,6 +33,9 @@ template<class T> inline void ax_max_it		( T& a, const T& b )	{ if( b>a ) a=b; }
 template<class T> inline T	  ax_clamp		( T  x, T a, T b )		{ if( x < a ) return a; return x > b ? b : x; }
 template<class T> inline void ax_clamp_it	( T &x, T a, T b )		{ if( x < a ) x=a; else if( x > b ) x=b; }
 
+inline float  ax_modf( float  value, float  *int_part )             { return modff( value, int_part ); }
+inline double ax_modf( double value, double *int_part )             { return modf( value, int_part ); }
+
 //! align multiple
 template<class T> inline T ax_align_multiple( T n, T a ) {  
 	T r = n % a;	
@@ -45,7 +48,6 @@ template<class T> inline T ax_align_multiple( T n, T a ) {
 
 inline	int  ax_align_pow_of_2( int v ) { v--; v |= v >> 1; v |= v >> 2; v |= v >> 4;	v |= v >> 8; v |= v >> 16; v++;	return v; }
 
-//@}
 //@}
 
 #endif //__ax_math_template_h__

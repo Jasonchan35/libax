@@ -14,7 +14,7 @@ axStatus axDBO::connect( const char* driver, const char* dsn ) {
 	close();
 
 	if(  ax_strcmp( driver, "pgsql" ) == 0 ) {
-		p_.ref( new axDBO_pgsql );
+//		p_.ref( new axDBO_pgsql );
 		if( !p_ ) return axStatus::code_not_enough_memory;
 	}else{
         return axStatus::code_not_found;

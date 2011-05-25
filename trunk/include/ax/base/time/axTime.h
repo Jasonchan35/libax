@@ -47,7 +47,7 @@ void axTime::set( double seconds ) {
 inline
 void axTime::set( float seconds ) {
 	float int_part;
-	usec_ = (int64_t) modf( seconds, &int_part ) * 1000000;
+	usec_ = (int64_t) ax_modf( seconds, &int_part ) * 1000000;
 	sec_  = (int64_t) int_part;
 }
 

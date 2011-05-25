@@ -13,11 +13,10 @@ public:
 	void unlock	();
 	bool tryLock();
 
-private:
+protected:
 
 #ifdef axUSE_PTHREAD
 	pthread_mutex_t m_;
-	#ifdef _DEBUG
 	class RecursiveAttr {
 	public:
 		pthread_mutexattr_t p_;
@@ -25,7 +24,6 @@ private:
 		~RecursiveAttr();
 		static	RecursiveAttr* getStatic();
 	};
-	#endif //_DEBUG
 #elif	axOS_WIN
 	CRITICAL_SECTION m_;
 #endif
@@ -92,7 +90,7 @@ axMutex::RecursiveAttr::~RecursiveAttr() {
 
 inline
 axMutex::RecursiveAttr* axMutex::RecursiveAttr::getStatic() {
-	static axMutex::Attr s;
+	static RecursiveAttr s;
 	return &s;
 }
 
@@ -101,8 +99,8 @@ axMutex::axMutex( bool recursive ) {
 	lockedCount_ = 0;
 	recursive_ = recursive;
 	if( recursive ) {
-		RecursiveAttr* ra = getStatic();
-		pthread_mutex_init( &m_, &ra->p );
+		RecursiveAttr* ra = RecursiveAttr::getStatic();
+		pthread_mutex_init( &m_, &ra->p_ );
 	}else{
 		pthread_mutex_init( &m_, NULL );
 	}

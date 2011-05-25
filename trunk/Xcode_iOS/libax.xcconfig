@@ -1,0 +1,28 @@
+// ======== iOS ============
+libax_path = <<Please set your own path>>
+axLDFLAGS =
+axCCFLAGS =
+
+ZERO_LINK = NO
+
+GCC_PREPROCESSOR_DEFINITIONS_Debug = _DEBUG DEBUG 
+GCC_PREPROCESSOR_DEFINITIONS_Release = NDEBUG
+GCC_PREPROCESSOR_DEFINITIONS = $(GCC_PREPROCESSOR_DEFINITIONS_$CONFIGURATION)
+
+//OTHER_CFLAGS_Debug   = -D_DEBUG -DDEBUG -D_GLIBCXX_DEBUG=1 -D_GLIBCXX_DEBUG_PEDANTIC=1
+//OTHER_CFLAGS_Release = -DNDEBUG
+OTHER_CFLAGS  = -Wall //$(OTHER_CFLAGS_$CONFIGURATION)
+
+OTHER_CPLUSPLUSFLAGS = -Wno-invalid-offsetof -fvisibility=default -fvisibility-inlines-hidden -x objective-c++ $(OTHER_CFLAGS) $(axCCFLAGS)
+
+HEADER_SEARCH_PATHS  = $(libax_path)/include
+LIBRARY_SEARCH_PATHS = $(libax_path)/lib/iOS/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
+
+//OTHER_CFLAGS  = -Wall -fvisibility=hidden
+//OTHER_CPLUSPLUSFLAGS = $(OTHER_CFLAGS) -Wno-invalid-offsetof -fvisibility-inlines-hidden -x objective-c++
+
+OTHER_LDFLAGS = -ObjC -lawecore -lawe_png -lawe_z -lawe_ungif -framework Foundation -framework CoreGraphics -framework CoreMotion -framework OpenGLES -framework QuartzCore -framework UIKit -framework AudioToolBox -framework AVFoundation -framework OpenAL -framework GameKit $(axLDFLAGS)
+
+COMPRESS_PNG_FILES = NO
+GCC_SYMBOLS_PRIVATE_EXTERN = YES
+

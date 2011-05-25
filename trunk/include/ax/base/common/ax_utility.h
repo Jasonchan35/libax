@@ -89,8 +89,8 @@ inline void		ax_free	( void* p  )	{ return ::free(p); }
 		if( seconds <= 10.0 ) {
 			usleep( (useconds_t)( seconds * 1000000) );
 		}else{
-			double &int_part;
-			double f = modf( seconds, int_part );
+			double int_part;
+			double f = modf( seconds, &int_part );
 			sleep( int_part );
 			usleep( (useconds_t)( f * 1000000) );
 		}

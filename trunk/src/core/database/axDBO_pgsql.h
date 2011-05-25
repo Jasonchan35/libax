@@ -1,3 +1,4 @@
+/*
 #ifndef __axDBO_pgsql_h__
 #define __axDBO_pgsql_h__
 
@@ -143,3 +144,4 @@ public:
 };
 
 #endif //__axDBO_pgsql_h__
+ */

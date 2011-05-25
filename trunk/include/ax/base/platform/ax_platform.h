@@ -61,6 +61,9 @@
     #include "ax_os_unix.h"
 #endif
 
+#if axOS_iOS
+    #include "ax_os_iOS.h"
+#endif
 
 #if axOS_MacOSX
 	#include "ax_os_mac.h"

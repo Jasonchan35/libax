@@ -96,15 +96,15 @@ void* axSystem::getCurrentThreadID() {
 
 		inline
 		axStatus axSystem::getMachineName( axIStringA &str ) {
-			Status st;
-			axSize size;
+			axStatus st;
+			size_t size;
 			//get string size
 			sysctlbyname("hw.machine", NULL, &size, NULL, 0);
 			
 			st = str.resize( size, false );			
 			if( !st ) return st;
 			
-			sysctlbyname("hw.machine", str.buf.ptr(), &size, NULL, 0);			
+			sysctlbyname("hw.machine", str._getInternalBufferPtr(), &size, NULL, 0);			
 			return 0;
 		}
 	

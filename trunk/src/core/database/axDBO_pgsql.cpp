@@ -1,3 +1,6 @@
+#if 0
+
+
 #include "axDBO_pgsql.h"
 
 axDBO_pgsql::axDBO_pgsql() {
@@ -506,3 +509,5 @@ axStatus axDBO_pgsql_Stmt::exec() {
 //							paramValues_, paramLengths_, paramFormats_, 1 );
 	return 0;
 }
+
+#endif //0

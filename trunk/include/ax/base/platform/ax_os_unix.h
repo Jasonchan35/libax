@@ -16,6 +16,8 @@
 #include <wctype.h>
 #include <dlfcn.h>
 #include <sys/types.h>
+#include <sys/time.h>
+#include <sys/sysctl.h>
 #include <time.h>
 #include <signal.h>
 

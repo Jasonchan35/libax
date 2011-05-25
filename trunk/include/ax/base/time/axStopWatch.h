@@ -1,6 +1,8 @@
 #ifndef	__axStopWatch_h__
 #define	__axStopWatch_h__
 
+#include "../platform/ax_platform.h"
+
 //! axStopWatch
 /*!
 Win32:
@@ -53,7 +55,7 @@ double axStopWatch::get() {
 
 inline
 void axStopWatch::reset() { 
-	gettimeofday ( &start, 0 ); 
+	gettimeofday ( &start_, 0 ); 
 }
 
 inline

@@ -25,7 +25,7 @@ public:
 private:
 
 #ifdef axUSE_PTHREAD
-	pthread_cond_t c;
+	pthread_cond_t c_;
 #else
 	bool _wait( DWORD dwMilliseconds );
 	HANDLE	h_[2]; // 0:signal, 1: broadcast
@@ -87,26 +87,26 @@ private:
 
 #ifdef axUSE_PTHREAD
 inline
-axCondVar::axCondVar() : axMutex(true)	{ pthread_cond_init( &c, NULL ); }
+axCondVar::axCondVar() : axMutex(true)	{ pthread_cond_init( &c_, NULL ); }
 inline
-axCondVar::~axCondVar()					{ pthread_cond_destroy( &c ); }
+axCondVar::~axCondVar()					{ pthread_cond_destroy( &c_ ); }
 
 inline
-void axCondVar::signal( bool broadcast ) { 
+void axCondVar::signal() { 
 	axScopeMutex sm(*this);	
-	pthread_cond_signal( &c );
+	pthread_cond_signal( &c_ );
 }
 
 inline
 void axCondVar::broadcast() {
 	axScopeMutex sm(*this);	
-	pthread_cond_broadcast( &c ); 
+	pthread_cond_broadcast( &c_ ); 
 }
 
 inline
 void axCondVar::wait() { 
 	axScopeMutex sm(*this);
-	pthread_cond_wait( &c, &m ); 
+	pthread_cond_wait( &c_, &m_ ); 
 }
 
 inline
@@ -120,7 +120,7 @@ bool axCondVar::timedWait(useconds_t microseconds) {
 	t.tv_sec  =  now.tv_sec + microseconds / (1000*1000);
 	t.tv_nsec = (now.tv_usec * 1000) + (microseconds % (1000*1000)) * 1000;
 
-	ret = pthread_cond_timedwait( &c, &m, &t );
+	ret = pthread_cond_timedwait( &c_, &m_, &t );
 	switch(ret) {
 	case ETIMEDOUT:	return false;
 	case 0:			return true;
