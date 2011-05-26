@@ -53,22 +53,15 @@ private:
 	axCondVar*	cv_; //!< condvar in lock
 };
 
-template< class T > class axCondVarProtectedAccessor;
-
 template< class T >
-class axCondVarProtected : protected T {
+class axCondVarProtected : public axNonCopyable {
 public:
-	typedef	axCondVarProtectedAccessor<T>	Accessor;
-
-friend class axCondVarProtectedAccessor<T>;
-protected:
-	axCondVar p_;
-}; 
-
-template< class T >
-class axCondVarProtectedAccessor : public axNonCopyable {
-public:
-	axCondVarProtectedAccessor( axCondVarProtected<T> &data ) : s_( data.p_ ), data_( data ) {}
+    class Data : protected T {
+    protected:
+        axCondVar   p_;
+    };
+    
+	axCondVarProtected( Data &data ) : s_( data.p_ ), data_( data ) {}
 	T& operator*	()	{ return *data(); }
 	T* operator->	()	{ return data(); }
 	T* data			()	{ return (T*) &data_; }
