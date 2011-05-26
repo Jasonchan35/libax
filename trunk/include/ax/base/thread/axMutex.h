@@ -47,30 +47,23 @@ private:
 };
 
 
-
-template< class T > class axMutexProtectedAccessor;
-
 template< class T >
-class axMutexProtected : protected T {
+class axMutexProtected : public axNonCopyable {
 public:
-	typedef	axMutexProtectedAccessor<T>	Accessor;
-
-friend class axMutexProtectedAccessor<T>;
-protected:
-	axMutex p_;
-}; 
-
-template< class T >
-class axMutexProtectedAccessor : public axNonCopyable {
-public:
-	axMutexProtectedAccessor( axMutexProtected<T> &data ) : s_( data.p_ ), data_( data ) {}
+    class Data : protected T {
+        friend class axMutexProtected<T>;
+    protected:
+        axMutex   p_;
+    };
+    
+	axMutexProtected( Data &data ) : s_( data.p_ ), data_( data ) {}
 	T& operator*	()	{ return *data(); }
 	T* operator->	()	{ return data(); }
 	T* data			()	{ return (T*) &data_; }
-
+    
 private:
 	axScopeMutex	s_;
-	axMutexProtected<T> &data_;
+	Data &data_;
 };
 
 

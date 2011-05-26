@@ -78,6 +78,12 @@ void* axSystem::getCurrentThreadID() {
 #endif //axOS_WIN
 	
 #if axOS_UNIX
+
+inline
+void* axSystem::getCurrentThreadID() {
+    return (void*)pthread_self();
+}
+
 	#if axOS_iOS	
 		#if 0
 		#pragma mark ================= iOS ====================

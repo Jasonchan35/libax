@@ -48,7 +48,7 @@ public:
 	T*		tail		() const				{ return (T*)_tail_; }
 	T*		getNodeByIndex( axSize idx ) const;
 
-	T*		popHead	()							{ T* h = _head_; if (h) remove( h ); return h; }
+	T*		takeHead	()						{ T* h = _head_; if (h) remove( h ); return h; }
 
 	axStatus	takeOwnership ( axDList<T> &src );
 

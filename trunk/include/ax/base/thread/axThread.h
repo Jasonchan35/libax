@@ -3,6 +3,8 @@
 
 #include "../common/axStatus.h"
 
+class axThreadPool;
+
 class axThread : public axNonCopyable {
 public:
 	axThread();
@@ -13,10 +15,20 @@ public:
 
 	virtual	void		onThreadProc() = 0;
 
+friend class axThreadPool;
+protected:
+    bool            counted_;
+    axThreadPool*	pool_;        
+    
+    
 private:
 #ifdef axOS_WIN
 	HANDLE	h_;
 #endif //axOS_WIN
+    
+#ifdef axUSE_PTHREAD
+    pthread_t   h_;
+#endif
 
 };
 
@@ -60,6 +72,35 @@ void axThread::destroy() {
 }
 
 #endif//axOS_WIN
+
+#ifdef axUSE_PTHREAD
+
+axThread::axThread() {
+	h_ = 0;
+}
+
+axThread::~axThread() {
+}
+
+void* axThread_onThreadProc( void *p ) {
+	axThread* t = (axThread*)p;
+	t->onThreadProc();
+	return 0;
+}
+
+axStatus axThread::create() {
+    if( h_ ) return axStatus::code_already_exist;
+	if( pthread_create( &h_, NULL, axThread_onThreadProc, this ) )
+		return -1;
+	return 0;
+}
+
+void axThread::destroy() {
+	pthread_join( h_, NULL );
+	pthread_detach( h_ );
+}
+
+#endif//axUSE_PTHREAD
 
 
 

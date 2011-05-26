@@ -3,6 +3,7 @@
 
 #include "../common/axStatus.h"
 
+class axDateTime;
 class axTime {
 public:
 	axTime	();
@@ -13,13 +14,18 @@ public:
 	void	set( int64_t sec, int64_t microseconds = 0 );
 	void	set( double sec );
 	void	set( float sec );
-
+    void    set( const axDateTime &dt );
+    
 	void	convertTo( double &seconds )	{ seconds = sec_ + (usec_ / 1000000.0 ); }
 	void	convertTo( float  &seconds )	{ seconds = sec_ + (usec_ / 1000000.0f); }
 
 	double	toDouble()						{ double v; convertTo(v); return v; }
 	float	toFloat ()						{ float  v; convertTo(v); return v; }
-
+    
+    void    setToNow();
+    
+    int64_t second() const                  { return sec_; }
+  
 private:
 	int64_t	sec_;	
 	int64_t	usec_;	//micro-seconds
@@ -29,6 +35,14 @@ inline
 axTime::axTime() {
 	sec_  = 0;
 	usec_ = 0;
+}
+
+inline
+void axTime::setToNow() {
+    timeval v;
+    gettimeofday( &v, NULL );
+    sec_  = v.tv_sec;
+    usec_ = v.tv_usec;
 }
 
 inline

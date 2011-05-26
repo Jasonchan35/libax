@@ -26,6 +26,9 @@
 #include "base/time/axTime.h"
 #include "base/time/axTimeStamp.h"
 
+#include "base/other/ax_log.h"
+#include "base/other/ax_global.h"
+
 #if axCOMPILER_VC
 	#pragma comment( lib, "Ws2_32.lib" )
 	#pragma comment( lib, "User32.lib" )

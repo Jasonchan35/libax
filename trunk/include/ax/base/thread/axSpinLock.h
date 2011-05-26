@@ -52,31 +52,25 @@ private:
 };
 
 
-template< class T > class axSpinLockProtectedAccessor;
 
 template< class T >
-class axSpinLockProtected : protected T {
+class axSpinLockProtected : public axNonCopyable {
 public:
-	typedef	axSpinLockProtectedAccessor<T>	Accessor;
-
-friend class axSpinLockProtectedAccessor<T>;
-protected:
-	axSpinLock p_;
-}; 
-
-template< class T >
-class axSpinLockProtectedAccessor : public axNonCopyable {
-public:
-	axSpinLockProtectedAccessor( axSpinLockProtected<T> &data ) : s_( data.p_ ), data_( data ) {}
+    class Data : protected T {
+        friend class axSpinLockProtected<T>;
+    protected:
+        axSpinLock   p_;
+    };
+    
+	axSpinLockProtected( Data &data ) : s_( data.p_ ), data_( data ) {}
 	T& operator*	()	{ return *data(); }
 	T* operator->	()	{ return data(); }
 	T* data			()	{ return (T*) &data_; }
-
+    
 private:
 	axScopeSpinLock	s_;
-	axSpinLockProtected<T> &data_;
+	Data &data_;
 };
-
 
 
 

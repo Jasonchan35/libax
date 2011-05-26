@@ -1,0 +1,315 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		967CC218138DFA80002CC28F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 967CC217138DFA80002CC28F /* UIKit.framework */; };
+		967CC21A138DFA80002CC28F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 967CC219138DFA80002CC28F /* Foundation.framework */; };
+		967CC21C138DFA80002CC28F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 967CC21B138DFA80002CC28F /* CoreGraphics.framework */; };
+		967CC222138DFA80002CC28F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 967CC220138DFA80002CC28F /* InfoPlist.strings */; };
+		967CC225138DFA80002CC28F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 967CC224138DFA80002CC28F /* main.cpp */; };
+		967CC228138DFA81002CC28F /* libax_testAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 967CC227138DFA80002CC28F /* libax_testAppDelegate.m */; };
+		967CC22C138DFA81002CC28F /* libax_testAppDelegate_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 967CC22B138DFA81002CC28F /* libax_testAppDelegate_iPhone.m */; };
+		967CC22F138DFA81002CC28F /* MainWindow_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 967CC22D138DFA81002CC28F /* MainWindow_iPhone.xib */; };
+		967CC233138DFA81002CC28F /* libax_testAppDelegate_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 967CC232138DFA81002CC28F /* libax_testAppDelegate_iPad.m */; };
+		967CC236138DFA81002CC28F /* MainWindow_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 967CC234138DFA81002CC28F /* MainWindow_iPad.xib */; };
+		967CC2F9138DFBBD002CC28F /* libax.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 967CC2F8138DFBBD002CC28F /* libax.xcconfig */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		967CC213138DFA80002CC28F /* libax_test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = libax_test.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		967CC217138DFA80002CC28F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		967CC219138DFA80002CC28F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		967CC21B138DFA80002CC28F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		967CC21F138DFA80002CC28F /* libax_test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "libax_test-Info.plist"; sourceTree = "<group>"; };
+		967CC221138DFA80002CC28F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		967CC223138DFA80002CC28F /* libax_test-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libax_test-Prefix.pch"; sourceTree = "<group>"; };
+		967CC224138DFA80002CC28F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		967CC226138DFA80002CC28F /* libax_testAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libax_testAppDelegate.h; sourceTree = "<group>"; };
+		967CC227138DFA80002CC28F /* libax_testAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = libax_testAppDelegate.m; sourceTree = "<group>"; };
+		967CC22A138DFA81002CC28F /* libax_testAppDelegate_iPhone.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = libax_testAppDelegate_iPhone.h; path = iPhone/libax_testAppDelegate_iPhone.h; sourceTree = "<group>"; };
+		967CC22B138DFA81002CC28F /* libax_testAppDelegate_iPhone.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = libax_testAppDelegate_iPhone.m; path = iPhone/libax_testAppDelegate_iPhone.m; sourceTree = "<group>"; };
+		967CC22E138DFA81002CC28F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = iPhone/en.lproj/MainWindow_iPhone.xib; sourceTree = "<group>"; };
+		967CC231138DFA81002CC28F /* libax_testAppDelegate_iPad.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = libax_testAppDelegate_iPad.h; path = iPad/libax_testAppDelegate_iPad.h; sourceTree = "<group>"; };
+		967CC232138DFA81002CC28F /* libax_testAppDelegate_iPad.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = libax_testAppDelegate_iPad.m; path = iPad/libax_testAppDelegate_iPad.m; sourceTree = "<group>"; };
+		967CC235138DFA81002CC28F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = iPad/en.lproj/MainWindow_iPad.xib; sourceTree = "<group>"; };
+		967CC2F8138DFBBD002CC28F /* libax.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = libax.xcconfig; path = /Users/jason/svn/libax/projects/iOS/ax/../libax.xcconfig; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		967CC210138DFA80002CC28F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				967CC218138DFA80002CC28F /* UIKit.framework in Frameworks */,
+				967CC21A138DFA80002CC28F /* Foundation.framework in Frameworks */,
+				967CC21C138DFA80002CC28F /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		967CC208138DFA80002CC28F = {
+			isa = PBXGroup;
+			children = (
+				967CC2F8138DFBBD002CC28F /* libax.xcconfig */,
+				967CC21D138DFA80002CC28F /* libax_test */,
+				967CC216138DFA80002CC28F /* Frameworks */,
+				967CC214138DFA80002CC28F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		967CC214138DFA80002CC28F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				967CC213138DFA80002CC28F /* libax_test.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		967CC216138DFA80002CC28F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				967CC217138DFA80002CC28F /* UIKit.framework */,
+				967CC219138DFA80002CC28F /* Foundation.framework */,
+				967CC21B138DFA80002CC28F /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		967CC21D138DFA80002CC28F /* libax_test */ = {
+			isa = PBXGroup;
+			children = (
+				967CC226138DFA80002CC28F /* libax_testAppDelegate.h */,
+				967CC227138DFA80002CC28F /* libax_testAppDelegate.m */,
+				967CC229138DFA81002CC28F /* iPhone */,
+				967CC230138DFA81002CC28F /* iPad */,
+				967CC21E138DFA80002CC28F /* Supporting Files */,
+			);
+			path = libax_test;
+			sourceTree = "<group>";
+		};
+		967CC21E138DFA80002CC28F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				967CC21F138DFA80002CC28F /* libax_test-Info.plist */,
+				967CC220138DFA80002CC28F /* InfoPlist.strings */,
+				967CC223138DFA80002CC28F /* libax_test-Prefix.pch */,
+				967CC224138DFA80002CC28F /* main.cpp */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		967CC229138DFA81002CC28F /* iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				967CC22A138DFA81002CC28F /* libax_testAppDelegate_iPhone.h */,
+				967CC22B138DFA81002CC28F /* libax_testAppDelegate_iPhone.m */,
+				967CC22D138DFA81002CC28F /* MainWindow_iPhone.xib */,
+			);
+			name = iPhone;
+			sourceTree = "<group>";
+		};
+		967CC230138DFA81002CC28F /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				967CC231138DFA81002CC28F /* libax_testAppDelegate_iPad.h */,
+				967CC232138DFA81002CC28F /* libax_testAppDelegate_iPad.m */,
+				967CC234138DFA81002CC28F /* MainWindow_iPad.xib */,
+			);
+			name = iPad;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		967CC212138DFA80002CC28F /* libax_test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 967CC239138DFA81002CC28F /* Build configuration list for PBXNativeTarget "libax_test" */;
+			buildPhases = (
+				967CC20F138DFA80002CC28F /* Sources */,
+				967CC210138DFA80002CC28F /* Frameworks */,
+				967CC211138DFA80002CC28F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libax_test;
+			productName = libax_test;
+			productReference = 967CC213138DFA80002CC28F /* libax_test.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		967CC20A138DFA80002CC28F /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 967CC20D138DFA80002CC28F /* Build configuration list for PBXProject "libax_test" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 967CC208138DFA80002CC28F;
+			productRefGroup = 967CC214138DFA80002CC28F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				967CC212138DFA80002CC28F /* libax_test */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		967CC211138DFA80002CC28F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				967CC222138DFA80002CC28F /* InfoPlist.strings in Resources */,
+				967CC22F138DFA81002CC28F /* MainWindow_iPhone.xib in Resources */,
+				967CC236138DFA81002CC28F /* MainWindow_iPad.xib in Resources */,
+				967CC2F9138DFBBD002CC28F /* libax.xcconfig in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		967CC20F138DFA80002CC28F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				967CC225138DFA80002CC28F /* main.cpp in Sources */,
+				967CC228138DFA81002CC28F /* libax_testAppDelegate.m in Sources */,
+				967CC22C138DFA81002CC28F /* libax_testAppDelegate_iPhone.m in Sources */,
+				967CC233138DFA81002CC28F /* libax_testAppDelegate_iPad.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		967CC220138DFA80002CC28F /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				967CC221138DFA80002CC28F /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		967CC22D138DFA81002CC28F /* MainWindow_iPhone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				967CC22E138DFA81002CC28F /* en */,
+			);
+			name = MainWindow_iPhone.xib;
+			sourceTree = "<group>";
+		};
+		967CC234138DFA81002CC28F /* MainWindow_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				967CC235138DFA81002CC28F /* en */,
+			);
+			name = MainWindow_iPad.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		967CC237138DFA81002CC28F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 967CC2F8138DFBBD002CC28F /* libax.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				libax_path = ../../../;
+			};
+			name = Debug;
+		};
+		967CC238138DFA81002CC28F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 967CC2F8138DFBBD002CC28F /* libax.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				libax_path = ../../../;
+			};
+			name = Release;
+		};
+		967CC23A138DFA81002CC28F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "libax_test/libax_test-Prefix.pch";
+				INFOPLIST_FILE = "libax_test/libax_test-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		967CC23B138DFA81002CC28F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "libax_test/libax_test-Prefix.pch";
+				INFOPLIST_FILE = "libax_test/libax_test-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		967CC20D138DFA80002CC28F /* Build configuration list for PBXProject "libax_test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				967CC237138DFA81002CC28F /* Debug */,
+				967CC238138DFA81002CC28F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		967CC239138DFA81002CC28F /* Build configuration list for PBXNativeTarget "libax_test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				967CC23A138DFA81002CC28F /* Debug */,
+				967CC23B138DFA81002CC28F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 967CC20A138DFA80002CC28F /* Project object */;
+}

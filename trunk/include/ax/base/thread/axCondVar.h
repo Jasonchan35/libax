@@ -57,6 +57,7 @@ template< class T >
 class axCondVarProtected : public axNonCopyable {
 public:
     class Data : protected T {
+    friend class axCondVarProtected<T>;
     protected:
         axCondVar   p_;
     };
@@ -72,7 +73,7 @@ public:
 	bool	timedWait	( uint32_t microseconds )		{ return s_.timedWait( microseconds ); }
 private:
 	axScopeCondVar	s_;
-	axCondVarProtected<T> &data_;
+	Data &data_;
 };
 
 
