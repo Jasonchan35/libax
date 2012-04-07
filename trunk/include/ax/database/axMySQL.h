@@ -9,7 +9,7 @@ axStatus axMySQL_connect ( axDBConn & conn, const char* dbname, const char* user
 
 #ifdef _MSC_VER
 	#pragma comment( lib, "axMySQL.lib" )
-	#pragma comment( lib, "ax_libmysql.lib" )
+	#pragma comment( lib, "ax_external_libmysql-5.5.15.lib" )
 #endif
 
 #endif //__axDB_MySQL_h__
