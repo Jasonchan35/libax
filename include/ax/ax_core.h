@@ -1,4 +1,3 @@
-#pragma once
 #ifndef	__ax_core_h__
 #define __ax_core_h__
 
@@ -33,7 +32,7 @@
 
 #ifdef axCOMPILER_VC
 	#pragma comment( lib, "winmm.lib" )
-	#pragma comment( lib, "ax.lib" )
+	#pragma comment( lib, "ax_core.lib" )
 #endif
 
 /*!	\defgroup core 
