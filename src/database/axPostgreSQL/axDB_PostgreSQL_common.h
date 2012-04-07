@@ -13,16 +13,16 @@
 
 #if axOS_WIN
 	#if axOS_WIN64
-		#include <ax/external/pgsql/Windows/Win64/libpq-fe.h>
-		#include <ax/external/pgsql/Windows/Win32/ecpg_config.h>
+		#include "../../external/pgsql/Windows/Win64/libpq-fe.h"
+		#include "../../external/pgsql/Windows/Win32/ecpg_config.h"
 	#elif axOS_WIN32
-		#include <ax/external/pgsql/Windows/Win32/libpq-fe.h>
-		#include <ax/external/pgsql/Windows/Win32/ecpg_config.h>
+		#include "../../external/pgsql/Windows/Win32/libpq-fe.h"
+		#include "../../external/pgsql/Windows/Win32/ecpg_config.h"
 	#endif
 	
 #elif axOS_MacOSX
-	#include <ax/external/pgsql/MacOSX/libpq-fe.h>	
-	#include <ax/external/pgsql/MacOSX/ecpg_config.h>	
+	#include "../../external/pgsql/MacOSX/libpq-fe.h"
+	#include "../../external/pgsql/MacOSX/ecpg_config.h"
 #else
 	#include "libpq-fe.h"
 	#include "ecpg_config.h"
