@@ -1,0 +1,75 @@
+== TODO ==
+- axSystem::defaultFont -> axFont::systemDefault
+
+- rename function isValid() -> valid() ?
+- add function invalid() ?
+
+- axGLApp
+	- KeyEvent
+	- MacOSX
+		- Touch Event ( bug: crash when touch more than 1 finger couple times )
+		- Menu
+	- Android
+		- remove axTHREAD_LOCAL in axFont (using axThreadLocalPtr), because some android doesn't support gcc __thread
+		
+- axJSONDeserializer
+	- isHaveElement_ -> hasElement_
+	- handle string with quote, new line and \u000
+
+- axCopyOnWrite
+
+- axScope ( to avoid operator new )
+
+- axStatus
+	- extenable code and toString
+	
+- axGL UI
+	- axGLUIText : Auto font size
+	
+- axString (UTF-16)
+	- good for SQLite, JavaScript, MacOSX, iOS
+
+- mkdir full path
+
+- axGLTexture support loadFile using PBO http://www.songho.ca/opengl/gl_pbo.html
+
+- ax_str_to
+	number overflow not detected e.g. (10000 for uint8 )
+
+== done [2011-09-29] ==
+- axLog tag
+
+
+== done [2011-08-09] ==
+- axDir //File directory
+- Database
+	- support for DateTime, TimeStamp
+
+== done [2011-08-01] ==
+- DEBUG_ax_log_xxxx
+- axExecute, ax_exec
+
+== done [2011-07-14] ==
+- [fixed] axCSVParser	error when line not end with ','
+
+
+== done [2011-06-26] ==
+
+- rename axSOFile to axShareLibrary
+- axMemMap using axFile instead axFileStream
+- improved ax_dump_hex
+
+== done [2011-06-19] ==
+
+- axAutoRetin for ObjC
+- axStringFormat Arg macro
+- axString::trim()
+- axArray::shrink()
+
+== done [2011-06-12] ==
+- axGLApp call onDestroy() on Android
+- non-power of 2 OpenGL texture support
+	- [ok] iPhone 
+	- [ok] Win32
+	- [not support] Android 
+- axFont Align
