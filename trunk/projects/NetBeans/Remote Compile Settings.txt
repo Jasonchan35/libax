@@ -1,0 +1,13 @@
+=== Remote Compile Settings ===
+- Netbeans Preference > C/C++ 
+	- add a development host ( for FreeBSD please using "gmake" instead "make" )
+	- In Development Hosts Manager
+		- Host Properties > Synchronization : "System level file sharing"
+		- Path Mapper - set the location that remote mount point e.g. using NFS to mount from remote to local host
+
+- Project Properties
+	- Build > Development Host - Choice the remote host
+	- Run > Console Type - using "Standard Output" ( otherwise debugger might not run properly )
+
+
+
