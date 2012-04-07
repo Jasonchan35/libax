@@ -1,7 +1,7 @@
 #ifndef __axSQLite3_h__
 #define __axSQLite3_h__
 
-#include "ax_core.h"
+#include "../ax_core.h"
 
 class axDBConn;
 
