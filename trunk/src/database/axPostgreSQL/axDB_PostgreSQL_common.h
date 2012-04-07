@@ -13,8 +13,8 @@
 
 #if axOS_WIN
 	#if axOS_WIN64
-		#include "../../external/pgsql/Windows/Win64/libpq-fe.h"
-		#include "../../external/pgsql/Windows/Win32/ecpg_config.h"
+		#include "../../external/pgsql/Windows/x64/libpq-fe.h"
+		#include "../../external/pgsql/Windows/x64/ecpg_config.h"
 	#elif axOS_WIN32
 		#include "../../external/pgsql/Windows/Win32/libpq-fe.h"
 		#include "../../external/pgsql/Windows/Win32/ecpg_config.h"

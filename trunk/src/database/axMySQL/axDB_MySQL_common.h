@@ -13,7 +13,7 @@
 
 #if axOS_WIN
 	#if axOS_WIN64
-		#include "../../external/mysql/Windows/Win64/mysql.h"
+		#include "../../external/mysql/Windows/x64/mysql.h"
 	#elif axOS_WIN32	
 		#include "../../external/mysql/Windows/Win32/mysql.h"
 	#endif

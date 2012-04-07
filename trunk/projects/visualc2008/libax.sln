@@ -10,9 +10,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "axPostgreSQL", "database\axPostgreSQL.vcproj", "{488DA319-11CB-4478-B4D1-3B0BEA2FFE17}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "axSQLite3", "database\axSQLite3.vcproj", "{8121CAFA-F539-4A99-B43E-BB94D5F6E828}"
-	ProjectSection(ProjectDependencies) = postProject
-		{D26435BE-EED3-4972-BC53-52D3E3EB39C3} = {D26435BE-EED3-4972-BC53-52D3E3EB39C3}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ax_external_sqlite3", "database\ax_external_sqlite3.vcproj", "{D26435BE-EED3-4972-BC53-52D3E3EB39C3}"
 EndProject

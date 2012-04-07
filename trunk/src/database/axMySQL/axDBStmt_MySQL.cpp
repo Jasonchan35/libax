@@ -117,14 +117,14 @@ axStatus axDBStmt_MySQL::exec_ParamList( const axDB_ParamList & list ) {
 			case axDB_c_type_StringA: {
 				b.buffer_type = MYSQL_TYPE_STRING;
 				b.buffer      = (void*)p.strA;
-				len = ax_strlen( p.strA );
+				len = (long)ax_strlen( p.strA );
 				b.buffer_length = len;
 			}break;
 			case axDB_c_type_StringW: {
 				st = str.set( p.strW );		if( !st ) return st;
 				b.buffer_type = MYSQL_TYPE_STRING;
 				b.buffer      = (void*)str.c_str();
-				b.buffer_length = str.size();
+				b.buffer_length = (long)str.size();
 			}break;
 			case axDB_c_type_TimeStamp: {
 				//using str as buffer
