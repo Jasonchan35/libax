@@ -12,7 +12,7 @@
 #include <ax/ax_core.h>
 
 #if axOS_WIN
-	#include <ax/external/sqlite3/Windows/sqlite3.h>
+	#include "../../external/sqlite3/sqlite3.h"
 #else
 	#include <sqlite3.h>
 #endif
