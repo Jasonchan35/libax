@@ -10,7 +10,7 @@ axStatus axSQLite3_openMemory( axDBConn & conn );
 
 #ifdef _MSC_VER
 	#pragma comment( lib, "axSQLite3.lib" )
-	#pragma comment( lib, "ax_sqlite3.lib" )
+	#pragma comment( lib, "ax_external_sqlite3.lib" )
 #endif
 
 #endif //__axSQLite3_h__
