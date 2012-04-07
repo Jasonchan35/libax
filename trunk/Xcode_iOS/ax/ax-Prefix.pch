@@ -1,7 +1,0 @@
-//
-// Prefix header for all source files of the 'ax' target in the 'ax' project
-//
-
-#ifdef __OBJC__
-    #import <Foundation/Foundation.h>
-#endif

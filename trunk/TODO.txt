@@ -1,9 +1,0 @@
-== Base ==
-- Serializer
-
-== Core ==
-- OpenImageIO as image lib
-
-
-
-Vec2fVec2iRect2fOpenGLTextureFontColorRGBAfOpenALContextDeserializerfunc:log_infoinline int random( int start, int end )
