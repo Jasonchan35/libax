@@ -90,13 +90,13 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ../../../../../lib/${axPLATFORM_PATH}/${CND_CONF}/libax.a
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ../../../lib/${axPLATFORM_PATH}/${CND_CONF}/libax.a
 
-../../../../../lib/${axPLATFORM_PATH}/${CND_CONF}/libax.a: ${OBJECTFILES}
-	${MKDIR} -p ../../../../../lib/${axPLATFORM_PATH}/${CND_CONF}
-	${RM} ../../../../../lib/${axPLATFORM_PATH}/${CND_CONF}/libax.a
-	${AR} -rv ../../../../../lib/${axPLATFORM_PATH}/${CND_CONF}/libax.a ${OBJECTFILES} 
-	$(RANLIB) ../../../../../lib/${axPLATFORM_PATH}/${CND_CONF}/libax.a
+../../../lib/${axPLATFORM_PATH}/${CND_CONF}/libax.a: ${OBJECTFILES}
+	${MKDIR} -p ../../../lib/${axPLATFORM_PATH}/${CND_CONF}
+	${RM} ../../../lib/${axPLATFORM_PATH}/${CND_CONF}/libax.a
+	${AR} -rv ../../../lib/${axPLATFORM_PATH}/${CND_CONF}/libax.a ${OBJECTFILES} 
+	$(RANLIB) ../../../lib/${axPLATFORM_PATH}/${CND_CONF}/libax.a
 
 ${OBJECTDIR}/_ext/877439419/axExecute.o: ../../../src/core/system/axExecute.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/877439419
@@ -284,7 +284,7 @@ ${OBJECTDIR}/_ext/801113954/axIntersect3.o: ../../../src/core/math/axIntersect3.
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ../../../../../lib/${axPLATFORM_PATH}/${CND_CONF}/libax.a
+	${RM} ../../../lib/${axPLATFORM_PATH}/${CND_CONF}/libax.a
 
 # Subprojects
 .clean-subprojects:

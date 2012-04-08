@@ -4,20 +4,16 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>../../../include/ax/database/axSQLite3.h</itemPath>
-    </logicalFolder>
-    <logicalFolder name="ResourceFiles"
-                   displayName="Resource Files"
-                   projectFiles="true">
+      <itemPath>../../../../include/ax/database/axSQLite3.h</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="axSQLite3" displayName="axSQLite3" projectFiles="true">
-        <itemPath>../../../src/database/axSQLite3/axDBConn_SQLite3.cpp</itemPath>
-        <itemPath>../../../src/database/axSQLite3/axDBConn_SQLite3.h</itemPath>
-        <itemPath>../../../src/database/axSQLite3/axDBStmt_SQLite3.cpp</itemPath>
-        <itemPath>../../../src/database/axSQLite3/axDBStmt_SQLite3.h</itemPath>
+        <itemPath>../../../../src/database/axSQLite3/axDBConn_SQLite3.cpp</itemPath>
+        <itemPath>../../../../src/database/axSQLite3/axDBConn_SQLite3.h</itemPath>
+        <itemPath>../../../../src/database/axSQLite3/axDBStmt_SQLite3.cpp</itemPath>
+        <itemPath>../../../../src/database/axSQLite3/axDBStmt_SQLite3.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -34,6 +30,7 @@
   </logicalFolder>
   <sourceRootList>
     <Elem>../../../src</Elem>
+    <Elem>../../../../src/database/axSQLite3</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
