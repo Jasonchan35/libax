@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../include"
+				AdditionalIncludeDirectories="../../include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -64,7 +64,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
+				OutputFile="../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -108,7 +108,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../include"
+				AdditionalIncludeDirectories="../../include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -128,7 +128,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
+				OutputFile="../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -173,7 +173,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../../../include"
+				AdditionalIncludeDirectories="../../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -192,7 +192,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
+				OutputFile="../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -238,7 +238,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../../../include"
+				AdditionalIncludeDirectories="../../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -257,7 +257,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
+				OutputFile="../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -283,7 +283,7 @@
 			Name="Header Files"
 			>
 			<File
-				RelativePath="..\..\..\include\ax\database\axSQLite3.h"
+				RelativePath="..\..\include\ax\database\axSQLite3.h"
 				>
 			</File>
 		</Filter>
@@ -291,19 +291,19 @@
 			Name="Source Files"
 			>
 			<File
-				RelativePath="..\..\..\src\database\axSQLite3\axDBConn_SQLite3.cpp"
+				RelativePath="..\..\src\database\axSQLite3\axDBConn_SQLite3.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\database\axSQLite3\axDBConn_SQLite3.h"
+				RelativePath="..\..\src\database\axSQLite3\axDBConn_SQLite3.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\database\axSQLite3\axDBStmt_SQLite3.cpp"
+				RelativePath="..\..\src\database\axSQLite3\axDBStmt_SQLite3.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\database\axSQLite3\axDBStmt_SQLite3.h"
+				RelativePath="..\..\src\database\axSQLite3\axDBStmt_SQLite3.h"
 				>
 			</File>
 		</Filter>

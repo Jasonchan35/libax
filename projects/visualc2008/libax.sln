@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ax_core", "ax_core.vcproj", "{56FD78C1-3024-4862-8CF3-A1461D776809}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "database", "database", "{F6D131AC-DCA6-4B40-9B4D-3E62D20214D6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "axMySQL", "axMySQL.vcproj", "{13FC117D-9AD1-442E-912D-48B9AD78ADB8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "axMySQL", "database\axMySQL.vcproj", "{13FC117D-9AD1-442E-912D-48B9AD78ADB8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "axPostgreSQL", "axPostgreSQL.vcproj", "{488DA319-11CB-4478-B4D1-3B0BEA2FFE17}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "axPostgreSQL", "database\axPostgreSQL.vcproj", "{488DA319-11CB-4478-B4D1-3B0BEA2FFE17}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "axSQLite3", "axSQLite3.vcproj", "{8121CAFA-F539-4A99-B43E-BB94D5F6E828}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "axSQLite3", "database\axSQLite3.vcproj", "{8121CAFA-F539-4A99-B43E-BB94D5F6E828}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ax_external_sqlite3", "database\ax_external_sqlite3.vcproj", "{D26435BE-EED3-4972-BC53-52D3E3EB39C3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ax_external_sqlite3", "ax_external_sqlite3.vcproj", "{D26435BE-EED3-4972-BC53-52D3E3EB39C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
