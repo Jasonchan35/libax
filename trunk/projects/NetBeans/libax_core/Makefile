@@ -49,8 +49,8 @@ CP=cp
 CCADMIN=CCadmin
 
 libax_path=../../..
-include ${libax_path}/projects/NetBeans/libax.mk
-axCCFLAGS += -I ${libax_path}/include
+include ../../../projects/NetBeans/libax.mk
+axCCFLAGS += -I ../../../include
 
 # --- precompile header ----
 #axOBJECT_PATH = ${CND_BUILDDIR}/${CONF}/${CND_PLATFORM_${CONF}}

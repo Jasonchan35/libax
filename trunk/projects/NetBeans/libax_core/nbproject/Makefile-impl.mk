@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=libax
+PROJECTNAME=libax_core
 
 # Active Configuration
 DEFAULTCONF=Debug

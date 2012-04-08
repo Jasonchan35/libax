@@ -230,7 +230,7 @@
       <itemPath>../libax.mk</itemPath>
       <itemPath>precompiled_header.mk</itemPath>
     </logicalFolder>
-    <itemPath>../../../../../TODO.txt</itemPath>
+    <itemPath>../../../TODO.txt</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>../../../src</Elem>
@@ -251,7 +251,7 @@
           <warningLevel>2</warningLevel>
         </ccTool>
         <archiverTool>
-          <output>../../../../../lib/${axPLATFORM_PATH}/${CND_CONF}/libax.a</output>
+          <output>../../../lib/${axPLATFORM_PATH}/${CND_CONF}/libax.a</output>
         </archiverTool>
       </compileType>
     </conf>
@@ -277,7 +277,7 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <archiverTool>
-          <output>../../../../../lib/${axPLATFORM_PATH}/${CND_CONF}/libax.a</output>
+          <output>../../../lib/${axPLATFORM_PATH}/${CND_CONF}/libax.a</output>
         </archiverTool>
       </compileType>
     </conf>

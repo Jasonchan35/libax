@@ -127,7 +127,7 @@ include nbproject/Makefile-impl.mk
 # include project make variables
 include nbproject/Makefile-variables.mk
 
-libax_path=../../..
+libax_path=../../../..
 include ${libax_path}/projects/NetBeans/libax.mk
 
 axCCFLAGS += -I ${libax_path}/include
