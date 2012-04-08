@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="axPostgreSQL"
-	ProjectGUID="{488DA319-11CB-4478-B4D1-3B0BEA2FFE17}"
-	RootNamespace="axPostgreSQL"
+	Name="ax_external_sqlite3"
+	ProjectGUID="{D26435BE-EED3-4972-BC53-52D3E3EB39C3}"
+	RootNamespace="ax_external_sqlite3"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -22,7 +22,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="_build\$(ProjectName)\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			>
@@ -44,7 +44,6 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -64,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
+				OutputFile="../../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -85,7 +84,7 @@
 		<Configuration
 			Name="Debug|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="_build\$(ProjectName)\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			>
@@ -108,7 +107,6 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -128,7 +126,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
+				OutputFile="../../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -149,7 +147,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="_build\$(ProjectName)\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -173,7 +171,6 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -192,7 +189,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
+				OutputFile="../../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -213,7 +210,7 @@
 		<Configuration
 			Name="Release|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="_build\$(ProjectName)\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -238,7 +235,6 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -257,7 +253,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
+				OutputFile="../../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -280,42 +276,26 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Header Files"
+			Name="Source Files"
+			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\include\ax\database\axPostgreSQL.h"
+				RelativePath="..\..\..\src\external\sqlite3\sqlite3.c"
 				>
 			</File>
 		</Filter>
 		<Filter
-			Name="Source Files"
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\src\database\axPostgreSQL\axDB_PostgreSQL_common.h"
+				RelativePath="..\..\..\src\external\sqlite3\sqlite3.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\database\axPostgreSQL\axDB_PostgreSQL_ParamSet.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\database\axPostgreSQL\axDB_PostgreSQL_ParamSet.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\database\axPostgreSQL\axDBConn_PostgreSQL.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\database\axPostgreSQL\axDBConn_PostgreSQL.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\database\axPostgreSQL\axDBStmt_PostgreSQL.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\database\axPostgreSQL\axDBStmt_PostgreSQL.h"
+				RelativePath="..\..\..\src\external\sqlite3\sqlite3ext.h"
 				>
 			</File>
 		</Filter>
