@@ -13,9 +13,9 @@
 # PARTICULAR PURPOSE.
 
 
-srcdir = .
-top_srcdir = .
-
+srcdir = /home/jason/svn/libax
+top_srcdir = /home/jason/svn/libax
+VPATH = /home/jason/svn/libax
 pkgdatadir = $(datadir)/libax
 pkglibdir = $(libdir)/libax
 pkgincludedir = $(includedir)/libax
@@ -172,7 +172,9 @@ target_alias =
 target_cpu = x86_64
 target_os = linux-gnu
 target_vendor = redhat
-SUBDIRS = projects/autotools/ax_core
+
+#SUBDIRS=libTest include exampleProgram
+SUBDIRS = projects/autotools/ax_core/
 all: all-recursive
 
 .SUFFIXES:

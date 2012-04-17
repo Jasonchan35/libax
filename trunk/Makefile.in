@@ -172,7 +172,9 @@ target_alias = @target_alias@
 target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
-SUBDIRS = projects/autotools/ax_core
+
+#SUBDIRS=libTest include exampleProgram
+SUBDIRS = projects/autotools/ax_core/
 all: all-recursive
 
 .SUFFIXES:
