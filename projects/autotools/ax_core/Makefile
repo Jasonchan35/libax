@@ -14,9 +14,9 @@
 
 
 
-srcdir = .
-top_srcdir = ../../..
-
+srcdir = /home/jason/svn/libax/projects/autotools/ax_core
+top_srcdir = /home/jason/svn/libax
+VPATH = /home/jason/svn/libax/projects/autotools/ax_core
 pkgdatadir = $(datadir)/libax
 pkglibdir = $(libdir)/libax
 pkgincludedir = $(includedir)/libax
