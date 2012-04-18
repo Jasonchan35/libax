@@ -7,14 +7,7 @@ lib_LIBRARIES = libax_core.a
 #######################################
 # Build information for each library
 
-
-include h_file_list.mk
 include cpp_file_list.mk
-
-#libax_core_a_nobase_includedir = $(includedir)
-#libax_core_a_nobase_include_HEADERS = $(h_file_list)
-
-nobase_include_HEADERS = $(h_file_list)
 
 # Sources for libTest
 libax_core_a_SOURCES = $(cpp_file_list)

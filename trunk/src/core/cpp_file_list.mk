@@ -1,0 +1,37 @@
+cpp_file_list=\
+	./math/axVec_Str.cpp \
+	./math/axFrustum3.cpp \
+	./math/axRay3.cpp \
+	./math/axIntersect3.cpp \
+	./math/axQuaternion.cpp \
+	./math/axVec4.cpp \
+	./math/axVec3.cpp \
+	./math/axRect2.cpp \
+	./math/axEulerRotation3.cpp \
+	./math/axMatrix4.cpp \
+	./lang_table/axLangTable.cpp \
+	./thread/axThreadPool.cpp \
+	./thread/axMutex.cpp \
+	./thread/axCondVar.cpp \
+	./thread/axThread.cpp \
+	./file_system/axFileStream.cpp \
+	./file_system/axDir.cpp \
+	./file_system/axFileSystem.cpp \
+	./file_system/axFile.cpp \
+	./file_system/axDirCopyStatus.cpp \
+	./file_system/axMemMap.cpp \
+	./precompiled_header/precompiled_header.cpp \
+	./parser/axIniParser.cpp \
+	./parser/axCSVParser.cpp \
+	./system/axCommandLineApp.cpp \
+	./system/axLog.cpp \
+	./system/ax_poll.cpp \
+	./system/axSharedLibrary.cpp \
+	./system/axExecute.cpp \
+	./system/axSystem.cpp \
+	./system/axApp.cpp \
+	./system/axAndroid.cpp \
+	./database/axDBConn.cpp \
+	./database/axDBStmt.cpp \
+	./net/axSocket.cpp \
+	./net/axSockAddr.cpp  

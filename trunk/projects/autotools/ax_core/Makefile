@@ -14,9 +14,10 @@
 
 
 
-srcdir = /home/jason/svn/libax/projects/autotools/ax_core
-top_srcdir = /home/jason/svn/libax
-VPATH = /home/jason/svn/libax/projects/autotools/ax_core
+
+srcdir = .
+top_srcdir = ../../..
+
 pkgdatadir = $(datadir)/libax
 pkglibdir = $(libdir)/libax
 pkgincludedir = $(includedir)/libax
@@ -37,8 +38,9 @@ POST_UNINSTALL = :
 build_triplet = x86_64-redhat-linux-gnu
 host_triplet = x86_64-redhat-linux-gnu
 target_triplet = x86_64-redhat-linux-gnu
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	$(srcdir)/cpp_file_list.mk
+DIST_COMMON = $(nobase_include_HEADERS) $(srcdir)/Makefile.am \
+	$(srcdir)/Makefile.in $(srcdir)/cpp_file_list.mk \
+	$(srcdir)/h_file_list.mk
 subdir = projects/autotools/ax_core
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -52,7 +54,7 @@ am__vpath_adj = case $$p in \
     *) f=$$p;; \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(libdir)"
+am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 libLIBRARIES_INSTALL = $(INSTALL_DATA)
 LIBRARIES = $(lib_LIBRARIES)
 ARFLAGS = cru
@@ -106,6 +108,8 @@ CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(libax_core_a_SOURCES)
 DIST_SOURCES = $(libax_core_a_SOURCES)
+nobase_includeHEADERS_INSTALL = $(install_sh_DATA)
+HEADERS = $(nobase_include_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -128,7 +132,7 @@ CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
 CXXFLAGS = -g -O2
 CYGPATH_W = echo
-DEFS = -DPACKAGE_NAME=\"libax\" -DPACKAGE_TARNAME=\"libax\" -DPACKAGE_VERSION=\"1.0\" -DPACKAGE_STRING=\"libax\ 1.0\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE=\"libax\" -DVERSION=\"1.0\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 
+DEFS = -DPACKAGE_NAME=\"libax\" -DPACKAGE_TARNAME=\"libax\" -DPACKAGE_VERSION=\"1.1\" -DPACKAGE_STRING=\"libax\ 1.1\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE=\"libax\" -DVERSION=\"1.1\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 
 DEPDIR = .deps
 ECHO = echo
 ECHO_C = 
@@ -138,6 +142,7 @@ EGREP = grep -E
 EXEEXT = 
 F77 = f95
 FFLAGS = -g -O2
+HOST_CPU_COUNT = 8
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
@@ -153,16 +158,16 @@ OBJEXT = o
 PACKAGE = libax
 PACKAGE_BUGREPORT = 
 PACKAGE_NAME = libax
-PACKAGE_STRING = libax 1.0
+PACKAGE_STRING = libax 1.1
 PACKAGE_TARNAME = libax
-PACKAGE_VERSION = 1.0
+PACKAGE_VERSION = 1.1
 PATH_SEPARATOR = :
 RANLIB = ranlib
 SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = strip
-VERSION = 1.0
+VERSION = 1.1
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
@@ -216,6 +221,119 @@ target_vendor = redhat
 # The 'lib_' indicates that these build products will be installed
 # in the $(libdir) directory. For example /usr/lib
 lib_LIBRARIES = libax_core.a
+h_file_list = \
+	../../../include/ax/ax_base.h \
+	../../../include/ax/base/other/axJSONSerializer.h \
+	../../../include/ax/base/other/ax_objc.h \
+	../../../include/ax/base/other/axSerializer.h \
+	../../../include/ax/base/other/axEventHook.h \
+	../../../include/ax/base/string/axString_cout_support.h \
+	../../../include/ax/base/string/axString.h \
+	../../../include/ax/base/string/axStringFormat_out_Imp.h \
+	../../../include/ax/base/string/ax_c_str.h \
+	../../../include/ax/base/string/ax_str_encode.h \
+	../../../include/ax/base/string/axStringFormat.h \
+	../../../include/ax/base/string/axConstString.h \
+	../../../include/ax/base/string/axStringFormat_Imp.h \
+	../../../include/ax/base/string/axLocalString.h \
+	../../../include/ax/base/string/ax_utf8.h \
+	../../../include/ax/base/string/axIString.h \
+	../../../include/ax/base/string/axFilePath.h \
+	../../../include/ax/base/string/ax_string.h \
+	../../../include/ax/base/string/ax_str_to.h \
+	../../../include/ax/base/string/axString_Array.h \
+	../../../include/ax/base/string/ax_print.h \
+	../../../include/ax/base/string/axExternalString.h \
+	../../../include/ax/base/data_structure/axHashTable.h \
+	../../../include/ax/base/data_structure/axArray_types.h \
+	../../../include/ax/base/data_structure/axExternalArray.h \
+	../../../include/ax/base/data_structure/axTinyList.h \
+	../../../include/ax/base/data_structure/axDList.h \
+	../../../include/ax/base/data_structure/axChunkArray.h \
+	../../../include/ax/base/data_structure/axPtr.h \
+	../../../include/ax/base/data_structure/axAutoPtr.h \
+	../../../include/ax/base/data_structure/axIArray.h \
+	../../../include/ax/base/data_structure/axArray.h \
+	../../../include/ax/base/data_structure/axLocalArray.h \
+	../../../include/ax/base/data_structure/axArray0.h \
+	../../../include/ax/base/common/axSize.h \
+	../../../include/ax/base/common/axStatus_enum.h \
+	../../../include/ax/base/common/ax_math_template.h \
+	../../../include/ax/base/common/ax_utility.h \
+	../../../include/ax/base/common/axDLL_Singleton.h \
+	../../../include/ax/base/common/ax_macro.h \
+	../../../include/ax/base/common/ax_common.h \
+	../../../include/ax/base/common/ax_byteorder.h \
+	../../../include/ax/base/common/axStatus.h \
+	../../../include/ax/base/common/axTypeOf.h \
+	../../../include/ax/base/platform/ax_os_mac.h \
+	../../../include/ax/base/platform/ax_os_freebsd.h \
+	../../../include/ax/base/platform/ax_os_iOS.h \
+	../../../include/ax/base/platform/ax_compiler_vc.h \
+	../../../include/ax/base/platform/ax_os_unix.h \
+	../../../include/ax/base/platform/ax_platform.h \
+	../../../include/ax/base/platform/ax_os_android.h \
+	../../../include/ax/base/platform/ax_os_linux.h \
+	../../../include/ax/base/platform/ax_os_win.h \
+	../../../include/ax/base/platform/ax_compiler_gcc.h \
+	../../../include/ax/base/time/axDateTime.h \
+	../../../include/ax/base/time/axTimeStamp.h \
+	../../../include/ax/base/time/axStopWatch.h \
+	../../../include/ax/ax_core.h \
+	../../../include/ax/core/math/axVec_Str.h \
+	../../../include/ax/core/math/all_math.h \
+	../../../include/ax/core/math/axMatrix4.h \
+	../../../include/ax/core/math/axBBox3.h \
+	../../../include/ax/core/math/axRay3.h \
+	../../../include/ax/core/math/axVec2.h \
+	../../../include/ax/core/math/axVec4.h \
+	../../../include/ax/core/math/ax_math_angle.h \
+	../../../include/ax/core/math/axMargin2.h \
+	../../../include/ax/core/math/axFrustum3.h \
+	../../../include/ax/core/math/axQuaternion.h \
+	../../../include/ax/core/math/axPlane3.h \
+	../../../include/ax/core/math/axIntersect3.h \
+	../../../include/ax/core/math/axEulerRotation3.h \
+	../../../include/ax/core/math/axRect2.h \
+	../../../include/ax/core/math/axVec3.h \
+	../../../include/ax/core/lang_table/all_lang_table.h \
+	../../../include/ax/core/lang_table/axLocation_enum.h \
+	../../../include/ax/core/lang_table/axLangTable.h \
+	../../../include/ax/core/thread/axTimerThread.h \
+	../../../include/ax/core/thread/axAtomicQueue.h \
+	../../../include/ax/core/thread/axThread.h \
+	../../../include/ax/core/thread/axThreadLocalPtr.h \
+	../../../include/ax/core/thread/axCondVar.h \
+	../../../include/ax/core/thread/axSpinLock.h \
+	../../../include/ax/core/thread/axMutex.h \
+	../../../include/ax/core/thread/axThreadPool.h \
+	../../../include/ax/core/thread/axAtomicInt.h \
+	../../../include/ax/core/data_structure/axSharedPtr.h \
+	../../../include/ax/core/data_structure/axCopyOnWrite.h \
+	../../../include/ax/core/file_system/axFileStream.h \
+	../../../include/ax/core/file_system/axFileSystem.h \
+	../../../include/ax/core/file_system/axMemMap.h \
+	../../../include/ax/core/file_system/all_file_system.h \
+	../../../include/ax/core/file_system/axDirCopyStatus.h \
+	../../../include/ax/core/file_system/axFile.h \
+	../../../include/ax/core/file_system/axDir.h \
+	../../../include/ax/core/parser/axIniParser.h \
+	../../../include/ax/core/parser/axCSVParser.h \
+	../../../include/ax/core/system/axCommandLineApp.h \
+	../../../include/ax/core/system/axSharedLibrary.h \
+	../../../include/ax/core/system/axAndroid.h \
+	../../../include/ax/core/system/axLog.h \
+	../../../include/ax/core/system/axSystem.h \
+	../../../include/ax/core/system/axExecute.h \
+	../../../include/ax/core/system/all_system.h \
+	../../../include/ax/core/system/ax_poll.h \
+	../../../include/ax/core/system/axApp.h \
+	../../../include/ax/core/database/axDBStmt.h \
+	../../../include/ax/core/database/axDBConn.h \
+	../../../include/ax/core/database/axDB_common.h \
+	../../../include/ax/core/net/axSocket.h \
+	../../../include/ax/core/net/axSockAddr.h  
+
 cpp_file_list = \
 	../../../src/core/math/axVec_Str.cpp \
 	../../../src/core/math/axFrustum3.cpp \
@@ -258,6 +376,10 @@ cpp_file_list = \
 #######################################
 # Build information for each library
 
+#libax_core_a_nobase_includedir = $(includedir)
+#libax_core_a_nobase_include_HEADERS = $(h_file_list)
+nobase_include_HEADERS = $(h_file_list)
+
 # Sources for libTest
 libax_core_a_SOURCES = $(cpp_file_list)
 
@@ -271,7 +393,7 @@ all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .cpp .lo .o .obj
-$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/cpp_file_list.mk $(am__configure_deps)
+$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/h_file_list.mk $(srcdir)/cpp_file_list.mk $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -911,6 +1033,25 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
+install-nobase_includeHEADERS: $(nobase_include_HEADERS)
+	@$(NORMAL_INSTALL)
+	test -z "$(includedir)" || $(mkdir_p) "$(DESTDIR)$(includedir)"
+	@$(am__vpath_adj_setup) \
+	list='$(nobase_include_HEADERS)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  $(am__vpath_adj) \
+	  echo " $(nobase_includeHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(includedir)/$$f'"; \
+	  $(nobase_includeHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(includedir)/$$f"; \
+	done
+
+uninstall-nobase_includeHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@$(am__vpath_adj_setup) \
+	list='$(nobase_include_HEADERS)'; for p in $$list; do \
+	  $(am__vpath_adj) \
+	  echo " rm -f '$(DESTDIR)$(includedir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(includedir)/$$f"; \
+	done
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -961,6 +1102,7 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
+	$(mkdir_p) $(distdir)/../../../include/ax $(distdir)/../../../include/ax/base/common $(distdir)/../../../include/ax/base/data_structure $(distdir)/../../../include/ax/base/other $(distdir)/../../../include/ax/base/platform $(distdir)/../../../include/ax/base/string $(distdir)/../../../include/ax/base/time $(distdir)/../../../include/ax/core/data_structure $(distdir)/../../../include/ax/core/database $(distdir)/../../../include/ax/core/file_system $(distdir)/../../../include/ax/core/lang_table $(distdir)/../../../include/ax/core/math $(distdir)/../../../include/ax/core/net $(distdir)/../../../include/ax/core/parser $(distdir)/../../../include/ax/core/system $(distdir)/../../../include/ax/core/thread
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -989,9 +1131,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LIBRARIES)
+all-am: Makefile $(LIBRARIES) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: install-am
@@ -1039,7 +1181,7 @@ info: info-am
 
 info-am:
 
-install-data-am:
+install-data-am: install-nobase_includeHEADERS
 
 install-exec-am: install-libLIBRARIES
 
@@ -1067,7 +1209,8 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-info-am uninstall-libLIBRARIES
+uninstall-am: uninstall-info-am uninstall-libLIBRARIES \
+	uninstall-nobase_includeHEADERS
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
 	clean-libLIBRARIES clean-libtool ctags distclean \
@@ -1075,12 +1218,13 @@ uninstall-am: uninstall-info-am uninstall-libLIBRARIES
 	distclean-tags distdir dvi dvi-am html html-am info info-am \
 	install install-am install-data install-data-am install-exec \
 	install-exec-am install-info install-info-am \
-	install-libLIBRARIES install-man install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-info-am \
-	uninstall-libLIBRARIES
+	install-libLIBRARIES install-man install-nobase_includeHEADERS \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags uninstall uninstall-am \
+	uninstall-info-am uninstall-libLIBRARIES \
+	uninstall-nobase_includeHEADERS
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
