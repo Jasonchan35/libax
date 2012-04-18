@@ -3,11 +3,11 @@ cd `dirname "$0"`
 echo "h_file_list=\\" > h_file_list.mk
 
 add_h_dir() {
-	find $1 -name "*.h" | sed -e "s/$/ \\\\/" -e"s/^/\t/" >> h_file_list.tmp
+	find $1 -name "*.h" | sed -e "s/$/ \\\\/" -e"s/^/ /" >> h_file_list.tmp
 }
 
 add_h_file() {
-	echo $1 | sed -e "s/$/ \\\\/" -e"s/^/\t/" >> h_file_list.tmp
+	echo $1 | sed -e "s/$/ \\\\/" -e"s/^/ /" >> h_file_list.tmp
 }
 
 #===== add scan folder here ====
