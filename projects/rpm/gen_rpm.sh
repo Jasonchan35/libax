@@ -4,7 +4,7 @@ cd `dirname "$0"`
 
 echo ======= gen_rpm =======
 
-echo "%_topdir $HOME/rpmbuild" > ~/.rpmmacros
+echo "%_topdir $PWD" > ~/.rpmmacros
 cp ../../libax-1.1.tar.gz SOURCES
 
 rpmbuild -ba SPECS/libax.spec
