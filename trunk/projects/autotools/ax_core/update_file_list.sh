@@ -7,7 +7,7 @@ add_cpp_dir() {
 }
 
 #===== add scan folder here ====
-add_cpp_dir "."
+add_cpp_dir "../../../src/core"
 
 #====================
 
