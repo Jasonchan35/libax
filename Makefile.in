@@ -100,6 +100,7 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
+HOST_CPU_COUNT = @HOST_CPU_COUNT@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
@@ -174,7 +175,8 @@ target_os = @target_os@
 target_vendor = @target_vendor@
 
 #SUBDIRS=libTest include exampleProgram
-SUBDIRS = projects/autotools/ax_core/
+SUBDIRS = include src/core
+AM_MAKEFLAGS = "-j@HOST_CPU_COUNT@"
 all: all-recursive
 
 .SUFFIXES:

@@ -13,9 +13,9 @@
 # PARTICULAR PURPOSE.
 
 
-srcdir = /home/jason/svn/libax
-top_srcdir = /home/jason/svn/libax
-VPATH = /home/jason/svn/libax
+srcdir = .
+top_srcdir = .
+
 pkgdatadir = $(datadir)/libax
 pkglibdir = $(libdir)/libax
 pkgincludedir = $(includedir)/libax
@@ -90,7 +90,7 @@ CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
 CXXFLAGS = -g -O2
 CYGPATH_W = echo
-DEFS = -DPACKAGE_NAME=\"libax\" -DPACKAGE_TARNAME=\"libax\" -DPACKAGE_VERSION=\"1.0\" -DPACKAGE_STRING=\"libax\ 1.0\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE=\"libax\" -DVERSION=\"1.0\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 
+DEFS = -DPACKAGE_NAME=\"libax\" -DPACKAGE_TARNAME=\"libax\" -DPACKAGE_VERSION=\"1.1\" -DPACKAGE_STRING=\"libax\ 1.1\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE=\"libax\" -DVERSION=\"1.1\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 
 DEPDIR = .deps
 ECHO = echo
 ECHO_C = 
@@ -100,6 +100,7 @@ EGREP = grep -E
 EXEEXT = 
 F77 = f95
 FFLAGS = -g -O2
+HOST_CPU_COUNT = 8
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
@@ -115,16 +116,16 @@ OBJEXT = o
 PACKAGE = libax
 PACKAGE_BUGREPORT = 
 PACKAGE_NAME = libax
-PACKAGE_STRING = libax 1.0
+PACKAGE_STRING = libax 1.1
 PACKAGE_TARNAME = libax
-PACKAGE_VERSION = 1.0
+PACKAGE_VERSION = 1.1
 PATH_SEPARATOR = :
 RANLIB = ranlib
 SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = strip
-VERSION = 1.0
+VERSION = 1.1
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
@@ -174,7 +175,8 @@ target_os = linux-gnu
 target_vendor = redhat
 
 #SUBDIRS=libTest include exampleProgram
-SUBDIRS = projects/autotools/ax_core/
+SUBDIRS = include src/core
+AM_MAKEFLAGS = "-j8"
 all: all-recursive
 
 .SUFFIXES:
