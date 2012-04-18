@@ -12,11 +12,11 @@ add_h_file() {
 
 #===== add scan folder here ====
 
-add_h_file "ax/ax_base.h"
-add_h_dir  "ax/base"
+add_h_file "ax_base.h"
+add_h_dir  "base"
 
-add_h_file "ax/ax_core.h"
-add_h_dir  "ax/core"
+add_h_file "ax_core.h"
+add_h_dir  "core"
 
 #====================
 
