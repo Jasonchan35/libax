@@ -31,6 +31,6 @@ AC_SUBST([HOST_CPU_COUNT])
 
 
 AC_CONFIG_FILES(Makefile
-				include/ax/Makefile
+		include/Makefile
                 projects/autotools/ax_core/Makefile)
 AC_OUTPUT
