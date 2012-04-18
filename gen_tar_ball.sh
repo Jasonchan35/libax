@@ -1,3 +1,5 @@
+cd `dirname "$0"`
+
 sh update_file_list.sh
 
 if ! aclocal; then exit; fi;
