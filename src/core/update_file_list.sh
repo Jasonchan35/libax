@@ -3,7 +3,7 @@ cd `dirname "$0"`
 echo "cpp_file_list=\\" > cpp_file_list.mk
 
 add_cpp_dir() {
-	find $1 -name "*.cpp" | sed -e "s/$/ \\\\/" -e"s/^/\t/" >> cpp_file_list.tmp
+	find $1 -name "*.cpp" | sed -e "s/$/ \\\\/" -e"s/^/ /" >> cpp_file_list.tmp
 }
 
 #===== add scan folder here ====
