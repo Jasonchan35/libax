@@ -226,7 +226,7 @@ top_builddir = .
 top_srcdir = .
 
 #SUBDIRS=libTest include exampleProgram
-SUBDIRS = include src/core
+SUBDIRS = include projects/autotools/ax_core
 AM_MAKEFLAGS = "-j1"
 all: all-recursive
 
