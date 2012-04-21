@@ -10,7 +10,7 @@ lib_LIBRARIES = libax_core.a
 include src_file_list.mk
 
 # Sources for libTest
-libax_core_a_SOURCES = $(cpp_file_list)
+libax_core_a_SOURCES = $(src_file_list)
 
 # Linker options libTestProgram
 #libax_core_a_LDFLAGS = 
