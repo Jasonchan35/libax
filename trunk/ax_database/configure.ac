@@ -32,8 +32,8 @@ AC_SUBST([HOST_CPU_COUNT])
 
 AC_CONFIG_FILES(Makefile
 		include/Makefile
-                projects/autotools/axSQLite3/Makefile 
-                projects/autotools/axMySQL/Makefile 
-                projects/autotools/axPostgreSQL/Makefile 
+                projects/autotools/database/axSQLite3/Makefile 
+                projects/autotools/database/axMySQL/Makefile 
+                projects/autotools/database/axPostgreSQL/Makefile 
                 )
 AC_OUTPUT
