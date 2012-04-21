@@ -29,11 +29,22 @@ esac
 echo "HOST_CPU_COUNT = ${HOST_CPU_COUNT}"
 AC_SUBST([HOST_CPU_COUNT])
 
+AC_ARG_WITH([sqlite3],
+            [AS_HELP_STRING([--with-sqlite3], 
+            [use sqlite3 (default is yes)])], 
+            [use_sqlite3=$withval], 
+            [use_sqlite3=yes])
 
 AC_CONFIG_FILES(Makefile
-		include/Makefile
+				include/Makefile
                 projects/autotools/database/axSQLite3/Makefile 
                 projects/autotools/database/axMySQL/Makefile 
                 projects/autotools/database/axPostgreSQL/Makefile 
                 )
+               
+                
 AC_OUTPUT
+
+
+echo use_sqlite3 = $use_sqlite3
+
