@@ -23,9 +23,11 @@
 #elif axOS_MacOSX
 	#include "../../external/pgsql/MacOSX/libpq-fe.h"
 	#include "../../external/pgsql/MacOSX/ecpg_config.h"
+#elif axOS_Linux
+	#include <libpq-fe.h>
+//	#include <ecpg_config.h>
 #else
-	#include "libpq-fe.h"
-	#include "ecpg_config.h"
+
 #endif
 
 
