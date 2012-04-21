@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(libax, 1.1)
+AC_INIT(libax_core, 1.1)
 AC_PROG_CC
 AC_PROG_CXX
 
