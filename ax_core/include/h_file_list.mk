@@ -1,5 +1,4 @@
 h_file_list=\
- ax/ax_base.h \
  ax/base/other/axJSONSerializer.h \
  ax/base/other/ax_objc.h \
  ax/base/other/axSerializer.h \
@@ -109,4 +108,5 @@ h_file_list=\
  ax/core/database/axDBConn.h \
  ax/core/database/axDB_common.h \
  ax/core/net/axSocket.h \
- ax/core/net/axSockAddr.h  
+ ax/core/net/axSockAddr.h \
+ ax/ax_base.h  

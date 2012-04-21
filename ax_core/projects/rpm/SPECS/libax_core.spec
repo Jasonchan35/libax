@@ -1,4 +1,4 @@
-Name:		libax	
+Name:		libax_core
 Version:	1.1
 Release:	1%{?dist}
 Summary:	"A-Cross" C++ Essential Framework
@@ -6,7 +6,7 @@ Summary:	"A-Cross" C++ Essential Framework
 Group:		Development
 License:	New BSD License
 URL:		libax.googlecode.com
-Source0:	libax-%{version}.tar.gz
+Source0:	libax_core-%{version}.tar.gz
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:	gcc
