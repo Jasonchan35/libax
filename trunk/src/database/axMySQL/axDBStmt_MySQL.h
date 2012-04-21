@@ -64,3 +64,6 @@ template<>	inline axStatus	ax_take( MYSQL_BIND &a, MYSQL_BIND &b ) { a=b; return
 
 
 #endif //__axDBStmt_MySQL_h__
+
+
+

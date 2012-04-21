@@ -19,8 +19,10 @@
 	#endif
 #elif axOS_MacOSX
 	#include "../../external/mysql/MacOSX/mysql.h"
-#else
+#elif axOS_Linux
+	#include <mysql/mysql.h>
 
+#else
 
 #endif
 
