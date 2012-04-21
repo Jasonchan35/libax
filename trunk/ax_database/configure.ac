@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(libax, 1.1)
+AC_INIT(libax_database, 1.1)
 AC_PROG_CC
 AC_PROG_CXX
 
@@ -31,9 +31,9 @@ AC_SUBST([HOST_CPU_COUNT])
 
 
 AC_CONFIG_FILES(Makefile
-				include/Makefile
-                projects/autotools/database/axSQLite3/Makefile 
-                projects/autotools/database/axMySQL/Makefile 
-                projects/autotools/database/axPostgreSQL/Makefile 
+		include/Makefile
+                projects/autotools/axSQLite3/Makefile 
+                projects/autotools/axMySQL/Makefile 
+                projects/autotools/axPostgreSQL/Makefile 
                 )
 AC_OUTPUT
