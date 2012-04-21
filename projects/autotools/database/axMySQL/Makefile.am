@@ -7,10 +7,10 @@ lib_LIBRARIES = libaxMySQL.a
 #######################################
 # Build information for each library
 
-include cpp_file_list.mk
+include src_file_list.mk
 
 # Sources for libTest
-libaxMySQL_a_SOURCES = $(cpp_file_list)
+libaxMySQL_a_SOURCES = $(src_file_list)
 
 # Linker options libTestProgram
 #libaxMySQL_a_LDFLAGS = 

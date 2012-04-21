@@ -1,4 +1,4 @@
-cpp_file_list=\
+src_file_list=\
  ../../../src/core/math/axVec_Str.cpp \
  ../../../src/core/math/axFrustum3.cpp \
  ../../../src/core/math/axRay3.cpp \

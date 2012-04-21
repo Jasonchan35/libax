@@ -7,10 +7,10 @@ lib_LIBRARIES = libaxSQLite3.a
 #######################################
 # Build information for each library
 
-include cpp_file_list.mk
+include src_file_list.mk
 
 # Sources for libTest
-libaxSQLite3_a_SOURCES = $(cpp_file_list)
+libaxSQLite3_a_SOURCES = $(src_file_list)
 
 # Linker options libTestProgram
 #libaxSQLite3_a_LDFLAGS = 
