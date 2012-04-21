@@ -9,7 +9,7 @@ add_src_dir() {
 }
 
 #===== add scan folder here ====
-add_src_dir "../../../../src/database/axPostgreSQL/"
+add_src_dir "../../../src/database/axPostgreSQL/"
 
 #====================
 
