@@ -11,8 +11,7 @@ add_h_file() {
 }
 
 #===== add scan folder here ====
-
-add_h_dir  "ax"
+add_h_dir "ax"
 
 #====================
 
