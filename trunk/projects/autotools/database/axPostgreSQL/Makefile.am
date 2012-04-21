@@ -7,10 +7,10 @@ lib_LIBRARIES = libaxPostgreSQL.a
 #######################################
 # Build information for each library
 
-include cpp_file_list.mk
+include src_file_list.mk
 
 # Sources for libTest
-libaxPostgreSQL_a_SOURCES = $(cpp_file_list)
+libaxPostgreSQL_a_SOURCES = $(src_file_list)
 
 # Linker options libTestProgram
 #libaxPostgreSQL_a_LDFLAGS = 

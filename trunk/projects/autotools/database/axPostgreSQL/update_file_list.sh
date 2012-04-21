@@ -1,23 +1,24 @@
 cd `dirname "$0"`
 
-echo "cpp_file_list=\\" > cpp_file_list.mk
+echo "src_file_list=\\" > src_file_list.mk
 
-add_cpp_dir() {
-	find $1 -name "*.cpp" | sed -e "s/$/ \\\\/" -e"s/^/ /" >> cpp_file_list.tmp
+add_src_dir() {
+	find $1 -name "*.cpp" | sed -e "s/$/ \\\\/" -e"s/^/ /" >> src_file_list.tmp
+	find $1 -name "*.h" | sed -e "s/$/ \\\\/" -e"s/^/ /" >> src_file_list.tmp
 }
 
 #===== add scan folder here ====
-add_cpp_dir "../../../../src/database/axPostgreSQL/"
+add_src_dir "../../../../src/database/axPostgreSQL/"
 
 #====================
 
 #remove last slash
-sed -e "$ s/\\\\/ /g" cpp_file_list.tmp >> cpp_file_list.mk
+sed -e "$ s/\\\\/ /g" src_file_list.tmp >> src_file_list.mk
 
-rm cpp_file_list.tmp
+rm src_file_list.tmp
 
-#echo "====== generate $PWD/cpp_file_list.mk ======"
-#cat cpp_file_list.mk
+#echo "====== generate $PWD/src_file_list.mk ======"
+#cat src_file_list.mk
 #echo "============="
 
 
