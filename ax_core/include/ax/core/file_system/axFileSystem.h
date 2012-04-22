@@ -3,7 +3,7 @@
 #define __axFileSystem_h__
 
 #include "axFile.h"
-#include "axDirCopyStatus.h"
+
 
 //! \ingroup data_file_system
 //@{
@@ -46,8 +46,6 @@ public:
 	static	axStatus	makeDirectory	( const char*		dir );
 	static	axStatus	makeDirectory	( const wchar_t*    dir );	
 		
-	static	axStatus	copyDirectory	( const char*		src, const char*		dst, axDirCopyStatus &copy_status );
-	static	axStatus	copyDirectory	( const wchar_t*    src, const wchar_t*		dst, axDirCopyStatus &copy_status );
 
 	static	axStatus	copyDirectory	( const char*		src, const char*		dst );
 	static	axStatus	copyDirectory	( const wchar_t*    src, const wchar_t*		dst );

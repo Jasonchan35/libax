@@ -120,51 +120,6 @@ axStatus	axFileSystem::fileLastWriteTime	( axTimeStamp & out, const wchar_t* fil
 }
 
 
-axStatus	axFileSystem::copyDirectory ( const char* src, const char* dst, axDirCopyStatus &copy_status ) {
-	axStatus st;
-	axTempStringW src_, dst_;
-	st = src_.set( src );	if( !st ) return st;
-	st = dst_.set( dst );	if( !st ) return st;
-	return copyDirectory( src_, dst_, copy_status );
-}
-
-
-axStatus	axFileSystem::copyDirectory ( const wchar_t* src, const wchar_t* dst, axDirCopyStatus &copy_status ) {
-	axStatus st;
-
-	axDir::Entry e;
-	axTempStringW src_file, dst_file;
-
-	axDir dir;
-	st = dir.open( src ); if( !st ) return st;
-
-	axFileSystem::makeDirectory( dst );
-
-	axSize n;
-	st = axDir::getCount( src, n );		if( !st ) return st;
-	st = copy_status.pushWithEntryCount( n );	if( !st ) return st;
-
-
-	while( dir.next( e ) ) { 		
-
-		st = src_file.format("{?}/{?}", src, e.filename );	if( !st ) return st;
-		st = dst_file.format("{?}/{?}", dst, e.filename );	if( !st ) return st;
-
-		if( e.isDir() ) {
-			st = copyDirectory( src_file, dst_file, copy_status ); if( !st ) return st;
-		}else {
-			st = axFileSystem::copyFile( src_file, dst_file ); if( !st ) return st;
-		}
-
-		copy_status.incProgess();
-
-	}
-
-	st = copy_status.pop(); if( !st ) return st;
-
-	return 0;
-}
-
 axStatus	axFileSystem::copyDirectory	( const char*		src, const char*		dst ) {
 	axStatus st;
 
