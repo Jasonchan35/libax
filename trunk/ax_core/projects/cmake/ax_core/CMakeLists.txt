@@ -1,20 +1,23 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
-PROJECT(libax)
+PROJECT(libax_core)
 MESSAGE( "======== ${PROJECT_NAME} ============" )
 
 #INCLUDE( ../common.cmake )
 
-SET( header_files_path   "../../../include/ax" )
-SET( src_files_path "../../../src/" )
 INCLUDE_DIRECTORIES( ../../../include )
+
+
+SET( header_files_path   "../../../include" )
+SET( src_files_path "../../../src" )
 
 FILE( GLOB_RECURSE  header_files	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}	"${header_files_path}/*.h" )
 FILE( GLOB_RECURSE  src_cpp_files	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}	"${src_files_path}/core/*.cpp"  )
 FILE( GLOB_RECURSE  src_h_files		RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}	"${src_files_path}/core/*.h"  )
 
+
 set( src_cpp_files ${src_cpp_files} ${precompiled_header_cpp} )
 
-FOREACH( f IN LISTS header_files )
+FOREACH( f ${header_files} )
 #	MESSAGE( STATUS "File: ${f}" )
 	GET_FILENAME_COMPONENT( g ${f} PATH )
 	STRING(REPLACE ${header_files_path} "" g "${g}" )
@@ -30,7 +33,7 @@ FOREACH( f IN LISTS header_files )
 	ENDIF()
 ENDFOREACH()
 
-FOREACH( f IN LISTS src_cpp_files  src_h_files )
+FOREACH( f ${src_cpp_files} ${src_h_files} )
 #	MESSAGE( STATUS "File: ${f}" )
 	GET_FILENAME_COMPONENT( g ${f} PATH )
 	STRING(REPLACE ${src_files_path} "" g "${g}" )
@@ -58,3 +61,11 @@ if (MSVC)
 		PROPERTIES COMPILE_FLAGS "/Yc${precompiled_header_h} ")
 
 endif(MSVC)
+
+INSTALL(DIRECTORY	"../../../include/"
+		DESTINATION include PATTERN .svn EXCLUDE )
+		
+INSTALL(FILES		"../../../lib/${CMAKE_SYSTEM_NAME}/libax_core.a"
+		DESTINATION lib )
+
+
