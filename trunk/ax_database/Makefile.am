@@ -1,9 +1,6 @@
 #SUBDIRS=libTest include exampleProgram
 
-SUBDIRS=include \
-	projects/autotools/database/axSQLite3 \
-	projects/autotools/database/axPostgreSQL \
-	projects/autotools/database/axMySQL
+SUBDIRS=@MY_PROJECTS@
 
 
 AM_MAKEFLAGS="-j@HOST_CPU_COUNT@"

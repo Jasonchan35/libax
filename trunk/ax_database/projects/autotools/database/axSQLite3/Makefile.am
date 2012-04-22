@@ -17,5 +17,5 @@ libaxSQLite3_a_SOURCES = $(src_file_list)
 
 # Compiler options. Here we are adding the include directory
 # to be searched for headers included in the source code.
-libaxSQLite3_a_CPPFLAGS = -I$(top_srcdir)/../ax_core/include -I$(top_srcdir)/include
+libaxSQLite3_a_CPPFLAGS = @ax_core_CPPFLAGS@ -I$(top_srcdir)/include
 

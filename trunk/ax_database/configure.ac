@@ -29,22 +29,41 @@ esac
 echo "HOST_CPU_COUNT = ${HOST_CPU_COUNT}"
 AC_SUBST([HOST_CPU_COUNT])
 
-AC_ARG_WITH([sqlite3],
-            [AS_HELP_STRING([--with-sqlite3], 
-            [use sqlite3 (default is yes)])], 
-            [use_sqlite3=$withval], 
-            [use_sqlite3=yes])
+#detect ax_core source
+if `test -d "../ax_core"`; then
+	echo "ax_core src found";
+	ax_core_CPPFLAGS="-I\$(top_srcdir)/../ax_core/include"
+	AC_SUBST([ax_core_CPPFLAGS])
+fi
 
-AC_CONFIG_FILES(Makefile
-				include/Makefile
-                projects/autotools/database/axSQLite3/Makefile 
-                projects/autotools/database/axMySQL/Makefile 
-                projects/autotools/database/axPostgreSQL/Makefile 
-                )
-               
-                
+
+#--------
+AC_SUBST([MY_PROJECTS])
+AC_CONFIG_FILES([Makefile])  
+
+AC_DEFUN([MY_ADD_PROJECT], [ 
+	AC_CONFIG_FILES([$1/Makefile])
+	sh $1/update_file_list.sh
+	MY_PROJECTS="$MY_PROJECTS $1"
+])
+
+AC_DEFUN([MY_ADD_OPTION_PROJECT],[
+	AC_ARG_WITH([$1],
+	            [AS_HELP_STRING([--with-$1], 
+	            [use $1 (default is $3)])], 
+	            [use_$1=$withval], 
+	            [use_$1=$3])
+	echo use_$1 = $use_$1
+	AS_IF([test "x$use_$1" = xyes],[MY_ADD_PROJECT([$2])])
+])
+
+#----- modules ---- 
+MY_ADD_PROJECT(include)
+MY_ADD_OPTION_PROJECT(sqlite3,		[projects/autotools/database/axSQLite3],	yes)
+MY_ADD_OPTION_PROJECT(postgresql,	[projects/autotools/database/axPostgreSQL],	yes)
+MY_ADD_OPTION_PROJECT(mysql,		[projects/autotools/database/axMySQL],		yes)
+
+
+
 AC_OUTPUT
-
-
-echo use_sqlite3 = $use_sqlite3
 
