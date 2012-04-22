@@ -57,7 +57,7 @@ AC_DEFUN([MY_ADD_OPTION_PROJECT],[
 	AS_IF([test "x$use_$1" = xyes],[MY_ADD_PROJECT([$2])])
 ])
 
-#----- modules ---- 
+#----- projects ---- 
 MY_ADD_PROJECT(include)
 MY_ADD_OPTION_PROJECT(sqlite3,		[projects/autotools/database/axSQLite3],	yes)
 MY_ADD_OPTION_PROJECT(postgresql,	[projects/autotools/database/axPostgreSQL],	yes)
