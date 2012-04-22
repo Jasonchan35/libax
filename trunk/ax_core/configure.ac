@@ -41,7 +41,7 @@ AC_DEFUN([MY_ADD_PROJECT], [
 ])
 
                 
-#----- modules ---- 
+#----- projects ---- 
 MY_ADD_PROJECT(include)
 MY_ADD_PROJECT(projects/autotools/ax_core)
                 
