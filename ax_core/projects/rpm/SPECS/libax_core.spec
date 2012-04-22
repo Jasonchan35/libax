@@ -28,7 +28,7 @@ Requires:	gcc
 Development files for libax
 
 %build
-%configure
+cmake .
 make %{?_smp_mflags}
 
 
