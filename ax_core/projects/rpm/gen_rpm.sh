@@ -3,6 +3,7 @@ cd `dirname "$0"`
 NAME=libax_core
 VER=1.1
 
+rm -Rf BUILD/*
 
 rm -Rf $NAME-$VER
 svn export ../../ $NAME-$VER

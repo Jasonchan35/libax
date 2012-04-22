@@ -52,7 +52,7 @@ ENDFOREACH()
 
 ADD_LIBRARY( ax_core ${header_files} ${src_cpp_files} ${src_h_files} )
 SET_TARGET_PROPERTIES( ax_core PROPERTIES
-	ARCHIVE_OUTPUT_DIRECTORY ../../../lib/${axPLATFORM_DIR}
+	ARCHIVE_OUTPUT_DIRECTORY ../../../${axLIB_DIR}/${axPLATFORM_DIR}
 )
 
 if (MSVC)
@@ -66,7 +66,7 @@ endif(MSVC)
 INSTALL(DIRECTORY	"../../../include/"
 		DESTINATION include PATTERN .svn EXCLUDE )
 		
-INSTALL(FILES		"../../../lib/${axPLATFORM_DIR}/libax_core.a"
-		DESTINATION lib )
+INSTALL(FILES		"../../../${axLIB_DIR}/${axPLATFORM_DIR}/libax_core.a"
+		DESTINATION ${axLIB_DIR} )
 
 

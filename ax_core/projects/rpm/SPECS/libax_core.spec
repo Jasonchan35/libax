@@ -28,7 +28,10 @@ Requires:	gcc
 Development files for libax
 
 %build
-cmake .
+
+echo ======== %_lib =====
+
+cmake -D CMAKE_INSTALL_PREFIX:PATH="%_prefix" -D axLIB_DIR:PATH="%_lib" .
 make %{?_smp_mflags}
 
 
