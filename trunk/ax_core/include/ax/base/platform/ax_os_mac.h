@@ -6,7 +6,7 @@
 //@{
 #ifdef axOS_MacOSX
 
-#include "../../external/glew/glew.h"
+//#include "../../external/glew/glew.h"
 
 #import <Foundation/Foundation.h>
 #import <CoreServices/CoreServices.h>

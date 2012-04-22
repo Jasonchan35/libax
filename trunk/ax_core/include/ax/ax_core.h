@@ -19,7 +19,6 @@
 #include "core/math/all_math.h"
 #include "core/system/all_system.h"
 #include "core/file_system/all_file_system.h"
-#include "core/lang_table/all_lang_table.h"
 #include "core/parser/axCSVParser.h"
 #include "core/parser/axIniParser.h"
 

@@ -1,0 +1,3 @@
+
+ax_core_path = ../../../
+#include "ax_core.xcconfig"
