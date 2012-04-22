@@ -17,5 +17,5 @@ libaxMySQL_a_SOURCES = $(src_file_list)
 
 # Compiler options. Here we are adding the include directory
 # to be searched for headers included in the source code.
-libaxMySQL_a_CPPFLAGS = -I$(top_srcdir)/../ax_core/include -I$(top_srcdir)/include
+libaxMySQL_a_CPPFLAGS = @ax_core_CPPFLAGS@ -I$(top_srcdir)/include
 
