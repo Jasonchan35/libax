@@ -30,8 +30,19 @@ echo "HOST_CPU_COUNT = ${HOST_CPU_COUNT}"
 AC_SUBST([HOST_CPU_COUNT])
 
 
-AC_CONFIG_FILES(Makefile
-				include/Makefile
-                projects/autotools/ax_core/Makefile 
-                )
+
+AC_SUBST([MY_PROJECTS])
+AC_CONFIG_FILES([Makefile])  
+
+AC_DEFUN([MY_ADD_PROJECT], [ 
+	AC_CONFIG_FILES([$1/Makefile])
+	sh $1/update_file_list.sh
+	MY_PROJECTS="$MY_PROJECTS $1"
+])
+
+                
+#----- modules ---- 
+MY_ADD_PROJECT(include)
+MY_ADD_PROJECT(projects/autotools/ax_core)
+                
 AC_OUTPUT

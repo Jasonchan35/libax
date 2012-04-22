@@ -1,6 +1,3 @@
 #SUBDIRS=libTest include exampleProgram
-SUBDIRS=\
-	include \
-	projects/autotools/ax_core
-
+SUBDIRS=@MY_PROJECTS@
 AM_MAKEFLAGS="-j@HOST_CPU_COUNT@"

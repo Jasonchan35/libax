@@ -1,4 +1,5 @@
 cd `dirname "$0"`
+echo === run $0 ====
 
 echo "h_file_list=\\" > h_file_list.mk
 
