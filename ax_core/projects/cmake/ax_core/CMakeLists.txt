@@ -15,9 +15,6 @@ FILE( GLOB_RECURSE  header_files	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}	"${header_
 FILE( GLOB_RECURSE  src_cpp_files	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}	"${src_files_path}/core/*.cpp"  )
 FILE( GLOB_RECURSE  src_h_files		RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}	"${src_files_path}/core/*.h"  )
 
-
-set( src_cpp_files ${src_cpp_files} ${precompiled_header_cpp} )
-
 FOREACH( f ${header_files} )
 #	MESSAGE( STATUS "File: ${f}" )
 	GET_FILENAME_COMPONENT( g ${f} PATH )
@@ -56,10 +53,11 @@ SET_TARGET_PROPERTIES( ax_core PROPERTIES
 )
 
 if (MSVC)
-   set_target_properties( ax_core
-		PROPERTIES COMPILE_FLAGS "/Yu${precompiled_header_h} /FI${precompiled_header_h}")
-   set_source_files_properties	( ${precompiled_header_cpp}
-		PROPERTIES COMPILE_FLAGS "/Yc${precompiled_header_h} ")
+	set( precompiled_header_h 	"../../../src/core/precompiled_header/precompiled_header.h" )
+	set( precompiled_header_cpp	"../../../src/core/precompiled_header/precompiled_header.cpp" )
+	
+	set_target_properties( ax_core PROPERTIES COMPILE_FLAGS "/Yu${precompiled_header_h} /FI${precompiled_header_h}")
+	set_source_files_properties	( ${precompiled_header_cpp}   PROPERTIES COMPILE_FLAGS "/Yc${precompiled_header_h}")
 
 endif(MSVC)
 
