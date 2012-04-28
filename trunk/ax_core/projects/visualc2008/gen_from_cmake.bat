@@ -6,7 +6,7 @@ cd ..
 
 mkdir x64
 cd x64
-cmake -G "Visual Studio 9 x64" ../../cmake/ax_core
+cmake -G "Visual Studio 9 2008 Win64" ../../cmake/ax_core
 cd ..
 
 
