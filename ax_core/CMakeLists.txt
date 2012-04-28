@@ -13,4 +13,4 @@ message( "CMAKE_SYSTEM_VERSION   = ${CMAKE_SYSTEM_VERSION}" )
 message( "CMAKE_INSTALL_PREFIX   = ${CMAKE_INSTALL_PREFIX}" )
 message( "axLIB_DIR              = ${axLIB_DIR}" )
 
-add_subdirectory(projects/cmake/ax_core)
+add_subdirectory(projects/cmake)
