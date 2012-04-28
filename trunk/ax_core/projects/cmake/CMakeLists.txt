@@ -4,12 +4,12 @@ MESSAGE( "======== ${PROJECT_NAME} ============" )
 
 #INCLUDE( ../common.cmake )
 
-INCLUDE_DIRECTORIES( ../../../include )
+INCLUDE_DIRECTORIES( ../../include )
 
 SET( axPLATFORM_DIR ${CMAKE_SYSTEM_NAME}/${CMAKE_SYSTEM_PROCESSOR} )
 
-SET( header_files_path   "../../../include" )
-SET( src_files_path "../../../src" )
+SET( header_files_path   "../../include" )
+SET( src_files_path "../../src" )
 
 FILE( GLOB_RECURSE  header_files	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}	"${header_files_path}/*.h" )
 FILE( GLOB_RECURSE  src_cpp_files	RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}	"${src_files_path}/core/*.cpp"  )
@@ -49,22 +49,22 @@ ENDFOREACH()
 
 ADD_LIBRARY( ax_core ${header_files} ${src_cpp_files} ${src_h_files} )
 SET_TARGET_PROPERTIES( ax_core PROPERTIES
-	ARCHIVE_OUTPUT_DIRECTORY ../../../${axLIB_DIR}/${axPLATFORM_DIR}
+	ARCHIVE_OUTPUT_DIRECTORY ../../${axLIB_DIR}/${axPLATFORM_DIR}
 )
 
 if (MSVC)
-	set( precompiled_header_h 	"../../../src/core/precompiled_header/precompiled_header.h" )
-	set( precompiled_header_cpp	"../../../src/core/precompiled_header/precompiled_header.cpp" )
+	set( precompiled_header_h 	"../../src/core/precompiled_header/precompiled_header.h" )
+	set( precompiled_header_cpp	"../../src/core/precompiled_header/precompiled_header.cpp" )
 	
 	set_target_properties( ax_core PROPERTIES COMPILE_FLAGS "/Yu${precompiled_header_h} /FI${precompiled_header_h}")
 	set_source_files_properties	( ${precompiled_header_cpp}   PROPERTIES COMPILE_FLAGS "/Yc${precompiled_header_h}")
 
 endif(MSVC)
 
-INSTALL(DIRECTORY	"../../../include/"
+INSTALL(DIRECTORY	"../../include/"
 		DESTINATION include PATTERN .svn EXCLUDE )
 		
-INSTALL(FILES		"../../../${axLIB_DIR}/${axPLATFORM_DIR}/libax_core.a"
+INSTALL(FILES		"../../${axLIB_DIR}/${axPLATFORM_DIR}/libax_core.a"
 		DESTINATION ${axLIB_DIR} )
 
 
