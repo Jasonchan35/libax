@@ -36,6 +36,8 @@ MESSAGE( "axPLATFORM_DIR         = ${axPLATFORM_DIR}" )
 
 INCLUDE_DIRECTORIES( "../../../include" )
 
+SET( precompiled_header_h 	"${_CMAKE_CURRENT_LIST_FILE_DIR}/../../../src/core/precompiled_header/precompiled_header.h" )
+SET( precompiled_header_cpp	"../../../src/core/precompiled_header/precompiled_header.cpp" )
 
 
 SET( header_files_path	"../../../include/ax" )
@@ -84,8 +86,6 @@ SET_TARGET_PROPERTIES( ${PROJECT_NAME} PROPERTIES
 
 #------ precompiled header -----
 if (MSVC)
-	set( precompiled_header_h 	"${_CMAKE_CURRENT_LIST_FILE_DIR}/../../../src/core/precompiled_header/precompiled_header.h" )
-	set( precompiled_header_cpp	"../../../src/core/precompiled_header/precompiled_header.cpp" )
 	set_target_properties		( ${PROJECT_NAME} 
 									PROPERTIES COMPILE_FLAGS "/Yu${precompiled_header_h} /FI${precompiled_header_h}")
 	set_source_files_properties	( ${precompiled_header_cpp} 
