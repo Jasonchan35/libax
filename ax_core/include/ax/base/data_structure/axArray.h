@@ -1,4 +1,3 @@
-#pragma once
 #ifndef __axArray_h__
 #define __axArray_h__
 
