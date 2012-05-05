@@ -1,4 +1,15 @@
 == TODO ==
+- axArray
+	- sort
+
+- axDList
+	- sort
+
+- axSortedArray -
+
+- axSortedDList -
+
+
 - axSystem::defaultFont -> axFont::systemDefault
 
 - rename function isValid() -> valid() ?
