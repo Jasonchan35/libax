@@ -1,3 +1,6 @@
-
-ax_core_path = ../../../
+ax_core_path = ../../..
 #include "ax_core.xcconfig"
+
+DEPLOYMENT_LOCATION = YES
+DSTROOT = $(ax_core_path)
+INSTALL_PATH = /lib/OSX/$(CONFIGURATION)
