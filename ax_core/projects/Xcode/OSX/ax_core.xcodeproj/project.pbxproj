@@ -28,8 +28,6 @@
 		EA9F4E0C1544139E00C9459E /* axSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA9F4DE51544139E00C9459E /* axSocket.cpp */; };
 		EA9F4E0D1544139E00C9459E /* axCSVParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA9F4DE71544139E00C9459E /* axCSVParser.cpp */; };
 		EA9F4E0E1544139E00C9459E /* axIniParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA9F4DE81544139E00C9459E /* axIniParser.cpp */; };
-		EA9F4E0F1544139E00C9459E /* precompiled_header.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA9F4DEA1544139E00C9459E /* precompiled_header.cpp */; };
-		EA9F4E101544139E00C9459E /* precompiled_header.h in Headers */ = {isa = PBXBuildFile; fileRef = EA9F4DEB1544139E00C9459E /* precompiled_header.h */; };
 		EA9F4E111544139E00C9459E /* ax_poll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA9F4DED1544139E00C9459E /* ax_poll.cpp */; };
 		EA9F4E121544139E00C9459E /* axAndroid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA9F4DEE1544139E00C9459E /* axAndroid.cpp */; };
 		EA9F4E131544139E00C9459E /* axApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA9F4DEF1544139E00C9459E /* axApp.cpp */; };
@@ -45,6 +43,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		96930D39155E9135000EA9F4 /* pch.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pch.cpp; sourceTree = "<group>"; };
+		96930D3A155E9135000EA9F4 /* pch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pch.h; sourceTree = "<group>"; };
 		EA15F6C71544053B00356C7C /* ax_base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_base.h; sourceTree = "<group>"; };
 		EA15F6C81544053B00356C7C /* ax_core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_core.h; sourceTree = "<group>"; };
 		EA15F6CB1544053B00356C7C /* ax_byteorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_byteorder.h; sourceTree = "<group>"; };
@@ -173,8 +173,6 @@
 		EA9F4DE51544139E00C9459E /* axSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axSocket.cpp; sourceTree = "<group>"; };
 		EA9F4DE71544139E00C9459E /* axCSVParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axCSVParser.cpp; sourceTree = "<group>"; };
 		EA9F4DE81544139E00C9459E /* axIniParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axIniParser.cpp; sourceTree = "<group>"; };
-		EA9F4DEA1544139E00C9459E /* precompiled_header.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = precompiled_header.cpp; sourceTree = "<group>"; };
-		EA9F4DEB1544139E00C9459E /* precompiled_header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = precompiled_header.h; sourceTree = "<group>"; };
 		EA9F4DED1544139E00C9459E /* ax_poll.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_poll.cpp; sourceTree = "<group>"; };
 		EA9F4DEE1544139E00C9459E /* axAndroid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axAndroid.cpp; sourceTree = "<group>"; };
 		EA9F4DEF1544139E00C9459E /* axApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axApp.cpp; sourceTree = "<group>"; };
@@ -203,6 +201,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		96930D38155E9135000EA9F4 /* pch */ = {
+			isa = PBXGroup;
+			children = (
+				96930D39155E9135000EA9F4 /* pch.cpp */,
+				96930D3A155E9135000EA9F4 /* pch.h */,
+			);
+			path = pch;
+			sourceTree = "<group>";
+		};
 		EA15F6C61544053B00356C7C /* include */ = {
 			isa = PBXGroup;
 			children = (
@@ -449,12 +456,12 @@
 		EA9F4DCE1544139E00C9459E /* src */ = {
 			isa = PBXGroup;
 			children = (
+				96930D38155E9135000EA9F4 /* pch */,
 				EA9F4DCF1544139E00C9459E /* database */,
 				EA9F4DD21544139E00C9459E /* file_system */,
 				EA9F4DD81544139E00C9459E /* math */,
 				EA9F4DE31544139E00C9459E /* net */,
 				EA9F4DE61544139E00C9459E /* parser */,
-				EA9F4DE91544139E00C9459E /* precompiled_header */,
 				EA9F4DEC1544139E00C9459E /* system */,
 				EA9F4DF51544139E00C9459E /* thread */,
 			);
@@ -518,15 +525,6 @@
 			path = parser;
 			sourceTree = "<group>";
 		};
-		EA9F4DE91544139E00C9459E /* precompiled_header */ = {
-			isa = PBXGroup;
-			children = (
-				EA9F4DEA1544139E00C9459E /* precompiled_header.cpp */,
-				EA9F4DEB1544139E00C9459E /* precompiled_header.h */,
-			);
-			path = precompiled_header;
-			sourceTree = "<group>";
-		};
 		EA9F4DEC1544139E00C9459E /* system */ = {
 			isa = PBXGroup;
 			children = (
@@ -579,7 +577,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA9F4E101544139E00C9459E /* precompiled_header.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -654,7 +651,6 @@
 				EA9F4E0C1544139E00C9459E /* axSocket.cpp in Sources */,
 				EA9F4E0D1544139E00C9459E /* axCSVParser.cpp in Sources */,
 				EA9F4E0E1544139E00C9459E /* axIniParser.cpp in Sources */,
-				EA9F4E0F1544139E00C9459E /* precompiled_header.cpp in Sources */,
 				EA9F4E111544139E00C9459E /* ax_poll.cpp in Sources */,
 				EA9F4E121544139E00C9459E /* axAndroid.cpp in Sources */,
 				EA9F4E131544139E00C9459E /* axApp.cpp in Sources */,
