@@ -16,7 +16,7 @@
 
 #if axCOMPILER_CLANG | axCOMPILER_GCC
 
-#define	axEXPORT	//nothing
+#define	axDLLEXPORT	//nothing
 #define	axFUNC_NAME			__FUNCTION__
 #define axPRETTY_FUNC_NAME	__PRETTY_FUNCTION__
 

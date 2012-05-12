@@ -13,22 +13,15 @@ template<class T>
 class axSingleton {
 	static T& instance;
 
-	T* getInstance() {
-		if( !f ) {
-#ifdef axOS_WIN
-			f = (func)GetProcAddress(GetModuleHandle(NULL),"dummy"); //always get function from .EXE even in .DLL
-#endif
-		}
-		if( f )	return f();
-	}
-private:
-	T* (*func)();
-	func f;
-
-	axDLL_EXPORT T* dummy() {
-		static T s;
-		return &s;
+	static T& getInstance() {
+		static T t;
+		return t;
 	}
 };
+
+
+template<class T>
+axDLLEXPORT T & axSingleton<T>::instance = axSingleton<T>::getInstance();
+
 
 #endif

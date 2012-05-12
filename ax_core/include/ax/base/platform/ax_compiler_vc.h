@@ -11,7 +11,7 @@
 #endif
 
 #define	axCOMPILER_VC	1
-#define axEXPORT			_declspec (dllexport)
+#define axDLLEXPORT			_declspec (dllexport)
 #define	axFUNC_NAME			__FUNCTION__
 #define axPRETTY_FUNC_NAME	__FUNCSIG__
 

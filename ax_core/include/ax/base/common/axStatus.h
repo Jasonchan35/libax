@@ -3,6 +3,7 @@
 #define __axStatus_h__
 
 #include "../platform/ax_platform.h"
+#include "../common/axSingleton.h"
 
 //! \ingroup base_common
 //@{
@@ -105,11 +106,13 @@ axStatus_Module::axStatus_Module( int start ) {
 	if( p ) p->registerModule( this, start );
 }
 
+static axSingleton< axStatus_Std >	axStatus_Std_singleton;
+
+
 //======================
 inline
 axStatus_ModuleList::axStatus_ModuleList() {
 	memset( module, 0, sizeof(axStatus_Module) * kModuleMax );
-	static axStatus_Std	std;
 }
 
 inline
@@ -122,6 +125,9 @@ const char* axStatus_ModuleList::c_str( int code ) {
 	}
 	return "Uknown";
 }
+
+
+static axSingleton< axStatus_ModuleList >	axStatus_ModuleList_singleton;
 
 inline
 axStatus_ModuleList* axStatus_ModuleList::getInstance() {
