@@ -207,7 +207,6 @@
 		9632174E155EF2000061BE21 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				9632174F155EF2000061BE21 /* core */,
 				96321750155EF2000061BE21 /* database */,
 				96321753155EF2000061BE21 /* file_system */,
 				96321759155EF2000061BE21 /* math */,
@@ -219,13 +218,6 @@
 			);
 			name = src;
 			path = ../../../src;
-			sourceTree = "<group>";
-		};
-		9632174F155EF2000061BE21 /* core */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = core;
 			sourceTree = "<group>";
 		};
 		96321750155EF2000061BE21 /* database */ = {
