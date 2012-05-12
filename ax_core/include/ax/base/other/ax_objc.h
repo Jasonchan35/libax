@@ -5,7 +5,7 @@
 
 #include "../common/axStatus.h"
 #include "../common/ax_utility.h"
-/*
+
 class	axScope_NSAutoreleasePool : public axNonCopyable {
 public:
 	axScope_NSAutoreleasePool () { p_ = [[NSAutoreleasePool alloc] init]; }
@@ -13,7 +13,7 @@ public:
 private:
 	NSAutoreleasePool* p_;
 };
-*/
+
 
 template<class T>
 class	axNSObject {
