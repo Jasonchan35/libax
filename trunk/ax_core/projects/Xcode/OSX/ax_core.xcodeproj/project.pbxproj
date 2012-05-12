@@ -80,6 +80,7 @@
 		96321778155EF2000061BE21 /* axMutex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axMutex.cpp; sourceTree = "<group>"; };
 		96321779155EF2000061BE21 /* axThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axThread.cpp; sourceTree = "<group>"; };
 		9632177A155EF2000061BE21 /* axThreadPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axThreadPool.cpp; sourceTree = "<group>"; };
+		9692ECAC155F1F0000F6D625 /* axSingleton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSingleton.h; sourceTree = "<group>"; };
 		EA15F6C71544053B00356C7C /* ax_base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_base.h; sourceTree = "<group>"; };
 		EA15F6C81544053B00356C7C /* ax_core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_core.h; sourceTree = "<group>"; };
 		EA15F6CB1544053B00356C7C /* ax_byteorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_byteorder.h; sourceTree = "<group>"; };
@@ -356,6 +357,7 @@
 				EA15F6D21544053B00356C7C /* axStatus.h */,
 				EA15F6D31544053B00356C7C /* axStatus_enum.h */,
 				EA15F6D41544053B00356C7C /* axTypeOf.h */,
+				9692ECAC155F1F0000F6D625 /* axSingleton.h */,
 			);
 			path = common;
 			sourceTree = "<group>";

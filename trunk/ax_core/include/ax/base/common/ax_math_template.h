@@ -58,8 +58,8 @@ inline float  ax_floor( float  a )	{ return ::floorf(a); }
 inline double ax_floor( double a )	{ return ::floor(a); }
 
 //round up
-inline float  ax_round( float a  ) { return floor( a > 0 ? a+0.5f : a-0.5f ); }
-inline double ax_round( double a ) { return floor( a > 0 ? a+0.5  : a-0.5  ); }
+inline float  ax_round( float a  ) { return ax_floor( a > 0 ? a+0.5f : a-0.5f ); }
+inline double ax_round( double a ) { return ax_floor( a > 0 ? a+0.5  : a-0.5  ); }
 
 //! Equivalent
 template<class T>
@@ -122,20 +122,20 @@ template<class T> inline T ax_align_multiple( T n, T a ) {
 //! floating-point align
 inline
 float  ax_align_multiple( float   n, float   a ) {
-	float i = floor( n / a ) * a;
+	float i = ax_floor( n / a ) * a;
 	if( i == n ) return i;
 	return (n > 0) ? i+a : i-a;
 }
 
 inline
 double ax_align_multiple( double  n, double  a ) {
-	double i = floor( n / a ) * a;
+	double i = ax_floor( n / a ) * a;
 	if( i == n ) return i;
 	return (n > 0) ? i+a : i-a;
 }
 
-inline float  ax_remainder( float  a, float  b ) { return ( a - floor(a/b) * b ); }
-inline double ax_remainder( double a, double b ) { return ( a - floor(a/b) * b ); }
+inline float  ax_remainder( float  a, float  b ) { return ( a - ax_floor(a/b) * b ); }
+inline double ax_remainder( double a, double b ) { return ( a - ax_floor(a/b) * b ); }
 
 inline float  ax_cos( float  a ) { return ::cosf(a); }
 inline double ax_cos( double a ) { return ::cos (a); }
