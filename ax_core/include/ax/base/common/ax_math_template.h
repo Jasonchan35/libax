@@ -48,8 +48,11 @@ const  double ax_math_PI = 3.14159265358979323846;
 inline float  ax_modf( float  n, float  *i ) { return ::modff( n, i ); }
 inline double ax_modf( double n, double *i ) { return ::modf ( n, i ); }
 
-inline float  ax_modf( float  n ) { float  i; return ::modff( n, &i ); }
-inline double ax_modf( double n ) { double i; return ::modf ( n, &i ); }
+inline float  ax_modf( float  n )	{ float  i; return ::modff( n, &i ); }
+inline double ax_modf( double n )	{ double i; return ::modf ( n, &i ); }
+
+inline float  ax_sqrt( float  n )	{ return ::sqrtf( n ); }
+inline double ax_sqrt( double n )	{ return ::sqrt ( n ); }
 
 inline float  ax_ceil( float  a )	{ return ::ceilf(a); }
 inline double ax_ceil( double a )	{ return ::ceil(a); }
@@ -58,8 +61,8 @@ inline float  ax_floor( float  a )	{ return ::floorf(a); }
 inline double ax_floor( double a )	{ return ::floor(a); }
 
 //round up
-inline float  ax_round( float a  ) { return ax_floor( a > 0 ? a+0.5f : a-0.5f ); }
-inline double ax_round( double a ) { return ax_floor( a > 0 ? a+0.5  : a-0.5  ); }
+inline float  ax_round( float a  )	{ return ax_floor( a > 0 ? a+0.5f : a-0.5f ); }
+inline double ax_round( double a )	{ return ax_floor( a > 0 ? a+0.5  : a-0.5  ); }
 
 //! Equivalent
 template<class T>
