@@ -88,7 +88,7 @@ public:
 	//! distance in square
 	T			distanceSq	( const axVec3 &v ) const		{ return (x-v.x)*(x-v.x) + (y-v.y)*(y-v.y) + (z-v.z)*(z-v.z); }
 
-	axVec3		normalize	() const						{ T r = lengthSq(); return r ? (*this/sqrt(r)) : *this; }
+	axVec3		normalize	() const						{ T r = lengthSq(); return r ? (*this/ax_sqrt(r)) : *this; }
 	void		normalizeIt	()								{ *this = normalize(); }
 
 
