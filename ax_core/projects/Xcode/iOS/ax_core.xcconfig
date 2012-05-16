@@ -1,0 +1,25 @@
+// ======== iOS ============
+axPLATFORM = iOS
+
+ZERO_LINK = NO
+
+GCC_PREPROCESSOR_DEFINITIONS_Debug = _DEBUG DEBUG 
+GCC_PREPROCESSOR_DEFINITIONS_Release = NDEBUG
+GCC_PREPROCESSOR_DEFINITIONS = $(GCC_PREPROCESSOR_DEFINITIONS) $(GCC_PREPROCESSOR_DEFINITIONS_$CONFIGURATION)
+
+ax_CFLAGS_Debug   = -D_DEBUG -DDEBUG //-D_GLIBCXX_DEBUG=1 -D_GLIBCXX_DEBUG_PEDANTIC=1
+ax_CFLAGS_Release = -DNDEBUG
+ax_CFLAGS         = -Wall $(OTHER_CFLAGS_$CONFIGURATION)
+
+//OTHER_LDFLAGS = $(OTHER_LDFLAGS) -ObjC -framework Foundation -framework AppKit -framework OpenGL -framework OpenAL -framework QuartzCore -framework AudioToolBox 
+OTHER_CPLUSPLUSFLAGS = -Wno-invalid-offsetof -fvisibility=default -fvisibility-inlines-hidden -x objective-c++ $(OTHER_CFLAGS) 
+				 
+//-lax_png -lax_z -lsqlite3 -lpq -lkrb5 -lssl -lcrypto
+
+COMPRESS_PNG_FILES = NO
+GCC_SYMBOLS_PRIVATE_EXTERN = YES
+
+
+ax_core_CFLAGS  = -I$(ax_core_path)/include -Wall $(ax_CFLAGS_$CONFIGURATION)
+ax_core_LDFLAGS = -L$(ax_core_path)/lib/$(axPLATFORM)/$(CONFIGURATION) -L$(ax_core_path)/lib/$(axPLATFORM) -lax_core -framework Foundation -framework AppKit -framework OpenGL -framework OpenAL -framework QuartzCore -framework AudioToolBox
+
