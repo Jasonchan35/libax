@@ -45,7 +45,6 @@ axStatus _ax_decodeBase64( axIString_<T> &dst, const T* src ) {
 
 	st = dst.resize( dst_max_len ); if( !st ) return st;
 
-	T *org_pos = dst._getInternalBufferPtr();
 	T *pos = dst._getInternalBufferPtr();
 
 	count = 0;
@@ -112,10 +111,10 @@ axStatus _ax_encodeBase64( axIString_<T> &dst, const T* src ) {
 		input[0] = *s++;
 		input[1] = *s++;
 		input[2] = *s++;
-		*pos++ = k_ax_base64_encode_table[ input[0] >> 2 ];
-		*pos++ = k_ax_base64_encode_table[ ((input[0] & 0x03) << 4) + (input[1] >> 4) ];
-		*pos++ = k_ax_base64_encode_table[ ((input[1] & 0x0f) << 2) + (input[2] >> 6) ];
-		*pos++ = k_ax_base64_encode_table[ input[2] & 0x3f];
+		*pos++ = k_ax_base64_encode_table[ (uint8_t) input[0] >> 2 ];
+		*pos++ = k_ax_base64_encode_table[ (uint8_t) ((input[0] & 0x03) << 4) + (input[1] >> 4) ];
+		*pos++ = k_ax_base64_encode_table[ (uint8_t) ((input[1] & 0x0f) << 2) + (input[2] >> 6) ];
+		*pos++ = k_ax_base64_encode_table[ (uint8_t) input[2] & 0x3f];
 	}
 
 	size_t remain = (size_t)( e - s );
@@ -135,13 +134,13 @@ axStatus _ax_encodeBase64( axIString_<T> &dst, const T* src ) {
 		output[2] = ((input[1] & 0x0f) << 2) + (input[2] >> 6);
 
 
-		*pos++ = k_ax_base64_encode_table[ output[0] ];
-		*pos++ = k_ax_base64_encode_table[ output[1] ];
+		*pos++ = k_ax_base64_encode_table[ (uint8_t) output[0] ];
+		*pos++ = k_ax_base64_encode_table[ (uint8_t) output[1] ];
 
 		if( remain == 1 ) {
 			*pos++ = '=';
 		}else {
-			*pos++ = k_ax_base64_encode_table[ output[2] ];
+			*pos++ = k_ax_base64_encode_table[ (uint8_t) output[2] ];
 		}
 		*pos++ = '=';
 	}
