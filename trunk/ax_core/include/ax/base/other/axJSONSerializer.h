@@ -251,7 +251,7 @@ public:
 
 				st = getString( str ); if( !st ) return st;
 				if( !str.equalsIgnoreCase( name ) ) { 
-					return axStatus::JSON_deserialize_name_not_equal;			
+					return axStatus_Std::JSON_deserialize_name_not_equal;			
 				}
 
 				st = skipColon_(); if( !st ) return st;
@@ -264,7 +264,7 @@ public:
 			if( targetName.equals( name ) ) {
 				targetName.clear();
 				st =  ax_json_serialize_io	( *this, value );  if( !st ) return st;
-				return axStatus::JSON_deserialize_internal_found;
+				return axStatus_Std::JSON_deserialize_internal_found;
 
 			}else {
 				return 0;
@@ -412,7 +412,7 @@ axStatus	ax_json_serialize_io ( axJSONDeserializer &s, axDList<T> &v ) {
 	axStatus st;
 
 	st = s.skipSpace_();	if( !st ) return st;
-	if( *s.r_ != '[' ) return axStatus::JSON_deserialize_format_error;
+	if( *s.r_ != '[' ) return axStatus_Std::JSON_deserialize_format_error;
 	s.r_++;
 
 
@@ -426,7 +426,7 @@ axStatus	ax_json_serialize_io ( axJSONDeserializer &s, axDList<T> &v ) {
 
 
 	st = s.skipSpace_();	if( !st ) return st;
-	if( *s.r_ != ']' ) return axStatus::JSON_deserialize_format_error;
+	if( *s.r_ != ']' ) return axStatus_Std::JSON_deserialize_format_error;
 	s.r_++;
 
 	return 0;
@@ -480,7 +480,7 @@ axStatus ax_json_serialize_io( axJSONDeserializer &s, axIArray<T> &v ) {
 	axStatus st;
 
 	st = s.skipSpace_();	if( !st ) return st;
-	if( *s.r_ != '[' ) return axStatus::JSON_deserialize_format_error;
+	if( *s.r_ != '[' ) return axStatus_Std::JSON_deserialize_format_error;
 	s.r_++;
 
 	while( s.isHaveElement_() ){ 
@@ -490,7 +490,7 @@ axStatus ax_json_serialize_io( axJSONDeserializer &s, axIArray<T> &v ) {
 	}
 
 	st = s.skipSpace_();	if( !st ) return st;
-	if( *s.r_ != ']' ) return axStatus::JSON_deserialize_format_error;
+	if( *s.r_ != ']' ) return axStatus_Std::JSON_deserialize_format_error;
 	s.r_++;
 
 	return 0;
@@ -564,7 +564,7 @@ axStatus ax_json_serialize_io( S &s, axExternalString_<T> &v ) {
 
 template< class S, class T > inline
 axStatus ax_json_serialize_io( S &s, axString_Array<T> &v ) {
-	return ax_json_serialize_io( s, (axIArray<axString_<T>>&) v );
+	return ax_json_serialize_io( s, (axIArray< axString_<T> >&) v );
 }
 
 
@@ -598,8 +598,8 @@ axStatus ax_json_on_string_serialize( axJSONDeserializer &s, T &value ) {
 		st = s.skipColon_();			if( !st ) return st;
 		st = value.onStringSerialize( s );
 		if( st.code() == 0 )  {
-			return axStatus::JSON_deserialize_element_not_found;
-		}else if( st.code() != axStatus::JSON_deserialize_internal_found ) {
+			return axStatus_Std::JSON_deserialize_element_not_found;
+		}else if( st.code() != axStatus_Std::JSON_deserialize_internal_found ) {
 			return st;
 		}
 
