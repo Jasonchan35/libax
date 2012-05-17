@@ -166,14 +166,14 @@ public:
 	axStatus skipColon_() {
 		axStatus st;
 		st = skipSpace_();	if( !st ) return st;
-		if( *r_ != ':' ) return axStatus::JSON_deserialize_cannot_find_colon; 
+		if( *r_ != ':' ) return axStatus_Std::JSON_deserialize_cannot_find_colon; 
 		r_++;
 		return 0;
 	}
 
 	axStatus skipSpace_() {
-		if( r_ == NULL ) return axStatus::JSON_deserialize_format_error;
-		if( *r_ == 0 )   return axStatus::JSON_deserialize_format_error;
+		if( r_ == NULL ) return axStatus_Std::JSON_deserialize_format_error;
+		if( *r_ == 0 )   return axStatus_Std::JSON_deserialize_format_error;
 
 		for( ; r_ < e_; r_++ ) {
 			const char c = *r_;
@@ -214,11 +214,11 @@ public:
 
 		st = skipSpace_();	if( !st ) return st;
 
-		if( *r_ != '\"' ) return axStatus::JSON_deserialize_cannot_find_string;
+		if( *r_ != '\"' ) return axStatus_Std::JSON_deserialize_cannot_find_string;
 		r_++;
 
 		const char *e = ax_strchr( r_, '\"' );
-		if( !e ) return axStatus::JSON_deserialize_cannot_find_string;
+		if( !e ) return axStatus_Std::JSON_deserialize_cannot_find_string;
 
 		st = str.setWithLength( r_, e-r_ );	if( !st ) return st;
 		r_ = e+1;
@@ -230,7 +230,7 @@ public:
 		axStatus st;
 		st = skipSpace_();	if( !st ) return st;
 		const char *c = fineEndToken_();
-		if( !c ) return axStatus::JSON_deserialize_cannot_find_end_token;
+		if( !c ) return axStatus_Std::JSON_deserialize_cannot_find_end_token;
 		st = str.setWithLength( r_, c-r_ );	if( !st ) return st;
 		r_ = c;
 		return 0;
@@ -284,7 +284,7 @@ public:
 	axStatus beginStruct_() { 
 		axStatus st;
 		st = skipSpace_(); if( !st ) return st;
-		if( *r_ != '{' ) return axStatus::JSON_deserialize_format_error;
+		if( *r_ != '{' ) return axStatus_Std::JSON_deserialize_format_error;
 		r_++;
 		return 0;
 	}
@@ -292,7 +292,7 @@ public:
 	axStatus endStruct_() { 
 		axStatus st;
 		st = skipSpace_(); if( !st ) return st;
-		if( *r_ != '}' ) return axStatus::JSON_deserialize_format_error;
+		if( *r_ != '}' ) return axStatus_Std::JSON_deserialize_format_error;
 		r_++;
 		return 0;
 	}
@@ -358,7 +358,7 @@ inline axStatus ax_json_serialize_io( axJSONDeserializer &s, bool &v ) {
 	}else if( str.equalsIgnoreCase( "false" ) ) {
 		v = false;
 	}else {
-		return axStatus::JSON_deserialize_bool_format_error;
+		return axStatus_Std::JSON_deserialize_bool_format_error;
 	}
 
 	return 0;

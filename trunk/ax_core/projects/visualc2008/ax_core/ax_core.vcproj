@@ -408,43 +408,11 @@
 				Name="database"
 				>
 				<File
-					RelativePath="..\..\..\include\ax\core\database\axDB_common.h"
+					RelativePath="..\..\..\src\database\axDBConn.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\core\database\axDBConn.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\database\axDBConn.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\database\axDBStmt.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\database\axDBStmt.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="parser"
-				>
-				<File
-					RelativePath="..\..\..\src\core\parser\axCSVParser.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\parser\axCSVParser.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\parser\axIniParser.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\parser\axIniParser.h"
+					RelativePath="..\..\..\src\database\axDBStmt.cpp"
 					>
 				</File>
 			</Filter>
@@ -452,47 +420,23 @@
 				Name="file_system"
 				>
 				<File
-					RelativePath="..\..\..\include\ax\core\file_system\all_file_system.h"
+					RelativePath="..\..\..\src\file_system\axDir.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\core\file_system\axDir.cpp"
+					RelativePath="..\..\..\src\file_system\axFile.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\ax\core\file_system\axDir.h"
+					RelativePath="..\..\..\src\file_system\axFileStream.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\core\file_system\axFile.cpp"
+					RelativePath="..\..\..\src\file_system\axFileSystem.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\ax\core\file_system\axFile.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\file_system\axFileStream.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\file_system\axFileStream.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\file_system\axFileSystem.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\file_system\axFileSystem.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\file_system\axMemMap.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\file_system\axMemMap.h"
+					RelativePath="..\..\..\src\file_system\axMemMap.cpp"
 					>
 				</File>
 			</Filter>
@@ -500,107 +444,43 @@
 				Name="math"
 				>
 				<File
-					RelativePath="..\..\..\include\ax\core\math\all_math.h"
+					RelativePath="..\..\..\src\math\axEulerRotation3.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\ax\core\math\ax_math_angle.h"
+					RelativePath="..\..\..\src\math\axFrustum3.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\ax\core\math\axBBox3.h"
+					RelativePath="..\..\..\src\math\axIntersect3.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\core\math\axEulerRotation3.cpp"
+					RelativePath="..\..\..\src\math\axMatrix4.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\ax\core\math\axEulerRotation3.h"
+					RelativePath="..\..\..\src\math\axQuaternion.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\core\math\axFrustum3.cpp"
+					RelativePath="..\..\..\src\math\axRay3.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\ax\core\math\axFrustum3.h"
+					RelativePath="..\..\..\src\math\axRect2.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\core\math\axIntersect3.cpp"
+					RelativePath="..\..\..\src\math\axVec3.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\ax\core\math\axIntersect3.h"
+					RelativePath="..\..\..\src\math\axVec4.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\ax\core\math\axMargin2.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\math\axMatrix4.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\math\axMatrix4.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\math\axPlane3.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\math\axQuaternion.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\math\axQuaternion.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\math\axRay3.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\math\axRay3.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\math\axRect2.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\math\axRect2.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\math\axVec2.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\math\axVec3.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\math\axVec3.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\math\axVec4.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\math\axVec4.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\math\axVec_Str.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\math\axVec_Str.h"
+					RelativePath="..\..\..\src\math\axVec_Str.cpp"
 					>
 				</File>
 			</Filter>
@@ -608,147 +488,23 @@
 				Name="net"
 				>
 				<File
-					RelativePath="..\..\..\src\core\net\axSockAddr.cpp"
+					RelativePath="..\..\..\src\net\axSockAddr.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\ax\core\net\axSockAddr.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\net\axSocket.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\net\axSocket.h"
+					RelativePath="..\..\..\src\net\axSocket.cpp"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="thread"
+				Name="parser"
 				>
 				<File
-					RelativePath="..\..\..\include\ax\core\thread\axAtomicInt.h"
+					RelativePath="..\..\..\src\parser\axCSVParser.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\ax\core\thread\axAtomicQueue.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\thread\axCondVar.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\thread\axCondVar.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\thread\axMutex.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\thread\axMutex.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\thread\axSpinLock.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\thread\axThread.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\thread\axThread.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\thread\axThreadLocalPtr.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\thread\axThreadPool.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\thread\axThreadPool.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\thread\axTimerThread.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="system"
-				>
-				<File
-					RelativePath="..\..\..\include\ax\core\system\all_system.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\system\ax_poll.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\system\ax_poll.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\system\axAndroid.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\system\axAndroid.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\system\axApp.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\system\axApp.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\system\axCommandLineApp.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\system\axCommandLineApp.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\system\axExecute.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\system\axExecute.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\system\axLog.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\system\axLog.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\system\axSharedLibrary.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\system\axSharedLibrary.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\core\system\axSystem.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\system\axSystem.h"
+					RelativePath="..\..\..\src\parser\axIniParser.cpp"
 					>
 				</File>
 			</Filter>
@@ -756,16 +512,8 @@
 				Name="pch"
 				>
 				<File
-					RelativePath="..\..\..\src\core\pch\pch.cpp"
+					RelativePath="..\..\..\src\pch\pch.cpp"
 					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="1"
-						/>
-					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
 						>
@@ -776,19 +524,63 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\src\core\pch\pch.h"
+					RelativePath="..\..\..\src\pch\pch.h"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="data_structure"
+				Name="system"
 				>
 				<File
-					RelativePath="..\..\..\include\ax\core\data_structure\axCopyOnWrite.h"
+					RelativePath="..\..\..\src\system\ax_poll.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\ax\core\data_structure\axSharedPtr.h"
+					RelativePath="..\..\..\src\system\axAndroid.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\system\axApp.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\system\axCommandLineApp.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\system\axExecute.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\system\axLog.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\system\axSharedLibrary.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\system\axSystem.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="thread"
+				>
+				<File
+					RelativePath="..\..\..\src\thread\axCondVar.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\thread\axMutex.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\thread\axThread.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\thread\axThreadPool.cpp"
 					>
 				</File>
 			</Filter>
