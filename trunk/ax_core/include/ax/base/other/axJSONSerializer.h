@@ -36,6 +36,11 @@ public:
 		str_ = &str;
 	}
 
+	axStatus printNewLine_() {
+		if( !isPrintFormat ) return 0;
+		return str_->appendFormat( "\n" );
+	}
+	
 	bool isStartValue() {
 		if( str_->size() == 0 ) return true;
 
@@ -73,10 +78,8 @@ public:
 			st = str_->appendFormat( "," );	if( !st ) return st;	
 		}
 
-		if( isPrintFormat ){
-			st = str_->appendFormat( "\n" );	if( !st ) return st;
-		}
-		st = printDepth_();						if( !st ) return st;
+		st = printNewLine_();				if( !st ) return st;
+		st = printDepth_();					if( !st ) return st;
 
 		if( ax_strlen( name ) > 0 ) {
 			st = str_->appendFormat( "\"{?}\": ", name );	if( !st ) return st;	
@@ -102,12 +105,9 @@ public:
 		axStatus st;
 		if( depth_ > 0 ) depth_--;
 
-		if( isPrintFormat ) {
-			st = str_->appendFormat( "\n" );				if( !st ) return st;
-		}
-
-		st = printDepth_();								if( !st ) return st;
-		st = str_->appendFormat( "}" );					if( !st ) return st;
+		st = printNewLine_();				if( !st ) return st;
+		st = printDepth_();					if( !st ) return st;
+		st = str_->appendFormat( "}" );		if( !st ) return st;
 
 		return 0;
 	}
@@ -374,10 +374,7 @@ axStatus	ax_json_serialize_io ( axJSONSerializer &s, axDList<T> &v ) {
 	T *p = v.head();
 
 	st = s.str_->appendFormat( "[" );	if( !st ) return st;
-
-	if( s.isPrintFormat ) {
-		st = s.str_->appendFormat( "\n" );	if( !st ) return st;
-	}
+	st = s.printNewLine_(); if( !st )	return st;
 
 	s.depth_++;
 	st = s.printDepth_();				if( !st ) return st;
@@ -387,18 +384,13 @@ axStatus	ax_json_serialize_io ( axJSONSerializer &s, axDList<T> &v ) {
 		if( p->next() != NULL ) {
 			st = s.str_->appendFormat( "," );		if( !st ) return st;
 
-			if( s.isPrintFormat ) {
-				st = s.str_->appendFormat( "\n" );		if( !st ) return st;
-			}
-
+			st = s.printNewLine_();					if( !st ) return st;
 			st = s.printDepth_();					if( !st ) return st;
 		}
 	}
 
-	if( s.isPrintFormat ) {
-		st = s.str_->appendFormat( "\n" );	if( !st ) return st;
-	}
-
+	st = s.printNewLine_(); if( !st ) return st;
+	
 	s.depth_--;
 	st = s.printDepth_();				if( !st ) return st;
 	st = s.str_->appendFormat( "]" );	if( !st ) return st;
@@ -441,30 +433,25 @@ axStatus ax_json_serialize_io( axJSONSerializer &s, axIArray<T> &v ) {
 	//T *p = v.head();
 	st = s.str_->appendFormat( "[" );	if( !st ) return st;
 
-	if( s.isPrintFormat ) {
-		st = s.str_->appendFormat( "\n" );	if( !st ) return st;
-	}
+	st = s.printNewLine_(); if( !st ) return st;
 
 	s.depth_++;
+	
 	st = s.printDepth_();				if( !st ) return st;
 
 	for( i=0; i<v.size(); i++ ) {
 
-		st = ax_json_serialize_io ( s, v[i] );		if( !st ) return st;
+		st = ax_json_serialize_io ( s, v[i] );	if( !st ) return st;
 
 		if( i != v.size()-1 ) {
 
-			st = s.str_->appendFormat( "," );		if( !st ) return st;
-			if( s.isPrintFormat ) {
-				st = s.str_->appendFormat( "\n" );	if( !st ) return st;
-			}
-			st = s.printDepth_();					if( !st ) return st;
+			st = s.str_->appendFormat( "," );	if( !st ) return st;
+			st = s.printNewLine_();				if( !st ) return st;
+			st = s.printDepth_();				if( !st ) return st;
 		}
 	}
 
-	if( s.isPrintFormat ) {
-		st = s.str_->appendFormat( "\n" );	if( !st ) return st;
-	}
+	st = s.printNewLine_();				if( !st ) return st;
 
 	s.depth_--;
 	st = s.printDepth_();				if( !st ) return st;
