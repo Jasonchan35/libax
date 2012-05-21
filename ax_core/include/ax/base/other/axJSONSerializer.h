@@ -10,16 +10,12 @@
 class axJSONSerializer;
 class axJSONDeserializer;
 
-
-
 template<class S, class T> inline	
 axStatus ax_json_serialize_io( S &s, T& value, const char* name );
 
 class axJSONSerializerBase: public axNonCopyable {
 public:
-
 	static const char *skip_chr() { return " \t\r\n"; }
-
 };
 
 class axJSONSerializer : public axJSONSerializerBase {
@@ -40,7 +36,7 @@ public:
 		if( !isPrintFormat ) return 0;
 		return str_->appendFormat( "\n" );
 	}
-	
+
 	bool isStartValue() {
 		if( str_->size() == 0 ) return true;
 
@@ -63,7 +59,7 @@ public:
 
 	template<class T>	axStatus io	( T& value, const char* name = "" )	{ 
 		axStatus st;
-		//if( !str_ ) { assert( false ); return axStatus::JSON_serialize_not_init; }
+		//if( !str_ ) { assert( false ); return axStatus_Std::JSON_serialize_not_init; }
 
 		bool is_first = false;
 
@@ -119,6 +115,25 @@ public:
 		for( i=0; i<depth_; i++ ) {
 			st = str_->appendFormat( "\t" );	if( !st ) return st;
 		}
+		return 0;
+	}
+
+	axStatus startArray_() {
+		axStatus st;
+		st = str_->appendFormat( "[" );	if( !st ) return st;
+		st = printNewLine_(); if( !st )	return st;
+		depth_++;
+		st = printDepth_();				if( !st ) return st;
+
+		return 0;
+	}
+
+	axStatus endArray_() {
+		axStatus st;
+		st = printNewLine_();				if( !st ) return st;
+		depth_--;
+		st = printDepth_();				if( !st ) return st;
+		st = str_->appendFormat( "]" );	if( !st ) return st;
 		return 0;
 	}
 
@@ -184,6 +199,21 @@ public:
 		return 0;
 	}
 
+	axStatus startArray_() {
+		axStatus st;
+		st = skipSpace_();	if( !st ) return st;
+		if( *r_ != '[' )	return axStatus_Std::JSON_deserialize_format_error;
+		r_++;
+		return 0;
+	}
+
+	axStatus endArray_() {
+		axStatus st;
+		st = skipSpace_();	if( !st ) return st;
+		if( *r_ != ']' )	return axStatus_Std::JSON_deserialize_format_error;
+		r_++;
+		return 0;
+	}
 
 	bool  isHaveElement_() {
 		axStatus st;
@@ -371,13 +401,9 @@ inline axStatus ax_json_serialize_io( axJSONDeserializer &s, bool &v ) {
 template<class T> inline 
 axStatus	ax_json_serialize_io ( axJSONSerializer &s, axDList<T> &v ) {
 	axStatus st;
+	st = s.startArray_();	if( !st ) return st;
+
 	T *p = v.head();
-
-	st = s.str_->appendFormat( "[" );	if( !st ) return st;
-	st = s.printNewLine_(); if( !st )	return st;
-
-	s.depth_++;
-	st = s.printDepth_();				if( !st ) return st;
 	for( ;p;p=p->next() )  {
 
 		st = ax_json_serialize_io ( s, (T&)*p );	if( !st ) return st;
@@ -389,11 +415,8 @@ axStatus	ax_json_serialize_io ( axJSONSerializer &s, axDList<T> &v ) {
 		}
 	}
 
-	st = s.printNewLine_(); if( !st ) return st;
-	
-	s.depth_--;
-	st = s.printDepth_();				if( !st ) return st;
-	st = s.str_->appendFormat( "]" );	if( !st ) return st;
+
+	st = s.endArray_();		if( !st ) return st;
 
 	return 0 ;
 }
@@ -403,10 +426,7 @@ template<class T> inline
 axStatus	ax_json_serialize_io ( axJSONDeserializer &s, axDList<T> &v ) {	
 	axStatus st;
 
-	st = s.skipSpace_();	if( !st ) return st;
-	if( *s.r_ != '[' ) return axStatus_Std::JSON_deserialize_format_error;
-	s.r_++;
-
+	st = s.startArray_();	if( !st ) return st;
 
 	while( s.isHaveElement_() ) { 
 		axAutoPtr<T> p;
@@ -416,10 +436,7 @@ axStatus	ax_json_serialize_io ( axJSONDeserializer &s, axDList<T> &v ) {
 		s.nextElement_();
 	};
 
-
-	st = s.skipSpace_();	if( !st ) return st;
-	if( *s.r_ != ']' ) return axStatus_Std::JSON_deserialize_format_error;
-	s.r_++;
+	st = s.endArray_();	if( !st ) return st;
 
 	return 0;
 }
@@ -428,17 +445,10 @@ axStatus	ax_json_serialize_io ( axJSONDeserializer &s, axDList<T> &v ) {
 template< class T > inline
 axStatus ax_json_serialize_io( axJSONSerializer &s, axIArray<T> &v ) {
 	axStatus st;
-	axSize i;
-
-	//T *p = v.head();
-	st = s.str_->appendFormat( "[" );	if( !st ) return st;
-
-	st = s.printNewLine_(); if( !st ) return st;
-
-	s.depth_++;
 	
-	st = s.printDepth_();				if( !st ) return st;
+	st = s.startArray_();	if( !st ) return st;
 
+	axSize i;
 	for( i=0; i<v.size(); i++ ) {
 
 		st = ax_json_serialize_io ( s, v[i] );	if( !st ) return st;
@@ -451,11 +461,7 @@ axStatus ax_json_serialize_io( axJSONSerializer &s, axIArray<T> &v ) {
 		}
 	}
 
-	st = s.printNewLine_();				if( !st ) return st;
-
-	s.depth_--;
-	st = s.printDepth_();				if( !st ) return st;
-	st = s.str_->appendFormat( "]" );	if( !st ) return st;
+	st = s.endArray_();		if( !st ) return st;
 
 	return 0;
 }
@@ -466,9 +472,7 @@ axStatus ax_json_serialize_io( axJSONDeserializer &s, axIArray<T> &v ) {
 
 	axStatus st;
 
-	st = s.skipSpace_();	if( !st ) return st;
-	if( *s.r_ != '[' ) return axStatus_Std::JSON_deserialize_format_error;
-	s.r_++;
+	st = s.startArray_();	if( !st ) return st;
 
 	while( s.isHaveElement_() ){ 
 		st = v.incSize( 1 );		if( !st ) return st;
@@ -476,9 +480,7 @@ axStatus ax_json_serialize_io( axJSONDeserializer &s, axIArray<T> &v ) {
 		s.nextElement_();
 	}
 
-	st = s.skipSpace_();	if( !st ) return st;
-	if( *s.r_ != ']' ) return axStatus_Std::JSON_deserialize_format_error;
-	s.r_++;
+	st = s.endArray_();	if( !st ) return st;
 
 	return 0;
 }
@@ -596,9 +598,6 @@ axStatus ax_json_on_string_serialize( axJSONDeserializer &s, T &value ) {
 	return 0;
 }
 
-
-
 #define ax_string_serialize( n ) st = s.io( n, #n ); if( !st ) return st;
-
 
 #endif //__axJSONSerializer_h__
