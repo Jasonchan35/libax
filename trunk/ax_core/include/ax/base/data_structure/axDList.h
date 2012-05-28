@@ -52,8 +52,11 @@ public:
 	~axDList();
 
 	axSize	size		() const				{ return _size_; }
-	T*		head		() const				{ return (T*)_head_; }
-	T*		tail		() const				{ return (T*)_tail_; }
+	T*		head		() const				{ return _head_; }
+	T*		tail		() const				{ return _tail_; }
+	
+	T*		owner		() const				{ return _owner_; }
+	void	setOwner	( T* o )				{ _owner_ = o; }
 
 	T*		getNodeByIndex( axSize idx ) const;
 	T*		takeHead	()						{ T* h = _head_; if (h) h->removeFromList(); return h; }
@@ -78,6 +81,7 @@ public:
 private:
 	T*		_head_;
 	T*		_tail_;
+	T*		_owner_;
 	axSize	_size_;
 };
 
@@ -122,7 +126,8 @@ template<class T>
 axDList<T>::axDList() {
 	_head_   = NULL;
 	_tail_   = NULL;
-	_size_	= 0;
+	_owner_	 = NULL;
+	_size_	 = 0;
 }
 
 template<class T>
