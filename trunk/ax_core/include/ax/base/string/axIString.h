@@ -58,6 +58,12 @@ public:
 	bool			equals					( const T* sz ) const		{ return compareTo(sz) == 0; }
 	bool			equalsIgnoreCase		( const T* sz ) const		{ return compareToIgnoreCase(sz) == 0; }
 
+	bool			contains				( T ch ) const				{ return ax_strchr( c_str(), ch ); }
+	bool			containsIgnoreCase		( T ch ) const				{ return ax_strcasechr( c_str(), ch ); }
+	
+	bool			contains				( const T* sz ) const		{ return ax_strstr( c_str(), sz ); }
+	bool			containsIgnoreCase		( const T* sz ) const		{ return ax_strcasestr( c_str(), sz ); }
+
 	T				charAt					( axSize idx     ) const;
 	axStatus		setCharAt				( axSize idx, T ch );
 
