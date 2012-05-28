@@ -165,21 +165,6 @@ private:
 };
 
 
-template<class T> inline 
-axStatus ax_serialize_to_buf( axIByteArray	&buf, T &v ) {
-	axStatus st;
-/*	
-	axLenSerializer	ls;
-	st = ls.io( v );							if( !st ) return st;
-	st = buf.resize( ls.usedSize(), false );	if( !st ) return st;
-*/
-	buf.resize(0);
-	axSerializer		s(buf);
-	st = s.io( v );							if( !st ) return st;
-	st = buf.resize( s.usedSize() );		if( !st ) return st;
-	return 0;
-}
-
 /*
 template<class T> inline
 void ax_serialize_io_template_specialization_helper( T &v ){

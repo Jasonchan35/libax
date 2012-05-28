@@ -42,6 +42,7 @@
 		9632179B155EF2000061BE21 /* axMutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96321778155EF2000061BE21 /* axMutex.cpp */; };
 		9632179C155EF2000061BE21 /* axThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96321779155EF2000061BE21 /* axThread.cpp */; };
 		9632179D155EF2000061BE21 /* axThreadPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9632177A155EF2000061BE21 /* axThreadPool.cpp */; };
+		EA31D3AC157402890027265C /* axSerializer_Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = EA31D3AB157402890027265C /* axSerializer_Helper.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -188,6 +189,7 @@
 		EA15F73F1544053B00356C7C /* axThreadLocalPtr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axThreadLocalPtr.h; sourceTree = "<group>"; };
 		EA15F7401544053B00356C7C /* axThreadPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axThreadPool.h; sourceTree = "<group>"; };
 		EA15F7411544053B00356C7C /* axTimerThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTimerThread.h; sourceTree = "<group>"; };
+		EA31D3AB157402890027265C /* axSerializer_Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = axSerializer_Helper.h; path = other/axSerializer_Helper.h; sourceTree = "<group>"; };
 		EA9F4E1D154414BC00C9459E /* ax_core build.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "ax_core build.xcconfig"; sourceTree = "<group>"; };
 		EA9F4E1E154414C100C9459E /* ax_core.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ax_core.xcconfig; sourceTree = "<group>"; };
 		EAD528AA154405160034A2DD /* libax_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libax_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -438,6 +440,7 @@
 		EA15F7081544053B00356C7C /* core */ = {
 			isa = PBXGroup;
 			children = (
+				EA31D3A9157402810027265C /* other */,
 				EA15F7091544053B00356C7C /* data_structure */,
 				EA15F70C1544053B00356C7C /* database */,
 				EA15F7101544053B00356C7C /* file_system */,
@@ -555,6 +558,14 @@
 			path = thread;
 			sourceTree = "<group>";
 		};
+		EA31D3A9157402810027265C /* other */ = {
+			isa = PBXGroup;
+			children = (
+				EA31D3AB157402890027265C /* axSerializer_Helper.h */,
+			);
+			name = other;
+			sourceTree = "<group>";
+		};
 		EAD5289F154405160034A2DD = {
 			isa = PBXGroup;
 			children = (
@@ -582,6 +593,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96321791155EF2000061BE21 /* pch.h in Headers */,
+				EA31D3AC157402890027265C /* axSerializer_Helper.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

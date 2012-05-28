@@ -29,6 +29,9 @@
 
 #include "core/data_structure/axSharedPtr.h"
 
+#include "core/other/axSerializer_Helper.h"
+
+
 #ifdef axCOMPILER_VC
 	#pragma comment( lib, "winmm.lib" )
 	#pragma comment( lib, "ax_core.lib" )
