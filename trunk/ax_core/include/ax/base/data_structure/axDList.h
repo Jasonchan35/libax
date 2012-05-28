@@ -136,7 +136,7 @@ void axDList<T>::clear() {
 	for( ;; ) {
 		n = _tail_;     if( ! n ) return;
         n->removeFromList();
-		if( n->_ownedByList_ )
+		if( n->isOwnedByList() )
 			delete n;
 	}
 }

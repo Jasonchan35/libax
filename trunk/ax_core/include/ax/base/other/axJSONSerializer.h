@@ -247,8 +247,28 @@ public:
 		if( *r_ != '\"' ) return axStatus_Std::JSON_deserialize_cannot_find_string;
 		r_++;
 
-		const char *e = ax_strchr( r_, '\"' );
+		const char *e = r_;	
+		for( ; *e; e++ ) {
+			if( *e == '\\' ) {
+				e++;
+			}else {
+				if( *e == '\"' ) break;
+			}
+		}
+
 		if( !e ) return axStatus_Std::JSON_deserialize_cannot_find_string;
+
+		/*
+		for( ;; ) {
+		e = ax_strchr( r_, '\"' );
+		const char *be = e-1;
+		if( be != r_ ) {
+		if( *be == '\\' ) continue;
+
+		}
+		}
+
+		*/
 
 		st = str.setWithLength( r_, e-r_ );	if( !st ) return st;
 		r_ = e+1;
@@ -445,7 +465,7 @@ axStatus	ax_json_serialize_io ( axJSONDeserializer &s, axDList<T> &v ) {
 template< class T > inline
 axStatus ax_json_serialize_io( axJSONSerializer &s, axIArray<T> &v ) {
 	axStatus st;
-	
+
 	st = s.startArray_();	if( !st ) return st;
 
 	axSize i;
@@ -516,7 +536,19 @@ axStatus ax_json_serialize_io( S &s, axChunkArray<T,CS,LB> &v ) {
 template< class T > inline
 axStatus ax_json_serialize_io( axJSONSerializer &s, axIString_<T> &v ) {
 	axStatus st;
-	st = s.str_->appendFormat( "\"{?}\"", v.c_str() );		if( !st ) return st;
+	axTempStringA str;
+	st = str.set( v ); if( !st ) return st;
+
+	st = str.replaceString( "\\", "\\\\" ); if( !st ) return st;
+	st = str.replaceString( "\"", "\\\"" ); if( !st ) return st;
+	st = str.replaceString( "/",  "\\/"  ); if( !st ) return st;
+	st = str.replaceString( "\r", "\\r"  ); if( !st ) return st;
+	st = str.replaceString( "\n", "\\n"  ); if( !st ) return st;
+	st = str.replaceString( "\t", "\\t"  ); if( !st ) return st;
+	st = str.replaceString( "\b", "\\b"  ); if( !st ) return st;
+	st = str.replaceString( "\f", "\\f"  ); if( !st ) return st;
+
+	st = s.str_->appendFormat( "\"{?}\"", str.c_str() );		if( !st ) return st;
 	return 0;
 }
 
@@ -526,6 +558,16 @@ axStatus ax_json_serialize_io( axJSONDeserializer &s, axIString_<T> &v ) {
 	axStatus st;
 	axTempStringA str;
 	st = s.getString( str );	if( !st ) return st;
+
+	st = str.replaceString( "\\\\", "\\" ); if( !st ) return st;
+	st = str.replaceString( "\\\"", "\"" ); if( !st ) return st;
+	st = str.replaceString( "\\/",  "/"  ); if( !st ) return st;
+	st = str.replaceString( "\\r",  "\r" ); if( !st ) return st;
+	st = str.replaceString( "\\n",  "\n" ); if( !st ) return st;
+	st = str.replaceString( "\\t",  "\t" ); if( !st ) return st;
+	st = str.replaceString( "\\b",  "\b" ); if( !st ) return st;
+	st = str.replaceString( "\\f",  "\f" ); if( !st ) return st;
+
 	st = v.set( str );			if( !st ) return st;
 
 	return 0;
