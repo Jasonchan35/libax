@@ -809,6 +809,7 @@ template< class T > inline
 axStatus	axIString_<T> :: replaceString ( const T* from, const T* to, axSize start_from, axSize count ) {
 	axStatus st;
 
+	if( size() == 0 ) return 0;
 	if( start_from >= size() ) return axStatus_Std::invalid_parameter;
 	if( count == 0 ) count = axTypeOf<axSize>::valueMax();
 
@@ -865,6 +866,8 @@ axStatus	axIString_<T> :: replaceString ( const T* from, const T* to, axSize sta
 template< class T > inline
 axStatus	axIString_<T> :: replaceStringEnd ( const T* from, const T* to, axSize start_from, axSize count  ) {
 	axStatus st;
+	
+	if( size() == 0 ) return 0;
 	if( start_from >= size() ) return axStatus_Std::invalid_parameter;
 	if( count == 0 ) count = axTypeOf<axSize>::valueMax();
 
