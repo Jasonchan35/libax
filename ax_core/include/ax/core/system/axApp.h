@@ -10,7 +10,11 @@
 #include "axLog.h"
 
 class axApp : public axNonCopyable {
+#ifdef _OBJ_C_
+	axScope_NSAutoreleasePool autoReleasePool__;
+#endif //_OBJ_C_
 public:		
+	
 			axStatus	setAppName			( const char*	sz );
 	const	axStringA&	appName				();
 	
