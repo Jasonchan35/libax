@@ -190,6 +190,7 @@ axStatus axDir :: next( Entry &e ) {
 
 		st = e.filename.set( result_->d_name );	if( !st ) return st;
 		e.dir_ = ( result_->d_type & DT_DIR ) ? true : false;
+		break;
 	}
 	return 0;
 }

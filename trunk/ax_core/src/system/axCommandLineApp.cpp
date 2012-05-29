@@ -116,9 +116,7 @@ axStatus axCommandLineApp::_os_run() {
 #endif
 
 axStatus axCommandLineApp::_os_run() {
-#ifdef __OBJC__
-	axScope_NSAutoreleasePool	pool;
-#endif
+
 	return onRun();
 }
 

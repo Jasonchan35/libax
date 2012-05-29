@@ -8,6 +8,13 @@ class axString_Array : public axArray< axString_<T>, 8 > {
 	typedef axArray< axString_<T>, 8 > B;
 public:
 	axStatus	sortIgnoreCase( bool ascending = true );
+	
+	bool		containsIgnoreCase( const T *sz ) const;
+	
+	axStatus	append( const axString_<T> &v ) { return B::append( v ); }
+	
+	axStatus	append( const T *sz );
+	
 };
 
 typedef axString_Array<char>		axStringA_Array;
@@ -16,21 +23,41 @@ typedef axString_Array<wchar_t>		axStringW_Array;
 //----- inline -------
 
 template< class T > inline
+axStatus	axString_Array<T>::append( const T *sz ) {
+	axStatus st;
+	st = B::incSize( 1 ); if( !st ) return st;
+	st = B::last().set( sz ); if( !st ) return st;
+	return 0;
+}
+	
+	
+template< class T > inline
+bool axString_Array<T>::containsIgnoreCase( const T *sz ) const {
+
+	for( axSize i=0; i<B::size(); i++ ) {
+		if( B::indexOf(i).compareToIgnoreCase( sz ) == 0 ) return true;
+	}	
+	return false;
+
+}
+
+
+template< class T > inline
 axStatus	axString_Array<T>::sortIgnoreCase( bool ascending ) {
 	axSize n = B::size();
 	if( ascending ) {
 		for( axSize i=0; i<n; i++ ) {
 			for( axSize j=i+1; j<n; j++ ) {
-				if( B::element(i).compareToIgnoreCase( B::element(j) ) > 0 ) {
-					ax_swap( B::element(i), B::element(j) );
+				if( B::indexOf(i).compareToIgnoreCase( B::indexOf(j) ) > 0 ) {
+					ax_swap( B::indexOf(i), B::indexOf(j) );
 				}
 			}
 		}
 	}else{
 		for( axSize i=0; i<n; i++ ) {
 			for( axSize j=i+1; j<n; j++ ) {
-				if( B::element(i).compareToIgnoreCase( B::element(j) ) < 0 ) {
-					ax_swap( B::element(i), B::element(j) );
+				if( B::indexOf(i).compareToIgnoreCase( B::indexOf(j) ) < 0 ) {
+					ax_swap( B::indexOf(i), B::indexOf(j) );
 				}
 			}
 		}
