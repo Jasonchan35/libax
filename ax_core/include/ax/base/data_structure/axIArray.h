@@ -107,6 +107,9 @@ public:
 	template<class S>
 	axALWAYS_INLINE(	axStatus	serialize_io_vary	( S &s ) );
 
+
+						T*	_IArrayForPtr	() 			{ return ptr(); }
+				const 	T*	_IArrayForPtr	() const 	{ return ptr(); }
 protected:
 	axALWAYS_INLINE(	void	_init( T* p, axSize size, axSize capacity ) );
 

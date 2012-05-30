@@ -41,6 +41,7 @@ private:
 	char	local_[ LOCAL_BUF_SIZE * sizeof(T) ];
 	axSize	capacityIncrement_;
 };
+
 // -----------
 
 template<class T, size_t LOCAL_BUF_SIZE> inline
