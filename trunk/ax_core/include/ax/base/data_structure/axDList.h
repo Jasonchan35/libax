@@ -238,7 +238,7 @@ void axDList<T>::append( T* node, T* after ) {
 
 template<class T>
 void axDList<T>::remove( T *node, bool call_onWillRemoveFromList ) {
-	if( !node )				  { assert( false ); return; }
+	if( !node )	{ assert( false ); return; }
 	if( node->list() != this ) {
 		assert( false ); return;
 	}  // node is not belongs to this list !!
