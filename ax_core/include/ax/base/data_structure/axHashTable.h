@@ -131,7 +131,7 @@ axHashTable<T>::axHashTable() {
 
 template < class T >
 axHashTable<T>::~axHashTable() {
-    
+    clear();
 }
 
 template < class T >
