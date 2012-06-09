@@ -300,7 +300,7 @@ public:
 				st = beginStruct_();	if( !st ) return st;
 
 				st = getString( str ); if( !st ) return st;
-				if( !str.equalsIgnoreCase( name ) ) { 
+				if( !str.equalsNoCase( name ) ) { 
 					return axStatus_Std::JSON_deserialize_name_not_equal;			
 				}
 
@@ -403,9 +403,9 @@ inline axStatus ax_json_serialize_io( axJSONDeserializer &s, bool &v ) {
 
 	st = s.getToken_( str );			if( !st ) return st;
 
-	if( str.equalsIgnoreCase( "true" ) ) {
+	if( str.equalsNoCase( "true" ) ) {
 		v = true;
-	}else if( str.equalsIgnoreCase( "false" ) ) {
+	}else if( str.equalsNoCase( "false" ) ) {
 		v = false;
 	}else {
 		return axStatus_Std::JSON_deserialize_bool_format_error;

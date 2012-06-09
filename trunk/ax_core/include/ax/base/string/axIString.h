@@ -52,17 +52,17 @@ public:
 	operator const T* () const { return c_str(); }
 	bool			isEmpty					() const { return buf_.size() == 0; }
 
-	int				compareTo				( const T* sz ) const		{ return ax_strcmp( this->c_str(), sz ); }
-	int				compareToIgnoreCase		( const T* sz ) const		{ return ax_strcasecmp( this->c_str(), sz ); }
+	int				cmp						( const T* sz ) const		{ return ax_strcmp( this->c_str(), sz ); }
+	int				cmpNoCase				( const T* sz ) const		{ return ax_strcasecmp( this->c_str(), sz ); }
 
-	bool			equals					( const T* sz ) const		{ return compareTo(sz) == 0; }
-	bool			equalsIgnoreCase		( const T* sz ) const		{ return compareToIgnoreCase(sz) == 0; }
+	bool			equals					( const T* sz ) const		{ return cmp(sz) == 0; }
+	bool			equalsNoCase			( const T* sz ) const		{ return cmpNoCase(sz) == 0; }
 
 	bool			contains				( T ch ) const				{ return ax_strchr( c_str(), ch ); }
-	bool			containsIgnoreCase		( T ch ) const				{ return ax_strcasechr( c_str(), ch ); }
+	bool			containsNoCase			( T ch ) const				{ return ax_strcasechr( c_str(), ch ); }
 	
 	bool			contains				( const T* sz ) const		{ return ax_strstr( c_str(), sz ); }
-	bool			containsIgnoreCase		( const T* sz ) const		{ return ax_strcasestr( c_str(), sz ); }
+	bool			containsNoCase			( const T* sz ) const		{ return ax_strcasestr( c_str(), sz ); }
 
 	T				charAt					( axSize idx     ) const;
 	axStatus		setCharAt				( axSize idx, T ch );
@@ -163,10 +163,10 @@ protected:
 private:
 	bool operator ==	( const T* sz ) const;	// please using equals()
 	bool operator !=	( const T* sz ) const;	// please using equals()
-	bool operator <		( const T* sz ) const;	// please using compareTo() < 0
-	bool operator >		( const T* sz ) const;	// please using compareTo() > 0
-	bool operator <=	( const T* sz ) const;	// please using compareTo() <= 0
-	bool operator >=	( const T* sz ) const;	// please using compareTo() >= 0
+	bool operator <		( const T* sz ) const;	// please using cmp() < 0
+	bool operator >		( const T* sz ) const;	// please using cmp() > 0
+	bool operator <=	( const T* sz ) const;	// please using cmp() <= 0
+	bool operator >=	( const T* sz ) const;	// please using cmp() >= 0
 };
 
 template<> inline const char*		axIString_<char>   :: defaultTrimChars() { return  " \t"; }
