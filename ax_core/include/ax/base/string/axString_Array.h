@@ -7,9 +7,9 @@ template< class T >
 class axString_Array : public axArray< axString_<T>, 8 > {
 	typedef axArray< axString_<T>, 8 > B;
 public:
-	axStatus	sortIgnoreCase( bool ascending = true );
+	axStatus	sortNoCase( bool ascending = true );
 	
-	bool		containsIgnoreCase( const T *sz ) const;
+	bool		containsNoCase( const T *sz ) const;
 	
 	axStatus	append( const axString_<T> &v ) { return B::append( v ); }
 	
@@ -32,10 +32,10 @@ axStatus	axString_Array<T>::append( const T *sz ) {
 	
 	
 template< class T > inline
-bool axString_Array<T>::containsIgnoreCase( const T *sz ) const {
+bool axString_Array<T>::containsNoCase( const T *sz ) const {
 
 	for( axSize i=0; i<B::size(); i++ ) {
-		if( B::indexOf(i).compareToIgnoreCase( sz ) == 0 ) return true;
+		if( B::indexOf(i).cmpNoCase( sz ) == 0 ) return true;
 	}	
 	return false;
 
@@ -43,12 +43,12 @@ bool axString_Array<T>::containsIgnoreCase( const T *sz ) const {
 
 
 template< class T > inline
-axStatus	axString_Array<T>::sortIgnoreCase( bool ascending ) {
+axStatus	axString_Array<T>::sortNoCase( bool ascending ) {
 	axSize n = B::size();
 	if( ascending ) {
 		for( axSize i=0; i<n; i++ ) {
 			for( axSize j=i+1; j<n; j++ ) {
-				if( B::indexOf(i).compareToIgnoreCase( B::indexOf(j) ) > 0 ) {
+				if( B::indexOf(i).cmpNoCase( B::indexOf(j) ) > 0 ) {
 					ax_swap( B::indexOf(i), B::indexOf(j) );
 				}
 			}
@@ -56,7 +56,7 @@ axStatus	axString_Array<T>::sortIgnoreCase( bool ascending ) {
 	}else{
 		for( axSize i=0; i<n; i++ ) {
 			for( axSize j=i+1; j<n; j++ ) {
-				if( B::indexOf(i).compareToIgnoreCase( B::indexOf(j) ) < 0 ) {
+				if( B::indexOf(i).cmpNoCase( B::indexOf(j) ) < 0 ) {
 					ax_swap( B::indexOf(i), B::indexOf(j) );
 				}
 			}
