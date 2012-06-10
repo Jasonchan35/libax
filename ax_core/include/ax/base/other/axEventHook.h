@@ -47,6 +47,7 @@ public:
 			p->call( ev ); 
 		} 
 	}
+	bool	hasHook		()			{ return B::head() != NULL; }
 	void	_hook		( HOOK *h )	{ B::insert(h); }
 };
 
@@ -110,6 +111,7 @@ public:
 			p->call(); 
 		} 
 	}
+	bool	hasHook		()			{ return B::head() != NULL; }
 	void	_hook	( HOOK *h )	{ B::insert(h); }
 };
 
