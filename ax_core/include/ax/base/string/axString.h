@@ -14,7 +14,7 @@ public:
 	axStatus	onTake( axStringA_<LOCAL_BUF_SIZE> &src )	{  return ax_take( buf_, src.buf_ ); }
 	void		setCapacityIncrement( axSize  n )			{ buf_.setCapacityIncrement(n); }
 private:
-	axArray<char, LOCAL_BUF_SIZE+1>	buf_;
+	axArray<char, LOCAL_BUF_SIZE>	buf_;
 };
 
 
@@ -26,7 +26,7 @@ public:
 	axStatus	onTake( axStringW_<LOCAL_BUF_SIZE> &src )	{  return buf_.onTake( src.buf_ ); }
 	void		setCapacityIncrement( axSize  n )			{ buf_.setCapacityIncrement(n); }
 private:
-	axArray<wchar_t, LOCAL_BUF_SIZE+1>	buf_;
+	axArray<wchar_t, LOCAL_BUF_SIZE>	buf_;
 };
 
 template< size_t LOCAL_BUF_SIZE >
@@ -37,7 +37,7 @@ public:
 	axStatus	onTake( axStringU_<LOCAL_BUF_SIZE> &src )	{  return buf_.onTake( src.buf_ ); }
 	void		setCapacityIncrement( axSize  n )			{ buf_.setCapacityIncrement(n); }
 private:
-	axArray<axUChar, LOCAL_BUF_SIZE+1>	buf_;
+	axArray<axUChar, LOCAL_BUF_SIZE>	buf_;
 };
 
 //------------------
@@ -50,7 +50,7 @@ public:
 	axStatus	onTake( axString_<T, LOCAL_BUF_SIZE>	&src )	{  return ax_take( buf_, src.buf_ ); }
 	void		setCapacityIncrement( axSize  n )	{ buf_.setCapacityIncrement(n); }
 private:
-	axArray<T,LOCAL_BUF_SIZE+1>	buf_;
+	axArray<T,LOCAL_BUF_SIZE>	buf_;
 };
 
 typedef	axString_<char>				axStringA;
