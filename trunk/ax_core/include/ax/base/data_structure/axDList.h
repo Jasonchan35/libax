@@ -55,8 +55,8 @@ public:
 	T*		head		() const				{ return _head_; }
 	T*		tail		() const				{ return _tail_; }
 	
-	T*		owner		() const				{ return _owner_; }
-	void	setOwner	( T* o )				{ _owner_ = o; }
+	void*	owner		() const				{ return _owner_; }
+	void	setOwner	( void* o )				{ _owner_ = o; }
 
 	T*		getNodeByIndex( axSize idx ) const;
 	T*		takeHead	()						{ T* h = _head_; if (h) h->removeFromList(); return h; }
@@ -81,7 +81,7 @@ public:
 private:
 	T*		_head_;
 	T*		_tail_;
-	T*		_owner_;
+	void*	_owner_;
 	axSize	_size_;
 };
 
