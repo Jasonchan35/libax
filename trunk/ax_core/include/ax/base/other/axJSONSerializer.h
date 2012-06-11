@@ -342,7 +342,7 @@ public:
 				st = beginStruct_();	if( !st ) return st;
 
 				st = getString( str ); if( !st ) return st;
-				if( !str.equalsIgnoreCase( name ) ) { 
+				if( !str.equalsNoCase( name ) ) { 
 					return axStatus_Std::JSON_deserialize_name_not_equal;			
 				}
 
