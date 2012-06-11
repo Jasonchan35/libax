@@ -1,5 +1,47 @@
 #ifndef __axJSONSerializer_h__
 #define __axJSONSerializer_h__
+/*
+** 3 method to support axJSONSerializer ** 
+1: onStringSerialize function in your class:
+
+template< class S >
+axStatus onStringSerialize( S &s ) {
+axStatus st;
+ax_string_serialize( v1 )
+ax_string_serialize( v2 )
+return 0;
+}
+
+2:  external class global function:
+
+template<class S > inline 
+axStatus	ax_json_serialize_io_class ( S &s, vector3 &v ) {	
+axStatus st;
+st = s.io( v.x, "x" );	if( !st ) return st;
+st = s.io( v.y, "y" );	if( !st ) return st;
+st = s.io( v.z, "z" );	if( !st ) return st;
+return 0;
+}
+
+
+
+3: inline global function : ( This function only support singale string input and output )
+
+inline axStatus ax_json_serialize_io( axJSONDeserializer &s, vector3 &value ) {
+axStatus st;
+axTempStringA str;
+st = s.getString( str ); if( !st ) return st;
+st = ax_str_to( str, value ); if( !st ) return st;
+return 0;
+}
+
+inline axStatus ax_json_serialize_io( axJSONSerializer &s, vector3 &value ) {
+axStatus st;
+axTempStringA str;
+st = str.format( "{?} {?} {?}", value.x, value.y, value.z ); if( !st ) return st;
+return ax_json_serialize_io( s, str );
+}
+*/
 
 #include "../data_structure/axIArray.h"
 #include "../data_structure/axDList.h"
@@ -300,7 +342,7 @@ public:
 				st = beginStruct_();	if( !st ) return st;
 
 				st = getString( str ); if( !st ) return st;
-				if( !str.equalsNoCase( name ) ) { 
+				if( !str.equalsIgnoreCase( name ) ) { 
 					return axStatus_Std::JSON_deserialize_name_not_equal;			
 				}
 
@@ -611,10 +653,13 @@ axStatus ax_json_serialize_io( S &s, T& value ) {
 	return 0;
 }
 
+template<class S, class T> inline	
+axStatus ax_json_serialize_io_class( S &s, T &v ) { return v.onStringSerialize( s ); }
+
 
 template< class T> inline	
 axStatus ax_json_on_string_serialize( axJSONSerializer &s, T &value ) {
-	return value.onStringSerialize( s );
+	return ax_json_serialize_io_class( s, value );
 }
 
 
@@ -627,7 +672,7 @@ axStatus ax_json_on_string_serialize( axJSONDeserializer &s, T &value ) {
 		st = s.getString( str );		if( !st ) return st;
 		st = s.targetName.set( str );	if( !st ) return st;
 		st = s.skipColon_();			if( !st ) return st;
-		st = value.onStringSerialize( s );
+		st = ax_json_serialize_io_class( s, value );
 		if( st.code() == 0 )  {
 			return axStatus_Std::JSON_deserialize_element_not_found;
 		}else if( st.code() != axStatus_Std::JSON_deserialize_internal_found ) {
