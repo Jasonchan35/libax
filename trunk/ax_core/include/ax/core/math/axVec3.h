@@ -77,18 +77,16 @@ public:
 	axVec3		reflect		( const axVec3 &normal ) const	{ return *this - ( normal * ( dot( normal ) * 2 ) ); }
 	axVec3		reflectHalf ( const axVec3 &normal ) const	{ return *this - ( normal * ( dot( normal )     ) ); }
 
-	T			average()									{ return (x + y + z) / (T)3; }
-
-	T			length		() const						{ return sqrt( lengthSq() ); }
-	//! length in square
-	T			lengthSq	() const						{ return (x*x + y*y + z*z); }
+	//! magnitude
+	T			mag			() const						{ return sqrt( magSq() ); }
+	T			magSq		() const						{ return (x*x + y*y + z*z); }
 
 	T			distance	( const axVec3 &v ) const		{ return sqrt( distanceSq( v ) ); }
 
 	//! distance in square
 	T			distanceSq	( const axVec3 &v ) const		{ return (x-v.x)*(x-v.x) + (y-v.y)*(y-v.y) + (z-v.z)*(z-v.z); }
 
-	axVec3		normalize	() const						{ T r = lengthSq(); return r ? (*this/ax_sqrt(r)) : *this; }
+	axVec3		normalize	() const						{ T r = magSq(); return r ? (*this/ax_sqrt(r)) : *this; }
 	void		normalizeIt	()								{ *this = normalize(); }
 
 
