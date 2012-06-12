@@ -71,8 +71,9 @@ public:
 	bool		isAll		( const T v ) const				{ return (x==v && y==v); }
 	bool		isAny		( const T v ) const				{ return (x==v || y==v); }
 
-	T			length		() const						{ return sqrt( lengthSq() ); }
-	T			lengthSq	() const						{ return ( x*x + y*y ); }
+	//magnitude
+	T			mag			() const						{ return sqrt( magSq() ); }
+	T			magSq		() const						{ return ( x*x + y*y ); }
 
 	T			distance	( const axVec2 &v ) const		{ return sqrt ( distanceSq( v ) ); }
 	T			distanceSq	( const axVec2 &v ) const		{ return (x-v.x)*(x-v.x) + (y-v.y)*(y-v.y);	}
@@ -80,18 +81,16 @@ public:
 	//! cross product in 2D should return scaler, not vector
 	T			operator^	( const axVec2 &v ) const		{ return x*v.y - y*v.x; }
 
-	T			average		()								{ return (x + y) / (T)2; }
-
 	bool		isInsideTriangle( const axVec2 &v0, const axVec2 &v1, const axVec2 &v2 );
 	
-	axVec2		perpendicular()							{ return axVec2d(-y,x); }
-	axVec2		normalize()							{ T l = length(); return l ? axVec2d(x/l,y/l) : axVec2d(0,0); }
-	void		normalizeIt()							{ *this = normalize(); }
+	axVec2		perpendicular()								{ return axVec2d(-y,x); }
+
+	axVec2		normalize	() const						{ T r = magSq(); return r ? (*this/ax_sqrt(r)) : *this; }
+	void		normalizeIt	()								{ *this = normalize(); }	
 	
-	
-	void		roundX()								{ x = ax_round(x); }
-	void		roundY()								{ y = ax_round(y); }	
-	void		round()									{ roundX(); roundY(); }
+	void		roundX()									{ x = ax_round(x); }
+	void		roundY()									{ y = ax_round(y); }	
+	void		round()										{ roundX(); roundY(); }
 
 	axStatus	onTake( axVec2<T> &b )				{ *this = b; return 0; }
 

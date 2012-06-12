@@ -58,11 +58,11 @@ public:
 	bool			equals					( const T* sz ) const		{ return cmp(sz) == 0; }
 	bool			equalsNoCase			( const T* sz ) const		{ return cmpNoCase(sz) == 0; }
 
-	bool			contains				( T ch ) const				{ return ax_strchr( c_str(), ch ); }
-	bool			containsNoCase			( T ch ) const				{ return ax_strcasechr( c_str(), ch ); }
+	bool			contains				( T ch ) const				{ return ax_strchr( c_str(), ch ) != NULL; }
+	bool			containsNoCase			( T ch ) const				{ return ax_strcasechr( c_str(), ch ) != NULL; }
 	
-	bool			contains				( const T* sz ) const		{ return ax_strstr( c_str(), sz ); }
-	bool			containsNoCase			( const T* sz ) const		{ return ax_strcasestr( c_str(), sz ); }
+	bool			contains				( const T* sz ) const		{ return ax_strstr( c_str(), sz ) != NULL; }
+	bool			containsNoCase			( const T* sz ) const		{ return ax_strcasestr( c_str(), sz ) != NULL; }
 
 	T				charAt					( axSize idx     ) const;
 	axStatus		setCharAt				( axSize idx, T ch );
