@@ -23,14 +23,12 @@ template< class EV > class axEventCaster;
 template< class OBJ, class EV > class axEventFunc;
 
 template< class EV >
-class axEventHookBase : public axTinyListNode< axEventHookBase<EV> > {
-	typedef	axTinyListNode< axEventHookBase<EV> > B;
+class axEventHookBase : public axTinyListNode< axEventHookBase<EV>, false > {
+	typedef	axTinyListNode< axEventHookBase<EV>, false > B;
 public:
+	virtual ~axEventHookBase() {}
 	virtual	void	call	( EV &ev ) = 0;
 			void	unhook	()				{ B::removeFromList(); }
-
-	virtual ~axEventHookBase() {}
-	axEventHookBase() { B::setOwnedByList( false ); }
 };
 
 template< class EV >
@@ -87,14 +85,13 @@ private:
 template<> class axEventCaster<void>;
 
 template<>
-class axEventHookBase<void> : public axTinyListNode< axEventHookBase<void> > {
-	typedef	axTinyListNode< axEventHookBase<void> > B;
+class axEventHookBase<void> : public axTinyListNode< axEventHookBase<void>, false > {
+	typedef	axTinyListNode< axEventHookBase<void>, false > B;
 public:
 	virtual	void	call	() = 0;
 			void	unhook	()		{ B::removeFromList(); }
 
 	virtual ~axEventHookBase() {}
-	axEventHookBase() { B::setOwnedByList( false ); }
 };
 
 template<>

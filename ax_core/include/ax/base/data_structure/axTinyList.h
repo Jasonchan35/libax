@@ -11,31 +11,31 @@ class axDeserializer;
 
 template<class T> class axTinyList;
 
-template<class T>
+template<class T, bool OwnedByList>
 class axTinyListNode : public axNonCopyable {
 public:
+	typedef	axTinyList<T>	List;
+
 	axTinyListNode();
 	~axTinyListNode()		{ removeFromList(); }
 
-	T*			prev()		{ return _prev_; }
-	T*			next()      { return _next_; }
+	axALWAYS_INLINE( T*	prev() )	{ return _prev_; }
+	axALWAYS_INLINE( T*	next() )    { return _next_; }
 
 	axTinyList<T>*	list() const				{ return (axTinyList<T>*) _list_; }
 
 	void        removeFromList	()				{ if( list() ) list()->remove( (T*)this ); }
 
+//--- function for override ---
 	void        onDidAddToList  ()              {}
 	void        onWillRemoveFromList()          {}
-
-	void        setOwnedByList ( bool b )		{ _ownedByList_ = b; }
-	bool        isOwnedByList  ()				{ return _ownedByList_; }
+	bool       	onIsOwnedByList  ()				{ return OwnedByList; }
 
 friend class axTinyList<T>;
 protected:
 	T*		_prev_;
 	T*		_next_;
 	void*	_list_;
-	bool	_ownedByList_;
 };
 
 template<class T>
@@ -44,24 +44,25 @@ public:
 	axTinyList();
 	~axTinyList()		{ clear(); }
 
-	void	clear	();
+	void	clear		();
 
-	T*		head	()	{ return _head_; }
+	axALWAYS_INLINE( T*	head		() )	{ return _head_; }
+	axALWAYS_INLINE( T*	takeHead	() )	{ T* h = _head_; if (h) h->removeFromList(); return h; }
 
-	void	insert	( T* node );
-	void	remove	( T* node, bool call_onWillRemoveFromList = true );
+	axALWAYS_INLINE( void		insert	( T* node )	);
+	axALWAYS_INLINE( void		remove	( T* node, bool call_onWillRemoveFromList = true ) );
+	axALWAYS_INLINE( axStatus	onTake	( axTinyList<T> &src ) );
 
 private:
 	T*	_head_;
 };
 
 //---- inline ----
-template<class T>
-axTinyListNode<T>::axTinyListNode()	{ 
+template<class T, bool OwnedByList>
+axTinyListNode<T,OwnedByList>::axTinyListNode()	{ 
 	_prev_  = NULL;
 	_next_  = NULL;
 	_list_	= NULL;
-	_ownedByList_ = true;
 }
 
 template<class T>
@@ -70,12 +71,25 @@ axTinyList<T>::axTinyList()	{
 }
 
 template<class T>
+axStatus axTinyList<T>::onTake( axTinyList<T> &src ) {
+	clear();
+	_head_ = src._head_;
+	src._head_ = NULL;
+	
+	T* p = _head_;
+	for( ;p; p=p->next() ) {
+		p->_list_ = this;
+	}
+	return 0;
+}
+
+template<class T>
 void axTinyList<T>::clear() {
 	T *n;
 	for( ;; ) {
 		n = _head_;     if( !n ) return;
         n->removeFromList();
-		if( n->_ownedByList_ )
+		if( n->onIsOwnedByList() )
 			delete n;
 	}
 }

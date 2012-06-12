@@ -74,12 +74,13 @@ axStatus axSharedPtr<T> :: newObject() {
 
 template <class T> inline
 axStatus axSharedPtr<T> :: unshare () {
+	axStatus st;
 	if( !p_ ) return 0;
 	if( p_->refCount() == 1 ) return 0; // this is the only one holding the object
 	const T* c = p_;
-	T* t = c->onClone();
-	if( !t ) return axStatus_Std::not_enough_memory;
-	ref( t );	
+	T* newObj = NULL;
+	st = c->onClone( newObj );		if( !st ) return st;
+	ref( newObj );	
 	return 0;		
 }
 

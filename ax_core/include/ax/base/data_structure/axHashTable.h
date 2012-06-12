@@ -7,9 +7,9 @@
 template< class T > class axHashTable;
 template< class T > class axHashTable_List;
 
-template< class T >
-class axHashTableNode : public axDListNode<T> {
-	typedef axDListNode<T>          B;
+template< class T, bool OwnedByList >
+class axHashTableNode : public axTinyListNode<T,OwnedByList> {
+	typedef axTinyListNode<T,OwnedByList>    B;
     typedef axHashTable_List<T>     List;
 public:
 	~axHashTableNode()              { removeFromList(); }
@@ -21,26 +21,25 @@ public:
 };
 
 template<class T>
-class axHashTable_List : public axDList<T> {
-	typedef axDList<T>          B;
+class axHashTable_List : public axTinyList<T> {
+	typedef axTinyList<T>       B;
     typedef axHashTable<T>      Table;
 public:
     axHashTable_List()          { node_.This = this; }
     ~axHashTable_List()         { B::clear(); }
     
 friend class axHashTable<T>;
-friend class axHashTableNode<T>;
+friend class axHashTableNode<T,true>;
+friend class axHashTableNode<T,false>;
 protected:
 	void insert ( T* item );
-	void append ( T* item );
 	void remove ( T* item );
     
     Table*  table_;    
     
-    class   Node : public axDListNode< Node > {
-        typedef axDListNode< Node > B;
+    class   Node : public axDListNode< Node, false> {
+        typedef axDListNode< Node, false > B;
     public:
-        Node() { B::setOwnedByList(false); }
         axHashTable_List<T> *This;
     };
     Node    node_;
@@ -60,7 +59,6 @@ public:
 	T*          getListHead ( uint32_t hash )   { List* list; axStatus st = getList( list, hash ); return st ? list->head() : NULL; }
 
 	axStatus	insert		( T* item )			{ List* list; axStatus st = getList( list, item->hashTableValue() ); if( !st ) return st; list->insert( item ); return 0; }
-	axStatus	append		( T* item )			{ List* list; axStatus st = getList( list, item->hashTableValue() ); if( !st ) return st; list->append( item ); return 0; }
 	axStatus	remove		( T* item )			{ List* list; axStatus st = getList( list, item->hashTableValue() ); if( !st ) return st; list->remove( item ); return 0; }
 
 	void        clear       ();
@@ -146,7 +144,7 @@ axStatus axHashTable<T>::setTableSize( axSize table_size ) {
         for( ;; ) {
             p = table_[i].takeHead();
             if( !p ) break;
-            tmpList.append( p );
+            tmpList.insert( p );
         }
     }    
     
@@ -159,7 +157,7 @@ axStatus axHashTable<T>::setTableSize( axSize table_size ) {
     for(;;) {
         p = tmpList.takeHead();
         if( !p ) break;
-        append( p );
+        insert( p );
     }
 	return 0;
 }
@@ -174,7 +172,7 @@ void axHashTable<T>::clear() {
 
 template < class T >
 void axHashTable_List<T> :: insert( T* item ) {
-	if( B::size() == 0 ) {
+	if( ! B::head() ) {
         table_->nonEmptyList_.insert( &node_ );
     }
     B::insert(item);
@@ -182,19 +180,10 @@ void axHashTable_List<T> :: insert( T* item ) {
 }
 
 template < class T >
-void axHashTable_List<T> :: append( T* item ) {
-	if( B::size() == 0 ) {
-        table_->nonEmptyList_.append( &node_ );
-    }
-    B::append(item);
-	table_->_incNodeCount();
-}
-
-template < class T >
 void axHashTable_List<T> :: remove( T* item ) {
     B::remove(item);
 	table_->_decNodeCount();
-	if( B::size() == 0 ) {//only remove from nonEmptyList when no more node
+	if( ! B::head() ) {//only remove from nonEmptyList when no more node
 		table_->nonEmptyList_.remove( &node_ );
     }
 }

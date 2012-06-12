@@ -17,31 +17,31 @@ class axDeserializer;
 template<class T> class axDList;
 
 //! double linked list node
-template< class T >
+template< class T, bool OwnedByList >
 class axDListNode : public axNonCopyable {
 public:
+	typedef	axDList<T>	List;
+
 	axDListNode();
 	~axDListNode()                              { removeFromList(); }
 
-	T*			prev()                          { return _prev_; }
-	T*			next()                          { return _next_; }
+	axALWAYS_INLINE( T*	prev() )                { return _prev_; }
+	axALWAYS_INLINE( T*	next() )                { return _next_; }
 	axDList<T>*	list() const                    { return (axDList<T>*) _list_; }
 
 	axStatus	getIndex        ( axSize &idx );
 	void        removeFromList	()				{ if( list() ) list()->remove( (T*)this ); }
 
+//--- function for override ---
 	void        onDidAddToList  ()              {}
 	void        onWillRemoveFromList()          {}
-
-	void        setOwnedByList ( bool b )		{ _ownedByList_ = b; }
-	bool        isOwnedByList  ()				{ return _ownedByList_; }
+	bool        onIsOwnedByList  ()				{ return OwnedByList; }
 
 friend class axDList<T>;
 protected:
 	T*		_next_;
 	T*		_prev_;
 	void*	_list_;
-	bool	_ownedByList_;
 };
 
 //! double linked list template
@@ -51,15 +51,16 @@ public:
 	axDList();
 	~axDList();
 
-	axSize	size		() const				{ return _size_; }
-	T*		head		() const				{ return _head_; }
-	T*		tail		() const				{ return _tail_; }
-	
 	void*	owner		() const				{ return _owner_; }
 	void	setOwner	( void* o )				{ _owner_ = o; }
 
 	T*		getNodeByIndex( axSize idx ) const;
-	T*		takeHead	()						{ T* h = _head_; if (h) h->removeFromList(); return h; }
+	
+	axALWAYS_INLINE( axSize	size	() const )	{ return _size_; }
+	axALWAYS_INLINE( T*		head	() const )	{ return _head_; }
+	axALWAYS_INLINE( T*		tail	() const )	{ return _tail_; }
+
+	axALWAYS_INLINE( T*		takeHead	()	)		{ T* h = _head_; if (h) h->removeFromList(); return h; }
 
 	axALWAYS_INLINE(	void		insert			( T* node ) );
 	axALWAYS_INLINE(	void		insert			( T* node, T* before ) );
@@ -81,22 +82,21 @@ public:
 private:
 	T*		_head_;
 	T*		_tail_;
-	void*	_owner_;
 	axSize	_size_;
+	void*	_owner_;
 };
 
 //===================== inline ==========================
 
-template<class T>
-axDListNode<T>::axDListNode() {
+template<class T, bool OwnedByList>
+axDListNode<T,OwnedByList>::axDListNode() {
 	_list_ = NULL;
 	_prev_ = _next_ = NULL;
-	_ownedByList_ = true;
 }
 
 
-template<class T>
-axStatus	axDListNode<T> :: getIndex( axSize &idx ) {
+template<class T, bool OwnedByList>
+axStatus	axDListNode<T,OwnedByList> :: getIndex( axSize &idx ) {
 	if( ! list() ) return axStatus_Std::invalid_parameter;
 	T* n = list()->head();
 	axSize i = 0;
@@ -112,12 +112,18 @@ axStatus	axDListNode<T> :: getIndex( axSize &idx ) {
 template<class T>
 axStatus axDList<T>::onTake( axDList<T> &src ) {
 	clear();
-	T* item;
-	for( ;; ) {
-		item = src.head();
-		if( !item ) break;
-        item->removeFromList();
-		append( item );
+	_head_ = src._head_;
+	_tail_ = src._tail_;
+	_size_ = src._size_;
+	_owner_ = _owner_;
+	
+	src._head_ = NULL;
+	src._tail_ = NULL;
+	src._size_ = 0;
+	
+	T* p = _head_;
+	for( ;p; p=p->next() ) {
+		p->_list_ = this;
 	}
 	return 0;
 }
@@ -141,7 +147,7 @@ void axDList<T>::clear() {
 	for( ;; ) {
 		n = _tail_;     if( ! n ) return;
         n->removeFromList();
-		if( n->isOwnedByList() )
+		if( n->onIsOwnedByList() )
 			delete n;
 	}
 }
