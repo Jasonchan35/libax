@@ -7,6 +7,7 @@
 #include "base/string/ax_string.h"
 
 #include "base/data_structure/axAutoPtr.h"
+#include "base/data_structure/axWeakPtr.h"
 #include "base/data_structure/axDList.h"
 #include "base/data_structure/axTinyList.h"
 #include "base/data_structure/axArray_types.h"
