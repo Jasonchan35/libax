@@ -37,7 +37,7 @@ void axVec3<T>::operator*= ( const axMatrix4<T> &m ) {
 
 template <class T>
 T axVec3<T>::angle( const axVec3 &v ) {
-	T m = length() * v.length();
+	T m = mag() * v.mag();
 	if( !m ) return 0.0;
 	T cosine = dot(v)/m;
 	if( cosine >= 1.0 )	return 0.0;
