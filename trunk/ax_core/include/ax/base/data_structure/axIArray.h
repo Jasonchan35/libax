@@ -55,24 +55,24 @@ public:
 						void		setAutoCapacityIncrement()				{ setCapacityIncrement(0); }						
 				virtual	axSize		capacityIncrement		() const		{ return 1; }
 
-						T&			indexOf		( axSize i )				{ assert( inBound(i) ); return p_[i]; }
-				const	T&			indexOf		( axSize i ) const			{ assert( inBound(i) ); return p_[i]; }
+	axALWAYS_INLINE(			T&	indexOf		( axSize i ) )				{ assert( inBound(i) ); return p_[i]; }
+	axALWAYS_INLINE(	const	T&	indexOf		( axSize i ) const )		{ assert( inBound(i) ); return p_[i]; }
 
-						T&			operator[]	( axSize i )				{ return indexOf(i); }
-				const	T&			operator[]	( axSize i ) const			{ return indexOf(i); }
+	axALWAYS_INLINE( 			T&	operator[]	( axSize i ) )				{ return indexOf(i); }
+	axALWAYS_INLINE( 	const	T&	operator[]	( axSize i ) const )		{ return indexOf(i); }
 
-						T&			last		( axSize i = 0 )			{ return indexOf( size_-i-1 ); }
-				const	T&			last		( axSize i = 0 ) const		{ return indexOf( size_-i-1 ); }
+	axALWAYS_INLINE(			T&			last		( axSize i = 0 ) )			{ return indexOf( size_-i-1 ); }
+	axALWAYS_INLINE(	const	T&			last		( axSize i = 0 ) const )	{ return indexOf( size_-i-1 ); }
 
 	axALWAYS_INLINE(	axStatus	copy		( const axIArray<T> &src ) );
 
-						axStatus	insert		( axSize pos, const T &src )				{ return insertN( pos, &src, 1 ); }
-						axStatus	insertN		( axSize pos, const axIArray<T> &src )		{ return insertN( pos, src.ptr(), src.size() ); }
+	axALWAYS_INLINE(	axStatus	insert		( axSize pos, const T &src ) )				{ return insertN( pos, &src, 1 ); }
+	axALWAYS_INLINE(	axStatus	insertN		( axSize pos, const axIArray<T> &src ) )	{ return insertN( pos, src.ptr(), src.size() ); }
 	axALWAYS_INLINE(	axStatus	insertN		( axSize pos, const T* src, axSize count ) );
 
 	axALWAYS_INLINE(	axStatus	append		( const T& value ) );
 	axALWAYS_INLINE(	axStatus	appendN		( const T* src, axSize count ) );
-						axStatus	appendN		( const axIArray<T> &src )	{ return appendN( src.ptr(), src.size() ); }
+	axALWAYS_INLINE(	axStatus	appendN		( const axIArray<T> &src ) )	{ return appendN( src.ptr(), src.size() ); }
 			
 	axALWAYS_INLINE(	axStatus	extract		( axIArray & out, axSize start, axSize count ) );
 

@@ -10,7 +10,7 @@ class axArray<T,0> : public axIArray<T> {
 	typedef axIArray<T>	B;
 public:
 	axArray()							{ _ctor(); }
-	axArray( const axArray<T,0> & src ) { _ctor(); B::copy(src); }
+//	axArray( const axArray<T,0> & src ) { _ctor(); B::copy(src); }
 
 	virtual	~axArray();
 
@@ -18,8 +18,7 @@ public:
 	template<class S>	axStatus	serialize_io	 ( S &s )	{ return B::serialize_io(s); }
 	template<class S>	axStatus	serialize_io_vary( S &s )	{ return B::serialize_io_vary(s); }
 	
-	virtual	void		setCapacityIncrement	( axSize n )	{ capacityIncrement_ = n; }
-	virtual	axSize		capacityIncrement		() const		{ return capacityIncrement_; }
+	virtual	axSize		capacityIncrement		() const		{ return 0; }
 
 protected:
 	virtual	axStatus	onMalloc	( axSize req_size, T* &newPtr, axSize &newCapacity );
@@ -27,7 +26,6 @@ protected:
 
 private:
 	void	_ctor();
-	axSize	capacityIncrement_;
 };
 
 // -----------
@@ -35,7 +33,6 @@ private:
 template<class T> inline
 void axArray<T,0>::_ctor() {
 	B::_init( NULL, 0, 0 );
-	capacityIncrement_ = 0;
 }
 
 template<class T> inline
@@ -50,10 +47,10 @@ template<class T> inline
 axStatus	axArray< T, 0 >::onMalloc( axSize req_size, T* &newPtr, axSize &newCapacity ) {
 	newCapacity = 0;
 	axSize	n = 0;
-	if( capacityIncrement_ == 0 ) {
+	if( capacityIncrement() == 0 ) {
 		n = ax_max( B::size() + B::size() / 2 , req_size ); //auto resize to 1.5x
 	}else{
-		n = ax_align_multiple( req_size, capacityIncrement_ );
+		n = ax_align_multiple( req_size, capacityIncrement() );
 	}
 
 	newPtr = (T*) ax_malloc( sizeof(T) * n );

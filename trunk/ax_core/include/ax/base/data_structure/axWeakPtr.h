@@ -16,10 +16,10 @@
 
 class axWeakPte;
 
-class axWeakPtrBase : public axTinyListNode< axWeakPtrBase > {
+class axWeakPtrBase : public axTinyListNode< axWeakPtrBase, false > {
 public:
-	axWeakPtrBase()			{ setOwnedByList(false); }
-	virtual ~axWeakPtrBase() {}
+	bool	ownedByList	()		{ return false; }
+	virtual ~axWeakPtrBase() 	{}
 	virtual void onWillRemoveFromList() {}
 };
 

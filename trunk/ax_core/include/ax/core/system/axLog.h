@@ -46,7 +46,7 @@ public:
 	void    destroy     ();
 
 //-----------
-	class Node : public axDListNode<Node> {
+	class Node : public axDListNode<Node, true> {
 	public:
 
 		axDateTime					time;
@@ -55,7 +55,7 @@ public:
 		axStringA					tmp;
 	};
 
-	class Handler : public axDListNode<Handler> {
+	class Handler : public axDListNode<Handler, true> {
 	public:
 		virtual ~Handler() {}
 		virtual void out( axLog::Node* n ) { assert( false ); }
