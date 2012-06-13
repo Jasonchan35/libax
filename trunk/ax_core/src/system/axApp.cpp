@@ -260,7 +260,7 @@ axStatus	axApp::getAppResourceDir	( axIStringA &out ) {
 	axStatus	st;
 	axTempStringA	tmp;
 	st = getProcessFileDir( tmp );				if( !st ) return st;
-	st = out.format( "{?}../Resources", tmp );	if( !st ) return st;
+	st = out.format( "{?}../Resources/Resources", tmp );	if( !st ) return st;
 	return 0;
 }
 
@@ -268,7 +268,7 @@ axStatus	axApp::getAppResourceDir	( axIStringW &out ) {
 	axStatus	st;
 	axTempStringA	tmp;
 	st = getAppResourceDir( tmp );		if( !st ) return st;
-	st = out.format( "{?}../Resources", tmp );	if( !st ) return st;
+	st = out.format( "{?}../Resources/Resources", tmp );	if( !st ) return st;
 	return 0;
 }
 
