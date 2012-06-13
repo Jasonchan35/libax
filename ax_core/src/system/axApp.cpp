@@ -179,8 +179,7 @@ axStatus	axApp::getAppResourceDir	( axIStringA &out ) {
 	axStatus	st;
 	axTempStringA	tmp;
 	st = getProcessFileDir( tmp );		if( !st ) return st;
-	
-	out.format( "{?}Resources", tmp );
+	st = out.format( "{?}Resources", tmp ); if( !st ) return st;
 	return 0;
 }
 
@@ -188,7 +187,8 @@ axStatus	axApp::getAppResourceDir	( axIStringW &out ) {
 	axStatus	st;
 	axTempStringA	tmp;
 	st = getAppResourceDir( tmp );		if( !st ) return st;
-	return out.set( tmp );
+	st = out.format( "{?}Resources", tmp ); if( !st ) return st;
+	return 0;
 }
 
 
@@ -259,9 +259,8 @@ axStatus	axApp::getDesktopDir		( axIStringW &out )	{ return axApp_NSSearchPath( 
 axStatus	axApp::getAppResourceDir	( axIStringA &out ) {
 	axStatus	st;
 	axTempStringA	tmp;
-	st = getProcessFileDir( tmp );		if( !st ) return st;
-	
-	out.format( "{?}../Resources", tmp );
+	st = getProcessFileDir( tmp );				if( !st ) return st;
+	st = out.format( "{?}../Resources", tmp );	if( !st ) return st;
 	return 0;
 }
 
@@ -269,7 +268,8 @@ axStatus	axApp::getAppResourceDir	( axIStringW &out ) {
 	axStatus	st;
 	axTempStringA	tmp;
 	st = getAppResourceDir( tmp );		if( !st ) return st;
-	return out.set( tmp );
+	st = out.format( "{?}../Resources", tmp );	if( !st ) return st;
+	return 0;
 }
 
 axStatus	axApp::getProcessFilename	( axIStringA &out ) { 
