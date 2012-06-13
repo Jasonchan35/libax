@@ -18,7 +18,8 @@ public:
 	template<class S>	axStatus	serialize_io	 ( S &s )	{ return B::serialize_io(s); }
 	template<class S>	axStatus	serialize_io_vary( S &s )	{ return B::serialize_io_vary(s); }
 	
-	virtual	axSize		capacityIncrement		() const		{ return 0; }
+	virtual	void		setCapacityIncrement	( axSize n )	{ capacityIncrement_ = n;    }
+	virtual	axSize		capacityIncrement		() const		{ return capacityIncrement_; }
 
 protected:
 	virtual	axStatus	onMalloc	( axSize req_size, T* &newPtr, axSize &newCapacity );
@@ -26,6 +27,7 @@ protected:
 
 private:
 	void	_ctor();
+	axSize	capacityIncrement_;
 };
 
 // -----------
