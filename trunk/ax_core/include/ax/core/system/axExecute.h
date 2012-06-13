@@ -19,7 +19,7 @@ public:
 	axStatus	exec( const char* cmd, int& cmd_ret );
 
 #if axOS_WIN
-	class Node : public axDListNode< Node > {
+	class Node : public axDListNode< Node, true > {
 	public:
 		enum {
 			t_stdin,
