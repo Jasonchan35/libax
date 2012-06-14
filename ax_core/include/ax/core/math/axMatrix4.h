@@ -18,6 +18,8 @@ typedef axMatrix4<double>	axMatrix4d;
 template<class T>
 class axMatrix4 {
 public:
+	typedef	T	TYPE;
+	
 	axVec4<T> cx,cy,cz,cw;
 
 	axMatrix4() {}
