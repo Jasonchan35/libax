@@ -250,11 +250,21 @@ axStatus	axApp::getUserAppDataDir	( axIStringW &out )	{ return axApp_NSSearchPat
 axStatus	axApp::getUserDocumentDir	( axIStringA &out )	{ return axApp_NSSearchPath( out, NSDocumentDirectory ); }	
 axStatus	axApp::getUserDocumentDir	( axIStringW &out )	{ return axApp_NSSearchPath( out, NSDocumentDirectory ); }
 
-axStatus	axApp::getUserHomeDir		( axIStringA &out )	{ return axApp_NSSearchPath( out, NSDocumentDirectory ); }	
-axStatus	axApp::getUserHomeDir		( axIStringW &out )	{ return axApp_NSSearchPath( out, NSDocumentDirectory ); }
-
 axStatus	axApp::getDesktopDir		( axIStringA &out )	{ return axApp_NSSearchPath( out, NSDesktopDirectory ); }	
 axStatus	axApp::getDesktopDir		( axIStringW &out )	{ return axApp_NSSearchPath( out, NSDesktopDirectory ); }
+
+#include <pwd.h>
+axStatus	axApp::getUserHomeDir		( axIStringA &out )	{ 
+	struct passwd	*p = ::getpwuid( ::getuid() );
+	if( !p ) return -1;
+	return out.set( p->pw_dir );	
+}
+	
+axStatus	axApp::getUserHomeDir		( axIStringW &out )	{ 
+	struct passwd	*p = ::getpwuid( ::getuid() );
+	if( !p ) return -1;
+	return out.set( p->pw_dir );	
+}
 
 axStatus	axApp::getAppResourceDir	( axIStringA &out ) {
 	axStatus	st;
