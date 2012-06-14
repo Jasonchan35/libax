@@ -30,8 +30,15 @@ class axStringFormat;
 
 
 */
+
+class axIArrayBase : public axNonCopyable { 
+public:
+	virtual	~axIArrayBase() {}
+	virtual void	clear() {}
+};
+
 template< class T >
-class axIArray : public axNonCopyable {
+class axIArray : public axIArrayBase {
 public:
 	typedef	T	Element;
 
@@ -65,6 +72,9 @@ public:
 	axALWAYS_INLINE(	const	T&			last		( axSize i = 0 ) const )	{ return indexOf( size_-i-1 ); }
 
 	axALWAYS_INLINE(	axStatus	copy		( const axIArray<T> &src ) );
+	axALWAYS_INLINE(	axStatus	onTake		( axIArray<T> &src ) );
+
+
 
 	axALWAYS_INLINE(	axStatus	insert		( axSize pos, const T &src ) )				{ return insertN( pos, &src, 1 ); }
 	axALWAYS_INLINE(	axStatus	insertN		( axSize pos, const axIArray<T> &src ) )	{ return insertN( pos, src.ptr(), src.size() ); }
@@ -94,7 +104,7 @@ public:
 						axSize		capacity	() const					{ return capacity_; }
 
 
-                        void		clear		();	//!< clear and free all memory
+				virtual	void		clear		();	//!< clear and free all memory
 
 						axStatus	shrink		( axSize tolerance = 0 ); //!< free un-used memory
 				
@@ -116,6 +126,8 @@ protected:
 	virtual	axStatus	onMalloc	( axSize req_size, T* &newPtr, axSize &newCapacity ) = 0;
 	virtual void		onFree		( T* p ) = 0;
 
+	virtual	bool		_canBeTakenDirectly	 () const { return false; }
+	virtual bool		_canTakeOtherDirectly() const { return false; }
 private:
 	axSize	size_;
 	axSize	capacity_;
@@ -320,6 +332,22 @@ axStatus	axIArray<T>::copy ( const axIArray<T> &src ) {
 	return appendN( src ); 
 }
 
+template<class T> inline
+axStatus	axIArray<T>::onTake( axIArray<T>	&src )	{  
+	axStatus	st;
+	if( src._canBeTakenDirectly() && this->_canTakeOtherDirectly() ) {
+	//direct take
+		this->_init ( src.ptr(), src.size(), src.capacity() );
+		src._init( NULL, 0, 0 );
+		return 0;
+	}else{
+	//take one by one
+		st = this->resize( src.size() );								if( !st ) return st;
+		st = ax_array_take( this->ptr(), src.ptr(), src.size() );		if( !st ) return st;		
+		src.clear();
+		return 0;
+	}
+}
 
 template< class T > inline
 axStatus	axIArray<T>::resize( axSize new_size, bool keep_data ) {

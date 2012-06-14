@@ -24,7 +24,6 @@ public:
 
 	virtual	~axArray();
 
-	axALWAYS_INLINE(	axStatus	onTake( axArray<T, LOCAL_BUF_SIZE>	&src ) );
 
 	template<class S>	axStatus	serialize_io	 ( S &s )	{ return B::serialize_io(s); }
 	template<class S>	axStatus	serialize_io_vary( S &s )	{ return B::serialize_io_vary(s); }
@@ -32,9 +31,14 @@ public:
 	virtual	void		setCapacityIncrement	( axSize n )	{ capacityIncrement_ = n;    }
 	virtual	axSize		capacityIncrement		() const		{ return capacityIncrement_; }
 	
+			bool		usingLocalBuffer() const { return (void*)B::ptr() == (void*)local_; }
+	
 protected:
 	virtual	axStatus	onMalloc	( axSize req_size, T* &newPtr, axSize &newCapacity );
 	virtual void		onFree		( T* p );
+
+	virtual	bool		_canBeTakenDirectly	 () const { return ! usingLocalBuffer(); }
+	virtual bool		_canTakeOtherDirectly() const { return true; }
 
 private:
 	void	_ctor();
@@ -51,21 +55,6 @@ void axArray< T, LOCAL_BUF_SIZE >::_ctor() {
 	}else{
 		B::_init( NULL, 0, 0 );
 	}
-}
-
-template<class T, size_t LOCAL_BUF_SIZE> inline
-axStatus	axArray< T, LOCAL_BUF_SIZE >::onTake( axArray<T, LOCAL_BUF_SIZE>	&src )	{  
-	axStatus	st;
-	if( src.size() < LOCAL_BUF_SIZE ) {
-		st = B::resize( src.size() );		if( !st ) return st;
-		st = ax_array_take( B::ptr(), src.ptr(), src.size() );		if( !st ) return st;		
-		src.clear();
-		return 0;
-	}
-
-	B::_init ( src.ptr(), src.size(), src.capacity() );
-	src._init( NULL, 0, 0 );
-	return 0;
 }
 
 template<class T, size_t LOCAL_BUF_SIZE> inline

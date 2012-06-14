@@ -20,6 +20,7 @@ template<class T> class axMatrix4;
 template <class T>
 class axVec3 {
 public:
+	typedef	T	TYPE;
 	T x, y, z;
 	enum { kElementCount = 3 };
 
