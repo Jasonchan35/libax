@@ -7,6 +7,10 @@ axCSVParserBase::axCSVParserBase() {
 	r_ = NULL;
 }
 
+void	axCSVParserBase::setLineBufSize( axSize n ) {
+	line_buf_max_size_ = n;
+}
+
 axCSVParserBase::~axCSVParserBase() {
 }
 
