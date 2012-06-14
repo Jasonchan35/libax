@@ -11,6 +11,7 @@ public:
 	axStatus	getRow( axStringA_Array	&row );
 
 	void		setSeperator( char s );
+	void		setLineBufSize( axSize n );
 
 protected:
 	virtual		axStatus	onReadLine( axStringA &buf ) = 0;
