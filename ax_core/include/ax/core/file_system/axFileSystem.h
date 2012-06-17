@@ -43,9 +43,8 @@ public:
 	static	axStatus	removeDirectory	( const char*		dir, bool recursive = false );
 	static	axStatus	removeDirectory	( const wchar_t*    dir, bool recursive = false );	
 	
-	static	axStatus	makeDirectory	( const char*		dir );
-	static	axStatus	makeDirectory	( const wchar_t*    dir );	
-		
+	static	axStatus	makeDirectory	( const char*		dir, bool recursive = true );
+	static	axStatus	makeDirectory	( const wchar_t*    dir, bool recursive = true );	
 
 	static	axStatus	copyDirectory	( const char*		src, const char*		dst );
 	static	axStatus	copyDirectory	( const wchar_t*    src, const wchar_t*		dst );
@@ -56,7 +55,16 @@ public:
 	static	axStatus	copyFile( const wchar_t* src, const wchar_t* dst );
 	static	axStatus	copyFile( const char* src, const char* dst );
 
+	
 private: 
+
+	template< class T > static axStatus makeDirectoryT( const T* dir, bool recursive );
+
+	static	axStatus	_makeDirectory	( const char*		dir );
+	static	axStatus	_makeDirectory	( const wchar_t*    dir );	
+
+	template< class T > static axStatus removeDirectoryT( const T* dir, bool recursive );
+	
 	static	axStatus	_removeDirectory 	( const char*		dir );
 	static	axStatus	_removeDirectory 	( const wchar_t*    dir );
 };
