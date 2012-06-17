@@ -23,6 +23,11 @@ public:
 	operator const T* () const { return c_str(); }	
 	
 	axStatus	toStringFormat( axStringFormat & f ) const { return axStringFormat_out( f, c_str() ); }
+	axStatus	onTake( axTinyString_ & src ) {
+		axStatus st = set( src.c_str() );	if( !st ) return st;
+		src.clear();
+		return 0;
+	}
 private:
 	T*	p_;
 	T 	buf_[LOCAL_BUF_SIZE];
@@ -48,6 +53,7 @@ axStatus	axTinyString_<T,LOCAL_BUF_SIZE>::set( const T* sz )	{
 		p_ = new T[n];
 		memcpy( p_,   sz, sizeof(T) * n );
 	}else{
+		p_ = buf_;
 		memcpy( buf_, sz, sizeof(T) * n);
 	}
 	return 0;
@@ -55,14 +61,18 @@ axStatus	axTinyString_<T,LOCAL_BUF_SIZE>::set( const T* sz )	{
 
 template<class T, size_t LOCAL_BUF_SIZE> inline
 void		axTinyString_<T,LOCAL_BUF_SIZE>::clear() {
-	if( p_ ) delete[] p_;
-	if( LOCAL_BUF_SIZE > 0 ) buf_[0] = 0;
+	if( p_ != buf_ ) delete[] p_; 
+	if( LOCAL_BUF_SIZE > 0 ) {
+		p_ = buf_;
+		buf_[0] = 0;
+	}else{
+		p_ = NULL;
+	}
 }
 
 template<class T, size_t LOCAL_BUF_SIZE> inline
 const T* 	axTinyString_<T,LOCAL_BUF_SIZE>::c_str() const {
 	if( p_ ) return p_;
-	if( LOCAL_BUF_SIZE ) return buf_;
 	return "";
 }
 
