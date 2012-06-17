@@ -129,7 +129,7 @@ axStatus	axFileSystem::copyDirectory	( const char*		src, const char*		dst ) {
 	axDir dir;
 	st = dir.open( src ); if( !st ) return st;
 
-	makeDirectory( dst );
+	_makeDirectory( dst );
 
 	while( dir.next( e ) ) { 		
 
@@ -156,19 +156,22 @@ axStatus	axFileSystem::copyDirectory	( const wchar_t*    src, const wchar_t*		ds
 }
 
 
-axStatus	axFileSystem::removeDirectory	( const char*		src, bool recursive ) {
+
+template < class T >
+axStatus	axFileSystem::removeDirectoryT ( const T* src, bool recursive ) {
+
 	axStatus st;
 	if( !recursive ) return _removeDirectory( src );
 
 	axDir::Entry e;
-	axTempStringA path;
+	axString_< T, 1024> path;
 
 	axDir dir;
 	st = dir.open( src ); if( !st ) return st;
 
 	while( dir.next( e ) ) { 		
 
-		st = path.format("{?}/{?}", src, e.filename );	if( !st ) return st;
+		st = path.format( "{?}/{?}", src, e.filename );	if( !st ) return st;
 
 		if( e.isDir() ) {
 			st = removeDirectory( path, recursive );	if( !st ) return st;
@@ -176,13 +179,79 @@ axStatus	axFileSystem::removeDirectory	( const char*		src, bool recursive ) {
 		}else {
 			st = deleteFile( path ); if( !st ) return st;
 		}
-
 	}
 
 	st = _removeDirectory( src );				if( !st ) return st;
 
 	return 0;
 }
+
+axStatus	axFileSystem::removeDirectory 	( const char*		dir, bool recursive ) {
+	return removeDirectoryT( dir, recursive );
+}
+axStatus	axFileSystem::removeDirectory 	( const wchar_t*    dir, bool recursive ) {
+	return removeDirectoryT( dir, recursive );
+}
+
+template< class T > axStatus axFileSystem::makeDirectoryT( const T* dir, bool recursive ) {
+
+	axStatus st;
+	
+	if( !recursive ) return _makeDirectory( dir );
+	
+	const T *s = dir;	
+	T sp[3]; sp[0] = '/'; sp[1]= '\\'; sp[2]=0;
+	const T *end = dir + ax_strlen( dir );
+
+	axTempStringA token, path;
+	
+	for( ;; ) {
+	
+		const T *e = ax_strchrs( s, sp );
+		if( !e ) { 
+			e = end;
+		}
+		
+		axSize len = e-s;
+				
+		if( len > 0 ) {
+		
+			st = token.setWithLength( s, len ); if( !st ) return st;		
+			
+			if( s != dir ) { //skip the 1st 1
+				st = path.append( "/" ); if( !st ) return st;
+			}
+			
+			st = path.append( token ); if( !st ) return st;
+			st = axFileSystem::_makeDirectory( path );
+			//ax_log("p {?}", path );			
+		}
+				
+		if( e >= end ) break;
+		s = e+1;
+	
+	}
+
+
+	return 0;
+
+
+}
+
+
+
+
+axStatus	axFileSystem::makeDirectory( const char* dir, bool recursive ) {
+	return makeDirectoryT( dir, recursive );
+}
+
+axStatus	axFileSystem::makeDirectory( const wchar_t* dir, bool recursive ) {
+	return makeDirectoryT( dir, recursive );
+}
+
+
+
+
 
 #if 0
 #pragma mark ================= Windows ====================
@@ -280,14 +349,14 @@ axStatus	axFileSystem::_removeDirectory	( const char*		dir ) {
 	return _removeDirectory( tmp );
 }
 
-axStatus	axFileSystem::makeDirectory	( const char*		dir )  {
+axStatus	axFileSystem::_makeDirectory	( const char*		dir )  {
 	axStatus st;
 	axTempStringW	tmp;
 	st = tmp.set( dir );	if( !st ) return st;
-	return makeDirectory( tmp );
+	return _makeDirectory( tmp );
 }
 
-axStatus	axFileSystem::makeDirectory	( const wchar_t*    dir ) { 
+axStatus	axFileSystem::_makeDirectory	( const wchar_t*    dir ) { 
 	return _wmkdir( dir ); 
 }
 
@@ -358,11 +427,11 @@ axStatus axFileSystem::isFileExist ( const wchar_t* file ) {
 	return isFileExist( tmp );
 }
 
-axStatus	 axFileSystem::makeDirectory	( const char *dir )	   { 
+axStatus	 axFileSystem::_makeDirectory	( const char *dir )	   { 
 	return ::mkdir( dir, 0755 ); 
 }
 
-axStatus	 axFileSystem::makeDirectory	( const wchar_t *dir ) {
+axStatus	 axFileSystem::_makeDirectory	( const wchar_t *dir ) {
 	axTempStringA tmp;
     axStatus st = tmp.set( dir ); if( !st ) return st;
     return ::mkdir( tmp, 0755 );
