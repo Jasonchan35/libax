@@ -120,11 +120,13 @@ public:
 
 						T*	_IArrayForPtr	() 			{ return ptr(); }
 				const 	T*	_IArrayForPtr	() const 	{ return ptr(); }
+			
+	static		const  axIArray<T> &	kEmpty()		{ static axIArray<T> e; return e; }
 protected:
 	axALWAYS_INLINE(	void	_init( T* p, axSize size, axSize capacity ) );
 
-	virtual	axStatus	onMalloc	( axSize req_size, T* &newPtr, axSize &newCapacity ) = 0;
-	virtual void		onFree		( T* p ) = 0;
+	virtual	axStatus	onMalloc	( axSize req_size, T* &newPtr, axSize &newCapacity ) { return -1; }
+	virtual void		onFree		( T* p ) {}
 
 	virtual	bool		_canBeTakenDirectly	 () const { return false; }
 	virtual bool		_canTakeOtherDirectly() const { return false; }
