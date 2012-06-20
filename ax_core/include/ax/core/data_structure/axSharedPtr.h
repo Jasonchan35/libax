@@ -59,6 +59,9 @@ public:
 	
 	axStatus onTake( axSharedPtr<T>& src )			{ ref( src ); src.unref(); return 0; }
 
+	axStatus	serialize_io( axSerializer 	 &s );
+	axStatus	serialize_io( axDeserializer &s );
+
 private:
 	T*	p_;
 };
@@ -100,5 +103,18 @@ void axSharedPtr<T> :: unref() {
 		p_ = NULL;
 	}
 }
+
+template <class T> inline
+axStatus axSharedPtr<T> :: serialize_io( axSerializer &s ) {
+	if( p_ ) return s.io( *p_ );
+	T dummy; return s.io( dummy );
+}
+
+template <class T> inline
+axStatus axSharedPtr<T> :: serialize_io( axDeserializer &s ) {
+	axStatus st = newObject();	if( !st ) return st;
+	return s.io( *p_ );
+}
+
 
 #endif //__axSharedPtr_h__
