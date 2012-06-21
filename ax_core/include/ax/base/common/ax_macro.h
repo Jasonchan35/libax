@@ -1,6 +1,10 @@
 #ifndef __ax_macro_h__
 #define __ax_macro_h__
 
+#define	for_axArray( T, V, ARR  )  for( T *(V)=(ARR).ptr(), *axEachEnd=(V)+(ARR).size(); (V)<axEachEnd; (V)++ ) 
+#define for_axDList( T, V, LIST )  for( T *(V)=(LIST).head(); (V); (V)=(V)->next() )
+
+
 //! for 0 fixed parameter
 #define axExpandArgList0( ReturnType, FuncName, Arg, ArgList, ArgFunc ) \
 ReturnType	FuncName ( )																																		{ ArgList list;																				return ArgFunc( list ); } \
