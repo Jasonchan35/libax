@@ -154,7 +154,8 @@ axStatus axCSVStringAParser::onReadLine( axStringA &buf ) {
 	e = ax_strchr( p_, '\r' );
 	if( !e ) e = ax_strchr( p_, '\n' );
 	if( !e ) { e = p_ + ax_strlen(p_); }
-
+	if( !e ) return -1;
+	
 	for( ; *e ; e++ ) {
 		bool is_break=false;
 		switch( *e )  {

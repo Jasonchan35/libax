@@ -137,10 +137,14 @@ axStatus axFile::getFileSize( axFileSize &out ) {
 	out = 0;
 	if( ! isValid() ) { assert(false);	return axStatus_Std::not_initialized; }	
 	axStatus st;
-	off_t a;
-	a = lseek( h_, 0, SEEK_END );		if( a == -1 ) return axStatus_Std::File_seek_error;
-	a = lseek( h_, a, SEEK_SET );		if( a == -1 ) return axStatus_Std::File_seek_error;
-	out = a;
+	
+	off_t curr, r; 
+	
+	curr = lseek( h_, 0, SEEK_CUR );	if( curr == -1 ) return axStatus_Std::File_seek_error;
+	r = lseek( h_, 0, SEEK_END );		if( r == -1 ) return axStatus_Std::File_seek_error;
+	out = r;
+	r = lseek( h_, curr, SEEK_SET );	if( r == -1 ) return axStatus_Std::File_seek_error;
+	
 	return 0;
 }
 

@@ -412,7 +412,6 @@ axStatus axFileSystem::copyFile( const char* src, const char* dst ) {
 
 	return 0;
 
-	return 0;
 }
 
 axStatus axFileSystem::isFileExist ( const char*    file ) {
