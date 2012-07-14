@@ -26,7 +26,7 @@ axVec3<T> axVec3<T>::mul4x3 ( const axMatrix4<T> &m ) const {
 }
 
 template<class T>
-axVec3<T> axVec3<T>::operator* ( const axMatrix4<T> &m ) const {
+axVec3<T> axVec3<T>::mul4x4 ( const axMatrix4<T> &m ) const {
 	return  ( axVec4<T>( *this, 1 ) * m ).to_Vec3();
 }
 
