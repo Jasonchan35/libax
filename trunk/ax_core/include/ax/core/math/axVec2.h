@@ -88,6 +88,8 @@ public:
 
 	axVec2		normalize	() const						{ T r = magSq(); return r ? (*this/ax_sqrt(r)) : *this; }
 	void		normalizeIt	()								{ *this = normalize(); }	
+
+	axVec2		dir			( const axVec2 &v ) const		{ return (*this - v).normalize(); }
 	
 	void		roundX()									{ x = ax_round(x); }
 	void		roundY()									{ y = ax_round(y); }	

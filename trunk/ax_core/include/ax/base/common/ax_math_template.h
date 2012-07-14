@@ -54,6 +54,10 @@ inline double ax_modf( double n )	{ double i; return ::modf ( n, &i ); }
 inline float  ax_sqrt( float  n )	{ return ::sqrtf( n ); }
 inline double ax_sqrt( double n )	{ return ::sqrt ( n ); }
 
+//! reciprocal square root
+inline float  ax_rsqrt( float  n )	{ return 1.0f/::sqrtf( n ); }
+inline double ax_rsqrt( double n )	{ return 1.0 /::sqrt ( n ); }
+
 inline float  ax_ceil( float  a )	{ return ::ceilf(a); }
 inline double ax_ceil( double a )	{ return ::ceil(a); }
 
@@ -98,6 +102,9 @@ inline int64_t	ax_lerp( int64_t  a, int64_t  b, float  w ) { return _ax_int_lerp
 
 inline float	ax_lerp( float    a, float    b, float  w ) { return (a+w*(b-a)); }
 inline double	ax_lerp( double   a, double   b, double w ) { return (a+w*(b-a)); }
+
+inline float	ax_step( float 	a, float  x ) 	{ return x>=a?1:0; }
+inline double	ax_step( double a, double x ) 	{ return x>=a?1:0; }
 
 inline float	ax_ease_in ( float  a ) { return a*a; }	
 inline double	ax_ease_in ( double a ) { return a*a; }	
