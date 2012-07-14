@@ -74,6 +74,8 @@ public:
 	axMatrix4		transpose		() const;
 	axMatrix4<T>	inverse			() const;
 
+		void		inverseIt() { *this = inverse(); }
+
 		bool		isAll				( T v ) const				{ return ( cx.isAll(v) && cy.isAll(v) && cz.isAll(v) && cw.isAll(v) ); }
 
 		void		setIdentity	()									{ cx.set(1,0,0,0); cy.set(0,1,0,0); cz.set(0,0,1,0); cw.set(0,0,0,1); }

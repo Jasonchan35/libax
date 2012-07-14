@@ -28,6 +28,8 @@ public:
 	
 	axRay3	operator*  ( const axMatrix4<T>	&m )		{ return axRay3( o*m, (v*m).normalize() ); }
 
+	axVec3<T>	getPoint( T distance ) const {  return o + v * distance; }
+
 	axVec3<T>	o;	//!< origin
 	axVec3<T>	v;	//!< direction
 
