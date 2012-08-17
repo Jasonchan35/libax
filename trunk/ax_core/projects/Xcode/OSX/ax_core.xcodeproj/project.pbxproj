@@ -42,6 +42,9 @@
 		9632179B155EF2000061BE21 /* axMutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96321778155EF2000061BE21 /* axMutex.cpp */; };
 		9632179C155EF2000061BE21 /* axThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96321779155EF2000061BE21 /* axThread.cpp */; };
 		9632179D155EF2000061BE21 /* axThreadPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9632177A155EF2000061BE21 /* axThreadPool.cpp */; };
+		96E2A22B15DEB55B00006235 /* axTypeList_float.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E2A22815DEB55A00006235 /* axTypeList_float.h */; };
+		96E2A22C15DEB55B00006235 /* axTypeList_int.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E2A22915DEB55A00006235 /* axTypeList_int.h */; };
+		96E2A22D15DEB55B00006235 /* axTypeList_uint.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E2A22A15DEB55A00006235 /* axTypeList_uint.h */; };
 		EA31D3AC157402890027265C /* axSerializer_Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = EA31D3AB157402890027265C /* axSerializer_Helper.h */; };
 /* End PBXBuildFile section */
 
@@ -84,6 +87,9 @@
 		964DA0991587C64E00C9E00D /* axWeakPtr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axWeakPtr.h; sourceTree = "<group>"; };
 		964F056E1584FD5200F57B4B /* axTinyString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTinyString.h; sourceTree = "<group>"; };
 		9692ECAC155F1F0000F6D625 /* axSingleton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSingleton.h; sourceTree = "<group>"; };
+		96E2A22815DEB55A00006235 /* axTypeList_float.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axTypeList_float.h; sourceTree = "<group>"; };
+		96E2A22915DEB55A00006235 /* axTypeList_int.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axTypeList_int.h; sourceTree = "<group>"; };
+		96E2A22A15DEB55A00006235 /* axTypeList_uint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axTypeList_uint.h; sourceTree = "<group>"; };
 		EA15F6C71544053B00356C7C /* ax_base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_base.h; sourceTree = "<group>"; };
 		EA15F6C81544053B00356C7C /* ax_core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_core.h; sourceTree = "<group>"; };
 		EA15F6CB1544053B00356C7C /* ax_byteorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_byteorder.h; sourceTree = "<group>"; };
@@ -352,6 +358,9 @@
 				EA15F6D11544053B00356C7C /* axSize.h */,
 				EA15F6D21544053B00356C7C /* axStatus.h */,
 				EA15F6D31544053B00356C7C /* axStatus_enum.h */,
+				96E2A22815DEB55A00006235 /* axTypeList_float.h */,
+				96E2A22915DEB55A00006235 /* axTypeList_int.h */,
+				96E2A22A15DEB55A00006235 /* axTypeList_uint.h */,
 				EA15F6D41544053B00356C7C /* axTypeOf.h */,
 				9692ECAC155F1F0000F6D625 /* axSingleton.h */,
 			);
@@ -598,6 +607,9 @@
 			files = (
 				96321791155EF2000061BE21 /* pch.h in Headers */,
 				EA31D3AC157402890027265C /* axSerializer_Helper.h in Headers */,
+				96E2A22B15DEB55B00006235 /* axTypeList_float.h in Headers */,
+				96E2A22C15DEB55B00006235 /* axTypeList_int.h in Headers */,
+				96E2A22D15DEB55B00006235 /* axTypeList_uint.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

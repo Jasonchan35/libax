@@ -54,7 +54,7 @@ public:
 
 	void		setAlign			( const axVec3<T> &src,    const axVec3<T> &dst);
 	void		setAlignOnPlane		( const axVec3<T> &normal, const axVec3<T> &src,
-								      const axVec3<T> &dst,    T epsilon = ax_fp_epsilon<T>() );
+								      const axVec3<T> &dst,    T epsilon = ax_epsilon<T>() );
 
 	//! Spherical linear interpolation
 	axQuaternion		sphericalLerp ( const axQuaternion &q, T t ) const;

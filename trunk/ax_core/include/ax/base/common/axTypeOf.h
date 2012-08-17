@@ -11,8 +11,13 @@ class axNullClass;
 
 
 #if axOS_MacOSX || axOS_iOS
-	#define	axTypeHas_long			1
-	#define	axTypeHas_long_long		1
+	#if ! axCPU_LP32
+		#define	axTypeHas_long			1
+	#endif	
+		
+	#if ! axCPU_LP64
+		#define	axTypeHas_long_long		1
+	#endif
 #else
 	#define	axTypeHas_long			0
 	#define	axTypeHas_long_long		0
@@ -144,54 +149,6 @@ template<> inline	double		ax_type_max<double>	()		{ return  DBL_MAX; }
 	axTYPE_LIST( wchar_t )
 #undef		axTYPE_LIST
 
-	/*
-template<> inline	uint8_t		axTypeOf<uint8_t>::valueMin()		{ return 0; }
-template<> inline	uint8_t		axTypeOf<uint8_t>::valueMax()		{ return 0xff; }
-template<> inline	int			axTypeOf<uint8_t>::precision()		{ return 0; }
-
-template<> inline	uint16_t	axTypeOf<uint16_t>::valueMin()		{ return 0; }
-template<> inline	uint16_t	axTypeOf<uint16_t>::valueMax()		{ return 0xffff; }
-template<> inline	int			axTypeOf<uint16_t>::precision()		{ return 0; }
-
-template<> inline	uint32_t	axTypeOf<uint32_t>::valueMin()		{ return 0; }
-template<> inline	uint32_t	axTypeOf<uint32_t>::valueMax()		{ return 0xffffffffU; }
-template<> inline	int			axTypeOf<uint32_t>::precision()		{ return 0; }
-
-template<> inline	uint64_t	axTypeOf<uint64_t>::valueMin()		{ return 0; }
-template<> inline	uint64_t	axTypeOf<uint64_t>::valueMax()		{ return 0xffffffffffffffffULL; }
-template<> inline	int			axTypeOf<uint64_t>::precision()		{ return 0; }
-
-template<> inline	int8_t		axTypeOf<int8_t>::valueMin()		{ return (-0x7f-1); }
-template<> inline	int8_t		axTypeOf<int8_t>::valueMax()		{ return 0x7f; }
-template<> inline	int			axTypeOf<int8_t>::precision()		{ return 0; }
-
-template<> inline	int16_t		axTypeOf<int16_t>::valueMin()		{ return (-0x7fff-1); }
-template<> inline	int16_t		axTypeOf<int16_t>::valueMax()		{ return 0x7fff; }
-template<> inline	int			axTypeOf<int16_t>::precision()		{ return 0; }
-
-template<> inline	int32_t		axTypeOf<int32_t>::valueMin()		{ return (-0x7fffffff-1); }
-template<> inline	int32_t		axTypeOf<int32_t>::valueMax()		{ return 0x7fffffff; }
-template<> inline	int			axTypeOf<int32_t>::precision()		{ return 0; }
-
-template<> inline	int64_t		axTypeOf<int64_t>::valueMin()		{ return (-0x7fffffffffffffffLL-1); }
-template<> inline	int64_t		axTypeOf<int64_t>::valueMax()		{ return 0x7fffffffffffffffLL; }
-template<> inline	int			axTypeOf<int64_t>::precision()		{ return 0; }
-
-template<> inline	bool		axTypeOf<bool>::valueMin()			{ return false; }
-template<> inline	bool		axTypeOf<bool>::valueMax()			{ return true; }
-template<> inline	int			axTypeOf<bool>::precision()			{ return 0; }
-
-
-template<> inline	float		axTypeOf<float>::valueMin()			{ return -FLT_MAX; }
-template<> inline	float		axTypeOf<float>::valueMax()			{ return  FLT_MAX; }
-template<> inline	float		axTypeOf<float>::epsilon()			{ return  FLT_EPSILON; }
-template<> inline	int			axTypeOf<float>::precision()		{ return  6; }
-
-template<> inline	double		axTypeOf<double>::valueMin()		{ return -DBL_MAX; }
-template<> inline	double		axTypeOf<double>::valueMax()		{ return  DBL_MAX; }
-template<> inline	double		axTypeOf<double>::epsilon()			{ return  DBL_EPSILON; }
-template<> inline	int			axTypeOf<double>::precision()		{ return  15; }
-*/
 
 template<class T> inline	axStatus	ax_copy( T &a, const T &b )  		{ a=b; return 0; }
 
