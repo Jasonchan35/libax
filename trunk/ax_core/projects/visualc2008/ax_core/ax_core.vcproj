@@ -402,6 +402,18 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\include\ax\base\common\axTypeList_float.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\ax\base\common\axTypeList_int.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\ax\base\common\axTypeList_uint.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\ax\base\common\axTypeOf.h"
 					>
 				</File>

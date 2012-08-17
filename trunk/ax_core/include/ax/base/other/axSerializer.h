@@ -524,7 +524,7 @@ axStatus axIArray<T>::serialize_io( S &s ) {
 	axStatus st;
 	st = ax_serialize_io_array_size( s, *this );	if( !st ) return st;
 #if ( axBYTE_ORDER == axSERIALIZE_BYTE_ORDER )
-	if( axTypeOf<T>::isPOD() ) {
+	if( axTypeOf<T>::isPOD ) {
 		return s.io_raw( ptr(), size() * sizeof(T) );
 	}
 #endif

@@ -9,80 +9,134 @@
 
 class axNullClass;
 
+
+#if axOS_MacOSX || axOS_iOS
+	#define	axTypeHas_long			1
+	#define	axTypeHas_long_long		1
+#else
+	#define	axTypeHas_long			0
+	#define	axTypeHas_long_long		0
+#endif
+
 template< class T >	
 class axTypeOf {
 public:
-	static	T		valueMin	();
-	static	T		valueMax	();
-
-	static	int		precision	();
-	static	T		epsilon		();
-	static	bool	isInterger	();
-	static	bool	isUnsigned	();
-
 	//! POD (plain-old-data)
-	static	bool	isPOD()	{ return false; }
+	static	const	bool	isPOD = false;
 };
-
-template<class T> inline		T	ax_type_min( T a )		{ return axTypeOf<T>::valueMin(); }
-template<class T> inline		T	ax_type_max( T a )		{ return axTypeOf<T>::valueMax(); }
-
-template<class T> inline	axStatus	ax_copy( T &a, const T &b )  		{ a=b; return 0; }
-
-template<class T> inline	axStatus	ax_take( T  &a, T  &b )  			{ return a.onTake(b); }
-template<class T> inline	axStatus	ax_take( T* &a, T* &b )				{ a=b; return 0; }
-template<class T> inline	axStatus	ax_take( const T* &a, const T* &b )	{ a=b; return 0; }
 
 template<class T>	bool  ax_less_than0( T value );
 
-//primitive
+//--- uint ---
+
+class axTypeOf_uint {
+public:
+	static	const	bool	isPOD		= true;
+	static	const	int		precision	= 0;
+	static	const	bool	isInterger	= true;
+	static	const	bool	isUnsigned	= true;
+};
 #define	axTYPE_LIST(T)	\
-	template<> inline	bool		axTypeOf<T>::isPOD()		{ return true; } \
-	template<> inline	bool		axTypeOf<T>::isUnsigned()	{ return false; } \
-	inline	axStatus	ax_take( T &a, T &b )					{ a=b; return 0; } \
-	inline	bool		ax_less_than0( T value )				{ return value < 0; } \
-//-------
-	axTYPE_LIST( int8_t )
-	axTYPE_LIST( int16_t )
-	axTYPE_LIST( int32_t )
-	axTYPE_LIST( int64_t )
-	axTYPE_LIST( float )
-	axTYPE_LIST( double )
-
-	#if axOS_MacOSX || axOS_iOS
-		axTYPE_LIST( long )	
-		//axTYPE_LIST( long long )
-	#else
-		#if axCPU_LP32
-			axTYPE_LIST( long )
-		#endif
-	#endif
-	
-#undef		axTYPE_LIST
-
-
-#define	axTYPE_LIST(T)	\
-	template<> inline	bool	axTypeOf<T>::isPOD()		{ return true; } \
-	template<> inline	bool	axTypeOf<T>::isUnsigned()	{ return true; } \
+	template<> class axTypeOf<T > : public axTypeOf_uint {}; \
 	inline	axStatus	ax_take( T &a, T &b )		{ a=b; return 0; } \
 	inline	bool		ax_less_than0( T value )	{ return false; } \
 //-------
-	axTYPE_LIST( uint8_t )
-	axTYPE_LIST( uint16_t )
-	axTYPE_LIST( uint32_t )
-	axTYPE_LIST( uint64_t )
+	#include "axTypeList_uint.h"
+#undef		axTYPE_LIST
 
-	#if axOS_MacOSX || axOS_iOS
-		axTYPE_LIST( unsigned long )	
-		//axTYPE_LIST( unsigned long long )
-	#elif axOS_WIN
-		axTYPE_LIST( unsigned long )
-	#endif
+class axTypeOf_int {
+public:
+	static	const	bool	isPOD		= true;
+	static	const	int		precision	= 0;
+	static	const	bool	isInterger	= true;
+	static	const	bool	isUnsigned	= false;
+};
+#define	axTYPE_LIST(T)	\
+	template<> class axTypeOf<T > : public axTypeOf_int {}; \
+	inline	axStatus	ax_take( T &a, T &b )					{ a=b; return 0; } \
+	inline	bool		ax_less_than0( T value )				{ return value < 0; } \
+//-------
+	#include "axTypeList_int.h"
 #undef		axTYPE_LIST
 
 
+
+//--- float ---
+template<>
+class axTypeOf<float> {
+	typedef	float	T;
+public:
+	static	const	bool	isPOD		= true;
+	static	const	int		precision	= 6;
+	static	const	bool	isInterger	= false;
+	static	const	bool	isUnsigned	= false;
+};
+
+template<>
+class axTypeOf<double> {
+	typedef	float	T;
+public:
+	static	const	bool	isPOD		= true;
+	static	const	int		precision	= 15;
+	static	const	bool	isInterger	= false;
+	static	const	bool	isUnsigned	= false;
+};
+
 #define	axTYPE_LIST(T)	\
-	template<> inline	bool	axTypeOf<T>::isPOD()			{ return true; } \
+	inline	axStatus	ax_take( T &a, T &b )					{ a=b; return 0; } \
+	inline	bool		ax_less_than0( T value )				{ return value < 0; } \
+//-------
+	#include "axTypeList_float.h"
+#undef		axTYPE_LIST
+
+
+
+
+
+// -- value min/max ----
+template<class T> 	T	ax_type_min();
+template<class T> 	T	ax_type_max();
+
+template<class T> 	T	ax_type_min( T a ) { return ax_type_min<T>(); }
+template<class T> 	T	ax_type_max( T a ) { return ax_type_max<T>(); }
+
+template<> inline	uint8_t		ax_type_min<uint8_t>()		{ return 0; }
+template<> inline	uint8_t		ax_type_max<uint8_t>()		{ return 0xff; }
+
+template<> inline	uint16_t	ax_type_min<uint16_t>()		{ return 0; }
+template<> inline	uint16_t	ax_type_max<uint16_t>()		{ return 0xffff; }
+
+template<> inline	uint32_t	ax_type_min<uint32_t>()		{ return 0; }
+template<> inline	uint32_t	ax_type_max<uint32_t>()		{ return 0xffffffffU; }
+
+template<> inline	uint64_t	ax_type_min<uint64_t>()		{ return 0; }
+template<> inline	uint64_t	ax_type_max<uint64_t>()		{ return 0xffffffffffffffffULL; }
+
+template<> inline	int8_t		ax_type_min<int8_t>()		{ return (-0x7f-1); }
+template<> inline	int8_t		ax_type_max<int8_t>()		{ return 0x7f; }
+
+template<> inline	int16_t		ax_type_min<int16_t>()		{ return (-0x7fff-1); }
+template<> inline	int16_t		ax_type_max<int16_t>()		{ return 0x7fff; }
+
+template<> inline	int32_t		ax_type_min<int32_t>()		{ return (-0x7fffffff-1); }
+template<> inline	int32_t		ax_type_max<int32_t>()		{ return 0x7fffffff; }
+
+template<> inline	int64_t		ax_type_min<int64_t>()		{ return (-0x7fffffffffffffffLL-1); }
+template<> inline	int64_t		ax_type_max<int64_t>()		{ return 0x7fffffffffffffffLL; }
+
+template<> inline	bool		ax_type_min<bool>()			{ return false; }
+template<> inline	bool		ax_type_max<bool>()			{ return true; }
+
+
+template<> inline	float		ax_type_min<float>  ()		{ return -FLT_MAX; }
+template<> inline	float		ax_type_max<float>	()		{ return  FLT_MAX; }
+template<> inline	double		ax_type_min<double>	()		{ return -DBL_MAX; }
+template<> inline	double		ax_type_max<double>	()		{ return  DBL_MAX; }
+
+
+
+
+#define	axTYPE_LIST(T)	\
 	inline	axStatus	ax_take( T &a, T &b )	{ a=b; return 0; } \
 //-------
     axTYPE_LIST( bool )
@@ -90,8 +144,7 @@ template<class T>	bool  ax_less_than0( T value );
 	axTYPE_LIST( wchar_t )
 #undef		axTYPE_LIST
 
-
-
+	/*
 template<> inline	uint8_t		axTypeOf<uint8_t>::valueMin()		{ return 0; }
 template<> inline	uint8_t		axTypeOf<uint8_t>::valueMax()		{ return 0xff; }
 template<> inline	int			axTypeOf<uint8_t>::precision()		{ return 0; }
@@ -138,6 +191,14 @@ template<> inline	double		axTypeOf<double>::valueMin()		{ return -DBL_MAX; }
 template<> inline	double		axTypeOf<double>::valueMax()		{ return  DBL_MAX; }
 template<> inline	double		axTypeOf<double>::epsilon()			{ return  DBL_EPSILON; }
 template<> inline	int			axTypeOf<double>::precision()		{ return  15; }
+*/
+
+template<class T> inline	axStatus	ax_copy( T &a, const T &b )  		{ a=b; return 0; }
+
+template<class T> inline	axStatus	ax_take( T  &a, T  &b )  			{ return a.onTake(b); }
+template<class T> inline	axStatus	ax_take( T* &a, T* &b )				{ a=b; return 0; }
+template<class T> inline	axStatus	ax_take( const T* &a, const T* &b )	{ a=b; return 0; }
+
 
 #ifdef axCOMPILER_VC
 	#pragma warning( push )
@@ -149,7 +210,6 @@ template<> inline	int			axTypeOf<double>::precision()		{ return  15; }
 	#pragma clang diagnostic ignored "-Wshorten-64-to-32"
 	
 #endif
-
 
 
 template<class DST, class SRC> axStatus	ax_safe_assign( DST &dst, const SRC &src );
@@ -173,14 +233,14 @@ template<class DST, class SRC> axStatus	ax_safe_assign( DST &dst, const SRC &src
 template<class DST, class SRC> inline 
 axStatus	ax_safe_assign( DST &dst, const SRC &src ) {
 	DST tmp = (DST) src;
-	if( axTypeOf<DST>::isUnsigned() ) {
-		if( ! axTypeOf<SRC>::isUnsigned() ) {
+	if( axTypeOf<DST>::isUnsigned ) {
+		if( ! axTypeOf<SRC>::isUnsigned ) {
 			//unsigned <<= signed
 			if( ax_less_than0( src ) ) return axStatus_Std::non_safe_assign;
 		}
 	}else{
 		// signed <<= unsigned
-		if( axTypeOf<SRC>::isUnsigned() ) {
+		if( axTypeOf<SRC>::isUnsigned ) {
 			if( ax_less_than0( tmp ) ) return axStatus_Std::non_safe_assign;	
 		}
 	}

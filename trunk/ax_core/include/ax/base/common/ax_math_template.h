@@ -30,17 +30,20 @@ template<class T> inline void ax_min_it		( T& a, const T& b )	{ if( b<a ) a=b; }
 template<class T> inline void ax_max_it		( T& a, const T& b )	{ if( b>a ) a=b; }
 
 //! x clamped to the range [a,b]
-template<class T> inline T      ax_clamp	( T  x, T a, T b )		{ if( x < a ) return a; return x > b ? b : x; }
-template<class T> inline void   ax_clamp_it	( T &x, T a, T b )		{ if( x < a ) x=a; else if( x > b ) x=b; }
+template<class T> inline T      ax_clamp	( T x, T a, T b )		{ if( x < a ) return a; return x > b ? b : x; }
+template<class T> inline T		ax_clamp01	( T x )					{ return ax_clamp(x,0,1); }
 
-inline	int  ax_align_pow2( int v ) { v--; v |= v >> 1; v |= v >> 2; v |= v >> 4;	v |= v >> 8; v |= v >> 16; v++;	return v; }
-inline	bool ax_is_pow2( int v )	{ return !(v & (v - 1)) && v ; }
+template<class T> inline void   ax_clamp_it		( T &x, T a, T b )	{ if( x < a ) x=a; else if( x > b ) x=b; }
+template<class T> inline void	ax_clamp01_it	( T &x )			{ ax_clamp_it(x,0,1); }
+
+inline	int  ax_align_pow2	( int v )	{ v--; v |= v >> 1; v |= v >> 2; v |= v >> 4;	v |= v >> 8; v |= v >> 16; v++;	return v; }
+inline	bool ax_is_pow2		( int v )	{ return !(v & (v - 1)) && v ; }
 
 
-template<class T>	T ax_fp_epsilon();
+template<class T>	T ax_epsilon();
 
-template<>	inline double	ax_fp_epsilon<double>() { return 1.0e-12; }
-template<>	inline float	ax_fp_epsilon<float>()  { return 1.0e-5f; }
+template<>	inline double	ax_epsilon<double>() { return 1.0e-12; }
+template<>	inline float	ax_epsilon<float> () { return 1.0e-5f; }
 
 const  double ax_math_PI = 3.14159265358979323846;
 
@@ -70,7 +73,7 @@ inline double ax_round( double a )	{ return ax_floor( a > 0 ? a+0.5  : a-0.5  );
 
 //! Equivalent
 template<class T>
-inline bool ax_math_equals( T  a, T  b, T ep=ax_fp_epsilon<T>() )  { return ( ax_abs(a-b) < ep) ; }
+inline bool ax_math_equals( T  a, T  b, T ep=ax_epsilon<T>() )  { return ( ax_abs(a-b) < ep) ; }
 
 //! increase but not over the limit
 template<class T>
@@ -103,8 +106,8 @@ inline int64_t	ax_lerp( int64_t  a, int64_t  b, float  w ) { return _ax_int_lerp
 inline float	ax_lerp( float    a, float    b, float  w ) { return (a+w*(b-a)); }
 inline double	ax_lerp( double   a, double   b, double w ) { return (a+w*(b-a)); }
 
-inline float	ax_step( float 	a, float  x ) 	{ return x>=a?1:0; }
-inline double	ax_step( double a, double x ) 	{ return x>=a?1:0; }
+inline float	ax_step( float 	a, float  x ) 	{ return x>=a ? 1.0f : 0.0f; }
+inline double	ax_step( double a, double x ) 	{ return x>=a ? 1.0  : 0.0;  }
 
 inline float	ax_ease_in ( float  a ) { return a*a; }	
 inline double	ax_ease_in ( double a ) { return a*a; }	
@@ -119,9 +122,19 @@ template<class T> inline T ax_smooth_step( const T &a, const T &b, double w ) { 
 
 
 //! align multiple
-template<class T> inline T ax_align_multiple( T n, T a ) {  
+template<class T> inline 
+T _ax_align_multiple_int( T n, T a ) { 
+	return n + a -(n%a);
+}
+
+inline int8_t	ax_align_multiple( int8_t  n, int8_t  a ) { return _ax_align_multiple_int(n,a); }
+inline int16_t	ax_align_multiple( int16_t n, int16_t a ) { return _ax_align_multiple_int(n,a); }
+inline int32_t	ax_align_multiple( int32_t n, int32_t a ) { return _ax_align_multiple_int(n,a); }
+inline int64_t	ax_align_multiple( int64_t n, int64_t a ) { return _ax_align_multiple_int(n,a); }
+
+template<class T> inline 
+T _ax_align_multiple_uint( T n, T a ) {  
 	T r = n % a;
-	if( r == 0 ) return n;
 	if( n > 0 ) { 
 		return n + ax_abs(a) -r; 
 	}else{ 
@@ -129,23 +142,27 @@ template<class T> inline T ax_align_multiple( T n, T a ) {
 	} 
 }
 
+inline uint8_t	ax_align_multiple( uint8_t  n, uint8_t  a ) { return _ax_align_multiple_uint(n,a); }
+inline uint16_t	ax_align_multiple( uint16_t n, uint16_t a ) { return _ax_align_multiple_uint(n,a); }
+inline uint32_t	ax_align_multiple( uint32_t n, uint32_t a ) { return _ax_align_multiple_uint(n,a); }
+inline uint64_t	ax_align_multiple( uint64_t n, uint64_t a ) { return _ax_align_multiple_uint(n,a); }
+
+
 //! floating-point align
-inline
-float  ax_align_multiple( float   n, float   a ) {
-	float i = ax_floor( n / a ) * a;
+template<class T> inline
+T  _ax_align_multiple_float( T   n, T   a ) {
+	T i = ax_floor( n / a ) * a;
 	if( i == n ) return i;
 	return (n > 0) ? i+a : i-a;
 }
 
-inline
-double ax_align_multiple( double  n, double  a ) {
-	double i = ax_floor( n / a ) * a;
-	if( i == n ) return i;
-	return (n > 0) ? i+a : i-a;
-}
+inline float  ax_align_multiple( float  n, float  a ) { return _ax_align_multiple_float(n,a); }
+inline double ax_align_multiple( double n, double a ) { return _ax_align_multiple_float(n,a); }
 
-inline float  ax_remainder( float  a, float  b ) { return ( a - ax_floor(a/b) * b ); }
-inline double ax_remainder( double a, double b ) { return ( a - ax_floor(a/b) * b ); }
+
+//get remainder
+inline float  ax_fmod( float  a, float  b ) { return ::fmodf(a,b); }
+inline double ax_fmod( double a, double b ) { return ::fmod (a,b); }
 
 inline float  ax_cos( float  a ) { return ::cosf(a); }
 inline double ax_cos( double a ) { return ::cos (a); }

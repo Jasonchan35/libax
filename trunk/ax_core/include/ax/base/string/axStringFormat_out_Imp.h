@@ -143,16 +143,8 @@ inline axStatus axStringFormat_out( axStringFormat &f, char		value ) { return ax
 	inline int axStringFormat_to_digi( char* buf, const int max_digi, T  value, int base, bool exponent, int precision, const char *table ) { \
 					return axStringFormat_to_digi_signed( buf, max_digi, value, base, exponent, precision, table ); } \
 	//------
-	axTYPE_LIST( int8_t )
-	axTYPE_LIST( int16_t )
-	axTYPE_LIST( int32_t )
-	axTYPE_LIST( int64_t )
 
-	#if axOS_Linux
-	#else
-		axTYPE_LIST( long )
-	#endif
-
+#include "../common/axTypeList_int.h"
 #undef axTYPE_LIST
 
 //======== unsigned int
@@ -162,15 +154,7 @@ inline axStatus axStringFormat_out( axStringFormat &f, char		value ) { return ax
 		return axStringFormat_to_digi_unsigned( buf, max_digi, value, base, exponent, precision, table ); \
 	} \
 	//---------
-	axTYPE_LIST( uint8_t )
-	axTYPE_LIST( uint16_t )
-	axTYPE_LIST( uint32_t )
-	axTYPE_LIST( uint64_t )
-	#if axOS_Linux
-	#else
-		axTYPE_LIST( unsigned long )
-	#endif
-
+#include "../common/axTypeList_uint.h"
 #undef axTYPE_LIST
 
 inline axStatus axStringFormat_out( axStringFormat &f, float   value ) { return axStringFormat_out_NumberT( f, value ); }
@@ -281,7 +265,7 @@ axStatus axStringFormat_out_NumberT( axStringFormat &f, T value ) {
 	}else{
 		digi = axStringFormat_to_digi( ch, max_digi, value, base, exponent, precision, table );
 		if( digi < 0 ) { assert(false); return -1; }        
-		if( ! axTypeOf<T>::isUnsigned() && ax_less_than0( value ) ) {
+		if( ! axTypeOf<T>::isUnsigned && ax_less_than0( value ) ) {
 			plus_sign = false;
 		}
 	}

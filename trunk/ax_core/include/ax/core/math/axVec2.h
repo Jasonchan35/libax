@@ -164,11 +164,12 @@ axStatus axVec2<T>::serialize_io( S &s ) {
 	#endif
 }
 
-
-
 #define axTYPE_LIST(T) \
-	template<> inline bool axTypeOf<T>::isPOD() { return true; }
-
+	template<> class axTypeOf<T> { \
+	public: \
+		static const bool isPOD = true; \
+	};\
+//----
     axTYPE_LIST( axVec2b )
     axTYPE_LIST( axVec2i )
     axTYPE_LIST( axVec2f )

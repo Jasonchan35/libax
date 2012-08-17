@@ -155,7 +155,10 @@ axStatus axMatrix4<T>::serialize_io( S &s ) {
 //@}
 
 #define axTYPE_LIST(T) \
-	template<> inline bool axTypeOf<T>::isPOD() { return true; }
+	template<> class axTypeOf<T> { \
+	public: \
+		static const bool isPOD = true; \
+	};\
 //----
     axTYPE_LIST( axMatrix4f )
     axTYPE_LIST( axMatrix4d )

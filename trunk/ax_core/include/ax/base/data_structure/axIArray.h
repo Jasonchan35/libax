@@ -151,7 +151,7 @@ template<class T> axALWAYS_INLINE( axStatus ax_array_take		( T* dst, const T* sr
 
 template< class T > inline
 void	ax_array_constructor( T* p, axSize n ) {
-	if( axTypeOf<T>::isPOD() ) return;
+	if( axTypeOf<T>::isPOD ) return;
 	T *e = p + n;
 	for( ; p<e; p++ )
 		::new(p) T;
@@ -159,7 +159,7 @@ void	ax_array_constructor( T* p, axSize n ) {
 
 template< class T > inline
 void	ax_array_destructor( T* p, axSize n ) {
-	if( axTypeOf<T>::isPOD() ) return;
+	if( axTypeOf<T>::isPOD ) return;
 	T *e = p + n;
 	for( ; p<e; p++ )
 		p->~T();
@@ -167,7 +167,7 @@ void	ax_array_destructor( T* p, axSize n ) {
 
 template<class T> inline
 bool ax_array_is_equals( const T* dst, const T* src, axSize n ) {
-	if( axTypeOf<T>::isPOD() ) {
+	if( axTypeOf<T>::isPOD ) {
 		return ( 0 == memcmp( dst, src, n * sizeof(T) ) );
 	}else{
 		const T* end = src + n;
@@ -186,7 +186,7 @@ axStatus ax_array_copy( T* dst, const T* src, axSize n ) {
 	}
 
 	axStatus st;
-	if( axTypeOf<T>::isPOD() ) {
+	if( axTypeOf<T>::isPOD ) {
 		memcpy( (void*)dst, (void*)src, n * sizeof(T) );
 	}else{
 		const T* end = src + n;
@@ -206,7 +206,7 @@ axStatus ax_array_take( T* dst, T* src, axSize n ) {
 
 	if( dst+n > src && dst < src+n ) {
 		//overlapped
-		if( axTypeOf<T>::isPOD() ) {
+		if( axTypeOf<T>::isPOD ) {
 			memmove( (void*)dst, (void*)src, n * sizeof(T) );
 			return 0;
 		}else{
@@ -230,7 +230,7 @@ axStatus ax_array_take( T* dst, T* src, axSize n ) {
 		return 0;
 	}
 
-	if( axTypeOf<T>::isPOD() ) {
+	if( axTypeOf<T>::isPOD ) {
 		//warning: destination for this 'memcpy' call is a pointer to dynamic class 'axArray<int, 0>'; vtable pointer will be overwritten [-Wnon-pod-memaccess,3]
 		memcpy( (void*)dst, (void*)src, n * sizeof(T) );
 	}else{
@@ -294,7 +294,7 @@ axStatus	axIArray<T>::setCapacity ( axSize n ) {
 	st = onMalloc( n, np, newCapacity );		if( !st ) return st;
 
 	if( size_ && p_ != np ) {
-		if( axTypeOf<T>::isPOD() ) {
+		if( axTypeOf<T>::isPOD ) {
 			memcpy( (void*)np, (void*)p_, size_ * sizeof(T) );
 		}else{
 			T* s = p_; //old data

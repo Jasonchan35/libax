@@ -63,18 +63,36 @@ inline axSize	ax_min		( axSize a, axSize b )	{ return (a<b)?a:b; }
 inline axSize	ax_max		( axSize a, axSize b )	{ return (a>b)?a:b; }
 inline axSize	ax_abs		( axSize a )			{ return a; } //unsigned will always be positive
 
-template<> inline	axSize		axTypeOf<axSize>::valueMin()		{ return 0; }
-template<> inline	axSize		axTypeOf<axSize>::valueMax()		{ 
+template<>
+class axTypeOf<axSize> {
+	typedef	size_t	T;
+	/*
+#if axCPU_LP32
+	typedef uint32_t T;
+#elif axCPU_LP64
+	typedef uint64_t T;
+#else
+	#error
+#endif
+*/
+public:
+	static	const		bool	isPOD		= true;
+	static	const	int		precision	= 0;
+	static	const	T		epsilon		= 0;
+	static	const	bool	isInterger	= true;
+	static	const	bool	isUnsigned	= true;
+};
+
+template<> inline  axSize ax_type_min<axSize>() { return 0; }
+
+template<> inline  axSize ax_type_max<axSize>() { 
 	#if axCPU_LP32
 		return 0xffffffffU;
 	#elif axCPU_LP64
-		return 0xffffffffffffffffULL;
-	#else
-		#error
+		return  0xffffffffffffffffULL;
 	#endif
 }
 
-template<> inline	bool	axTypeOf<axSize>::isUnsigned()		{ return true; }
 template<> inline  axStatus ax_safe_assign( axSize &dst, const axSize &src ) { dst = src; return 0; }	
 
 //@}

@@ -210,8 +210,8 @@ axStatus axSocket::_send	( axSize &sent_len, const void* msg, axSize len, int fl
 	sent_len = 0;
 
 	int sn;
-	if( len >= (size_t) axTypeOf<int>::valueMax() ) {
-		sn = axTypeOf<int>::valueMax();
+	if( len >= (size_t) ax_type_max<int>() ) {
+		sn = ax_type_max<int>();
 	}else{
 		sn = (int)len;
 	}
@@ -223,7 +223,7 @@ axStatus axSocket::_send	( axSize &sent_len, const void* msg, axSize len, int fl
 
 axStatus axSocket::_sendto( axSize &sent_len, const axSockAddr &addr, const void* msg, axSize len, int flags ) {
 	if( ! isValid() ) { axASSERT(false); return axStatus_Std::not_initialized; }
-	int sn = (int) ax_min( len, axTypeOf<int>::valueMax() );
+	int sn = (int) ax_min( len, ax_type_max<int>() );
 	const struct sockaddr &a = addr.as_sockaddr();
 	int n = ::sendto ( fd_, (const char*)msg, sn, flags, &a, sizeof(a) );
 	if( n < 0 )	return is_error() ? -2 : 0 ;
@@ -235,7 +235,7 @@ axStatus axSocket::_recv	( axSize &recv_len, void* buf, axSize len, int flags ) 
 	if( ! isValid() ) { axASSERT(false); return axStatus_Std::not_initialized; }
 	recv_len = 0;
 
-	int sn = (int) ax_min( len, axTypeOf<int>::valueMax() );
+	int sn = (int) ax_min( len, ax_type_max<int>() );
 	int n = ::recv ( fd_, (char*)buf, sn, flags );
 	if( n < 0 )	return is_error() ? -2 : 0 ;
 	recv_len = (axSize) n;
@@ -245,7 +245,7 @@ axStatus axSocket::_recv	( axSize &recv_len, void* buf, axSize len, int flags ) 
 axStatus axSocket::_recvfrom( axSize &recv_len, axSockAddr &addr, void* buf, axSize len, int flags ) {
 	if( ! isValid() ) { axASSERT(false); return axStatus_Std::not_initialized; }
 	recv_len = 0;
-	int sn = (int) ax_min( len, axTypeOf<int>::valueMax() );
+	int sn = (int) ax_min( len, ax_type_max<int>() );
 
 	struct sockaddr &a = addr.as_sockaddr();
 	ax_socklen_t fromlen = sizeof( a );
