@@ -106,12 +106,15 @@ public:
 };
 
 #define axTYPE_LIST(T) \
-	template<> inline bool axTypeOf<T>::isPOD() { return true; }
-
-axTYPE_LIST( axVec3b )
-axTYPE_LIST( axVec3i )
-axTYPE_LIST( axVec3f )
-axTYPE_LIST( axVec3d )
+	template<> class axTypeOf<T> { \
+	public: \
+		static const bool isPOD = true; \
+	};\
+//----
+	axTYPE_LIST( axVec3b )
+	axTYPE_LIST( axVec3i )
+	axTYPE_LIST( axVec3f )
+	axTYPE_LIST( axVec3d )
 #undef axTYPE_LIST
 
 template< class T > inline axVec3i to_axVec3i( const axVec3<T>& v ) { return axVec3i( (int   )v.x, (int   )v.y, (int   )v.z ); }

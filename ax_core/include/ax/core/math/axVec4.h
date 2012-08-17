@@ -88,8 +88,11 @@ public:
 };
 
 #define axTYPE_LIST(T) \
-	template<> inline bool axTypeOf<T>::isPOD() { return true; }
-//---
+	template<> class axTypeOf<T> { \
+	public: \
+		static const bool isPOD = true; \
+	};\
+//----
     axTYPE_LIST( axVec4b )
     axTYPE_LIST( axVec4i )
     axTYPE_LIST( axVec4f )

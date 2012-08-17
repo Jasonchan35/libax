@@ -774,7 +774,7 @@ axStatus	axIString_<T> :: replaceChar( T from, T to, axSize start_from, axSize c
 
 	if( start_from >= size() ) return axStatus_Std::invalid_parameter;
 
-	if( count == 0 ) count = axTypeOf<axSize>::valueMax();
+	if( count == 0 ) count = ax_type_max<axSize>();
 
 	T* s = &buf_[start_from];
 	
@@ -817,7 +817,7 @@ axStatus	axIString_<T> :: replaceString ( const T* from, const T* to, axSize sta
 
 	if( size() == 0 ) return 0;
 	if( start_from >= size() ) return axStatus_Std::invalid_parameter;
-	if( count == 0 ) count = axTypeOf<axSize>::valueMax();
+	if( count == 0 ) count = ax_type_max<axSize>();
 
 	T* s = &buf_[start_from];	
 
