@@ -92,7 +92,7 @@ public:
 
 	axVec3		dir			( const axVec3 &v ) const		{ return (*this - v).normalize(); }
 
-	bool		isParallel          ( const axVec3 &v, T tolerance = ax_fp_epsilon<T>() ) const;
+	bool		isParallel          ( const axVec3 &v, T tolerance = ax_epsilon<T>() ) const;
 	void		faceNormal			( const axVec3 &v0, const axVec3 &v1, const axVec3 &v2 );
 
 	//! angle between this and v

@@ -2,7 +2,7 @@
 #ifndef __ax_math_template_h__
 #define __ax_math_template_h__
 
-#include "axTypeOf.h"
+#include "axSize.h"
 
 //! \ingroup base_common
 //@{
@@ -146,6 +146,7 @@ inline uint8_t	ax_align_multiple( uint8_t  n, uint8_t  a ) { return _ax_align_mu
 inline uint16_t	ax_align_multiple( uint16_t n, uint16_t a ) { return _ax_align_multiple_uint(n,a); }
 inline uint32_t	ax_align_multiple( uint32_t n, uint32_t a ) { return _ax_align_multiple_uint(n,a); }
 inline uint64_t	ax_align_multiple( uint64_t n, uint64_t a ) { return _ax_align_multiple_uint(n,a); }
+inline axSize	ax_align_multiple( axSize   n, axSize   a ) { return _ax_align_multiple_uint(n,a); }
 
 
 //! floating-point align

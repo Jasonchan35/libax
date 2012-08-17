@@ -66,19 +66,9 @@ inline axSize	ax_abs		( axSize a )			{ return a; } //unsigned will always be pos
 template<>
 class axTypeOf<axSize> {
 	typedef	size_t	T;
-	/*
-#if axCPU_LP32
-	typedef uint32_t T;
-#elif axCPU_LP64
-	typedef uint64_t T;
-#else
-	#error
-#endif
-*/
 public:
-	static	const		bool	isPOD		= true;
+	static	const	bool	isPOD		= true;
 	static	const	int		precision	= 0;
-	static	const	T		epsilon		= 0;
 	static	const	bool	isInterger	= true;
 	static	const	bool	isUnsigned	= true;
 };
