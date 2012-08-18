@@ -17,7 +17,7 @@ public:
 	axVec4<T> c;	//!< the coeff.
 	axQuaternion() {}
 	axQuaternion( const axQuaternion& v ) : c(v.c) {}
-	axQuaternion( const axVec4<T> &cc ) : c(cc)   {}
+	axQuaternion( const axVec4<T>   &cc ) : c(cc)   {}
 	axQuaternion( T xx, T yy, T zz, T ww ) : c(xx,yy,zz,ww) {}
 
 	axQuaternion( const axVec3<T> &src, const axVec3<T> &dst)	{ setAlign(src, dst); }
@@ -43,14 +43,12 @@ public:
 	axQuaternion	conjugate	() const						{ return axQuaternion( -c.x, -c.y, -c.z, c.w ); }
 	axQuaternion	inv			() const;
 
-	void		setRotateX( T rad )						{ c.w = cos(rad/2); c.x = sin(rad/2); c.y = c.z = 0; }
-	void		setRotateY( T rad )						{ c.w = cos(rad/2); c.y = sin(rad/2); c.x = c.z = 0; }
-	void		setRotateZ( T rad )						{ c.w = cos(rad/2); c.z = sin(rad/2); c.x = c.y = 0; }
+	void		setRotateX( T rad )						{ c.w = ax_cos(rad/2); c.x = ax_sin(rad/2); c.y = c.z = 0; }
+	void		setRotateY( T rad )						{ c.w = ax_cos(rad/2); c.y = ax_sin(rad/2); c.x = c.z = 0; }
+	void		setRotateZ( T rad )						{ c.w = ax_cos(rad/2); c.z = ax_sin(rad/2); c.x = c.y = 0; }
 
 	void		setRotate	( T angle,  const axVec3<T> &axis);
 	bool		getRotate	( T &angle, axVec3<T> &axis) const;
-
-	axVec3<T>		rotate		( const axVec3<T> &v ) const;
 
 	void		setAlign			( const axVec3<T> &src,    const axVec3<T> &dst);
 	void		setAlignOnPlane		( const axVec3<T> &normal, const axVec3<T> &src,

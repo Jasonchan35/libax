@@ -71,10 +71,11 @@ public:
 	axALWAYS_INLINE(			T&			last		( axSize i = 0 ) )			{ return indexOf( size_-i-1 ); }
 	axALWAYS_INLINE(	const	T&			last		( axSize i = 0 ) const )	{ return indexOf( size_-i-1 ); }
 
+						bool		isAll		( const T& v ) const;
+						bool		isAny		( const T& v ) const;
+
 	axALWAYS_INLINE(	axStatus	copy		( const axIArray<T> &src ) );
 	axALWAYS_INLINE(	axStatus	onTake		( axIArray<T> &src ) );
-
-
 
 	axALWAYS_INLINE(	axStatus	insert		( axSize pos, const T &src ) )				{ return insertN( pos, &src, 1 ); }
 	axALWAYS_INLINE(	axStatus	insertN		( axSize pos, const axIArray<T> &src ) )	{ return insertN( pos, src.ptr(), src.size() ); }
@@ -315,6 +316,27 @@ axStatus	axIArray<T>::setCapacity ( axSize n ) {
 	return 0;
 }
 
+template< class T > inline
+bool	axIArray<T>::isAll	( const T& v ) const {
+	if( size_ == 0 ) return false;	
+	const T* p = p_;
+	const T* e = p + size_;
+	for( ;p<e; p++ ) {
+		if( *p != v ) return false;
+	}
+	return true;
+}
+
+template< class T > inline
+bool	axIArray<T>::isAny	( const T& v ) const {
+	if( size_ == 0 ) return false;	
+	const T* p = p_;
+	const T* e = p + size_;
+	for( ;p<e; p++ ) {
+		if( *p == v ) return true;
+	}
+	return false;
+}
 
 template< class T > inline
 axStatus	axIArray<T>::shrink( axSize tolerance ) {

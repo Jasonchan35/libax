@@ -123,20 +123,6 @@ axEulerRotation3<T> axQuaternion<T>::to_EulerRotation3() const {
 	return axEulerRotation3<T>( v );
 }
 
-template<class T> axVec3<T> axQuaternion<T>::rotate( const axVec3<T> &v ) const {
-	T w2 = 2 * c.w;
-	T p_mul = w2 * c.w - 1;
-	
-	axVec3<T>	n ( c.x, c.y, c.z );
-	
-	T v_mul = 2 * n.dot( v );
-	axVec3<T> c_cross_v = n ^ v;
-	
-	return axVec3<T>( p_mul * v.x + v_mul * n.x + w2 * c_cross_v.x,
-					p_mul * v.y + v_mul * n.y + w2 * c_cross_v.y,
-					p_mul * v.z + v_mul * n.z + w2 * c_cross_v.z );
-}
-
 template<class T>
 void axQuaternion<T>::setAlignOnPlane(	const axVec3<T> &normal,
 										const axVec3<T> &src,

@@ -8,6 +8,20 @@
 
 #include <ax/core/math/axMatrix4.h>
 
+//---------- axQuaternion ----------
+template<class T> axVec3<T> axVec3<T>::operator*( const axQuaternion<T> &q ) const {
+	T w2 = 2 * q.c.w;
+	T p_mul = w2 * q.c.w - 1;
+	
+	axVec3<T>	n ( q.c.x, q.c.y, q.c.z );
+	
+	T v_mul = 2 * n.dot( *this );
+	axVec3<T> c_cross_v = n ^ *this;
+	
+	return axVec3<T>(	p_mul * x + v_mul * n.x + w2 * c_cross_v.x,
+						p_mul * y + v_mul * n.y + w2 * c_cross_v.y,
+						p_mul * z + v_mul * n.z + w2 * c_cross_v.z );
+}
 
 //---------- Matrix * Vec 3----------------
 
@@ -26,14 +40,10 @@ axVec3<T> axVec3<T>::mul4x3 ( const axMatrix4<T> &m ) const {
 }
 
 template<class T>
-axVec3<T> axVec3<T>::operator* ( const axMatrix4<T> &m ) const {
+axVec3<T> axVec3<T>::mul4x4 ( const axMatrix4<T> &m ) const {
 	return  ( axVec4<T>( *this, 1 ) * m ).to_Vec3();
 }
 
-template<class T> 
-void axVec3<T>::operator*= ( const axMatrix4<T> &m ) {
-	*this = *this * m;
-}
 
 template <class T>
 T axVec3<T>::angle( const axVec3 &v ) {

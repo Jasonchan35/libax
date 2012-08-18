@@ -68,14 +68,14 @@ axFrustum3<T> axFrustum3<T>::operator*( const axMatrix4<T>& m ) {
 	axFrustum3<T>	fr;
 	if( !valid ) return fr;
 
-	fr.pt[0] = pt[0] * m;
-	fr.pt[1] = pt[1] * m;
-	fr.pt[2] = pt[2] * m;
-	fr.pt[3] = pt[3] * m;
-	fr.pt[4] = pt[4] * m;
-	fr.pt[5] = pt[5] * m;
-	fr.pt[6] = pt[6] * m;
-	fr.pt[7] = pt[7] * m;
+	fr.pt[0] = pt[0].mul4x4(m);
+	fr.pt[1] = pt[1].mul4x4(m);
+	fr.pt[2] = pt[2].mul4x4(m);
+	fr.pt[3] = pt[3].mul4x4(m);
+	fr.pt[4] = pt[4].mul4x4(m);
+	fr.pt[5] = pt[5].mul4x4(m);
+	fr.pt[6] = pt[6].mul4x4(m);
+	fr.pt[7] = pt[7].mul4x4(m);
 	fr.valid = true;
 
 	return fr;
@@ -85,14 +85,14 @@ axFrustum3<T> axFrustum3<T>::operator*( const axMatrix4<T>& m ) {
 template<class T>
 void axFrustum3<T>::operator*=( const axMatrix4<T>& m ) {
 	if( !valid ) return;
-	pt[0] *= m;
-	pt[1] *= m;
-	pt[2] *= m;
-	pt[3] *= m;
-	pt[4] *= m;
-	pt[5] *= m;
-	pt[6] *= m;
-	pt[7] *= m;
+	pt[0].mul4x4_it(m);
+	pt[1].mul4x4_it(m);
+	pt[2].mul4x4_it(m);
+	pt[3].mul4x4_it(m);
+	pt[4].mul4x4_it(m);
+	pt[5].mul4x4_it(m);
+	pt[6].mul4x4_it(m);
+	pt[7].mul4x4_it(m);
 }
 
 

@@ -72,13 +72,14 @@ public:
 	axMatrix4		operator/		( T v ) const				{ T inv = (T)1.0/v; return *this * inv; }
 
 	axMatrix4		transpose		() const;
-	axMatrix4<T>	inverse			() const;
+	axMatrix4		inverse			() const;
 
-		void		inverseIt() { *this = inverse(); }
+		void		inverseIt		() { *this = inverse(); }
 
-		bool		isAll				( T v ) const				{ return ( cx.isAll(v) && cy.isAll(v) && cz.isAll(v) && cw.isAll(v) ); }
+		bool		isAll			( T v ) const					{ return ( cx.isAll(v) && cy.isAll(v) && cz.isAll(v) && cw.isAll(v) ); }
+		bool		isAny			( T v ) const					{ return ( cx.isAny(v) || cy.isAny(v) || cz.isAny(v) || cw.isAny(v) ); }
 
-		void		setIdentity	()									{ cx.set(1,0,0,0); cy.set(0,1,0,0); cz.set(0,0,1,0); cw.set(0,0,0,1); }
+		void		setIdentity		()								{ cx.set(1,0,0,0); cy.set(0,1,0,0); cz.set(0,0,1,0); cw.set(0,0,0,1); }
 		void		setTranslate	( const axVec3<T> &v );
 		void		translate		( const axVec3<T> &v );
 		void		translate		( const axVec2<T> &v )			{ translate( axVec3<T>(v.x,v.y,0) ); }

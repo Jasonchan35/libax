@@ -35,7 +35,7 @@ public:
 	axMatrix4<T>	to_Matrix4		() const;
 	axQuaternion<T>	to_Quaternion	() const;
 
-	const char*		order_name		() const;
+	const char*		orderName		() const;
 
 	template<class S>	axStatus	serialize_io	( S &se );
 						axStatus	toStringFormat	( axStringFormat &f ) const;

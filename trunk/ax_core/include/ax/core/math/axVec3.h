@@ -16,6 +16,7 @@ typedef axVec3<double>	axVec3d;
 
 
 template<class T> class axMatrix4;
+template<class T> class axQuaternion;
 
 template <class T>
 class axVec3 {
@@ -54,11 +55,19 @@ public:
 	void		operator*=	( const axVec3 &v )			{ x*=v.x; y*=v.y; z*=v.z; }
 	void		operator/=	( const axVec3 &v )			{ x/=v.x; y/=v.y; z/=v.z; }
 
-	axVec3		operator*	( const axMatrix4<T> &m ) const;
-	void		operator*=	( const axMatrix4<T> &m );
+	axVec3		mul4x4		( const axMatrix4<T> &m ) const;
+	void		mul4x4_it	( const axMatrix4<T> &m )		{ *this = this->mul4x4(m); }
 
-	axVec3		mul3x3		( const axMatrix4<T> &m ) const;	//!< no translate and projection
-	axVec3		mul4x3		( const axMatrix4<T> &m ) const;	//!< no projection
+	//!< no projection
+	axVec3		mul4x3		( const axMatrix4<T> &m ) const;	
+	void		mul4x3_it	( const axMatrix4<T> &m )		{ *this = this->mul4x3(m); }
+
+	//!< no translate and projection
+	axVec3		mul3x3		( const axMatrix4<T> &m ) const;	
+	void		mul3x3_it	( const axMatrix4<T> &m )		{ *this = this->mul3x3(m); }
+
+	axVec3		operator*	( const axQuaternion<T> &q ) const;
+	void		operator*=	( const axQuaternion<T> &q )	{ *this = *this * q; }
 
 	void		operator+=	( const T v )				{ x+=v; y+=v; z+=v; }
 	void		operator-=	( const T v )				{ x-=v; y-=v; z-=v; }
@@ -75,22 +84,21 @@ public:
 	bool		isAll		( const T v ) const				{ return (x==v && y==v && z==v); }
 	bool		isAny		( const T v ) const				{ return (x==v || y==v || z==v); }
 
-	axVec3		reflect		( const axVec3 &normal ) const	{ return *this - ( normal * ( dot( normal ) * 2 ) ); }
-	axVec3		reflectHalf ( const axVec3 &normal ) const	{ return *this - ( normal * ( dot( normal )     ) ); }
+	axVec3		reflect		( const axVec3 &normal, T f=2 ) const	{ return *this - ( normal * ( dot( normal ) * f ) ); }
 
 	//! magnitude
 	T			mag			() const						{ return sqrt( magSq() ); }
 	T			magSq		() const						{ return (x*x + y*y + z*z); }
 
-	T			distance	( const axVec3 &v ) const		{ return sqrt( distanceSq( v ) ); }
-
 	//! distance in square
 	T			distanceSq	( const axVec3 &v ) const		{ return (x-v.x)*(x-v.x) + (y-v.y)*(y-v.y) + (z-v.z)*(z-v.z); }
+	T			distance	( const axVec3 &v ) const		{ return sqrt( distanceSq( v ) ); }
+	axVec3		direction	( const axVec3 &v ) const		{ return (*this - v).normalize(); }
+
 
 	axVec3		normalize	() const						{ T r = magSq(); return r ? (*this/ax_sqrt(r)) : *this; }
 	void		normalizeIt	()								{ *this = normalize(); }
 
-	axVec3		dir			( const axVec3 &v ) const		{ return (*this - v).normalize(); }
 
 	bool		isParallel          ( const axVec3 &v, T tolerance = ax_epsilon<T>() ) const;
 	void		faceNormal			( const axVec3 &v0, const axVec3 &v1, const axVec3 &v2 );
