@@ -3,7 +3,7 @@
 #include <ax/core/math/axQuaternion.h>
 
 template<class T>
-const char* axEulerRotation3<T>::order_name() const {
+const char* axEulerRotation3<T>::orderName() const {
 	switch( o ) {
 		case o_xyz: return"xyz";
 		case o_yzx: return"yzx";
@@ -133,12 +133,14 @@ axQuaternion<T> axEulerRotation3<T>::to_Quaternion() const {
 
 template<class T>
 void axEulerRotation3<T>::set( const axMatrix4<T> &m ) {
+	T pole = (T)1.0 - ax_epsilon<T>();
+
 	o = o_xyz;
-	if ( m.cx.y > 0.998 ) { // singularity at north pole
+	if ( m.cx.y > pole ) { // singularity at north pole
 		a.x = ax_atan2( m.cy.x, m.cz.x );
 		a.y = (T)(ax_math_PI / 2);
 		a.z = 0;
-	} else if ( m.cx.y < -0.998 ) { // singularity at south pole
+	} else if ( m.cx.y < -pole ) { // singularity at south pole
 		a.x = ax_atan2( m.cy.x, m.cz.x );
 		a.y = (T)(-ax_math_PI / 2);
 		a.z = 0;

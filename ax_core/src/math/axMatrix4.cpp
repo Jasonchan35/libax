@@ -434,8 +434,6 @@ void axMatrix4<T>::operator*=( const axMatrix4<T> &v ) {
 	cw.w = e0*v.cw.x + e1*v.cw.y + e2*v.cw.z + e3*v.cw.w;
 }
 
-
-
 //The explicit instantiation
 template class axMatrix4<float>;
 template class axMatrix4<double>;

@@ -49,7 +49,6 @@ public:
 	axVec4		operator-	( const axVec4 &v ) const		{ return axVec4( x - v.x, y - v.y, z - v.z, w - v.w ); }
 	axVec4		operator*	( const axVec4 &v ) const		{ return axVec4( x * v.x, y * v.y, z * v.z, w * v.w ); }
 	axVec4		operator/	( const axVec4 &v ) const		{ return axVec4( x / v.x, y / v.y, z / v.z, w / v.w ); }
-	axVec4		operator*	( const axMatrix4<T> &m ) const;
 
 	axVec4		operator-	() const					{ return axVec4( -x, -y, -z, -w ); }
 
@@ -64,6 +63,7 @@ public:
 	void		operator*=	( T v )						{ x*=v; y*=v; z*=v; w*=v; }
 	void		operator/=	( T v )						{ x/=v; y/=v; z/=v; w/=v; }
 
+	axVec4		operator*	( const axMatrix4<T> &m ) const;
 	void		operator*=	( const axMatrix4<T> &m );
 
 	bool		operator==	( const axVec4 &v ) const		{ return ( x == v.x && y == v.y && z == v.z && w == v.w ); }
@@ -73,11 +73,11 @@ public:
 	bool		operator>	( const axVec4 &v ) const		{ return ( x >  v.x && y >  v.y && z >  v.z && w >  v.w ); }
 	bool		operator>=	( const axVec4 &v ) const		{ return ( x >= v.x && y >= v.y && z >= v.z && w >= v.w ); }
 
-	bool		isAll		( const T v ) const			{ return (x==v && y==v && z==v && w==v); }
-	bool		isAny		( const T v ) const			{ return (x==v || y==v || z==v || w==v); }
+	bool		isAll		( const T v ) const				{ return (x==v && y==v && z==v && w==v); }
+	bool		isAny		( const T v ) const				{ return (x==v || y==v || z==v || w==v); }
 
 	T			dot			( const axVec4 &v ) const		{ return (x*v.x) + (y*v.y) + (z*v.z) + (w*v.w); }
-	T			average		() const					{ return (x + y + z + w) / (T)4; }
+	T			average		() const						{ return (x + y + z + w) / (T)4; }
 
 	axVec3<T>	to_Vec3		();
 

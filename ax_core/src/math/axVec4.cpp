@@ -13,9 +13,9 @@
 template<class T>
 axVec4<T> axVec4<T>::operator* ( const axMatrix4<T> &m ) const {
 	return axVec4<T>(	x*m.cx.x + y*m.cy.x + z*m.cz.x + w*m.cw.x,
-					 x*m.cx.y + y*m.cy.y + z*m.cz.y + w*m.cw.y,
-					 x*m.cx.z + y*m.cy.z + z*m.cz.z + w*m.cw.z,
-					 x*m.cx.w + y*m.cy.w + z*m.cz.w + w*m.cw.w );
+						x*m.cx.y + y*m.cy.y + z*m.cz.y + w*m.cw.y,
+						x*m.cx.z + y*m.cy.z + z*m.cz.z + w*m.cw.z,
+						x*m.cx.w + y*m.cy.w + z*m.cz.w + w*m.cw.w );
 }
 
 template<class T>
