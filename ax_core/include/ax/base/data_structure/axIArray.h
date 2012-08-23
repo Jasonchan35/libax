@@ -91,6 +91,7 @@ public:
 
 						void		setAll		( const T& value );
 						axStatus	setValues	( const T* src, axSize count )  { resize(0); return appendN(src,count); }
+						axStatus	setValues	( const axIArray<T> &src )		{ resize(0); return appendN(src); }
 
 			//! (element order might be changed) try to swap from tail to prevent large memory copy
 	axALWAYS_INLINE(	axStatus	removeBySwap	( axSize index, axSize count=1 ) );
