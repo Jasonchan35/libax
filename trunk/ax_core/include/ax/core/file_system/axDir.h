@@ -19,17 +19,17 @@ public:
 	};
 
 
-			axStatus	open	( const char* path );
+			axStatus	open	( const char*    path );
 			axStatus	open	( const wchar_t* path );
 			void		close	();
 			axStatus	next	( Entry &e );
 			bool		isValid	();
 
 	static	axStatus	getEntries( const wchar_t* path, axIArray<Entry> & entries );
-	static	axStatus	getEntries( const char* path, axIArray<Entry> & entries );
+	static	axStatus	getEntries( const char*    path, axIArray<Entry> & entries );
 
 	static	axStatus	getCount( const wchar_t* path, axSize &res );
-	static	axStatus	getCount( const char* path, axSize &res );
+	static	axStatus	getCount( const char*    path, axSize &res );
 
 private:
 
