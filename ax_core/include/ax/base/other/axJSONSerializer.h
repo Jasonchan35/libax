@@ -6,10 +6,10 @@
 
 template< class S >
 axStatus onStringSerialize( S &s ) {
-axStatus st;
-ax_string_serialize( v1 )
-ax_string_serialize( v2 )
-return 0;
+	axStatus st;
+	ax_string_serialize( v1 )
+	ax_string_serialize( v2 )
+	return 0;
 }
 
 2:  external class global function:
@@ -17,9 +17,9 @@ return 0;
 template<class S > inline 
 axStatus	ax_json_serialize_io_class ( S &s, vector3 &v ) {	
 axStatus st;
-st = s.io( v.x, "x" );	if( !st ) return st;
-st = s.io( v.y, "y" );	if( !st ) return st;
-st = s.io( v.z, "z" );	if( !st ) return st;
+	st = s.io( v.x, "x" );	if( !st ) return st;
+	st = s.io( v.y, "y" );	if( !st ) return st;
+	st = s.io( v.z, "z" );	if( !st ) return st;
 return 0;
 }
 
@@ -28,18 +28,18 @@ return 0;
 3: inline global function : ( This function only support singale string input and output )
 
 inline axStatus ax_json_serialize_io( axJSONDeserializer &s, vector3 &value ) {
-axStatus st;
-axTempStringA str;
-st = s.getString( str ); if( !st ) return st;
-st = ax_str_to( str, value ); if( !st ) return st;
-return 0;
+	axStatus st;
+	axTempStringA str;
+	st = s.getString( str ); if( !st ) return st;
+	st = ax_str_to( str, value ); if( !st ) return st;
+	return 0;
 }
 
 inline axStatus ax_json_serialize_io( axJSONSerializer &s, vector3 &value ) {
-axStatus st;
-axTempStringA str;
-st = str.format( "{?} {?} {?}", value.x, value.y, value.z ); if( !st ) return st;
-return ax_json_serialize_io( s, str );
+	axStatus st;
+	axTempStringA str;
+	st = str.format( "{?} {?} {?}", value.x, value.y, value.z ); if( !st ) return st;
+	return ax_json_serialize_io( s, str );
 }
 */
 

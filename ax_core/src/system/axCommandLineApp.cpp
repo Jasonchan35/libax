@@ -8,10 +8,10 @@
 
 #include <ax/core/system/axCommandLineApp.h>
 
+
 axCommandLineApp::axCommandLineApp() {
 	argc_ = 0;
 	argv_ = NULL;
-	axApp::_setInstance( this );
 }
 
 axCommandLineApp::~axCommandLineApp() {
