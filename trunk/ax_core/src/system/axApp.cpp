@@ -2,15 +2,9 @@
 #include <ax/core/file_system/axFileSystem.h>
 #include <ax/core/system/axAndroid.h>
 
-axApp* axApp::_instance = NULL;
 
-axApp* axApp::getInstance() {
-	return _instance;
-}
+axApp::axApp() {
 
-void axApp::_setInstance( axApp *p ) {
-	assert( _instance == NULL );
-	_instance = p;
 }
 
 axStatus axApp::setAppName( const char* sz ) {
@@ -18,6 +12,7 @@ axStatus axApp::setAppName( const char* sz ) {
 }
 
 const axStringA& axApp::appName() {
+	assert( appName_.size() != 0 );
 	return appName_;
 }
 
@@ -244,8 +239,25 @@ axStatus axApp_NSSearchPath( axIString_<T> &out, NSSearchPathDirectory d ) {
 	return 0;
 }
 
-axStatus	axApp::getUserAppDataDir	( axIStringA &out )	{ return axApp_NSSearchPath( out, NSApplicationSupportDirectory ); }	
-axStatus	axApp::getUserAppDataDir	( axIStringW &out )	{ return axApp_NSSearchPath( out, NSApplicationSupportDirectory ); }
+axStatus	axApp::getUserAppDataDir	( axIStringA &out )	{
+	if( appName().size() == 0 ) { out.clear(); return -1; }
+	axStatus st;
+	st = axApp_NSSearchPath( out, NSApplicationSupportDirectory ); if( !st ) return st;
+	st = out.append( "/" );			if( !st ) return st;
+	st = out.append( appName() );	if( !st ) return st;
+	return 0;
+}
+
+axStatus	axApp::getUserAppDataDir	( axIStringW &out )	{
+	if( appName().size() == 0 ) { out.clear(); return -1; }
+	axStatus st;
+	st = axApp_NSSearchPath( out, NSApplicationSupportDirectory ); if( !st ) return st;
+	st = out.append( "/" );			if( !st ) return st;
+	st = out.append( appName() );	if( !st ) return st;
+	return 0;
+}
+
+
 
 axStatus	axApp::getUserDocumentDir	( axIStringA &out )	{ return axApp_NSSearchPath( out, NSDocumentDirectory ); }	
 axStatus	axApp::getUserDocumentDir	( axIStringW &out )	{ return axApp_NSSearchPath( out, NSDocumentDirectory ); }
@@ -353,22 +365,21 @@ axStatus	axApp::getAppDataDir( axIStringW &str ) {
 #include <pwd.h>
 
 axStatus	axApp::getUserAppDataDir		( axIStringA	&out ) {
-	axApp *app = getInstance();
-	if( app->appName().size() == 0 ) { out.clear(); return -1; }
+	if( appName().size() == 0 ) { out.clear(); return -1; }
 	axStatus st;
-	st = getUserHomeDir( out );			if( !st ) return st;
-	st = out.append( "/." );			if( !st ) return st;
-	st = out.append( app->appName() );	if( !st ) return st;
+	st = getUserHomeDir( out );		if( !st ) return st;
+	st = out.append( "/." );		if( !st ) return st;
+	st = out.append( appName() );	if( !st ) return st;
 	return 0;
 }
 
 axStatus	axApp::getUserAppDataDir		( axIStringW	&out ) {
-	axApp *app = getInstance();
-	if( app->appName().size() == 0 ) { out.clear(); return -1; }
+	if( appName().size() == 0 ) { out.clear(); return -1; }
+	
 	axStatus st;
-	st = getUserHomeDir( out );			if( !st ) return st;
-	st = out.append( "/." );			if( !st ) return st;
-	st = out.append( app->appName() );	if( !st ) return st;
+	st = getUserHomeDir( out );		if( !st ) return st;
+	st = out.append( "/." );		if( !st ) return st;
+	st = out.append( appName() );	if( !st ) return st;
 	return 0;
 }
 	

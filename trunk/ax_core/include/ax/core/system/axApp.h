@@ -15,73 +15,73 @@ class axApp : public axNonCopyable {
 #endif //__OBJC__
 public:		
 	
+	axApp();
+	
 			axStatus	setAppName			( const char*	sz );
 	const	axStringA&	appName				();
 	
-	static	axStatus	setCurrentDir		( const char*	 path );
-	static	axStatus	setCurrentDir		( const wchar_t* path );
+	axStatus	setCurrentDir		( const char*	 path );
+	axStatus	setCurrentDir		( const wchar_t* path );
 	
-	static	axStatus	getCurrentDir		( axIStringA	&out );
-	static	axStatus	getCurrentDir		( axIStringW	&out );
+	axStatus	getCurrentDir		( axIStringA	&out );
+	axStatus	getCurrentDir		( axIStringW	&out );
 	
-	static	axStatus	getProcessFilename	( axIStringA	&path_to_exe );
-	static	axStatus	getProcessFilename	( axIStringW	&path_to_exe );
+	axStatus	getProcessFilename	( axIStringA	&path_to_exe );
+	axStatus	getProcessFilename	( axIStringW	&path_to_exe );
 
-	static	axStatus	getProcessFileDir	( axIStringA	&path_to_exe );
-	static	axStatus	getProcessFileDir	( axIStringW	&path_to_exe );
+	axStatus	getProcessFileDir	( axIStringA	&path_to_exe );
+	axStatus	getProcessFileDir	( axIStringW	&path_to_exe );
 
-	static	axStatus	getUserName			( axIStringA	&out );
-	static	axStatus	getUserName			( axIStringW	&out );
+	axStatus	getUserName			( axIStringA	&out );
+	axStatus	getUserName			( axIStringW	&out );
 
-	static	axStatus	getTempDir			( axIStringA	&out );
-	static	axStatus	getTempDir			( axIStringW	&out );
+	axStatus	getTempDir			( axIStringA	&out );
+	axStatus	getTempDir			( axIStringW	&out );
 	
-	static	axStatus	getAppResourceDir	( axIStringA	&out );
-	static	axStatus	getAppResourceDir	( axIStringW	&out );
+	axStatus	getAppResourceDir	( axIStringA	&out );
+	axStatus	getAppResourceDir	( axIStringW	&out );
 	
 	/*!
 	!	WinXP		C:\Documents and Settings\username\Application Data
 	!	WinVista	C:\User\username\Application Data
 	*/
-	static	axStatus	getUserAppDataDir		( axIStringA	&out );
-	static	axStatus	getUserAppDataDir		( axIStringW	&out );
+	axStatus	getUserAppDataDir		( axIStringA	&out );
+	axStatus	getUserAppDataDir		( axIStringW	&out );
 	
-	static	axStatus	getUserAppDataFilename	( axIStringA	&out, const char*	 filename );	
-	static	axStatus	getUserAppDataFilename	( axIStringW	&out, const wchar_t* filename );	
+	axStatus	getUserAppDataFilename	( axIStringA	&out, const char*	 filename );	
+	axStatus	getUserAppDataFilename	( axIStringW	&out, const wchar_t* filename );	
 	
 	/*!
 	!	WinXP		C:\Documents and Settings\username\My Documents
 	!	WinVista	C:\Users\username\Documents
 	*/
-	static	axStatus	getUserDocumentDir	( axIStringA	&out );
-	static	axStatus	getUserDocumentDir	( axIStringW	&out );
+	axStatus	getUserDocumentDir	( axIStringA	&out );
+	axStatus	getUserDocumentDir	( axIStringW	&out );
 	
 	/*!
 	!	WinXP		C:\Documents and Settings\username
 	!	WinVista	C:\Users\username
 	*/
-	static	axStatus	getUserHomeDir		( axIStringA	&out );
-	static	axStatus	getUserHomeDir		( axIStringW	&out );
+	axStatus	getUserHomeDir		( axIStringA	&out );
+	axStatus	getUserHomeDir		( axIStringW	&out );
 	
 	/*!
 	!	WinXP		C:\Documents and Settings\username\Desktop
 	!	WinVista	C:\Users\username\Desktop
 	*/
-	static	axStatus	getDesktopDir		( axIStringA	&out );
-	static	axStatus	getDesktopDir		( axIStringW	&out );
+	axStatus	getDesktopDir		( axIStringA	&out );
+	axStatus	getDesktopDir		( axIStringW	&out );
 
-	static	axStatus	loadFileFromAppData	( axIByteArray	&buf, const char*	 filename );
-	static	axStatus	loadFileFromAppData	( axIByteArray	&buf, const wchar_t* filename );
+	axStatus	loadFileFromAppData	( axIByteArray	&buf, const char*	 filename );
+	axStatus	loadFileFromAppData	( axIByteArray	&buf, const wchar_t* filename );
 	
-	static	axStatus	saveFileToAppData	( const axIByteArray	&buf, const char*	 filename );
-	static	axStatus	saveFileToAppData	( const axIByteArray	&buf, const wchar_t* filename );
+	axStatus	saveFileToAppData	( const axIByteArray	&buf, const char*	 filename );
+	axStatus	saveFileToAppData	( const axIByteArray	&buf, const wchar_t* filename );
 		
-	static	axApp*	getInstance();
 protected:
-	void	_setInstance( axApp* p );
 	
 private:
-	static		axApp*	_instance;
+
 	axStringA	appName_;
 };
 

@@ -17,9 +17,7 @@ public:
 	
 			axStatus	_run( const char* name, int argc, const char* argv[] );
 	virtual	axStatus	onRun() = 0;
-	
-	static	axCommandLineApp*	getInstance();
-	
+		
 	int			getArgCount();
 	const char* getArg( int index );
 	
@@ -43,10 +41,6 @@ private:
 };
 
 //-----------------------
-inline
-axCommandLineApp*	axCommandLineApp::getInstance() {
-	return (axCommandLineApp*) axApp::getInstance();
-}
 
 
 #define		axCommandLineApp_program_main( AppName, App ) \
