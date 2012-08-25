@@ -19,11 +19,11 @@ public:
 	static	axStatus	loadFile		( axIByteArray	&out, const wchar_t* filename );
 	static	axStatus	loadFile		( axIByteArray	&out, const char*	 filename );
 	
-	static	axStatus	saveFile		( const axIByteArray &buf, const char*	  filename, bool replace_exists_file = true );
-	static	axStatus	saveFile		( const axIByteArray &buf, const wchar_t* filename, bool replace_exists_file = true );
+	static	axStatus	saveFile		( const axIByteArray &buf, const char*	  filename, bool create_if_file_not_exists = true, bool truncate = true );
+	static	axStatus	saveFile		( const axIByteArray &buf, const wchar_t* filename, bool create_if_file_not_exists = true, bool truncate = true );
 	
-	static	axStatus	saveFile		( const axIStringA &buf, const char*	 filename, bool replace_exists_file = true );
-	static	axStatus	saveFile		( const axIStringA &buf, const wchar_t*	 filename, bool replace_exists_file = true );
+	static	axStatus	saveFile		( const axIStringA &buf, const char*	 filename, bool create_if_file_not_exists = true, bool truncate = true );
+	static	axStatus	saveFile		( const axIStringA &buf, const wchar_t*	 filename, bool create_if_file_not_exists = true, bool truncate = true );
 
 	static	axStatus	renameFile		( const char*	 old_name, const char*    new_name );
 	static	axStatus	renameFile		( const wchar_t* old_name, const wchar_t* new_name );

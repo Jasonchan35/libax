@@ -259,7 +259,7 @@ axStatus axMemMapFile::openWrite( const char *filename, axSize size ) {
 
 axStatus axMemMapFile::openWrite( const wchar_t *filename, axSize size ) {
     axStatus st;
-	st = file_.openWrite( filename, true );	if( !st ) return st;
+	st = file_.openWrite( filename, true, false );	if( !st ) return st;
 	
 	axFileSize	off;
 	st = ax_safe_assign( off, size );	if( !st ) return st;
