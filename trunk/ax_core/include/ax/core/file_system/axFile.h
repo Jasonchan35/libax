@@ -14,12 +14,8 @@ public:
 	axStatus	openRead		( const char*    filename );
 	axStatus	openRead		( const wchar_t* filename );
 
-	axStatus	openWrite		( const char*    filename, bool replace_if_file_exists );
-	axStatus	openWrite		( const wchar_t* filename, bool replace_if_file_exists ); 
-
-	//! open existing file and truncated the length to 0
-	axStatus	openNew			( const char*	 filename );
-	axStatus	openNew			( const wchar_t* filename );
+	axStatus	openWrite		( const char*    filename, bool create_if_file_not_exists, bool truncate );
+	axStatus	openWrite		( const wchar_t* filename, bool create_if_file_not_exists, bool truncate ); 
 
 	axStatus	openAppend		( const char*    filename, bool create_if_file_not_exists );
 	axStatus	openAppend		( const wchar_t* filename, bool create_if_file_not_exists );

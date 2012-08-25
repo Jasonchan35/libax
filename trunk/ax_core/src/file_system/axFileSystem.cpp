@@ -53,35 +53,35 @@ axStatus	axFileSystem::loadFile		( axIByteArray &out, const char*	 filename ) {
 }
 
 
-axStatus	axFileSystem::saveFile		( const axIByteArray &buf, const char*	filename, bool replace_exists_file ) {
+axStatus	axFileSystem::saveFile		( const axIByteArray &buf, const char*	filename, bool create_if_file_not_exists, bool truncate ) {
 	axStatus	st;
 	axFile	f;
-	st = f.openWrite( filename, replace_exists_file );	if( !st ) return st;
+	st = f.openWrite( filename, create_if_file_not_exists, truncate );	if( !st ) return st;
 	st = f.write( buf );								if( !st ) return st;
 	return 0;
 }
 
 
-axStatus	axFileSystem::saveFile		( const axIByteArray &buf, const wchar_t*	filename, bool replace_exists_file ) {
+axStatus	axFileSystem::saveFile		( const axIByteArray &buf, const wchar_t*	filename, bool create_if_file_not_exists, bool truncate ) {
 	axStatus	st;
 	axFile	f;
-	st = f.openWrite( filename, replace_exists_file );	if( !st ) return st;
+	st = f.openWrite( filename, create_if_file_not_exists, truncate );	if( !st ) return st;
 	st = f.write( buf );								if( !st ) return st;
 	return 0;
 }
 
-axStatus	axFileSystem::saveFile		( const axIStringA &buf, const char*	 filename, bool replace_exists_file ) {
+axStatus	axFileSystem::saveFile		( const axIStringA &buf, const char*	 filename, bool create_if_file_not_exists, bool truncate ) {
 	axStatus	st;
 	axFile	f;
-	st = f.openWrite( filename, replace_exists_file );		if( !st ) return st;
+	st = f.openWrite( filename, create_if_file_not_exists, truncate );		if( !st ) return st;
 	st = f.writeString( buf );								if( !st ) return st;
 	return 0;
 }
 
-axStatus	axFileSystem::saveFile		( const axIStringA &buf, const wchar_t*	 filename, bool replace_exists_file ) {
+axStatus	axFileSystem::saveFile		( const axIStringA &buf, const wchar_t*	 filename, bool create_if_file_not_exists, bool truncate ) {
 	axStatus	st;
 	axFile	f;
-	st = f.openWrite( filename, replace_exists_file );		if( !st ) return st;
+	st = f.openWrite( filename, create_if_file_not_exists, truncate );		if( !st ) return st;
 	st = f.writeString( buf );								if( !st ) return st;
 	return 0;
 }
@@ -386,9 +386,9 @@ axStatus axFileSystem::copyFile( const char* src, const char* dst ) {
 	axFileSize size;
 
 	axFile s, d;
-	st = s.openRead( src );				if( !st ) return st;
-	st = s.getFileSize(	size );			if( !st ) return st;
-	st = d.openWrite( dst, true );		if( !st ) return st;
+	st = s.openRead( src );					if( !st ) return st;
+	st = s.getFileSize(	size );				if( !st ) return st;
+	st = d.openWrite( dst, true, true );	if( !st ) return st;
 
 	axByteArray buf;
 

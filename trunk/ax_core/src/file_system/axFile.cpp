@@ -193,14 +193,11 @@ axStatus axFile::_os_open( const char* filename, int access_flag ) {
 	return 0;
 }
 
-axStatus	axFile::openWrite	( const char*    filename, bool replace_if_file_exists ) {
-	int flag = O_CREAT | O_RDWR;
-	if( ! replace_if_file_exists ) flag |= O_EXCL;
+axStatus	axFile::openWrite	( const char*    filename, bool create_if_file_not_exists, bool truncate ) {
+	int flag = O_RDWR;
+	if( create_if_file_not_exists ) flag |= O_CREAT;
+	if( truncate ) flag |= O_TRUNC;
 	return _os_open( filename, flag );
-}
-
-axStatus	axFile::openNew		( const char* filename ) {
-	return _os_open( filename, O_RDWR | O_TRUNC );
 }
 
 axStatus	axFile::openRead	( const char* filename ) {
@@ -229,16 +226,10 @@ axStatus	axFile::openAppend	( const wchar_t* filename, bool create_if_file_not_e
 	return openAppend( tmp, create_if_file_not_exists );
 }
 
-axStatus	axFile::openWrite	( const wchar_t* filename, bool replace_if_file_exists ) {
+axStatus	axFile::openWrite	( const wchar_t* filename, bool create_if_file_not_exists, bool truncate ) {
 	axTempStringA tmp;	
 	axStatus st = tmp.set( filename );	if( !st ) return st; 
-	return openWrite( tmp, replace_if_file_exists );
-}
-
-axStatus	axFile::openNew	( const wchar_t* filename ) {
-	axTempStringA tmp;	
-	axStatus st = tmp.set( filename );	if( !st ) return st; 
-	return openNew( tmp );
+	return openWrite( tmp, create_if_file_not_exists, truncate );
 }
 
 axStatus	axFile::_os_lock( int flags ) {
@@ -330,16 +321,24 @@ axStatus axFile::_os_open( const wchar_t* filename, DWORD access_flag, DWORD cre
 	return 0;
 }
 
-axStatus axFile::openWrite( const wchar_t*    filename, bool replace_if_file_exists ) {
+axStatus axFile::openWrite( const wchar_t*    filename, bool create_if_file_not_exists, bool truncate ) {
 	DWORD	access_flag = GENERIC_READ | GENERIC_WRITE;
-	DWORD	create_flag = replace_if_file_exists ? CREATE_ALWAYS : CREATE_NEW;
-	return _os_open( filename, access_flag, create_flag );
-}
-
-axStatus axFile::openNew ( const wchar_t* filename ) {
-	DWORD	access_flag = GENERIC_READ | GENERIC_WRITE;
-	DWORD	create_flag = TRUNCATE_EXISTING;
-	DWORD	_share_flag = 0;
+	DWORD	create_flag = 0;
+	
+	if( truncate ) {
+		if( create_if_file_not_exists ) {
+			create_flag = CREATE_ALWAYS;
+		}else{
+			create_flag = OPEN_EXISTING | TRUNCATE_EXISTING;
+		}	
+	}else{
+		if( create_if_file_not_exists ) {
+			create_flag = OPEN_ALWAYS;
+		}else{
+			create_flag = OPEN_EXISTING;
+		}		
+	}
+	
 	return _os_open( filename, access_flag, create_flag );
 }
 
@@ -456,16 +455,10 @@ axStatus	axFile::openRead	( const char*    filename ) {
 	return openRead( tmp );
 }
 
-axStatus axFile::openWrite	( const char *filename, bool replace_if_file_exists ) {
+axStatus axFile::openWrite	( const char *filename, bool create_if_file_not_exists, bool truncate ) {
 	axTempStringW tmp;
 	axStatus st = tmp.set( filename );	if( !st ) return st;
-	return openWrite ( tmp, replace_if_file_exists );
-}
-
-axStatus axFile::openNew( const char *filename ) {
-	axTempStringW tmp;
-	axStatus st = tmp.set( filename );	if( !st ) return st;
-	return openNew( tmp );
+	return openWrite ( tmp, create_if_file_not_exists, truncate );
 }
 
 axStatus axFile::_os_lock( DWORD flags ) {
