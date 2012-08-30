@@ -10,6 +10,10 @@
 
 #define	axPRINT_FUNC_NAME	ax_print("FUNC [{?}]\n", axPRETTY_FUNC_NAME );
 
+template<class T> inline T* ax_const_cast( const T* v ) { return const_cast<T*>(v); }
+
+#define	ax_this	ax_const_cast(this)
+
 inline void ax_toggle( bool &b ) { b = !b; }
 
 //--- 32 bits ---
