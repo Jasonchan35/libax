@@ -91,6 +91,38 @@ axStatus	axApp::getProcessFileDir	( axIStringW	&path_to_exe ) {
 
 #include <Shlobj.h>
 
+/*
+axStatus	axApp::shellOpenFile( const char *file ) {
+	axStatus st;
+	#error not_implemented
+	return -1;
+}
+
+axStatus	axApp::showFileInFinder( const char *path ) {
+	
+	axStatus st;
+	#error not_implemented
+	
+	const QString explorer = Environment::systemEnvironment().searchInPath(QLatin1String("explorer.exe"));
+	
+    if (explorer.isEmpty()) {
+		QMessageBox::warning(parent,
+		tr("Launching Windows Explorer failed"),
+		tr("Could not find explorer.exe in path to launch Windows Explorer."));
+		return;
+	
+	}
+	QString param;
+	if (!QFileInfo(pathIn).isDir())
+	param = QLatin1String("/select,");
+	param += QDir::toNativeSeparators(pathIn);
+	QProcess::startDetached(explorer, QStringList(param));
+
+	return -1;
+}
+
+*/
+
 axStatus	axApp::setCurrentDir ( const wchar_t* path ) {
 	return ::_wchdir( path );
 }
@@ -238,12 +270,10 @@ axStatus	axApp::shellOpenFile( const char *file ) {
 axStatus	axApp::showFileInFinder( const char *path ) {
 	
 	axStatus st;
-	
 	axTempStringA cmd;
 			
 	st = cmd.format("/usr/bin/osascript -e \"tell application \\\"Finder\\\" to reveal POSIX file \\\"{?}\\\"\"", path ); if( !st ) return st;
 	system( cmd );
-
 	st = cmd.format("/usr/bin/osascript -e \"tell application \\\"Finder\\\" to activate\"" ); if( !st ) return st;
 	system( cmd );
 	
