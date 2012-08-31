@@ -125,9 +125,6 @@ public:
 	axStatus		replaceCharEnd			( T from, T to, axSize start_from = 0, axSize count = 0 );
 
 	axStatus		replaceString			( const T* from, const T* to, axSize start_from = 0, axSize count = 0 );
-	axStatus		replaceStringEnd		( const T* from, const T* to, axSize start_from = 0, axSize count = 0 );
-
-
 
 	axStatus		format_ArgList			( const char* fmt, const axStringFormat_ArgList &list )			{ resize(0); return appendFormat_ArgList( fmt, list ); }
 	axStatus		appendFormat_ArgList	( const char* fmt, const axStringFormat_ArgList &list );
@@ -815,107 +812,55 @@ template< class T > inline
 axStatus	axIString_<T> :: replaceString ( const T* from, const T* to, axSize start_from, axSize count ) {
 	axStatus st;
 
-	if( size() == 0 ) return 0;
-	if( start_from >= size() ) return axStatus_Std::invalid_parameter;
-	if( count == 0 ) count = ax_type_max<axSize>();
+	size_t c = 0;
+	T* s = buf_.ptr();
+	size_t from_len = ax_strlen( from );
+	size_t to_len   = ax_strlen( to );
 
-	T* s = &buf_[start_from];	
+	if( from_len == to_len ) {
 
-	axSize	strlen_to = ax_strlen( to ) ;
-	axSize	strlen_from = ax_strlen( from ) ;
-	int64_t len_diff = strlen_to - strlen_from;
-
-
-	while( count-- ) {
-		
-		axSize my_size = size();
-
-		T* c = ax_strstr( s, from );
-		if( !c ) return 0;
-		
-		if( len_diff > 0 ) {
-			axSize s_len_diff = 0;
-			st = ax_safe_assign( s_len_diff, len_diff );		if( !st ) return st;
-			st = buf_.incSize( s_len_diff );	if( !st ) return st;
+		for( c=0; count == 0 || c < count ; c++ ) {
+			s = ax_strstr( s, from );	if( !s ) break;
+			ax_array_copy( s, to, to_len );
+			s += from_len;
 		}
+		return 0;
+	}
 
-		if( len_diff != 0 ) {
-			axSize pos = c - buf_.ptr() + strlen_from;
+	for( c=0; count == 0 || c < count ; c++ ) {
+		s = ax_strstr( s, from );		if( !s ) break;
+		s += from_len;
+	}
 
-			uint64_t pos_ = pos+len_diff;
-			axSize s_pos_ = 0;
-			st = ax_safe_assign( s_pos_, pos_ ); if( !st ) return st;
-			st = ax_array_take( &buf_[s_pos_], &buf_[pos], my_size - pos ); if( !st ) return st;
-		}
+	axString_<T, 1024>	tmp;
+	if( to_len > from_len ) {
+		tmp.resize( size() + ( to_len - from_len ) * c );
+	}else{
+		tmp.resize( size() - ( from_len - to_len ) * c );
+	}
 
-		for( axSize i=0; i<strlen_to; i++, c++ ) {
-			*c = to[i];
-		}
+	T* dst = tmp._getInternalBufferPtr();
+	s = buf_.ptr();
+	T* last_s = s;
 
-		s = c;
-		
-		if( len_diff < 0 ) {
-			axSize s_len_diff = 0;
-			st = ax_safe_assign( s_len_diff, -len_diff );		if( !st ) return st;
-			st = buf_.decSize( s_len_diff );	if( !st ) return st;
-		}		
 
-		buf_.last() = 0;
+	for( c=0; count == 0 || c < count ; c++ ) {
+		s = ax_strstr( last_s, from );		if( !s ) break;
+		size_t n = s-last_s;
+		ax_array_copy( dst, last_s, n );
+		dst += n;
+		s += from_len;
 
+		ax_array_copy( dst, to, to_len );
+		dst += to_len;
+
+		last_s = s;
 	}	
-	
 
+	ax_strcpy( dst, last_s );
 
-	return 0;
+	return set( tmp );
 }
-
-template< class T > inline
-axStatus	axIString_<T> :: replaceStringEnd ( const T* from, const T* to, axSize start_from, axSize count  ) {
-	axStatus st;
-	
-	if( size() == 0 ) return 0;
-	if( start_from >= size() ) return axStatus_Std::invalid_parameter;
-	if( count == 0 ) count = ax_type_max<axSize>();
-
-	T* s = &buf_[start_from];	
-
-	axSize	strlen_to = ax_strlen( to ) ;
-	axSize	strlen_from = ax_strlen( from ) ;
-	int64_t len_diff = strlen_to - strlen_from;
-
-
-	while( count-- ) {
-		axSize my_size = size();
-		
-		T* c = ax_strrstr( s, from );
-		if( !c ) return 0;
-		
-		if( len_diff > 0 ) {
-			st = buf_.incSize( len_diff );	if( !st ) return st;
-		}
-
-		if( len_diff != 0 ) {
-			axSize pos = c - buf_.ptr() + strlen_from;
-			st = ax_array_take( &buf_[pos+len_diff], &buf_[pos], my_size - pos ); if( !st ) return st;
-		}
-
-		for( axSize i=0; i<strlen_to; i++, c++ ) {
-			*c = to[i];
-		}
-		
-		if( len_diff < 0 ) {
-			st = buf_.decSize( -len_diff );	if( !st ) return st;
-		}		
-
-		buf_.last() = 0;
-
-	}	
-	
-
-	return 0;
-}
-
-
 
 
 template< class T > inline

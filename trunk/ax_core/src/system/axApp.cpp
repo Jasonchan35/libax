@@ -174,8 +174,19 @@ static	axStatus	axApp_SHGetFolderPath( axIString_<T>& str, int CSIDL ) {
 	return str.set(p);
 }
 
-axStatus	axApp::getUserAppDataDir	( axIStringA &out ) { return axApp_SHGetFolderPath( out, CSIDL_APPDATA ); }
-axStatus	axApp::getUserAppDataDir	( axIStringW &out ) { return axApp_SHGetFolderPath( out, CSIDL_APPDATA ); }
+axStatus	axApp::getUserAppDataDir	( axIStringA &out ) { 
+	axStatus st;
+	st = axApp_SHGetFolderPath( out, CSIDL_APPDATA );	if( !st ) return st;
+	st = out.appendFormat("/{?}", appName_ );			if( !st ) return st;
+	return 0;
+}
+
+axStatus	axApp::getUserAppDataDir	( axIStringW &out ) { 
+	axStatus st;
+	st = axApp_SHGetFolderPath( out, CSIDL_APPDATA );	if( !st ) return st;
+	st = out.appendFormat("/{?}", appName_ );			if( !st ) return st;
+	return 0;
+}
 
 axStatus	axApp::getUserHomeDir		( axIStringA &out ) { return axApp_SHGetFolderPath( out, CSIDL_PROFILE ); }
 axStatus	axApp::getUserHomeDir		( axIStringW &out ) { return axApp_SHGetFolderPath( out, CSIDL_PROFILE ); }
@@ -218,6 +229,24 @@ axStatus	axApp::getAppResourceDir	( axIStringW &out ) {
 	return 0;
 }
 
+
+axStatus	axApp::shellOpenFile( const char *file ) {
+	axStatus st;
+	axTempStringW	cmd;
+	st = cmd.set( file );		if( !st ) return st;
+	ShellExecute( NULL, L"open", cmd, NULL, NULL, SW_SHOW );
+	return 0;
+}
+
+axStatus	axApp::showFileInFinder( const char *path ) {
+	axStatus st;
+
+	axTempStringW	cmd;
+	st = cmd.set( path );		if( !st ) return st;
+	ShellExecute( NULL, L"explore", cmd, NULL, NULL, SW_SHOW );
+	return 0;
+
+}
 
 #endif  //axOS_Win
 
