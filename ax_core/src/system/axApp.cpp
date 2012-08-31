@@ -224,6 +224,35 @@ axStatus	axApp::setCurrentDir( const wchar_t* dir ) {
 #if 0
 #pragma mark ================= iOS & MacOSX ====================
 #endif
+
+#if axOS_MacOSX 
+
+axStatus	axApp::shellOpenFile( const char *file ) {
+	axStatus st;
+	axTempStringA cmd;
+	st = cmd.format("/usr/bin/open {?} &", file ); if( !st ) return st;
+	system( cmd );
+	return 0;
+}
+
+axStatus	axApp::showFileInFinder( const char *path ) {
+	
+	axStatus st;
+	
+	axTempStringA cmd;
+			
+	st = cmd.format("/usr/bin/osascript -e \"tell application \\\"Finder\\\" to reveal POSIX file \\\"{?}\\\"\"", path ); if( !st ) return st;
+	system( cmd );
+
+	st = cmd.format("/usr/bin/osascript -e \"tell application \\\"Finder\\\" to activate\"" ); if( !st ) return st;
+	system( cmd );
+	
+	return 0;
+}
+
+
+#endif // axOS_MacOS
+
 #if axOS_iOS || axOS_MacOSX
 
 template<class T>

@@ -77,6 +77,9 @@ public:
 	
 	axStatus	saveFileToAppData	( const axIByteArray	&buf, const char*	 filename );
 	axStatus	saveFileToAppData	( const axIByteArray	&buf, const wchar_t* filename );
+
+	axStatus	shellOpenFile( const char *file );
+	axStatus	showFileInFinder( const char *path );
 		
 protected:
 	
