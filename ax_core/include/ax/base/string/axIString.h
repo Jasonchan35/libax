@@ -812,8 +812,10 @@ template< class T > inline
 axStatus	axIString_<T> :: replaceString ( const T* from, const T* to, axSize start_from, axSize count ) {
 	axStatus st;
 
+	if( start_from >= size() ) return -1;
+
 	size_t c = 0;
-	T* s = buf_.ptr();
+	T* s = buf_.ptr() + start_from;
 	size_t from_len = ax_strlen( from );
 	size_t to_len   = ax_strlen( to );
 
@@ -840,7 +842,7 @@ axStatus	axIString_<T> :: replaceString ( const T* from, const T* to, axSize sta
 	}
 
 	T* dst = tmp._getInternalBufferPtr();
-	s = buf_.ptr();
+	s = buf_.ptr() + start_from;
 	T* last_s = s;
 
 
