@@ -119,7 +119,6 @@ public:
 		static const bool isPOD = true; \
 	};\
 //----
-	axTYPE_LIST( axVec3b )
 	axTYPE_LIST( axVec3i )
 	axTYPE_LIST( axVec3f )
 	axTYPE_LIST( axVec3d )

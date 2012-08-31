@@ -279,7 +279,7 @@ void axMatrix4<T>::translate ( const axVec3<T> &v ) {
 
 template <class T>
 void axMatrix4<T>::setRotateX ( T rad ) {
-	T s = sin ( rad ), c = ax_cos ( rad );
+	T s = ax_sin ( rad ), c = ax_cos ( rad );
 	cx.set( 1, 0, 0, 0 );
 	cy.set( 0, c, s, 0 );
 	cz.set( 0,-s, c, 0 );
@@ -288,7 +288,7 @@ void axMatrix4<T>::setRotateX ( T rad ) {
 
 template <class T>
 void axMatrix4<T>::setRotateY ( T rad ) {
-	T s = sin ( rad ), c = ax_cos ( rad );
+	T s = ax_sin ( rad ), c = ax_cos ( rad );
 	cx.set( c, 0,-s, 0 );
 	cy.set( 0, 1, 0, 0 );
 	cz.set( s, 0, c, 0 );
@@ -297,7 +297,7 @@ void axMatrix4<T>::setRotateY ( T rad ) {
 
 template <class T>
 void axMatrix4<T>::setRotateZ ( T rad ) {
-	T s = sin ( rad ), c = ax_cos ( rad );
+	T s = ax_sin ( rad ), c = ax_cos ( rad );
 	cx.set( c, s, 0, 0 );
 	cy.set(-s, c, 0, 0 );
 	cz.set( 0, 0, 1, 0 );
