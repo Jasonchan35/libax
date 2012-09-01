@@ -105,6 +105,9 @@ public:
 						axSize		byteSize	() const					{ return size() * sizeof(T); }
 						axSize		capacity	() const					{ return capacity_; }
 
+						bool		inMem		( const T* p ) const			{ return ( capacity_ == 0 ) ? false : (p   >= p_) && (p < p_+capacity_); }
+						bool		inMem		( const T* p, axSize n ) const	{ return ( capacity_ == 0 ) ? false : (p+n >= p_) && (p < p_+capacity_); }
+
 
 				virtual	void		clear		();	//!< clear and free all memory
 
