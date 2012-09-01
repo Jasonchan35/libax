@@ -149,6 +149,8 @@ public:
 	axStatus		serialize_io			( axDeserializer	&se );
 	axStatus		serialize_io			( axLenSerializer	&se );
 
+		bool		inMem					( const T* p ) const			{ return buf_.inMem(p); }
+		bool		inMem					( const T* p, axSize n ) const	{ return buf_.inMem(p,n); }
 
 protected:
 	axIArray<T>&	buf_;
@@ -171,13 +173,13 @@ template<> inline const wchar_t*	axIString_<wchar_t>:: defaultTrimChars() { retu
 
 // ---------
 
-template< class T > inline	axStatus	axIString_<T> :: set( const char*    sz ) { clear(); return append( sz ); }
-template< class T > inline	axStatus	axIString_<T> :: set( const wchar_t* sz ) {	clear(); return append( sz ); }
-template< class T > inline	axStatus	axIString_<T> :: set( const axUChar* sz ) {	clear(); return append( sz ); }
+template< class T > inline	axStatus	axIString_<T> :: set( const char*    sz ) { resize(0); return append( sz ); }
+template< class T > inline	axStatus	axIString_<T> :: set( const wchar_t* sz ) {	resize(0); return append( sz ); }
+template< class T > inline	axStatus	axIString_<T> :: set( const axUChar* sz ) {	resize(0); return append( sz ); }
 
-template< class T > inline	axStatus	axIString_<T> :: setWithLength( const char*    sz, axSize len ) { clear(); return appendWithLength( sz, len ); }
-template< class T > inline	axStatus	axIString_<T> :: setWithLength( const wchar_t* sz, axSize len ) { clear(); return appendWithLength( sz, len ); }
-template< class T > inline	axStatus	axIString_<T> :: setWithLength( const axUChar* sz, axSize len ) { clear(); return appendWithLength( sz, len ); }
+template< class T > inline	axStatus	axIString_<T> :: setWithLength( const char*    sz, axSize len ) { resize(0); return appendWithLength( sz, len ); }
+template< class T > inline	axStatus	axIString_<T> :: setWithLength( const wchar_t* sz, axSize len ) { resize(0); return appendWithLength( sz, len ); }
+template< class T > inline	axStatus	axIString_<T> :: setWithLength( const axUChar* sz, axSize len ) { resize(0); return appendWithLength( sz, len ); }
 
 
 
@@ -375,6 +377,8 @@ template< class T > inline
 axStatus	axIString_<T> :: _appendWithLength( const T *src, axSize src_len ) {
 	if( ! src ) return 1;
 	if( src_len <= 0 ) return 1;
+
+	assert( ! inMem(src,src_len) );
 
 	axSize old_len = size();
 	axSize new_len = old_len + src_len;
@@ -634,6 +638,11 @@ axStatus	axIString_<T> :: toLowerCase () {
 template< class T > inline
 axStatus	axIString_<T> :: resize( axSize new_size, bool keep_data ) {
 	axStatus st;
+	if( new_size == 0 ) {
+		buf_.resize(0);
+		return 0;
+	}
+
 	st = buf_.resize( new_size+1, keep_data );		if( !st ) return st;
 	buf_.last() = 0;
 	return 0;

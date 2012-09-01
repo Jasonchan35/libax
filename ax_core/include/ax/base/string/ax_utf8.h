@@ -26,6 +26,8 @@ inline int ax_utf8_to_wchar( wchar_t &out, const char *utf8, axSize len ) {
 			| (wchar_t)(utf8[2] & 0x3F );
 		return 3;
 	}
+
+	assert(false);
 	return -1;
 }
 
