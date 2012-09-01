@@ -116,7 +116,8 @@ public:
 #define axTYPE_LIST(T) \
 	template<> class axTypeOf<T> { \
 	public: \
-		static const bool isPOD = true; \
+		static	const	bool	isPOD = true; \
+		static	const	bool	rawSerializable = true; \
 	};\
 //----
 	axTYPE_LIST( axVec3i )

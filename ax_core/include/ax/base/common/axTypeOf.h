@@ -27,7 +27,8 @@ template< class T >
 class axTypeOf {
 public:
 	//! POD (plain-old-data)
-	static	const	bool	isPOD = false;
+	static	const	bool	isPOD = false; 				//can be memcpy
+	static	const	bool	rawSerializable = false; 	//can raw serializable (size is fixed and isPOD)
 };
 
 template<class T>	bool  ax_less_than0( T value );
@@ -37,6 +38,7 @@ template<class T>	bool  ax_less_than0( T value );
 class axTypeOf_uint {
 public:
 	static	const	bool	isPOD		= true;
+	static	const	bool	rawSerializable = true;
 	static	const	int		precision	= 0;
 	static	const	bool	isInterger	= true;
 	static	const	bool	isUnsigned	= true;
@@ -52,6 +54,7 @@ public:
 class axTypeOf_int {
 public:
 	static	const	bool	isPOD		= true;
+	static	const	bool	rawSerializable = true;
 	static	const	int		precision	= 0;
 	static	const	bool	isInterger	= true;
 	static	const	bool	isUnsigned	= false;
@@ -72,6 +75,7 @@ class axTypeOf<float> {
 	typedef	float	T;
 public:
 	static	const	bool	isPOD		= true;
+	static	const	bool	rawSerializable = true;
 	static	const	int		precision	= 6;
 	static	const	bool	isInterger	= false;
 	static	const	bool	isUnsigned	= false;
@@ -82,6 +86,7 @@ class axTypeOf<double> {
 	typedef	float	T;
 public:
 	static	const	bool	isPOD		= true;
+	static	const	bool	rawSerializable = true;
 	static	const	int		precision	= 15;
 	static	const	bool	isInterger	= false;
 	static	const	bool	isUnsigned	= false;

@@ -167,7 +167,8 @@ axStatus axVec2<T>::serialize_io( S &s ) {
 #define axTYPE_LIST(T) \
 	template<> class axTypeOf<T> { \
 	public: \
-		static const bool isPOD = true; \
+		static 	const 	bool	isPOD = true; \
+		static	const	bool	rawSerializable = true; \
 	};\
 //----
     axTYPE_LIST( axVec2b )

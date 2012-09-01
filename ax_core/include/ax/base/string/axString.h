@@ -62,8 +62,65 @@ typedef axString_<char,		axTempString_localBufSize>		axTempStringA;
 typedef axString_<wchar_t,	axTempString_localBufSize>		axTempStringW;
 typedef axString_<axUChar,	axTempString_localBufSize>		axTempStringU;
 
-
 //@}
+
+
+template< class T > inline
+axStatus	axIString_<T> :: replaceString ( const T* from, const T* to, axSize start_from, axSize count ) {
+	axStatus st;
+
+	if( start_from >= size() ) return -1;
+
+	size_t c = 0;
+	T* s = buf_.ptr() + start_from;
+	size_t from_len = ax_strlen( from );
+	size_t to_len   = ax_strlen( to );
+
+	if( from_len == to_len ) {
+
+		for( c=0; count == 0 || c < count ; c++ ) {
+			s = ax_strstr( s, from );	if( !s ) break;
+			ax_array_copy( s, to, to_len );
+			s += from_len;
+		}
+		return 0;
+	}
+
+	for( c=0; count == 0 || c < count ; c++ ) {
+		s = ax_strstr( s, from );		if( !s ) break;
+		s += from_len;
+	}
+
+	axString_<T, 1024>	tmp;
+	if( to_len > from_len ) {
+		tmp.resize( size() + ( to_len - from_len ) * c );
+	}else{
+		tmp.resize( size() - ( from_len - to_len ) * c );
+	}
+
+	T* dst = tmp._getInternalBufferPtr();
+	s = buf_.ptr() + start_from;
+	T* last_s = s;
+
+
+	for( c=0; count == 0 || c < count ; c++ ) {
+		s = ax_strstr( last_s, from );		if( !s ) break;
+		size_t n = s-last_s;
+		ax_array_copy( dst, last_s, n );
+		dst += n;
+		s += from_len;
+
+		ax_array_copy( dst, to, to_len );
+		dst += to_len;
+
+		last_s = s;
+	}	
+
+	ax_strcpy( dst, last_s );
+
+	return set( tmp );
+}
+
 
 #include "axStringFormat_out_Imp.h"
 

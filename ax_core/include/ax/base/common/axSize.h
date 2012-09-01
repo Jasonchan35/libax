@@ -68,6 +68,7 @@ class axTypeOf<axSize> {
 	typedef	size_t	T;
 public:
 	static	const	bool	isPOD		= true;
+	static	const	bool	rawSerializable = false;
 	static	const	int		precision	= 0;
 	static	const	bool	isInterger	= true;
 	static	const	bool	isUnsigned	= true;
