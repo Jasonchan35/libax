@@ -175,7 +175,6 @@ axStatus	axFileSystem::removeDirectoryT ( const T* src, bool recursive ) {
 
 		if( e.isDir() ) {
 			st = removeDirectory( path, recursive );	if( !st ) return st;
-			st = _removeDirectory( path );					if( !st ) return st;
 		}else {
 			st = deleteFile( path ); if( !st ) return st;
 		}
