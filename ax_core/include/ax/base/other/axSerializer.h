@@ -97,7 +97,7 @@ public:
 		_advance( len );
 		return 0;
 	}
-
+	
 	template<class T>	axStatus io			( T& value )	{ return ax_serialize_io		( *this, value ); }
 	template<class T>	axStatus io_vary	( T& value )	{ return ax_serialize_io_vary	( *this, value ); }
 	template<class T>	axStatus io_vary32	( T& value )	{ return ax_serialize_io_vary32	( *this, value ); }

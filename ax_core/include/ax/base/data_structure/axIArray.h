@@ -68,8 +68,8 @@ public:
 	axALWAYS_INLINE( 			T&	operator[]	( axSize i ) )				{ return indexOf(i); }
 	axALWAYS_INLINE( 	const	T&	operator[]	( axSize i ) const )		{ return indexOf(i); }
 
-	axALWAYS_INLINE(			T&			last		( axSize i = 0 ) )			{ return indexOf( size_-i-1 ); }
-	axALWAYS_INLINE(	const	T&			last		( axSize i = 0 ) const )	{ return indexOf( size_-i-1 ); }
+	axALWAYS_INLINE(			T&	last		( axSize i = 0 ) )			{ return indexOf( size_-i-1 ); }
+	axALWAYS_INLINE(	const	T&	last		( axSize i = 0 ) const )	{ return indexOf( size_-i-1 ); }
 
 						bool		isAll		( const T& v ) const;
 						bool		isAny		( const T& v ) const;

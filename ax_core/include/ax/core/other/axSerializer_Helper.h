@@ -6,14 +6,17 @@
 #include "../file_system/axFileSystem.h"
 
 template<class T> inline 
-axStatus ax_serialize_to_buf( axIByteArray	&buf, T &v ) {
+axStatus ax_serialize_append_to_buf( axIByteArray	&buf, T &v ) {
 	axStatus st;
-
-	buf.resize(0);
 	axSerializer		s(buf);
 	st = s.io( v );							if( !st ) return st;
-	st = buf.resize( s.usedSize() );		if( !st ) return st;
 	return 0;
+}
+
+template<class T> inline 
+axStatus ax_serialize_to_buf( axIByteArray	&buf, T &v ) {
+	buf.resize(0);
+	return ax_serialize_append_to_buf(buf,v);
 }
 
 template<class T> inline 
