@@ -1,4 +1,4 @@
-..#ifndef __axSize_h__
+#ifndef __axSize_h__
 #define __axSize_h__
 
 #include "axTypeOf.h"
