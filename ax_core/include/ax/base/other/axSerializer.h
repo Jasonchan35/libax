@@ -63,6 +63,7 @@ public:
 
 	axStatus io_raw( const void* ptr, axSize len ) { _advance( len ); return 0; }
 
+	template<class T>	axStatus io			( T& value, const char* name ) { return io(value); }
 	template<class T>	axStatus io			( T& value )	{ return ax_serialize_io		( *this, value ); }
 	template<class T>	axStatus io_vary	( T& value )	{ return ax_serialize_io_vary	( *this, value ); }
 	template<class T>	axStatus io_vary32	( T& value )	{ return ax_serialize_io_vary32	( *this, value ); }
@@ -98,6 +99,7 @@ public:
 		return 0;
 	}
 	
+	template<class T>	axStatus io			( T& value, const char* name ) { return io(value); }
 	template<class T>	axStatus io			( T& value )	{ return ax_serialize_io		( *this, value ); }
 	template<class T>	axStatus io_vary	( T& value )	{ return ax_serialize_io_vary	( *this, value ); }
 	template<class T>	axStatus io_vary32	( T& value )	{ return ax_serialize_io_vary32	( *this, value ); }
@@ -144,6 +146,7 @@ public:
 	axStatus getLine( axIStringA	&str );
 	axStatus getLine( axIStringW	&str );
 
+	template<class T>	axStatus io			( T& value, const char* name ) { return io(value); }
 	template<class T>	axStatus io			( T& value )	{ return ax_serialize_io		( *this, value ); }
 	template<class T>	axStatus io_vary	( T& value )	{ return ax_serialize_io_vary	( *this, value ); }
 	template<class T>	axStatus io_vary32	( T& value )	{ return ax_serialize_io_vary32	( *this, value ); }
