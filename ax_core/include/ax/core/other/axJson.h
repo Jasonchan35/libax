@@ -2,13 +2,13 @@
 #define __axJsonWriter_h__
 /*
 ** 3 method to support axJsonWriter ** 
-1: onStringSerialize function in your class:
+1: serialize_io function in your class:
 
 template< class S >
-axStatus onStringSerialize( S &s ) {
+axStatus serialize_io( S &s ) {
 	axStatus st;
-	ax_string_serialize( v1 )
-	ax_string_serialize( v2 )
+	ax_io( v1 )
+	ax_io( v2 )
 	return 0;
 }
 
@@ -440,7 +440,7 @@ axStatus ax_json_serialize_value( S &s, T& value ) {
 
 template<class S, class T> inline	
 axStatus ax_json_serialize_object_members( S &s, T &v ) { 
-	return v.onStringSerialize( s ); 
+	return v.serialize_io( s ); 
 }
 
 
@@ -469,11 +469,5 @@ axStatus ax_json_on_string_serialize( axJsonParser &s, T &value ) {
 	}
 	return 0;
 }
-
-
-
-
-
-#define ax_string_serialize( n ) st = s.io( n, #n ); if( !st ) return st;
 
 #endif //__axJsonWriter_h__
