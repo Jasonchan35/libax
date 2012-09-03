@@ -69,18 +69,12 @@ class axJSONSerializer : public axJSONSerializerBase {
 	typedef axJSONSerializerBase B;
 public:
 
-	axJSONSerializer( axIStringA &str, bool condense = true ) { 
-		str_ = & str;
-		depth_ = 0;
-		ended_ = false;
-		condense_ = condense;
-	}
 
 	template<class T>	axStatus io	( T& value, const char* name )	{ 
 		axStatus st;
-		if( name && name[0] ) { assert( false ); return axStatus_Std::JSON_deserialize_format_error; } //first value must without name
+		if( ! name|| ! name[0] ) return axStatus_Std::JSON_deserialize_format_error;
 		st = member( name );			if( !st ) return st;
-		st = io_value( value );			if( !st ) return st;			
+		st = io_value( value );			if( !st ) return st;
 		st = str_->append( "," );		if( !st ) return st;
 		return 0;
 	}
@@ -89,96 +83,33 @@ public:
 		return ax_json_serialize_value( *this, value );
 	}
 	
-	axStatus member( const char* name ) {
-		if( ! name || ! name[0] ) return 0;
-		
-		axStatus st;
-		st = newline();			if( !st ) return st;		
-		axTempStringA	tmp;
-
-		st = ax_to_json_str( tmp, name, true );		if( !st ) return st;
-		st = str_->append( tmp );					if( !st ) return st;
-		st = str_->append( ":" );					if( !st ) return st;
-		return 0;
-	}
+	axJSONSerializer( axIStringA &str, bool condense = true );
 	
-	axStatus beginObject	( const char* name ) 	{ 
-		axStatus st;
-		st = member( name );		if( !st ) return st;
-		st = begin_('{'); 			if( !st ) return st;
-		return 0;
-	}
+	axStatus member( const char* name );
 	
-	axStatus endObject 		() 						{ 
-		axStatus st;
-		st = end_('{','}'); 		if( !st ) return st;
-		st = str_->append( "," );	if( !st ) return st;
-		return 0;
-	}
+	axStatus beginObject	( const char* name );
+	axStatus endObject 		();
 
-	axStatus beginArray		( const char* name ) 	{ 
-		axStatus st;
-		st = member( name );		if( !st ) return st;
-		st = begin_('['); 			if( !st ) return st;
-		return 0;
-	}
-	axStatus endArray		() 						{ 
-		axStatus st;
-		st = end_('[',']'); 	if( !st ) return st;
-		st = str_->append( "," );	if( !st ) return st;
-		return 0;
-	}
+	axStatus beginArray		( const char* name );
+	axStatus endArray		();
 	
-	axStatus beginObjectValue	()					{ return begin_('{'); }
-	axStatus endObjectValue 	()					{ return end_('{','}'); }
+	axStatus beginObjectValue	();
+	axStatus endObjectValue 	();
 
-	axStatus beginArrayValue	() 					{ return begin_('['); }
-	axStatus endArrayValue		() 					{ return end_('[',']'); }
+	axStatus beginArrayValue	();
+	axStatus endArrayValue		();
 
-	axStatus begin_( const char ch ) { 
-		if( ended_ ) return axStatus_Std::JSON_deserialize_format_error;
+	axStatus begin_( const char ch );
+
+	axStatus end_( const char begin, const char ch );
+	axStatus newline();
 	
-		axStatus st;
-		st = str_->append(ch);		if( !st ) return st;
-		depth_++;
-		return 0;
-	};
-
-	axStatus end_( const char begin, const char ch ) {
-		axStatus st;
-		if( depth_ == 0 )  		return axStatus_Std::JSON_deserialize_format_error;
-		depth_--;
-
-		if( depth_ == 0 ) ended_ = true;
-		
-		if( str_->size() == 0 ) return axStatus_Std::JSON_deserialize_format_error;
-		
-		char e = str_->lastChar(0);
-		if( e == ',' ) {
-			str_->decSize(1);
-			st = newline();				if( !st ) return st;
-		}else{
-			if( e != begin ) 	return axStatus_Std::JSON_deserialize_format_error;
-		}
-		st = str_->append(ch);			if( !st ) return st;		
-		return 0;
-	}
-
-	axStatus newline() {
-		if( condense_ ) return 0;
-		
-		axStatus st;
-		st = str_->append( "\n" );			if( !st ) return st;
-		axSize i=0;
-		for( i=0; i<depth_; i++ ) {
-			st = str_->append( "\t" );		if( !st ) return st;
-		}
-		return 0;
-	}
+	axStatus append( const char* sz );
 	
+private:
 	axIStringA*	str_;
-	axSize 		depth_;
 	bool 		condense_;
+	axSize 		depth_;
 	bool		ended_;
 };
 
@@ -229,7 +160,6 @@ public:
 	axStatus beginArrayValue();
 	axStatus endArrayValue() ;
 
-
 	axTempStringA		token;
 	bool				tokenIsString;
 private:
@@ -273,7 +203,9 @@ axStatus	ax_from_json_file( const char* filename, T & v ) {
 
 template<class T> inline axStatus ax_json_serialize_value_primitive( axJSONSerializer &s, T &v ) {
 	axStatus st;
-	st = s.str_->appendFormat( "{?}", v );		if( !st ) return st;
+	axTempStringA tmp;
+	st = tmp.convert(v);	if( !st ) return st;
+	st = s.append( tmp );	if( !st ) return st;
 	return 0;
 
 }
@@ -303,7 +235,7 @@ axTYPE_LIST( double )
 //------ bool -------
 
 inline axStatus ax_json_serialize_value( axJSONSerializer &s, bool &v )	{
-	return s.str_->appendFormat( v ? "true" : "false" );
+	return s.append( v ? "true" : "false" );
 }
 
 inline axStatus ax_json_serialize_value( axJSONDeserializer &s, bool &v ) {
@@ -334,6 +266,7 @@ axStatus	ax_json_serialize_value ( axJSONSerializer &s, axDList<T> &v ) {
 	T *p = v.head();
 	for( ; p; p=p->next() )  {
 		st = ax_json_serialize_value ( s, (T&)*p );	if( !st ) return st;
+		st = s.append( "," );						if( !st ) return st;
 	}
 
 	st = s.endArrayValue();		if( !st ) return st;
@@ -367,6 +300,7 @@ axStatus ax_json_serialize_value( axJSONSerializer &s, axIArray<T> &v ) {
 	st = s.beginArrayValue();		if( !st ) return st;
 	for( axSize i=0; i<v.size(); i++ ) {
 		st = ax_json_serialize_value ( s, v[i] );	if( !st ) return st;
+		st = s.append( "," );						if( !st ) return st;
 	}
 	st = s.endArrayValue();			if( !st ) return st;
 	return 0;
@@ -421,7 +355,7 @@ axStatus ax_json_serialize_value( axJSONSerializer &s, axIString_<T> &v ) {
 	axStatus st;
 	axTempStringA str;
 	st = ax_to_json_str( str, v, true );		if( !st ) return st;	
-	return s.str_->append( str );
+	return s.append( str );
 }
 
 
@@ -459,7 +393,7 @@ axStatus ax_json_serialize_value( axJSONSerializer &s, axTinyString_<T,LOCAL_BUF
 	axStatus st;
 	axTempStringA str;
 	st = ax_to_json_str( str, v, true );		if( !st ) return st;	
-	return s.str_->append( str );
+	return s.append( str );
 }
 
 
