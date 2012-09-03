@@ -1,12 +1,12 @@
 //
-//  axJSONSerializer.cpp
+//  axJson.cpp
 //  ax_core
 //
 //  Created by Jason Chan on 2012-09-03.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#include <ax/core/other/axJSONSerializer.h>
+#include <ax/core/other/axJson.h>
 
 axStatus	ax_to_json_str	( axIStringA & str, const char* sz, bool withQuote ) {
 	axStatus st;
@@ -63,18 +63,18 @@ axStatus	ax_from_json_str	( axIStringA & str, const char* sz, bool withQuote ) {
 //========================
 
 
-axJSONSerializer::axJSONSerializer( axIStringA &str, bool condense ) { 
+axJsonWriter::axJsonWriter( axIStringA &str, bool condense ) { 
 	str_ = & str;
 	depth_ = 0;
 	ended_ = false;
 	condense_ = condense;
 }
 
-axStatus axJSONSerializer::append( const char* sz ) {
+axStatus axJsonWriter::append( const char* sz ) {
 	return str_->append( sz );
 }
 
-axStatus axJSONSerializer::member( const char* name ) {
+axStatus axJsonWriter::member( const char* name ) {
 	if( ! name || ! name[0] ) return 0;
 	
 	axStatus st;
@@ -87,40 +87,40 @@ axStatus axJSONSerializer::member( const char* name ) {
 	return 0;
 }
 
-axStatus axJSONSerializer::beginObject	( const char* name ) 	{ 
+axStatus axJsonWriter::beginObject	( const char* name ) 	{ 
 	axStatus st;
 	st = member( name );		if( !st ) return st;
 	st = begin_('{'); 			if( !st ) return st;
 	return 0;
 }
 
-axStatus axJSONSerializer::endObject () { 
+axStatus axJsonWriter::endObject () { 
 	axStatus st;
 	st = end_('{','}'); 		if( !st ) return st;
 	st = str_->append( "," );	if( !st ) return st;
 	return 0;
 }
 
-axStatus axJSONSerializer::beginArray( const char* name ) { 
+axStatus axJsonWriter::beginArray( const char* name ) { 
 	axStatus st;
 	st = member( name );		if( !st ) return st;
 	st = begin_('['); 			if( !st ) return st;
 	return 0;
 }
-axStatus axJSONSerializer::endArray	() 	{ 
+axStatus axJsonWriter::endArray	() 	{ 
 	axStatus st;
 	st = end_('[',']'); 	if( !st ) return st;
 	st = str_->append( "," );	if( !st ) return st;
 	return 0;
 }
 
-axStatus axJSONSerializer::beginObjectValue	()	{ return begin_('{'); }
-axStatus axJSONSerializer::endObjectValue 	()	{ return end_('{','}'); }
+axStatus axJsonWriter::beginObjectValue	()	{ return begin_('{'); }
+axStatus axJsonWriter::endObjectValue 	()	{ return end_('{','}'); }
 
-axStatus axJSONSerializer::beginArrayValue	() 	{ return begin_('['); }
-axStatus axJSONSerializer::endArrayValue	() 	{ return end_('[',']'); }
+axStatus axJsonWriter::beginArrayValue	() 	{ return begin_('['); }
+axStatus axJsonWriter::endArrayValue	() 	{ return end_('[',']'); }
 
-axStatus axJSONSerializer::begin_( const char ch ) { 
+axStatus axJsonWriter::begin_( const char ch ) { 
 	if( ended_ ) return axStatus_Std::JSON_deserialize_format_error;
 
 	axStatus st;
@@ -129,7 +129,7 @@ axStatus axJSONSerializer::begin_( const char ch ) {
 	return 0;
 };
 
-axStatus axJSONSerializer::end_( const char begin, const char ch ) {
+axStatus axJsonWriter::end_( const char begin, const char ch ) {
 	axStatus st;
 	if( depth_ == 0 )  		return axStatus_Std::JSON_deserialize_format_error;
 	depth_--;
@@ -149,7 +149,7 @@ axStatus axJSONSerializer::end_( const char begin, const char ch ) {
 	return 0;
 }
 
-axStatus axJSONSerializer::newline() {
+axStatus axJsonWriter::newline() {
 	if( condense_ ) return 0;
 	
 	axStatus st;
@@ -163,7 +163,7 @@ axStatus axJSONSerializer::newline() {
 	
 
 //=======================
-axJSONDeserializer::axJSONDeserializer( const axIStringA &str )			{ 
+axJsonParser::axJsonParser( const axIStringA &str )			{ 
 	str_ = & str;
 	r_ = str_->c_str();
 	
@@ -176,13 +176,14 @@ static int hex( char ch ) {
 	return -1;
 }
 
-axStatus	axJSONDeserializer::nextToken() {
+/*
+axStatus	axJsonParser::nextToken() {
 	axStatus st = _nextToken();
-	if( st ) ax_log( "token = {?}", token );
+	if( st ) ax_log( "json token = {?}", token );
 	return st;
 }
-
-axStatus	axJSONDeserializer::_nextToken() {
+*/
+axStatus	axJsonParser::nextToken() {
 	axStatus st;
 
 	const char* singleCharTokens = ":,{}[]";
@@ -271,14 +272,14 @@ axStatus	axJSONDeserializer::_nextToken() {
 	return 0;	
 }
 
-axStatus	axJSONDeserializer::checkToken( const char* sz ) {
+axStatus	axJsonParser::checkToken( const char* sz ) {
 	axStatus st;
 	if( tokenIsString )		return axStatus_Std::JSON_deserialize_format_error;
 	if( !token.equals(sz) )	return axStatus_Std::JSON_deserialize_format_error;
 	return 0;
 }
 
-axStatus	axJSONDeserializer::checkStringToken( const char* sz ) {
+axStatus	axJsonParser::checkStringToken( const char* sz ) {
 	axStatus st;
 	if( !tokenIsString )	return axStatus_Std::JSON_deserialize_format_error;
 	if( !token.equals(sz) )	return axStatus_Std::JSON_deserialize_format_error;
@@ -286,32 +287,32 @@ axStatus	axJSONDeserializer::checkStringToken( const char* sz ) {
 }
 
 
-axStatus axJSONDeserializer::beginObject( const char* name ) {
+axStatus axJsonParser::beginObject( const char* name ) {
 	return 0;
 }
 
-axStatus axJSONDeserializer::endObject() {
+axStatus axJsonParser::endObject() {
 	return 0;
 }
 
-axStatus axJSONDeserializer::beginObjectValue() { 
+axStatus axJsonParser::beginObjectValue() { 
 	axStatus st;		
 	st = checkToken("{");		if( !st ) return st;
 	st = nextToken();			if( !st ) return st;
 	return 0;
 }
 
-axStatus axJSONDeserializer::endObjectValue() { 
+axStatus axJsonParser::endObjectValue() { 
 	axStatus st;
 	st = checkToken("}");		if( !st ) return st;
 	st = nextToken();			if( !st ) return st;
 	return 0;
 }
 
-axStatus axJSONDeserializer::beginArrayValue() {
+axStatus axJsonParser::beginArrayValue() {
 	return 0;
 }
 
-axStatus axJSONDeserializer::endArrayValue() {
+axStatus axJsonParser::endArrayValue() {
 	return 0;
 }

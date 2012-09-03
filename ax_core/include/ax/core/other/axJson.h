@@ -1,7 +1,7 @@
-#ifndef __axJSONSerializer_h__
-#define __axJSONSerializer_h__
+#ifndef __axJsonWriter_h__
+#define __axJsonWriter_h__
 /*
-** 3 method to support axJSONSerializer ** 
+** 3 method to support axJsonWriter ** 
 1: onStringSerialize function in your class:
 
 template< class S >
@@ -27,7 +27,7 @@ return 0;
 
 3: inline global function : ( This function only support singale string input and output )
 
-inline axStatus ax_json_serialize_value( axJSONDeserializer &s, vector3 &value ) {
+inline axStatus ax_json_serialize_value( axJsonParser &s, vector3 &value ) {
 	axStatus st;
 	axTempStringA str;
 	st = s.getString( str ); if( !st ) return st;
@@ -35,7 +35,7 @@ inline axStatus ax_json_serialize_value( axJSONDeserializer &s, vector3 &value )
 	return 0;
 }
 
-inline axStatus ax_json_serialize_value( axJSONSerializer &s, vector3 &value ) {
+inline axStatus ax_json_serialize_value( axJsonWriter &s, vector3 &value ) {
 	axStatus st;
 	axTempStringA str;
 	st = str.format( "{?} {?} {?}", value.x, value.y, value.z ); if( !st ) return st;
@@ -49,8 +49,8 @@ inline axStatus ax_json_serialize_value( axJSONSerializer &s, vector3 &value ) {
 #include "../../base/string/axIString.h"
 #include "../../base/string/ax_utf8.h"
 
-class axJSONSerializer;
-class axJSONDeserializer;
+class axJsonWriter;
+class axJsonParser;
 
 template<class S, class T> inline	
 axStatus ax_json_serialize_value( S &s, T& value, const char* name );
@@ -58,15 +58,15 @@ axStatus ax_json_serialize_value( S &s, T& value, const char* name );
 axStatus	ax_to_json_str		( axIStringA & str, const char* sz, bool withQuote );
 axStatus	ax_from_json_str	( axIStringA & str, const char* sz, bool withQuote );
 
-class axJSONSerializerBase: public axNonCopyable {
+class axJsonWriterBase: public axNonCopyable {
 public:
 	static const char *skip_chr() { return " \t\r\n"; }
 	
 	enum { k_name_mismatch = 4445 };
 };
 
-class axJSONSerializer : public axJSONSerializerBase {
-	typedef axJSONSerializerBase B;
+class axJsonWriter : public axJsonWriterBase {
+	typedef axJsonWriterBase B;
 public:
 
 
@@ -83,7 +83,7 @@ public:
 		return ax_json_serialize_value( *this, value );
 	}
 	
-	axJSONSerializer( axIStringA &str, bool condense = true );
+	axJsonWriter( axIStringA &str, bool condense = true );
 	
 	axStatus member( const char* name );
 	
@@ -114,11 +114,11 @@ private:
 };
 
 
-class axJSONDeserializer : public axJSONSerializerBase {
-	typedef axJSONSerializerBase B;
+class axJsonParser : public axJsonWriterBase {
+	typedef axJsonWriterBase B;
 public:
 
-	axJSONDeserializer( const axIStringA &str )	;
+	axJsonParser( const axIStringA &str )	;
 	
 	template<class T>	axStatus parse( T& value, const char* name ) {
 		axStatus st = io( value, name );
@@ -170,14 +170,14 @@ private:
 
 template<class T> inline
 axStatus	ax_to_json  ( axIStringA &json, const T & v ) {
-	axJSONSerializer	s(json);
+	axJsonWriter	s(json);
 	return s.io_value( *const_cast<T*>(&v) );
 }
 
 template<class T> inline
 axStatus	ax_from_json( const char* json, T & v ) {
 	axConstStringA		str( json );
-	axJSONDeserializer	s(str);
+	axJsonParser	s(str);
 	return s.io_value(v);
 }
 
@@ -201,7 +201,7 @@ axStatus	ax_from_json_file( const char* filename, T & v ) {
 
 //------------------
 
-template<class T> inline axStatus ax_json_serialize_value_primitive( axJSONSerializer &s, T &v ) {
+template<class T> inline axStatus ax_json_serialize_value_primitive( axJsonWriter &s, T &v ) {
 	axStatus st;
 	axTempStringA tmp;
 	st = tmp.convert(v);	if( !st ) return st;
@@ -210,7 +210,7 @@ template<class T> inline axStatus ax_json_serialize_value_primitive( axJSONSeria
 
 }
 
-template<class T> inline axStatus ax_json_serialize_value_primitive( axJSONDeserializer &s, T &v ) {
+template<class T> inline axStatus ax_json_serialize_value_primitive( axJsonParser &s, T &v ) {
 	axStatus st;
 	if( s.tokenIsString )	return -1;
 	st = ax_str_to( s.token, v );		if( !st ) return st;
@@ -234,11 +234,11 @@ axTYPE_LIST( double )
 
 //------ bool -------
 
-inline axStatus ax_json_serialize_value( axJSONSerializer &s, bool &v )	{
+inline axStatus ax_json_serialize_value( axJsonWriter &s, bool &v )	{
 	return s.append( v ? "true" : "false" );
 }
 
-inline axStatus ax_json_serialize_value( axJSONDeserializer &s, bool &v ) {
+inline axStatus ax_json_serialize_value( axJsonParser &s, bool &v ) {
 	axStatus st;	
 	if( s.tokenIsString )	return -1;
 
@@ -259,7 +259,7 @@ inline axStatus ax_json_serialize_value( axJSONDeserializer &s, bool &v ) {
 //----------- DList ----------------
 
 template<class T> inline 
-axStatus	ax_json_serialize_value ( axJSONSerializer &s, axDList<T> &v ) {
+axStatus	ax_json_serialize_value ( axJsonWriter &s, axDList<T> &v ) {
 	axStatus st;
 	st = s.beginArrayValue();	if( !st ) return st;
 
@@ -275,7 +275,7 @@ axStatus	ax_json_serialize_value ( axJSONSerializer &s, axDList<T> &v ) {
 
 
 template<class T> inline 
-axStatus	ax_json_serialize_value ( axJSONDeserializer &s, axDList<T> &v ) {	
+axStatus	ax_json_serialize_value ( axJsonParser &s, axDList<T> &v ) {	
 	axStatus st;
 
 	st = s.beginArrayValue();			if( !st ) return st;
@@ -295,7 +295,7 @@ axStatus	ax_json_serialize_value ( axJSONDeserializer &s, axDList<T> &v ) {
 
 //------ Array -------
 template< class T > inline
-axStatus ax_json_serialize_value( axJSONSerializer &s, axIArray<T> &v ) {
+axStatus ax_json_serialize_value( axJsonWriter &s, axIArray<T> &v ) {
 	axStatus st;
 	st = s.beginArrayValue();		if( !st ) return st;
 	for( axSize i=0; i<v.size(); i++ ) {
@@ -308,7 +308,7 @@ axStatus ax_json_serialize_value( axJSONSerializer &s, axIArray<T> &v ) {
 
 
 template< class T > inline
-axStatus ax_json_serialize_value( axJSONDeserializer &s, axIArray<T> &v ) {
+axStatus ax_json_serialize_value( axJsonParser &s, axIArray<T> &v ) {
 	axStatus st;
 	st = s.beginArrayValue();			if( !st ) return st;
 	for(;;) {
@@ -351,7 +351,7 @@ axStatus ax_json_serialize_value( S &s, axChunkArray<T,CS,LB> &v ) {
 
 
 template< class T > inline
-axStatus ax_json_serialize_value( axJSONSerializer &s, axIString_<T> &v ) {
+axStatus ax_json_serialize_value( axJsonWriter &s, axIString_<T> &v ) {
 	axStatus st;
 	axTempStringA str;
 	st = ax_to_json_str( str, v, true );		if( !st ) return st;	
@@ -360,7 +360,7 @@ axStatus ax_json_serialize_value( axJSONSerializer &s, axIString_<T> &v ) {
 
 
 template< class T > inline
-axStatus ax_json_serialize_value( axJSONDeserializer &s, axIString_<T> &v ) {
+axStatus ax_json_serialize_value( axJsonParser &s, axIString_<T> &v ) {
 	axStatus st;
 	if( ! s.tokenIsString ) return -1;
 	st = v.set( s.token );		if( !st ) return st;
@@ -389,7 +389,7 @@ axStatus ax_json_serialize_value( S &s, axExternalString_<T> 	&v ) { return ax_j
 //===============
 
 template<class T, size_t LOCAL_BUF_SIZE> inline
-axStatus ax_json_serialize_value( axJSONSerializer &s, axTinyString_<T,LOCAL_BUF_SIZE> &v ) {
+axStatus ax_json_serialize_value( axJsonWriter &s, axTinyString_<T,LOCAL_BUF_SIZE> &v ) {
 	axStatus st;
 	axTempStringA str;
 	st = ax_to_json_str( str, v, true );		if( !st ) return st;	
@@ -398,7 +398,7 @@ axStatus ax_json_serialize_value( axJSONSerializer &s, axTinyString_<T,LOCAL_BUF
 
 
 template<class T, size_t LOCAL_BUF_SIZE> inline
-axStatus ax_json_serialize_value( axJSONDeserializer &s, axTinyString_<T,LOCAL_BUF_SIZE> &v ) {
+axStatus ax_json_serialize_value( axJsonParser &s, axTinyString_<T,LOCAL_BUF_SIZE> &v ) {
 	axStatus st;
 	st = s.nextToken();			if( !st ) return st;
 	if( ! s.tokenIsString ) return -1;
@@ -406,22 +406,22 @@ axStatus ax_json_serialize_value( axJSONDeserializer &s, axTinyString_<T,LOCAL_B
 }
 
 template<size_t LOCAL_BUF_SIZE> inline
-axStatus ax_json_serialize_value( axJSONSerializer &s, axTinyStringA< LOCAL_BUF_SIZE > &v ) {
+axStatus ax_json_serialize_value( axJsonWriter &s, axTinyStringA< LOCAL_BUF_SIZE > &v ) {
 	return ax_json_serialize_value( s, (axTinyString_< char, LOCAL_BUF_SIZE > & ) v );
 }
 
 template<size_t LOCAL_BUF_SIZE> inline
-axStatus ax_json_serialize_value( axJSONDeserializer &s, axTinyStringA< LOCAL_BUF_SIZE > &v ) {
+axStatus ax_json_serialize_value( axJsonParser &s, axTinyStringA< LOCAL_BUF_SIZE > &v ) {
 	return ax_json_serialize_value( s, (axTinyString_< char, LOCAL_BUF_SIZE > & ) v );
 }
 
 template<size_t LOCAL_BUF_SIZE> inline
-axStatus ax_json_serialize_value( axJSONSerializer &s, axTinyStringW< LOCAL_BUF_SIZE > &v ) {
+axStatus ax_json_serialize_value( axJsonWriter &s, axTinyStringW< LOCAL_BUF_SIZE > &v ) {
 	return ax_json_serialize_value( s, (axTinyString_< wchar_t, LOCAL_BUF_SIZE > & ) v );
 }
 
 template<size_t LOCAL_BUF_SIZE> inline
-axStatus ax_json_serialize_value( axJSONDeserializer &s, axTinyStringW< LOCAL_BUF_SIZE > &v ) {
+axStatus ax_json_serialize_value( axJsonParser &s, axTinyStringW< LOCAL_BUF_SIZE > &v ) {
 	return ax_json_serialize_value( s, (axTinyString_< wchar_t, LOCAL_BUF_SIZE > & ) v );
 }
 
@@ -445,13 +445,13 @@ axStatus ax_json_serialize_object_members( S &s, T &v ) {
 
 
 template< class T> inline	
-axStatus ax_json_on_string_serialize( axJSONSerializer &s, T &value ) {
+axStatus ax_json_on_string_serialize( axJsonWriter &s, T &value ) {
 	return ax_json_serialize_object_members( s, value );
 }
 
 
 template< class T> inline	
-axStatus ax_json_on_string_serialize( axJSONDeserializer &s, T &value ) {
+axStatus ax_json_on_string_serialize( axJsonParser &s, T &value ) {
 	axStatus st;	
 	if( s.checkToken("}") ) return 0;
 	
@@ -476,4 +476,4 @@ axStatus ax_json_on_string_serialize( axJSONDeserializer &s, T &value ) {
 
 #define ax_string_serialize( n ) st = s.io( n, #n ); if( !st ) return st;
 
-#endif //__axJSONSerializer_h__
+#endif //__axJsonWriter_h__
