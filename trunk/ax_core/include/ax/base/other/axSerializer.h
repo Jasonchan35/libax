@@ -9,9 +9,14 @@
 
 #define axSERIALIZE_BYTE_ORDER (4321) //4321=little-endian (x86, ARM)
 
-#define ax_io( n ) \
-	st = s.io( n, #n ); 	if( !st ) return st;
+#define ax_io( value ) \
+	st = s.io( value, #value ); 	if( !st ) return st;
 //-------------
+
+#define ax_io_named( value, name ) \
+	st = s.io( value, name ); 	if( !st ) return st;
+//-------------
+
 
 class axLenSerializer;
 class axSerializer;

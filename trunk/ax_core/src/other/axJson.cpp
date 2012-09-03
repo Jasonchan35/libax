@@ -63,11 +63,12 @@ axStatus	ax_from_json_str	( axIStringA & str, const char* sz, bool withQuote ) {
 //========================
 
 
-axJsonWriter::axJsonWriter( axIStringA &str, bool condense ) { 
+axJsonWriter::axJsonWriter( axIStringA &str, bool condense, const char* indent ) { 
 	str_ = & str;
 	depth_ = 0;
 	ended_ = false;
 	condense_ = condense;
+	indent_.set( indent );
 }
 
 axStatus axJsonWriter::append( const char* sz ) {
@@ -154,9 +155,11 @@ axStatus axJsonWriter::newline() {
 	
 	axStatus st;
 	st = str_->append( "\n" );			if( !st ) return st;
-	axSize i=0;
-	for( i=0; i<depth_; i++ ) {
-		st = str_->append( "\t" );		if( !st ) return st;
+	
+	if( indent_.size() > 0 ) {	
+		for( axSize i=0; i<depth_; i++ ) {
+			st = str_->append(indent_);		if( !st ) return st;
+		}
 	}
 	return 0;
 }

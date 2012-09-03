@@ -83,7 +83,7 @@ public:
 		return ax_json_serialize_value( *this, value );
 	}
 	
-	axJsonWriter( axIStringA &str, bool condense = true );
+	axJsonWriter( axIStringA &str, bool condense = true, const char* indent = "\t" );
 	
 	axStatus member( const char* name );
 	
@@ -107,10 +107,11 @@ public:
 	axStatus append( const char* sz );
 	
 private:
-	axIStringA*	str_;
-	bool 		condense_;
-	axSize 		depth_;
-	bool		ended_;
+	axIStringA*		str_;
+	bool 			condense_;
+	axSize 			depth_;
+	bool			ended_;
+	axStringA_<8>	indent_;
 };
 
 
