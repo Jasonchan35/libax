@@ -30,6 +30,7 @@ public:
 	axStatus	onTake( axTinyString_ & src );
 	axStatus	serialize_io( axSerializer 	 &se );
 	axStatus	serialize_io( axDeserializer &se );	
+	
 private:
 	T*	p_;
 	T 	buf_[LOCAL_BUF_SIZE];
@@ -82,8 +83,6 @@ const T* 	axTinyString_<T,LOCAL_BUF_SIZE>::c_str() const {
 	return "";
 }
 
-
-
 template<class T, size_t LOCAL_BUF_SIZE> inline
 axStatus	axTinyString_<T,LOCAL_BUF_SIZE>::onTake( axTinyString_ & src ) {
 	axStatus st = set( src.c_str() );	if( !st ) return st;
@@ -108,6 +107,7 @@ axStatus	axTinyString_<T,LOCAL_BUF_SIZE>::serialize_io( axDeserializer &se ) {
 	st = set( tmp.c_str() );	if( !st ) return st;
 	return 0;
 }
+
 
 
 #endif

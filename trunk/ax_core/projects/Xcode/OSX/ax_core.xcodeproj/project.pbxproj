@@ -42,6 +42,8 @@
 		9632179B155EF2000061BE21 /* axMutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96321778155EF2000061BE21 /* axMutex.cpp */; };
 		9632179C155EF2000061BE21 /* axThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96321779155EF2000061BE21 /* axThread.cpp */; };
 		9632179D155EF2000061BE21 /* axThreadPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9632177A155EF2000061BE21 /* axThreadPool.cpp */; };
+		966A56C515F3BEF300012DCA /* axJSONSerializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 966A56C415F3BEF300012DCA /* axJSONSerializer.cpp */; };
+		966A56C715F3BFC400012DCA /* axJSONSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 966A56C615F3BFC400012DCA /* axJSONSerializer.h */; };
 		96E2A22B15DEB55B00006235 /* axTypeList_float.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E2A22815DEB55A00006235 /* axTypeList_float.h */; };
 		96E2A22C15DEB55B00006235 /* axTypeList_int.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E2A22915DEB55A00006235 /* axTypeList_int.h */; };
 		96E2A22D15DEB55B00006235 /* axTypeList_uint.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E2A22A15DEB55A00006235 /* axTypeList_uint.h */; };
@@ -86,6 +88,8 @@
 		9632177A155EF2000061BE21 /* axThreadPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axThreadPool.cpp; sourceTree = "<group>"; };
 		964DA0991587C64E00C9E00D /* axWeakPtr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axWeakPtr.h; sourceTree = "<group>"; };
 		964F056E1584FD5200F57B4B /* axTinyString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTinyString.h; sourceTree = "<group>"; };
+		966A56C415F3BEF300012DCA /* axJSONSerializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axJSONSerializer.cpp; sourceTree = "<group>"; };
+		966A56C615F3BFC400012DCA /* axJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = axJSONSerializer.h; path = other/axJSONSerializer.h; sourceTree = "<group>"; };
 		9692ECAC155F1F0000F6D625 /* axSingleton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSingleton.h; sourceTree = "<group>"; };
 		96E2A22815DEB55A00006235 /* axTypeList_float.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axTypeList_float.h; sourceTree = "<group>"; };
 		96E2A22915DEB55A00006235 /* axTypeList_int.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axTypeList_int.h; sourceTree = "<group>"; };
@@ -116,7 +120,6 @@
 		EA15F6E11544053B00356C7C /* axTinyList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTinyList.h; sourceTree = "<group>"; };
 		EA15F6E31544053B00356C7C /* ax_objc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_objc.h; sourceTree = "<group>"; };
 		EA15F6E41544053B00356C7C /* axEventHook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axEventHook.h; sourceTree = "<group>"; };
-		EA15F6E51544053B00356C7C /* axJSONSerializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axJSONSerializer.h; sourceTree = "<group>"; };
 		EA15F6E61544053B00356C7C /* axSerializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSerializer.h; sourceTree = "<group>"; };
 		EA15F6E81544053B00356C7C /* ax_compiler_gcc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_compiler_gcc.h; sourceTree = "<group>"; };
 		EA15F6E91544053B00356C7C /* ax_compiler_vc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_compiler_vc.h; sourceTree = "<group>"; };
@@ -217,6 +220,7 @@
 		9632174E155EF2000061BE21 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				966A56C315F3BEF300012DCA /* other */,
 				96321750155EF2000061BE21 /* database */,
 				96321753155EF2000061BE21 /* file_system */,
 				96321759155EF2000061BE21 /* math */,
@@ -321,6 +325,14 @@
 			path = thread;
 			sourceTree = "<group>";
 		};
+		966A56C315F3BEF300012DCA /* other */ = {
+			isa = PBXGroup;
+			children = (
+				966A56C415F3BEF300012DCA /* axJSONSerializer.cpp */,
+			);
+			path = other;
+			sourceTree = "<group>";
+		};
 		EA15F6C61544053B00356C7C /* include */ = {
 			isa = PBXGroup;
 			children = (
@@ -392,7 +404,6 @@
 			children = (
 				EA15F6E31544053B00356C7C /* ax_objc.h */,
 				EA15F6E41544053B00356C7C /* axEventHook.h */,
-				EA15F6E51544053B00356C7C /* axJSONSerializer.h */,
 				EA15F6E61544053B00356C7C /* axSerializer.h */,
 			);
 			path = other;
@@ -574,6 +585,7 @@
 		EA31D3A9157402810027265C /* other */ = {
 			isa = PBXGroup;
 			children = (
+				966A56C615F3BFC400012DCA /* axJSONSerializer.h */,
 				EA31D3AB157402890027265C /* axSerializer_Helper.h */,
 			);
 			name = other;
@@ -610,6 +622,7 @@
 				96E2A22B15DEB55B00006235 /* axTypeList_float.h in Headers */,
 				96E2A22C15DEB55B00006235 /* axTypeList_int.h in Headers */,
 				96E2A22D15DEB55B00006235 /* axTypeList_uint.h in Headers */,
+				966A56C715F3BFC400012DCA /* axJSONSerializer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -697,6 +710,7 @@
 				9632179B155EF2000061BE21 /* axMutex.cpp in Sources */,
 				9632179C155EF2000061BE21 /* axThread.cpp in Sources */,
 				9632179D155EF2000061BE21 /* axThreadPool.cpp in Sources */,
+				966A56C515F3BEF300012DCA /* axJSONSerializer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
