@@ -30,7 +30,7 @@
 #include "core/data_structure/axSharedPtr.h"
 
 #include "core/other/axSerializer_Helper.h"
-#include "core/other/axJSONSerializer.h"
+#include "core/other/axJson.h"
 
 
 #ifdef axCOMPILER_VC
