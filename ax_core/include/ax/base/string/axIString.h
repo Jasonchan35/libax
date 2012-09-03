@@ -38,6 +38,9 @@ public:
 	template<class V>
 	axStatus		convert					( const V& value )						{ return format( L"{?}", value ); }
 
+	template<class V>
+	axStatus		appendConvert			( const V& value )						{ return appendFormat( L"{?}", value ); }
+
 	axSize			size					() const;
 
 	axStatus		resize					( axSize new_size, bool keep_data = true );
@@ -671,7 +674,8 @@ axStatus	axIString_<T> :: clone( const axIString_<T> &src ) {
 
 template< class T > inline
 T	axIString_<T> :: charAt  ( axSize idx   ) const {
-	if( idx >= buf_.size() ) {
+	size_t n = size();
+	if( idx >= n ) {
 		assert( false );
 		return 0;
 	}else{
@@ -681,7 +685,8 @@ T	axIString_<T> :: charAt  ( axSize idx   ) const {
 
 template< class T > inline
 axStatus axIString_<T> :: setCharAt  ( axSize idx, T ch ) {
-	if( idx >= buf_.size() ) {
+	size_t n = size();
+	if( idx >= n ) {
 		assert( false );
 		return axStatus_Std::out_of_bound;
 	}else{
@@ -692,21 +697,24 @@ axStatus axIString_<T> :: setCharAt  ( axSize idx, T ch ) {
 
 template< class T > inline
 T	axIString_<T> :: lastChar	( axSize idx ) const {
-	if( idx+1 >= buf_.size() ) {
+	size_t n = size();
+	if( idx >= n ) {
 		assert( false );
 		return 0;
 	}else{
-		return buf_[ buf_.size() - idx - 2 ];
+		return buf_[ n - idx - 1 ];
 	}
 }
 
 template< class T > inline
 axStatus axIString_<T> :: setLastChar ( axSize idx, T ch ) {
-	if( idx >= buf_.size() ) {
+	size_t n = size();
+	if( idx >= n ) {
 		assert( false );
 		return axStatus_Std::out_of_bound;
 	}else{
-		return buf_[ buf_.size() - idx - 2 ] = ch;
+		buf_[ n - idx - 1 ] = ch;
+		return 0;
 	}
 }
 

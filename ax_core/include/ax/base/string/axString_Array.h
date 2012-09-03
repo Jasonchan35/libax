@@ -20,6 +20,11 @@ public:
 typedef axString_Array<char>		axStringA_Array;
 typedef axString_Array<wchar_t>		axStringW_Array;
 
+template< class S, class T > inline
+axStatus ax_json_serialize_io( S &s, axString_Array<T> &v ) {
+	return ax_json_serialize_io( s, (axIArray< axString_<T> >&) v );
+}
+
 //----- inline -------
 
 template< class T > inline

@@ -65,6 +65,8 @@ public:
 	inline	bool		ax_less_than0( T value )				{ return value < 0; } \
 //-------
 	#include "axTypeList_int.h"
+	axTYPE_LIST(char)
+	axTYPE_LIST(wchar_t)
 #undef		axTYPE_LIST
 
 
@@ -150,8 +152,6 @@ template<> inline	double		ax_type_max<double>	()		{ return  DBL_MAX; }
 	inline	axStatus	ax_take( T &a, T &b )	{ a=b; return 0; } \
 //-------
     axTYPE_LIST( bool )
-	axTYPE_LIST( char )
-	axTYPE_LIST( wchar_t )
 #undef		axTYPE_LIST
 
 

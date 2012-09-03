@@ -69,7 +69,7 @@ template< class T > inline
 axStatus	axIString_<T> :: replaceString ( const T* from, const T* to, axSize start_from, axSize count ) {
 	axStatus st;
 
-	if( start_from >= size() ) return -1;
+	if( start_from > size() ) return -1;
 
 	size_t c = 0;
 	T* s = buf_.ptr() + start_from;
@@ -77,7 +77,6 @@ axStatus	axIString_<T> :: replaceString ( const T* from, const T* to, axSize sta
 	size_t to_len   = ax_strlen( to );
 
 	if( from_len == to_len ) {
-
 		for( c=0; count == 0 || c < count ; c++ ) {
 			s = ax_strstr( s, from );	if( !s ) break;
 			ax_array_copy( s, to, to_len );
@@ -90,6 +89,10 @@ axStatus	axIString_<T> :: replaceString ( const T* from, const T* to, axSize sta
 		s = ax_strstr( s, from );		if( !s ) break;
 		s += from_len;
 	}
+	
+	if( c == 0 ) {
+//		return 0; //not found
+	}
 
 	axString_<T, 1024>	tmp;
 	if( to_len > from_len ) {
@@ -99,6 +102,10 @@ axStatus	axIString_<T> :: replaceString ( const T* from, const T* to, axSize sta
 	}
 
 	T* dst = tmp._getInternalBufferPtr();
+	
+	ax_array_copy( dst, buf_.ptr(), start_from );
+	dst += start_from;
+	
 	s = buf_.ptr() + start_from;
 	T* last_s = s;
 
