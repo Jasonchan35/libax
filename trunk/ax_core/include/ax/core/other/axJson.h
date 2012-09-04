@@ -119,7 +119,9 @@ class axJsonParser : public axJsonWriterBase {
 	typedef axJsonWriterBase B;
 public:
 
-	axJsonParser( const axIStringA &str )	;
+	axJsonParser( const axIStringA &str, bool memberMustInOrder = false );
+	
+	void	setIgnoreUnknownMemeber( bool b );
 	
 	template<class T>	axStatus parse( T& value, const char* name ) {
 		axStatus st = io( value, name );
@@ -131,13 +133,19 @@ public:
 		axStatus st;
 		if( ! name ) return axStatus_Std::JSON_deserialize_format_error;
 		
-		if( ! checkStringToken(name) ) return k_name_mismatch;
+		if( ! checkStringToken(name) ) {
+			if( memberMustInOrder_ ) return axStatus_Std::JSON_deserialize_format_error;
+			return k_name_mismatch;
+		}
+		
 		st = nextToken();				if( !st ) return st;
 		
 		st = checkToken( ":" );			if( !st ) return st;
 		st = nextToken();				if( !st ) return st;
 		
 		st = io_value( value );			if( !st ) return st;
+		
+		if( memberMustInOrder_ ) return 0;
 		return axStatus_Std::JSON_deserialize_internal_found;
 	}
 	
@@ -152,18 +160,27 @@ public:
 	
 	
 	axStatus beginObject( const char* name );
-
 	axStatus endObject() ;
 
 	axStatus beginObjectValue();
-
-	axStatus endObjectValue();	
+	axStatus endObjectValue();
+	
 	axStatus beginArrayValue();
 	axStatus endArrayValue() ;
 
+	axStatus skipValue();
+	axStatus skipBlock( char open, char close );
+	
 	axTempStringA		token;
 	bool				tokenIsString;
+	
+	bool	ignoreUnknownMemeber()	{ return ignoreUnknownMemeber_; }
+	bool	memberMustInOrder()		{ return memberMustInOrder_; }
+		
 private:
+	bool	ignoreUnknownMemeber_;
+	bool	memberMustInOrder_;
+	
 	const axIStringA*	str_;	
 	const char *		r_;	
 };
@@ -453,20 +470,35 @@ axStatus ax_json_on_string_serialize( axJsonWriter &s, T &value ) {
 
 template< class T> inline	
 axStatus ax_json_on_string_serialize( axJsonParser &s, T &value ) {
-	axStatus st;	
+	axStatus st;
+	axTempStringA tmp;
 	if( s.checkToken("}") ) return 0;
 	
 	for(;;) {
-		st = ax_json_serialize_object_members( s, value );	
+		st = ax_json_serialize_object_members( s, value );
+		if( s.memberMustInOrder() ) return st;
+		
 		if( st.code() == axStatus_Std::JSON_deserialize_internal_found ) {
 			if( s.checkToken(",") ) {
 				st = s.nextToken();		if( !st ) return st;
 				continue;		
 			}
 			if( s.checkToken("}") ) break;
-			
 			return axStatus_Std::JSON_deserialize_format_error;
-		}else if( !st ) return st;
+		}
+		
+		if( !st ) return st;
+		
+		if( s.ignoreUnknownMemeber() ) {
+			if( s.checkToken("}") ) break;
+
+			st = s.io_value( tmp );	if( !st ) return st;
+			st = s.checkToken(":");	if( !st ) return st;
+			st = s.skipValue();		if( !st ) return st;
+			continue;
+		}else{
+			return axStatus_Std::JSON_deserialize_member_not_found;
+		}
 	}
 	return 0;
 }
