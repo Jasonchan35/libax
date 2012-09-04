@@ -48,6 +48,7 @@ inline axStatus ax_json_serialize_value( axJsonWriter &s, vector3 &value ) {
 #include "../../base/data_structure/axAutoPtr.h"
 #include "../../base/string/axIString.h"
 #include "../../base/string/ax_utf8.h"
+#include "../file_system/axFileSystem.h"
 
 class axJsonWriter;
 class axJsonParser;

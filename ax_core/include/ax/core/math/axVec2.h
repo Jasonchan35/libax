@@ -3,6 +3,7 @@
 
 #include "../../base/common/ax_common.h"
 #include "../../base/string/ax_string.h"
+#include "../other/axJson.h"
 
 //! \addtogroup math
 //@{
