@@ -146,7 +146,13 @@ public:
 		
 		st = io_value( value );			if( !st ) return st;
 		
-		if( memberMustInOrder_ ) return 0;
+		if( memberMustInOrder_ ) {
+			st = checkToken("}");		if( st ) return 0;
+			
+			st = checkToken(",");		if( !st ) return st;
+			st = nextToken();			if( !st ) return st;
+			return 0;
+		}
 		return axStatus_Std::JSON_deserialize_internal_found;
 	}
 	
@@ -195,9 +201,9 @@ axStatus	ax_to_json  ( axIStringA &json, const T & v ) {
 }
 
 template<class T> inline
-axStatus	ax_from_json( const char* json, T & v ) {
+axStatus	ax_from_json( const char* json, T & v, bool memberMustInOrder ) {
 	axConstStringA		str( json );
-	axJsonParser	s(str);
+	axJsonParser	s(str, memberMustInOrder );
 	return s.io_value(v);
 }
 
@@ -211,11 +217,11 @@ axStatus	ax_to_json_file( const char* filename, const T & v ) {
 }
 
 template<class T> inline
-axStatus	ax_from_json_file( const char* filename, T & v ) {
+axStatus	ax_from_json_file( const char* filename, T & v, bool memberMustInOrder = false ) {
 	axStatus st;
 	axTempStringA	json;
-	st = axFileSystem::loadFile( json, filename );	if( !st ) return st;
-	st = ax_from_json( json, v );					if( !st ) return st;
+	st = axFileSystem::loadFile( json, filename );		if( !st ) return st;
+	st = ax_from_json( json, v, memberMustInOrder );	if( !st ) return st;
 	return 0;
 }
 
@@ -496,6 +502,7 @@ axStatus ax_json_on_string_serialize( axJsonParser &s, T &value ) {
 
 			st = s.io_value( tmp );	if( !st ) return st;
 			st = s.checkToken(":");	if( !st ) return st;
+			st = s.nextToken();		if( !st ) return st;
 			st = s.skipValue();		if( !st ) return st;
 			continue;
 		}else{

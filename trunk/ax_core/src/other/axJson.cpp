@@ -71,6 +71,10 @@ axJsonWriter::axJsonWriter( axIStringA &str, bool condense, const char* indent )
 	indent_.set( indent );
 }
 
+axStatus axJsonWriter::write( const char* sz ) {
+	return str_->append( sz );
+}
+
 axStatus axJsonWriter::nextElement() {
 	return str_->append( "," );
 }
