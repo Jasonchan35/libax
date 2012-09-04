@@ -166,11 +166,16 @@ axStatus axJsonWriter::newline() {
 	
 
 //=======================
-axJsonParser::axJsonParser( const axIStringA &str )			{ 
+axJsonParser::axJsonParser( const axIStringA &str, bool memberMustInOrder )	{
 	str_ = & str;
 	r_ = str_->c_str();
-	
+	ignoreUnknownMemeber_ = true;
+	memberMustInOrder_ = memberMustInOrder;
 	nextToken();
+}
+
+void axJsonParser::setIgnoreUnknownMemeber( bool b ) {
+	ignoreUnknownMemeber_ = b;
 }
 
 static int hex( char ch ) {
@@ -289,6 +294,32 @@ axStatus	axJsonParser::checkStringToken( const char* sz ) {
 	return 0;
 }
 
+axStatus	axJsonParser::skipValue() {
+	if( tokenIsString ) return nextToken();
+	double tmp;
+	axStatus st = ax_str_to( token, tmp );
+	if( st ) return nextToken();
+	
+	if( checkToken("{") ) return skipBlock( '{', '}' );
+	if( checkToken("[") ) return skipBlock( '[', ']' );
+	
+	return axStatus_Std::JSON_deserialize_format_error;
+}
+
+axStatus axJsonParser::skipBlock( char open, char close ) {
+	int lv = 0;
+	for( ; *r_; r_++ ) {
+		if( *r_ == open ) { lv++; continue; }
+		if( *r_ == close ) {
+			if( lv == 0 ) {
+				r_++;
+				return nextToken();
+			}
+			lv--;
+		}
+	}
+	return axStatus_Std::JSON_deserialize_format_error;
+}
 
 axStatus axJsonParser::beginObject( const char* name ) {
 	return 0;
