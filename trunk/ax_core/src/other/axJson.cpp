@@ -71,8 +71,8 @@ axJsonWriter::axJsonWriter( axIStringA &str, bool condense, const char* indent )
 	indent_.set( indent );
 }
 
-axStatus axJsonWriter::append( const char* sz ) {
-	return str_->append( sz );
+axStatus axJsonWriter::nextElement() {
+	return str_->append( "," );
 }
 
 axStatus axJsonWriter::member( const char* name ) {
@@ -291,6 +291,15 @@ axStatus	axJsonParser::checkStringToken( const char* sz ) {
 	axStatus st;
 	if( !tokenIsString )	return axStatus_Std::JSON_deserialize_format_error;
 	if( !token.equals(sz) )	return axStatus_Std::JSON_deserialize_format_error;
+	return 0;
+}
+
+axStatus axJsonParser::parseMember ( const char* name ) {
+	axStatus st;
+	st = checkStringToken( name );	if( !st ) return st;
+	st = nextToken();				if( !st ) return st;
+	st = checkToken(":");			if( !st ) return st;
+	st = nextToken();				if( !st ) return st;
 	return 0;
 }
 
