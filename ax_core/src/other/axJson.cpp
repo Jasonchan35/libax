@@ -313,6 +313,8 @@ axStatus	axJsonParser::skipValue() {
 	axStatus st = ax_str_to( token, tmp );
 	if( st ) return nextToken();
 	
+	if( checkToken("null") ) return nextToken();
+	
 	if( checkToken("{") ) return skipBlock( '{', '}' );
 	if( checkToken("[") ) return skipBlock( '[', ']' );
 	
