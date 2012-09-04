@@ -73,9 +73,9 @@ public:
 	template<class T>	axStatus io	( T& value, const char* name )	{ 
 		axStatus st;
 		if( ! name|| ! name[0] ) return axStatus_Std::JSON_deserialize_format_error;
-		st = member( name );			if( !st ) return st;
-		st = io_value( value );			if( !st ) return st;
-		st = str_->append( "," );		if( !st ) return st;
+		st = member( name );		if( !st ) return st;
+		st = io_value( value );		if( !st ) return st;
+		st = nextElement();			if( !st ) return st;
 		return 0;
 	}
 	
@@ -104,7 +104,8 @@ public:
 	axStatus end_( const char begin, const char ch );
 	axStatus newline();
 	
-	axStatus append( const char* sz );
+	axStatus write( const char* sz );
+	axStatus nextElement();
 	
 private:
 	axIStringA*		str_;
@@ -158,18 +159,19 @@ public:
 	axStatus	checkToken( const char* sz );
 	axStatus	checkStringToken( const char* sz );
 	
-	
-	axStatus beginObject( const char* name );
-	axStatus endObject() ;
+	axStatus	beginObject( const char* name );
+	axStatus	endObject() ;
 
-	axStatus beginObjectValue();
-	axStatus endObjectValue();
+	axStatus	beginObjectValue();
+	axStatus	endObjectValue();	
 	
-	axStatus beginArrayValue();
-	axStatus endArrayValue() ;
-
-	axStatus skipValue();
-	axStatus skipBlock( char open, char close );
+	axStatus	beginArrayValue();
+	axStatus	endArrayValue() ;
+	
+	axStatus	parseMember( const char* name );
+	
+	axStatus 	skipValue();
+	axStatus 	skipBlock( char open, char close );
 	
 	axTempStringA		token;
 	bool				tokenIsString;
@@ -223,7 +225,7 @@ template<class T> inline axStatus ax_json_serialize_value_primitive( axJsonWrite
 	axStatus st;
 	axTempStringA tmp;
 	st = tmp.convert(v);	if( !st ) return st;
-	st = s.append( tmp );	if( !st ) return st;
+	st = s.write( tmp );	if( !st ) return st;
 	return 0;
 
 }
@@ -253,7 +255,7 @@ axTYPE_LIST( double )
 //------ bool -------
 
 inline axStatus ax_json_serialize_value( axJsonWriter &s, bool &v )	{
-	return s.append( v ? "true" : "false" );
+	return s.write( v ? "true" : "false" );
 }
 
 inline axStatus ax_json_serialize_value( axJsonParser &s, bool &v ) {
@@ -284,7 +286,7 @@ axStatus	ax_json_serialize_value ( axJsonWriter &s, axDList<T> &v ) {
 	T *p = v.head();
 	for( ; p; p=p->next() )  {
 		st = ax_json_serialize_value ( s, (T&)*p );	if( !st ) return st;
-		st = s.append( "," );						if( !st ) return st;
+		st = s.write( "," );						if( !st ) return st;
 	}
 
 	st = s.endArrayValue();		if( !st ) return st;
@@ -318,7 +320,7 @@ axStatus ax_json_serialize_value( axJsonWriter &s, axIArray<T> &v ) {
 	st = s.beginArrayValue();		if( !st ) return st;
 	for( axSize i=0; i<v.size(); i++ ) {
 		st = ax_json_serialize_value ( s, v[i] );	if( !st ) return st;
-		st = s.append( "," );						if( !st ) return st;
+		st = s.write( "," );						if( !st ) return st;
 	}
 	st = s.endArrayValue();			if( !st ) return st;
 	return 0;
@@ -373,7 +375,7 @@ axStatus ax_json_serialize_value( axJsonWriter &s, axIString_<T> &v ) {
 	axStatus st;
 	axTempStringA str;
 	st = ax_to_json_str( str, v, true );		if( !st ) return st;	
-	return s.append( str );
+	return s.write( str );
 }
 
 
@@ -411,7 +413,7 @@ axStatus ax_json_serialize_value( axJsonWriter &s, axTinyString_<T,LOCAL_BUF_SIZ
 	axStatus st;
 	axTempStringA str;
 	st = ax_to_json_str( str, v, true );		if( !st ) return st;	
-	return s.append( str );
+	return s.write( str );
 }
 
 
