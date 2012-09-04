@@ -80,8 +80,6 @@ axStatus axJsonWriter::nextElement() {
 }
 
 axStatus axJsonWriter::member( const char* name ) {
-	if( ! name || ! name[0] ) return 0;
-	
 	axStatus st;
 	st = newline();			if( !st ) return st;		
 	axTempStringA	tmp;

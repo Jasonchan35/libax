@@ -257,6 +257,7 @@ axTYPE_LIST( uint32_t )
 axTYPE_LIST( uint64_t )
 axTYPE_LIST( float )
 axTYPE_LIST( double )
+axTYPE_LIST( axSize )
 #undef axTYPE_LIST
 
 //------ bool -------
