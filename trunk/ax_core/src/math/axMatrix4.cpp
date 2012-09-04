@@ -11,15 +11,15 @@
 #include <ax/core/math/axQuaternion.h>
 
 
-template<> const axMatrix4f axMatrix4f::kIdentity( 1,0,0,0,
-												0,1,0,0,
-												0,0,1,0,
-												0,0,0,1 );
+template<> const axMatrix4f axMatrix4f::kIdentity( 	1,0,0,0,
+													0,1,0,0,
+													0,0,1,0,
+													0,0,0,1 );
 
-template<> const axMatrix4d axMatrix4d::kIdentity( 1,0,0,0,
-												0,1,0,0,
-												0,0,1,0,
-												0,0,0,1);
+template<> const axMatrix4d axMatrix4d::kIdentity( 	1,0,0,0,
+													0,1,0,0,
+													0,0,1,0,
+													0,0,0,1);
 
 template<class T>
 void axMatrix4<T>::rotate ( const axEulerRotation3<T>  &er )	{ 
@@ -432,6 +432,16 @@ void axMatrix4<T>::operator*=( const axMatrix4<T> &v ) {
 	cy.w = e0*v.cy.x + e1*v.cy.y + e2*v.cy.z + e3*v.cy.w;
 	cz.w = e0*v.cz.x + e1*v.cz.y + e2*v.cz.z + e3*v.cz.w;
 	cw.w = e0*v.cw.x + e1*v.cw.y + e2*v.cw.z + e3*v.cw.w;
+}
+
+template<class T>
+axStatus	axMatrix4<T>::serialize_io( axJsonWriter	 &s ) {
+	return 0;
+}
+
+template<class T>
+axStatus	axMatrix4<T>::serialize_io( axJsonParser &s ) {
+	return 0;
 }
 
 //The explicit instantiation
