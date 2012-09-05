@@ -257,21 +257,15 @@ axStatus	axApp::setCurrentDir( const wchar_t* dir ) {
 #if axOS_MacOSX 
 
 axStatus	axApp::shellOpenFile( const char *file ) {
-	axStatus st;
-	axTempStringA cmd;
-	st = cmd.format("/usr/bin/open {?} &", file ); if( !st ) return st;
-	system( cmd );
+	BOOL b = [[NSWorkspace sharedWorkspace] openFile: ax_toNSString( file ) ];
+	if( !b ) return -1;
 	return 0;
 }
 
 axStatus	axApp::showFileInFinder( const char *path ) {
 	
-	axStatus st;
-	axTempStringA cmd;
-
-	st = cmd.format("/usr/bin/osascript -e \"tell application \\\"Finder\\\" to activate reveal POSIX file \\\"{?}\\\"\" > /dev/null", path ); if( !st ) return st;
-	system( cmd );
-	
+	BOOL b  = [ [NSWorkspace sharedWorkspace] selectFile: ax_toNSString( path )  inFileViewerRootedAtPath:@""];
+	if( !b ) return -1;
 	return 0;
 }
 
