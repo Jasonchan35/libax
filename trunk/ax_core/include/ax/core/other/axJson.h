@@ -61,8 +61,6 @@ axStatus	ax_from_json_str	( axIStringA & str, const char* sz, bool withQuote );
 
 class axJsonWriterBase: public axNonCopyable {
 public:
-	static const char *skip_chr() { return " \t\r\n"; }
-	
 	enum { k_name_mismatch = 4445 };
 };
 
@@ -144,8 +142,9 @@ public:
 	
 	void	setIgnoreUnknownMemeber( bool b );
 	
-	template<class T>	axStatus parse( T& value, const char* name ) {
-		axStatus st = io( value, name );
+	template<class T>	axStatus parse( T& value, const char* name ) {	
+		axStatus st;
+		st = io( value, name );
 		if( st.code() == axStatus_Std::JSON_deserialize_internal_found ) return 0;
 		return st;
 	}
@@ -167,11 +166,9 @@ public:
 		st = io_value( value );			if( !st ) return st;
 		
 		if( memberMustInOrder_ ) {
-			st = checkToken("}");		if( st ) return 0;
-			
-			st = checkToken(",");		if( !st ) return st;
-			st = nextToken();			if( !st ) return st;
-			return 0;
+			if( checkToken("}") ) return 0;
+			if( checkToken(",") ) return nextToken();
+			return axStatus_Std::JSON_deserialize_format_error;
 		}
 		return axStatus_Std::JSON_deserialize_internal_found;
 	}
@@ -190,14 +187,26 @@ public:
 
 	axStatus	beginObjectValue();
 	axStatus	endObjectValue();	
+
+	axStatus	beginArray( const char* name );
+	axStatus	endArray() ;
 	
 	axStatus	beginArrayValue();
 	axStatus	endArrayValue() ;
+
+	axStatus	nextElement();
 	
 	axStatus	parseMember( const char* name );
 	
+	axStatus	getMemberName( axIStringA & out );
+		
 	axStatus 	skipValue();
 	axStatus 	skipBlock( char open, char close );
+	
+	axSize		lineNo() { return lineNo_; }
+	axSize		charNo() { return r_ - lineStart_; }
+	
+	axStatus	log		( const char* msg );
 	
 	axTempStringA		token;
 	bool				tokenIsString;
@@ -209,8 +218,10 @@ private:
 	bool	ignoreUnknownMemeber_;
 	bool	memberMustInOrder_;
 	
-	const axIStringA*	str_;	
-	const char *		r_;	
+	const axIStringA*	str_;
+	const char *		r_;
+	const char *		lineStart_;
+	axSize				lineNo_;
 };
 
 
@@ -280,29 +291,8 @@ axTYPE_LIST( axSize )
 #undef axTYPE_LIST
 
 //------ bool -------
-template<> inline 
-axStatus ax_json_serialize_value( axJsonWriter &s, bool &v )	{
-	return s.write( v ? "true" : "false" );
-}
-
-template<> inline 
-axStatus ax_json_serialize_value( axJsonParser &s, bool &v ) {
-	axStatus st;	
-	if( s.tokenIsString )	return -1;
-
-	if( s.token.equalsNoCase( "true" ) ) {
-		v = true;
-	}else if( s.token.equalsNoCase( "false" ) ) {
-		v = false;
-	}else {
-		return axStatus_Std::JSON_deserialize_bool_format_error;
-	}
-	
-	st = s.nextToken();		if( !st ) return st;
-	return 0;
-}
-
-
+template<> axStatus ax_json_serialize_value( axJsonWriter &s, bool &v );
+template<> axStatus ax_json_serialize_value( axJsonParser &s, bool &v );
 
 //----------- DList ----------------
 
@@ -327,17 +317,19 @@ axStatus	ax_json_serialize_value ( axJsonParser &s, axDList<T> &v ) {
 	axStatus st;
 
 	st = s.beginArrayValue();			if( !st ) return st;
-	for(;;) {
-		st = s.nextToken();				if( !st ) return st;
-		if( ! s.token.equals(",") ) break;	
-
-		axAutoPtr<T> p;
-		st = p.newObject();				if( !st ) return st;
-		st = s.io( *p );				if( !st ) return st;
-		v.append( p.unref() );
+	if( ! s.checkToken("]") ) {
+		for(;;) {
+			axAutoPtr<T> p;
+			st = p.newObject();				if( !st ) return st;
+			st = s.io( *p );				if( !st ) return st;
+			v.append( p.unref() );
+			
+			if( s.checkToken("]") ) break;	
+			st = s.checkToken(",");			if( !st ) return st;
+			st = s.nextToken();				if( !st ) return st;
+		}
 	}
 	st = s.endArrayValue();				if( !st ) return st;
-
 	return 0;
 }
 
@@ -359,13 +351,16 @@ template< class T > inline
 axStatus ax_json_serialize_value( axJsonParser &s, axIArray<T> &v ) {
 	axStatus st;
 	st = s.beginArrayValue();			if( !st ) return st;
-	for(;;) {
-		st = s.nextToken();				if( !st ) return st;
-		if( ! s.token.equals(",") ) break;	
-
-		st = v.incSize( 1 );			if( !st ) return st;
-		st = s.io_value( v.last() );	if( !st ) return st;
-	}	
+	if( ! s.checkToken("]") ) {
+		for(;;) {
+			st = v.incSize( 1 );			if( !st ) return st;
+			st = s.io_value( v.last() );	if( !st ) return st;
+			
+			if( s.checkToken("]") ) break;
+			st = s.checkToken(",");			if( !st ) return st;
+			st = s.nextToken();				if( !st ) return st;
+		}	
+	}
 	st = s.endArrayValue();				if( !st ) return st;
 	return 0;
 }

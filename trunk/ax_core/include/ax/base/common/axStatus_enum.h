@@ -109,6 +109,7 @@ axStatus_enum( JSON_deserialize_cannot_find_end_token )
 axStatus_enum( JSON_deserialize_element_not_found )
 axStatus_enum( JSON_deserialize_bool_format_error )
 axStatus_enum( JSON_deserialize_member_not_found )
+axStatus_enum( JSON_deserialize_expected_close_quota )
 
 //-------------
 axStatus_enum( error_encodeJSON )
