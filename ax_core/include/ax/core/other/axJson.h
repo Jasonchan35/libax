@@ -54,7 +54,7 @@ class axJsonWriter;
 class axJsonParser;
 
 template<class S, class T> inline	
-axStatus ax_json_serialize_value( S &s, T& value, const char* name );
+axStatus ax_json_serialize_value( S &s, T& value );
 
 axStatus	ax_to_json_str		( axIStringA & str, const char* sz, bool withQuote );
 axStatus	ax_from_json_str	( axIStringA & str, const char* sz, bool withQuote );
@@ -69,8 +69,6 @@ public:
 class axJsonWriter : public axJsonWriterBase {
 	typedef axJsonWriterBase B;
 public:
-
-
 	template<class T>	axStatus io	( T& value, const char* name )	{ 
 		axStatus st;
 		if( ! name|| ! name[0] ) return axStatus_Std::JSON_deserialize_format_error;
@@ -85,6 +83,9 @@ public:
 	}
 	
 	axJsonWriter( axIStringA &str, bool condense = true, const char* indent = "\t" );
+	
+	void	setCondense( bool b )	{ condense_ = b; }
+	bool	isCondense() const		{ return condense_; }
 	
 	axStatus member( const char* name );
 	
@@ -107,6 +108,10 @@ public:
 	
 	axStatus write( const char* sz );
 	axStatus nextElement();
+	
+	axStatus nullValue();
+	
+	axStatus writeRawElement( const char* name, const char* value );
 	
 private:
 	axIStringA*		str_;
@@ -261,12 +266,13 @@ axTYPE_LIST( axSize )
 #undef axTYPE_LIST
 
 //------ bool -------
-
-inline axStatus ax_json_serialize_value( axJsonWriter &s, bool &v )	{
+template<> inline 
+axStatus ax_json_serialize_value( axJsonWriter &s, bool &v )	{
 	return s.write( v ? "true" : "false" );
 }
 
-inline axStatus ax_json_serialize_value( axJsonParser &s, bool &v ) {
+template<> inline 
+axStatus ax_json_serialize_value( axJsonParser &s, bool &v ) {
 	axStatus st;	
 	if( s.tokenIsString )	return -1;
 
@@ -344,7 +350,7 @@ axStatus ax_json_serialize_value( axJsonParser &s, axIArray<T> &v ) {
 		if( ! s.token.equals(",") ) break;	
 
 		st = v.incSize( 1 );			if( !st ) return st;
-		st = s.io( v.last() );			if( !st ) return st;
+		st = s.io_value( v.last() );	if( !st ) return st;
 	}	
 	st = s.endArrayValue();				if( !st ) return st;
 	return 0;
