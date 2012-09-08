@@ -181,8 +181,10 @@ axStatus axJsonWriter::newline() {
 
 //=======================
 axJsonParser::axJsonParser( const axIStringA &str, bool memberMustInOrder )	{
+	lineNo_ = 1;
 	str_ = & str;
 	r_ = str_->c_str();
+	lineStart_ = r_;
 	ignoreUnknownMemeber_ = true;
 	memberMustInOrder_ = memberMustInOrder;
 	nextToken();
@@ -198,16 +200,40 @@ static int hex( char ch ) {
 	return -1;
 }
 
-/*
+template<>
+axStatus ax_json_serialize_value( axJsonWriter &s, bool &v )	{
+	return s.write( v ? "true" : "false" );
+}
+
+template<> 
+axStatus ax_json_serialize_value( axJsonParser &s, bool &v ) {
+	axStatus st;	
+	if( s.tokenIsString )	return -1;
+
+	if( s.checkToken( "true" ) ) {
+		v = true;
+	}else if( s.checkToken( "false" ) ) {
+		v = false;
+	}else {
+		return axStatus_Std::JSON_deserialize_bool_format_error;
+	}
+	
+	st = s.nextToken();		if( !st ) return st;
+	return 0;
+}
+
+axStatus	axJsonParser::log ( const char* msg ) {
+	return ax_log("Json({?}:{?}) {?}", lineNo(), charNo(), msg );
+}
+
 axStatus	axJsonParser::nextToken() {
 	axStatus st = _nextToken();
-	if( st ) ax_log( "json token = {?}", token );
+	if( st ) ax_log( "json token = [{?}] {?}", token, tokenIsString ? "isString":"" );
 	return st;
 }
-*/
-axStatus	axJsonParser::nextToken() {
-	axStatus st;
 
+axStatus	axJsonParser::_nextToken() {
+	axStatus st;
 	const char* singleCharTokens = ":,{}[]";
 
 	token.resize(0);
@@ -216,26 +242,28 @@ axStatus	axJsonParser::nextToken() {
 	tokenIsString = false;
 	
 	for( ;*r_; r_++ ) {
-		if( ax_strchr( skip_chr(), *r_ ) ) continue;
+		if( *r_ == '\n' ) { lineNo_++; lineStart_ = r_; continue; }	
+		if( ax_strchr( " \t\r", *r_ ) ) continue;
 		break;
 	}
 
 	//---------------
 	for( ; *r_; r_++) {
+		if( *r_ == '\n' ) { lineNo_++; lineStart_ = r_; }
 		if( tokenIsString ) {
 			if( *r_ == '\\' ) {
 				r_++;
 				switch( *r_ ) {
-					case 0: 	return -1;
+					case 0: return axStatus_Std::JSON_deserialize_expected_close_quota;
 				//-----
 					case '/':	
 					case '\\':	
 						break;
 				//------
-					case 'b': { r_++; st = token.append('\b'); if( !st ) return st; continue; }
-					case 'n': { r_++; st = token.append('\n'); if( !st ) return st; continue; }
-					case 'r': { r_++; st = token.append('\r'); if( !st ) return st; continue; }
-					case 't': { r_++; st = token.append('\t'); if( !st ) return st; continue; }
+					case 'b': { st = token.append('\b'); if( !st ) return st; continue; }
+					case 'n': { st = token.append('\n'); if( !st ) return st; continue; }
+					case 'r': { st = token.append('\r'); if( !st ) return st; continue; }
+					case 't': { st = token.append('\t'); if( !st ) return st; continue; }
 				//-------
 					case 'u': {
 						r_++;
@@ -247,8 +275,8 @@ axStatus	axJsonParser::nextToken() {
 						v = hex(*r_++);	if(v<0) return -1;	u <<= 4; u+=v;
 						
 						wchar_t w;
-						st = ax_safe_assign( w, v );			if( !st ) return st;
-						st = token.append( w );		if( !st ) return st;
+						st = ax_safe_assign( w, v );	if( !st ) return st;
+						st = token.append( w );			if( !st ) return st;
 					}continue;
 				//--------	
 					default: { //unknown escape
@@ -256,12 +284,8 @@ axStatus	axJsonParser::nextToken() {
 					}
 				}
 			}
-		
-			if( *r_ == '\"' ) {
-				r_++;
-				return 1;
-			}
-										
+
+			if( *r_ == '\"' ) { r_++; return 1; }
 			st = token.append( *r_ );		if( !st ) return st;						
 		}else{
 			if( ax_strchr( singleCharTokens, *r_ ) ) {
@@ -275,11 +299,12 @@ axStatus	axJsonParser::nextToken() {
 			switch( *r_ ) {
 				case 0: 	return 0;
 			//-----
+				case '\n':	return 0;
 				case '\"':	{ 
 					tokenIsString = true;
 				} continue;
 
-				default:	{ 
+				default:	{
 					st = token.append( *r_ ); if( !st ) return st;						
 				}continue;
 				
@@ -317,24 +342,47 @@ axStatus axJsonParser::parseMember ( const char* name ) {
 	return 0;
 }
 
+axStatus axJsonParser::getMemberName( axIStringA & out ) {
+	axStatus st;
+	if( ! tokenIsString ) return -1;
+	st = out.set( token );			if( !st ) return st;
+	st = nextToken();				if( !st ) return st;	
+	st = checkToken(":");			if( !st ) return st;
+	st = nextToken();				if( !st ) return st;	
+	return 0;
+}
+
+axStatus axJsonParser::nextElement() {
+	axStatus st;
+	st = checkToken(",");			if( !st ) return st;
+	st = nextToken();				if( !st ) return st;
+	return 0;
+}
+
 axStatus	axJsonParser::skipValue() {
 	if( tokenIsString ) return nextToken();
+
+	if( checkToken("null")  ) return nextToken();
+	if( checkToken("true")  ) return nextToken();
+	if( checkToken("false") ) return nextToken();
+	
+	if( checkToken("{") ) return skipBlock( '{', '}' );
+	if( checkToken("[") ) return skipBlock( '[', ']' );
+
+//number
 	double tmp;
 	axStatus st = ax_str_to( token, tmp );
 	if( st ) return nextToken();
 	
-	if( checkToken("null") ) return nextToken();
-	
-	if( checkToken("{") ) return skipBlock( '{', '}' );
-	if( checkToken("[") ) return skipBlock( '[', ']' );
-	
+	assert(false);
 	return axStatus_Std::JSON_deserialize_format_error;
 }
 
 axStatus axJsonParser::skipBlock( char open, char close ) {
 	int lv = 0;
 	for( ; *r_; r_++ ) {
-		if( *r_ == open ) { lv++; continue; }
+		if( *r_ == '\n' ) { lineNo_++; lineStart_ = r_; }
+		if( *r_ == open  ) { lv++; continue; }
 		if( *r_ == close ) {
 			if( lv == 0 ) {
 				r_++;
@@ -347,10 +395,15 @@ axStatus axJsonParser::skipBlock( char open, char close ) {
 }
 
 axStatus axJsonParser::beginObject( const char* name ) {
+	axStatus st;
+	st = parseMember( name );		if( !st ) return st;
+	st = beginObjectValue();		if( !st ) return st;
 	return 0;
 }
 
 axStatus axJsonParser::endObject() {
+	axStatus st;
+	st = endObjectValue();		if( !st ) return st;
 	return 0;
 }
 
@@ -368,10 +421,29 @@ axStatus axJsonParser::endObjectValue() {
 	return 0;
 }
 
+axStatus axJsonParser::beginArray( const char* name ) {
+	axStatus st;
+	st = parseMember( name );	if( !st ) return st;
+	st = beginArrayValue();		if( !st ) return st;
+	return 0;
+}
+
+axStatus axJsonParser::endArray() {
+	axStatus st;
+	st = endArrayValue();		if( !st ) return st;
+	return 0;
+}
+
 axStatus axJsonParser::beginArrayValue() {
+	axStatus st;
+	st = checkToken("[");		if( !st ) return st;
+	st = nextToken();			if( !st ) return st;
 	return 0;
 }
 
 axStatus axJsonParser::endArrayValue() {
+	axStatus st;
+	st = checkToken("]");		if( !st ) return st;
+	st = nextToken();			if( !st ) return st;
 	return 0;
 }
