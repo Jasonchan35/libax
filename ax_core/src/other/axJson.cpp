@@ -280,7 +280,7 @@ axStatus	axJsonParser::_nextToken() {
 					}continue;
 				//--------	
 					default: { //unknown escape
-						return -1;
+						return axStatus_Std::JSON_deserialize_unknown_escape_in_string;
 					}
 				}
 			}
@@ -299,7 +299,7 @@ axStatus	axJsonParser::_nextToken() {
 			switch( *r_ ) {
 				case 0: 	return 0;
 			//-----
-				case '\n':	return 0;
+				case '\n':	{ r_++; return 0; }
 				case '\"':	{ 
 					tokenIsString = true;
 				} continue;
@@ -314,9 +314,9 @@ axStatus	axJsonParser::_nextToken() {
 
 	if( tokenIsString ) {
 		assert(false);	// quota excepted for close string
-		return -1;
+		return axStatus_Std::JSON_deserialize_expected_close_quota;
 	}
-	return 0;	
+	return 0;
 }
 
 axStatus	axJsonParser::checkToken( const char* sz ) {
