@@ -8,10 +8,14 @@
 
 #include <ax/core/system/axCommandLineApp.h>
 
+axCommandLineApp *axCommandLineApp::instance_ = NULL;;
+axCommandLineApp* &axCommandLineApp::instance = axCommandLineApp::instance_;
 
 axCommandLineApp::axCommandLineApp() {
 	argc_ = 0;
 	argv_ = NULL;
+	
+	instance_ = this;
 }
 
 axCommandLineApp::~axCommandLineApp() {
@@ -82,8 +86,7 @@ void axCommandLineApp::printArgs() {
 
 @implementation axCommandLineApp_Delegate
 -(void)applicationDidFinishLaunching:(UIApplication *)application {
-	axCommandLineApp* app = axCommandLineApp::getInstance();
-	app->thread_.create();
+	axCommandLineApp::instance->thread_.create();
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -93,9 +96,7 @@ void axCommandLineApp::printArgs() {
 @end
 
 void axCommandLineApp::Thread::onThreadProc() {
-	axCommandLineApp* app = axCommandLineApp::getInstance();
-	axStatus st = app->onRun();	
-	
+	axStatus st = instance->onRun();
 	ax_log( "\n\n===== Command Line Program Ended with exit code {?} ======", st );
 }
 
