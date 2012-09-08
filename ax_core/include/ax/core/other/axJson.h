@@ -84,9 +84,6 @@ public:
 	
 	axJsonWriter( axIStringA &str, bool condense = true, const char* indent = "\t" );
 	
-	void	setCondense( bool b )	{ condense_ = b; }
-	bool	isCondense() const		{ return condense_; }
-	
 	axStatus member( const char* name );
 	
 	axStatus beginObject	( const char* name );
@@ -112,6 +109,23 @@ public:
 	axStatus nullValue();
 	
 	axStatus writeRawElement( const char* name, const char* value );
+	
+	void	setCondense( bool b )	{ condense_ = b; }
+	bool	isCondense() const		{ return condense_; }
+	
+	class ScopeCondense : public axNonCopyable {
+	public:
+		ScopeCondense( axJsonWriter &s, bool b ) :writer(s) {
+			old = writer.isCondense();
+			writer.setCondense(b);
+		}
+		~ScopeCondense() {
+			writer.setCondense(old);
+		}
+	private:
+		axJsonWriter &writer;
+		bool	old;	
+	};	
 	
 private:
 	axIStringA*		str_;
