@@ -28,6 +28,10 @@ public:
 //-------- OS code ------------	
 	axStatus	_os_run();
 
+	
+	static axCommandLineApp*	&instance;
+
+
 #if axOS_iOS
 	class	Thread : public axThread {
 		virtual	void		onThreadProc();
@@ -38,6 +42,9 @@ public:
 private:
 	int argc_;
 	const char** argv_;
+	
+	
+	static axCommandLineApp *instance_;
 };
 
 //-----------------------

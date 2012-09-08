@@ -11,13 +11,15 @@ class axNullClass;
 
 
 #if axOS_MacOSX || axOS_iOS
+
 	#if ! axCPU_LP32
-		#define	axTypeHas_long			1
+		#define	axTypeHas_long			0
 	#endif	
 		
 	#if ! axCPU_LP64
-		#define	axTypeHas_long_long		1
+		#define	axTypeHas_long_long		0
 	#endif
+		
 #else
 	#define	axTypeHas_long			0
 	#define	axTypeHas_long_long		0
