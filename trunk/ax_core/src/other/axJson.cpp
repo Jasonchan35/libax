@@ -79,6 +79,18 @@ axStatus axJsonWriter::nextElement() {
 	return str_->append( "," );
 }
 
+axStatus axJsonWriter::writeRawElement( const char* name, const char* value ) {
+	axStatus st;
+	st = member( name );	if( !st ) return st;
+	st = write( value );	if( !st ) return st;
+	st = nextElement();		if( !st ) return st;
+	return 0;
+}
+
+axStatus axJsonWriter::nullValue() {
+	return write("null");
+}
+
 axStatus axJsonWriter::member( const char* name ) {
 	axStatus st;
 	st = newline();			if( !st ) return st;		

@@ -99,6 +99,9 @@ public:
 	axStatus	onTake( axVec2<T> &b )				{ *this = b; return 0; }
 
 	template<class S>	axStatus	serialize_io	( S &se );
+						axStatus	serialize_io	( axJsonWriter &s );
+						axStatus	serialize_io	( axJsonParser &s );
+	
 						axStatus	toStringFormat	( axStringFormat &f ) const;
 
 #if axOS_iOS 
@@ -164,6 +167,12 @@ axStatus axVec2<T>::serialize_io( S &s ) {
 		return 0;
 	#endif
 }
+
+template<class T> inline
+axStatus axVec2<T>::serialize_io( axJsonWriter & s ) { axStatus st; ax_io(x); ax_io(y); return 0; }
+template<class T> inline
+axStatus axVec2<T>::serialize_io( axJsonParser & s ) { axStatus st; ax_io(x); ax_io(y); return 0; }
+
 
 #define axTYPE_LIST(T) \
 	template<> class axTypeOf<T> { \

@@ -109,6 +109,10 @@ public:
 	bool		isInsideTriangle	( const axVec3 &v0, const axVec3 &v1, const axVec3 &v2, const axVec3 &normal ) const;
 
 	template<class S>	axStatus	serialize_io	( S &se );
+						
+						axStatus	serialize_io	( axJsonWriter &s );
+						axStatus	serialize_io	( axJsonParser &s );
+	
 						axStatus	toStringFormat	( axStringFormat &f ) const;
 	axStatus	onTake( axVec3<T> &b )				{ *this = b; return 0; }
 };
@@ -189,6 +193,11 @@ axStatus axVec3<T>::serialize_io( S &s ) {
 		return 0;
 	#endif
 }
+
+template<class T> inline
+axStatus axVec3<T>::serialize_io( axJsonWriter & s ) { axStatus st; ax_io(x); ax_io(y); ax_io(z); return 0; }
+template<class T> inline
+axStatus axVec3<T>::serialize_io( axJsonParser & s ) { axStatus st; ax_io(x); ax_io(y); ax_io(z); return 0; }
 
 inline axVec3d ax_toVec3d( const axVec3f& v ) { return axVec3d(v.x,v.y,v.z); }
 
