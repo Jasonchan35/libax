@@ -96,9 +96,6 @@ public:
 	axStatus beginArrayValue	();
 	axStatus endArrayValue		();
 
-	axStatus begin_( const char ch );
-
-	axStatus end_( const char begin, const char ch );
 	axStatus newline();
 	
 	axStatus write( const char* sz );
@@ -126,6 +123,9 @@ public:
 	};	
 	
 private:
+	axStatus begin_	( const char ch );
+	axStatus end_	( const char begin, const char ch );
+
 	axIStringA*		str_;
 	bool 			condense_;
 	axSize 			depth_;
