@@ -111,8 +111,8 @@ axStatus axJsonWriter::beginObject	( const char* name ) 	{
 
 axStatus axJsonWriter::endObject () { 
 	axStatus st;
-	st = end_('{','}'); 		if( !st ) return st;
-	st = str_->append( "," );	if( !st ) return st;
+	st = endObjectValue();		if( !st ) return st;
+	st = nextElement();			if( !st ) return st;
 	return 0;
 }
 
@@ -124,8 +124,8 @@ axStatus axJsonWriter::beginArray( const char* name ) {
 }
 axStatus axJsonWriter::endArray	() 	{ 
 	axStatus st;
-	st = end_('[',']'); 	if( !st ) return st;
-	st = str_->append( "," );	if( !st ) return st;
+	st = endArrayValue();		if( !st ) return st;
+	st = nextElement();			if( !st ) return st;
 	return 0;
 }
 
@@ -156,9 +156,12 @@ axStatus axJsonWriter::end_( const char begin, const char ch ) {
 	char e = str_->lastChar(0);
 	if( e == ',' ) {
 		str_->decSize(1);
-		st = newline();				if( !st ) return st;
+		st = newline();			if( !st ) return st;
 	}else{
-		if( e != begin ) 	return axStatus_Std::JSON_deserialize_format_error;
+		if( e != begin ) {
+			ax_log("Json end of {?} error");
+			return axStatus_Std::JSON_deserialize_format_error;
+		}
 	}
 	st = str_->append(ch);			if( !st ) return st;		
 	return 0;
