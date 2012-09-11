@@ -471,30 +471,27 @@ axStatus ax_json_serialize_value( axJsonParser &s, axTinyStringW< LOCAL_BUF_SIZE
 
 // ================================
 
-
-template<class S, class T> inline	
-axStatus ax_json_serialize_value( S &s, T& value ) { 
-	axStatus st;
-	st = s.beginObjectValue();							if( !st ) return st;
-	st = ax_json_on_string_serialize( s, value );		if( !st ) return st;
-	st = s.endObjectValue();							if( !st ) return st;	
-	return 0;
-}
-
 template<class S, class T> inline	
 axStatus ax_json_serialize_object_members( S &s, T &v ) { 
 	return v.serialize_io( s ); 
 }
 
+template<class S, class T> inline	
+axStatus ax_json_serialize_value( S &s, T& value ) { 
+	axStatus st;
+	st = s.beginObjectValue();							if( !st ) return st;
+	st = ax_json_serialize_object_value( s, value );	if( !st ) return st;
+	st = s.endObjectValue();							if( !st ) return st;	
+	return 0;
+}
 
 template< class T> inline	
-axStatus ax_json_on_string_serialize( axJsonWriter &s, T &value ) {
+axStatus ax_json_serialize_object_value( axJsonWriter &s, T &value ) {
 	return ax_json_serialize_object_members( s, value );
 }
 
-
 template< class T> inline	
-axStatus ax_json_on_string_serialize( axJsonParser &s, T &value ) {
+axStatus ax_json_serialize_object_value( axJsonParser &s, T &value ) {
 	axStatus st;
 	axTempStringA tmp;
 	if( s.checkToken("}") ) return 0;
