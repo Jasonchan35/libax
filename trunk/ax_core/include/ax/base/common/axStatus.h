@@ -123,7 +123,7 @@ const char* axStatus_ModuleList::c_str( int code ) {
 	}else{
 		if( module[m] ) return module[m]->c_str(code);
 	}
-	return "Uknown";
+	return "Unknown";
 }
 
 
