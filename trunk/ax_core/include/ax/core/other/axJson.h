@@ -351,6 +351,7 @@ axStatus ax_json_serialize_value( axJsonWriter &s, axIArray<T> &v ) {
 template< class T > inline
 axStatus ax_json_serialize_value( axJsonParser &s, axIArray<T> &v ) {
 	axStatus st;
+	v.resize(0);
 	st = s.beginArrayValue();				if( !st ) return st;
 	if( ! s.checkToken("]") ) {
 		for(;;) {
