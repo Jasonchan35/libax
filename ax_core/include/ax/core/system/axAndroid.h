@@ -9,7 +9,7 @@
 
 class axAndroid : public axNonCopyable {
 public:
-	static	axAndroid*	getInstance	();
+
 
 	axAndroid();
 	axStatus	_create		( JNIEnv* env, jobject activity );
@@ -54,20 +54,29 @@ public:
 	axStringA	resourcePath_;
 
 	template<class T>
-	class	JNILocal<T> {
+	class JNILocal {
 	public:
-		Local( T p = NULL ) { o_=p; }
+		JNILocal( T p = NULL ) { o_=p; }
 		void operator=( T p ) { o_=p; }
+		
+		
+		T	get() { return o_; }
 		operator T	() { return o_; }
 		T operator->() { return o_; }
 
-		~Local() {
-			if(o_) getInstance()->jni->DeleteLocalRef(o_);
+		~JNILocal() {
+			if(o_) axAndroid::instance.jni->DeleteLocalRef(o_);
 		}
 	private:
 		T	o_;
 	};
+	
+	static axAndroid instance;
+	
+private:
+
 };
+
 
 
 #endif //axOS_Android

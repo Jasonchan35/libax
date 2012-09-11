@@ -7,6 +7,8 @@
 #include <android/log.h>
 #include <sys/sysinfo.h>
 #include <jni.h>
+#include <time64.h>
+
 
 	#define GL_FRAMEBUFFER									GL_FRAMEBUFFER_OES
 	#define GL_FRAMEBUFFER_BINDING							GL_FRAMEBUFFER_BINDING_OES

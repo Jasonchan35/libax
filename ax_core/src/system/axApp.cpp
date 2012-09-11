@@ -362,16 +362,25 @@ axStatus	axApp::getProcessFilename	( axIStringW &out ) {
 
 #elif axOS_Android
 
-axStatus	axApp::getAppDataDir( axIStringA &str ) {
-	axAndroid* an = axAndroid::getInstance();
-	return str.set( an->resourcePath() );
+axStatus	axApp::getUserAppDataDir( axIStringA &str ) {
+	return str.set( axAndroid::instance.resourcePath() );
 }
 
-axStatus	axApp::getAppDataDir( axIStringW &str ) {
-	axAndroid* an = axAndroid::getInstance();
-	return str.set( an->resourcePath() );
+axStatus	axApp::getUserAppDataDir( axIStringW &str ) {
+	return str.set( axAndroid::instance.resourcePath() );
 }
 
+axStatus	axApp::getProcessFilename( axIStringW &out ) {
+	//! todo !!
+	return -1;
+}
+
+axStatus	axApp::getProcessFilename( axIStringA &out ) {
+	//! todo !!
+	return -1;
+}
+ 
+	
 
 #else // Other UNIX
 #if 0

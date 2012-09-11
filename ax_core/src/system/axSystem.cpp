@@ -24,8 +24,8 @@ void* axSystem::getCurrentThreadID() {
 #endif
 
 double axSystem::uptime() {
-	axAndroid *an = axAndroid::getInstance();
-	jlong t = an->jni->CallStaticLongMethod( an->jni_SystemClock_class, an->jni_SystemClock_elapsedRealtime );
+	axAndroid &an = axAndroid::instance;
+	jlong t = an.jni->CallStaticLongMethod( an.jni_SystemClock_class, an.jni_SystemClock_elapsedRealtime );
 	return t/1000.0;
 }
 
