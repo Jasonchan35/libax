@@ -341,7 +341,7 @@ axStatus ax_json_serialize_value( axJsonWriter &s, axIArray<T> &v ) {
 	st = s.beginArrayValue();		if( !st ) return st;
 	for( axSize i=0; i<v.size(); i++ ) {
 		st = ax_json_serialize_value ( s, v[i] );	if( !st ) return st;
-		st = s.write( "," );						if( !st ) return st;
+		st = s.nextElement();						if( !st ) return st;
 	}
 	st = s.endArrayValue();			if( !st ) return st;
 	return 0;
