@@ -231,7 +231,7 @@ axStatus	axJsonParser::log ( const char* msg ) {
 
 axStatus	axJsonParser::nextToken() {
 	axStatus st = _nextToken();
-	if( st ) ax_log( "json token = [{?}] {?}", token, tokenIsString ? "isString":"" );
+//	if( st ) ax_log( "json token = [{?}] {?}", token, tokenIsString ? "isString":"" );
 	return st;
 }
 
@@ -419,9 +419,28 @@ axStatus axJsonParser::beginObjectValue() {
 
 axStatus axJsonParser::endObjectValue() { 
 	axStatus st;
+	st = checkToken(",");
+	if( st ) {
+		if( ignoreUnknownMemeber() ) {
+			axTempStringA	tmp;
+			
+			for(;;) {
+				st = nextToken();			if( !st ) return st;
+				st = getMemberName( tmp );	if( !st ) return st;
+				_logIgnoreMember( tmp );
+				st = skipValue();			if( !st ) return st;
+				if( checkToken("}") ) break;
+			}
+		}
+	}
+	
 	st = checkToken("}");		if( !st ) return st;
 	st = nextToken();			if( !st ) return st;
 	return 0;
+}
+
+void axJsonParser::_logIgnoreMember( const char* name ) {
+	ax_log("Json({?}:{?})  ignore member [{?}]", lineNo(), charNo(), name );
 }
 
 axStatus axJsonParser::beginArray( const char* name ) {
