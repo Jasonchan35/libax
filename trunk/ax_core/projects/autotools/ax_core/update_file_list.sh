@@ -8,7 +8,7 @@ add_src_dir() {
 }
 
 #===== add scan folder here ====
-add_src_dir "../../../src/core"
+add_src_dir "../../../src/"
 
 #====================
 

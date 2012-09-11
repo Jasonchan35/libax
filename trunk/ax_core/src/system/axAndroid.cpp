@@ -2,15 +2,13 @@
 
 #ifdef axOS_Android
 
-axTHREAD_LOCAL	JNIEnv*	 axAndroid::jni = NULL;
+axAndroid axAndroid::instance;
 
-axAndroid* axAndroid::getInstance() {
-	static axAndroid o;
-	return &o;
-}
+axTHREAD_LOCAL	JNIEnv*	 axAndroid::jni = NULL;
 
 axAndroid::axAndroid() {
 	jni = NULL;
+	jni_Activity = NULL;
 }
 
 void axAndroid::_destroy() {
@@ -23,13 +21,14 @@ const char* axAndroid::resourcePath() {
 
 axStatus	axAndroid::_create( JNIEnv* env, jobject activity ) {
  	axStatus	st;
-
+	
 	if( jni != NULL ) {
-		ax_log("error axAndroid already init");
+		ax_log("error axAndroid already init: {?}", jni );
 		return axStatus_Std::Java_JNI_not_found;
 	}
 	jni = env;
 	jni_Activity = activity;
+
 
 #define	FindClass( out, name ) \
 	out = jni->FindClass( name );	\
@@ -71,9 +70,10 @@ axStatus	axAndroid::_create( JNIEnv* env, jobject activity ) {
 	FindClass	( jni_Bitmap_class, "android/graphics/Bitmap" );
 	GetMethodID	( jni_Bitmap_class, jni_Bitmap_getPixels, "getPixels", "([IIIIIII)V");
 
-	FindClass	( jni_Activity_class, "com/awenix/libax/axGLApp" );
+	FindClass	( jni_Activity_class, "com/awenix/axcore/axGLApp" );
 	GetMethodID	( jni_Activity_class, jni_Activity_finish, "finish", "()V" );
 	GetMethodID	( jni_Activity_class, jni_Activity_getPackageResourcePath, "getPackageResourcePath", "()Ljava/lang/String;" );
+	
 
 //-------
  	jobject res_path = jni->CallObjectMethod( jni_Activity, jni_Activity_getPackageResourcePath );
@@ -81,7 +81,7 @@ axStatus	axAndroid::_create( JNIEnv* env, jobject activity ) {
  		ax_log("axApp.getPackageResourcePath() error");
  		return -1;
  	}
-
+	
  	st = getJString( resourcePath_, res_path );
  	if( !st ) {
 		ax_log("axApp.getPackageResourcePath() error 2");
@@ -144,11 +144,9 @@ jobject		axAndroid::toRect		( const axRect2i& rect ) {
 
 extern "C" {
 
-JNIEXPORT void Java_com_awenix_libax_axAndroid_jniOnInit		( JNIEnv* env, jobject obj, jobject activity ) {
-	axAndroid::jni = env;
-	ax_log("================== axAndroid_jniOnInit ===================");
-	axAndroid* an = axAndroid::getInstance();
-	an->_create( env, activity );
+JNIEXPORT void Java_com_awenix_axcore_axAndroid_jniOnInit ( JNIEnv* env, jobject obj, jobject activity ) {
+	ax_log("================== axAndroid_jniOnInit =================== ");
+	axAndroid::instance._create( env, activity );
 }
 
 }//extern "C"

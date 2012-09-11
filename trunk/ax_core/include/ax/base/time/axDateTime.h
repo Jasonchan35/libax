@@ -217,8 +217,30 @@ axStatus axDateTime::set(  const axTimeStamp &ts, bool _UTC  ) {
     return 0;
 }
 
+
+#if axOS_Android 
+
+
 inline
-axTimeStamp axDateTime::toTimeStamp() const { 
+axTimeStamp axDateTime::toTimeStamp() const {
+	struct tm _tm = to_tm();
+	double d;
+	if( UTC ) {
+		d = (double)timegm64   ( const_cast<tm*>(&_tm));
+	}else{
+		d = (double)timelocal64( const_cast<tm*>(&_tm));
+	}
+	
+	double int_part;
+	d += ax_modf( second, &int_part );
+	return d;
+}   
+
+
+#else 
+
+inline
+axTimeStamp axDateTime::toTimeStamp() const {
 	struct tm _tm = to_tm();
 	double d;
 	if( UTC ) {
@@ -231,6 +253,9 @@ axTimeStamp axDateTime::toTimeStamp() const {
 	d += ax_modf( second, &int_part );
 	return d;
 }   
+
+#endif
+
 
 #endif //axCOMPILER_GCC
 

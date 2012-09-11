@@ -2,6 +2,7 @@
 #define __axSpinLock_h__
 
 #include "../../base/common/ax_common.h"
+#include "axMutex.h"
 
 //! \ingroup base_thread
 //@{
@@ -25,8 +26,10 @@ public:
 	void unlock	()		{ OSSpinLockUnlock(&_spinlock); }
 private:
 	OSSpinLock _spinlock;
+
+
 		
-#elif axUSE_PTHREAD
+#elif axUSE_PTHREAD && !axOS_Android
 public:
 	axSpinLock	()		{ pthread_spin_init(&_spinlock, PTHREAD_PROCESS_PRIVATE); }
 	~axSpinLock	()		{ pthread_spin_destroy(&_spinlock); }
@@ -43,7 +46,15 @@ public:
 	void lock	()		{ EnterCriticalSection(&h_); }
 	void unlock	()		{ LeaveCriticalSection(&h_); }
 private:
-	CRITICAL_SECTION h_;	
+	CRITICAL_SECTION h_;
+	
+#else 
+public:
+	void lock	() { m_.lock(); }
+	void unlock () { m_.unlock(); }
+private:
+	axMutex m_;
+	
 #endif
 };
 
