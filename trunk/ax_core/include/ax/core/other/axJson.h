@@ -59,7 +59,7 @@ axStatus ax_json_serialize_value( S &s, T& value );
 axStatus	ax_to_json_str		( axIStringA & str, const char* sz, bool withQuote );
 axStatus	ax_from_json_str	( axIStringA & str, const char* sz, bool withQuote );
 
-class axJsonWriterBase: public axNonCopyable {
+class axJsonWriterBase: public axSerializerBase {
 public:
 	enum { k_name_mismatch = 4445 };
 };
@@ -108,13 +108,13 @@ public:
 	void	setCondense( bool b )	{ condense_ = b; }
 	bool	isCondense() const		{ return condense_; }
 	
-	class ScopeCondense : public axNonCopyable {
+	class Scope_JsonCondense : public axNonCopyable {
 	public:
-		ScopeCondense( axJsonWriter &s, bool b ) :writer(s) {
+		Scope_JsonCondense( axJsonWriter &s, bool b ) :writer(s) {
 			old = writer.isCondense();
 			writer.setCondense(b);
 		}
-		~ScopeCondense() {
+		~Scope_JsonCondense() {
 			writer.setCondense(old);
 		}
 	private:
@@ -167,8 +167,8 @@ public:
 		
 		if( memberMustInOrder_ ) {
 			if( checkToken("}") ) return 0;
-			if( checkToken(",") ) return nextToken();
-			return axStatus_Std::JSON_deserialize_format_error;
+			st = nextElement();			if( !st ) return st;
+			return 0;
 		}
 		return axStatus_Std::JSON_deserialize_internal_found;
 	}
@@ -213,10 +213,12 @@ public:
 	
 	bool	ignoreUnknownMemeber()	{ return ignoreUnknownMemeber_; }
 	bool	memberMustInOrder()		{ return memberMustInOrder_; }
-		
+	
+	void	_logIgnoreMember( const char* name );
+			
 private:
 	bool	ignoreUnknownMemeber_;
-	bool	memberMustInOrder_;
+	bool	memberMustInOrder_;	
 	
 	const axIStringA*	str_;
 	const char *		r_;
@@ -325,8 +327,7 @@ axStatus	ax_json_serialize_value ( axJsonParser &s, axDList<T> &v ) {
 			v.append( p.unref() );
 			
 			if( s.checkToken("]") ) break;	
-			st = s.checkToken(",");			if( !st ) return st;
-			st = s.nextToken();				if( !st ) return st;
+			st = s.nextElement();			if( !st ) return st;
 		}
 	}
 	st = s.endArrayValue();				if( !st ) return st;
@@ -350,18 +351,17 @@ axStatus ax_json_serialize_value( axJsonWriter &s, axIArray<T> &v ) {
 template< class T > inline
 axStatus ax_json_serialize_value( axJsonParser &s, axIArray<T> &v ) {
 	axStatus st;
-	st = s.beginArrayValue();			if( !st ) return st;
+	st = s.beginArrayValue();				if( !st ) return st;
 	if( ! s.checkToken("]") ) {
 		for(;;) {
 			st = v.incSize( 1 );			if( !st ) return st;
 			st = s.io_value( v.last() );	if( !st ) return st;
 			
 			if( s.checkToken("]") ) break;
-			st = s.checkToken(",");			if( !st ) return st;
-			st = s.nextToken();				if( !st ) return st;
+			st = s.nextElement();			if( !st ) return st;
 		}	
 	}
-	st = s.endArrayValue();				if( !st ) return st;
+	st = s.endArrayValue();					if( !st ) return st;
 	return 0;
 }
 
@@ -498,25 +498,22 @@ axStatus ax_json_serialize_object_value( axJsonParser &s, T &value ) {
 	
 	for(;;) {
 		st = ax_json_serialize_object_members( s, value );
-		if( s.memberMustInOrder() ) return st;
-		
-		if( st.code() == axStatus_Std::JSON_deserialize_internal_found ) {
-			if( s.checkToken(",") ) {
-				st = s.nextToken();		if( !st ) return st;
-				continue;		
+		if( ! s.memberMustInOrder() ) {		
+			if( st.code() == axStatus_Std::JSON_deserialize_internal_found ) {
+				if( s.checkToken(",") ) {
+					st = s.nextToken();		if( !st ) return st;
+					continue;		
+				}
+				if( s.checkToken("}") ) break;
+				return axStatus_Std::JSON_deserialize_format_error;
 			}
-			if( s.checkToken("}") ) break;
-			return axStatus_Std::JSON_deserialize_format_error;
-		}
-		
-		if( !st ) return st;
+		}		
 		
 		if( s.ignoreUnknownMemeber() ) {
 			if( s.checkToken("}") ) break;
 
-			st = s.io_value( tmp );	if( !st ) return st;
-			st = s.checkToken(":");	if( !st ) return st;
-			st = s.nextToken();		if( !st ) return st;
+			st = s.getMemberName( tmp );	if( !st ) return st;
+			s._logIgnoreMember( tmp );
 			st = s.skipValue();		if( !st ) return st;
 			continue;
 		}else{

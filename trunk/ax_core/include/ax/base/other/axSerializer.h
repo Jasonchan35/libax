@@ -63,7 +63,11 @@ template<class S, class T>	axStatus ax_serialize_io_vary32	( S &s, T &v );
 
 class axSerializerBase : public axNonCopyable{
 public:
-
+//dummy
+	class Scope_JsonCondense : public axNonCopyable {
+	public:
+		Scope_JsonCondense( axSerializerBase &s, bool b ) {}
+	};
 };
 
 class axLenSerializer : public axSerializerBase {
