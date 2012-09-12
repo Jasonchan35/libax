@@ -11,6 +11,8 @@
 
 enum { axStringFormat_ArgListMaxSize = 16 };
 
+template<class T> axStatus axStringFormat_out( axStringFormat &f, T & v );
+
 //--------
 class axStringFormat_FuncClass {
 public:
