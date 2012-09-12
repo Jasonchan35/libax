@@ -7,6 +7,7 @@
 
 #include "../math/all_math.h"
 #include "axLog.h"
+#include "../other/ax_objc.h"
 
 class axApp : public axNonCopyable {
 #ifdef __OBJC__

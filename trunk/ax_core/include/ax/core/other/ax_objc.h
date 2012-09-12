@@ -5,6 +5,7 @@
 
 #include "../common/axStatus.h"
 #include "../common/ax_utility.h"
+#include "../string/ax_string.h"
 
 class	axScope_NSAutoreleasePool : public axNonCopyable {
 public:
@@ -39,8 +40,30 @@ private:
 	T	p_;
 };
 
+template<class T> inline 
+axStatus axStringFormat_out( axStringFormat &f, const axNSObject<T>& value ) { return axStringFormat_out( f, value.obj() ); }
 
+inline
+NSString* ax_toNSString( const char *sz ) {
+	if( sz == NULL ) return @"";
+	return [NSString stringWithUTF8String: sz ];
+}
 
+inline
+NSString* ax_toNSString( const wchar_t *sz ) {
+	if( sz == NULL ) return @"";
+	axTempStringA lstr;	
+	if( ! lstr.set( sz ) ) return nil;
+	return ax_toNSString( lstr );
+}
+
+inline
+NSString* ax_toNSString( const axUChar *sz ) {
+	if( sz == NULL ) return @"";
+	axTempStringA lstr;	
+	if( ! lstr.set( sz ) ) return nil;
+	return ax_toNSString( lstr );
+}
 
 #endif //__ax_objc_h__
 

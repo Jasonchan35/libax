@@ -1,7 +1,7 @@
 #ifndef __axTimeStamp_h__
 #define __axTimeStamp_h__
 
-#include "../string/axString.h"
+#include "../string/axStringFormat.h"
 
 //! timestamp - UTC millisecond based on Unix epoch ( 1970-01-01 )
 class axTimeStamp {

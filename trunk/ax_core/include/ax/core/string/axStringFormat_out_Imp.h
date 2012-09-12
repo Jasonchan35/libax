@@ -2,7 +2,8 @@
 #ifndef __axStringFormat_out_Imp_h__
 #define __axStringFormat_out_Imp_h__
 
-#include "axStringFormat_Imp.h"
+#include "axStringFormat.h"
+#include "axStringFormat_helper.h"
 #include "ax_str_to.h"
 
 //! \ingroup base_string
@@ -108,7 +109,6 @@ inline axStatus axStringFormat_out_c_str( axStringFormat &f, const T*  value ) {
 
 inline axStatus axStringFormat_out( axStringFormat &f, const char*		value ) { return axStringFormat_out_c_str( f, value ); }
 inline axStatus axStringFormat_out( axStringFormat &f, const wchar_t*	value ) { return axStringFormat_out_c_str( f, value ); }
-inline axStatus axStringFormat_out( axStringFormat &f, const axUChar*	value ) { return axStringFormat_out_c_str( f, value ); }
 
 template< class T > inline 
 axStatus axStringFormat_out_char( axStringFormat &f, T value ) {
