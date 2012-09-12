@@ -1,121 +1,104 @@
 #pragma once
-#ifndef __axStringFormat_h__
-#define __axStringFormat_h__
+#ifndef	__axStringFormat_Imp_h__
+#define __axStringFormat_Imp_h__
 
-#include "ax_c_str.h"
-#include "../data_structure/axLocalArray.h"
-#include "../other/ax_objc.h"
+#include "axStringFormat_helper.h"
+
+//-------- axStringFormat implementation ---
 
 //! \ingroup base_string
 //@{
+/*!
+	ax_print("a={?}", a );
+	- {?}, using parameter in order
+	- {1}, using first parameter
+	- {2}, using second parameter
+	- {N}, using the Nth parameter
 
-
-enum { axStringFormat_ArgListMaxSize = 16 };
-
-class	axStringFormat;
-
-axStatus axStringFormat_out( axStringFormat &f, uint8_t		value );
-axStatus axStringFormat_out( axStringFormat &f, uint16_t	value );
-axStatus axStringFormat_out( axStringFormat &f, uint32_t	value );
-axStatus axStringFormat_out( axStringFormat &f, uint64_t	value );
-axStatus axStringFormat_out( axStringFormat &f, int8_t		value );
-axStatus axStringFormat_out( axStringFormat &f, int16_t		value );
-axStatus axStringFormat_out( axStringFormat &f, int32_t		value );
-axStatus axStringFormat_out( axStringFormat &f, int64_t		value );
-
-axStatus axStringFormat_out( axStringFormat &f, unsigned long value );
-axStatus axStringFormat_out( axStringFormat &f, long value );
-axStatus axStringFormat_out( axStringFormat &f, unsigned long long value );
-axStatus axStringFormat_out( axStringFormat &f, long long value );
-
-
-axStatus axStringFormat_out( axStringFormat &f, float		value );
-axStatus axStringFormat_out( axStringFormat &f, double		value );
-axStatus axStringFormat_out( axStringFormat &f, bool		value );
-
-axStatus axStringFormat_out( axStringFormat &f, char		value );
-axStatus axStringFormat_out( axStringFormat &f, wchar_t		value );
-
-axStatus axStringFormat_out( axStringFormat &f, const char*		value );
-axStatus axStringFormat_out( axStringFormat &f, const wchar_t*  value );
-axStatus axStringFormat_out( axStringFormat &f, const axUChar*  value );
-
-inline axStatus axStringFormat_out( axStringFormat &f, axSize	value ) { return axStringFormat_out( f, value.asNative() ); }
-inline axStatus axStringFormat_out( axStringFormat &f, char*	value ) { return axStringFormat_out( f, (const char*)   value ); }
-inline axStatus axStringFormat_out( axStringFormat &f, wchar_t*	value ) { return axStringFormat_out( f, (const wchar_t*)value ); }
-inline axStatus axStringFormat_out( axStringFormat &f, axUChar*	value ) { return axStringFormat_out( f, (const axUChar*)value ); }
-
-axStatus axStringFormat_out( axStringFormat &f, const void* p );
-
-template<class T> inline
-axStatus axStringFormat_out( axStringFormat &f, T*	  value ) { return axStringFormat_out( f, (const void* &)value ); }
-
-template<class T> inline
-axStatus axStringFormat_out( axStringFormat &f, const T& value ) { return value.toStringFormat( f ); }
-//---------
-
-#ifdef __OBJC__
-
-template<class T> inline axStatus axStringFormat_out( axStringFormat &f, const axNSObject<T>& value ) { return axStringFormat_out( f, value.obj() ); }
-
-#endif //__OBJC__
-
-axStatus	axStringFormat_out( axStringFormat &f, axStatus value );
-
-//--------
-class axStringFormat_FuncClass {
+	- {?:option}, anything follow ':' is option passed to formater
+	- '{{', for single '{' print out
+*/
+class	axStringFormat : public axNonCopyable {
 public:
-	axStatus func( axStringFormat &f ) { assert(false); return -1; }
-	const void* data_;
-};
-typedef axStatus (axStringFormat_FuncClass::*StringFormat_Func)( axStringFormat &f );
+	typedef	axStringFormat_Arg		Arg;
+	typedef	axStringFormat_ArgList	ArgList;
 
-template< class T >
-class axStringFormat_FuncClass_T : public axStringFormat_FuncClass {
-public:
-	axStatus func( axStringFormat &f ) { return axStringFormat_out( f, *data() ); }
-	const T* data() { return (const T*)data_; }
-};
+	axStringFormat();
 
-class axStringFormat_Arg {
-public:
-	axStringFormat_Arg() { data_=NULL; callback_=NULL; }
+	template<class T>	axStatus	out( const T&v ) { return axStringFormat_out( *this, v ); }
+	
+	axStatus	put	( char	  ch );
+	axStatus	put	( wchar_t ch );
 
-	template<class T> 
-	axStringFormat_Arg( const T &v )	{ 
-		data_ = &v;
-		callback_ = static_cast< StringFormat_Func > ( &axStringFormat_FuncClass_T<T>::func );
-	}
+	axStatus	put	( const char*	 sz );
+	axStatus	put	( const wchar_t* sz );
 
-	axStatus	call( axStringFormat &f ) const {
-		axStringFormat_FuncClass	wrapper;
-		wrapper.data_ = data_;
-		return (wrapper.*callback_)( f );
-	}
+	axStatus	put	( const char*	 sz, axSize len );
+	axStatus	put	( const wchar_t* sz, axSize len );
 
-	axStatus	onTake( axStringFormat_Arg &src ) { operator=( src ); return 0; }
+	axStatus	repeat( char    ch, axSize len );
+	axStatus	repeat( wchar_t ch, axSize len );
+	
+	axStatus	format_ArgList( const char*    fmt, const ArgList &list );
+	axStatus	format_ArgList( const wchar_t* fmt, const ArgList &list );
 
-	const void*	data() const { return data_; }
+	axStatus	_process( const char*    fmt, const ArgList &list );
+	axStatus	_process( const wchar_t* fmt, const ArgList &list );
+
+	void		_setOutput( axIStringA &str )		{ strA_ = &str; }
+	void		_setOutput( axIStringW &str )		{ strW_ = &str; }
+
+	
+	//!macro - axStatus	format( const char* fmt, ... );
+	axExpandArgList1( axStatus, format,	const char*,	const axStringFormat_Arg&, axStringFormat_ArgList, format_ArgList )
+	axExpandArgList1( axStatus, format,	const wchar_t*,	const axStringFormat_Arg&, axStringFormat_ArgList, format_ArgList )
+	
+	axStringA_<64>		opt;
 private:
-	const void*			data_;
-	StringFormat_Func	callback_;
+	template<class T>
+	axStatus	_processT( const T*    fmt, const ArgList &list );
+	axIStringA*		strA_;
+	axIStringW*		strW_;
 };
-
-class axStringFormat_ArgList : public axLocalArray< axStringFormat_Arg, axStringFormat_ArgListMaxSize > {
-	typedef	axLocalArray< axStringFormat_Arg, axStringFormat_ArgListMaxSize >	B;
-public:
-	axStringFormat_ArgList&	operator<<( const axStringFormat_Arg &a ) { 
-		axStatus st;
-		
-		st = B::append( a );	assert( st );
-		return *this; 
-	}
-
-private:
-	axStatus	toStringFormat( axStringFormat &f ) const { assert(false); return -1; } // ArgList.toString is not allowed
-};
-
 //@}
 
-#endif //__ax_StringFormat_h__
 
+template< class T > inline
+axStatus	axIArray<T>::toStringFormat( axStringFormat &f ) const {
+	axSize i;
+	f.put( '[' );
+	for( i=0; i<size(); i++ ) {
+		if( i > 0 ) f.put( ", " );
+		f.format( "{?}", indexOf(i) );
+	}
+	f.put( ']' );
+	return 0;
+}
+
+
+template<class T> inline
+axStatus	axDList<T>::toStringFormat( axStringFormat &f ) const {
+	T*	p = head();
+	axSize i = 0;
+	f.put( '[' );
+	for( ; p; p=p->next(), i++ ) {
+		if( i > 0 ) f.put( ", " );
+		f.format( "{?}", *p );
+	}
+	f.put( ']' );
+	return 0;
+}
+
+template<class T, size_t CHUNK_SIZE, size_t CHUNK_PTR_LOCAL_BUF> inline
+axStatus  axChunkArray<T,CHUNK_SIZE,CHUNK_PTR_LOCAL_BUF>::toStringFormat( axStringFormat &f ) const {
+	axSize i;
+	f.put( '[' );
+	for( i=0; i<size(); i++ ) {
+		if( i > 0 ) f.put( ", " );
+		f.format( "{?}", indexOf(i) );
+	}
+	f.put( ']' );
+	return 0;
+}
+
+#endif //__axStringFormat_Imp_h__

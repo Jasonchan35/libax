@@ -154,6 +154,25 @@ inline int	 ax_strncasecmp( const wchar_t* s1, const wchar_t* s2, size_t n ) { r
 inline int	 ax_strncasecmp( const axUChar* s1, const axUChar* s2, size_t n ) { return _ax_strncasecmp(s1,s2,n); }
 
 template<class T> inline
+T* _ax_strcasechr( T* sz, T ch ) {
+	T c = ax_toupper(ch);
+	if( ! sz ) return NULL;
+	for(;*sz;sz++) {
+		if( ax_toupper(*sz) == c ) return sz;
+	}
+	return NULL;
+}
+
+inline	      char* 	ax_strcasechr(       char*    sz, char    ch ) { return _ax_strcasechr(sz,ch); }
+inline	      wchar_t* 	ax_strcasechr(       wchar_t* sz, wchar_t ch ) { return _ax_strcasechr(sz,ch); }
+inline	      axUChar* 	ax_strcasechr(       axUChar* sz, axUChar ch ) { return _ax_strcasechr(sz,ch); }
+
+inline	const char* 	ax_strcasechr( const char*    sz, char    ch ) { return _ax_strcasechr((char*   )sz,ch); }
+inline	const wchar_t* 	ax_strcasechr( const wchar_t* sz, wchar_t ch ) { return _ax_strcasechr((wchar_t*)sz,ch); }
+inline	const axUChar* 	ax_strcasechr( const axUChar* sz, axUChar ch ) { return _ax_strcasechr((axUChar*)sz,ch); }
+
+
+template<class T> inline
 T* _ax_strcasestr( T* big, T* little ) {
 	size_t big_len    = ax_strlen( big );
 	size_t little_len = ax_strlen( little );
