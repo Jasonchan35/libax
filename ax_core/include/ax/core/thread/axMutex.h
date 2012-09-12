@@ -1,8 +1,9 @@
 #ifndef __axMutex_h__
 #define __axMutex_h__
 
-#include "../../base/common/axStatus.h"
-#include "../../base/common/ax_utility.h"
+#include "../common/ax_common.h"
+
+
 //! \addtogroup thread
 //@{
 class axMutex : public axNonCopyable {

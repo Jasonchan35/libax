@@ -1,7 +1,8 @@
 #ifndef __axFile_h__
 #define __axFile_h__
 
-#include <ax/ax_base.h>
+#include "../common/ax_common.h"
+#include "../time/axTimeStamp.h"
 
 class axFile {
 public:

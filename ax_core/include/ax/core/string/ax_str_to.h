@@ -3,7 +3,7 @@
 #define __ax_str_to_h__
 
 #include "axString.h"
-#include "../../base/data_structure/axArray_types.h"
+#include "../data_structure/axArray_types.h"
 
 //! \ingroup base_string
 //@{

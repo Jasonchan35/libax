@@ -1,7 +1,7 @@
 #ifndef __axThreadPool_h__
 #define __axThreadPool_h__
 
-#include "../../base/data_structure/axDList.h"
+#include "../data_structure/axDList.h"
 #include "axThread.h"
 #include "axAtomicInt.h"
 #include "axCondVar.h"

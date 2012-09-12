@@ -1,8 +1,8 @@
 #ifndef __axExecute_h__
 #define __axExecute_h__
 
-#include "../../ax_base.h"
 #include "../thread/axAtomicQueue.h"
+#include "../string/axString.h"
 
 axStatus ax_exec		( int& cmd_ret, const char* cmd, const char*         std_in=NULL, axIStringA*   std_out=NULL, axIStringA*   std_err=NULL, const char* env=NULL );
 axStatus ax_exec_bin	( int& cmd_ret, const char* cmd, const axIByteArray* std_in=NULL, axIByteArray* std_out=NULL, axIByteArray* std_err=NULL, const char* env=NULL );

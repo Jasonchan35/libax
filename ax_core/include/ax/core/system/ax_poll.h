@@ -1,7 +1,8 @@
 #ifndef __ax_poll_h__
 #define __ax_poll_h__
 
-#include <ax/ax_base.h>
+#include "../data_structure/axArray_types.h"
+
 
 #if axOS_WIN && (_WIN32_WINNT < 0x0600)
 //! don't change it since this struct must as same as Unix pollfd

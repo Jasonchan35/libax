@@ -1,7 +1,7 @@
 #ifndef __axFileStream_h__
 #define __axFileStream_h__
 
-#include "../../ax_base.h"
+#include "../string/axString.h"
 
 /*!	ANSI C File Stream
  

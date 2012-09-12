@@ -1,7 +1,7 @@
 #ifndef __axDir_h__
 #define __axDir_h__
 
-#include <ax/ax_base.h>
+#include "../string/axString.h"
 
 class axDir : public axNonCopyable {
 public:

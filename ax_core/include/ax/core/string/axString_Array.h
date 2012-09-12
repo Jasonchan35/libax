@@ -78,7 +78,7 @@ axStatus	axString_Array<T> :: tokenize ( const char* sz ) {
 	
 	const char* sep = " \t\r\n";
 	
-	T* p = sz;
+	const T* p = sz;
 	
 	bool inQuote = false;
 	bool started = false;

@@ -1,2 +1,1 @@
-#include <ax/ax_base.h>
-#include <ax/ax_core.h>
+#include <ax/core/common/ax_common.h>

@@ -2,6 +2,7 @@
 #define __axAtomicQueue_h__
 
 #include "axCondVar.h"
+#include "../data_structure/axDList.h"
 
 //! Multi-Thread Safe Queue 
 template<class T>

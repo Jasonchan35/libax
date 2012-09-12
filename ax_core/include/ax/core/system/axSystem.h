@@ -1,7 +1,7 @@
 #ifndef __axSystem_h__
 #define __axSystem_h__
 
-#include <ax/base/string/axIString.h>
+#include "../string/axIString.h"
 
 //! \ingroup base_platform
 //@{

@@ -2,7 +2,7 @@
 #define __axSerializer_Helper_h__
 
 
-#include "../../base/other/axSerializer.h"
+#include "../other/axSerializer.h"
 #include "../file_system/axFileSystem.h"
 
 template<class T> inline 

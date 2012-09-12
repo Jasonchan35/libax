@@ -1,9 +1,9 @@
 #ifndef __ax_log_h__
 #define __ax_log_h__
 
-#include "../../base/data_structure/axPtr.h"
-#include "../../base/string/ax_string.h"
-#include "../../base/time/axDateTime.h"
+#include "../data_structure/axPtr.h"
+#include "../string/ax_string.h"
+#include "..//time/axDateTime.h"
 #include "../thread/axThreadPool.h"
 
 

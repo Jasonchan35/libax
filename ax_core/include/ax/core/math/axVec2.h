@@ -1,8 +1,8 @@
 #ifndef __axVec2_h__
 #define __axVec2_h__
 
-#include "../../base/common/ax_common.h"
-#include "../../base/string/ax_string.h"
+#include "../common/ax_common.h"
+#include "../string/ax_string.h"
 #include "../other/axJson.h"
 
 //! \addtogroup math

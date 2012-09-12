@@ -43,12 +43,16 @@ inline axStatus ax_json_serialize_value( axJsonWriter &s, vector3 &value ) {
 }
 */
 
-#include "../../base/data_structure/axIArray.h"
-#include "../../base/data_structure/axDList.h"
-#include "../../base/data_structure/axAutoPtr.h"
-#include "../../base/string/axIString.h"
-#include "../../base/string/ax_utf8.h"
+#include "../data_structure/axIArray.h"
+#include "../data_structure/axDList.h"
+#include "../data_structure/axAutoPtr.h"
+#include "../string/axString.h"
+#include "../string/axConstString.h"
+#include "../string/axLocalString.h"
+#include "../string/axTinyString.h"
+#include "../string/ax_utf8.h"
 #include "../file_system/axFileSystem.h"
+#include "../other/axSerializer.h"
 
 class axJsonWriter;
 class axJsonParser;
