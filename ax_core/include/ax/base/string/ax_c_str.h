@@ -20,6 +20,17 @@ bool ax_ishex( T ch ) {
 	return false;
 }
 
+template<class T> inline
+T ax_char_escape( T c ) {
+	switch( c ) {
+		case 'n': return '\n';
+		case 'r': return '\r';
+		case 'b': return '\b';
+		case 't': return '\t';
+	}
+	return c;
+}
+
 template<class T> inline bool	ax_isupper( T  ch ) { return ( ch>='A' && ch <= 'Z' ); }
 template<class T> inline bool	ax_islower( T  ch ) { return ( ch>='a' && ch <= 'z' ); }
 

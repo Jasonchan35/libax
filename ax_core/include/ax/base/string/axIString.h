@@ -78,7 +78,6 @@ public:
 	axStatus		trimTail				( const T* char_list = defaultTrimChars() );
 	axStatus		trimBoth				( const T* char_list = defaultTrimChars() );
 	
-	
 	//! Must keep the buf end with zero and size is correct
 	T*				_getInternalBufferPtr	();
 	axStatus		_recalcSizeByZeroEnd	();
@@ -869,8 +868,6 @@ axStatus	axIString_<T> :: trimBoth( const T* char_list ) {
 	st = trimTail(char_list);	if( !st ) return st;
 	return 0;
 }
-
-
 
 //@}
 

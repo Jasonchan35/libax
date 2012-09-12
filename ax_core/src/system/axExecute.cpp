@@ -29,9 +29,9 @@ public:
 
 };
 
-axStatus ax_exec( const char* cmd, int& cmd_ret, const char*   std_in, axIStringA*   std_out, axIStringA*   std_err ) {
+axStatus ax_exec( int& cmd_ret, const char* cmd, const char*   std_in, axIStringA*   std_out, axIStringA*   std_err, const char* env ) {
 	axExecuteString	p( std_in, std_out, std_err );
-	return p.exec( cmd, cmd_ret );
+	return p.exec( cmd_ret, cmd, env );
 }
 
 class axExecuteBinary : public axExecute {
@@ -61,13 +61,36 @@ public:
 	axIByteArray* err_;
 };
 
-axStatus ax_exec_bin( const char* cmd, int& cmd_ret, const axIByteArray* std_in, axIByteArray* std_out, axIByteArray* std_err ) {
+axStatus ax_exec_bin( int& cmd_ret, const char* cmd, const axIByteArray* std_in, axIByteArray* std_out, axIByteArray* std_err, const char* env ) {
 	axExecuteBinary	p( std_in, std_out, std_err );
-	return p.exec( cmd, cmd_ret );
+	return p.exec( cmd_ret, cmd, env );
 }
 
+#if axOS_MacOSX
 
-#if axOS_UNIX && (! axOS_iOS)
+axExecute::axExecute() {
+//	env = nil;
+}
+
+axExecute::~axExecute() {
+}
+
+axStatus axExecute::exec( int& cmd_ret, const char* cmd, const char* env ) {
+	
+
+
+/*
+	NSTask *task = [NSTask launchedTaskWithLaunchPath: ax_toNSString( exe ) 
+							arguments: [NSArray arrayWithObjects: @"-batch", @"-script", ax_toNSString( mel ), nil] ];
+*/
+	return 0;
+}
+
+#endif //axOS_MacOSX
+
+
+
+#if axOS_UNIX && (! axOS_iOS) && ( ! axOS_MacOSX )
 
 class axExecute_Pipe {
 public:
@@ -91,7 +114,7 @@ axExecute::axExecute() {
 axExecute::~axExecute() {
 }
 
-axStatus axExecute::exec( const char* cmd, int& cmd_ret ) {
+axStatus axExecute::exec( int& cmd_ret, const char* cmd ) {
 	axStatus st;
 	cmd_ret = -1;
 
@@ -367,7 +390,7 @@ axStatus	escpaceQuote( axIStringA &o, const char* sz ) {
 	return 1;
 }
 
-axStatus axExecute::exec( const char* cmd, int& cmd_ret ) {
+axStatus axExecute::exec( int& cmd_ret, const char* cmd ) {
 	axStatus st;
 
 	axExecute_Pipe	p_in;	st = p_in.create();		if( !st ) return st;
