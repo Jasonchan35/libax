@@ -3,7 +3,6 @@
 #define __axStringFormat_out_Imp_h__
 
 #include "axStringFormat.h"
-#include "axStringFormat_helper.h"
 #include "ax_str_to.h"
 
 //! \ingroup base_string
