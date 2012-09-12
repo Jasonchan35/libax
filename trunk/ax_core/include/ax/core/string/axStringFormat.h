@@ -2,7 +2,10 @@
 #ifndef	__axStringFormat_Imp_h__
 #define __axStringFormat_Imp_h__
 
-#include "axStringFormat_helper.h"
+#include "axStringFormat_Arg.h"
+#include "axString.h"
+#include "../data_structure/axDList.h"
+#include "../data_structure/axChunkArray.h"
 
 //-------- axStringFormat implementation ---
 

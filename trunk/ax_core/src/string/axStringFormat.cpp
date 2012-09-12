@@ -7,6 +7,7 @@
 //
 
 #include <ax/core/string/axStringFormat.h>
+#include <ax/core/string/ax_str_to.h>
 
 axStringFormat::axStringFormat() {
 	strA_ = NULL;
