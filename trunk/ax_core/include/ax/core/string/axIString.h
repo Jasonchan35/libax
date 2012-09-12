@@ -14,7 +14,7 @@ class axLenSerializer;
 //! \ingroup base_string
 //@{
 
-template<class T> class axIString_;
+template<class T> class 		axIString_;
 typedef	axIString_<char>		axIStringA;
 typedef	axIString_<wchar_t>		axIStringW;
 
