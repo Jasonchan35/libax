@@ -7,14 +7,12 @@ template< class T >
 class axString_Array : public axArray< axString_<T>, 8 > {
 	typedef axArray< axString_<T>, 8 > B;
 public:
-	axStatus	sortNoCase( bool ascending = true );
+	axStatus	sortNoCase		( bool ascending = true );
+	bool		containsNoCase	( const T *sz ) const;
 	
-	bool		containsNoCase( const T *sz ) const;
-	
-	axStatus	append( const axString_<T> &v ) { return B::append( v ); }
-	
-	axStatus	append( const T *sz );
-	
+	axStatus	append			( const axString_<T> &v ) { return B::append( v ); }
+	axStatus	append			( const T *sz );
+	axStatus	tokenize 		( const char* sz );
 };
 
 typedef axString_Array<char>		axStringA_Array;
@@ -69,6 +67,67 @@ axStatus	axString_Array<T>::sortNoCase( bool ascending ) {
 	}
 	return 0;
 }
+
+
+template< class T > inline
+axStatus	axString_Array<T> :: tokenize ( const char* sz ) {
+	axStatus st;
+	B::resize(0);
+	
+	if( ! sz ) return 0;	
+	
+	const char* sep = " \t\r\n";
+	
+	T* p = sz;
+	
+	bool inQuote = false;
+	bool started = false;
+	
+	for( ;*p; p++ ) {
+		if( inQuote ) {
+			if( *p == '\\' ) {
+				p++;
+				st = B::last().append( ax_char_escape(*p)  );	if( !st ) return st;
+				continue;
+			}
+			
+			if( *p == '\"' ) {
+				inQuote = false;
+				continue;
+			}
+			
+			st = B::last().append(*p);	if( !st ) return st;
+		}else{
+			if( ax_strchr( sep, *p ) ) {
+				started = false;
+				continue;
+			}
+
+			if( *p == '\"') {
+				inQuote = true;
+				st = B::incSize(1);
+				continue;
+			}
+
+			if( ! started ) {
+				st = B::incSize(1);		if( !st ) return st;				
+			}
+			
+			if( *p == '\\' ) {
+				p++;
+				st = B::last().append( ax_char_escape(*p)  );	if( !st ) return st;
+				continue;				
+			}
+			
+			st = B::last().append( *p );	if( !st ) return st;
+			started = true;
+		}
+	}
+	
+	return 0;
+}
+
+
 
 #endif //__axString_Array_h__
 

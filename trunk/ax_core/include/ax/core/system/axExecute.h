@@ -4,8 +4,8 @@
 #include "../../ax_base.h"
 #include "../thread/axAtomicQueue.h"
 
-axStatus ax_exec		( const char* cmd, int& cmd_ret, const char*         std_in=NULL, axIStringA*   std_out=NULL, axIStringA*   std_err=NULL );
-axStatus ax_exec_bin	( const char* cmd, int& cmd_ret, const axIByteArray* std_in=NULL, axIByteArray* std_out=NULL, axIByteArray* std_err=NULL );
+axStatus ax_exec		( int& cmd_ret, const char* cmd, const char*         std_in=NULL, axIStringA*   std_out=NULL, axIStringA*   std_err=NULL, const char* env=NULL );
+axStatus ax_exec_bin	( int& cmd_ret, const char* cmd, const axIByteArray* std_in=NULL, axIByteArray* std_out=NULL, axIByteArray* std_err=NULL, const char* env=NULL );
 
 class axExecute : public axNonCopyable {
 public:
@@ -16,7 +16,8 @@ public:
 	virtual	void on_stdout	( const axIByteArray &buf ) = 0;
 	virtual	void on_stderr	( const axIByteArray &buf ) = 0;
 
-	axStatus	exec( const char* cmd, int& cmd_ret );
+	//! env = "var1=value1\0var2=value2\0"
+	axStatus	exec( int & cmd_ret, const char* cmd, const char* env );
 
 #if axOS_WIN
 	class Node : public axDListNode< Node, true > {
@@ -33,6 +34,10 @@ public:
 		axByteArray	buf;
 	};
 	axAtomicQueue<Node>	q_;
+#endif
+
+#if axOS_MaxOSX
+	NSDictionary* env;
 #endif
 
 };

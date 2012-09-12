@@ -1,7 +1,6 @@
 #ifndef __ax_str_encode_h__
 #define __ax_str_encode_h__
 
-
 static const char    k_ax_base64_encode_table[] = 
 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
