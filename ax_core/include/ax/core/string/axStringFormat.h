@@ -104,4 +104,6 @@ axStatus  axChunkArray<T,CHUNK_SIZE,CHUNK_PTR_LOCAL_BUF>::toStringFormat( axStri
 	return 0;
 }
 
+#include "axStringFormat_out_Imp.h"
+
 #endif //__axStringFormat_Imp_h__
