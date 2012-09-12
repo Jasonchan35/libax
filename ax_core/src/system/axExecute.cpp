@@ -141,7 +141,7 @@ axExecute::axExecute() {
 axExecute::~axExecute() {
 }
 
-axStatus axExecute::exec( int& cmd_ret, const char* cmd ) {
+axStatus axExecute::exec( int& cmd_ret, const char* cmd, const axEnvVarArray* env ) {
 	axStatus st;
 	cmd_ret = -1;
 
