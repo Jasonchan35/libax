@@ -191,7 +191,6 @@ axStatus _ax_decodeURI( axIString_<T> &dst, const T* src ) {
 	return 0;
 }
 
-
 axStatus ax_decodeURI( axIStringA &dst, const char*		src ) { return _ax_decodeURI(dst,src); }
 axStatus ax_decodeURI( axIStringW &dst, const wchar_t*	src ) { return _ax_decodeURI(dst,src); }
 

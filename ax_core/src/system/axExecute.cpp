@@ -1,5 +1,6 @@
 #include <ax/core/system/axExecute.h>
 #include <ax/core/system/axLog.h>
+#include <ax/core/other/ax_objc.h>
 
 class axExecuteString : public axExecute {
 public:
@@ -29,7 +30,7 @@ public:
 
 };
 
-axStatus ax_exec( int& cmd_ret, const char* cmd, const char*   std_in, axIStringA*   std_out, axIStringA*   std_err, const char* env ) {
+axStatus ax_exec( int& cmd_ret, const char* cmd, const char*   std_in, axIStringA*   std_out, axIStringA*   std_err, const axEnvVarArray* env ) {
 	axExecuteString	p( std_in, std_out, std_err );
 	return p.exec( cmd_ret, cmd, env );
 }
@@ -61,7 +62,7 @@ public:
 	axIByteArray* err_;
 };
 
-axStatus ax_exec_bin( int& cmd_ret, const char* cmd, const axIByteArray* std_in, axIByteArray* std_out, axIByteArray* std_err, const char* env ) {
+axStatus ax_exec_bin( int& cmd_ret, const char* cmd, const axIByteArray* std_in, axIByteArray* std_out, axIByteArray* std_err, const axEnvVarArray* env ) {
 	axExecuteBinary	p( std_in, std_out, std_err );
 	return p.exec( cmd_ret, cmd, env );
 }
@@ -69,20 +70,46 @@ axStatus ax_exec_bin( int& cmd_ret, const char* cmd, const axIByteArray* std_in,
 #if axOS_MacOSX
 
 axExecute::axExecute() {
-//	env = nil;
 }
 
 axExecute::~axExecute() {
 }
 
-axStatus axExecute::exec( int& cmd_ret, const char* cmd, const char* env ) {
+axStatus axExecute::exec( int& cmd_ret, const char* cmd, const axEnvVarArray* env ) {
+	axStatus st;
+	axStringA_Array	arg;
+	st = arg.tokenize( cmd );		if( !st ) return st;
+
+	if( arg.size() <= 0 ) return -1;
+
+	NSArray* arr = [NSArray array];
 	
+	for( size_t i=1; i<arg.size(); i++ ) {
+		arr = [arr arrayByAddingObject:ax_toNSString(arg[i])];
+	}
 
+	NSTask *task = [[[NSTask alloc] init] autorelease];
 
-/*
-	NSTask *task = [NSTask launchedTaskWithLaunchPath: ax_toNSString( exe ) 
-							arguments: [NSArray arrayWithObjects: @"-batch", @"-script", ax_toNSString( mel ), nil] ];
-*/
+//	[NSTask launchedTaskWithLaunchPath: ax_toNSString(arg[0]) arguments: arr];
+	
+	[task setLaunchPath:ax_toNSString(arg[0])];
+	[task setArguments:arr];
+	
+	if( env ) {
+		NSMutableDictionary* dicEnv = [ [NSDictionary dictionary] mutableCopy];
+		for( size_t i=0; i<env->size(); i++ ) {
+			const axEnvVar & e = env->indexOf(i);
+			[dicEnv setValue:ax_toNSString(e.value) forKey:ax_toNSString(e.name)];		
+		}
+		[task setEnvironment:dicEnv];
+	}
+	
+	[task launch];
+	
+	[task waitUntilExit];
+	
+	cmd_ret = [task terminationStatus];
+
 	return 0;
 }
 
