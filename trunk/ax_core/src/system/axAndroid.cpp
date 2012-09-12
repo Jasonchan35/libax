@@ -1,4 +1,5 @@
 #include <ax/core/system/axAndroid.h>
+#include <ax/core/system/axLog.h>
 
 #ifdef axOS_Android
 

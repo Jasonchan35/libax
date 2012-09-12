@@ -846,6 +846,23 @@
 		};
 /* End PBXHeadersBuildPhase section */
 
+/* Begin PBXLegacyTarget section */
+		9640E1611600E3D900F9D037 /* ax_core_android */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = 9640E1621600E3D900F9D037 /* Build configuration list for PBXLegacyTarget "ax_core_android" */;
+			buildPhases = (
+			);
+			buildToolPath = "/Users/jason/android/android-ndk-r8b/ndk-build";
+			buildWorkingDirectory = ../../Eclipse/Android;
+			dependencies = (
+			);
+			name = ax_core_android;
+			passBuildSettingsInEnvironment = 0;
+			productName = ax_core_android;
+		};
+/* End PBXLegacyTarget section */
+
 /* Begin PBXNativeTarget section */
 		EAD528A9154405160034A2DD /* ax_core */ = {
 			isa = PBXNativeTarget;
@@ -885,6 +902,7 @@
 			projectRoot = "";
 			targets = (
 				EAD528A9154405160034A2DD /* ax_core */,
+				9640E1611600E3D900F9D037 /* ax_core_android */,
 			);
 		};
 /* End PBXProject section */
@@ -943,6 +961,27 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		9640E1631600E3D900F9D037 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUGGING_SYMBOLS = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		9640E1641600E3D900F9D037 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		EAD528AC154405160034A2DD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EA9F4E1D154414BC00C9459E /* ax_core build.xcconfig */;
@@ -1009,6 +1048,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		9640E1621600E3D900F9D037 /* Build configuration list for PBXLegacyTarget "ax_core_android" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9640E1631600E3D900F9D037 /* Debug */,
+				9640E1641600E3D900F9D037 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		EAD528A4154405160034A2DD /* Build configuration list for PBXProject "ax_core" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
