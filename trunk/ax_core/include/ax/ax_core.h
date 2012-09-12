@@ -1,7 +1,26 @@
 #ifndef	__ax_core_h__
 #define __ax_core_h__
 
-#include "ax_base.h"
+#include "core/platform/ax_platform.h"
+
+#include "core/string/ax_string.h"
+
+#include "core/data_structure/axAutoPtr.h"
+#include "core/data_structure/axWeakPtr.h"
+#include "core/data_structure/axDList.h"
+#include "core/data_structure/axTinyList.h"
+#include "core/data_structure/axArray_types.h"
+#include "core/data_structure/axHashTable.h"
+#include "core/data_structure/axChunkArray.h"
+
+#include "core/time/axDateTime.h"
+#include "core/time/axTimeStamp.h"
+#include "core/time/axStopWatch.h"
+
+#include "core/other/axSerializer.h"
+
+#include "core/other/ax_objc.h"
+#include "core/other/axEventHook.h"
 
 #include "core/system/axSharedLibrary.h"
 #include "core/system/axApp.h"
@@ -34,7 +53,22 @@
 
 
 #ifdef axCOMPILER_VC
+	#pragma comment( lib, "Ws2_32.lib" )
+	#pragma comment( lib, "User32.lib" )
+	#pragma comment( lib, "gdi32.lib" )
+	#pragma comment( lib, "shell32.lib" )
 	#pragma comment( lib, "winmm.lib" )
+	#pragma comment( lib, "comctl32.lib" )
+	#pragma comment( lib, "opengl32.lib" )
+	#pragma comment( lib, "glu32.lib" )
+	#pragma comment( lib, "Ole32.lib" )
+	#pragma comment( lib, "Oleaut32.lib" )
+	#pragma comment( lib, "Comdlg32.lib" )
+	#pragma comment( lib, "Rpcrt4.lib" )
+	#pragma comment( lib, "Advapi32.lib" )
+	#pragma comment( lib, "Shell32.lib" )
+	#pragma comment( lib, "winmm.lib" )
+	
 	#pragma comment( lib, "ax_core.lib" )
 #endif
 

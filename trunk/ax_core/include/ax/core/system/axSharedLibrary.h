@@ -1,7 +1,7 @@
 #ifndef __axSharedLibrary_h__
 #define __axSharedLibrary_h__
 
-#include "../../ax_base.h"
+#include "../common/ax_common.h"
 
 //! \ingroup core_system
 //@{

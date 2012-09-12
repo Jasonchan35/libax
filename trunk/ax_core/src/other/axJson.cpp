@@ -7,6 +7,7 @@
 //
 
 #include <ax/core/other/axJson.h>
+#include <ax/core/system/axLog.h>
 
 axStatus	ax_to_json_str	( axIStringA & str, const char* sz, bool withQuote ) {
 	axStatus st;

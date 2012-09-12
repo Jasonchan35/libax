@@ -2,7 +2,7 @@
 #define __axTimerThread_h__
 
 #include "axThread.h"
-#include "../../base/time/axStopWatch.h"
+#include "../time/axStopWatch.h"
 
 class axTimerThread : private axThread {
 	typedef	axThread	B;

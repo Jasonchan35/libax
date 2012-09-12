@@ -1,7 +1,7 @@
 #ifndef __ax_math_angle_h__
 #define __ax_math_angle_h__
 
-#include "../../base/common/ax_common.h"
+#include "../common/ax_common.h"
 
 inline float  ax_rad_to_deg( int    x )	{ return x * (180.0f / (float)ax_math_PI); }
 inline float  ax_rad_to_deg( float  x )	{ return x * (180.0f / (float)ax_math_PI); }

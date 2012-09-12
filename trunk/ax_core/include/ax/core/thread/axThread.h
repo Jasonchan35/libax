@@ -1,7 +1,7 @@
 #ifndef __axThread_h__
 #define __axThread_h__
 
-#include "../../ax_base.h"
+#include "../common/ax_common.h"
 
 class axThreadPool;
 

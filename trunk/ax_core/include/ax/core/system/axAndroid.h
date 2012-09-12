@@ -1,7 +1,6 @@
 #ifndef __axAndroid_h__
 #define __axAndroid_h__
 
-#include "../../ax_base.h"
 #include "../../core/math/axRect2.h"
 #ifdef axOS_Android
 

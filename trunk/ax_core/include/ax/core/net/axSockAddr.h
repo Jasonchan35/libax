@@ -1,7 +1,7 @@
 #ifndef __axSockAddr_h__
 #define __axSockAddr_h__
 
-#include <ax/ax_base.h>
+#include "../string/ax_string.h"
 
 //! socket address ( IPv4 + port )
 class axSockAddr {

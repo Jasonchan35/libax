@@ -9,8 +9,9 @@
 #ifndef __axDB_common_h__
 #define __axDB_common_h__
 
-#include "../../ax_base.h"
 #include "../data_structure/axSharedPtr.h"
+#include "../time/axTimeStamp.h"
+#include "../time/axDateTime.h"
 
 enum {
 	axDB_c_type_null = 0,

@@ -1,4 +1,5 @@
 #include <ax/core/thread/axThread.h>
+#include <ax/core/other/ax_objc.h>
 
 #if 0
 #pragma mark ================= Windows ====================

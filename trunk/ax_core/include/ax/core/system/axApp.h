@@ -5,7 +5,6 @@
 #ifndef __axApp_h__
 #define __axApp_h__
 
-#include "../../ax_base.h"
 #include "../math/all_math.h"
 #include "axLog.h"
 

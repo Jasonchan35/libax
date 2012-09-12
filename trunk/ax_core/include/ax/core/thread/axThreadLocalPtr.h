@@ -1,7 +1,7 @@
 #ifndef __axThreadLocalPtr_h__
 #define __axThreadLocalPtr_h__
 
-#include "../../base/platform/ax_platform.h"
+#include "../platform/ax_platform.h"
 
 //! Thread Local Storage Pointer
 template<class T>

@@ -2,6 +2,7 @@
 #define __axSharedPtr_h__
 
 #include "../thread/axAtomicInt.h"
+#include "../other/axSerializer.h"
 
 template <class T>	class axSharedPtr;
 
