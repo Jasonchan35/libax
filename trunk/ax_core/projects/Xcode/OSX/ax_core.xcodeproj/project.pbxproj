@@ -849,11 +849,11 @@
 /* Begin PBXLegacyTarget section */
 		9640E1611600E3D900F9D037 /* ax_core_android */ = {
 			isa = PBXLegacyTarget;
-			buildArgumentsString = "$(ACTION)";
+			buildArgumentsString = "-j 8 $(ACTION)";
 			buildConfigurationList = 9640E1621600E3D900F9D037 /* Build configuration list for PBXLegacyTarget "ax_core_android" */;
 			buildPhases = (
 			);
-			buildToolPath = "/Users/jason/android/android-ndk-r8b/ndk-build";
+			buildToolPath = "/android/android-ndk-r8b/ndk-build";
 			buildWorkingDirectory = ../../Eclipse/Android;
 			dependencies = (
 			);
