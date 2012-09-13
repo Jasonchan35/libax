@@ -49,8 +49,11 @@ public:
 	static	axStatus	copyDirectory	( const char*		src, const char*		dst );
 	static	axStatus	copyDirectory	( const wchar_t*    src, const wchar_t*		dst );
 
-	static	axStatus	isFileExist		( const char*    file );
-	static	axStatus	isFileExist		( const wchar_t* file );
+	static	axStatus	isFileExists	( const char*    file );
+	static	axStatus	isFileExists	( const wchar_t* file );
+	
+	static	axStatus	isDirExists		( const char* 	 file );
+	static	axStatus	isDirExists		( const wchar_t* file );
 
 	static	axStatus	copyFile( const wchar_t* src, const wchar_t* dst );
 	static	axStatus	copyFile( const char* src, const char* dst );
