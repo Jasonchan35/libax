@@ -249,9 +249,17 @@ axStatus	axFileSystem::makeDirectory( const wchar_t* dir, bool recursive ) {
 	return makeDirectoryT( dir, recursive );
 }
 
+axStatus	axFileSystem::isDirExists		( const char* 	 dir ) {
+	axDir	d;
+	if( ! d.open( dir ) ) return -1;
+	return 0;
+}
 
-
-
+axStatus	axFileSystem::isDirExists		( const wchar_t* dir ) {
+	axDir	d;
+	if( ! d.open( dir ) ) return -1;
+	return 0;
+}
 
 #if 0
 #pragma mark ================= Windows ====================
@@ -278,12 +286,12 @@ axStatus axFileSystem::copyFile( const wchar_t* src, const wchar_t* dst ) {
 }
 
 
-axStatus axFileSystem::isFileExist ( const char*    file ) {
+axStatus axFileSystem::isFileExists ( const char*    file ) {
 	if( _access( file, 0 ) != 0 ) return axStatus_Std::File_not_found;
 	return 0;
 }
 
-axStatus axFileSystem::isFileExist ( const wchar_t* file ) {
+axStatus axFileSystem::isFileExists ( const wchar_t* file ) {
 	
 	if( _waccess( file, 0 ) != 0 ) return axStatus_Std::File_not_found;
 	return 0;
@@ -414,16 +422,16 @@ axStatus axFileSystem::copyFile( const char* src, const char* dst ) {
 
 }
 
-axStatus axFileSystem::isFileExist ( const char*    file ) {
+axStatus axFileSystem::isFileExists ( const char*    file ) {
 	if( access( file, F_OK ) != 0 ) return axStatus_Std::File_not_found;
 	return 0;
 }
 
-axStatus axFileSystem::isFileExist ( const wchar_t* file ) {
+axStatus axFileSystem::isFileExists ( const wchar_t* file ) {
 	axStatus st;
 	axTempStringA tmp;
 	st = tmp.set( file ); if( !st ) return st;
-	return isFileExist( tmp );
+	return isFileExists( tmp );
 }
 
 axStatus	 axFileSystem::_makeDirectory	( const char *dir )	   { 
