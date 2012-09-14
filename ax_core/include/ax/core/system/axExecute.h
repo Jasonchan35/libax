@@ -34,30 +34,12 @@ public:
 	axExecute();
 	virtual ~axExecute();
 
-	virtual	bool on_stdin	( axIByteArray &buf ) { return false; }
+	virtual	bool on_stdin	( 		axIByteArray &buf ) { return false; }
 	virtual	void on_stdout	( const axIByteArray &buf ) = 0;
 	virtual	void on_stderr	( const axIByteArray &buf ) = 0;
 
 	//! env = "var1=value1\0var2=value2\0"
 	axStatus	exec( int & cmd_ret, const char* cmd, const axEnvVarArray* env );
-
-#if axOS_WIN
-	class Node : public axDListNode< Node, true > {
-	public:
-		enum {
-			t_stdin,
-			t_stdout,
-			t_stderr,
-			t_stdin_done,
-			t_stdout_done,
-			t_stderr_done,
-		};
-		int type;
-		axByteArray	buf;
-	};
-	axAtomicQueue<Node>	q_;
-#endif
-
 };
 
 

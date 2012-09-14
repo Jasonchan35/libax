@@ -21,7 +21,7 @@ class axSingleton {
 
 
 template<class T>
-axDLLEXPORT T & axSingleton<T>::instance = axSingleton<T>::getInstance();
+axDLL_EXPORT T & axSingleton<T>::instance = axSingleton<T>::getInstance();
 
 
 #endif

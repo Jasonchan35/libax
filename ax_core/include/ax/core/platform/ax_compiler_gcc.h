@@ -16,7 +16,16 @@
 
 #if axCOMPILER_CLANG | axCOMPILER_GCC
 
-#define	axDLLEXPORT	//nothing
+#if __GNUC__ >= 4
+	#define	axDLL_EXPORT			__attribute__ ((visibility ("default")))
+	#define axDLL_IMPORT			__attribute__ ((visibility ("hidden")))
+#else
+	#define	axDLL_EXPORT
+	#define axDLL_IMPORT
+#endif
+
+
+
 #define	axFUNC_NAME			__FUNCTION__
 #define axPRETTY_FUNC_NAME	__PRETTY_FUNCTION__
 
