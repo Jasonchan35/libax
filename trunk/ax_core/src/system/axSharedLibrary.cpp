@@ -74,6 +74,7 @@ axStatus	axSharedLibrary::_getProc( void* &proc, const char* proc_name ) {
     if( ! handle_ ) return -1;
 
     proc = dlsym( handle_, proc_name );
+	if( ! proc ) return -1;
     return 1;
 }
 

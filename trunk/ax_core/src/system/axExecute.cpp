@@ -1,6 +1,23 @@
 #include <ax/core/system/axExecute.h>
+#include <ax/core/thread/axThread.h>
 #include <ax/core/system/axLog.h>
 #include <ax/core/other/ax_objc.h>
+
+class Node : public axDListNode< Node, true > {
+public:
+	enum {
+		t_stdin,
+		t_stdout,
+		t_stderr,
+		t_stdin_done,
+		t_stdout_done,
+		t_stderr_done,
+	};
+	int type;
+	axByteArray	buf;
+};
+
+
 
 class axExecuteString : public axExecute {
 public:
@@ -18,7 +35,7 @@ public:
 		return true;
 	}
 	virtual void on_stdout( const axIByteArray &buf ) {
-		if( out_ ) out_->appendWithLength( (const char*)buf.ptr(), buf.size() );
+		if( out_ ) out_->appendWithLength( (const char*)buf.ptr(), buf.size() );	
 	}
 	virtual void on_stderr( const axIByteArray &buf ) {
 		if( err_ ) err_->appendWithLength( (const char*)buf.ptr(), buf.size() );
@@ -73,6 +90,70 @@ axStatus ax_exec_bin( int& cmd_ret, const char* cmd, const axIByteArray* std_in,
 
 #if axOS_MacOSX
 
+
+
+class axExecute_IOThread : public axThread {
+public:
+	NSFileHandle*			h;
+	axAtomicQueue< Node >	q;
+	axAtomicQueue< Node >*	eq;
+	
+	virtual	void onThreadProc() {
+		Node*	p;
+		for(;;) {
+			p = q.takeHead();		if( ! p ) continue;
+			switch( p->type ) {
+				case Node::t_stdin: {
+//					DEBUG_ax_log("stdin writing");
+					if( p->buf.size() == 0 ) {
+						eq->append( p );
+						continue;
+					}
+
+					NSData* data = [NSData dataWithBytes:p->buf.ptr() length:p->buf.size()];
+					[h writeData:data];
+					eq->append( p );
+				}break;
+				case Node::t_stdin_done: {
+//					DEBUG_ax_log("thread stdin done");
+					[h closeFile];
+					eq->append( p );
+					goto quit;
+				}break;
+
+				case Node::t_stdout: 
+				case Node::t_stderr: {
+			//		DEBUG_ax_log("thread stdout / stderr");
+					NSData* data = [h availableData];
+					size_t	n = [data length];
+					if( n == 0 ) {
+			//			DEBUG_ax_log("thread stdout / stderr done");
+						switch( p->type ) {
+							case Node::t_stdout: 	p->type = Node::t_stdout_done;	break;
+							case Node::t_stderr: 	p->type = Node::t_stderr_done;	break;
+						}						
+						eq->append( p );
+						goto quit;
+					}
+
+					p->buf.resize( n+1 );
+					p->buf[n] = 0; //set zero-end for string
+					p->buf.setValues( (const uint8_t*)[data bytes], n );					
+					eq->append( p );
+				}break;
+
+			}
+		}
+
+	quit:
+//		DEBUG_ax_log("exit IOThread {?}", h );
+		return;
+	}
+};
+
+
+
+
 axExecute::axExecute() {
 }
 
@@ -84,6 +165,13 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd, const axEnvVarArray* en
 	axStringA_Array	arg;
 	st = arg.tokenize( cmd );		if( !st ) return st;
 
+	NSPipe *inPipe  = [NSPipe pipe];
+	NSPipe *outPipe = [NSPipe pipe];
+	NSPipe *errPipe = [NSPipe pipe];
+
+	axByteArray	buf;
+	st = buf.reserve( 16 * 1024 );
+
 	if( arg.size() <= 0 ) return -1;
 
 	NSArray* arr = [NSArray array];
@@ -94,7 +182,6 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd, const axEnvVarArray* en
 
 	NSTask *task = [[[NSTask alloc] init] autorelease];
 
-//	[NSTask launchedTaskWithLaunchPath: ax_toNSString(arg[0]) arguments: arr];
 	
 	[task setLaunchPath:ax_toNSString(arg[0])];
 	[task setArguments:arr];
@@ -108,15 +195,115 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd, const axEnvVarArray* en
 		[task setEnvironment:dicEnv];
 	}
 	
+	[task setStandardInput: inPipe];
+	[task setStandardOutput:outPipe];
+	[task setStandardError: errPipe];
+	
 	@try{
 		[task launch];
-		[task waitUntilExit];
-		cmd_ret = [task terminationStatus];
 	}@catch(NSException *exception) {
 		ax_log("ax_exec error: {?}\nCMD={?}\n", [exception reason], cmd );
 		return -1;
 	}
-	return 0;
+	
+//-----
+	const int stdin_polling  = 0x1;
+	const int stdout_polling = 0x2;
+	const int stderr_polling = 0x4;
+	
+	uint32_t polling = stdin_polling | stdout_polling | stderr_polling;
+
+	Node	stdin_node;
+	Node	stdout_node;
+	Node	stderr_node;
+	
+	axAtomicQueue< Node >	q;	
+
+	const size_t buf_increment = 16*1024;
+	st = stdin_node.buf.reserve ( buf_increment );				if( !st ) return st;
+	stdin_node.buf.setCapacityIncrement ( buf_increment );		if( !st ) return st;
+	
+	st = stdout_node.buf.reserve( buf_increment );				if( !st ) return st;
+	st = stderr_node.buf.reserve( buf_increment );				if( !st ) return st;
+
+	stdin_node.type  = Node::t_stdin;
+	stdout_node.type = Node::t_stdout;
+	stderr_node.type = Node::t_stderr;
+
+	axExecute_IOThread	stdin_thread;
+	stdin_thread.eq = &q;
+	stdin_thread.h = [inPipe fileHandleForWriting];
+	q.append( & stdin_node );
+
+	axExecute_IOThread	stdout_thread;
+	stdout_thread.eq = &q;
+	stdout_thread.h  = [outPipe fileHandleForReading];
+	stdout_thread.q.append( &stdout_node );
+
+	axExecute_IOThread	stderr_thread;
+	stderr_thread.eq = &q;
+	stderr_thread.h  = [errPipe fileHandleForReading];
+	stderr_thread.q.append( &stderr_node );
+
+	stdin_thread.create();
+	stdout_thread.create();
+	stderr_thread.create();
+
+	Node* p;
+	for(;;) {
+		if( ! polling ) break;
+//		ax_log("polling {?}", polling );
+		p = q.takeHead();
+		if( p ) {
+			switch( p->type ) {
+			//-- stdin
+				case Node::t_stdin: {
+					p->buf.resize(0);
+					if( on_stdin( p->buf ) ) {
+//						DEBUG_ax_log("post stdin");
+						stdin_thread.q.append( p );
+					}else{
+//						DEBUG_ax_log("post stdin done");
+						p->type = Node::t_stdin_done;
+						stdin_thread.q.append( p );
+					}
+				}break;
+				case Node::t_stdin_done: {
+//					DEBUG_ax_log("stdin done");
+					ax_unset_bits( polling, stdin_polling );
+				}break;
+			//-- stdout
+				case Node::t_stdout: {
+//					DEBUG_ax_log( "stdout {?}", (const char*)p->buf.ptr() );
+					on_stdout( p->buf );
+					stdout_thread.q.append( p );
+				}break;
+				case Node::t_stdout_done: {
+//					DEBUG_ax_log("stdout done");
+					ax_unset_bits( polling, stdout_polling );
+				}break;
+			//-- stderr
+				case Node::t_stderr: {
+//					DEBUG_ax_log( "stderr {?}", (const char*)p->buf.ptr() );
+					on_stderr( p->buf );
+					stderr_thread.q.append( p );
+				}break;
+				case Node::t_stderr_done: {
+//					DEBUG_ax_log("stderr done");
+					ax_unset_bits( polling, stderr_polling );
+				}break;
+			}
+		}
+		//Sleep( 100 );
+	}
+
+	stdin_thread.join();
+	stdout_thread.join();
+	stderr_thread.join();	
+
+	cmd_ret = [task terminationStatus];
+	
+	return st;
 }
 
 #endif //axOS_MacOSX
@@ -317,65 +504,53 @@ public:
 
 class axExecute_IOThread : public axThread {
 public:
-	typedef axExecute::Node Node;
-	axExecute*	e;
 	HANDLE		h;
-	axAtomicQueue<Node>	q_;
+	axAtomicQueue< Node >	q;
+	axAtomicQueue< Node >	*eq;
+	
 	virtual	void onThreadProc() {
-		DWORD dw;
+		DWORD dw = 0;
 		Node* p;
 		for(;;) {
-			p = q_.takeHead();		if( ! p ) continue;
+			p = q.takeHead();		if( ! p ) continue;
 			switch( p->type ) {
 				case Node::t_stdin: {
 //					DEBUG_ax_log("stdin writing");
-
 					if( p->buf.size() == 0 ) {
-						e->q_.append( p );
+						eq->append( p );
+						continue;
 					}
 					
 					if( ! WriteFile( h, p->buf.ptr(), (DWORD)p->buf.size(), &dw, NULL ) ) {
 						DEBUG_ax_log_win32_error("write child stdin failure");
 					}
-					e->q_.append( p );
+					eq->append( p );
 				}break;
 				case Node::t_stdin_done: {
 //					DEBUG_ax_log("thread stdin done");
 					SetEndOfFile( h );
-					e->q_.append( p );
+					eq->append( p );
 					goto quit;
 				}break;
 
-				case Node::t_stdout: {
-					p->buf.resizeToCapacity();
-					assert( p->buf.size() != 0 );
-					if( ! ReadFile( h, p->buf.ptr(), (DWORD)p->buf.size(), &dw, NULL ) ) {
-						if( dw == 0 ) {
-							p->type = Node::t_stdout_done;
-							e->q_.append( p );
-							goto quit;
-						}
-					}
-					p->buf[dw] = 0;
-					p->buf.resize( dw );
-					e->q_.append( p );
-				}break;
-
+				case Node::t_stdout:
 				case Node::t_stderr: {
 					p->buf.resizeToCapacity();
 					assert( p->buf.size() != 0 );
-					if( ! ReadFile( h, p->buf.ptr(), (DWORD)p->buf.size(), &dw, NULL ) ) {
+					if( ! ReadFile( h, p->buf.ptr(), (DWORD)p->buf.size()-1, &dw, NULL ) ) {
 						if( dw == 0 ) {
-							p->type = Node::t_stderr_done;
-							e->q_.append( p );
+							switch( p->type ) {
+								case Node::t_stdout: 	p->type = Node::t_stdout_done;	break;
+								case Node::t_stderr: 	p->type = Node::t_stderr_done;	break;
+							}						
+							eq->append( p );
 							goto quit;
 						}
 					}
-					p->buf[dw] = 0;
+					p->buf[dw] = 0; //set zero-end for string
 					p->buf.resize( dw );
-					e->q_.append( p );
+					eq->append( p );
 				}break;
-
 			}
 		}
 
@@ -500,6 +675,8 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd ) {
 	Node	stdin_node;
 	Node	stdout_node;
 	Node	stderr_node;
+	
+	axAtomicQueue< Node >	q;	
 
 	const size_t buf_increment = 16*1024;
 	st = stdin_node.buf.reserve ( buf_increment );				if( !st ) return st;
@@ -513,20 +690,19 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd ) {
 	stderr_node.type = Node::t_stderr;
 
 	axExecute_IOThread	stdin_thread;
-	stdin_thread.e = this;
+	stdin_thread.eq = &q;
 	stdin_thread.h = p_in.w;
-	q_.append( & stdin_node );
-//	stdin_thread.q_.append( &stdin_node );
+	q.append( & stdin_node );
 
 	axExecute_IOThread	stdout_thread;
-	stdout_thread.e = this;
-	stdout_thread.h = p_out.r;
-	stdout_thread.q_.append( &stdout_node );
+	stdout_thread.eq = &q;
+	stdout_thread.h  = p_out.r;
+	stdout_thread.q.append( &stdout_node );
 
 	axExecute_IOThread	stderr_thread;
-	stderr_thread.e = this;
-	stderr_thread.h = p_err.r;
-	stderr_thread.q_.append( &stderr_node );
+	stderr_thread.eq = &q;
+	stderr_thread.h  = p_err.r;
+	stderr_thread.q.append( &stderr_node );
 
 	stdin_thread.create();
 	stdout_thread.create();
@@ -536,7 +712,7 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd ) {
 	for(;;) {
 		if( ! polling ) break;
 //		ax_log("polling {?}", polling );
-		p = q_.takeHead();
+		p = q.takeHead();
 		if( p ) {
 			switch( p->type ) {
 			//-- stdin
@@ -544,11 +720,11 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd ) {
 					p->buf.resize(0);
 					if( on_stdin( p->buf ) ) {
 //						DEBUG_ax_log("post stdin");
-						stdin_thread.q_.append( p );
+						stdin_thread.q.append( p );
 					}else{
 //						DEBUG_ax_log("post stdin done");
 						p->type = Node::t_stdin_done;
-						stdin_thread.q_.append( p );
+						stdin_thread.q.append( p );
 					}
 				}break;
 				case Node::t_stdin_done: {
@@ -559,7 +735,7 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd ) {
 				case Node::t_stdout: {
 //					DEBUG_ax_log( "stdout {?}", (const char*)p->buf.ptr() );
 					on_stdout( p->buf );
-					stdout_thread.q_.append( p );
+					stdout_thread.q.append( p );
 				}break;
 				case Node::t_stdout_done: {
 //					DEBUG_ax_log("stdout done");
@@ -569,7 +745,7 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd ) {
 				case Node::t_stderr: {
 //					DEBUG_ax_log( "stderr {?}", (const char*)p->buf.ptr() );
 					on_stderr( p->buf );
-					stderr_thread.q_.append( p );
+					stderr_thread.q.append( p );
 				}break;
 				case Node::t_stderr_done: {
 //					DEBUG_ax_log("stderr done");

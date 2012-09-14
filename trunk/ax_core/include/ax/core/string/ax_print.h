@@ -33,7 +33,8 @@ axExpandArgList1( inline axStatus, ax_print,	const wchar_t*, const axStringForma
 axStatus ax_print_ArgList( const wchar_t* fmt, const axStringFormat_ArgList &list );
 axStatus ax_print_ArgList( const char*	  fmt, const axStringFormat_ArgList &list );
 
-void ax_dump_hex_mem( const void* buf, axSize len, FILE *stream = stdout );
+		void ax_dump_hex_mem( const void* buf, axSize len, FILE *stream = stdout );
+inline 	void ax_dump_hex_mem( const axIByteArray & buf ) { ax_dump_hex_mem( buf.ptr(), buf.byteSize() ); }
 
 template< class T > inline
 void ax_dump_hex_raw( const T& o, FILE *s = stdout ) { ax_dump_hex_mem( &o, sizeof(o), s ); }

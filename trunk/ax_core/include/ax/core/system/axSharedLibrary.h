@@ -39,11 +39,7 @@ private:
 //---- inline ----
 template<class FUNC> inline
 axStatus  axSharedLibrary::getProc( FUNC &func, const char* proc_name ) {
-    void*  p;
-    axStatus st;
-    st = _getProc( p, proc_name );	if( !st ) return st;
-    func = (FUNC)p;
-    return 0;
+    return _getProc( (void* &) func, proc_name );
 }
 
 typedef	axSharedLibrary	axDLLFile;
