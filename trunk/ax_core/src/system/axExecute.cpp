@@ -67,6 +67,10 @@ axStatus ax_exec_bin( int& cmd_ret, const char* cmd, const axIByteArray* std_in,
 	return p.exec( cmd_ret, cmd, env );
 }
 
+#if 0
+#pragma mark ================= Mac OSX ====================
+#endif
+
 #if axOS_MacOSX
 
 axExecute::axExecute() {
@@ -104,18 +108,23 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd, const axEnvVarArray* en
 		[task setEnvironment:dicEnv];
 	}
 	
-	[task launch];
-	
-	[task waitUntilExit];
-	
-	cmd_ret = [task terminationStatus];
-
+	@try{
+		[task launch];
+		[task waitUntilExit];
+		cmd_ret = [task terminationStatus];
+	}@catch(NSException *exception) {
+		ax_log("ax_exec error: {?}\nCMD={?}\n", [exception reason], cmd );
+		return -1;
+	}
 	return 0;
 }
 
 #endif //axOS_MacOSX
 
 
+#if 0
+#pragma mark ================= Unix ====================
+#endif
 
 #if axOS_UNIX && (! axOS_iOS) && ( ! axOS_MacOSX )
 
@@ -276,6 +285,9 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd, const axEnvVarArray* en
 
 #endif //axOS_UNIX
 
+#if 0
+#pragma mark ================= Windows ====================
+#endif
 
 #if axOS_WIN
 
