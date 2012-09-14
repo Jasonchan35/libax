@@ -40,8 +40,13 @@ private:
 	T	p_;
 };
 
-template<class T> inline 
-axStatus axStringFormat_out( axStringFormat &f, const axNSObject<T>& value ) { return axStringFormat_out( f, value.obj() ); }
+//template<class T> inline 
+//axStatus axStringFormat_out( axStringFormat &f, const axNSObject<T>& value ) { return axStringFormat_out( f, value.obj() ); }
+
+template<> inline
+axStatus axStringFormat_out( axStringFormat &f, NSString* v ) { 
+	return axStringFormat_out( f, v ? [v UTF8String] : "null" );
+}
 
 inline
 NSString* ax_toNSString( const char *sz ) {
