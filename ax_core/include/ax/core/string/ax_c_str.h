@@ -103,6 +103,10 @@ const axUChar* 	ax_strcasechr( const axUChar* sz, axUChar ch );
  int	 ax_strcmp ( const char*    s1, const char*    s2 );
  int	 ax_strcmp ( const wchar_t* s1, const wchar_t* s2 );
  int	 ax_strcmp ( const axUChar* s1, const axUChar* s2 );
+ 
+inline bool	ax_str_equals( const char*    s1, const char*    s2 ) { return 0 == ax_strcmp(s1,s2); }
+inline bool	ax_str_equals( const wchar_t* s1, const wchar_t* s2 ) { return 0 == ax_strcmp(s1,s2); }
+inline bool	ax_str_equals( const axUChar* s1, const axUChar* s2 ) { return 0 == ax_strcmp(s1,s2); }
 
  int	 ax_strncmp( const char*    s1, const char*    s2, size_t n );
  int	 ax_strncmp( const wchar_t* s1, const wchar_t* s2, size_t n );
