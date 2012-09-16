@@ -17,6 +17,9 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.TextView;
 import android.view.inputmethod.EditorInfo;
 import android.view.KeyEvent;
+import android.view.WindowManager;
+import android.view.ViewGroup.LayoutParams;
+
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -41,17 +44,17 @@ public class axGLApp extends axAndroid {
         view_ = new MyView(getApplication(), display.getWidth(), display.getHeight() );
         
 		et_ = new EditText(  this );
+        et_.setVisibility( View.GONE );
+		et_.setImeOptions( EditorInfo.IME_ACTION_DONE );
 		
 		et_.setOnEditorActionListener( new OnEditorActionListener() {
             @Override
             public boolean onEditorAction( TextView v, int actionId, KeyEvent event) {
             
                 if (actionId == EditorInfo.IME_ACTION_DONE ) {                	
-                	InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                	imm.hideSoftInputFromWindow( et_.getWindowToken(), 0 );
                 	Log.v("libax-java","Test: " + et_.getText() );
                 	jniOnKeyboardInput( et_.getText().toString() );
-                	et_.setVisibility( View.GONE );
+                	hideKeyboard();
                     return true;
                 }
 
@@ -59,18 +62,19 @@ public class axGLApp extends axAndroid {
             }
         });
         
-        et_.setSingleLine( true );
-        et_.setVisibility( View.GONE );
+
                 
         rl_ = new RelativeLayout(this);
         
-        RelativeLayout.LayoutParams lp = editText_Params( 0,0,0,0 );
+        RelativeLayout.LayoutParams lp = editText_Params( 0 );
 
         rl_.addView( view_ );
         rl_.addView( et_, lp );
         
         setContentView( rl_ );
         
+     
+        getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE ) ;
         
         jniOnCreate();
     }
@@ -116,16 +120,17 @@ public class axGLApp extends axAndroid {
 	public static native void jniOnKeyboardInput	( String s );
 	
 	
-	RelativeLayout.LayoutParams editText_Params ( int x, int y, int w, int h ) {	
-		ViewGroup.MarginLayoutParams mlp = new ViewGroup.MarginLayoutParams( w, h );
-
-		mlp.leftMargin = x;
-		mlp.topMargin = y;
+	RelativeLayout.LayoutParams editText_Params ( int h ) {	
+	
+		ViewGroup.MarginLayoutParams mlp = new ViewGroup.MarginLayoutParams( LayoutParams.FILL_PARENT, h );
+ 
+		mlp.leftMargin = 10;
+		mlp.rightMargin = 10;
 		
 		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams( mlp );
 	
-        lp.addRule(RelativeLayout.ALIGN_TOP );
-        lp.addRule(RelativeLayout.ALIGN_LEFT );
+        lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT );
+        lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM );
 	
 		return lp;
 	}
@@ -138,14 +143,16 @@ public class axGLApp extends axAndroid {
 
 		et_.setVisibility( View.GONE );
 	}
-	public void showKeyboard( int x, int y, int w, int h ) {
+	
+	public void showKeyboard( int height, int max_line ) {
 		
 		rl_.removeView( et_ );
 		
 		et_.setText("");
 		et_.setVisibility( View.VISIBLE );
+		et_.setMaxLines( max_line );
 
-		RelativeLayout.LayoutParams lp = editText_Params( x, y, w, h );
+		RelativeLayout.LayoutParams lp = editText_Params( height );
                 
         rl_.addView( et_, lp );
 
