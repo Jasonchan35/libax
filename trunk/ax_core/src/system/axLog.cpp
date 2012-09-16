@@ -9,11 +9,12 @@
 #include <ax/core/system/axLog.h>
 
 axLog_Tag	axLog::stdTag("log");
-
+/*
 axLog* axLog::getInstance() {
 	static	axLog	s;
 	return &s;
 }
+*/
 
 #if axOS_WIN
 

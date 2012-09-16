@@ -60,8 +60,6 @@ public:
 
 	const char* c_str( int code );
 
-	static	axStatus_ModuleList* getInstance();
-
 	int		moduleIdByCode( int code );
 	void	registerModule( axStatus_Module* mod, int moduleStart );
 
@@ -88,13 +86,19 @@ public:
 	axStatus_Std() : axStatus_Module(_start) {}
 };
 
+static axSingleton< axStatus_ModuleList >	g_axStatus_ModuleList;
+static axSingleton< axStatus_Std >			g_axStatus_Std;
+
 //======================
+
+
+
 inline
 axStatus::axStatus() { code_ = axStatus_Std::status_undefined; }
 
 inline
 const char* axStatus :: c_str() const { 
-	axStatus_ModuleList* p = axStatus_ModuleList::getInstance();
+	axStatus_ModuleList* p = g_axStatus_ModuleList;
 	return p ? p->c_str(code_) : "";
 }
 
@@ -102,12 +106,9 @@ const char* axStatus :: c_str() const {
 
 inline
 axStatus_Module::axStatus_Module( int start ) {
-	axStatus_ModuleList* p = axStatus_ModuleList::getInstance();
+	axStatus_ModuleList* p = g_axStatus_ModuleList;
 	if( p ) p->registerModule( this, start );
 }
-
-static axSingleton< axStatus_Std >	axStatus_Std_singleton;
-
 
 //======================
 inline
@@ -124,15 +125,6 @@ const char* axStatus_ModuleList::c_str( int code ) {
 		if( module[m] ) return module[m]->c_str(code);
 	}
 	return "Unknown";
-}
-
-
-static axSingleton< axStatus_ModuleList >	axStatus_ModuleList_singleton;
-
-inline
-axStatus_ModuleList* axStatus_ModuleList::getInstance() {
-	static axStatus_ModuleList s;
-	return &s;
 }
 
 inline
