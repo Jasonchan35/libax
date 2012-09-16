@@ -31,49 +31,23 @@ axStatus	axAndroid::_create( JNIEnv* env, jobject activity ) {
 	jni_Activity = activity;
 
 
-#define	FindClass( out, name ) \
-	out = jni->FindClass( name );	\
-	if( !out ) { \
-		ax_log("JNI Class({?}) not found", name ); \
-		return axStatus_Std::Java_JNI_not_found; \
-	}
-#define GetFieldID( cls, out, name, sig ) \
-	out = jni->GetFieldID( cls, name, sig ); \
-	if( !out ) { \
-		ax_log("JNI FieldID({?},{?}) not found", name, sig ); \
-		return axStatus_Std::Java_JNI_not_found; \
-	}
-#define GetMethodID( cls, out, name, sig ) \
-	out = jni->GetMethodID( cls, name, sig ); \
-	if( !out ) { \
-		ax_log("JNI GetMethodID({?},{?}) not found", name, sig ); \
-		return axStatus_Std::Java_JNI_not_found; \
-	}
-#define GetStaticMethodID( cls, out, name, sig ) \
-	out = jni->GetStaticMethodID( cls, name, sig ); \
-	if( !out ) { \
-		ax_log("JNI GetStaticMethodID({?},{?}) not found", name, sig ); \
-		return axStatus_Std::Java_JNI_not_found; \
-	}
-//-------
+	st = findClass			( jni_SystemClock_class, "android/os/SystemClock");	 if( !st ) return st;
+	st = getStaticMethodID	( jni_SystemClock_class, jni_SystemClock_uptimeMillis, 	"uptimeMillis", 	"()J" ); if( !st ) return st;
+	st = getStaticMethodID	( jni_SystemClock_class, jni_SystemClock_elapsedRealtime, "elapsedRealtime", 	"()J" ); if( !st ) return st;
 
-	FindClass			( jni_SystemClock_class, "android/os/SystemClock");
-	GetStaticMethodID	( jni_SystemClock_class, jni_SystemClock_uptimeMillis, 	"uptimeMillis", 	"()J" );
-	GetStaticMethodID	( jni_SystemClock_class, jni_SystemClock_elapsedRealtime, "elapsedRealtime", 	"()J" );
+	st = findClass	( jni_Rect_class, "android/graphics/Rect" ); if( !st ) return st;
+	st = getMethodID	( jni_Rect_class, jni_Rect_init, 	 "<init>", "()V"); if( !st ) return st;
+	st = getFieldID	( jni_Rect_class, jni_Rect_left,	 "left",   "I" ); if( !st ) return st;
+	st = getFieldID	( jni_Rect_class, jni_Rect_right,	 "right",  "I" ); if( !st ) return st;
+	st = getFieldID	( jni_Rect_class, jni_Rect_top, 	 "top",	   "I" ); if( !st ) return st;
+	st = getFieldID	( jni_Rect_class, jni_Rect_bottom, "bottom", "I" ); if( !st ) return st;
 
-	FindClass	( jni_Rect_class, "android/graphics/Rect" );
-	GetMethodID	( jni_Rect_class, jni_Rect_init, 	 "<init>", "()V");
-	GetFieldID	( jni_Rect_class, jni_Rect_left,	 "left",   "I" );
-	GetFieldID	( jni_Rect_class, jni_Rect_right,	 "right",  "I" );
-	GetFieldID	( jni_Rect_class, jni_Rect_top, 	 "top",	   "I" );
-	GetFieldID	( jni_Rect_class, jni_Rect_bottom, "bottom", "I" );
+	st = findClass	( jni_Bitmap_class, "android/graphics/Bitmap" ); if( !st ) return st;
+	st = getMethodID	( jni_Bitmap_class, jni_Bitmap_getPixels, "getPixels", "([IIIIIII)V"); if( !st ) return st;
 
-	FindClass	( jni_Bitmap_class, "android/graphics/Bitmap" );
-	GetMethodID	( jni_Bitmap_class, jni_Bitmap_getPixels, "getPixels", "([IIIIIII)V");
-
-	FindClass	( jni_Activity_class, "com/awenix/axcore/axGLApp" );
-	GetMethodID	( jni_Activity_class, jni_Activity_finish, "finish", "()V" );
-	GetMethodID	( jni_Activity_class, jni_Activity_getPackageResourcePath, "getPackageResourcePath", "()Ljava/lang/String;" );
+	st = findClass	( jni_Activity_class, "com/awenix/axcore/axGLApp" ); if( !st ) return st;
+	st = getMethodID	( jni_Activity_class, jni_Activity_finish, "finish", "()V" ); if( !st ) return st;
+	st = getMethodID	( jni_Activity_class, jni_Activity_getPackageResourcePath, "getPackageResourcePath", "()Ljava/lang/String;" ); if( !st ) return st;
 	
 
 //-------
@@ -142,6 +116,41 @@ jobject		axAndroid::toRect		( const axRect2i& rect ) {
 	jni->SetIntField( obj, jni_Rect_bottom, rect.bottom() );
 	return obj;
 }
+
+axStatus axAndroid::findClass( jclass &cls, const char *name ) {
+	if( !jni ) return axStatus_Std::Java_JNI_not_init;
+	cls = jni->FindClass( name );
+	if( cls ) return 0;
+	ax_log("JNI Class({?}) not found", name );
+	return axStatus_Std::Java_JNI_not_found;
+}
+
+
+axStatus axAndroid::getFieldID( jclass cls, jfieldID &fid, const char *name, const char *sig ) {
+	if( !jni ) return axStatus_Std::Java_JNI_not_init;
+	fid = jni->GetFieldID( cls, name, sig ); 
+	if( fid ) return 0;
+	ax_log("JNI FieldID({?},{?}) not found", name, sig );
+	return axStatus_Std::Java_JNI_not_found;
+}
+
+
+axStatus axAndroid::getMethodID( jclass cls, jmethodID &mth, const char *name, const char *sig ) {
+	if( !jni ) return axStatus_Std::Java_JNI_not_init;
+	mth = jni->GetMethodID( cls, name, sig ); 
+	if( mth ) return 0;
+	ax_log("JNI GetMethodID({?},{?}) not found", name, sig );
+	return axStatus_Std::Java_JNI_not_found;
+}
+
+axStatus axAndroid::getStaticMethodID( jclass cls, jmethodID &mth, const char *name, const char *sig ) {
+	if( !jni ) return axStatus_Std::Java_JNI_not_init;
+	mth = jni->GetStaticMethodID( cls, name, sig );
+	if( mth ) return 0;
+	ax_log("JNI GetStaticMethodID({?},{?}) not found", name, sig );
+	return axStatus_Std::Java_JNI_not_found; 
+}
+
 
 extern "C" {
 

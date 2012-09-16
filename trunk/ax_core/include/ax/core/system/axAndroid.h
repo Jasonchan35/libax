@@ -72,6 +72,12 @@ public:
 	
 	static axAndroid instance;
 	
+
+	axStatus findClass( jclass &cls, const char *name );
+	axStatus getFieldID( jclass cls, jfieldID &fid, const char *name, const char *sig );
+	axStatus getMethodID( jclass cls, jmethodID &mth, const char *name, const char *sig );
+	axStatus getStaticMethodID( jclass cls, jmethodID &mth, const char *name, const char *sig );
+	
 private:
 
 };

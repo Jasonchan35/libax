@@ -7,13 +7,27 @@ import android.os.Bundle;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.util.Log;
+import android.widget.RelativeLayout;
+import android.widget.EditText;
+import android.view.ViewGroup;
+import android.view.ViewGroup.MarginLayoutParams;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView.OnEditorActionListener;
+import android.widget.TextView;
+import android.view.inputmethod.EditorInfo;
+import android.view.KeyEvent;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 
 public class axGLApp extends axAndroid {
+
     private MyView	view_;
+    private EditText et_;
+	private RelativeLayout rl_;
+    
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
               
@@ -24,11 +38,43 @@ public class axGLApp extends axAndroid {
   //      Log.v( "libax","res = " + getPackageResourcePath() );
         
     	Display display = getWindowManager().getDefaultDisplay(); 
-        view_ = new MyView(getApplication(), display.getWidth(), display.getHeight() );        
-        setContentView(view_);
-        //setContentView(R.layout.main);
+        view_ = new MyView(getApplication(), display.getWidth(), display.getHeight() );
+        
+		et_ = new EditText(  this );
+		
+		et_.setOnEditorActionListener( new OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction( TextView v, int actionId, KeyEvent event) {
+            
+                if (actionId == EditorInfo.IME_ACTION_DONE ) {                	
+                	InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                	imm.hideSoftInputFromWindow( et_.getWindowToken(), 0 );
+                	Log.v("libax-java","Test: " + et_.getText() );
+                	jniOnKeyboardInput( et_.getText().toString() );
+                	et_.setVisibility( View.GONE );
+                    return true;
+                }
+
+                return false;
+            }
+        });
+        
+        et_.setSingleLine( true );
+        et_.setVisibility( View.GONE );
+                
+        rl_ = new RelativeLayout(this);
+        
+        RelativeLayout.LayoutParams lp = editText_Params( 0,0,0,0 );
+
+        rl_.addView( view_ );
+        rl_.addView( et_, lp );
+        
+        setContentView( rl_ );
+        
+        
         jniOnCreate();
     }
+    
     @Override protected void onStart() {
         super.onStart();
     }
@@ -67,6 +113,49 @@ public class axGLApp extends axAndroid {
 	public static native void jniOnFrame			();
 	public static native void jniOnResize			( int width,  int height );
 	public static native void jniOnTouchEvent		( int action, int touchId, float x, float y, float pressure, long timestamp );
+	public static native void jniOnKeyboardInput	( String s );
+	
+	
+	RelativeLayout.LayoutParams editText_Params ( int x, int y, int w, int h ) {	
+		ViewGroup.MarginLayoutParams mlp = new ViewGroup.MarginLayoutParams( w, h );
+
+		mlp.leftMargin = x;
+		mlp.topMargin = y;
+		
+		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams( mlp );
+	
+        lp.addRule(RelativeLayout.ALIGN_TOP );
+        lp.addRule(RelativeLayout.ALIGN_LEFT );
+	
+		return lp;
+	}
+	
+	public void hideKeyboard() {
+		if( et_.getVisibility() == View.INVISIBLE ) return;
+
+	 	InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+       	imm.hideSoftInputFromWindow( et_.getWindowToken(), 0 );
+
+		et_.setVisibility( View.GONE );
+	}
+	public void showKeyboard( int x, int y, int w, int h ) {
+		
+		rl_.removeView( et_ );
+		
+		et_.setText("");
+		et_.setVisibility( View.VISIBLE );
+
+		RelativeLayout.LayoutParams lp = editText_Params( x, y, w, h );
+                
+        rl_.addView( et_, lp );
+
+    	et_.setFocusableInTouchMode(true);
+    	et_.requestFocus();
+    	
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);   	
+    	imm.showSoftInput( et_, InputMethodManager.SHOW_FORCED);       	
+
+	}
 	
 	private static class MyRenderer implements GLSurfaceView.Renderer {
 		@Override public void onDrawFrame(GL10 gl) {
@@ -84,7 +173,8 @@ public class axGLApp extends axAndroid {
 	    }
 	}	
 			 
-	private class MyView extends GLSurfaceView {		
+	private class MyView extends GLSurfaceView {	
+			
 		public MyView(Context context, int width, int height) {
 		    super(context);
 		    setRenderer(new MyRenderer());
