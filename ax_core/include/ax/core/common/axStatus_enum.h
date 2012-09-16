@@ -81,6 +81,7 @@ axStatus_enum( Image_PNG_unsupported_color_type )
 axStatus_enum( Image_PNG_invalid_data )
 //-----
 axStatus_enum( GLTexture_unsupported_color_type )
+axStatus_enum( Java_JNI_not_init )
 axStatus_enum( Java_JNI_not_found )
 axStatus_enum( DBO_unsupport_data_type )
 //------

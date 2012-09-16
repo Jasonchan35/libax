@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		EA2C373215640D9900765E93 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA2C373115640D9900765E93 /* Foundation.framework */; };
+		EA4995501605D8B7001AE979 /* ax_c_str.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA4995491605D8B7001AE979 /* ax_c_str.cpp */; };
+		EA4995511605D8B7001AE979 /* ax_print.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA49954A1605D8B7001AE979 /* ax_print.cpp */; };
+		EA4995521605D8B7001AE979 /* ax_str_encode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA49954B1605D8B7001AE979 /* ax_str_encode.cpp */; };
+		EA4995531605D8B7001AE979 /* ax_str_to.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA49954C1605D8B7001AE979 /* ax_str_to.cpp */; };
+		EA4995541605D8B7001AE979 /* axIString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA49954D1605D8B7001AE979 /* axIString.cpp */; };
+		EA4995551605D8B7001AE979 /* axString_Array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA49954E1605D8B7001AE979 /* axString_Array.cpp */; };
+		EA4995561605D8B7001AE979 /* axStringFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA49954F1605D8B7001AE979 /* axStringFormat.cpp */; };
 		EA860B1A15FBE53600C0511B /* axDBConn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AEE15FBE53600C0511B /* axDBConn.cpp */; };
 		EA860B1B15FBE53600C0511B /* axDBStmt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AEF15FBE53600C0511B /* axDBStmt.cpp */; };
 		EA860B1C15FBE53600C0511B /* axDir.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AF115FBE53600C0511B /* axDir.cpp */; };
@@ -51,6 +58,13 @@
 		EA21A92315640E18001B0462 /* ax_core.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ax_core.xcconfig; sourceTree = "<group>"; };
 		EA2C372E15640D9900765E93 /* libax_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libax_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA2C373115640D9900765E93 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		EA4995491605D8B7001AE979 /* ax_c_str.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_c_str.cpp; sourceTree = "<group>"; };
+		EA49954A1605D8B7001AE979 /* ax_print.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_print.cpp; sourceTree = "<group>"; };
+		EA49954B1605D8B7001AE979 /* ax_str_encode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_str_encode.cpp; sourceTree = "<group>"; };
+		EA49954C1605D8B7001AE979 /* ax_str_to.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_str_to.cpp; sourceTree = "<group>"; };
+		EA49954D1605D8B7001AE979 /* axIString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axIString.cpp; sourceTree = "<group>"; };
+		EA49954E1605D8B7001AE979 /* axString_Array.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axString_Array.cpp; sourceTree = "<group>"; };
+		EA49954F1605D8B7001AE979 /* axStringFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axStringFormat.cpp; sourceTree = "<group>"; };
 		EA860A6915FBE51F00C0511B /* ax_base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_base.h; sourceTree = "<group>"; };
 		EA860A6A15FBE51F00C0511B /* ax_core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_core.h; sourceTree = "<group>"; };
 		EA860A6D15FBE51F00C0511B /* ax_byteorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_byteorder.h; sourceTree = "<group>"; };
@@ -250,6 +264,20 @@
 				EA2C373115640D9900765E93 /* Foundation.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EA4995481605D8B7001AE979 /* string */ = {
+			isa = PBXGroup;
+			children = (
+				EA4995491605D8B7001AE979 /* ax_c_str.cpp */,
+				EA49954A1605D8B7001AE979 /* ax_print.cpp */,
+				EA49954B1605D8B7001AE979 /* ax_str_encode.cpp */,
+				EA49954C1605D8B7001AE979 /* ax_str_to.cpp */,
+				EA49954D1605D8B7001AE979 /* axIString.cpp */,
+				EA49954E1605D8B7001AE979 /* axString_Array.cpp */,
+				EA49954F1605D8B7001AE979 /* axStringFormat.cpp */,
+			);
+			path = string;
 			sourceTree = "<group>";
 		};
 		EA860A6815FBE51F00C0511B /* ax */ = {
@@ -512,6 +540,7 @@
 		EA860AEC15FBE53600C0511B /* src */ = {
 			isa = PBXGroup;
 			children = (
+				EA4995481605D8B7001AE979 /* string */,
 				EA860AED15FBE53600C0511B /* database */,
 				EA860AF015FBE53600C0511B /* file_system */,
 				EA860AF615FBE53600C0511B /* math */,
@@ -721,6 +750,13 @@
 				EA860B3B15FBE53600C0511B /* axMutex.cpp in Sources */,
 				EA860B3C15FBE53600C0511B /* axThread.cpp in Sources */,
 				EA860B3D15FBE53600C0511B /* axThreadPool.cpp in Sources */,
+				EA4995501605D8B7001AE979 /* ax_c_str.cpp in Sources */,
+				EA4995511605D8B7001AE979 /* ax_print.cpp in Sources */,
+				EA4995521605D8B7001AE979 /* ax_str_encode.cpp in Sources */,
+				EA4995531605D8B7001AE979 /* ax_str_to.cpp in Sources */,
+				EA4995541605D8B7001AE979 /* axIString.cpp in Sources */,
+				EA4995551605D8B7001AE979 /* axString_Array.cpp in Sources */,
+				EA4995561605D8B7001AE979 /* axStringFormat.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -746,7 +782,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -763,7 +799,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
