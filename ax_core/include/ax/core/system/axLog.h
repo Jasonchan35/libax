@@ -65,7 +65,7 @@ public:
 	void        addHandler		( Handler* h );
 	void        removeHandler	( Handler* h );
 	
-	static	axLog* getInstance();
+//	static	axLog* getInstance();
 
 	static	axLog_Tag		stdTag;
 
@@ -112,15 +112,18 @@ private:
 		kLogMsgReserveSize = 2048,
 	};
 };
+
+static	axSingleton< axLog >	g_axLog;
+
 inline
 axStatus ax_log_ArgList( const char* fmt, const axStringFormat::ArgList &list ) {    
-	axLog *p = axLog::getInstance();
+	axLog *p = g_axLog;
 	return p->log_ArgList( p->stdTag, fmt, list );
 }
 
 inline
 axStatus ax_log_ArgList( const wchar_t* fmt, const axStringFormat::ArgList &list ) {    
-	axLog *p = axLog::getInstance();
+	axLog *p = g_axLog;
     return p->log_ArgList( p->stdTag, fmt, list );
 }
 
@@ -128,12 +131,12 @@ axStatus ax_log_ArgList( const wchar_t* fmt, const axStringFormat::ArgList &list
 
 inline
 axStatus ax_log_ArgList( const axLog_Tag &tag, const char* fmt, const axStringFormat::ArgList &list ) {    
-    return axLog::getInstance()->log_ArgList( tag, fmt, list );
+    return g_axLog->log_ArgList( tag, fmt, list );
 }
 
 inline
 axStatus ax_log_ArgList( const axLog_Tag &tag, const wchar_t* fmt, const axStringFormat::ArgList &list ) {    
-    return axLog::getInstance()->log_ArgList( tag, fmt, list );
+    return g_axLog->log_ArgList( tag, fmt, list );
 }
 
 

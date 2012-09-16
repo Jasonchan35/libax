@@ -1,5 +1,4 @@
 /*
-
 #ifndef axDLL_Singleton
 #define axDLL_Singleton
 
@@ -49,7 +48,6 @@ private:
 
 //======
 
-
-
 #endif //axDLL_Singleton
 */
+
