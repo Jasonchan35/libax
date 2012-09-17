@@ -149,8 +149,14 @@ public:
 	template<class T>	axStatus parse( T& value, const char* name ) {	
 		axStatus st;
 		st = io( value, name );
-		if( st.code() == axStatus_Std::JSON_deserialize_internal_found ) return 0;
-		return st;
+		if( st.code() == axStatus_Std::JSON_deserialize_internal_found ) {
+			st = 0;
+		}
+		
+		if( st ) {
+			if( checkToken(",") ) return nextToken();
+		}
+		return 0;
 	}
 	
 	template<class T>	axStatus io	( T& value, const char* name )	{ 
@@ -505,24 +511,27 @@ axStatus ax_json_serialize_object_value( axJsonParser &s, T &value ) {
 		st = ax_json_serialize_object_members( s, value );
 		if( ! s.memberMustInOrder() ) {		
 			if( st.code() == axStatus_Std::JSON_deserialize_internal_found ) {
+				if( s.checkToken("}") ) break;
 				if( s.checkToken(",") ) {
 					st = s.nextToken();		if( !st ) return st;
 					continue;		
 				}
-				if( s.checkToken("}") ) break;
 				return axStatus_Std::JSON_deserialize_format_error;
 			}
 		}		
 		
-		if( s.ignoreUnknownMemeber() ) {
-			if( s.checkToken("}") ) break;
-
-			st = s.getMemberName( tmp );	if( !st ) return st;
-			s._logIgnoreMember( tmp );
-			st = s.skipValue();		if( !st ) return st;
-			continue;
-		}else{
+		if( ! s.ignoreUnknownMemeber() ) {
 			return axStatus_Std::JSON_deserialize_member_not_found;
+		}
+		
+		if( s.checkToken("}") ) break;
+
+		st = s.getMemberName( tmp );	if( !st ) return st;
+		s._logIgnoreMember( tmp );
+		st = s.skipValue();				if( !st ) return st;
+		
+		if( s.checkToken(",") ) {
+			st = s.nextToken();		if( !st ) return st;
 		}
 	}
 	return 0;
