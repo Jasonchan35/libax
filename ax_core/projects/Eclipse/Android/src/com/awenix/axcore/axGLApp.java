@@ -19,7 +19,8 @@ import android.view.inputmethod.EditorInfo;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
-
+import android.content.res.Configuration;
+import android.content.pm.ActivityInfo;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -31,8 +32,29 @@ public class axGLApp extends axAndroid {
     private EditText et_;
 	private RelativeLayout rl_;
     
+    
+    @Override
+	public void onConfigurationChanged(Configuration newConfig) {
+    	super.onConfigurationChanged(newConfig);
+    	Log.v("libax-java","Configuration");
+    	
+    	if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+    		setContentView(rl_);
+ 
+    	} else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+    		setContentView(rl_);
+ 
+    	}
+     
+	}
+
+
+
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        //setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
+        
               
 //        getWindow().setFlags( WindowManager.LayoutParams.FLAG_FULLSCREEN,
   //              			    WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -73,7 +95,7 @@ public class axGLApp extends axAndroid {
         
         setContentView( rl_ );
         
-     
+     	//| WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
         getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE ) ;
         
         jniOnCreate();
