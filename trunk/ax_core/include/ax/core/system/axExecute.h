@@ -9,19 +9,8 @@ public:
 	axStringA	name;
 	axStringA	value;
 	
-	axStatus set( const char* _name, const char* _value ) {
-		axStatus st;
-		st = name.set ( _name  );	if( !st ) return st;
-		st = value.set( _value );	if( !st ) return st;
-		return 0;
-	}
-	
-	axStatus onTake( axEnvVar &s ) { 
-		axStatus st;
-		st = ax_take( name,  s.name );	if( !st ) return st;
-		st = ax_take( value, s.value );	if( !st ) return st;
-		return 0;
-	}
+	axStatus set	( const char* _name, const char* _value );
+	axStatus onTake	( axEnvVar &s );
 };
 
 typedef axArray< axEnvVar >	axEnvVarArray;
