@@ -25,8 +25,9 @@ axStatus	axAndroid::_create( JNIEnv* env, jobject activity ) {
 	
 	if( jni != NULL ) {
 		ax_log("error axAndroid already init: {?}", jni );
-		return axStatus_Std::Java_JNI_not_found;
+		//return axStatus_Std::Java_JNI_not_found;
 	}
+
 	jni = env;
 	jni_Activity = activity;
 
@@ -64,11 +65,7 @@ axStatus	axAndroid::_create( JNIEnv* env, jobject activity ) {
  	}
  	ax_log( "resourcePath_={?}", resourcePath_ );
  	return 0;
-
-#undef	FindClass
-#undef	GetFieldID
-#undef	GetMethodID
-#undef	GetStaticMethodID
+	
 }
 
 jstring	axAndroid::toJString	( const char* 	 sz ) {
