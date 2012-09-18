@@ -99,7 +99,8 @@ axStatus::axStatus() { code_ = axStatus_Std::status_undefined; }
 inline
 const char* axStatus :: c_str() const { 
 	axStatus_ModuleList* p = g_axStatus_ModuleList;
-	return p ? p->c_str(code_) : "";
+	if( p ) return p->c_str(code_);
+	return code_ >= 0 ? "OK" : "Error";
 }
 
 //======================
@@ -124,7 +125,7 @@ const char* axStatus_ModuleList::c_str( int code ) {
 	}else{
 		if( module[m] ) return module[m]->c_str(code);
 	}
-	return "Unknown";
+	return code >= 0 ? "OK" : "Error";
 }
 
 inline
