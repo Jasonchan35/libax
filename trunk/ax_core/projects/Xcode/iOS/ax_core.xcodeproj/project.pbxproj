@@ -65,7 +65,6 @@
 		EA49954D1605D8B7001AE979 /* axIString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axIString.cpp; sourceTree = "<group>"; };
 		EA49954E1605D8B7001AE979 /* axString_Array.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axString_Array.cpp; sourceTree = "<group>"; };
 		EA49954F1605D8B7001AE979 /* axStringFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axStringFormat.cpp; sourceTree = "<group>"; };
-		EA860A6915FBE51F00C0511B /* ax_base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_base.h; sourceTree = "<group>"; };
 		EA860A6A15FBE51F00C0511B /* ax_core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_core.h; sourceTree = "<group>"; };
 		EA860A6D15FBE51F00C0511B /* ax_byteorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_byteorder.h; sourceTree = "<group>"; };
 		EA860A6E15FBE51F00C0511B /* ax_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_common.h; sourceTree = "<group>"; };
@@ -283,7 +282,6 @@
 		EA860A6815FBE51F00C0511B /* ax */ = {
 			isa = PBXGroup;
 			children = (
-				EA860A6915FBE51F00C0511B /* ax_base.h */,
 				EA860A6A15FBE51F00C0511B /* ax_core.h */,
 				EA860A6B15FBE51F00C0511B /* base */,
 				EA860AAF15FBE51F00C0511B /* core */,

@@ -72,7 +72,7 @@ public class axFont {
 		String[] s = text.split("\\\n");
 		
 		Paint paint = newPaint();
-		Paint.FontMetrics m = paint.getFontMetrics();
+		//Paint.FontMetrics m = paint.getFontMetrics();
 			
 		int w = 0;
 		int h = 0;

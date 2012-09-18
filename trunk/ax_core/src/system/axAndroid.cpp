@@ -46,7 +46,7 @@ axStatus	axAndroid::_create( JNIEnv* env, jobject activity ) {
 	st = findClass	( jni_Bitmap_class, "android/graphics/Bitmap" ); if( !st ) return st;
 	st = getMethodID	( jni_Bitmap_class, jni_Bitmap_getPixels, "getPixels", "([IIIIIII)V"); if( !st ) return st;
 
-	st = findClass	( jni_Activity_class, "com/awenix/axcore/axGLApp" ); if( !st ) return st;
+	st = findClass	( jni_Activity_class, "com/awenix/axcore/axAndroid" ); if( !st ) return st;
 	st = getMethodID	( jni_Activity_class, jni_Activity_finish, "finish", "()V" ); if( !st ) return st;
 	st = getMethodID	( jni_Activity_class, jni_Activity_getPackageResourcePath, "getPackageResourcePath", "()Ljava/lang/String;" ); if( !st ) return st;
 	
