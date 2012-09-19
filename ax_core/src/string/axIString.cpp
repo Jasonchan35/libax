@@ -290,61 +290,9 @@ axStatus	axIString_<T> :: reserve( axSize new_size ) {
 }
 
 template< class T > 
-axSize	axIString_<T> :: size	() const {
-	return ( buf_.size() ) ? ( buf_.size()-1 ) : 0;
-}
-
-template< class T > 
 axStatus	axIString_<T> :: clone( const axIString_<T> &src ) {
 	return set( src.c_str() );
 }
-
-template< class T > 
-T	axIString_<T> :: charAt  ( axSize idx   ) const {
-	size_t n = size();
-	if( idx >= n ) {
-		assert( false );
-		return 0;
-	}else{
-		return buf_[idx];
-	}
-}
-
-template< class T > 
-axStatus axIString_<T> :: setCharAt  ( axSize idx, T ch ) {
-	size_t n = size();
-	if( idx >= n ) {
-		assert( false );
-		return axStatus_Std::out_of_bound;
-	}else{
-		return buf_[idx] = ch;
-	}
-}
-
-
-template< class T > 
-T	axIString_<T> :: lastChar	( axSize idx ) const {
-	size_t n = size();
-	if( idx >= n ) {
-		assert( false );
-		return 0;
-	}else{
-		return buf_[ n - idx - 1 ];
-	}
-}
-
-template< class T > 
-axStatus axIString_<T> :: setLastChar ( axSize idx, T ch ) {
-	size_t n = size();
-	if( idx >= n ) {
-		assert( false );
-		return axStatus_Std::out_of_bound;
-	}else{
-		buf_[ n - idx - 1 ] = ch;
-		return 0;
-	}
-}
-
 
 template< class T > 
 axStatus	axIString_<T> :: substring( axSize start, axSize count, axIString_<T> &out ) const {

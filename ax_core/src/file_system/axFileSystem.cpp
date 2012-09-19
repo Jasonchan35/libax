@@ -120,6 +120,12 @@ axStatus	axFileSystem::fileLastWriteTime	( axTimeStamp & out, const wchar_t* fil
 	return 0;
 }
 
+axStatus	axFileSystem::touchFile ( const char* file ) {
+	axStatus st;
+	axFile tmp;
+	st = tmp.openWrite( file, false, false );		if( !st ) return st;
+	return 0;
+}
 
 axStatus	axFileSystem::copyDirectory	( const char*		src, const char*		dst ) {
 	axStatus st;
@@ -375,6 +381,15 @@ axStatus	axFileSystem::_makeDirectory	( const wchar_t*    dir ) {
 #endif
 #if axOS_UNIX
 
+axStatus	axFileSystem::touchDir ( const char* dir  ) {
+	axStatus st;	
+	DIR*	p = opendir( dir );
+	int fd = dirfd(p);
+	
+	if( futimes( fd, NULL ) != 0 ) return -1;
+
+	return 0;
+}
 
 axStatus axFileSystem::copyFile( const wchar_t* src, const wchar_t* dst ) {
 	axStatus st;

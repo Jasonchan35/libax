@@ -65,12 +65,15 @@ public:
 	bool			contains				( const T* sz ) const		{ return ax_strstr( c_str(), sz ) != NULL; }
 	bool			containsNoCase			( const T* sz ) const		{ return ax_strcasestr( c_str(), sz ) != NULL; }
 
-	T				charAt					( axSize idx     ) const;
-	axStatus		setCharAt				( axSize idx, T ch );
+							T&	operator[]	( size_t i ) 				{ return charAt(i); }
+					const	T&	operator[]	( size_t i ) const 			{ return charAt(i); }
 
-	T				lastChar				( axSize idx = 0 ) const;
-	axStatus		setLastChar				( axSize idx, T ch );
+			T&		charAt					( size_t i )				{ assert( i < size() ); return buf_[i]; }
+	const	T&		charAt					( size_t i ) const			{ assert( i < size() ); return buf_[i]; }
 
+			T&		lastChar				( size_t i = 0 )			{ return buf_.last(i+1); }
+	const	T&		lastChar				( size_t i = 0 ) const		{ return buf_.last(i+1); }
+	
 	static const T*	defaultTrimChars		();
 	axStatus		trimHead				( const T* char_list = defaultTrimChars() );
 	axStatus		trimTail				( const T* char_list = defaultTrimChars() );
@@ -154,6 +157,11 @@ private:
 };
 
 //@}
+
+template< class T > inline
+axSize	axIString_<T> :: size	() const {
+	return ( buf_.size() ) ? ( buf_.size()-1 ) : 0;
+}
 
 
 #endif //__axIString_h__

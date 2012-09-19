@@ -238,24 +238,24 @@ private:
 
 
 template<class T> inline
-axStatus	ax_to_json  ( axIStringA &json, const T & v ) {
-	axJsonWriter	s(json);
+axStatus	ax_to_json  ( axIStringA &json, const T & v, bool condense = true, const char* indent = "\t" ) {
+	axJsonWriter	s( json, condense, indent );
 	return s.io_value( *const_cast<T*>(&v) );
 }
 
 template<class T> inline
 axStatus	ax_from_json( const char* json, T & v, bool memberMustInOrder ) {
 	axConstStringA		str( json );
-	axJsonParser	s(str, memberMustInOrder );
+	axJsonParser	s( str, memberMustInOrder );
 	return s.io_value(v);
 }
 
 template<class T> inline
-axStatus	ax_to_json_file( const char* filename, const T & v ) {
+axStatus	ax_to_json_file( const char* filename, const T & v, bool condense = true, const char* indent = "\t" ) {
 	axStatus st;
 	axTempStringA	json;
-	st = ax_to_json( json, v );						if( !st ) return st;
-	st = axFileSystem::saveFile( json, filename );	if( !st ) return st;
+	st = ax_to_json( json, v, condense, indent );		if( !st ) return st;
+	st = axFileSystem::saveFile( json, filename );		if( !st ) return st;
 	return 0;
 }
 
