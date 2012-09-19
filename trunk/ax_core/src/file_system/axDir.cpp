@@ -67,6 +67,9 @@ axStatus	axDir::getCount( const char* path, axSize &res ) {
 }
 
 
+#if 0
+#pragma mark ================= Windows ====================
+#endif
 
 #ifdef axOS_WIN
 
@@ -145,6 +148,9 @@ axStatus axDir :: next( Entry & entry ) {
 
 #endif //axOS_WIN
 
+#if 0
+#pragma mark ================= Unix ====================
+#endif
 
 #if axOS_UNIX
 
@@ -168,8 +174,6 @@ axStatus axDir :: open( const wchar_t* path ) {
 	
 	return open( str );
 }
-
-
 
 axStatus axDir :: open( const char* path ) {
 	close();

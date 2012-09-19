@@ -154,13 +154,13 @@ axStatus axJsonWriter::end_( const char begin, const char ch ) {
 	
 	if( str_->size() == 0 ) return axStatus_Std::JSON_deserialize_format_error;
 	
-	char e = str_->lastChar(0);
+	char e = str_->lastChar();
 	if( e == ',' ) {
 		str_->decSize(1);
 		st = newline();			if( !st ) return st;
 	}else{
 		if( e != begin ) {
-			ax_log("Json end of {?} error");
+			ax_log("Json end of {?} error", ch );
 			return axStatus_Std::JSON_deserialize_format_error;
 		}
 	}

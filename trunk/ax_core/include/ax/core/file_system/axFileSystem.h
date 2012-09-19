@@ -39,6 +39,9 @@ public:
 
 	static	axStatus	fileLastWriteTime	( axTimeStamp & out, const char*	file );
 	static	axStatus	fileLastWriteTime	( axTimeStamp & out, const wchar_t* file );
+	
+	static	axStatus	touchFile		( const char*		file );
+	static	axStatus	touchDir		( const char*		dir  );
 
 	static	axStatus	removeDirectory	( const char*		dir, bool recursive = false );
 	static	axStatus	removeDirectory	( const wchar_t*    dir, bool recursive = false );	
