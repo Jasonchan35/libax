@@ -55,8 +55,8 @@ public:
 			axStatus	asyncExec	( const char* cmd, const char*         std_in = NULL );
 			axStatus	asyncExecBin( const char* cmd, const axIByteArray* std_in = NULL );
 			
-			axStatus	asyncPoll	( bool & isDone, axIStringA*   std_out = NULL, axIStringA*   std_err = NULL );
-			axStatus	asyncPollBin( bool & isDone, axIByteArray* std_out = NULL, axIByteArray* std_err = NULL );
+			axStatus	asyncPoll	( bool & isDone, uint32_t waitMilliseconds, axIStringA*   std_out = NULL, axIStringA*   std_err = NULL );
+			axStatus	asyncPollBin( bool & isDone, uint32_t waitMilliseconds, axIByteArray* std_out = NULL, axIByteArray* std_err = NULL );
 			
 			int			returnValue	() { return returnValue_; }
 			

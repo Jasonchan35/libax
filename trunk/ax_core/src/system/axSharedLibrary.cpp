@@ -55,6 +55,8 @@ void axSharedLibrary::unload() {
 #endif
 #ifdef axOS_UNIX
 
+#include <dlfcn.h>      // dlopen()
+
 void axSharedLibrary::_os_ctor() {
     handle_ = NULL;
 }

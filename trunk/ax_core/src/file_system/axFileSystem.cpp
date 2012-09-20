@@ -381,15 +381,16 @@ axStatus	axFileSystem::_makeDirectory	( const wchar_t*    dir ) {
 #endif
 #if axOS_UNIX
 
+#if ! axOS_Android
 axStatus	axFileSystem::touchDir ( const char* dir  ) {
 	axStatus st;	
 	DIR*	p = opendir( dir );
 	int fd = dirfd(p);
-	
 	if( futimes( fd, NULL ) != 0 ) return -1;
-
 	return 0;
 }
+#endif
+
 
 axStatus axFileSystem::copyFile( const wchar_t* src, const wchar_t* dst ) {
 	axStatus st;

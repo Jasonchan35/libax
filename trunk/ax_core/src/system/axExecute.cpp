@@ -37,7 +37,7 @@ axStatus	axExecute::exec		( const char* cmd, const char*         std_in, axIStri
 	st = asyncExec( cmd, std_in );		if( !st ) return st;
 	bool isDone;
 	while( ! isDone ) {
-		st = asyncPoll( isDone, std_out, std_err );	if( !st ) return st;
+		st = asyncPoll( isDone, 500, std_out, std_err );		if( !st ) return st;
 	}	
 	return 0;
 }
@@ -47,7 +47,7 @@ axStatus	axExecute::execBin	( const char* cmd, const axIByteArray* std_in, axIBy
 	st = asyncExecBin( cmd, std_in );		if( !st ) return st;
 	bool isDone;
 	while( ! isDone ) {
-		st = asyncPollBin( isDone, std_out, std_err );	if( !st ) return st;
+		st = asyncPollBin( isDone, 500, std_out, std_err );		if( !st ) return st;
 	}	
 	return 0;
 }
@@ -74,6 +74,7 @@ axStatus ax_exec_bin( int& cmd_ret, const char* cmd, const axIByteArray* std_in,
 #pragma mark ================= Mac OSX ====================
 #endif
 
+/*
 #if axOS_MacOSX
 
 void axPID::reset() {
@@ -144,6 +145,25 @@ const int stderr_polling = 0x4;
 
 class axExecute::Imp {
 public:
+	axAtomicQueue< Node >	qMain;	
+	
+	axExecute_IOThread	stdin_thread;
+	axExecute_IOThread	stdout_thread;
+	axExecute_IOThread	stderr_thread;
+	
+	Node	stdin_node;
+	Node	stdout_node;
+	Node	stderr_node;
+		
+	axNSObject< NSPipe* >	inPipe;
+	axNSObject< NSPipe* >	outPipe;
+	axNSObject< NSPipe* >	errPipe;
+	axNSObject< NSTask* >	task;
+	
+	uint32_t polling;	
+	
+	axPtr<axExecute> owner;
+
 	~Imp() {
 		stdin_thread.join();
 		stdout_thread.join();
@@ -155,6 +175,17 @@ public:
 		this->owner = owner;
 		
 		task    = [NSTask alloc];
+		
+	
+//	if( env ) {
+//		NSMutableDictionary* dicEnv = [ [NSDictionary dictionary] mutableCopy];
+//		for( size_t i=0; i<env->size(); i++ ) {
+//			const axEnvVar & e = env->indexOf(i);
+//			[dicEnv setValue:ax_toNSString(e.value) forKey:ax_toNSString(e.name)];		
+//		}
+//		[task setEnvironment:dicEnv];
+//	}
+		
 		inPipe  = [NSPipe pipe];
 		outPipe = [NSPipe pipe];
 		errPipe = [NSPipe pipe];
@@ -197,22 +228,19 @@ public:
 		st = stderr_thread.create();	if( !st ) return st;
 		
 		polling = stdin_polling | stdout_polling | stderr_polling;
-		
-		return 0;
-	}
-	
-	axStatus	launch() {
+
 		@try{
 			[task launch];
 			owner->pid_.p_ = [task processIdentifier];
 		}@catch(NSException *exception) {
 			return -1;
 		}
-		return 0;
+		return 0;		
 	}
 	
-	axStatus	poll( bool & isDone, axIByteArray* bin_out, axIByteArray* bin_err,
-									 axIStringA*   str_out, axIStringA*   str_err ) 
+	axStatus	poll( bool & isDone, uint32_t waitMilliseconds,
+						axIByteArray* bin_out, axIByteArray* bin_err,
+						axIStringA*   str_out, axIStringA*   str_err ) 
 	{
 		axStatus st;
 		Node* p;
@@ -221,14 +249,13 @@ public:
 		if( ! polling ) {
 			isDone = ! [task isRunning];
 			if( isDone ) {
-				[task waitUntilExit];
 				owner->returnValue_ = [task terminationStatus];
 			}			
 			return 0;
 		}		
 		
 //		ax_log("polling {?}", polling );
-		p = qMain.takeHead(0);
+		p = qMain.takeHead(waitMilliseconds);
 		if( !p ) return 0;
 		
 		switch( p->type ) {
@@ -280,76 +307,19 @@ public:
 		return 0;
 	}
 	
-	axAtomicQueue< Node >	qMain;	
-	
-	axExecute_IOThread	stdin_thread;
-	axExecute_IOThread	stdout_thread;
-	axExecute_IOThread	stderr_thread;
-	
-	Node	stdin_node;
-	Node	stdout_node;
-	Node	stderr_node;
-		
-	axNSObject< NSPipe* >	inPipe;
-	axNSObject< NSPipe* >	outPipe;
-	axNSObject< NSPipe* >	errPipe;
-	axNSObject< NSTask* >	task;
-	
-	uint32_t polling;	
-	
-	axExecute*	owner;
+
 };
 
-axStatus axExecute::asyncExec   ( const char* cmd, const char*   std_in ) {
-	if( std_in ) {
-		axExternalArray<uint8_t>	buf( (uint8_t*)std_in, ax_strlen(std_in) );
-		return asyncExecBin(cmd, & buf );
-	}
-	
-	return asyncExecBin( cmd, NULL );
-}
-
-axStatus axExecute::asyncExecBin( const char* cmd, const axIByteArray*   std_in ) {
-	axStatus st;
-	if( imp ) return -1; //already running
-	
-	imp = new Imp;	
-	if( ! imp ) return axStatus_Std::not_enough_memory;
-
-	st = imp->create( this, cmd );		if( !st ) return st;
-/*	
-	if( env ) {
-		NSMutableDictionary* dicEnv = [ [NSDictionary dictionary] mutableCopy];
-		for( size_t i=0; i<env->size(); i++ ) {
-			const axEnvVar & e = env->indexOf(i);
-			[dicEnv setValue:ax_toNSString(e.value) forKey:ax_toNSString(e.name)];		
-		}
-		[task setEnvironment:dicEnv];
-	}
-	*/
-	st = imp->launch();		if( !st ) return st;
-//-----
-	
-	return st;
-}
-
-axStatus	axExecute::asyncPoll	( bool & isDone, axIStringA*   std_out, axIStringA*   std_err ) {
-	return imp->poll( isDone, NULL, NULL, std_out, std_err );
-}
-
-axStatus	axExecute::asyncPollBin( bool & isDone, axIByteArray* std_out, axIByteArray* std_err ) {
-	return imp->poll( isDone, std_out, std_err, NULL, NULL );
-}
-
-
 #endif //axOS_MacOSX
-
+*/
 
 #if 0
 #pragma mark ================= Unix ====================
 #endif
 
-#if axOS_UNIX && (! axOS_iOS) && ( ! axOS_MacOSX )
+#if axOS_UNIX // && (! axOS_iOS) && ( ! axOS_MacOSX )
+
+//#include <spawn.h> posix_spwan //Andorid doesn't support
 
 void axPID::reset() {
 	p_ = 0;
@@ -371,138 +341,180 @@ public:
 	int		r, w;
 };
 
-axStatus axExecute::exec( int& cmd_ret, const char* cmd, const axEnvVarArray* env ) {
-	axStatus st;
-	cmd_ret = -1;
+const int stdin_polling  = 0x1;
+const int stdout_polling = 0x2;
+const int stderr_polling = 0x4;
+const size_t buf_increment = 16 * 1024;
 
-	axExecute_Pipe	p_in;	st = p_in.create();		if( !st ) return st;
-	axExecute_Pipe	p_out;	st = p_out.create();	if( !st ) return st;
-	axExecute_Pipe	p_err;	st = p_err.create();	if( !st ) return st;
+class axExecute::Imp {
+public:
+	axPtr<axExecute> owner;
 
-	pid_t	pid = fork();
-	if( pid == -1 ) {
-		return -1; //error
-	}
+	axExecute_Pipe	p_in;
+	axExecute_Pipe	p_out;
+	axExecute_Pipe	p_err;
+	
+	pollfd	 pfd[3];
+	
+	uint32_t polling;
+	
+	axByteArray	in_buf;
+	size_t		in_buf_offset;
 
-	int ret;
-	if( pid == 0 ) {
-		//code runs in child
-		dup2( p_in.r,  0 );	p_in.close();
-		dup2( p_out.w, 1 ); p_out.close();
-		dup2( p_err.w, 2 ); p_err.close();
+	axByteArray	out_buf;
+	axByteArray	err_buf;
 
-		ret = system( cmd );
-		exit(ret);
-	}else{
-		//code runs in parent
+	axStatus create( axExecute* owner, const char* cmd ) {
+		axStatus st;
+		this->owner = owner;
 		
-		//set non-blocking to stdin write pipe 
-		int b = 1;
-		if( ::ioctl( p_in.w, FIONBIO, &b ) != 0 ) return -1;
-			
-		pollfd	p[3];
-		p[0].fd = p_in.w;	p[0].events = POLLOUT;
-		p[1].fd = p_out.r;	p[1].events = POLLIN;
-		p[2].fd = p_err.r;	p[2].events = POLLIN;
+		in_buf_offset = 0;
 		
-		::close( p_in.r  ); p_in.r  = -1;
-		::close( p_out.w ); p_out.w = -1;
-		::close( p_err.w ); p_err.w = -1;
+		st = p_in.create();		if( !st ) return st;
+		st = p_out.create();	if( !st ) return st;
+		st = p_err.create();	if( !st ) return st;
 
-		axByteArray		in_buf;
-		axSize			in_buf_offset = 0;
-		
-		axByteArray		out_buf;
-		axByteArray		err_buf;
-		
-		const int stdin_polling  = 0x1;
-		const int stdout_polling = 0x2;
-		const int stderr_polling = 0x4;
-		
-		uint32_t polling = stdin_polling | stdout_polling | stderr_polling;
-		
-		const size_t buf_increment = 16*1024;
-		
-		st = in_buf.reserve( buf_increment );		if( !st ) return st;
-		in_buf.setCapacityIncrement( buf_increment );
-
-		int c;
-		for(;;) {
-			if( ! polling ) break;
-			c = poll( p, 3, -1 );			
-			if( c < 0 ) {
-				return -1;
-			}
-			if( p[0].revents & POLLOUT ) {
-				if( in_buf.size() == 0 ) {
-					in_buf_offset = 0;
-					if( ! on_stdin( in_buf ) ) {
-//						ax_log("stdin done");
-						ax_unset_bits( polling, stdin_polling );
-						
-						p_in.close();
-						
-						p[0].fd = -1;
-						p[0].events  = 0;
-						p[0].revents = 0;
-					}
-				}
-				
-				if( in_buf_offset < in_buf.size() ) {
-					ssize_t n = write( p[0].fd, in_buf.ptr() + in_buf_offset, in_buf.size() - in_buf_offset );
-					if( n < 0 ) {
-						return -1;
-					}
-					if( n == 0 ) { 
-						//child closed
-					}
-					in_buf_offset += (size_t) n;
-					if( in_buf_offset >= in_buf.size() ) {
-						in_buf.resize(0);
-						in_buf_offset = 0;
-					}
-				}
-			}
-			if( p[1].revents & POLLIN ) {
-				st = out_buf.resize( buf_increment );	if( !st ) return st;
-				ssize_t n = read( p[1].fd, out_buf.ptr(), out_buf.size() );
-				if( n < 0 ) {
-					return -1;
-				}
-				if( n == 0 ) {
-//					ax_log("stdout done");
-					ax_unset_bits( polling, stdout_polling );
-					p[1].events  = 0;
-					p[1].revents = 0;
-				}else{
-					out_buf.resize( (size_t)n );
-					on_stdout( out_buf );
-				}
-			}
-			if( p[2].revents & POLLIN ) {
-				st = err_buf.resize( buf_increment );	if( !st ) return st;
-				ssize_t n = read( p[2].fd, err_buf.ptr(), err_buf.size() );
-				if( n < 0 ) {
-					return -1;
-				}
-				if( n == 0 ) {
-//					ax_log("stderr done");
-					ax_unset_bits( polling, stderr_polling );
-					p[2].events  = 0;
-					p[2].revents = 0;
-				}else{
-					err_buf.resize( (size_t)n );
-					on_stderr( err_buf );
-				}
-			}
+		pid_t	pid = fork();
+		if( pid == -1 ) {
+			return -1; //error
 		}
 		
-		waitpid( pid, &ret, 0 );
-		cmd_ret = ret;
-	}
+		owner->pid_.p_ = pid;
+
+		int ret;
+		if( pid == 0 ) {
+			//code runs in child
+			dup2( p_in.r,  0 );	p_in.close();
+			dup2( p_out.w, 1 ); p_out.close();
+			dup2( p_err.w, 2 ); p_err.close();
+
+			ret = system( cmd );
+			exit(ret);
+		}else{
+			//code runs in parent
+			
+			//set non-blocking to stdin write pipe 
+			int b = 1;
+			if( ::ioctl( p_in.w, FIONBIO, &b ) != 0 ) return -1;
+				
+			pfd[0].fd = p_in.w;		pfd[0].events = POLLOUT;
+			pfd[1].fd = p_out.r;	pfd[1].events = POLLIN;
+			pfd[2].fd = p_err.r;	pfd[2].events = POLLIN;
+			
+			::close( p_in.r  ); p_in.r  = -1;
+			::close( p_out.w ); p_out.w = -1;
+			::close( p_err.w ); p_err.w = -1;
+
+			axByteArray		in_buf;
+			axSize			in_buf_offset = 0;
+			
+			axByteArray		out_buf;
+			axByteArray		err_buf;
+			
+			polling = stdin_polling | stdout_polling | stderr_polling;
+		}
+		return 0;
+	} //create()
+	
+	axStatus poll( bool & isDone, uint32_t waitMilliseconds,
+						axIByteArray* bin_out, axIByteArray* bin_err,
+						axIStringA*   str_out, axIStringA*   str_err) 
+	{
+		axStatus st;
+		isDone = false;
 		
-	return 0;
-}
+		if( ! polling ) {
+			isDone = true;
+			waitpid( owner->pid_.p_, & owner->returnValue_, 0 );
+			return 0;
+		}
+		
+		ax_min_it( waitMilliseconds, (uint32_t) ax_type_max<int>() );
+			
+		int	c = ::poll( pfd, 3, (int)waitMilliseconds );
+		if( c < 0 ) return 0; //timeout
+
+		if( pfd[0].revents & POLLOUT ) {
+			if( in_buf.size() == 0 ) {
+				in_buf_offset = 0;
+				if( ! owner->on_stdin( in_buf ) ) {
+					ax_unset_bits( polling, stdin_polling );							
+					p_in.close();							
+					pfd[0].fd = -1;
+					pfd[0].events  = 0;
+					pfd[0].revents = 0;
+				}
+			}
+			
+			if( in_buf_offset < in_buf.size() ) {
+				ssize_t n = write( pfd[0].fd, in_buf.ptr() + in_buf_offset, in_buf.size() - in_buf_offset );
+				if( n < 0 ) {
+					return -1;
+				}
+				if( n == 0 ) { 
+					//child closed
+				}
+				in_buf_offset += (size_t) n;
+				if( in_buf_offset >= in_buf.size() ) {
+					in_buf.resize(0);
+					in_buf_offset = 0;
+				}
+			}
+		} //stdin
+		
+		if( pfd[1].revents & POLLIN ) {
+			st = out_buf.resize( buf_increment );	if( !st ) return st;
+			ssize_t n = read( pfd[1].fd, out_buf.ptr(), out_buf.size() );
+			if( n < 0 ) {
+				return -1;
+			}
+			if( n == 0 ) {
+//					ax_log("stdout done");
+				ax_unset_bits( polling, stdout_polling );
+				pfd[1].events  = 0;
+				pfd[1].revents = 0;
+			}else{
+				out_buf.resize( (size_t)n );
+					
+				if( bin_out ) {
+					st = bin_out->appendN( out_buf );
+					if( !st ) ax_log("Error {?}: axExecute cannot append to stdout buffer", st );
+				}
+				if( str_out ) {
+					st = str_out->appendWithLength( (const char*)out_buf.ptr(), out_buf.size() );
+					if( !st ) ax_log("Error {?}: axExecute cannot append to stdout buffer", st );
+				}
+			}
+		} //stdout
+		
+		if( pfd[2].revents & POLLIN ) {
+			st = err_buf.resize( buf_increment );	if( !st ) return st;
+			ssize_t n = read( pfd[2].fd, err_buf.ptr(), err_buf.size() );
+			if( n < 0 ) {
+				return -1;
+			}
+			if( n == 0 ) {
+//					ax_log("stderr done");
+				ax_unset_bits( polling, stderr_polling );
+				pfd[2].events  = 0;
+				pfd[2].revents = 0;
+			}else{
+				err_buf.resize( (size_t)n );
+				if( bin_err ) {
+					bin_err->appendN( err_buf );
+					if( !st ) ax_log("Error {?}: axExecute cannot append to stderr buffer", st );
+				}
+				if( str_err ) {
+					st = str_err->appendWithLength( (const char*)err_buf.ptr(), err_buf.size() );
+					if( !st ) ax_log("Error {?}: axExecute cannot append to stdout buffer", st );
+				}
+			}
+		} //stderr
+		return 0;
+	} // poll()
+	
+}; //class axExecute::Imp 
+
 
 #endif //axOS_UNIX
 
@@ -800,8 +812,37 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd ) {
 #endif//axOS_WIN
 
 #if 0
-#pragma mark ================= Ctor / Dtor ====================
+#pragma mark ================= Common ====================
 #endif
+
+axStatus axExecute::asyncExec   ( const char* cmd, const char*   std_in ) {
+	if( std_in ) {
+		axExternalArray<uint8_t>	buf( (uint8_t*)std_in, ax_strlen(std_in) );
+		return asyncExecBin(cmd, & buf );
+	}
+	return asyncExecBin( cmd, NULL );
+}
+
+axStatus axExecute::asyncExecBin( const char* cmd, const axIByteArray*   std_in ) {
+	axStatus st;
+	if( imp ) return -1; //already running
+	
+	imp = new Imp;	
+	if( ! imp ) return axStatus_Std::not_enough_memory;
+
+	st = imp->create( this, cmd );		if( !st ) return st;
+	return 0;
+}
+
+axStatus	axExecute::asyncPoll	( bool & isDone, uint32_t waitMilliseconds, axIStringA*   std_out, axIStringA*   std_err ) {
+	if( ! imp ) return -1;
+	return imp->poll( isDone, waitMilliseconds, NULL, NULL, std_out, std_err );
+}
+
+axStatus	axExecute::asyncPollBin( bool & isDone, uint32_t waitMilliseconds, axIByteArray* std_out, axIByteArray* std_err ) {
+	if( ! imp ) return -1;
+	return imp->poll( isDone, waitMilliseconds, std_out, std_err, NULL, NULL );
+}
 
 axExecute::axExecute() {
 	imp = NULL;
