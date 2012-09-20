@@ -81,6 +81,10 @@ public:
 	
 	//! Must keep the buf end with zero and size is correct
 	T*				_getInternalBufferPtr	();
+	//rememeber to append 0 at the end
+			axIArray<T>&	_getInternalBuffer() 		{ return buf_; }
+	const 	axIArray<T>&	_getInternalBuffer() const 	{ return buf_; }
+	
 	axStatus		_recalcSizeByZeroEnd	();
 
 	axStatus		insert					( axSize pos, char ch )									{ return insertWithLength( pos, &ch, 1 ); }

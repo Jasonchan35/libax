@@ -32,71 +32,43 @@ axStatus axEnvVar::onTake( axEnvVar &s ) {
 	return 0;
 }
 
-
-class axExecuteString : public axExecute {
-public:
-	axExecuteString( const char* in, axIStringA* out, axIStringA* err ) {
-		in_  = in;
-		out_ = out;		if( out ) out->clear();
-		err_ = err;		if( err ) err->clear();
-	}
-
-	virtual bool on_stdin ( axIByteArray &buf ) {
-		if( ! in_ ) return false;
-		axStatus st = buf.setValues( (uint8_t*)in_, ax_strlen(in_) );
-		in_ = NULL;
-		if( !st ) return false;
-		return true;
-	}
-	virtual void on_stdout( const axIByteArray &buf ) {
-		if( out_ ) out_->appendWithLength( (const char*)buf.ptr(), buf.size() );	
-	}
-	virtual void on_stderr( const axIByteArray &buf ) {
-		if( err_ ) err_->appendWithLength( (const char*)buf.ptr(), buf.size() );
-	}
-	
-	const char* in_;
-	axIStringA* out_;
-	axIStringA* err_;
-
-};
-
-axStatus ax_exec( int& cmd_ret, const char* cmd, const char*   std_in, axIStringA*   std_out, axIStringA*   std_err, const axEnvVarArray* env ) {
-	axExecuteString	p( std_in, std_out, std_err );
-	return p.exec( cmd_ret, cmd, env );
+axStatus	axExecute::exec		( const char* cmd, const char*         std_in, axIStringA*   std_out, axIStringA*   std_err ) {
+	axStatus st;
+	st = asyncExec( cmd, std_in );		if( !st ) return st;
+	bool isDone;
+	while( ! isDone ) {
+		st = asyncPoll( isDone, std_out, std_err );	if( !st ) return st;
+	}	
+	return 0;
 }
 
-class axExecuteBinary : public axExecute {
-public:
-	axExecuteBinary( const axIByteArray* in, axIByteArray* out, axIByteArray* err ) {
-		in_  = in;
-		out_ = out;		if( out ) out->clear();
-		err_ = err;		if( err ) err->clear();
-	}
-
-	virtual bool on_stdin ( axIByteArray &buf ) {
-		if( ! in_ ) return false;
-		axStatus st = buf.copy( *in_ );	
-		in_ = NULL;
-		if( !st ) return false;
-		return true;
-	}
-	virtual void on_stdout( const axIByteArray &buf ) {
-		if( out_ ) out_->appendN( buf );
-	}
-	virtual void on_stderr( const axIByteArray &buf ) {
-		if( err_ ) err_->appendN( buf );
-	}
-	
-	const axIByteArray* in_;
-	axIByteArray* out_;
-	axIByteArray* err_;
-};
-
-axStatus ax_exec_bin( int& cmd_ret, const char* cmd, const axIByteArray* std_in, axIByteArray* std_out, axIByteArray* std_err, const axEnvVarArray* env ) {
-	axExecuteBinary	p( std_in, std_out, std_err );
-	return p.exec( cmd_ret, cmd, env );
+axStatus	axExecute::execBin	( const char* cmd, const axIByteArray* std_in, axIByteArray* std_out, axIByteArray* std_err ) {
+	axStatus st;
+	st = asyncExecBin( cmd, std_in );		if( !st ) return st;
+	bool isDone;
+	while( ! isDone ) {
+		st = asyncPollBin( isDone, std_out, std_err );	if( !st ) return st;
+	}	
+	return 0;
 }
+
+
+axStatus ax_exec( int& cmd_ret, const char* cmd, const char*   std_in, axIStringA*   std_out, axIStringA*   std_err ) {
+	axStatus	st;
+	axExecute	e;	
+	st =  e.exec( cmd, std_in, std_out, std_err );		if( !st ) return st;
+	cmd_ret = e.returnValue();
+	return 0;
+}
+
+axStatus ax_exec_bin( int& cmd_ret, const char* cmd, const axIByteArray* std_in, axIByteArray* std_out, axIByteArray* std_err ) {
+	axStatus	st;
+	axExecute	e;
+	st =  e.execBin( cmd, std_in, std_out, std_err );		if( !st ) return st;
+	cmd_ret = e.returnValue();
+	return 0;
+}
+
 
 #if 0
 #pragma mark ================= Mac OSX ====================
@@ -104,13 +76,15 @@ axStatus ax_exec_bin( int& cmd_ret, const char* cmd, const axIByteArray* std_in,
 
 #if axOS_MacOSX
 
-
+void axPID::reset() {
+	p_ = 0;
+}
 
 class axExecute_IOThread : public axThread {
 public:
 	NSFileHandle*			h;
 	axAtomicQueue< Node >	q;
-	axAtomicQueue< Node >*	eq;
+	axAtomicQueue< Node >*	qMain;
 	
 	virtual	void onThreadProc() {
 		Node*	p;
@@ -120,18 +94,18 @@ public:
 				case Node::t_stdin: {
 //					DEBUG_ax_log("stdin writing");
 					if( p->buf.size() == 0 ) {
-						eq->append( p );
+						qMain->append( p );
 						continue;
 					}
 
 					NSData* data = [NSData dataWithBytes:p->buf.ptr() length:p->buf.size()];
 					[h writeData:data];
-					eq->append( p );
+					qMain->append( p );
 				}break;
 				case Node::t_stdin_done: {
 //					DEBUG_ax_log("thread stdin done");
 					[h closeFile];
-					eq->append( p );
+					qMain->append( p );
 					goto quit;
 				}break;
 
@@ -146,14 +120,13 @@ public:
 							case Node::t_stdout: 	p->type = Node::t_stdout_done;	break;
 							case Node::t_stderr: 	p->type = Node::t_stderr_done;	break;
 						}						
-						eq->append( p );
+						qMain->append( p );
 						goto quit;
 					}
 
-					p->buf.resize( n+1 );
-					p->buf[n] = 0; //set zero-end for string
+					p->buf.resize( n );
 					p->buf.setValues( (const uint8_t*)[data bytes], n );					
-					eq->append( p );
+					qMain->append( p );
 				}break;
 
 			}
@@ -165,41 +138,186 @@ public:
 	}
 };
 
+const int stdin_polling  = 0x1;
+const int stdout_polling = 0x2;
+const int stderr_polling = 0x4;
 
-
-
-axExecute::axExecute() {
-}
-
-axExecute::~axExecute() {
-}
-
-axStatus axExecute::exec( int& cmd_ret, const char* cmd, const axEnvVarArray* env ) {
-	axStatus st;
-	axStringA_Array	arg;
-	st = arg.tokenize( cmd );		if( !st ) return st;
-
-	NSPipe *inPipe  = [NSPipe pipe];
-	NSPipe *outPipe = [NSPipe pipe];
-	NSPipe *errPipe = [NSPipe pipe];
-
-	axByteArray	buf;
-	st = buf.reserve( 16 * 1024 );
-
-	if( arg.size() <= 0 ) return -1;
-
-	NSArray* arr = [NSArray array];
-	
-	for( size_t i=1; i<arg.size(); i++ ) {
-		arr = [arr arrayByAddingObject:ax_toNSString(arg[i])];
+class axExecute::Imp {
+public:
+	~Imp() {
+		stdin_thread.join();
+		stdout_thread.join();
+		stderr_thread.join();	
 	}
 
-	NSTask *task = [[[NSTask alloc] init] autorelease];
+	axStatus	create( axExecute* owner, const char* cmd ) {
+		axStatus st;
+		this->owner = owner;
+		
+		task    = [NSTask alloc];
+		inPipe  = [NSPipe pipe];
+		outPipe = [NSPipe pipe];
+		errPipe = [NSPipe pipe];
+		
+		[task setStandardInput:  inPipe ];
+		[task setStandardOutput: outPipe];
+		[task setStandardError:  errPipe];
+		
+		axStringA_Array	arg;
+		st = arg.tokenize( cmd );		if( !st ) return st;
+		
+		if( arg.size() <= 0 ) return -1;
 
+		NSArray* arr = [NSArray array];	
+		for( size_t i=1; i<arg.size(); i++ ) {
+			arr = [arr arrayByAddingObject:ax_toNSString(arg[i])];
+		}
+		
+		[task setLaunchPath:ax_toNSString(arg[0])];
+		[task setArguments:arr];
+
+		stdin_node.type  = Node::t_stdin;
+		stdout_node.type = Node::t_stdout;
+		stderr_node.type = Node::t_stderr;
+		
+		stdin_thread.qMain = &qMain;
+		stdin_thread.h = [inPipe fileHandleForWriting];
+		qMain.append( & stdin_node );
+
+		stdout_thread.qMain = &qMain;
+		stdout_thread.h  = [outPipe fileHandleForReading];
+		stdout_thread.q.append( &stdout_node );
+
+		stderr_thread.qMain = &qMain;
+		stderr_thread.h  = [errPipe fileHandleForReading];
+		stderr_thread.q.append( &stderr_node );
+
+		st = stdin_thread.create();		if( !st ) return st;
+		st = stdout_thread.create();	if( !st ) return st;
+		st = stderr_thread.create();	if( !st ) return st;
+		
+		polling = stdin_polling | stdout_polling | stderr_polling;
+		
+		return 0;
+	}
 	
-	[task setLaunchPath:ax_toNSString(arg[0])];
-	[task setArguments:arr];
+	axStatus	launch() {
+		@try{
+			[task launch];
+			owner->pid_.p_ = [task processIdentifier];
+		}@catch(NSException *exception) {
+			return -1;
+		}
+		return 0;
+	}
 	
+	axStatus	poll( bool & isDone, axIByteArray* bin_out, axIByteArray* bin_err,
+									 axIStringA*   str_out, axIStringA*   str_err ) 
+	{
+		axStatus st;
+		Node* p;
+		isDone = false;
+		
+		if( ! polling ) {
+			isDone = ! [task isRunning];
+			if( isDone ) {
+				[task waitUntilExit];
+				owner->returnValue_ = [task terminationStatus];
+			}			
+			return 0;
+		}		
+		
+//		ax_log("polling {?}", polling );
+		p = qMain.takeHead(0);
+		if( !p ) return 0;
+		
+		switch( p->type ) {
+		//-- stdin
+			case Node::t_stdin: {
+				p->buf.resize(0);
+				if( owner->on_stdin( p->buf ) ) {
+					stdin_thread.q.append( p );
+				}else{
+					p->type = Node::t_stdin_done;
+					stdin_thread.q.append( p );
+				}
+			}break;
+			case Node::t_stdin_done: {
+				ax_unset_bits( polling, stdin_polling );
+			}break;
+		//-- stdout
+			case Node::t_stdout: {
+				if( bin_out ) {
+					st = bin_out->appendN( p->buf );
+					if( !st ) ax_log("Error {?}: axExecute cannot append to stdout buffer", st );
+				}
+				if( str_out ) {
+					st = str_out->appendWithLength( (const char*)p->buf.ptr(), p->buf.size() );
+					if( !st ) ax_log("Error {?}: axExecute cannot append to stdout buffer", st );
+				}
+				stdout_thread.q.append( p );
+			}break;
+			case Node::t_stdout_done: {
+				ax_unset_bits( polling, stdout_polling );
+			}break;
+		//-- stderr
+			case Node::t_stderr: {
+				if( bin_err ) {
+					bin_err->appendN( p->buf );
+					if( !st ) ax_log("Error {?}: axExecute cannot append to stderr buffer", st );
+				}
+				if( str_err ) {
+					st = str_err->appendWithLength( (const char*)p->buf.ptr(), p->buf.size() );
+					if( !st ) ax_log("Error {?}: axExecute cannot append to stdout buffer", st );
+				}
+				stderr_thread.q.append( p );
+			}break;
+			case Node::t_stderr_done: {
+				ax_unset_bits( polling, stderr_polling );
+			}break;
+		}
+		
+		return 0;
+	}
+	
+	axAtomicQueue< Node >	qMain;	
+	
+	axExecute_IOThread	stdin_thread;
+	axExecute_IOThread	stdout_thread;
+	axExecute_IOThread	stderr_thread;
+	
+	Node	stdin_node;
+	Node	stdout_node;
+	Node	stderr_node;
+		
+	axNSObject< NSPipe* >	inPipe;
+	axNSObject< NSPipe* >	outPipe;
+	axNSObject< NSPipe* >	errPipe;
+	axNSObject< NSTask* >	task;
+	
+	uint32_t polling;	
+	
+	axExecute*	owner;
+};
+
+axStatus axExecute::asyncExec   ( const char* cmd, const char*   std_in ) {
+	if( std_in ) {
+		axExternalArray<uint8_t>	buf( (uint8_t*)std_in, ax_strlen(std_in) );
+		return asyncExecBin(cmd, & buf );
+	}
+	
+	return asyncExecBin( cmd, NULL );
+}
+
+axStatus axExecute::asyncExecBin( const char* cmd, const axIByteArray*   std_in ) {
+	axStatus st;
+	if( imp ) return -1; //already running
+	
+	imp = new Imp;	
+	if( ! imp ) return axStatus_Std::not_enough_memory;
+
+	st = imp->create( this, cmd );		if( !st ) return st;
+/*	
 	if( env ) {
 		NSMutableDictionary* dicEnv = [ [NSDictionary dictionary] mutableCopy];
 		for( size_t i=0; i<env->size(); i++ ) {
@@ -208,117 +326,21 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd, const axEnvVarArray* en
 		}
 		[task setEnvironment:dicEnv];
 	}
-	
-	[task setStandardInput: inPipe];
-	[task setStandardOutput:outPipe];
-	[task setStandardError: errPipe];
-	
-	@try{
-		[task launch];
-	}@catch(NSException *exception) {
-		ax_log("ax_exec error: {?}\nCMD={?}\n", [exception reason], cmd );
-		return -1;
-	}
-	
+	*/
+	st = imp->launch();		if( !st ) return st;
 //-----
-	const int stdin_polling  = 0x1;
-	const int stdout_polling = 0x2;
-	const int stderr_polling = 0x4;
-	
-	uint32_t polling = stdin_polling | stdout_polling | stderr_polling;
-
-	Node	stdin_node;
-	Node	stdout_node;
-	Node	stderr_node;
-	
-	axAtomicQueue< Node >	q;	
-
-	const size_t buf_increment = 16*1024;
-	st = stdin_node.buf.reserve ( buf_increment );				if( !st ) return st;
-	stdin_node.buf.setCapacityIncrement ( buf_increment );		if( !st ) return st;
-	
-	st = stdout_node.buf.reserve( buf_increment );				if( !st ) return st;
-	st = stderr_node.buf.reserve( buf_increment );				if( !st ) return st;
-
-	stdin_node.type  = Node::t_stdin;
-	stdout_node.type = Node::t_stdout;
-	stderr_node.type = Node::t_stderr;
-
-	axExecute_IOThread	stdin_thread;
-	stdin_thread.eq = &q;
-	stdin_thread.h = [inPipe fileHandleForWriting];
-	q.append( & stdin_node );
-
-	axExecute_IOThread	stdout_thread;
-	stdout_thread.eq = &q;
-	stdout_thread.h  = [outPipe fileHandleForReading];
-	stdout_thread.q.append( &stdout_node );
-
-	axExecute_IOThread	stderr_thread;
-	stderr_thread.eq = &q;
-	stderr_thread.h  = [errPipe fileHandleForReading];
-	stderr_thread.q.append( &stderr_node );
-
-	stdin_thread.create();
-	stdout_thread.create();
-	stderr_thread.create();
-
-	Node* p;
-	for(;;) {
-		if( ! polling ) break;
-//		ax_log("polling {?}", polling );
-		p = q.takeHead();
-		if( p ) {
-			switch( p->type ) {
-			//-- stdin
-				case Node::t_stdin: {
-					p->buf.resize(0);
-					if( on_stdin( p->buf ) ) {
-//						DEBUG_ax_log("post stdin");
-						stdin_thread.q.append( p );
-					}else{
-//						DEBUG_ax_log("post stdin done");
-						p->type = Node::t_stdin_done;
-						stdin_thread.q.append( p );
-					}
-				}break;
-				case Node::t_stdin_done: {
-//					DEBUG_ax_log("stdin done");
-					ax_unset_bits( polling, stdin_polling );
-				}break;
-			//-- stdout
-				case Node::t_stdout: {
-//					DEBUG_ax_log( "stdout {?}", (const char*)p->buf.ptr() );
-					on_stdout( p->buf );
-					stdout_thread.q.append( p );
-				}break;
-				case Node::t_stdout_done: {
-//					DEBUG_ax_log("stdout done");
-					ax_unset_bits( polling, stdout_polling );
-				}break;
-			//-- stderr
-				case Node::t_stderr: {
-//					DEBUG_ax_log( "stderr {?}", (const char*)p->buf.ptr() );
-					on_stderr( p->buf );
-					stderr_thread.q.append( p );
-				}break;
-				case Node::t_stderr_done: {
-//					DEBUG_ax_log("stderr done");
-					ax_unset_bits( polling, stderr_polling );
-				}break;
-			}
-		}
-		//Sleep( 100 );
-	}
-
-	stdin_thread.join();
-	stdout_thread.join();
-	stderr_thread.join();	
-
-	cmd_ret = [task terminationStatus];
 	
 	return st;
 }
+
+axStatus	axExecute::asyncPoll	( bool & isDone, axIStringA*   std_out, axIStringA*   std_err ) {
+	return imp->poll( isDone, NULL, NULL, std_out, std_err );
+}
+
+axStatus	axExecute::asyncPollBin( bool & isDone, axIByteArray* std_out, axIByteArray* std_err ) {
+	return imp->poll( isDone, std_out, std_err, NULL, NULL );
+}
+
 
 #endif //axOS_MacOSX
 
@@ -328,6 +350,10 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd, const axEnvVarArray* en
 #endif
 
 #if axOS_UNIX && (! axOS_iOS) && ( ! axOS_MacOSX )
+
+void axPID::reset() {
+	p_ = 0;
+}
 
 class axExecute_Pipe {
 public:
@@ -344,12 +370,6 @@ public:
 	}
 	int		r, w;
 };
-
-axExecute::axExecute() {
-}
-
-axExecute::~axExecute() {
-}
 
 axStatus axExecute::exec( int& cmd_ret, const char* cmd, const axEnvVarArray* env ) {
 	axStatus st;
@@ -492,6 +512,10 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd, const axEnvVarArray* en
 
 #if axOS_WIN
 
+void axPID::reset() {
+	p_ = INVALID_HANDLE;
+}
+
 class axExecute_Pipe {
 public:
 	axExecute_Pipe () { r = w = INVALID_HANDLE_VALUE; }
@@ -573,14 +597,6 @@ public:
 		return;
 	}
 };
-
-
-
-axExecute::axExecute() {
-}
-
-axExecute::~axExecute() {
-}
 
 class axExecute_HADNLE {
 public:
@@ -782,3 +798,21 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd ) {
 }
 
 #endif//axOS_WIN
+
+#if 0
+#pragma mark ================= Ctor / Dtor ====================
+#endif
+
+axExecute::axExecute() {
+	imp = NULL;
+	returnValue_ = axStatus_Std::status_undefined;
+}
+
+axExecute::~axExecute() {
+	if( imp ) {
+		delete imp;
+		imp = NULL;
+	}
+}
+
+

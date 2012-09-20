@@ -36,8 +36,6 @@
 #define	axUSE_OpenGL_ShadingProgram		1
 */
 
-
-
 #ifdef axCOMPILER_VC
 	#pragma comment( lib, "ws2_32.lib" )
 #endif //axCOMPILER_VC
