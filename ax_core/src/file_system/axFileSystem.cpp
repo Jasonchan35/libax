@@ -2,6 +2,7 @@
 #include <ax/core/file_system/axDir.h>
 #include <ax/core/system/axLog.h>
 #include <ax/core/other/ax_objc.h>
+#include <ax/core/string/axConstString.h>
 
 axStatus axFileSystem::loadFile( axIStringA &out, const wchar_t* filename ) {
 	axStatus st;
@@ -85,6 +86,14 @@ axStatus	axFileSystem::saveFile		( const axIStringA &buf, const wchar_t*	 filena
 	st = f.openWrite( filename, create_if_file_not_exists, truncate );		if( !st ) return st;
 	st = f.writeString( buf );								if( !st ) return st;
 	return 0;
+}
+
+axStatus	axFileSystem::saveFile		( const char* sz, const char*	 filename, bool create_if_file_not_exists, bool truncate ) {
+	return saveFile( axConstStringA(sz), filename, create_if_file_not_exists, truncate );
+}
+
+axStatus	axFileSystem::saveFile		( const char* sz, const wchar_t* filename, bool create_if_file_not_exists, bool truncate ) {
+	return saveFile( axConstStringA(sz), filename, create_if_file_not_exists, truncate );
 }
 
 
