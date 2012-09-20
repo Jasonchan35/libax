@@ -74,7 +74,6 @@ axStatus ax_exec_bin( int& cmd_ret, const char* cmd, const axIByteArray* std_in,
 #pragma mark ================= Mac OSX ====================
 #endif
 
-/*
 #if axOS_MacOSX
 
 void axPID::reset() {
@@ -112,7 +111,7 @@ public:
 
 				case Node::t_stdout: 
 				case Node::t_stderr: {
-			//		DEBUG_ax_log("thread stdout / stderr");
+				//	DEBUG_ax_log("thread stdout / stderr");
 					NSData* data = [h availableData];
 					size_t	n = [data length];
 					if( n == 0 ) {
@@ -125,8 +124,7 @@ public:
 						goto quit;
 					}
 
-					p->buf.resize( n );
-					p->buf.setValues( (const uint8_t*)[data bytes], n );					
+					p->buf.setValues( (const uint8_t*)[data bytes], n );
 					qMain->append( p );
 				}break;
 
@@ -311,13 +309,12 @@ public:
 };
 
 #endif //axOS_MacOSX
-*/
 
 #if 0
 #pragma mark ================= Unix ====================
 #endif
 
-#if axOS_UNIX // && (! axOS_iOS) && ( ! axOS_MacOSX )
+#if axOS_UNIX && (! axOS_iOS) && ( ! axOS_MacOSX )
 
 //#include <spawn.h> posix_spwan //Andorid doesn't support
 

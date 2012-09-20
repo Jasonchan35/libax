@@ -19,13 +19,10 @@ public:
 		( const_cast< axExternalString_<T>&>(v_) ).setExternal( (T*)sz ); 
 	}
 
-	operator const axExternalString_<T> & () 					{ return v_; }
-			 const axExternalString_<T> & asExternalString () 	{ return v_; }
+	operator const axIString_<T> & () 				{ return v_; }
+			 const axIString_<T> & asIString () 	{ return v_; }
 
-	operator const T*		() const	{ return v_.c_str(); }
-	
 	axStatus		toStringFormat( axStringFormat &f ) const { return v_.toStringFormat(f); }
-
 
 private:
 	const axExternalString_<T> v_;
