@@ -34,6 +34,7 @@ T* axAtomicQueue<T>::takeHead( uint32_t waitMilliseconds ) {
 	for(;;) {
 		p = q_.takeHead();
 		if( p ) return p;
+		if( waitMilliseconds == 0 ) return NULL;
 		if( ! cv.timedWait(waitMilliseconds) ) {
 			return NULL;
 		}
