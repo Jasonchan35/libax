@@ -165,7 +165,7 @@ int axStringFormat_to_digi_floating( char* buf, const int max_digi, T value, int
 
 	char	fmt[64 + 1];
 	fmt[64] = 0;
-	char type = exponent ? 'e' : 'f';
+	char type = exponent ? 'e' : 'g';
 
 #ifdef axCOMPILER_VC
 	if( precision < 0 ) {

@@ -84,7 +84,7 @@ public:
 		return ax_json_serialize_value( *this, value );
 	}
 	
-	axJsonWriter( axIStringA &str, bool condense = true, const char* indent = "\t" );
+	axJsonWriter( axIStringA &str, bool condense = true, const char* indent = " " );
 	
 	axStatus member( const char* name );
 	
@@ -238,7 +238,7 @@ private:
 
 
 template<class T> inline
-axStatus	ax_to_json  ( axIStringA &json, const T & v, bool condense = true, const char* indent = "\t" ) {
+axStatus	ax_to_json  ( axIStringA &json, const T & v, bool condense = true, const char* indent = " " ) {
 	axJsonWriter	s( json, condense, indent );
 	return s.io_value( *const_cast<T*>(&v) );
 }
@@ -251,7 +251,7 @@ axStatus	ax_from_json( const char* json, T & v, bool memberMustInOrder ) {
 }
 
 template<class T> inline
-axStatus	ax_to_json_file( const char* filename, const T & v, bool condense = true, const char* indent = "\t" ) {
+axStatus	ax_to_json_file( const char* filename, const T & v, bool condense = true, const char* indent = " " ) {
 	axStatus st;
 	axTempStringA	json;
 	st = ax_to_json( json, v, condense, indent );		if( !st ) return st;
@@ -423,15 +423,22 @@ axStatus ax_json_serialize_value( axJsonParser &s, axIString_<T> &v ) {
 }
 
 template< class S, class T, size_t N > inline
-axStatus ax_json_serialize_value( S &s, axString_<T,N> &v ) {
-	return ax_json_serialize_value( s, (axIString_<T>&) v );
-}
+axStatus ax_json_serialize_value( S &s, axString_<T,N> &v ) { return ax_json_serialize_value( s, (axIString_<T>&) v ); }
+
+template< class S, size_t N > inline
+axStatus ax_json_serialize_value( S &s, axStringA_<N> &v ) { return ax_json_serialize_value( s, (axIString_<char>&) v ); }
+
+template< class S, size_t N > inline
+axStatus ax_json_serialize_value( S &s, axStringW_<N> &v ) { return ax_json_serialize_value( s, (axIString_<wchar_t>&) v ); }
 
 template< class S, class T, size_t N > inline
 axStatus ax_json_serialize_value( S &s, axLocalString_<T,N> 	&v ) { return ax_json_serialize_value( s, (axIString_<T>&) v ); }
 
 template< class S, size_t N > inline
 axStatus ax_json_serialize_value( S &s, axLocalStringA<N> 		&v ) { return ax_json_serialize_value( s, (axIStringA &) v ); }
+
+template< class S, size_t N > inline
+axStatus ax_json_serialize_value( S &s, axLocalStringW<N> 		&v ) { return ax_json_serialize_value( s, (axIStringW &) v ); }
 
 template< class S, class T > inline
 axStatus ax_json_serialize_value( S &s, axConstString_<T> 		&v ) {	return ax_json_serialize_value( s, (axIString_<T>&) v ); }
