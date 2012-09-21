@@ -71,10 +71,10 @@ axStatus ax_exec_bin( int& cmd_ret, const char* cmd, const axIByteArray* std_in,
 
 
 #if 0
-#pragma mark ================= Mac OSX / iOS====================
+#pragma mark ================= Mac OSX ====================
 #endif
 
-#if axOS_MacOSX || axOS_iOS
+#if axOS_MacOSX
 
 void axPID::reset() {
 	p_ = 0;
@@ -318,7 +318,7 @@ public:
 #pragma mark ================= Unix ====================
 #endif
 
-#if axOS_UNIX && (! axOS_iOS) && ( ! axOS_MacOSX )
+#if axOS_UNIX && ( ! axOS_MacOSX )
 
 //#include <spawn.h> posix_spwan //Andorid doesn't support
 
@@ -365,6 +365,12 @@ public:
 	axByteArray	out_buf;
 	axByteArray	err_buf;
 
+
+	
+	void terminate() {
+		kill( owner->pid_.p_, SIGKILL );
+	}
+	
 	axStatus create( axExecute* owner, const char* cmd ) {
 		axStatus st;
 		this->owner = owner;
@@ -405,12 +411,6 @@ public:
 			::close( p_in.r  ); p_in.r  = -1;
 			::close( p_out.w ); p_out.w = -1;
 			::close( p_err.w ); p_err.w = -1;
-
-			axByteArray		in_buf;
-			axSize			in_buf_offset = 0;
-			
-			axByteArray		out_buf;
-			axByteArray		err_buf;
 			
 			polling = stdin_polling | stdout_polling | stderr_polling;
 		}
