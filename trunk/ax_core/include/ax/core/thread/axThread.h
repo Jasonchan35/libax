@@ -17,7 +17,6 @@ public:
 
 friend class axThreadPool;
 protected:
-    bool            counted_;
     axThreadPool*	pool_;        
     void			_close();
     

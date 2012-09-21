@@ -26,7 +26,6 @@ private:
 		_CVData() { 
 			target	= 0; 
 			count	= 0;
-			running = 0;
 		}
 
 		axSize		target;
