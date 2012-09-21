@@ -27,7 +27,7 @@ public:
 	
 	axStatus	onTake( axPtr<T> &o )	{ p_ = o; return 0; }
 	
-	axStatus	newObject()				{ ref( new T ); return (p_)? 0 : axStatus_Std::not_enough_memory; }
+	axStatus	newObject()				{ p_ = new T; return p_ ? 0 : axStatus_Std::not_enough_memory; }
 	void		deleteObject()			{ if( p_ ) { delete p_; p_=NULL; } }
 private:
 	T* p_;
