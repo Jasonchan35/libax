@@ -71,10 +71,10 @@ axStatus ax_exec_bin( int& cmd_ret, const char* cmd, const axIByteArray* std_in,
 
 
 #if 0
-#pragma mark ================= Mac OSX ====================
+#pragma mark ================= Mac OSX / iOS====================
 #endif
 
-#if axOS_MacOSX
+#if axOS_MacOSX || axOS_iOS
 
 void axPID::reset() {
 	p_ = 0;
@@ -166,6 +166,10 @@ public:
 		stdin_thread.join();
 		stdout_thread.join();
 		stderr_thread.join();	
+	}
+	
+	void terminate() {
+		[task terminate];
 	}
 
 	axStatus	create( axExecute* owner, const char* cmd ) {
@@ -839,6 +843,11 @@ axStatus	axExecute::asyncPoll	( bool & isDone, uint32_t waitMilliseconds, axIStr
 axStatus	axExecute::asyncPollBin( bool & isDone, uint32_t waitMilliseconds, axIByteArray* std_out, axIByteArray* std_err ) {
 	if( ! imp ) return -1;
 	return imp->poll( isDone, waitMilliseconds, std_out, std_err, NULL, NULL );
+}
+
+void	axExecute::terminate() {
+	if( ! imp ) return;
+	imp->terminate();
 }
 
 axExecute::axExecute() {

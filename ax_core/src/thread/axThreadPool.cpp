@@ -19,8 +19,6 @@ axSize	axThreadPool::target() {
 }
     
 bool axThreadPool::keeprun( axThread* thread ) {
-    if( !thread->counted_ ) return false;
-    
     CVData	d(cvdata_);
     
     //	printf("ThreadPool[%p] set_count() target=%u current=%u\n", this , (unsigned)d->target, (unsigned)d->current );
@@ -28,7 +26,6 @@ bool axThreadPool::keeprun( axThread* thread ) {
     if( d->count <= d->target ) return true;
     
     d->count--;
-    thread->counted_ = false;
     d.signal();
     return false;
 }
@@ -41,9 +38,7 @@ axStatus axThreadPool::setCount( axSize n, bool wait ) {
     for(;;) {
         //		printf("ThreadPool[%p] set_count() target=%u current=%u\n", this , (unsigned)d->target, (unsigned)d->current );
         //got the target number
-        if( d->target == d->count && d->target == d->running ) {
-            return 0;
-        }
+        if( d->target == d->count ) return 0;
         
         //create more
         if( d->target > d->count ) {
@@ -51,17 +46,13 @@ axStatus axThreadPool::setCount( axSize n, bool wait ) {
             if( !t ) return axStatus_Std::not_enough_memory;
             t->pool_ = this;
             
-            d->count++;
-            t->counted_ = true;
             st = t->create(); 
             if( !st ) {
-                d->count--;
-                
-                t->counted_ = false;
                 delete t;
                 return st;
             }
             
+            d->count++;
             continue;
         }
         
@@ -80,22 +71,12 @@ axThreadPool::Thread::~Thread() {
 
 //virtual 
 void axThreadPool::Thread::onThreadProc() {
-    {	CVData	d(pool_->cvdata_);
-        d->running++;
-        d.signal();
-    }
-    
     pool_->onThreadStart( this );
-    pool_->onThreadProc ( this );
-    
-    bool b = counted_;
+    pool_->onThreadProc ( this );    
     pool_->onThreadStop( this );
     
     {	CVData	d(pool_->cvdata_);
-        if( b ) {
-            d->count--;
-        }
-        d->running--;
+		d->count--;
         d.signal();
 	    delete this;
     }    
