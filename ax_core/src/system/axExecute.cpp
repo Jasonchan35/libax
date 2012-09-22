@@ -98,7 +98,7 @@ public:
 						continue;
 					}
 
-					NSData* data = [NSData dataWithBytes:p->buf.ptr() length:p->buf.size()];
+					NSData* data = [NSData dataWithBytesNoCopy:p->buf.ptr() length:p->buf.size()];
 					[h writeData:data];
 					qMain->append( p );
 				}break;
@@ -172,7 +172,7 @@ public:
 		[task terminate];
 	}
 
-	axStatus	create( axExecute* owner, const char* cmd ) {
+	axStatus	create( axExecute* owner, const char* cmd, const axIByteArray* std_in ) {
 		axStatus st;
 		this->owner = owner;
 		
@@ -213,9 +213,13 @@ public:
 		stdout_node.type = Node::t_stdout;
 		stderr_node.type = Node::t_stderr;
 		
+		if( std_in ) {
+			st = stdin_node.buf.copy( *std_in );	if( !st ) return st;
+		}
+		
 		stdin_thread.qMain = &qMain;
 		stdin_thread.h = [inPipe fileHandleForWriting];
-		qMain.append( & stdin_node );
+		stdin_thread.q.append( & stdin_node );
 
 		stdout_thread.qMain = &qMain;
 		stdout_thread.h  = [outPipe fileHandleForReading];
@@ -371,11 +375,14 @@ public:
 		kill( owner->pid_.p_, SIGKILL );
 	}
 	
-	axStatus create( axExecute* owner, const char* cmd ) {
+	axStatus create( axExecute* owner, const char* cmd, const axIByteArray* std_in ) {
 		axStatus st;
 		this->owner = owner;
 		
 		in_buf_offset = 0;
+		if( std_in ) {
+			st = in_buf.copy( *std_in );	if( !st ) return st;
+		}
 		
 		st = p_in.create();		if( !st ) return st;
 		st = p_out.create();	if( !st ) return st;
@@ -732,10 +739,15 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd ) {
 	stdout_node.type = Node::t_stdout;
 	stderr_node.type = Node::t_stderr;
 
+
+	if( std_in ) {
+		st = stdin_node.buf.copy( *std_in );	if( !st ) return st;
+	}
+
 	axExecute_IOThread	stdin_thread;
 	stdin_thread.eq = &q;
 	stdin_thread.h = p_in.w;
-	q.append( & stdin_node );
+	stdin_thread.q.append( &stdin_node );
 
 	axExecute_IOThread	stdout_thread;
 	stdout_thread.eq = &q;
@@ -831,7 +843,7 @@ axStatus axExecute::asyncExecBin( const char* cmd, const axIByteArray*   std_in 
 	imp = new Imp;	
 	if( ! imp ) return axStatus_Std::not_enough_memory;
 
-	st = imp->create( this, cmd );		if( !st ) return st;
+	st = imp->create( this, cmd, std_in );		if( !st ) return st;
 	return 0;
 }
 
