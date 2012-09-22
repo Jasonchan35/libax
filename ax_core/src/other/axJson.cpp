@@ -11,24 +11,33 @@
 
 axStatus	ax_to_json_str	( axIStringA & str, const char* sz, bool withQuote ) {
 	axStatus st;
-
+	
 	axSize 	offset = 0;
 	str.resize(0);
+	axJsonWriter	s( str );
 	if( withQuote ) {
 		st = str.set("\"");		if( !st ) return st;
 		offset++;
 	}
-	st = str.append( sz ); 	if( !st ) return st;
 	
-	
-	st = str.replaceString( "\\", "\\\\", offset ); if( !st ) return st;
-	st = str.replaceString( "\"", "\\\"", offset ); if( !st ) return st;
-	st = str.replaceString( "/",  "\\/",  offset ); if( !st ) return st;
-	st = str.replaceString( "\r", "\\r",  offset ); if( !st ) return st;
-	st = str.replaceString( "\n", "\\n",  offset ); if( !st ) return st;
-	st = str.replaceString( "\t", "\\t",  offset ); if( !st ) return st;
-	st = str.replaceString( "\b", "\\b",  offset ); if( !st ) return st;
-	st = str.replaceString( "\f", "\\f",  offset ); if( !st ) return st;
+	const char* p = sz;
+	if( p ) {
+		for( ; *p; p++ ) {
+			switch( *p ) {
+				case '\\': { st = str.append("\\\\");	if( !st ) return st; continue; }
+				case '\"': { st = str.append("\\\"");	if( !st ) return st; continue; }
+				case '/' : { st = str.append("\\/");	if( !st ) return st; continue; }
+				case '\r': { st = str.append("\\r");	if( !st ) return st; continue; }
+				case '\n': { st = str.append("\\n");	if( !st ) return st; continue; }
+				case '\t': { st = str.append("\\t");	if( !st ) return st; continue; }
+				case '\b': { st = str.append("\\b");	if( !st ) return st; continue; }
+				case '\f': { st = str.append("\\f");	if( !st ) return st; continue; }
+				default: {
+					st = str.append(*p);	if( !st ) return st;
+				}
+			}
+		}
+	}	
 	
 	if( withQuote ) {
 		st = str.append("\"");		if( !st ) return st;
@@ -36,29 +45,12 @@ axStatus	ax_to_json_str	( axIStringA & str, const char* sz, bool withQuote ) {
 	return 0;
 }
 
-axStatus	ax_from_json_str	( axIStringA & str, const char* sz, bool withQuote ) {
-	axStatus st;
-	
-	if( withQuote ) {
-		if( !sz || sz[0] != '\"' ) return axStatus_Std::JSON_deserialize_format_error;
-		size_t n = ax_strlen( sz );
-		if( n < 2 || sz[n-1] != '\"' ) return axStatus_Std::JSON_deserialize_format_error;
-	
-		st = str.setWithLength( sz+1, n-2 );		if( !st ) return st;
-	}else{
-		st = str.set( sz );							if( !st ) return st;
-	}
-
-	st = str.replaceString( "\\\\", "\\" ); if( !st ) return st;
-	st = str.replaceString( "\\\"", "\"" ); if( !st ) return st;
-	st = str.replaceString( "\\/",  "/"  ); if( !st ) return st;
-	st = str.replaceString( "\\r",  "\r" ); if( !st ) return st;
-	st = str.replaceString( "\\n",  "\n" ); if( !st ) return st;
-	st = str.replaceString( "\\t",  "\t" ); if( !st ) return st;
-	st = str.replaceString( "\\b",  "\b" ); if( !st ) return st;
-	st = str.replaceString( "\\f",  "\f" ); if( !st ) return st;
-
-	return 0;
+axStatus	ax_from_json_str	( axIStringA & str, const char* json, bool withQuote ) {
+	axStatus st;	
+	axJsonParser	parse( json, true );
+	parse.nextToken();
+	if( withQuote != parse.tokenIsString ) return axStatus_Std::JSON_deserialize_bool_format_error;
+	return str.set( parse.token );
 }
 
 //========================
@@ -184,10 +176,10 @@ axStatus axJsonWriter::newline() {
 	
 
 //=======================
-axJsonParser::axJsonParser( const axIStringA &str, bool memberMustInOrder )	{
+axJsonParser::axJsonParser( const char* json, bool memberMustInOrder )	{
 	lineNo_ = 1;
-	str_ = & str;
-	r_ = str_->c_str();
+	start_ = json;
+	r_ = json;
 	lineStart_ = r_;
 	ignoreUnknownMemeber_ = true;
 	memberMustInOrder_ = memberMustInOrder;
