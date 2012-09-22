@@ -142,7 +142,7 @@ class axJsonParser : public axJsonWriterBase {
 	typedef axJsonWriterBase B;
 public:
 
-	axJsonParser( const axIStringA &str, bool memberMustInOrder = false );
+	axJsonParser( const char* json, bool memberMustInOrder = false );
 	
 	void	setIgnoreUnknownMemeber( bool b );
 	
@@ -230,10 +230,10 @@ private:
 	bool	ignoreUnknownMemeber_;
 	bool	memberMustInOrder_;	
 	
-	const axIStringA*	str_;
-	const char *		r_;
-	const char *		lineStart_;
-	axSize				lineNo_;
+	const char*		start_;
+	const char*		r_;
+	const char*		lineStart_;
+	axSize			lineNo_;
 };
 
 
@@ -245,8 +245,7 @@ axStatus	ax_to_json  ( axIStringA &json, const T & v, bool condense = true, cons
 
 template<class T> inline
 axStatus	ax_from_json( const char* json, T & v, bool memberMustInOrder ) {
-	axConstStringA		str( json );
-	axJsonParser	s( str, memberMustInOrder );
+	axJsonParser	s( json, memberMustInOrder );
 	return s.io_value(v);
 }
 
