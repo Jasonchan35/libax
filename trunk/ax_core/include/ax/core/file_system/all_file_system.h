@@ -6,5 +6,6 @@
 #include "axFileStream.h"
 #include "axFileSystem.h"
 #include "axMemMap.h"
+#include "axFilePath.h"
 
 #endif //__ax_all_file_system_h__

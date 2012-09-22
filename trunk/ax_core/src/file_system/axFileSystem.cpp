@@ -1,5 +1,6 @@
 #include <ax/core/file_system/axFileSystem.h>
 #include <ax/core/file_system/axDir.h>
+#include <ax/core/file_system/axFilePath.h>
 #include <ax/core/system/axLog.h>
 #include <ax/core/other/ax_objc.h>
 #include <ax/core/string/axConstString.h>
