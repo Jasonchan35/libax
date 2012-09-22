@@ -73,6 +73,7 @@ public:
 
 						bool		isAll		( const T& v ) const;
 						bool		isAny		( const T& v ) const;
+						bool		find		( axSize &index, const T& value ) const;
 
 	axALWAYS_INLINE(	axStatus	copy		( const axIArray<T> &src ) );
 	axALWAYS_INLINE(	axStatus	onTake		( axIArray<T> &src ) );
@@ -338,6 +339,17 @@ bool	axIArray<T>::isAny	( const T& v ) const {
 	const T* e = p + size_;
 	for( ;p<e; p++ ) {
 		if( *p == v ) return true;
+	}
+	return false;
+}
+
+template< class T > inline
+bool	axIArray<T>::find	( axSize & index, const T& v ) const {
+	for( size_t i=0; i<size_; i++ ) {
+		if( *p_ == v ) {
+			index = i;
+			return true;
+		}
 	}
 	return false;
 }

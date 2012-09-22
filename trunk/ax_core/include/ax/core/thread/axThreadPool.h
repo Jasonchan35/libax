@@ -36,7 +36,6 @@ private:
     CVData::Data    cvdata_;
     
     class Thread : public axThread {
-		virtual ~Thread();
         virtual void onThreadProc();
     };
     

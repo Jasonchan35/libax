@@ -11,7 +11,7 @@ axThread::axThread() {
 }
 
 axThread::~axThread() {
-	assert( h_ == NULL ); //the thread still running, please call join() before destructor
+	join();
 }
 
 static
@@ -30,15 +30,17 @@ axStatus axThread::create() {
 	return 0;
 }
 
-void axThread::_close() {
-	CloseHandle( h_ );
-	h_ = NULL;
+void axThread::detach() {
+	if( h_ ) {
+		CloseHandle( h_ );
+		h_ = NULL;
+	}
 }
 
 void axThread::join() {
 	if( h_ ) {
 		WaitForSingleObject( h_, INFINITE );
-		_close();
+		detach();
 	}
 }
 
@@ -55,6 +57,7 @@ axThread::axThread() {
 }
 
 axThread::~axThread() {
+	join();
 }
 
 void* axThread_onThreadProc( void *p ) {
@@ -76,13 +79,15 @@ axStatus axThread::create() {
 void axThread::join() {
 	if( h_ ) {
 		pthread_join( h_, NULL );
-		_close();
+		detach();
 	}
 }
 
-void axThread::_close() {
-	pthread_detach( h_ );
-	h_ = 0;
+void axThread::detach() {
+	if( h_ ) {
+		pthread_detach( h_ );
+		h_ = 0;
+	}
 }
 
 #endif//axUSE_PTHREAD

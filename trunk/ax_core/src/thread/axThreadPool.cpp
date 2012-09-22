@@ -42,7 +42,7 @@ axStatus axThreadPool::setCount( axSize n, bool wait ) {
         
         //create more
         if( d->target > d->count ) {
-            axThread* t = new Thread;
+            Thread* t = new Thread; //delete in Thread::onThreadProc
             if( !t ) return axStatus_Std::not_enough_memory;
             t->pool_ = this;
             
@@ -65,11 +65,6 @@ axStatus axThreadPool::setCount( axSize n, bool wait ) {
 }	
 
 //virtual 
-axThreadPool::Thread::~Thread() {
-	_close();
-}
-
-//virtual 
 void axThreadPool::Thread::onThreadProc() {
     pool_->onThreadStart( this );
     pool_->onThreadProc ( this );    
@@ -78,6 +73,7 @@ void axThreadPool::Thread::onThreadProc() {
     {	CVData	d(pool_->cvdata_);
 		d->count--;
         d.signal();
+		detach(); //deatch before delete
 	    delete this;
     }    
 }

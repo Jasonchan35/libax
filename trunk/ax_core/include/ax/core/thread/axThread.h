@@ -11,14 +11,14 @@ public:
 	virtual	~axThread();
 
 			axStatus	create();
-			void		join(); //!<  called by other thread for waiting this thread terminated
+			void		join	(); //!<  called by other thread for waiting this thread terminated
+		    void		detach	(); //!< becareful, the thread still running
 
 	virtual	void		onThreadProc() = 0;
 
 friend class axThreadPool;
 protected:
     axThreadPool*	pool_;        
-    void			_close();
     
 private:
 #ifdef axOS_WIN
