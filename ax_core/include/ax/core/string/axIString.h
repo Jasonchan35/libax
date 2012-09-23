@@ -65,14 +65,12 @@ public:
 	bool			contains				( const T* sz ) const		{ return ax_strstr( c_str(), sz ) != NULL; }
 	bool			containsNoCase			( const T* sz ) const		{ return ax_strcasestr( c_str(), sz ) != NULL; }
 
-							T&	operator[]	( size_t i ) 				{ return charAt(i); }
-					const	T&	operator[]	( size_t i ) const 			{ return charAt(i); }
-
-			T&		charAt					( size_t i )				{ assert( i < size() ); return buf_[i]; }
-	const	T&		charAt					( size_t i ) const			{ assert( i < size() ); return buf_[i]; }
-
-			T&		lastChar				( size_t i = 0 )			{ return buf_.last(i+1); }
-	const	T&		lastChar				( size_t i = 0 ) const		{ return buf_.last(i+1); }
+			T		operator[]				( size_t i ) const 			{ return charAt(i); }
+			T		charAt					( size_t i ) const			{ return ( i >= size() ) ? 0 : buf_[i]; }
+			T		lastChar				( size_t i = 0 ) const		{ return ( i >= size() ) ? 0 : buf_.last(i+1); }
+	
+	axStatus		setCharAt				( size_t i, T ch )			{ if( i >= size() ) return -1; buf_[i] = ch;        return 0; }
+	axStatus		setLastChar				( size_t i, T ch )			{ if( i >= size() ) return -1; buf_.last(i+1) = ch; return 0; }
 	
 	static const T*	defaultTrimChars		();
 	axStatus		trimHead				( const T* char_list = defaultTrimChars() );
@@ -81,9 +79,8 @@ public:
 	
 	//! Must keep the buf end with zero and size is correct
 	T*				_getInternalBufferPtr	();
-	//rememeber to append 0 at the end
-			axIArray<T>&	_getInternalBuffer() 		{ return buf_; }
-	const 	axIArray<T>&	_getInternalBuffer() const 	{ return buf_; }
+	//! rememeber to append 0 at the end
+	axIArray<T>&	_getInternalBuffer		() 		{ return buf_; }
 	
 	axStatus		_recalcSizeByZeroEnd	();
 
