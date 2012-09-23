@@ -251,15 +251,14 @@ axStatus	axJsonParser::_nextToken() {
 				r_++;
 				switch( *r_ ) {
 					case 0: return axStatus_Std::JSON_deserialize_expected_close_quota;
-				//-----
-					case '/':	
-					case '\\':	
-						break;
 				//------
-					case 'b': { st = token.append('\b'); if( !st ) return st; continue; }
-					case 'n': { st = token.append('\n'); if( !st ) return st; continue; }
-					case 'r': { st = token.append('\r'); if( !st ) return st; continue; }
-					case 't': { st = token.append('\t'); if( !st ) return st; continue; }
+					case '\\': { st = token.append('\\'); if( !st ) return st; continue; }
+					case '\"': { st = token.append('\"'); if( !st ) return st; continue; }
+					case '/':  { st = token.append('/');  if( !st ) return st; continue; }
+					case 'b':  { st = token.append('\b'); if( !st ) return st; continue; }
+					case 'n':  { st = token.append('\n'); if( !st ) return st; continue; }
+					case 'r':  { st = token.append('\r'); if( !st ) return st; continue; }
+					case 't':  { st = token.append('\t'); if( !st ) return st; continue; }
 				//-------
 					case 'u': {
 						r_++;

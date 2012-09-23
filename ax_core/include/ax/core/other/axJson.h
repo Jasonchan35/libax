@@ -184,7 +184,14 @@ public:
 	}
 	
 	template<class T>	axStatus io_value( T& value ) {
-		return ax_json_serialize_value( *this, value );
+		axStatus st;
+		st = ax_json_serialize_value( *this, value );	
+		if( !st ) {
+			log("io_value");
+			assert(false);
+			return st;
+		}
+		return 0;
 	}
 	
 	axStatus	nextToken();	
@@ -310,15 +317,15 @@ template<> axStatus ax_json_serialize_value( axJsonParser &s, bool &v );
 template<class T> inline 
 axStatus	ax_json_serialize_value ( axJsonWriter &s, axDList<T> &v ) {
 	axStatus st;
-	st = s.beginArrayValue();	if( !st ) return st;
+	st = s.beginArrayValue();		if( !st ) return st;
 
 	T *p = v.head();
 	for( ; p; p=p->next() )  {
-		st = ax_json_serialize_value ( s, (T&)*p );	if( !st ) return st;
-		st = s.write( "," );						if( !st ) return st;
+		st = s.io_value( *p );		if( !st ) return st;
+		st = s.write( "," );		if( !st ) return st;
 	}
 
-	st = s.endArrayValue();		if( !st ) return st;
+	st = s.endArrayValue();			if( !st ) return st;
 	return 0 ;
 }
 
@@ -332,7 +339,7 @@ axStatus	ax_json_serialize_value ( axJsonParser &s, axDList<T> &v ) {
 		for(;;) {
 			axAutoPtr<T> p;
 			st = p.newObject();				if( !st ) return st;
-			st = s.io( *p );				if( !st ) return st;
+			st = s.io_value( *p );			if( !st ) return st;
 			v.append( p.unref() );
 			
 			if( s.checkToken("]") ) break;	
@@ -349,8 +356,8 @@ axStatus ax_json_serialize_value( axJsonWriter &s, axIArray<T> &v ) {
 	axStatus st;
 	st = s.beginArrayValue();		if( !st ) return st;
 	for( axSize i=0; i<v.size(); i++ ) {
-		st = ax_json_serialize_value ( s, v[i] );	if( !st ) return st;
-		st = s.nextElement();						if( !st ) return st;
+		st = s.io_value( v[i] );	if( !st ) return st;
+		st = s.nextElement();		if( !st ) return st;
 	}
 	st = s.endArrayValue();			if( !st ) return st;
 	return 0;
@@ -460,9 +467,10 @@ axStatus ax_json_serialize_value( axJsonWriter &s, axTinyString_<T,LOCAL_BUF_SIZ
 template<class T, size_t LOCAL_BUF_SIZE> inline
 axStatus ax_json_serialize_value( axJsonParser &s, axTinyString_<T,LOCAL_BUF_SIZE> &v ) {
 	axStatus st;
-	st = s.nextToken();			if( !st ) return st;
 	if( ! s.tokenIsString ) return -1;
-	return v.set( s.token );
+	st = v.set( s.token );	if( !st ) return st;
+	st = s.nextToken();		if( !st ) return st;
+	return 0;	
 }
 
 template<size_t LOCAL_BUF_SIZE> inline
