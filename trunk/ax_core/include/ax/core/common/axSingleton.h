@@ -25,7 +25,7 @@ public:
 private:
 	static T* instance;	
 	static T* getInstance() {
-		if( ! instance ) { //might init be EXE/DLL
+		if( ! instance ) { //might init by other EXE/DLL
 			static T t;
 			instance = &t;
 		}
@@ -34,7 +34,7 @@ private:
 };
 
 //shared symbol between DLL/EXE
-template<class T>  axDLL_EXPORT	T* axSingleton<T>::instance; // = axSingleton<T>::getInstance();
+template<class T>  axDLL_EXPORT	T* axSingleton<T>::instance;
 
 
 #endif

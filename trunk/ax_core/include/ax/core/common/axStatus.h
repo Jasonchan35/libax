@@ -30,9 +30,7 @@ class axStatus_Module {
 public:
 	axStatus_Module( int start );
 	virtual ~axStatus_Module() {}
-	virtual	const char*	c_str( int code ) = 0;
-	
-	bool registered;
+	virtual	const char*	c_str( int code ) = 0;	
 };
 
 class axStatus_ModuleList {

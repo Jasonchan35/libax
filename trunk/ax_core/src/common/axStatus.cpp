@@ -29,7 +29,8 @@ axStatus_Module::axStatus_Module( int start ) {
 
 //======================
 axStatus_ModuleList::axStatus_ModuleList() {
-	memset( module, 0, sizeof(axStatus_Module) * kModuleMax );
+// init by static
+//	memset( module, 0, sizeof(axStatus_Module) * kModuleMax );
 }
 
 const char* axStatus_ModuleList::c_str( int code ) {
