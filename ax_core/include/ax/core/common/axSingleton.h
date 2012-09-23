@@ -13,26 +13,28 @@
 template<class T>
 class axSingleton {
 public:
-			T* operator->()			{ return & instance; }
-	const	T* operator->() const	{ return & instance; }
+			T* operator->()			{ return  getInstance(); }
+	const	T* operator->() const	{ return  getInstance(); }
 	
-			T& operator* ()			{ return instance; }
-	const	T& operator* () const	{ return instance; }
+			T& operator* ()			{ return *getInstance(); }
+	const	T& operator* () const	{ return *getInstance(); }
 	
-	operator		T*()			{ return & instance; }
-	operator const	T*() const		{ return & instance; }
+	operator		T*()			{ return  getInstance(); }
+	operator const	T*() const		{ return  getInstance(); }
 
-	static T& instance;	
 private:
-	static T& getInstance() {
-		static T t;
-		return t;
+	static T* instance;	
+	static T* getInstance() {
+		if( ! instance ) { //might init be EXE/DLL
+			static T t;
+			instance = &t;
+		}
+		return instance;
 	}
 };
 
-
-//template<class T> axDLL_EXPORT T & axSingleton<T>::instance = axSingleton<T>::getInstance();
-template<class T>  T & axSingleton<T>::instance = axSingleton<T>::getInstance();
+//shared symbol between DLL/EXE
+template<class T>  axDLL_EXPORT	T* axSingleton<T>::instance; // = axSingleton<T>::getInstance();
 
 
 #endif
