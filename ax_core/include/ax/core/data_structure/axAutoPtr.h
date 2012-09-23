@@ -33,8 +33,8 @@ public:
 
 	axStatus	onTake( axAutoPtr<T> &o )	{ ref( o.unref() ); return 0; }
 
-	axStatus	newObject	()		{ ref( new T ); return (p_)? 0 : axStatus_Std::not_enough_memory; }
-	axStatus	newObjectIfNull	()	{ return p_ ? axStatus(0) : newObject(); }
+	axStatus	newObject		()			{ ref( new T ); return (p_)? 0 : axStatus_Std::not_enough_memory; }
+	axStatus	newObjectIfNull	()			{ return p_ ? axStatus(0) : newObject(); }
 
 	void		deleteObject()		{ if( p_ ) { delete p_; p_=NULL; } }
 private:
