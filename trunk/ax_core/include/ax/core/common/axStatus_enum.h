@@ -1,4 +1,3 @@
-axStatus_enum( status_undefined )
 axStatus_enum( out_of_bound )
 axStatus_enum( not_implemented )
 axStatus_enum( not_enough_memory )

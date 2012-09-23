@@ -113,7 +113,7 @@ private:
 	};
 };
 
-static	axSingleton< axLog >	g_axLog;
+extern	axSingleton< axLog >	g_axLog;
 
 inline
 axStatus ax_log_ArgList( const char* fmt, const axStringFormat::ArgList &list ) {    

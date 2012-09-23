@@ -84,33 +84,36 @@ public:
 		return ax_json_serialize_value( *this, value );
 	}
 	
-	axJsonWriter( axIStringA &str, bool condense = true, const char* indent = " " );
-	
-	axStatus member( const char* name );
-	
-	axStatus beginObject	( const char* name );
-	axStatus endObject 		();
+		axJsonWriter( axIStringA &str, bool condense = true, const char* indent = " " );
+		
+		axStatus member( const char* name );
+		
+		axStatus beginObject	( const char* name );
+		axStatus endObject 		();
 
-	axStatus beginArray		( const char* name );
-	axStatus endArray		();
-	
-	axStatus beginObjectValue	();
-	axStatus endObjectValue 	();
+		axStatus beginArray		( const char* name );
+		axStatus endArray		();
+		
+		axStatus beginObjectValue	();
+		axStatus endObjectValue 	();
 
-	axStatus beginArrayValue	();
-	axStatus endArrayValue		();
+		axStatus beginArrayValue	();
+		axStatus endArrayValue		();
 
-	axStatus newline();
-	
-	axStatus write( const char* sz );
-	axStatus nextElement();
-	
-	axStatus nullValue();
-	
-	axStatus writeRawElement( const char* name, const char* value );
-	
-	void	setCondense( bool b )	{ condense_ = b; }
-	bool	isCondense() const		{ return condense_; }
+		axStatus newline			();
+		
+	template<class V>
+		axStatus numberValue		( V v ) { return io_value(v); }
+		axStatus stringValue		( const char* sz );
+		axStatus nullValue			();
+		
+		axStatus write				( const char* sz );	
+		axStatus nextElement		();
+		
+		axStatus writeRawElement( const char* name, const char* value );
+		
+		void	setCondense( bool b )	{ condense_ = b; }
+		bool	isCondense() const		{ return condense_; }
 	
 	class Scope_JsonCondense : public axNonCopyable {
 	public:

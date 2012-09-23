@@ -84,14 +84,18 @@ axStatus axJsonWriter::nullValue() {
 	return write("null");
 }
 
+axStatus axJsonWriter::stringValue( const char* sz ) {
+	axStatus st;
+	axTempStringA tmp;
+	st = ax_to_json_str( tmp, sz, true );	if( !st ) return st;
+	return str_->append( tmp );
+}
+
 axStatus axJsonWriter::member( const char* name ) {
 	axStatus st;
-	st = newline();			if( !st ) return st;		
-	axTempStringA	tmp;
-
-	st = ax_to_json_str( tmp, name, true );		if( !st ) return st;
-	st = str_->append( tmp );					if( !st ) return st;
-	st = str_->append( ":" );					if( !st ) return st;
+	st = newline();				if( !st ) return st;		
+	st = stringValue( name );	if( !st ) return st;	
+	st = str_->append( ":" );	if( !st ) return st;
 	return 0;
 }
 

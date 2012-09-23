@@ -867,7 +867,7 @@ void	axExecute::terminate() {
 
 axExecute::axExecute() {
 	imp = NULL;
-	returnValue_ = axStatus_Std::status_undefined;
+	returnValue_ = axStatus::k_undefine;
 }
 
 axExecute::~axExecute() {
