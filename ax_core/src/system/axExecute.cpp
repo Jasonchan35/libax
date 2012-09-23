@@ -3,6 +3,8 @@
 #include <ax/core/system/axLog.h>
 #include <ax/core/other/ax_objc.h>
 
+const size_t k_buf_size = 8*1024;
+
 class Node : public axDListNode< Node, true > {
 public:
 	enum {
@@ -14,6 +16,11 @@ public:
 		t_stderr_done,
 	};
 	int type;
+	
+	Node() {
+		buf.setCapacityIncrement( k_buf_size );
+	}
+	
 	axByteArray	buf;
 };
 
@@ -112,7 +119,7 @@ public:
 				case Node::t_stdout: 
 				case Node::t_stderr: {
 				//	DEBUG_ax_log("thread stdout / stderr");
-					NSData* data = [h availableData];
+					NSData* data = [h readDataOfLength: k_buf_size ];
 					size_t	n = [data length];
 					if( n == 0 ) {
 			//			DEBUG_ax_log("thread stdout / stderr done");
