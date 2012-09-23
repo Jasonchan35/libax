@@ -17,11 +17,7 @@ public:
 	};
 	int type;
 	
-	Node() {
-		buf.setCapacityIncrement( k_buf_size );
-	}
-	
-	axByteArray	buf;
+	axByteArray_<k_buf_size>	buf;
 };
 
 
@@ -120,7 +116,7 @@ public:
 				case Node::t_stderr: {
 				//	DEBUG_ax_log("thread stdout / stderr");
 					NSData* data = [h readDataOfLength: k_buf_size ];
-					size_t	n = [data length];
+					size_t	n    = [data length];
 					if( n == 0 ) {
 			//			DEBUG_ax_log("thread stdout / stderr done");
 						switch( p->type ) {
