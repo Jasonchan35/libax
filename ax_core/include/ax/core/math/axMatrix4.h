@@ -122,13 +122,8 @@ public:
 
 	const	static axMatrix4	kIdentity;
 
-	template<class S>	axStatus	serialize_ioT	( S &s );
-						axStatus	serialize_io	( axSerializer   &s ) { return serialize_ioT(s); }
-						axStatus	serialize_io	( axDeserializer &s ) { return serialize_ioT(s); }
+	template<class S>	axStatus	serialize_io	( S &s );
 
-						axStatus	serialize_io	( axJsonWriter	 &s );
-						axStatus	serialize_io	( axJsonParser	 &s );						
-						
 						axStatus	toStringFormat	( axStringFormat &f ) const;
 						axStatus	onTake	( axMatrix4<T> &b ) { *this = b; return 0; }
 
@@ -145,7 +140,7 @@ template< class T > inline axMatrix4d to_axMatrix4d( const axMatrix4<T>& v ) {
 
 template<class T>
 template<class S> inline
-axStatus axMatrix4<T>::serialize_ioT( S &s ) {
+axStatus axMatrix4<T>::serialize_io( S &s ) {
 #if axBYTE_ORDER == axSERIALIZE_BYTE_ORDER
 	return s.io_raw( this, sizeof(T)*16 );
 #else
@@ -157,6 +152,10 @@ axStatus axMatrix4<T>::serialize_ioT( S &s ) {
 	return 0;
 #endif
 }
+
+template< class T > inline axStatus ax_json_serialize_value( axJsonWriter &s, axMatrix4<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 16 ); }
+template< class T > inline axStatus ax_json_serialize_value( axJsonParser &s, axMatrix4<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 16 ); }
+
 
 //@}
 

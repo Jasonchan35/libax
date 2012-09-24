@@ -183,6 +183,7 @@ axStatus axJsonWriter::newline() {
 axJsonParser::axJsonParser( const char* json, bool memberMustInOrder )	{
 	lineNo_ = 1;
 	start_ = json;
+	debugLog_ = false;
 	r_ = json;
 	lineStart_ = r_;
 	ignoreUnknownMemeber_ = true;
@@ -228,7 +229,9 @@ axStatus	axJsonParser::log ( const char* msg ) {
 
 axStatus	axJsonParser::nextToken() {
 	axStatus st = _nextToken();
-//	if( st ) ax_log( "json token = [{?}] {?}", token, tokenIsString ? "isString":"" );
+	if( debugLog_ ) {
+		if( st ) ax_log( "json({?}:{?})  token = [{?}] {?}", lineNo_, charNo(), token, tokenIsString ? "isString":"" );
+	}
 	return st;
 }
 
