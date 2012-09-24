@@ -10,8 +10,9 @@
 template<class T>
 class axPtr {
 public:
-	axPtr()							{ p_=NULL; }
-	axPtr( T* p )					{ p_ = p; }
+	axPtr	()						{ p_ = NULL; }
+	axPtr	( axStatus &st )		{ p_ = NULL; st = newObject(); }	
+	axPtr	( T* p )				{ p_ = p; }
 	
 			T* ptr	()				{ return  p_; }
 	const	T* ptr	() const		{ return  p_; }

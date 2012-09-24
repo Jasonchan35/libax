@@ -13,10 +13,11 @@
 template<class T>
 class axAutoPtr : public axNonCopyable {
 public:
-	axAutoPtr()						{ p_=NULL; }
-	~axAutoPtr()					{ deleteObject(); }
+	axAutoPtr	()					{ p_=NULL; }
+	axAutoPtr	( axStatus &st )	{ p_=NULL; st = newObject(); }	
+	~axAutoPtr	()					{ deleteObject(); }
 
-	void	ref( T* p )				{ deleteObject(); p_ = p; }
+	void	ref	( T* p )				{ deleteObject(); p_ = p; }
 	T*		unref()					{ T* t=p_; p_=NULL; return t; }
 
 			T* ptr	()				{ return  p_; }
