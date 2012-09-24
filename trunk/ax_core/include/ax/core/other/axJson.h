@@ -226,6 +226,8 @@ public:
 	axSize		lineNo() { return lineNo_; }
 	axSize		charNo() { return r_ - lineStart_; }
 	
+	void		setDebugLog( bool b ) { debugLog_ = b; }
+	
 	axStatus	log		( const char* msg );
 	
 	axTempStringA		token;
@@ -236,14 +238,15 @@ public:
 	
 	void	_logIgnoreMember( const char* name );
 			
-private:
-	bool	ignoreUnknownMemeber_;
-	bool	memberMustInOrder_;	
-	
+private:	
+	axSize			lineNo_;
 	const char*		start_;
 	const char*		r_;
 	const char*		lineStart_;
-	axSize			lineNo_;
+	bool	ignoreUnknownMemeber_ : 1;
+	bool	memberMustInOrder_ : 1;	
+	bool	debugLog_ : 1;
+	
 };
 
 
@@ -355,17 +358,36 @@ axStatus	ax_json_serialize_value ( axJsonParser &s, axDList<T> &v ) {
 
 //------ Array -------
 template< class T > inline
-axStatus ax_json_serialize_value( axJsonWriter &s, axIArray<T> &v ) {
+axStatus ax_json_serialize_value_array( axJsonWriter &s, T *p, size_t n ) {
 	axStatus st;
-	st = s.beginArrayValue();		if( !st ) return st;
-	for( axSize i=0; i<v.size(); i++ ) {
-		st = s.io_value( v[i] );	if( !st ) return st;
-		st = s.nextElement();		if( !st ) return st;
-	}
-	st = s.endArrayValue();			if( !st ) return st;
+	st = s.beginArrayValue();			if( !st ) return st;
+	for(size_t i=0; i<n; i++ ) {
+		st = s.io_value( p[i] );		if( !st ) return st;
+		st = s.nextElement();			if( !st ) return st;
+	}	
+	st = s.endArrayValue();				if( !st ) return st;
 	return 0;
 }
 
+template< class T > inline
+axStatus ax_json_serialize_value( axJsonWriter &s, axIArray<T> &v ) {
+	return ax_json_serialize_value_array( s, v.ptr(), v.size() );
+}
+
+//fixed array
+template< class T > inline
+axStatus ax_json_serialize_value_array( axJsonParser &s, T *p, size_t n ) {
+	axStatus st;
+	st = s.beginArrayValue();			if( !st ) return st;
+	for(size_t i=0; i<n; i++ ) {
+		if( i > 0 ) {
+			st = s.nextElement();			if( !st ) return st;
+		}
+		st = s.io_value( p[i] );		if( !st ) return st;
+	}	
+	st = s.endArrayValue();				if( !st ) return st;
+	return 0;
+}
 
 template< class T > inline
 axStatus ax_json_serialize_value( axJsonParser &s, axIArray<T> &v ) {

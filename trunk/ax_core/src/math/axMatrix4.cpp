@@ -434,15 +434,6 @@ void axMatrix4<T>::operator*=( const axMatrix4<T> &v ) {
 	cw.w = e0*v.cw.x + e1*v.cw.y + e2*v.cw.z + e3*v.cw.w;
 }
 
-template<class T>
-axStatus	axMatrix4<T>::serialize_io( axJsonWriter	 &s ) {
-	return 0;
-}
-
-template<class T>
-axStatus	axMatrix4<T>::serialize_io( axJsonParser &s ) {
-	return 0;
-}
 
 //The explicit instantiation
 template class axMatrix4<float>;

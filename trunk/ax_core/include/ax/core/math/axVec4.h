@@ -82,9 +82,6 @@ public:
 	axVec3<T>	to_Vec3		();
 
 	template<class S>	axStatus	serialize_io	( S &se );
-	
-						axStatus	serialize_io	( axJsonWriter &s );
-						axStatus	serialize_io	( axJsonParser &s );
 		
 						axStatus	toStringFormat	( axStringFormat &f ) const;
 
@@ -177,10 +174,8 @@ axStatus axVec4<T>::serialize_io( S &s ) {
 	#endif
 }
 
-template<class T> inline
-axStatus axVec4<T>::serialize_io( axJsonWriter & s ) { axStatus st; ax_io(x); ax_io(y); ax_io(z); return 0; }
-template<class T> inline
-axStatus axVec4<T>::serialize_io( axJsonParser & s ) { axStatus st; ax_io(x); ax_io(y); ax_io(z); return 0; }
+template< class T > inline axStatus ax_json_serialize_value( axJsonWriter &s, axVec4<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 4 ); }
+template< class T > inline axStatus ax_json_serialize_value( axJsonParser &s, axVec4<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 4 ); }
 
 
 #endif //__axVec4_h__

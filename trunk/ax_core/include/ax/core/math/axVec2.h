@@ -99,8 +99,6 @@ public:
 	axStatus	onTake( axVec2<T> &b )				{ *this = b; return 0; }
 
 	template<class S>	axStatus	serialize_io	( S &se );
-						axStatus	serialize_io	( axJsonWriter &s );
-						axStatus	serialize_io	( axJsonParser &s );
 	
 						axStatus	toStringFormat	( axStringFormat &f ) const;
 
@@ -168,10 +166,8 @@ axStatus axVec2<T>::serialize_io( S &s ) {
 	#endif
 }
 
-template<class T> inline
-axStatus axVec2<T>::serialize_io( axJsonWriter & s ) { axStatus st; ax_io(x); ax_io(y); return 0; }
-template<class T> inline
-axStatus axVec2<T>::serialize_io( axJsonParser & s ) { axStatus st; ax_io(x); ax_io(y); return 0; }
+template< class T > inline axStatus ax_json_serialize_value( axJsonWriter &s, axVec2<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 2 ); }
+template< class T > inline axStatus ax_json_serialize_value( axJsonParser &s, axVec2<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 2 ); }
 
 
 #define axTYPE_LIST(T) \
