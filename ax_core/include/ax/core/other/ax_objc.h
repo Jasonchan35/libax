@@ -62,14 +62,6 @@ NSString* ax_toNSString( const wchar_t *sz ) {
 	return ax_toNSString( lstr );
 }
 
-inline
-NSString* ax_toNSString( const axUChar *sz ) {
-	if( sz == NULL ) return @"";
-	axTempStringA lstr;	
-	if( ! lstr.set( sz ) ) return nil;
-	return ax_toNSString( lstr );
-}
-
 #endif //__ax_objc_h__
 
 #endif //__OBJC__
