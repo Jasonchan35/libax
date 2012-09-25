@@ -40,16 +40,6 @@ public:
 private:
 };
 
-#if axCOMPILER_VC
-	#define axSingleton_BODY( T )	axSingleton<T>::Instance	axSingleton<T>::instance;
-#else
-	template<class T> typename axSingleton<T>::Instance axSingleton<T>::instance;
-	#define axSingleton_BODY( T )  //
-//	#define axSingleton_BODY( T )	template<class T> typename axSingleton<T>::Instance axSingleton<T>::instance;
-#endif
-
-//shared symbol between DLL/EXE
-//template<class T> axDLL_EXPORT	T* axSingleton<T>::instance;
-
+template<class T> typename axSingleton<T>::Instance axSingleton<T>::instance;
 
 #endif
