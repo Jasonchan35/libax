@@ -5,7 +5,7 @@
 //! \ingroup base_platform
 //@{
 
-#ifdef __CLANG__ 
+#ifdef __clang__ 
 	#define	axCOMPILER_CLANG	1
 #endif 
 
