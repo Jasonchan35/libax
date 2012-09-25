@@ -9,8 +9,11 @@
 #include <ax/core/string/axIString.h>
 #include <ax/core/string/axStringFormat.h>
 
-template<>  const char*		axIString_<char>   :: defaultTrimChars() { return  " \t"; }
-template<>  const wchar_t*	axIString_<wchar_t>:: defaultTrimChars() { return L" \t"; }
+template<>  const char*		axIString_<char>	:: defaultTrimChars() { return  " \t"; }
+template<>  const wchar_t*	axIString_<wchar_t>	:: defaultTrimChars() { return L" \t"; }
+
+template<>	const char*		axIString_<char>	:: defaultSeperators() { return  " \t\r\n"; }
+template<>	const wchar_t*	axIString_<wchar_t>	:: defaultSeperators() { return L" \t\r\n"; }
 
 // ---------
 
@@ -110,7 +113,7 @@ axStatus	axIString_<T> :: _appendWithLength( const T *src, axSize src_len ) {
 	if( ! src ) return 1;
 	if( src_len <= 0 ) return 1;
 
-	assert( ! inMem(src,src_len) );
+	assert( ! isMemoryOverlapped(src,src_len) );
 
 	axSize old_len = size();
 	axSize new_len = old_len + src_len;

@@ -13,9 +13,10 @@
 #include "../other/axSerializer.h"
 
 template<class T, size_t LOCAL_BUF_SIZE>
-class axTinyString_ : public axNonCopyable {
+class axTinyString_ :private axLocalBuf< T, LOCAL_BUF_SIZE > {
+	typedef	axLocalBuf< T, LOCAL_BUF_SIZE > BUF;
 public:
-	axTinyString_() { p_ = NULL; if( LOCAL_BUF_SIZE ) buf_[0] = 0; }
+	axTinyString_() { p_ = NULL; if( LOCAL_BUF_SIZE ) BUF::_localBuf(0) = 0; }
 	
 	axStatus	set				( const T* sz );
 	axStatus	setWithLength	( const T* sz, size_t len );
@@ -33,7 +34,6 @@ public:
 	
 private:
 	T*	p_;
-	T 	buf_[LOCAL_BUF_SIZE];
 };
 
 template< size_t LOCAL_BUF_SIZE >
@@ -58,20 +58,19 @@ axStatus	axTinyString_<T,LOCAL_BUF_SIZE>::setWithLength( const T* sz, size_t len
 	len++; //for zero-end
 	if( len > LOCAL_BUF_SIZE ) {
 		p_ = new T[len];
-		memcpy( p_,   sz, sizeof(T) * len );
 	}else{
-		p_ = buf_;
-		memcpy( buf_, sz, sizeof(T) * len );
+		p_ = BUF::_localBufPtr();
 	}
+	memcpy( p_, sz, sizeof(T) * len );
 	return 0;
 }
 
 template<class T, size_t LOCAL_BUF_SIZE> inline
 void		axTinyString_<T,LOCAL_BUF_SIZE>::clear() {
-	if( p_ != buf_ ) delete[] p_; 
+	if( p_ != BUF::_localBufPtr() ) delete[] p_; 
 	if( LOCAL_BUF_SIZE > 0 ) {
-		p_ = buf_;
-		buf_[0] = 0;
+		p_ = BUF::_localBufPtr();
+		BUF::_localBuf(0) = 0;
 	}else{
 		p_ = NULL;
 	}

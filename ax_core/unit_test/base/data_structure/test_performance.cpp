@@ -1,4 +1,3 @@
-#include <ax/ax_base.h>
 #include <ax/ax_core.h>
 #include <iostream>
 #include <vector>
@@ -200,9 +199,35 @@ axStatus	test_array() {
 	return 0;
 }
 
+template<size_t N>
+class LocalBufTest : public axLocalBuf<int,N> {
+public:
+	int a;
+};
+
+axStatus my_test2() {
+	axTinyStringA<0>	t0;
+
+	#define	TYPE_LIST(T) \
+		ax_log( "sizeof({?}) = {?}", #T, sizeof(T) );
+	//----
+		TYPE_LIST( LocalBufTest<5> );
+		TYPE_LIST( LocalBufTest<0> );
+
+		TYPE_LIST( axTinyStringA<7> );
+		TYPE_LIST( axTinyStringA<0> );
+	#undef TYPE_LIST
+
+		axTinyStringA<0> a;
+
+	return 0;
+}
+
+
 axStatus do_test() {
     axStatus st;
-	st = test_array();				if( !st ) return st;
+//	st = test_array();	if( !st ) return st;
+	st = my_test2();	if( !st ) return st;
 	return 0;
 }
 

@@ -90,8 +90,8 @@ const axUChar* ax_strrchrs( const axUChar* sz, const axUChar* chrs ) { return _a
 template<class T> inline
 int	 _ax_strcasecmp ( const T* s1, const T* s2 ) {
 	for( ;; s1++, s2++ ) {
-		char c1 = ax_toupper(*s1);
-		char c2 = ax_toupper(*s2);
+		T c1 = ax_toupper(*s1);
+		T c2 = ax_toupper(*s2);
 		if( c1 != c2 ) return (c1-c2);
 		if( c1 == 0 || c2 == 0 ) break;
 	}
@@ -107,8 +107,8 @@ template<class T> inline
 int	 _ax_strncasecmp( const T* s1, const T* s2, size_t n ) {
 	size_t i;
 	for( i=0; i<n; s1++, s2++, i++ ) {
-		char c1 = ax_toupper(*s1);
-		char c2 = ax_toupper(*s2);
+		T c1 = ax_toupper(*s1);
+		T c2 = ax_toupper(*s2);
 		if( c1 != c2 ) return (c1-c2);
 		if( c1 == 0 || c2 == 0 ) break;
 	}

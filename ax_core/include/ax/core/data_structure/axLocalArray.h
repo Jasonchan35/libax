@@ -3,6 +3,7 @@
 #define __axLocalArray_h__
 
 #include "axIArray.h"
+#include "axLocalBuf.h"
 
 //! \ingroup base_data_structure
 //@{
@@ -10,8 +11,9 @@
 /*!
 */
 template<class T, size_t LOCAL_BUF_SIZE>
-class axLocalArray : public axIArray<T> {
+class axLocalArray : public axIArray<T>, private axLocalBuf< T,LOCAL_BUF_SIZE > {
 	typedef	axIArray<T>	B;
+	typedef	axLocalBuf< T,LOCAL_BUF_SIZE > BUF;
 public:
 	axLocalArray()												{ _ctor(); }
 	axLocalArray( const axLocalArray<T,LOCAL_BUF_SIZE> & src )  { _ctor(); B::copy(src); }
@@ -22,15 +24,13 @@ private:
 	void	_ctor();
 	virtual	axStatus	onMalloc	( axSize req_size, T* &newPtr, axSize &newCapacity );
 	virtual void		onFree		( T* p ) { /*do nothing*/ }
-
-	char	local_[ LOCAL_BUF_SIZE * sizeof(T) ];
 };
 
 
 //------------
 template<class T, size_t LOCAL_BUF_SIZE>
 void axLocalArray<T,LOCAL_BUF_SIZE> :: _ctor() {
-	B::_init( (T*)local_, 0, LOCAL_BUF_SIZE );
+	B::_init( BUF::_localBufPtr(), 0, LOCAL_BUF_SIZE );
 }
 
 template<class T, size_t LOCAL_BUF_SIZE>
@@ -41,7 +41,7 @@ axLocalArray<T,LOCAL_BUF_SIZE> :: ~axLocalArray() {
 template<class T, size_t LOCAL_BUF_SIZE>
 axStatus	axLocalArray<T,LOCAL_BUF_SIZE> ::onMalloc	( axSize req_size, T* &newPtr, axSize &newCapacity ) { 
 	if( req_size > LOCAL_BUF_SIZE ) return axStatus_Std::LocalArray_excess_limit;  
-	newPtr = (T*)local_;
+	newPtr = BUF::_localBufPtr();
 	newCapacity = LOCAL_BUF_SIZE;
 	return 0;
 }

@@ -14,6 +14,11 @@ template<class T> inline T* ax_const_cast( const T* v ) { return const_cast<T*>(
 
 #define	ax_this	ax_const_cast(this)
 
+
+template<class T> inline bool ax_is_memory_overlapped( const T* a, size_t a_size, const T* b, size_t b_size ) {
+	return (a + a_size >= b) && (a < b + b_size ); 
+}
+
 inline void ax_toggle( bool &b ) { b = !b; }
 
 //--- 32 bits ---

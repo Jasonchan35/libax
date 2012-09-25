@@ -33,7 +33,7 @@ public:
 	virtual	const char*	c_str( int code ) = 0;	
 };
 
-class axStatus_ModuleList {
+class axStatus_ModuleList : public axSingleton< axStatus_ModuleList > {
 public:
 	enum{
 		kModuleInterval = 1000,
@@ -62,7 +62,6 @@ public:
 		
 	enum { k_undefine = -9999 };
 
-	static	axSingleton< axStatus_ModuleList >	moduleList;
 private:
 	int code_;
 	operator int()  const;

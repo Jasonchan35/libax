@@ -2,6 +2,7 @@
 #define __axArray_h__
 
 #include "axIArray.h"
+#include "axLocalBuf.h"
 
 //! \ingroup base_data_structure
 //@{
@@ -16,8 +17,9 @@
 	- auto memory grow by 1.5x of orginal size ( when capacity increment = 0 )
 */
 template<class T, size_t LOCAL_BUF_SIZE = 0>
-class axArray : public axIArray<T> {
+class axArray : public axIArray<T>, private axLocalBuf<T, LOCAL_BUF_SIZE > {
 	typedef axIArray<T>	B;
+	typedef	axLocalBuf<T, LOCAL_BUF_SIZE > BUF;
 public:
 	axArray() 											{ _ctor(); }
 //	axArray( const axArray<T, LOCAL_BUF_SIZE> & src ) 	{ _ctor(); B::copy(src); }
@@ -31,7 +33,7 @@ public:
 	virtual	void		setCapacityIncrement	( axSize n )	{ capacityIncrement_ = n;    }
 	virtual	axSize		capacityIncrement		() const		{ return capacityIncrement_; }
 	
-			bool		usingLocalBuffer() const { return (void*)B::ptr() == (void*)local_; }
+			bool		usingLocalBuffer() const { return (void*)B::ptr() == (void*)BUF::_localBufPtr(); }
 	
 protected:
 	virtual	axStatus	onMalloc	( axSize req_size, T* &newPtr, axSize &newCapacity );
@@ -42,7 +44,6 @@ protected:
 
 private:
 	void	_ctor();
-	char	local_[ LOCAL_BUF_SIZE * sizeof(T) ];
 	axSize	capacityIncrement_;
 };
 
@@ -51,7 +52,7 @@ private:
 template<class T, size_t LOCAL_BUF_SIZE> inline
 void axArray< T, LOCAL_BUF_SIZE >::_ctor() {
 	if( LOCAL_BUF_SIZE ) {
-		B::_init( (T*)local_, 0, LOCAL_BUF_SIZE );
+		B::_init( BUF::_localBufPtr(), 0, LOCAL_BUF_SIZE );
 	}else{
 		B::_init( NULL, 0, 0 );
 	}
@@ -60,7 +61,7 @@ void axArray< T, LOCAL_BUF_SIZE >::_ctor() {
 template<class T, size_t LOCAL_BUF_SIZE> inline
 axStatus	axArray< T, LOCAL_BUF_SIZE >::onMalloc( axSize req_size, T* &newPtr, axSize &newCapacity ) {
 	if( req_size <= LOCAL_BUF_SIZE ) {
-		newPtr = (T*)local_;
+		newPtr = BUF::_localBufPtr();
 		newCapacity = LOCAL_BUF_SIZE;
 		return 0;
 	}
@@ -82,7 +83,7 @@ axStatus	axArray< T, LOCAL_BUF_SIZE >::onMalloc( axSize req_size, T* &newPtr, ax
 
 template<class T, size_t LOCAL_BUF_SIZE> inline
 void axArray< T, LOCAL_BUF_SIZE >::onFree( T* p ) {
-	if( (void*)p != local_ ) {
+	if( ! usingLocalBuffer() ) {
 		ax_free( p );
 	}
 }

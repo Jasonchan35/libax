@@ -9,13 +9,14 @@
 #include <ax/core/common/axStatus.h>
 #include <ax/core/system/axLog.h>
 
-axSingleton< axStatus_ModuleList >	axStatus::moduleList;
+axSingleton_BODY( axStatus_ModuleList );
+
 axStatus_Std	axStatus_Std::inst;
 
 const char* axStatus :: c_str() const { 
 	if( code_ == k_undefine ) return "undefine";
 
-	const char* sz = moduleList->c_str(code_);
+	const char* sz = axStatus_ModuleList::instance->c_str(code_);
 	if( sz ) return sz;
 	
 	return code_ >= 0 ? "OK" : "Error";
@@ -24,7 +25,7 @@ const char* axStatus :: c_str() const {
 //======================
 
 axStatus_Module::axStatus_Module( int start ) {
-	axStatus::moduleList->registerModule( this, start );
+	axStatus_ModuleList::instance->registerModule( this, start );
 }
 
 //======================

@@ -84,7 +84,7 @@ public:
 	bool		isAll		( const T v ) const				{ return (x==v && y==v && z==v); }
 	bool		isAny		( const T v ) const				{ return (x==v || y==v || z==v); }
 
-	axVec3		reflect		( const axVec3 &normal, T f=2 ) const	{ return *this - ( normal * ( dot( normal ) * f ) ); }
+	axVec3		reflect		( const axVec3 &normal, T f=(T)2 ) const	{ return *this - ( normal * ( dot( normal ) * f ) ); }
 
 	//! magnitude
 	T			mag			() const						{ return sqrt( magSq() ); }

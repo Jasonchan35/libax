@@ -5,6 +5,7 @@
 
 #include "core/string/ax_string.h"
 
+#include "core/data_structure/axLocalBuf.h"
 #include "core/data_structure/axAutoPtr.h"
 #include "core/data_structure/axWeakPtr.h"
 #include "core/data_structure/axDList.h"

@@ -35,44 +35,6 @@ axStatus axEnvVar::onTake( axEnvVar &s ) {
 	return 0;
 }
 
-axStatus	axExecute::exec		( const char* cmd, const char*         std_in, axIStringA*   std_out, axIStringA*   std_err ) {
-	axStatus st;
-	st = asyncExec( cmd, std_in );		if( !st ) return st;
-	bool isDone;
-	while( ! isDone ) {
-		st = asyncPoll( isDone, 500, std_out, std_err );		if( !st ) return st;
-	}	
-	return 0;
-}
-
-axStatus	axExecute::execBin	( const char* cmd, const axIByteArray* std_in, axIByteArray* std_out, axIByteArray* std_err ) {
-	axStatus st;
-	st = asyncExecBin( cmd, std_in );		if( !st ) return st;
-	bool isDone;
-	while( ! isDone ) {
-		st = asyncPollBin( isDone, 500, std_out, std_err );		if( !st ) return st;
-	}	
-	return 0;
-}
-
-
-axStatus ax_exec( int& cmd_ret, const char* cmd, const char*   std_in, axIStringA*   std_out, axIStringA*   std_err ) {
-	axStatus	st;
-	axExecute	e;	
-	st =  e.exec( cmd, std_in, std_out, std_err );		if( !st ) return st;
-	cmd_ret = e.returnValue();
-	return 0;
-}
-
-axStatus ax_exec_bin( int& cmd_ret, const char* cmd, const axIByteArray* std_in, axIByteArray* std_out, axIByteArray* std_err ) {
-	axStatus	st;
-	axExecute	e;
-	st =  e.execBin( cmd, std_in, std_out, std_err );		if( !st ) return st;
-	cmd_ret = e.returnValue();
-	return 0;
-}
-
-
 #if 0
 #pragma mark ================= Mac OSX ====================
 #endif
@@ -536,7 +498,7 @@ public:
 #if axOS_WIN
 
 void axPID::reset() {
-	p_ = INVALID_HANDLE;
+	p_ = 0; //Process Handle used 0 for invalid handle
 }
 
 class axExecute_Pipe {
@@ -554,10 +516,27 @@ public:
 		if ( ! CreatePipe(&r, &w, &sa, 0) ) return -1;
 		return 0;
 	}
-	void close() {
-		if( r != INVALID_HANDLE_VALUE ) { CloseHandle(r); r=INVALID_HANDLE_VALUE; }
-		if( w != INVALID_HANDLE_VALUE ) { CloseHandle(w); w=INVALID_HANDLE_VALUE; }
+
+	axStatus createWrite() {
+		axStatus st = create();		if( !st ) return st;
+		if ( ! SetHandleInformation( w,  HANDLE_FLAG_INHERIT, 0) ) return -1;
+		return 0;
 	}
+
+	axStatus createRead() {
+		axStatus st = create();		if( !st ) return st;
+		if ( ! SetHandleInformation( r, HANDLE_FLAG_INHERIT, 0) ) return -1;
+		return 0;
+	}
+
+	void close() {
+		closeRead();
+		closeWrite();
+	}
+
+	void closeRead () { if( r != INVALID_HANDLE_VALUE ) { CloseHandle(r); r=INVALID_HANDLE_VALUE; } }
+	void closeWrite() {	if( w != INVALID_HANDLE_VALUE ) { CloseHandle(w); w=INVALID_HANDLE_VALUE; } }
+
 	HANDLE	r, w;
 };
 
@@ -567,7 +546,7 @@ class axExecute_IOThread : public axThread {
 public:
 	HANDLE		h;
 	axAtomicQueue< Node >	q;
-	axAtomicQueue< Node >	*eq;
+	axAtomicQueue< Node >*	qMain;
 	
 	virtual	void onThreadProc() {
 		DWORD dw = 0;
@@ -578,19 +557,19 @@ public:
 				case Node::t_stdin: {
 //					DEBUG_ax_log("stdin writing");
 					if( p->buf.size() == 0 ) {
-						eq->append( p );
+						qMain->append( p );
 						continue;
 					}
 					
 					if( ! WriteFile( h, p->buf.ptr(), (DWORD)p->buf.size(), &dw, NULL ) ) {
 						DEBUG_ax_log_win32_error("write child stdin failure");
 					}
-					eq->append( p );
+					qMain->append( p );
 				}break;
 				case Node::t_stdin_done: {
 //					DEBUG_ax_log("thread stdin done");
 					SetEndOfFile( h );
-					eq->append( p );
+					qMain->append( p );
 					goto quit;
 				}break;
 
@@ -604,13 +583,13 @@ public:
 								case Node::t_stdout: 	p->type = Node::t_stdout_done;	break;
 								case Node::t_stderr: 	p->type = Node::t_stderr_done;	break;
 							}						
-							eq->append( p );
+							qMain->append( p );
 							goto quit;
 						}
 					}
 					p->buf[dw] = 0; //set zero-end for string
 					p->buf.resize( dw );
-					eq->append( p );
+					qMain->append( p );
 				}break;
 			}
 		}
@@ -623,11 +602,12 @@ public:
 
 class axExecute_HADNLE {
 public:
-	axExecute_HADNLE( HANDLE h ) { h_=h; }
-	~axExecute_HADNLE() {
-		if( h_ != INVALID_HANDLE_VALUE ) { CloseHandle( h_ ); h_ = INVALID_HANDLE_VALUE; }
-	}
+	//CreateProcess using 0 for invalid handle
+	axExecute_HADNLE( HANDLE h = 0 ) { h_=h; }
+	~axExecute_HADNLE() { close(); }
 
+	void close() { if( h_ != 0 ) { CloseHandle( h_ ); h_ = 0; } }
+	void operator = ( HANDLE h ) { close(); h_ = h; }
 	operator HANDLE() { return h_; }
 
 	HANDLE h_;
@@ -657,6 +637,220 @@ axStatus	escpaceQuote( axIStringA &o, const char* sz ) {
 	return 1;
 }
 
+const int stdin_polling  = 0x1;
+const int stdout_polling = 0x2;
+const int stderr_polling = 0x4;
+
+class axExecute::Imp {
+public:
+	axExecute*	owner;
+
+	Node	stdin_node;
+	Node	stdout_node;
+	Node	stderr_node;
+
+	axExecute_IOThread	stdin_thread;
+	axExecute_IOThread	stdout_thread;
+	axExecute_IOThread	stderr_thread;
+
+	axExecute_Pipe	p_in;
+	axExecute_Pipe	p_out;
+	axExecute_Pipe	p_err;
+
+	axAtomicQueue< Node >	qMain;	
+
+	uint32_t polling;
+
+	axExecute_HADNLE childProcess;
+	axExecute_HADNLE childThread;
+
+	~Imp() {
+		stdin_thread.join();
+		stdout_thread.join();
+		stderr_thread.join();
+	}
+
+	void terminate() {
+		if( owner && childProcess ) {
+			TerminateProcess( childProcess, -9999 );
+			GetExitCodeProcess( childProcess, (LPDWORD)&owner->returnValue_ );
+		}
+	}
+
+	axStatus	create	( axExecute* owner, const char* cmd, const axIByteArray* std_in ) {
+		this->owner = owner;
+		axStatus st;
+		if( std_in ) {
+			st = stdin_node.buf.copy( *std_in );	if( !st ) return st;
+		}
+
+		st = p_in.createWrite();	if( !st ) return st;
+		st = p_out.createRead();	if( !st ) return st;
+		st = p_err.createRead();	if( !st ) return st;
+
+		axTempStringA	tmp;
+		axTempStringW	_cmd;
+
+		st = escpaceQuote( tmp, cmd );				if( !st ) return st;
+		st =  _cmd.format( "cmd /c {?}", cmd );	if( !st ) return st;
+
+	//	DEBUG_ax_log_var( _cmd );
+
+		PROCESS_INFORMATION piProcInfo; 
+		STARTUPINFO siStartInfo;
+		BOOL bSuccess = FALSE;
+
+		ZeroMemory( &piProcInfo, sizeof(PROCESS_INFORMATION) );
+	 
+	//	Set up members of the STARTUPINFO structure. 
+	//	This structure specifies the STDIN and STDOUT handles for redirection.
+	 
+		ZeroMemory( &siStartInfo, sizeof(STARTUPINFO) );
+		siStartInfo.cb = sizeof(STARTUPINFO); 
+		siStartInfo.hStdInput  = p_in.r;
+		siStartInfo.hStdOutput = p_out.w;
+		siStartInfo.hStdError  = p_err.w;
+		siStartInfo.dwFlags   |= STARTF_USESTDHANDLES;
+	 
+	// Create the child process.     
+	   bSuccess = CreateProcess( NULL,	//lpApplicationName 
+								(LPWSTR)_cmd.c_str(),	// command line 
+								NULL,			// process security attributes 
+								NULL,           // primary thread security attributes 
+								TRUE,           // handles are inherited 
+								0,              // creation flags 
+								NULL,           // use parent's environment 
+								NULL,           // use parent's current directory 
+								&siStartInfo,   // STARTUPINFO pointer 
+								&piProcInfo );  // receives PROCESS_INFORMATION 
+	   
+		// If an error occurs, exit the application. 
+		if ( ! bSuccess ) {
+		  //ErrorExit(TEXT("CreateProcess"));
+			ax_log_win32_error("CreateProcess");
+			return axStatus_Std::Execute_error;
+		}
+
+		p_in.closeRead();
+		p_out.closeWrite();
+		p_err.closeWrite();
+
+		childThread  = piProcInfo.hThread;
+		childProcess = piProcInfo.hProcess;
+		owner->pid_.p_ = piProcInfo.hProcess;
+
+	//-----
+		polling = stdin_polling | stdout_polling | stderr_polling;
+
+		const size_t buf_increment = 16*1024;
+		st = stdin_node.buf.reserve ( buf_increment );				if( !st ) return st;
+		stdin_node.buf.setCapacityIncrement ( buf_increment );		if( !st ) return st;
+		
+		st = stdout_node.buf.reserve( buf_increment );				if( !st ) return st;
+		st = stderr_node.buf.reserve( buf_increment );				if( !st ) return st;
+
+		stdin_node.type  = Node::t_stdin;
+		stdout_node.type = Node::t_stdout;
+		stderr_node.type = Node::t_stderr;
+
+
+		stdin_thread.qMain = &qMain;
+		stdin_thread.h = p_in.w;
+		stdin_thread.q.append( &stdin_node );
+
+		stdout_thread.qMain = &qMain;
+		stdout_thread.h  = p_out.r;
+		stdout_thread.q.append( &stdout_node );
+
+		stderr_thread.qMain = &qMain;
+		stderr_thread.h  = p_err.r;
+		stderr_thread.q.append( &stderr_node );
+
+		stdin_thread.create();
+		stdout_thread.create();
+		stderr_thread.create();		
+
+		return 0;
+	}
+
+
+	axStatus	poll( bool & isDone, uint32_t waitMilliseconds,
+					axIByteArray* bin_out, axIByteArray* bin_err,
+					axIStringA*   str_out, axIStringA*   str_err ) 
+	{
+		axStatus st;
+		Node* p;
+		isDone = false;
+		if( ! polling ) {
+			isDone = true;
+
+			if( ! GetExitCodeProcess( childProcess, (LPDWORD)&owner->returnValue_ ) ) return -1;
+			return 0;
+		}
+
+//		ax_log("polling {?}", polling );
+		p = qMain.takeHead( waitMilliseconds );
+		if( p ) {
+			switch( p->type ) {
+			//-- stdin
+				case Node::t_stdin: {
+					p->buf.resize(0);
+					if( owner->on_stdin( p->buf ) ) {
+//						DEBUG_ax_log("post stdin");
+						stdin_thread.q.append( p );
+					}else{
+//						DEBUG_ax_log("post stdin done");
+						p->type = Node::t_stdin_done;
+						stdin_thread.q.append( p );
+					}
+				}break;
+				case Node::t_stdin_done: {
+//					DEBUG_ax_log("stdin done");
+					ax_unset_bits( polling, stdin_polling );
+				}break;
+			//-- stdout
+				case Node::t_stdout: {
+//					DEBUG_ax_log( "stdout {?}", (const char*)p->buf.ptr() );
+					if( bin_out ) {
+						st = bin_out->appendN( p->buf );
+						if( !st ) ax_log("Error {?}: axExecute cannot append to stdout buffer", st );
+					}
+					if( str_out ) {
+						st = str_out->appendWithLength( (const char*)p->buf.ptr(), p->buf.size() );
+						if( !st ) ax_log("Error {?}: axExecute cannot append to stdout buffer", st );
+					}
+					stdout_thread.q.append( p );
+				}break;
+				case Node::t_stdout_done: {
+//					DEBUG_ax_log("stdout done");
+					ax_unset_bits( polling, stdout_polling );
+				}break;
+			//-- stderr
+				case Node::t_stderr: {
+//					DEBUG_ax_log( "stderr {?}", (const char*)p->buf.ptr() );
+					if( bin_err ) {
+						bin_err->appendN( p->buf );
+						if( !st ) ax_log("Error {?}: axExecute cannot append to stderr buffer", st );
+					}
+					if( str_err ) {
+						st = str_err->appendWithLength( (const char*)p->buf.ptr(), p->buf.size() );
+						if( !st ) ax_log("Error {?}: axExecute cannot append to stdout buffer", st );
+					}
+					stderr_thread.q.append( p );
+				}break;
+				case Node::t_stderr_done: {
+//					DEBUG_ax_log("stderr done");
+					ax_unset_bits( polling, stderr_polling );
+				}break;
+			}
+		}
+		//Sleep( 100 );
+
+		return 0;
+	}
+};
+
+/*
 axStatus axExecute::exec( int& cmd_ret, const char* cmd ) {
 	axStatus st;
 
@@ -824,7 +1018,7 @@ axStatus axExecute::exec( int& cmd_ret, const char* cmd ) {
 
 	return 0;
 }
-
+*/
 #endif//axOS_WIN
 
 #if 0
@@ -877,4 +1071,41 @@ axExecute::~axExecute() {
 	}
 }
 
+
+axStatus	axExecute::exec		( const char* cmd, const char*         std_in, axIStringA*   std_out, axIStringA*   std_err ) {
+	axStatus st;
+	st = asyncExec( cmd, std_in );		if( !st ) return st;
+	bool isDone = false;
+	while( ! isDone ) {
+		st = asyncPoll( isDone, 500, std_out, std_err );		if( !st ) return st;
+	}	
+	return 0;
+}
+
+axStatus	axExecute::execBin	( const char* cmd, const axIByteArray* std_in, axIByteArray* std_out, axIByteArray* std_err ) {
+	axStatus st;
+	st = asyncExecBin( cmd, std_in );		if( !st ) return st;
+	bool isDone = false;
+	while( ! isDone ) {
+		st = asyncPollBin( isDone, 500, std_out, std_err );		if( !st ) return st;
+	}	
+	return 0;
+}
+
+
+axStatus ax_exec( int& cmd_ret, const char* cmd, const char*   std_in, axIStringA*   std_out, axIStringA*   std_err ) {
+	axStatus	st;
+	axExecute	e;	
+	st =  e.exec( cmd, std_in, std_out, std_err );		if( !st ) return st;
+	cmd_ret = e.returnValue();
+	return 0;
+}
+
+axStatus ax_exec_bin( int& cmd_ret, const char* cmd, const axIByteArray* std_in, axIByteArray* std_out, axIByteArray* std_err ) {
+	axStatus	st;
+	axExecute	e;
+	st =  e.execBin( cmd, std_in, std_out, std_err );		if( !st ) return st;
+	cmd_ret = e.returnValue();
+	return 0;
+}
 

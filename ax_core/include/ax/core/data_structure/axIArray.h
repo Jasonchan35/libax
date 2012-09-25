@@ -106,8 +106,7 @@ public:
 						axSize		byteSize	() const					{ return size() * sizeof(T); }
 						axSize		capacity	() const					{ return capacity_; }
 
-						bool		inMem		( const T* p ) const			{ return ( capacity_ == 0 ) ? false : (p   >= p_) && (p < p_+capacity_); }
-						bool		inMem		( const T* p, axSize n ) const	{ return ( capacity_ == 0 ) ? false : (p+n >= p_) && (p < p_+capacity_); }
+						bool		isMemoryOverlapped( const T* p, axSize n ) const	{ return ax_is_memory_overlapped(p,n, p_,capacity_); }
 
 
 				virtual	void		clear		();	//!< clear and free all memory
@@ -539,7 +538,7 @@ axStatus	axIArray<T>::insertN( axSize pos, const T* src, axSize count ) {
 	}
 
 	if( move_at_same_buffer ) {
-		if( axTypeOf<T>::isPOD() ) {
+		if( axTypeOf<T>::isPOD ) {
 			T* s = p_ + pos;
 			T* d = s + count;
 			axSize n = size_ - pos;
