@@ -52,7 +52,7 @@ void axStatus_ModuleList::registerModule( axStatus_Module* mod, int moduleStart 
 	if( m < 0 || m >= kModuleMax ) {
 		assert( false );
 	}else{
-		axStatus_Module* p =  module[m];
+		//axStatus_Module* p =  module[m];
 		if( module[m] ) {
 			 return; //duplicated ?
 		}
