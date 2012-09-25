@@ -112,9 +112,9 @@ public:
 
 	axStatus		substring				( axSize start, axSize count, axIString_<T> &out ) const;
 
-	axStatus		toUpperCase				();
-	axStatus		toLowerCase				();
-
+	void			toUpperCase				();
+	void			toLowerCase				();
+	
 	axStatus		replaceChar				( T from, T to, axSize start_from = 0, axSize count = 0 );
 	axStatus		replaceCharEnd			( T from, T to, axSize start_from = 0, axSize count = 0 );
 
