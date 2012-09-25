@@ -8,6 +8,7 @@
 
 #include <ax/core/string/axIString.h>
 #include <ax/core/string/axStringFormat.h>
+#include <ax/core/other/axSerializer.h>
 
 template<>  const char*		axIString_<char>	:: defaultTrimChars() { return  " \t"; }
 template<>  const wchar_t*	axIString_<wchar_t>	:: defaultTrimChars() { return L" \t"; }
@@ -245,6 +246,7 @@ void axIString_<T> :: clear() {
 }
 
 template< class T >  bool axIString_<T> :: operator == ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) == 0; }
+template< class T >  bool axIString_<T> :: operator != ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) != 0; }
 template< class T >  bool axIString_<T> :: operator <  ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) <  0; }
 template< class T >  bool axIString_<T> :: operator >  ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) >  0; }
 template< class T >  bool axIString_<T> :: operator <= ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) <= 0; }
@@ -303,13 +305,13 @@ axStatus	axIString_<T> :: substring( axSize start, axSize count, axIString_<T> &
 }
 
 template< class T > 
-axStatus	axIString_<T> :: findChar ( T ch, axSize &out_index, axSize start_from ) const {
+axStatus	axIString_<T> :: findChar ( T ch, axSize &outPos, axSize start_from ) const {
 	if( start_from >= size() ) return axStatus_Std::invalid_parameter;
 	const T* s = &buf_[start_from];
 	const T* e = &buf_.last();
 	for( ; s<e; s++ ) {
 		if( *s == ch ) {
-			out_index = s-buf_.ptr();
+			outPos = s-buf_.ptr();
 			return 0;
 		}
 	}
@@ -317,14 +319,30 @@ axStatus	axIString_<T> :: findChar ( T ch, axSize &out_index, axSize start_from 
 }
 
 template< class T > 
-axStatus	axIString_<T> :: findCharFromEnd	( T ch, axSize &out_index, axSize	start_from_end ) const {
+axStatus	axIString_<T>::findAnyChar	( const T* char_list, axSize &outPos, axSize start_from ) const {
+	if( start_from >= size() ) return axStatus_Std::invalid_parameter;
+	const T* s = &buf_[start_from];
+	const T* e = &buf_.last();
+	for( ; s<e; s++ ) {
+		if( ax_strchrs( s, char_list ) == 0) {
+			outPos = s-buf_.ptr();
+			return 0;
+		}
+	}
+	return axStatus_Std::not_found;
+}
+
+
+
+template< class T > 
+axStatus	axIString_<T> :: findCharFromEnd	( T ch, axSize &outPos, axSize	start_from_end ) const {
 	if( start_from_end >= size() ) return axStatus_Std::invalid_parameter;
 
 	const T* s = &buf_.last( start_from_end );
 	const T* e = &buf_[0];
 	for( ; s>e; s-- ) {
 		if( *s == ch ) {
-			out_index = s-buf_.ptr();
+			outPos = s-buf_.ptr();
 			return 0;
 		}
 	}
@@ -509,6 +527,89 @@ axStatus	axIString_<T> :: replaceString ( const T* from, const T* to, axSize sta
 
 	return set( tmp );
 }
+
+//----- Serializer -------
+
+
+//---------- String ----------------
+
+//-------------- axIStringA -------
+
+template<>
+axStatus axIString_<char>::serialize_io( axLenSerializer &se ) {
+	axStatus st;
+	axSize	n = size();
+	st = se.io_vary( n );		if( !st ) return st;
+	se._advance( n );
+	return 0;
+}
+
+template<>
+axStatus axIString_<char>::serialize_io( axSerializer &se ) {
+	axSize n = size();
+	axStatus st;
+	st = se.io_vary( n );			if( !st ) return st;
+	st = se.checkRemain( n );		if( !st ) return st;
+	st = se.io_raw( c_str(), n );	if( !st ) return st;
+	return 0;
+}
+
+template<>
+axStatus axIString_<char>::serialize_io( axDeserializer &se ) {
+	axSize n;
+	axStatus st;
+	st = se.io_vary( n );							if( !st ) return st;
+	st = se.checkRemain( n );						if( !st ) return st;
+	st = setWithLength( (const char*)se.r_, n );	if( !st ) return st;
+	se._advance( n );
+	return 0;
+}
+
+//-------------- axIStringW -------
+
+template<>
+axStatus axIString_<wchar_t>::serialize_io( axLenSerializer &se ) {
+	axSize	n;
+	axStatus st;
+	st = ax_utf8_count_in_wchar( n, c_str() );		if( !st ) return st;
+	st = se.io_vary( n );							if( !st ) return st;
+	se._advance( n );
+	return 0;
+}
+
+template<>
+axStatus axIString_<wchar_t>::serialize_io( axSerializer &se ) {
+	axSize	n;
+	axStatus st;
+	st = ax_utf8_count_in_wchar( n, c_str() );		if( !st ) return st;	
+	st = se.io_vary( n );			if( !st ) return st;
+	st = se.checkRemain( n );		if( !st ) return st;
+	
+	int ret;
+	char* utf8 = (char*)se.w_;
+	axSize utf8_len = n;
+	const wchar_t* ws = c_str();
+	for( ; *ws; ws++ ) {
+		ret = ax_wchar_to_utf8( utf8, utf8_len, *ws );
+		if( ret < 0 ) return axStatus_Std::serialize_utf8_error;
+		utf8 += ret;
+		utf8_len -= ret;
+	}	
+	se._advance( n );
+	return 0;
+}
+
+template<>
+axStatus axIString_<wchar_t>::serialize_io( axDeserializer &se ) {
+	axSize n;
+	axStatus st;
+	st = se.io_vary( n );				if( !st ) return st;
+	st = se.checkRemain( n );			if( !st ) return st;
+	st = setWithLength( (const char*)se.r_, n );	if( !st ) return st;	
+	se._advance( n );
+	return 0;
+}
+
 
 //----------------
 template<>

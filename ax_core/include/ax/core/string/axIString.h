@@ -102,9 +102,9 @@ public:
 
 	axStatus		clone					( const axIString_<T> &src );
 
-	axStatus		findChar				( T ch, axSize &pos, axSize start_from = 0     ) const;
-	axStatus		findCharFromEnd			( T ch, axSize &pos, axSize	start_from_end = 0 ) const;
-	axStatus		findAnyChar				( const T* char_list, axSize &pos, axSize start_from = 0 ) const;
+	axStatus		findChar				(       T  ch,        axSize &outPos, axSize start_from     = 0 ) const;
+	axStatus		findCharFromEnd			(       T  ch,        axSize &outPos, axSize start_from_end = 0 ) const;
+	axStatus		findAnyChar				( const T* char_list, axSize &outPos, axSize start_from     = 0 ) const;
 
 	axStatus		splitByIndex			( axSize index, axIString_<T> &part1, axIString_<T> &part2 ) const;
 	axStatus		splitByChar				( T ch,         axIString_<T> &part1, axIString_<T> &part2 ) const;
