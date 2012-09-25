@@ -8,49 +8,52 @@
 
 /* Begin PBXBuildFile section */
 		EA2C373215640D9900765E93 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA2C373115640D9900765E93 /* Foundation.framework */; };
-		EA4995501605D8B7001AE979 /* ax_c_str.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA4995491605D8B7001AE979 /* ax_c_str.cpp */; };
-		EA4995511605D8B7001AE979 /* ax_print.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA49954A1605D8B7001AE979 /* ax_print.cpp */; };
-		EA4995521605D8B7001AE979 /* ax_str_encode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA49954B1605D8B7001AE979 /* ax_str_encode.cpp */; };
-		EA4995531605D8B7001AE979 /* ax_str_to.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA49954C1605D8B7001AE979 /* ax_str_to.cpp */; };
-		EA4995541605D8B7001AE979 /* axIString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA49954D1605D8B7001AE979 /* axIString.cpp */; };
-		EA4995551605D8B7001AE979 /* axString_Array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA49954E1605D8B7001AE979 /* axString_Array.cpp */; };
-		EA4995561605D8B7001AE979 /* axStringFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA49954F1605D8B7001AE979 /* axStringFormat.cpp */; };
-		EA860B1A15FBE53600C0511B /* axDBConn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AEE15FBE53600C0511B /* axDBConn.cpp */; };
-		EA860B1B15FBE53600C0511B /* axDBStmt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AEF15FBE53600C0511B /* axDBStmt.cpp */; };
-		EA860B1C15FBE53600C0511B /* axDir.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AF115FBE53600C0511B /* axDir.cpp */; };
-		EA860B1D15FBE53600C0511B /* axFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AF215FBE53600C0511B /* axFile.cpp */; };
-		EA860B1E15FBE53600C0511B /* axFileStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AF315FBE53600C0511B /* axFileStream.cpp */; };
-		EA860B1F15FBE53600C0511B /* axFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AF415FBE53600C0511B /* axFileSystem.cpp */; };
-		EA860B2015FBE53600C0511B /* axMemMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AF515FBE53600C0511B /* axMemMap.cpp */; };
-		EA860B2115FBE53600C0511B /* axEulerRotation3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AF715FBE53600C0511B /* axEulerRotation3.cpp */; };
-		EA860B2215FBE53600C0511B /* axFrustum3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AF815FBE53600C0511B /* axFrustum3.cpp */; };
-		EA860B2315FBE53600C0511B /* axIntersect3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AF915FBE53600C0511B /* axIntersect3.cpp */; };
-		EA860B2415FBE53600C0511B /* axMatrix4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AFA15FBE53600C0511B /* axMatrix4.cpp */; };
-		EA860B2515FBE53600C0511B /* axQuaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AFB15FBE53600C0511B /* axQuaternion.cpp */; };
-		EA860B2615FBE53600C0511B /* axRay3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AFC15FBE53600C0511B /* axRay3.cpp */; };
-		EA860B2715FBE53600C0511B /* axRect2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AFD15FBE53600C0511B /* axRect2.cpp */; };
-		EA860B2815FBE53600C0511B /* axVec3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AFE15FBE53600C0511B /* axVec3.cpp */; };
-		EA860B2915FBE53600C0511B /* axVec4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860AFF15FBE53600C0511B /* axVec4.cpp */; };
-		EA860B2A15FBE53600C0511B /* axVec_Str.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B0015FBE53600C0511B /* axVec_Str.cpp */; };
-		EA860B2B15FBE53600C0511B /* axSockAddr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B0215FBE53600C0511B /* axSockAddr.cpp */; };
-		EA860B2C15FBE53600C0511B /* axSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B0315FBE53600C0511B /* axSocket.cpp */; };
-		EA860B2D15FBE53600C0511B /* axJson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B0515FBE53600C0511B /* axJson.cpp */; };
-		EA860B2E15FBE53600C0511B /* axCSVParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B0715FBE53600C0511B /* axCSVParser.cpp */; };
-		EA860B2F15FBE53600C0511B /* axIniParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B0815FBE53600C0511B /* axIniParser.cpp */; };
-		EA860B3015FBE53600C0511B /* pch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B0A15FBE53600C0511B /* pch.cpp */; };
-		EA860B3115FBE53600C0511B /* pch.h in Headers */ = {isa = PBXBuildFile; fileRef = EA860B0B15FBE53600C0511B /* pch.h */; };
-		EA860B3215FBE53600C0511B /* ax_poll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B0D15FBE53600C0511B /* ax_poll.cpp */; };
-		EA860B3315FBE53600C0511B /* axAndroid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B0E15FBE53600C0511B /* axAndroid.cpp */; };
-		EA860B3415FBE53600C0511B /* axApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B0F15FBE53600C0511B /* axApp.cpp */; };
-		EA860B3515FBE53600C0511B /* axCommandLineApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B1015FBE53600C0511B /* axCommandLineApp.cpp */; };
-		EA860B3615FBE53600C0511B /* axExecute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B1115FBE53600C0511B /* axExecute.cpp */; };
-		EA860B3715FBE53600C0511B /* axLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B1215FBE53600C0511B /* axLog.cpp */; };
-		EA860B3815FBE53600C0511B /* axSharedLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B1315FBE53600C0511B /* axSharedLibrary.cpp */; };
-		EA860B3915FBE53600C0511B /* axSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B1415FBE53600C0511B /* axSystem.cpp */; };
-		EA860B3A15FBE53600C0511B /* axCondVar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B1615FBE53600C0511B /* axCondVar.cpp */; };
-		EA860B3B15FBE53600C0511B /* axMutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B1715FBE53600C0511B /* axMutex.cpp */; };
-		EA860B3C15FBE53600C0511B /* axThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B1815FBE53600C0511B /* axThread.cpp */; };
-		EA860B3D15FBE53600C0511B /* axThreadPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA860B1915FBE53600C0511B /* axThreadPool.cpp */; };
+		EAE9123116116FAA00436F31 /* axStatus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE911F916116FAA00436F31 /* axStatus.cpp */; };
+		EAE9123216116FAA00436F31 /* axDBConn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE911FB16116FAA00436F31 /* axDBConn.cpp */; };
+		EAE9123316116FAA00436F31 /* axDBStmt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE911FC16116FAA00436F31 /* axDBStmt.cpp */; };
+		EAE9123416116FAA00436F31 /* axDir.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE911FE16116FAA00436F31 /* axDir.cpp */; };
+		EAE9123516116FAA00436F31 /* axFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE911FF16116FAA00436F31 /* axFile.cpp */; };
+		EAE9123616116FAA00436F31 /* axFilePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9120016116FAA00436F31 /* axFilePath.cpp */; };
+		EAE9123716116FAA00436F31 /* axFileStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9120116116FAA00436F31 /* axFileStream.cpp */; };
+		EAE9123816116FAA00436F31 /* axFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9120216116FAA00436F31 /* axFileSystem.cpp */; };
+		EAE9123916116FAA00436F31 /* axMemMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9120316116FAA00436F31 /* axMemMap.cpp */; };
+		EAE9123A16116FAA00436F31 /* axEulerRotation3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9120516116FAA00436F31 /* axEulerRotation3.cpp */; };
+		EAE9123B16116FAA00436F31 /* axFrustum3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9120616116FAA00436F31 /* axFrustum3.cpp */; };
+		EAE9123C16116FAA00436F31 /* axIntersect3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9120716116FAA00436F31 /* axIntersect3.cpp */; };
+		EAE9123D16116FAA00436F31 /* axMatrix4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9120816116FAA00436F31 /* axMatrix4.cpp */; };
+		EAE9123E16116FAA00436F31 /* axQuaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9120916116FAA00436F31 /* axQuaternion.cpp */; };
+		EAE9123F16116FAA00436F31 /* axRay3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9120A16116FAA00436F31 /* axRay3.cpp */; };
+		EAE9124016116FAA00436F31 /* axRect2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9120B16116FAA00436F31 /* axRect2.cpp */; };
+		EAE9124116116FAA00436F31 /* axVec3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9120C16116FAA00436F31 /* axVec3.cpp */; };
+		EAE9124216116FAA00436F31 /* axVec4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9120D16116FAA00436F31 /* axVec4.cpp */; };
+		EAE9124316116FAA00436F31 /* axVec_Str.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9120E16116FAA00436F31 /* axVec_Str.cpp */; };
+		EAE9124416116FAA00436F31 /* axSockAddr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9121016116FAA00436F31 /* axSockAddr.cpp */; };
+		EAE9124516116FAA00436F31 /* axSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9121116116FAA00436F31 /* axSocket.cpp */; };
+		EAE9124616116FAA00436F31 /* axJson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9121316116FAA00436F31 /* axJson.cpp */; };
+		EAE9124716116FAA00436F31 /* axSerializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9121416116FAA00436F31 /* axSerializer.cpp */; };
+		EAE9124816116FAA00436F31 /* axCSVParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9121616116FAA00436F31 /* axCSVParser.cpp */; };
+		EAE9124916116FAA00436F31 /* axIniParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9121716116FAA00436F31 /* axIniParser.cpp */; };
+		EAE9124A16116FAA00436F31 /* pch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9121916116FAA00436F31 /* pch.cpp */; };
+		EAE9124B16116FAA00436F31 /* pch.h in Headers */ = {isa = PBXBuildFile; fileRef = EAE9121A16116FAA00436F31 /* pch.h */; };
+		EAE9124C16116FAA00436F31 /* ax_c_str.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9121C16116FAA00436F31 /* ax_c_str.cpp */; };
+		EAE9124D16116FAA00436F31 /* ax_print.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9121D16116FAA00436F31 /* ax_print.cpp */; };
+		EAE9124E16116FAA00436F31 /* ax_str_encode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9121E16116FAA00436F31 /* ax_str_encode.cpp */; };
+		EAE9124F16116FAA00436F31 /* ax_str_to.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9121F16116FAA00436F31 /* ax_str_to.cpp */; };
+		EAE9125016116FAA00436F31 /* axIString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9122016116FAA00436F31 /* axIString.cpp */; };
+		EAE9125116116FAA00436F31 /* axString_Array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9122116116FAA00436F31 /* axString_Array.cpp */; };
+		EAE9125216116FAA00436F31 /* axStringFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9122216116FAA00436F31 /* axStringFormat.cpp */; };
+		EAE9125316116FAA00436F31 /* ax_poll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9122416116FAA00436F31 /* ax_poll.cpp */; };
+		EAE9125416116FAA00436F31 /* axAndroid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9122516116FAA00436F31 /* axAndroid.cpp */; };
+		EAE9125516116FAA00436F31 /* axApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9122616116FAA00436F31 /* axApp.cpp */; };
+		EAE9125616116FAA00436F31 /* axCommandLineApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9122716116FAA00436F31 /* axCommandLineApp.cpp */; };
+		EAE9125716116FAA00436F31 /* axExecute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9122816116FAA00436F31 /* axExecute.cpp */; };
+		EAE9125816116FAA00436F31 /* axLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9122916116FAA00436F31 /* axLog.cpp */; };
+		EAE9125916116FAA00436F31 /* axSharedLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9122A16116FAA00436F31 /* axSharedLibrary.cpp */; };
+		EAE9125A16116FAA00436F31 /* axSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9122B16116FAA00436F31 /* axSystem.cpp */; };
+		EAE9125B16116FAA00436F31 /* axCondVar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9122D16116FAA00436F31 /* axCondVar.cpp */; };
+		EAE9125C16116FAA00436F31 /* axMutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9122E16116FAA00436F31 /* axMutex.cpp */; };
+		EAE9125D16116FAA00436F31 /* axThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9122F16116FAA00436F31 /* axThread.cpp */; };
+		EAE9125E16116FAA00436F31 /* axThreadPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE9123016116FAA00436F31 /* axThreadPool.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,162 +61,166 @@
 		EA21A92315640E18001B0462 /* ax_core.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ax_core.xcconfig; sourceTree = "<group>"; };
 		EA2C372E15640D9900765E93 /* libax_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libax_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA2C373115640D9900765E93 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		EA4995491605D8B7001AE979 /* ax_c_str.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_c_str.cpp; sourceTree = "<group>"; };
-		EA49954A1605D8B7001AE979 /* ax_print.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_print.cpp; sourceTree = "<group>"; };
-		EA49954B1605D8B7001AE979 /* ax_str_encode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_str_encode.cpp; sourceTree = "<group>"; };
-		EA49954C1605D8B7001AE979 /* ax_str_to.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_str_to.cpp; sourceTree = "<group>"; };
-		EA49954D1605D8B7001AE979 /* axIString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axIString.cpp; sourceTree = "<group>"; };
-		EA49954E1605D8B7001AE979 /* axString_Array.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axString_Array.cpp; sourceTree = "<group>"; };
-		EA49954F1605D8B7001AE979 /* axStringFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axStringFormat.cpp; sourceTree = "<group>"; };
-		EA860A6A15FBE51F00C0511B /* ax_core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_core.h; sourceTree = "<group>"; };
-		EA860A6D15FBE51F00C0511B /* ax_byteorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_byteorder.h; sourceTree = "<group>"; };
-		EA860A6E15FBE51F00C0511B /* ax_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_common.h; sourceTree = "<group>"; };
-		EA860A6F15FBE51F00C0511B /* ax_macro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_macro.h; sourceTree = "<group>"; };
-		EA860A7015FBE51F00C0511B /* ax_math_template.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_math_template.h; sourceTree = "<group>"; };
-		EA860A7115FBE51F00C0511B /* ax_utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_utility.h; sourceTree = "<group>"; };
-		EA860A7215FBE51F00C0511B /* axDLL_Singleton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDLL_Singleton.h; sourceTree = "<group>"; };
-		EA860A7315FBE51F00C0511B /* axSingleton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSingleton.h; sourceTree = "<group>"; };
-		EA860A7415FBE51F00C0511B /* axSize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSize.h; sourceTree = "<group>"; };
-		EA860A7515FBE51F00C0511B /* axStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axStatus.h; sourceTree = "<group>"; };
-		EA860A7615FBE51F00C0511B /* axStatus_enum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axStatus_enum.h; sourceTree = "<group>"; };
-		EA860A7715FBE51F00C0511B /* axTypeList_float.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTypeList_float.h; sourceTree = "<group>"; };
-		EA860A7815FBE51F00C0511B /* axTypeList_int.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTypeList_int.h; sourceTree = "<group>"; };
-		EA860A7915FBE51F00C0511B /* axTypeList_uint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTypeList_uint.h; sourceTree = "<group>"; };
-		EA860A7A15FBE51F00C0511B /* axTypeOf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTypeOf.h; sourceTree = "<group>"; };
-		EA860A7C15FBE51F00C0511B /* axArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axArray.h; sourceTree = "<group>"; };
-		EA860A7D15FBE51F00C0511B /* axArray0.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axArray0.h; sourceTree = "<group>"; };
-		EA860A7E15FBE51F00C0511B /* axArray_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axArray_types.h; sourceTree = "<group>"; };
-		EA860A7F15FBE51F00C0511B /* axAutoPtr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axAutoPtr.h; sourceTree = "<group>"; };
-		EA860A8015FBE51F00C0511B /* axChunkArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axChunkArray.h; sourceTree = "<group>"; };
-		EA860A8115FBE51F00C0511B /* axDList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDList.h; sourceTree = "<group>"; };
-		EA860A8215FBE51F00C0511B /* axExternalArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axExternalArray.h; sourceTree = "<group>"; };
-		EA860A8315FBE51F00C0511B /* axHashTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axHashTable.h; sourceTree = "<group>"; };
-		EA860A8415FBE51F00C0511B /* axIArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axIArray.h; sourceTree = "<group>"; };
-		EA860A8515FBE51F00C0511B /* axLocalArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axLocalArray.h; sourceTree = "<group>"; };
-		EA860A8615FBE51F00C0511B /* axPtr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axPtr.h; sourceTree = "<group>"; };
-		EA860A8715FBE51F00C0511B /* axTinyList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTinyList.h; sourceTree = "<group>"; };
-		EA860A8815FBE51F00C0511B /* axWeakPtr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axWeakPtr.h; sourceTree = "<group>"; };
-		EA860A8A15FBE51F00C0511B /* ax_objc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_objc.h; sourceTree = "<group>"; };
-		EA860A8B15FBE51F00C0511B /* axEventHook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axEventHook.h; sourceTree = "<group>"; };
-		EA860A8C15FBE51F00C0511B /* axSerializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSerializer.h; sourceTree = "<group>"; };
-		EA860A8E15FBE51F00C0511B /* ax_compiler_gcc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_compiler_gcc.h; sourceTree = "<group>"; };
-		EA860A8F15FBE51F00C0511B /* ax_compiler_vc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_compiler_vc.h; sourceTree = "<group>"; };
-		EA860A9015FBE51F00C0511B /* ax_os_android.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_os_android.h; sourceTree = "<group>"; };
-		EA860A9115FBE51F00C0511B /* ax_os_freebsd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_os_freebsd.h; sourceTree = "<group>"; };
-		EA860A9215FBE51F00C0511B /* ax_os_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_os_iOS.h; sourceTree = "<group>"; };
-		EA860A9315FBE51F00C0511B /* ax_os_linux.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_os_linux.h; sourceTree = "<group>"; };
-		EA860A9415FBE51F00C0511B /* ax_os_mac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_os_mac.h; sourceTree = "<group>"; };
-		EA860A9515FBE51F00C0511B /* ax_os_unix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_os_unix.h; sourceTree = "<group>"; };
-		EA860A9615FBE51F00C0511B /* ax_os_win.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_os_win.h; sourceTree = "<group>"; };
-		EA860A9715FBE51F00C0511B /* ax_platform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_platform.h; sourceTree = "<group>"; };
-		EA860A9915FBE51F00C0511B /* ax_c_str.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_c_str.h; sourceTree = "<group>"; };
-		EA860A9A15FBE51F00C0511B /* ax_print.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_print.h; sourceTree = "<group>"; };
-		EA860A9B15FBE51F00C0511B /* ax_str_encode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_str_encode.h; sourceTree = "<group>"; };
-		EA860A9C15FBE51F00C0511B /* ax_str_to.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_str_to.h; sourceTree = "<group>"; };
-		EA860A9D15FBE51F00C0511B /* ax_string.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_string.h; sourceTree = "<group>"; };
-		EA860A9E15FBE51F00C0511B /* ax_utf8.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_utf8.h; sourceTree = "<group>"; };
-		EA860A9F15FBE51F00C0511B /* axConstString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axConstString.h; sourceTree = "<group>"; };
-		EA860AA015FBE51F00C0511B /* axExternalString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axExternalString.h; sourceTree = "<group>"; };
-		EA860AA115FBE51F00C0511B /* axFilePath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axFilePath.h; sourceTree = "<group>"; };
-		EA860AA215FBE51F00C0511B /* axIString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axIString.h; sourceTree = "<group>"; };
-		EA860AA315FBE51F00C0511B /* axLocalString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axLocalString.h; sourceTree = "<group>"; };
-		EA860AA415FBE51F00C0511B /* axString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axString.h; sourceTree = "<group>"; };
-		EA860AA515FBE51F00C0511B /* axString_Array.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axString_Array.h; sourceTree = "<group>"; };
-		EA860AA615FBE51F00C0511B /* axString_cout_support.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axString_cout_support.h; sourceTree = "<group>"; };
-		EA860AA715FBE51F00C0511B /* axStringFormat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axStringFormat.h; sourceTree = "<group>"; };
-		EA860AA815FBE51F00C0511B /* axStringFormat_Imp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axStringFormat_Imp.h; sourceTree = "<group>"; };
-		EA860AA915FBE51F00C0511B /* axStringFormat_out_Imp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axStringFormat_out_Imp.h; sourceTree = "<group>"; };
-		EA860AAA15FBE51F00C0511B /* axTinyString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTinyString.h; sourceTree = "<group>"; };
-		EA860AAC15FBE51F00C0511B /* axDateTime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDateTime.h; sourceTree = "<group>"; };
-		EA860AAD15FBE51F00C0511B /* axStopWatch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axStopWatch.h; sourceTree = "<group>"; };
-		EA860AAE15FBE51F00C0511B /* axTimeStamp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTimeStamp.h; sourceTree = "<group>"; };
-		EA860AB115FBE51F00C0511B /* axCopyOnWrite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axCopyOnWrite.h; sourceTree = "<group>"; };
-		EA860AB215FBE51F00C0511B /* axSharedPtr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSharedPtr.h; sourceTree = "<group>"; };
-		EA860AB415FBE51F00C0511B /* axDB_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDB_common.h; sourceTree = "<group>"; };
-		EA860AB515FBE51F00C0511B /* axDBConn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDBConn.h; sourceTree = "<group>"; };
-		EA860AB615FBE51F00C0511B /* axDBStmt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDBStmt.h; sourceTree = "<group>"; };
-		EA860AB815FBE51F00C0511B /* all_file_system.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = all_file_system.h; sourceTree = "<group>"; };
-		EA860AB915FBE51F00C0511B /* axDir.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDir.h; sourceTree = "<group>"; };
-		EA860ABA15FBE51F00C0511B /* axFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axFile.h; sourceTree = "<group>"; };
-		EA860ABB15FBE51F00C0511B /* axFileStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axFileStream.h; sourceTree = "<group>"; };
-		EA860ABC15FBE51F00C0511B /* axFileSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axFileSystem.h; sourceTree = "<group>"; };
-		EA860ABD15FBE51F00C0511B /* axMemMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axMemMap.h; sourceTree = "<group>"; };
-		EA860ABF15FBE51F00C0511B /* all_math.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = all_math.h; sourceTree = "<group>"; };
-		EA860AC015FBE51F00C0511B /* ax_math_angle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_math_angle.h; sourceTree = "<group>"; };
-		EA860AC115FBE51F00C0511B /* axBBox3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axBBox3.h; sourceTree = "<group>"; };
-		EA860AC215FBE51F00C0511B /* axEulerRotation3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axEulerRotation3.h; sourceTree = "<group>"; };
-		EA860AC315FBE51F00C0511B /* axFrustum3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axFrustum3.h; sourceTree = "<group>"; };
-		EA860AC415FBE51F00C0511B /* axIntersect3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axIntersect3.h; sourceTree = "<group>"; };
-		EA860AC515FBE51F00C0511B /* axMargin2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axMargin2.h; sourceTree = "<group>"; };
-		EA860AC615FBE51F00C0511B /* axMatrix4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axMatrix4.h; sourceTree = "<group>"; };
-		EA860AC715FBE51F00C0511B /* axPlane3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axPlane3.h; sourceTree = "<group>"; };
-		EA860AC815FBE51F00C0511B /* axQuaternion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axQuaternion.h; sourceTree = "<group>"; };
-		EA860AC915FBE51F00C0511B /* axRay3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRay3.h; sourceTree = "<group>"; };
-		EA860ACA15FBE51F00C0511B /* axRect2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRect2.h; sourceTree = "<group>"; };
-		EA860ACB15FBE51F00C0511B /* axVec2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axVec2.h; sourceTree = "<group>"; };
-		EA860ACC15FBE51F00C0511B /* axVec3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axVec3.h; sourceTree = "<group>"; };
-		EA860ACD15FBE51F00C0511B /* axVec4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axVec4.h; sourceTree = "<group>"; };
-		EA860ACE15FBE51F00C0511B /* axVec_Str.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axVec_Str.h; sourceTree = "<group>"; };
-		EA860AD015FBE51F00C0511B /* axSockAddr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSockAddr.h; sourceTree = "<group>"; };
-		EA860AD115FBE51F00C0511B /* axSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSocket.h; sourceTree = "<group>"; };
-		EA860AD315FBE51F00C0511B /* axJson.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axJson.h; sourceTree = "<group>"; };
-		EA860AD415FBE51F00C0511B /* axSerializer_Helper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSerializer_Helper.h; sourceTree = "<group>"; };
-		EA860AD615FBE51F00C0511B /* axCSVParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axCSVParser.h; sourceTree = "<group>"; };
-		EA860AD715FBE51F00C0511B /* axIniParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axIniParser.h; sourceTree = "<group>"; };
-		EA860AD915FBE51F00C0511B /* all_system.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = all_system.h; sourceTree = "<group>"; };
-		EA860ADA15FBE51F00C0511B /* ax_poll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_poll.h; sourceTree = "<group>"; };
-		EA860ADB15FBE51F00C0511B /* axAndroid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axAndroid.h; sourceTree = "<group>"; };
-		EA860ADC15FBE51F00C0511B /* axApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axApp.h; sourceTree = "<group>"; };
-		EA860ADD15FBE51F00C0511B /* axCommandLineApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axCommandLineApp.h; sourceTree = "<group>"; };
-		EA860ADE15FBE51F00C0511B /* axExecute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axExecute.h; sourceTree = "<group>"; };
-		EA860ADF15FBE51F00C0511B /* axLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axLog.h; sourceTree = "<group>"; };
-		EA860AE015FBE51F00C0511B /* axSharedLibrary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSharedLibrary.h; sourceTree = "<group>"; };
-		EA860AE115FBE51F00C0511B /* axSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSystem.h; sourceTree = "<group>"; };
-		EA860AE315FBE51F00C0511B /* axAtomicInt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axAtomicInt.h; sourceTree = "<group>"; };
-		EA860AE415FBE51F00C0511B /* axAtomicQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axAtomicQueue.h; sourceTree = "<group>"; };
-		EA860AE515FBE51F00C0511B /* axCondVar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axCondVar.h; sourceTree = "<group>"; };
-		EA860AE615FBE51F00C0511B /* axMutex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axMutex.h; sourceTree = "<group>"; };
-		EA860AE715FBE51F00C0511B /* axSpinLock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSpinLock.h; sourceTree = "<group>"; };
-		EA860AE815FBE51F00C0511B /* axThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axThread.h; sourceTree = "<group>"; };
-		EA860AE915FBE51F00C0511B /* axThreadLocalPtr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axThreadLocalPtr.h; sourceTree = "<group>"; };
-		EA860AEA15FBE51F00C0511B /* axThreadPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axThreadPool.h; sourceTree = "<group>"; };
-		EA860AEB15FBE51F00C0511B /* axTimerThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTimerThread.h; sourceTree = "<group>"; };
-		EA860AEE15FBE53600C0511B /* axDBConn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDBConn.cpp; sourceTree = "<group>"; };
-		EA860AEF15FBE53600C0511B /* axDBStmt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDBStmt.cpp; sourceTree = "<group>"; };
-		EA860AF115FBE53600C0511B /* axDir.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDir.cpp; sourceTree = "<group>"; };
-		EA860AF215FBE53600C0511B /* axFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axFile.cpp; sourceTree = "<group>"; };
-		EA860AF315FBE53600C0511B /* axFileStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axFileStream.cpp; sourceTree = "<group>"; };
-		EA860AF415FBE53600C0511B /* axFileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axFileSystem.cpp; sourceTree = "<group>"; };
-		EA860AF515FBE53600C0511B /* axMemMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axMemMap.cpp; sourceTree = "<group>"; };
-		EA860AF715FBE53600C0511B /* axEulerRotation3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axEulerRotation3.cpp; sourceTree = "<group>"; };
-		EA860AF815FBE53600C0511B /* axFrustum3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axFrustum3.cpp; sourceTree = "<group>"; };
-		EA860AF915FBE53600C0511B /* axIntersect3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axIntersect3.cpp; sourceTree = "<group>"; };
-		EA860AFA15FBE53600C0511B /* axMatrix4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axMatrix4.cpp; sourceTree = "<group>"; };
-		EA860AFB15FBE53600C0511B /* axQuaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axQuaternion.cpp; sourceTree = "<group>"; };
-		EA860AFC15FBE53600C0511B /* axRay3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axRay3.cpp; sourceTree = "<group>"; };
-		EA860AFD15FBE53600C0511B /* axRect2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axRect2.cpp; sourceTree = "<group>"; };
-		EA860AFE15FBE53600C0511B /* axVec3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axVec3.cpp; sourceTree = "<group>"; };
-		EA860AFF15FBE53600C0511B /* axVec4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axVec4.cpp; sourceTree = "<group>"; };
-		EA860B0015FBE53600C0511B /* axVec_Str.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axVec_Str.cpp; sourceTree = "<group>"; };
-		EA860B0215FBE53600C0511B /* axSockAddr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axSockAddr.cpp; sourceTree = "<group>"; };
-		EA860B0315FBE53600C0511B /* axSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axSocket.cpp; sourceTree = "<group>"; };
-		EA860B0515FBE53600C0511B /* axJson.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axJson.cpp; sourceTree = "<group>"; };
-		EA860B0715FBE53600C0511B /* axCSVParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axCSVParser.cpp; sourceTree = "<group>"; };
-		EA860B0815FBE53600C0511B /* axIniParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axIniParser.cpp; sourceTree = "<group>"; };
-		EA860B0A15FBE53600C0511B /* pch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pch.cpp; sourceTree = "<group>"; };
-		EA860B0B15FBE53600C0511B /* pch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pch.h; sourceTree = "<group>"; };
-		EA860B0D15FBE53600C0511B /* ax_poll.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_poll.cpp; sourceTree = "<group>"; };
-		EA860B0E15FBE53600C0511B /* axAndroid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axAndroid.cpp; sourceTree = "<group>"; };
-		EA860B0F15FBE53600C0511B /* axApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axApp.cpp; sourceTree = "<group>"; };
-		EA860B1015FBE53600C0511B /* axCommandLineApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axCommandLineApp.cpp; sourceTree = "<group>"; };
-		EA860B1115FBE53600C0511B /* axExecute.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axExecute.cpp; sourceTree = "<group>"; };
-		EA860B1215FBE53600C0511B /* axLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axLog.cpp; sourceTree = "<group>"; };
-		EA860B1315FBE53600C0511B /* axSharedLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axSharedLibrary.cpp; sourceTree = "<group>"; };
-		EA860B1415FBE53600C0511B /* axSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axSystem.cpp; sourceTree = "<group>"; };
-		EA860B1615FBE53600C0511B /* axCondVar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axCondVar.cpp; sourceTree = "<group>"; };
-		EA860B1715FBE53600C0511B /* axMutex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axMutex.cpp; sourceTree = "<group>"; };
-		EA860B1815FBE53600C0511B /* axThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axThread.cpp; sourceTree = "<group>"; };
-		EA860B1915FBE53600C0511B /* axThreadPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axThreadPool.cpp; sourceTree = "<group>"; };
+		EAE9117716116FA100436F31 /* ax_core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_core.h; sourceTree = "<group>"; };
+		EAE9117A16116FA100436F31 /* ax_byteorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_byteorder.h; sourceTree = "<group>"; };
+		EAE9117B16116FA100436F31 /* ax_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_common.h; sourceTree = "<group>"; };
+		EAE9117C16116FA100436F31 /* ax_macro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_macro.h; sourceTree = "<group>"; };
+		EAE9117D16116FA100436F31 /* ax_math_template.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_math_template.h; sourceTree = "<group>"; };
+		EAE9117E16116FA100436F31 /* ax_utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_utility.h; sourceTree = "<group>"; };
+		EAE9117F16116FA100436F31 /* axDLL_Singleton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDLL_Singleton.h; sourceTree = "<group>"; };
+		EAE9118016116FA100436F31 /* axSingleton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSingleton.h; sourceTree = "<group>"; };
+		EAE9118116116FA100436F31 /* axSize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSize.h; sourceTree = "<group>"; };
+		EAE9118216116FA100436F31 /* axStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axStatus.h; sourceTree = "<group>"; };
+		EAE9118316116FA100436F31 /* axStatus_enum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axStatus_enum.h; sourceTree = "<group>"; };
+		EAE9118416116FA100436F31 /* axTypeList_float.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTypeList_float.h; sourceTree = "<group>"; };
+		EAE9118516116FA100436F31 /* axTypeList_int.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTypeList_int.h; sourceTree = "<group>"; };
+		EAE9118616116FA100436F31 /* axTypeList_uint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTypeList_uint.h; sourceTree = "<group>"; };
+		EAE9118716116FA100436F31 /* axTypeOf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTypeOf.h; sourceTree = "<group>"; };
+		EAE9118916116FA100436F31 /* axArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axArray.h; sourceTree = "<group>"; };
+		EAE9118A16116FA100436F31 /* axArray0.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axArray0.h; sourceTree = "<group>"; };
+		EAE9118B16116FA100436F31 /* axArray_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axArray_types.h; sourceTree = "<group>"; };
+		EAE9118C16116FA100436F31 /* axAutoPtr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axAutoPtr.h; sourceTree = "<group>"; };
+		EAE9118D16116FA100436F31 /* axChunkArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axChunkArray.h; sourceTree = "<group>"; };
+		EAE9118E16116FA100436F31 /* axCopyOnWrite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axCopyOnWrite.h; sourceTree = "<group>"; };
+		EAE9118F16116FA100436F31 /* axDList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDList.h; sourceTree = "<group>"; };
+		EAE9119016116FA100436F31 /* axExternalArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axExternalArray.h; sourceTree = "<group>"; };
+		EAE9119116116FA100436F31 /* axHashTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axHashTable.h; sourceTree = "<group>"; };
+		EAE9119216116FA100436F31 /* axIArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axIArray.h; sourceTree = "<group>"; };
+		EAE9119316116FA100436F31 /* axLocalArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axLocalArray.h; sourceTree = "<group>"; };
+		EAE9119416116FA100436F31 /* axPtr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axPtr.h; sourceTree = "<group>"; };
+		EAE9119516116FA100436F31 /* axSharedPtr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSharedPtr.h; sourceTree = "<group>"; };
+		EAE9119616116FA100436F31 /* axTinyList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTinyList.h; sourceTree = "<group>"; };
+		EAE9119716116FA100436F31 /* axWeakPtr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axWeakPtr.h; sourceTree = "<group>"; };
+		EAE9119916116FA100436F31 /* axDB_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDB_common.h; sourceTree = "<group>"; };
+		EAE9119A16116FA100436F31 /* axDBConn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDBConn.h; sourceTree = "<group>"; };
+		EAE9119B16116FA100436F31 /* axDBStmt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDBStmt.h; sourceTree = "<group>"; };
+		EAE9119D16116FA100436F31 /* all_file_system.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = all_file_system.h; sourceTree = "<group>"; };
+		EAE9119E16116FA100436F31 /* axDir.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDir.h; sourceTree = "<group>"; };
+		EAE9119F16116FA100436F31 /* axFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axFile.h; sourceTree = "<group>"; };
+		EAE911A016116FA100436F31 /* axFilePath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axFilePath.h; sourceTree = "<group>"; };
+		EAE911A116116FA100436F31 /* axFileStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axFileStream.h; sourceTree = "<group>"; };
+		EAE911A216116FA100436F31 /* axFileSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axFileSystem.h; sourceTree = "<group>"; };
+		EAE911A316116FA100436F31 /* axMemMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axMemMap.h; sourceTree = "<group>"; };
+		EAE911A516116FA100436F31 /* all_math.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = all_math.h; sourceTree = "<group>"; };
+		EAE911A616116FA100436F31 /* ax_math_angle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_math_angle.h; sourceTree = "<group>"; };
+		EAE911A716116FA100436F31 /* axBBox3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axBBox3.h; sourceTree = "<group>"; };
+		EAE911A816116FA100436F31 /* axEulerRotation3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axEulerRotation3.h; sourceTree = "<group>"; };
+		EAE911A916116FA100436F31 /* axFrustum3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axFrustum3.h; sourceTree = "<group>"; };
+		EAE911AA16116FA100436F31 /* axIntersect3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axIntersect3.h; sourceTree = "<group>"; };
+		EAE911AB16116FA100436F31 /* axMargin2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axMargin2.h; sourceTree = "<group>"; };
+		EAE911AC16116FA100436F31 /* axMatrix4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axMatrix4.h; sourceTree = "<group>"; };
+		EAE911AD16116FA100436F31 /* axPlane3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axPlane3.h; sourceTree = "<group>"; };
+		EAE911AE16116FA100436F31 /* axQuaternion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axQuaternion.h; sourceTree = "<group>"; };
+		EAE911AF16116FA100436F31 /* axRay3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRay3.h; sourceTree = "<group>"; };
+		EAE911B016116FA100436F31 /* axRect2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRect2.h; sourceTree = "<group>"; };
+		EAE911B116116FA100436F31 /* axVec2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axVec2.h; sourceTree = "<group>"; };
+		EAE911B216116FA100436F31 /* axVec3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axVec3.h; sourceTree = "<group>"; };
+		EAE911B316116FA100436F31 /* axVec4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axVec4.h; sourceTree = "<group>"; };
+		EAE911B416116FA100436F31 /* axVec_Str.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axVec_Str.h; sourceTree = "<group>"; };
+		EAE911B616116FA100436F31 /* axSockAddr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSockAddr.h; sourceTree = "<group>"; };
+		EAE911B716116FA100436F31 /* axSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSocket.h; sourceTree = "<group>"; };
+		EAE911B916116FA100436F31 /* ax_objc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_objc.h; sourceTree = "<group>"; };
+		EAE911BA16116FA100436F31 /* axEventHook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axEventHook.h; sourceTree = "<group>"; };
+		EAE911BB16116FA100436F31 /* axJson.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axJson.h; sourceTree = "<group>"; };
+		EAE911BC16116FA100436F31 /* axSerializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSerializer.h; sourceTree = "<group>"; };
+		EAE911BD16116FA100436F31 /* axSerializer_Helper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSerializer_Helper.h; sourceTree = "<group>"; };
+		EAE911BF16116FA100436F31 /* axCSVParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axCSVParser.h; sourceTree = "<group>"; };
+		EAE911C016116FA100436F31 /* axIniParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axIniParser.h; sourceTree = "<group>"; };
+		EAE911C216116FA100436F31 /* ax_compiler_gcc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_compiler_gcc.h; sourceTree = "<group>"; };
+		EAE911C316116FA100436F31 /* ax_compiler_vc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_compiler_vc.h; sourceTree = "<group>"; };
+		EAE911C416116FA100436F31 /* ax_os_android.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_os_android.h; sourceTree = "<group>"; };
+		EAE911C516116FA100436F31 /* ax_os_freebsd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_os_freebsd.h; sourceTree = "<group>"; };
+		EAE911C616116FA100436F31 /* ax_os_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_os_iOS.h; sourceTree = "<group>"; };
+		EAE911C716116FA100436F31 /* ax_os_linux.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_os_linux.h; sourceTree = "<group>"; };
+		EAE911C816116FA100436F31 /* ax_os_mac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_os_mac.h; sourceTree = "<group>"; };
+		EAE911C916116FA100436F31 /* ax_os_unix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_os_unix.h; sourceTree = "<group>"; };
+		EAE911CA16116FA100436F31 /* ax_os_win.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_os_win.h; sourceTree = "<group>"; };
+		EAE911CB16116FA100436F31 /* ax_platform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_platform.h; sourceTree = "<group>"; };
+		EAE911CD16116FA100436F31 /* ax_c_str.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_c_str.h; sourceTree = "<group>"; };
+		EAE911CE16116FA100436F31 /* ax_print.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_print.h; sourceTree = "<group>"; };
+		EAE911CF16116FA100436F31 /* ax_str_encode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_str_encode.h; sourceTree = "<group>"; };
+		EAE911D016116FA100436F31 /* ax_str_to.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_str_to.h; sourceTree = "<group>"; };
+		EAE911D116116FA100436F31 /* ax_string.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_string.h; sourceTree = "<group>"; };
+		EAE911D216116FA100436F31 /* ax_utf8.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_utf8.h; sourceTree = "<group>"; };
+		EAE911D316116FA100436F31 /* axConstString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axConstString.h; sourceTree = "<group>"; };
+		EAE911D416116FA100436F31 /* axExternalString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axExternalString.h; sourceTree = "<group>"; };
+		EAE911D516116FA100436F31 /* axIString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axIString.h; sourceTree = "<group>"; };
+		EAE911D616116FA100436F31 /* axLocalString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axLocalString.h; sourceTree = "<group>"; };
+		EAE911D716116FA100436F31 /* axString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axString.h; sourceTree = "<group>"; };
+		EAE911D816116FA100436F31 /* axString_Array.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axString_Array.h; sourceTree = "<group>"; };
+		EAE911D916116FA100436F31 /* axString_cout_support.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axString_cout_support.h; sourceTree = "<group>"; };
+		EAE911DA16116FA100436F31 /* axStringFormat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axStringFormat.h; sourceTree = "<group>"; };
+		EAE911DB16116FA100436F31 /* axStringFormat_Arg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axStringFormat_Arg.h; sourceTree = "<group>"; };
+		EAE911DC16116FA100436F31 /* axStringFormat_out_Imp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axStringFormat_out_Imp.h; sourceTree = "<group>"; };
+		EAE911DD16116FA100436F31 /* axTinyString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTinyString.h; sourceTree = "<group>"; };
+		EAE911DF16116FA100436F31 /* all_system.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = all_system.h; sourceTree = "<group>"; };
+		EAE911E016116FA100436F31 /* ax_poll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_poll.h; sourceTree = "<group>"; };
+		EAE911E116116FA100436F31 /* axAndroid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axAndroid.h; sourceTree = "<group>"; };
+		EAE911E216116FA100436F31 /* axApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axApp.h; sourceTree = "<group>"; };
+		EAE911E316116FA100436F31 /* axCommandLineApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axCommandLineApp.h; sourceTree = "<group>"; };
+		EAE911E416116FA100436F31 /* axExecute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axExecute.h; sourceTree = "<group>"; };
+		EAE911E516116FA100436F31 /* axLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axLog.h; sourceTree = "<group>"; };
+		EAE911E616116FA100436F31 /* axSharedLibrary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSharedLibrary.h; sourceTree = "<group>"; };
+		EAE911E716116FA100436F31 /* axSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSystem.h; sourceTree = "<group>"; };
+		EAE911E916116FA100436F31 /* axAtomicInt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axAtomicInt.h; sourceTree = "<group>"; };
+		EAE911EA16116FA100436F31 /* axAtomicQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axAtomicQueue.h; sourceTree = "<group>"; };
+		EAE911EB16116FA100436F31 /* axCondVar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axCondVar.h; sourceTree = "<group>"; };
+		EAE911EC16116FA100436F31 /* axJobThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axJobThread.h; sourceTree = "<group>"; };
+		EAE911ED16116FA100436F31 /* axMutex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axMutex.h; sourceTree = "<group>"; };
+		EAE911EE16116FA100436F31 /* axSpinLock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSpinLock.h; sourceTree = "<group>"; };
+		EAE911EF16116FA100436F31 /* axThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axThread.h; sourceTree = "<group>"; };
+		EAE911F016116FA100436F31 /* axThreadLocalPtr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axThreadLocalPtr.h; sourceTree = "<group>"; };
+		EAE911F116116FA100436F31 /* axThreadPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axThreadPool.h; sourceTree = "<group>"; };
+		EAE911F216116FA100436F31 /* axTimerThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTimerThread.h; sourceTree = "<group>"; };
+		EAE911F416116FA100436F31 /* axDateTime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDateTime.h; sourceTree = "<group>"; };
+		EAE911F516116FA100436F31 /* axStopWatch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axStopWatch.h; sourceTree = "<group>"; };
+		EAE911F616116FA100436F31 /* axTimeStamp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTimeStamp.h; sourceTree = "<group>"; };
+		EAE911F916116FAA00436F31 /* axStatus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axStatus.cpp; sourceTree = "<group>"; };
+		EAE911FB16116FAA00436F31 /* axDBConn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDBConn.cpp; sourceTree = "<group>"; };
+		EAE911FC16116FAA00436F31 /* axDBStmt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDBStmt.cpp; sourceTree = "<group>"; };
+		EAE911FE16116FAA00436F31 /* axDir.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDir.cpp; sourceTree = "<group>"; };
+		EAE911FF16116FAA00436F31 /* axFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axFile.cpp; sourceTree = "<group>"; };
+		EAE9120016116FAA00436F31 /* axFilePath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axFilePath.cpp; sourceTree = "<group>"; };
+		EAE9120116116FAA00436F31 /* axFileStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axFileStream.cpp; sourceTree = "<group>"; };
+		EAE9120216116FAA00436F31 /* axFileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axFileSystem.cpp; sourceTree = "<group>"; };
+		EAE9120316116FAA00436F31 /* axMemMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axMemMap.cpp; sourceTree = "<group>"; };
+		EAE9120516116FAA00436F31 /* axEulerRotation3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axEulerRotation3.cpp; sourceTree = "<group>"; };
+		EAE9120616116FAA00436F31 /* axFrustum3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axFrustum3.cpp; sourceTree = "<group>"; };
+		EAE9120716116FAA00436F31 /* axIntersect3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axIntersect3.cpp; sourceTree = "<group>"; };
+		EAE9120816116FAA00436F31 /* axMatrix4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axMatrix4.cpp; sourceTree = "<group>"; };
+		EAE9120916116FAA00436F31 /* axQuaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axQuaternion.cpp; sourceTree = "<group>"; };
+		EAE9120A16116FAA00436F31 /* axRay3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axRay3.cpp; sourceTree = "<group>"; };
+		EAE9120B16116FAA00436F31 /* axRect2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axRect2.cpp; sourceTree = "<group>"; };
+		EAE9120C16116FAA00436F31 /* axVec3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axVec3.cpp; sourceTree = "<group>"; };
+		EAE9120D16116FAA00436F31 /* axVec4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axVec4.cpp; sourceTree = "<group>"; };
+		EAE9120E16116FAA00436F31 /* axVec_Str.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axVec_Str.cpp; sourceTree = "<group>"; };
+		EAE9121016116FAA00436F31 /* axSockAddr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axSockAddr.cpp; sourceTree = "<group>"; };
+		EAE9121116116FAA00436F31 /* axSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axSocket.cpp; sourceTree = "<group>"; };
+		EAE9121316116FAA00436F31 /* axJson.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axJson.cpp; sourceTree = "<group>"; };
+		EAE9121416116FAA00436F31 /* axSerializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axSerializer.cpp; sourceTree = "<group>"; };
+		EAE9121616116FAA00436F31 /* axCSVParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axCSVParser.cpp; sourceTree = "<group>"; };
+		EAE9121716116FAA00436F31 /* axIniParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axIniParser.cpp; sourceTree = "<group>"; };
+		EAE9121916116FAA00436F31 /* pch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pch.cpp; sourceTree = "<group>"; };
+		EAE9121A16116FAA00436F31 /* pch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pch.h; sourceTree = "<group>"; };
+		EAE9121C16116FAA00436F31 /* ax_c_str.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_c_str.cpp; sourceTree = "<group>"; };
+		EAE9121D16116FAA00436F31 /* ax_print.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_print.cpp; sourceTree = "<group>"; };
+		EAE9121E16116FAA00436F31 /* ax_str_encode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_str_encode.cpp; sourceTree = "<group>"; };
+		EAE9121F16116FAA00436F31 /* ax_str_to.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_str_to.cpp; sourceTree = "<group>"; };
+		EAE9122016116FAA00436F31 /* axIString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axIString.cpp; sourceTree = "<group>"; };
+		EAE9122116116FAA00436F31 /* axString_Array.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axString_Array.cpp; sourceTree = "<group>"; };
+		EAE9122216116FAA00436F31 /* axStringFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axStringFormat.cpp; sourceTree = "<group>"; };
+		EAE9122416116FAA00436F31 /* ax_poll.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_poll.cpp; sourceTree = "<group>"; };
+		EAE9122516116FAA00436F31 /* axAndroid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axAndroid.cpp; sourceTree = "<group>"; };
+		EAE9122616116FAA00436F31 /* axApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axApp.cpp; sourceTree = "<group>"; };
+		EAE9122716116FAA00436F31 /* axCommandLineApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axCommandLineApp.cpp; sourceTree = "<group>"; };
+		EAE9122816116FAA00436F31 /* axExecute.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axExecute.cpp; sourceTree = "<group>"; };
+		EAE9122916116FAA00436F31 /* axLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axLog.cpp; sourceTree = "<group>"; };
+		EAE9122A16116FAA00436F31 /* axSharedLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axSharedLibrary.cpp; sourceTree = "<group>"; };
+		EAE9122B16116FAA00436F31 /* axSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axSystem.cpp; sourceTree = "<group>"; };
+		EAE9122D16116FAA00436F31 /* axCondVar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axCondVar.cpp; sourceTree = "<group>"; };
+		EAE9122E16116FAA00436F31 /* axMutex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axMutex.cpp; sourceTree = "<group>"; };
+		EAE9122F16116FAA00436F31 /* axThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axThread.cpp; sourceTree = "<group>"; };
+		EAE9123016116FAA00436F31 /* axThreadPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axThreadPool.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,22 +235,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		EA21A8A115640DDF001B0462 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				EA860A6815FBE51F00C0511B /* ax */,
-			);
-			name = include;
-			path = ../../../include;
-			sourceTree = "<group>";
-		};
 		EA2C372315640D9900765E93 = {
 			isa = PBXGroup;
 			children = (
+				EAE911F716116FAA00436F31 /* src */,
+				EAE9117616116FA100436F31 /* ax */,
 				EA21A92215640E18001B0462 /* ax_core build.xcconfig */,
 				EA21A92315640E18001B0462 /* ax_core.xcconfig */,
-				EA860AEC15FBE53600C0511B /* src */,
-				EA21A8A115640DDF001B0462 /* include */,
 				EA2C373015640D9900765E93 /* Frameworks */,
 				EA2C372F15640D9900765E93 /* Products */,
 			);
@@ -265,389 +263,378 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		EA4995481605D8B7001AE979 /* string */ = {
+		EAE9117616116FA100436F31 /* ax */ = {
 			isa = PBXGroup;
 			children = (
-				EA4995491605D8B7001AE979 /* ax_c_str.cpp */,
-				EA49954A1605D8B7001AE979 /* ax_print.cpp */,
-				EA49954B1605D8B7001AE979 /* ax_str_encode.cpp */,
-				EA49954C1605D8B7001AE979 /* ax_str_to.cpp */,
-				EA49954D1605D8B7001AE979 /* axIString.cpp */,
-				EA49954E1605D8B7001AE979 /* axString_Array.cpp */,
-				EA49954F1605D8B7001AE979 /* axStringFormat.cpp */,
+				EAE9117716116FA100436F31 /* ax_core.h */,
+				EAE9117816116FA100436F31 /* core */,
 			);
-			path = string;
+			name = ax;
+			path = ../../../include/ax;
 			sourceTree = "<group>";
 		};
-		EA860A6815FBE51F00C0511B /* ax */ = {
+		EAE9117816116FA100436F31 /* core */ = {
 			isa = PBXGroup;
 			children = (
-				EA860A6A15FBE51F00C0511B /* ax_core.h */,
-				EA860A6B15FBE51F00C0511B /* base */,
-				EA860AAF15FBE51F00C0511B /* core */,
-			);
-			path = ax;
-			sourceTree = "<group>";
-		};
-		EA860A6B15FBE51F00C0511B /* base */ = {
-			isa = PBXGroup;
-			children = (
-				EA860A6C15FBE51F00C0511B /* common */,
-				EA860A7B15FBE51F00C0511B /* data_structure */,
-				EA860A8915FBE51F00C0511B /* other */,
-				EA860A8D15FBE51F00C0511B /* platform */,
-				EA860A9815FBE51F00C0511B /* string */,
-				EA860AAB15FBE51F00C0511B /* time */,
-			);
-			path = base;
-			sourceTree = "<group>";
-		};
-		EA860A6C15FBE51F00C0511B /* common */ = {
-			isa = PBXGroup;
-			children = (
-				EA860A6D15FBE51F00C0511B /* ax_byteorder.h */,
-				EA860A6E15FBE51F00C0511B /* ax_common.h */,
-				EA860A6F15FBE51F00C0511B /* ax_macro.h */,
-				EA860A7015FBE51F00C0511B /* ax_math_template.h */,
-				EA860A7115FBE51F00C0511B /* ax_utility.h */,
-				EA860A7215FBE51F00C0511B /* axDLL_Singleton.h */,
-				EA860A7315FBE51F00C0511B /* axSingleton.h */,
-				EA860A7415FBE51F00C0511B /* axSize.h */,
-				EA860A7515FBE51F00C0511B /* axStatus.h */,
-				EA860A7615FBE51F00C0511B /* axStatus_enum.h */,
-				EA860A7715FBE51F00C0511B /* axTypeList_float.h */,
-				EA860A7815FBE51F00C0511B /* axTypeList_int.h */,
-				EA860A7915FBE51F00C0511B /* axTypeList_uint.h */,
-				EA860A7A15FBE51F00C0511B /* axTypeOf.h */,
-			);
-			path = common;
-			sourceTree = "<group>";
-		};
-		EA860A7B15FBE51F00C0511B /* data_structure */ = {
-			isa = PBXGroup;
-			children = (
-				EA860A7C15FBE51F00C0511B /* axArray.h */,
-				EA860A7D15FBE51F00C0511B /* axArray0.h */,
-				EA860A7E15FBE51F00C0511B /* axArray_types.h */,
-				EA860A7F15FBE51F00C0511B /* axAutoPtr.h */,
-				EA860A8015FBE51F00C0511B /* axChunkArray.h */,
-				EA860A8115FBE51F00C0511B /* axDList.h */,
-				EA860A8215FBE51F00C0511B /* axExternalArray.h */,
-				EA860A8315FBE51F00C0511B /* axHashTable.h */,
-				EA860A8415FBE51F00C0511B /* axIArray.h */,
-				EA860A8515FBE51F00C0511B /* axLocalArray.h */,
-				EA860A8615FBE51F00C0511B /* axPtr.h */,
-				EA860A8715FBE51F00C0511B /* axTinyList.h */,
-				EA860A8815FBE51F00C0511B /* axWeakPtr.h */,
-			);
-			path = data_structure;
-			sourceTree = "<group>";
-		};
-		EA860A8915FBE51F00C0511B /* other */ = {
-			isa = PBXGroup;
-			children = (
-				EA860A8A15FBE51F00C0511B /* ax_objc.h */,
-				EA860A8B15FBE51F00C0511B /* axEventHook.h */,
-				EA860A8C15FBE51F00C0511B /* axSerializer.h */,
-			);
-			path = other;
-			sourceTree = "<group>";
-		};
-		EA860A8D15FBE51F00C0511B /* platform */ = {
-			isa = PBXGroup;
-			children = (
-				EA860A8E15FBE51F00C0511B /* ax_compiler_gcc.h */,
-				EA860A8F15FBE51F00C0511B /* ax_compiler_vc.h */,
-				EA860A9015FBE51F00C0511B /* ax_os_android.h */,
-				EA860A9115FBE51F00C0511B /* ax_os_freebsd.h */,
-				EA860A9215FBE51F00C0511B /* ax_os_iOS.h */,
-				EA860A9315FBE51F00C0511B /* ax_os_linux.h */,
-				EA860A9415FBE51F00C0511B /* ax_os_mac.h */,
-				EA860A9515FBE51F00C0511B /* ax_os_unix.h */,
-				EA860A9615FBE51F00C0511B /* ax_os_win.h */,
-				EA860A9715FBE51F00C0511B /* ax_platform.h */,
-			);
-			path = platform;
-			sourceTree = "<group>";
-		};
-		EA860A9815FBE51F00C0511B /* string */ = {
-			isa = PBXGroup;
-			children = (
-				EA860A9915FBE51F00C0511B /* ax_c_str.h */,
-				EA860A9A15FBE51F00C0511B /* ax_print.h */,
-				EA860A9B15FBE51F00C0511B /* ax_str_encode.h */,
-				EA860A9C15FBE51F00C0511B /* ax_str_to.h */,
-				EA860A9D15FBE51F00C0511B /* ax_string.h */,
-				EA860A9E15FBE51F00C0511B /* ax_utf8.h */,
-				EA860A9F15FBE51F00C0511B /* axConstString.h */,
-				EA860AA015FBE51F00C0511B /* axExternalString.h */,
-				EA860AA115FBE51F00C0511B /* axFilePath.h */,
-				EA860AA215FBE51F00C0511B /* axIString.h */,
-				EA860AA315FBE51F00C0511B /* axLocalString.h */,
-				EA860AA415FBE51F00C0511B /* axString.h */,
-				EA860AA515FBE51F00C0511B /* axString_Array.h */,
-				EA860AA615FBE51F00C0511B /* axString_cout_support.h */,
-				EA860AA715FBE51F00C0511B /* axStringFormat.h */,
-				EA860AA815FBE51F00C0511B /* axStringFormat_Imp.h */,
-				EA860AA915FBE51F00C0511B /* axStringFormat_out_Imp.h */,
-				EA860AAA15FBE51F00C0511B /* axTinyString.h */,
-			);
-			path = string;
-			sourceTree = "<group>";
-		};
-		EA860AAB15FBE51F00C0511B /* time */ = {
-			isa = PBXGroup;
-			children = (
-				EA860AAC15FBE51F00C0511B /* axDateTime.h */,
-				EA860AAD15FBE51F00C0511B /* axStopWatch.h */,
-				EA860AAE15FBE51F00C0511B /* axTimeStamp.h */,
-			);
-			path = time;
-			sourceTree = "<group>";
-		};
-		EA860AAF15FBE51F00C0511B /* core */ = {
-			isa = PBXGroup;
-			children = (
-				EA860AB015FBE51F00C0511B /* data_structure */,
-				EA860AB315FBE51F00C0511B /* database */,
-				EA860AB715FBE51F00C0511B /* file_system */,
-				EA860ABE15FBE51F00C0511B /* math */,
-				EA860ACF15FBE51F00C0511B /* net */,
-				EA860AD215FBE51F00C0511B /* other */,
-				EA860AD515FBE51F00C0511B /* parser */,
-				EA860AD815FBE51F00C0511B /* system */,
-				EA860AE215FBE51F00C0511B /* thread */,
+				EAE9117916116FA100436F31 /* common */,
+				EAE9118816116FA100436F31 /* data_structure */,
+				EAE9119816116FA100436F31 /* database */,
+				EAE9119C16116FA100436F31 /* file_system */,
+				EAE911A416116FA100436F31 /* math */,
+				EAE911B516116FA100436F31 /* net */,
+				EAE911B816116FA100436F31 /* other */,
+				EAE911BE16116FA100436F31 /* parser */,
+				EAE911C116116FA100436F31 /* platform */,
+				EAE911CC16116FA100436F31 /* string */,
+				EAE911DE16116FA100436F31 /* system */,
+				EAE911E816116FA100436F31 /* thread */,
+				EAE911F316116FA100436F31 /* time */,
 			);
 			path = core;
 			sourceTree = "<group>";
 		};
-		EA860AB015FBE51F00C0511B /* data_structure */ = {
+		EAE9117916116FA100436F31 /* common */ = {
 			isa = PBXGroup;
 			children = (
-				EA860AB115FBE51F00C0511B /* axCopyOnWrite.h */,
-				EA860AB215FBE51F00C0511B /* axSharedPtr.h */,
+				EAE9117A16116FA100436F31 /* ax_byteorder.h */,
+				EAE9117B16116FA100436F31 /* ax_common.h */,
+				EAE9117C16116FA100436F31 /* ax_macro.h */,
+				EAE9117D16116FA100436F31 /* ax_math_template.h */,
+				EAE9117E16116FA100436F31 /* ax_utility.h */,
+				EAE9117F16116FA100436F31 /* axDLL_Singleton.h */,
+				EAE9118016116FA100436F31 /* axSingleton.h */,
+				EAE9118116116FA100436F31 /* axSize.h */,
+				EAE9118216116FA100436F31 /* axStatus.h */,
+				EAE9118316116FA100436F31 /* axStatus_enum.h */,
+				EAE9118416116FA100436F31 /* axTypeList_float.h */,
+				EAE9118516116FA100436F31 /* axTypeList_int.h */,
+				EAE9118616116FA100436F31 /* axTypeList_uint.h */,
+				EAE9118716116FA100436F31 /* axTypeOf.h */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		EAE9118816116FA100436F31 /* data_structure */ = {
+			isa = PBXGroup;
+			children = (
+				EAE9118916116FA100436F31 /* axArray.h */,
+				EAE9118A16116FA100436F31 /* axArray0.h */,
+				EAE9118B16116FA100436F31 /* axArray_types.h */,
+				EAE9118C16116FA100436F31 /* axAutoPtr.h */,
+				EAE9118D16116FA100436F31 /* axChunkArray.h */,
+				EAE9118E16116FA100436F31 /* axCopyOnWrite.h */,
+				EAE9118F16116FA100436F31 /* axDList.h */,
+				EAE9119016116FA100436F31 /* axExternalArray.h */,
+				EAE9119116116FA100436F31 /* axHashTable.h */,
+				EAE9119216116FA100436F31 /* axIArray.h */,
+				EAE9119316116FA100436F31 /* axLocalArray.h */,
+				EAE9119416116FA100436F31 /* axPtr.h */,
+				EAE9119516116FA100436F31 /* axSharedPtr.h */,
+				EAE9119616116FA100436F31 /* axTinyList.h */,
+				EAE9119716116FA100436F31 /* axWeakPtr.h */,
 			);
 			path = data_structure;
 			sourceTree = "<group>";
 		};
-		EA860AB315FBE51F00C0511B /* database */ = {
+		EAE9119816116FA100436F31 /* database */ = {
 			isa = PBXGroup;
 			children = (
-				EA860AB415FBE51F00C0511B /* axDB_common.h */,
-				EA860AB515FBE51F00C0511B /* axDBConn.h */,
-				EA860AB615FBE51F00C0511B /* axDBStmt.h */,
+				EAE9119916116FA100436F31 /* axDB_common.h */,
+				EAE9119A16116FA100436F31 /* axDBConn.h */,
+				EAE9119B16116FA100436F31 /* axDBStmt.h */,
 			);
 			path = database;
 			sourceTree = "<group>";
 		};
-		EA860AB715FBE51F00C0511B /* file_system */ = {
+		EAE9119C16116FA100436F31 /* file_system */ = {
 			isa = PBXGroup;
 			children = (
-				EA860AB815FBE51F00C0511B /* all_file_system.h */,
-				EA860AB915FBE51F00C0511B /* axDir.h */,
-				EA860ABA15FBE51F00C0511B /* axFile.h */,
-				EA860ABB15FBE51F00C0511B /* axFileStream.h */,
-				EA860ABC15FBE51F00C0511B /* axFileSystem.h */,
-				EA860ABD15FBE51F00C0511B /* axMemMap.h */,
+				EAE9119D16116FA100436F31 /* all_file_system.h */,
+				EAE9119E16116FA100436F31 /* axDir.h */,
+				EAE9119F16116FA100436F31 /* axFile.h */,
+				EAE911A016116FA100436F31 /* axFilePath.h */,
+				EAE911A116116FA100436F31 /* axFileStream.h */,
+				EAE911A216116FA100436F31 /* axFileSystem.h */,
+				EAE911A316116FA100436F31 /* axMemMap.h */,
 			);
 			path = file_system;
 			sourceTree = "<group>";
 		};
-		EA860ABE15FBE51F00C0511B /* math */ = {
+		EAE911A416116FA100436F31 /* math */ = {
 			isa = PBXGroup;
 			children = (
-				EA860ABF15FBE51F00C0511B /* all_math.h */,
-				EA860AC015FBE51F00C0511B /* ax_math_angle.h */,
-				EA860AC115FBE51F00C0511B /* axBBox3.h */,
-				EA860AC215FBE51F00C0511B /* axEulerRotation3.h */,
-				EA860AC315FBE51F00C0511B /* axFrustum3.h */,
-				EA860AC415FBE51F00C0511B /* axIntersect3.h */,
-				EA860AC515FBE51F00C0511B /* axMargin2.h */,
-				EA860AC615FBE51F00C0511B /* axMatrix4.h */,
-				EA860AC715FBE51F00C0511B /* axPlane3.h */,
-				EA860AC815FBE51F00C0511B /* axQuaternion.h */,
-				EA860AC915FBE51F00C0511B /* axRay3.h */,
-				EA860ACA15FBE51F00C0511B /* axRect2.h */,
-				EA860ACB15FBE51F00C0511B /* axVec2.h */,
-				EA860ACC15FBE51F00C0511B /* axVec3.h */,
-				EA860ACD15FBE51F00C0511B /* axVec4.h */,
-				EA860ACE15FBE51F00C0511B /* axVec_Str.h */,
+				EAE911A516116FA100436F31 /* all_math.h */,
+				EAE911A616116FA100436F31 /* ax_math_angle.h */,
+				EAE911A716116FA100436F31 /* axBBox3.h */,
+				EAE911A816116FA100436F31 /* axEulerRotation3.h */,
+				EAE911A916116FA100436F31 /* axFrustum3.h */,
+				EAE911AA16116FA100436F31 /* axIntersect3.h */,
+				EAE911AB16116FA100436F31 /* axMargin2.h */,
+				EAE911AC16116FA100436F31 /* axMatrix4.h */,
+				EAE911AD16116FA100436F31 /* axPlane3.h */,
+				EAE911AE16116FA100436F31 /* axQuaternion.h */,
+				EAE911AF16116FA100436F31 /* axRay3.h */,
+				EAE911B016116FA100436F31 /* axRect2.h */,
+				EAE911B116116FA100436F31 /* axVec2.h */,
+				EAE911B216116FA100436F31 /* axVec3.h */,
+				EAE911B316116FA100436F31 /* axVec4.h */,
+				EAE911B416116FA100436F31 /* axVec_Str.h */,
 			);
 			path = math;
 			sourceTree = "<group>";
 		};
-		EA860ACF15FBE51F00C0511B /* net */ = {
+		EAE911B516116FA100436F31 /* net */ = {
 			isa = PBXGroup;
 			children = (
-				EA860AD015FBE51F00C0511B /* axSockAddr.h */,
-				EA860AD115FBE51F00C0511B /* axSocket.h */,
+				EAE911B616116FA100436F31 /* axSockAddr.h */,
+				EAE911B716116FA100436F31 /* axSocket.h */,
 			);
 			path = net;
 			sourceTree = "<group>";
 		};
-		EA860AD215FBE51F00C0511B /* other */ = {
+		EAE911B816116FA100436F31 /* other */ = {
 			isa = PBXGroup;
 			children = (
-				EA860AD315FBE51F00C0511B /* axJson.h */,
-				EA860AD415FBE51F00C0511B /* axSerializer_Helper.h */,
+				EAE911B916116FA100436F31 /* ax_objc.h */,
+				EAE911BA16116FA100436F31 /* axEventHook.h */,
+				EAE911BB16116FA100436F31 /* axJson.h */,
+				EAE911BC16116FA100436F31 /* axSerializer.h */,
+				EAE911BD16116FA100436F31 /* axSerializer_Helper.h */,
 			);
 			path = other;
 			sourceTree = "<group>";
 		};
-		EA860AD515FBE51F00C0511B /* parser */ = {
+		EAE911BE16116FA100436F31 /* parser */ = {
 			isa = PBXGroup;
 			children = (
-				EA860AD615FBE51F00C0511B /* axCSVParser.h */,
-				EA860AD715FBE51F00C0511B /* axIniParser.h */,
+				EAE911BF16116FA100436F31 /* axCSVParser.h */,
+				EAE911C016116FA100436F31 /* axIniParser.h */,
 			);
 			path = parser;
 			sourceTree = "<group>";
 		};
-		EA860AD815FBE51F00C0511B /* system */ = {
+		EAE911C116116FA100436F31 /* platform */ = {
 			isa = PBXGroup;
 			children = (
-				EA860AD915FBE51F00C0511B /* all_system.h */,
-				EA860ADA15FBE51F00C0511B /* ax_poll.h */,
-				EA860ADB15FBE51F00C0511B /* axAndroid.h */,
-				EA860ADC15FBE51F00C0511B /* axApp.h */,
-				EA860ADD15FBE51F00C0511B /* axCommandLineApp.h */,
-				EA860ADE15FBE51F00C0511B /* axExecute.h */,
-				EA860ADF15FBE51F00C0511B /* axLog.h */,
-				EA860AE015FBE51F00C0511B /* axSharedLibrary.h */,
-				EA860AE115FBE51F00C0511B /* axSystem.h */,
+				EAE911C216116FA100436F31 /* ax_compiler_gcc.h */,
+				EAE911C316116FA100436F31 /* ax_compiler_vc.h */,
+				EAE911C416116FA100436F31 /* ax_os_android.h */,
+				EAE911C516116FA100436F31 /* ax_os_freebsd.h */,
+				EAE911C616116FA100436F31 /* ax_os_iOS.h */,
+				EAE911C716116FA100436F31 /* ax_os_linux.h */,
+				EAE911C816116FA100436F31 /* ax_os_mac.h */,
+				EAE911C916116FA100436F31 /* ax_os_unix.h */,
+				EAE911CA16116FA100436F31 /* ax_os_win.h */,
+				EAE911CB16116FA100436F31 /* ax_platform.h */,
+			);
+			path = platform;
+			sourceTree = "<group>";
+		};
+		EAE911CC16116FA100436F31 /* string */ = {
+			isa = PBXGroup;
+			children = (
+				EAE911CD16116FA100436F31 /* ax_c_str.h */,
+				EAE911CE16116FA100436F31 /* ax_print.h */,
+				EAE911CF16116FA100436F31 /* ax_str_encode.h */,
+				EAE911D016116FA100436F31 /* ax_str_to.h */,
+				EAE911D116116FA100436F31 /* ax_string.h */,
+				EAE911D216116FA100436F31 /* ax_utf8.h */,
+				EAE911D316116FA100436F31 /* axConstString.h */,
+				EAE911D416116FA100436F31 /* axExternalString.h */,
+				EAE911D516116FA100436F31 /* axIString.h */,
+				EAE911D616116FA100436F31 /* axLocalString.h */,
+				EAE911D716116FA100436F31 /* axString.h */,
+				EAE911D816116FA100436F31 /* axString_Array.h */,
+				EAE911D916116FA100436F31 /* axString_cout_support.h */,
+				EAE911DA16116FA100436F31 /* axStringFormat.h */,
+				EAE911DB16116FA100436F31 /* axStringFormat_Arg.h */,
+				EAE911DC16116FA100436F31 /* axStringFormat_out_Imp.h */,
+				EAE911DD16116FA100436F31 /* axTinyString.h */,
+			);
+			path = string;
+			sourceTree = "<group>";
+		};
+		EAE911DE16116FA100436F31 /* system */ = {
+			isa = PBXGroup;
+			children = (
+				EAE911DF16116FA100436F31 /* all_system.h */,
+				EAE911E016116FA100436F31 /* ax_poll.h */,
+				EAE911E116116FA100436F31 /* axAndroid.h */,
+				EAE911E216116FA100436F31 /* axApp.h */,
+				EAE911E316116FA100436F31 /* axCommandLineApp.h */,
+				EAE911E416116FA100436F31 /* axExecute.h */,
+				EAE911E516116FA100436F31 /* axLog.h */,
+				EAE911E616116FA100436F31 /* axSharedLibrary.h */,
+				EAE911E716116FA100436F31 /* axSystem.h */,
 			);
 			path = system;
 			sourceTree = "<group>";
 		};
-		EA860AE215FBE51F00C0511B /* thread */ = {
+		EAE911E816116FA100436F31 /* thread */ = {
 			isa = PBXGroup;
 			children = (
-				EA860AE315FBE51F00C0511B /* axAtomicInt.h */,
-				EA860AE415FBE51F00C0511B /* axAtomicQueue.h */,
-				EA860AE515FBE51F00C0511B /* axCondVar.h */,
-				EA860AE615FBE51F00C0511B /* axMutex.h */,
-				EA860AE715FBE51F00C0511B /* axSpinLock.h */,
-				EA860AE815FBE51F00C0511B /* axThread.h */,
-				EA860AE915FBE51F00C0511B /* axThreadLocalPtr.h */,
-				EA860AEA15FBE51F00C0511B /* axThreadPool.h */,
-				EA860AEB15FBE51F00C0511B /* axTimerThread.h */,
+				EAE911E916116FA100436F31 /* axAtomicInt.h */,
+				EAE911EA16116FA100436F31 /* axAtomicQueue.h */,
+				EAE911EB16116FA100436F31 /* axCondVar.h */,
+				EAE911EC16116FA100436F31 /* axJobThread.h */,
+				EAE911ED16116FA100436F31 /* axMutex.h */,
+				EAE911EE16116FA100436F31 /* axSpinLock.h */,
+				EAE911EF16116FA100436F31 /* axThread.h */,
+				EAE911F016116FA100436F31 /* axThreadLocalPtr.h */,
+				EAE911F116116FA100436F31 /* axThreadPool.h */,
+				EAE911F216116FA100436F31 /* axTimerThread.h */,
 			);
 			path = thread;
 			sourceTree = "<group>";
 		};
-		EA860AEC15FBE53600C0511B /* src */ = {
+		EAE911F316116FA100436F31 /* time */ = {
 			isa = PBXGroup;
 			children = (
-				EA4995481605D8B7001AE979 /* string */,
-				EA860AED15FBE53600C0511B /* database */,
-				EA860AF015FBE53600C0511B /* file_system */,
-				EA860AF615FBE53600C0511B /* math */,
-				EA860B0115FBE53600C0511B /* net */,
-				EA860B0415FBE53600C0511B /* other */,
-				EA860B0615FBE53600C0511B /* parser */,
-				EA860B0915FBE53600C0511B /* pch */,
-				EA860B0C15FBE53600C0511B /* system */,
-				EA860B1515FBE53600C0511B /* thread */,
+				EAE911F416116FA100436F31 /* axDateTime.h */,
+				EAE911F516116FA100436F31 /* axStopWatch.h */,
+				EAE911F616116FA100436F31 /* axTimeStamp.h */,
+			);
+			path = time;
+			sourceTree = "<group>";
+		};
+		EAE911F716116FAA00436F31 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				EAE911F816116FAA00436F31 /* common */,
+				EAE911FA16116FAA00436F31 /* database */,
+				EAE911FD16116FAA00436F31 /* file_system */,
+				EAE9120416116FAA00436F31 /* math */,
+				EAE9120F16116FAA00436F31 /* net */,
+				EAE9121216116FAA00436F31 /* other */,
+				EAE9121516116FAA00436F31 /* parser */,
+				EAE9121816116FAA00436F31 /* pch */,
+				EAE9121B16116FAA00436F31 /* string */,
+				EAE9122316116FAA00436F31 /* system */,
+				EAE9122C16116FAA00436F31 /* thread */,
 			);
 			name = src;
 			path = ../../../src;
 			sourceTree = "<group>";
 		};
-		EA860AED15FBE53600C0511B /* database */ = {
+		EAE911F816116FAA00436F31 /* common */ = {
 			isa = PBXGroup;
 			children = (
-				EA860AEE15FBE53600C0511B /* axDBConn.cpp */,
-				EA860AEF15FBE53600C0511B /* axDBStmt.cpp */,
+				EAE911F916116FAA00436F31 /* axStatus.cpp */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		EAE911FA16116FAA00436F31 /* database */ = {
+			isa = PBXGroup;
+			children = (
+				EAE911FB16116FAA00436F31 /* axDBConn.cpp */,
+				EAE911FC16116FAA00436F31 /* axDBStmt.cpp */,
 			);
 			path = database;
 			sourceTree = "<group>";
 		};
-		EA860AF015FBE53600C0511B /* file_system */ = {
+		EAE911FD16116FAA00436F31 /* file_system */ = {
 			isa = PBXGroup;
 			children = (
-				EA860AF115FBE53600C0511B /* axDir.cpp */,
-				EA860AF215FBE53600C0511B /* axFile.cpp */,
-				EA860AF315FBE53600C0511B /* axFileStream.cpp */,
-				EA860AF415FBE53600C0511B /* axFileSystem.cpp */,
-				EA860AF515FBE53600C0511B /* axMemMap.cpp */,
+				EAE911FE16116FAA00436F31 /* axDir.cpp */,
+				EAE911FF16116FAA00436F31 /* axFile.cpp */,
+				EAE9120016116FAA00436F31 /* axFilePath.cpp */,
+				EAE9120116116FAA00436F31 /* axFileStream.cpp */,
+				EAE9120216116FAA00436F31 /* axFileSystem.cpp */,
+				EAE9120316116FAA00436F31 /* axMemMap.cpp */,
 			);
 			path = file_system;
 			sourceTree = "<group>";
 		};
-		EA860AF615FBE53600C0511B /* math */ = {
+		EAE9120416116FAA00436F31 /* math */ = {
 			isa = PBXGroup;
 			children = (
-				EA860AF715FBE53600C0511B /* axEulerRotation3.cpp */,
-				EA860AF815FBE53600C0511B /* axFrustum3.cpp */,
-				EA860AF915FBE53600C0511B /* axIntersect3.cpp */,
-				EA860AFA15FBE53600C0511B /* axMatrix4.cpp */,
-				EA860AFB15FBE53600C0511B /* axQuaternion.cpp */,
-				EA860AFC15FBE53600C0511B /* axRay3.cpp */,
-				EA860AFD15FBE53600C0511B /* axRect2.cpp */,
-				EA860AFE15FBE53600C0511B /* axVec3.cpp */,
-				EA860AFF15FBE53600C0511B /* axVec4.cpp */,
-				EA860B0015FBE53600C0511B /* axVec_Str.cpp */,
+				EAE9120516116FAA00436F31 /* axEulerRotation3.cpp */,
+				EAE9120616116FAA00436F31 /* axFrustum3.cpp */,
+				EAE9120716116FAA00436F31 /* axIntersect3.cpp */,
+				EAE9120816116FAA00436F31 /* axMatrix4.cpp */,
+				EAE9120916116FAA00436F31 /* axQuaternion.cpp */,
+				EAE9120A16116FAA00436F31 /* axRay3.cpp */,
+				EAE9120B16116FAA00436F31 /* axRect2.cpp */,
+				EAE9120C16116FAA00436F31 /* axVec3.cpp */,
+				EAE9120D16116FAA00436F31 /* axVec4.cpp */,
+				EAE9120E16116FAA00436F31 /* axVec_Str.cpp */,
 			);
 			path = math;
 			sourceTree = "<group>";
 		};
-		EA860B0115FBE53600C0511B /* net */ = {
+		EAE9120F16116FAA00436F31 /* net */ = {
 			isa = PBXGroup;
 			children = (
-				EA860B0215FBE53600C0511B /* axSockAddr.cpp */,
-				EA860B0315FBE53600C0511B /* axSocket.cpp */,
+				EAE9121016116FAA00436F31 /* axSockAddr.cpp */,
+				EAE9121116116FAA00436F31 /* axSocket.cpp */,
 			);
 			path = net;
 			sourceTree = "<group>";
 		};
-		EA860B0415FBE53600C0511B /* other */ = {
+		EAE9121216116FAA00436F31 /* other */ = {
 			isa = PBXGroup;
 			children = (
-				EA860B0515FBE53600C0511B /* axJson.cpp */,
+				EAE9121316116FAA00436F31 /* axJson.cpp */,
+				EAE9121416116FAA00436F31 /* axSerializer.cpp */,
 			);
 			path = other;
 			sourceTree = "<group>";
 		};
-		EA860B0615FBE53600C0511B /* parser */ = {
+		EAE9121516116FAA00436F31 /* parser */ = {
 			isa = PBXGroup;
 			children = (
-				EA860B0715FBE53600C0511B /* axCSVParser.cpp */,
-				EA860B0815FBE53600C0511B /* axIniParser.cpp */,
+				EAE9121616116FAA00436F31 /* axCSVParser.cpp */,
+				EAE9121716116FAA00436F31 /* axIniParser.cpp */,
 			);
 			path = parser;
 			sourceTree = "<group>";
 		};
-		EA860B0915FBE53600C0511B /* pch */ = {
+		EAE9121816116FAA00436F31 /* pch */ = {
 			isa = PBXGroup;
 			children = (
-				EA860B0A15FBE53600C0511B /* pch.cpp */,
-				EA860B0B15FBE53600C0511B /* pch.h */,
+				EAE9121916116FAA00436F31 /* pch.cpp */,
+				EAE9121A16116FAA00436F31 /* pch.h */,
 			);
 			path = pch;
 			sourceTree = "<group>";
 		};
-		EA860B0C15FBE53600C0511B /* system */ = {
+		EAE9121B16116FAA00436F31 /* string */ = {
 			isa = PBXGroup;
 			children = (
-				EA860B0D15FBE53600C0511B /* ax_poll.cpp */,
-				EA860B0E15FBE53600C0511B /* axAndroid.cpp */,
-				EA860B0F15FBE53600C0511B /* axApp.cpp */,
-				EA860B1015FBE53600C0511B /* axCommandLineApp.cpp */,
-				EA860B1115FBE53600C0511B /* axExecute.cpp */,
-				EA860B1215FBE53600C0511B /* axLog.cpp */,
-				EA860B1315FBE53600C0511B /* axSharedLibrary.cpp */,
-				EA860B1415FBE53600C0511B /* axSystem.cpp */,
+				EAE9121C16116FAA00436F31 /* ax_c_str.cpp */,
+				EAE9121D16116FAA00436F31 /* ax_print.cpp */,
+				EAE9121E16116FAA00436F31 /* ax_str_encode.cpp */,
+				EAE9121F16116FAA00436F31 /* ax_str_to.cpp */,
+				EAE9122016116FAA00436F31 /* axIString.cpp */,
+				EAE9122116116FAA00436F31 /* axString_Array.cpp */,
+				EAE9122216116FAA00436F31 /* axStringFormat.cpp */,
+			);
+			path = string;
+			sourceTree = "<group>";
+		};
+		EAE9122316116FAA00436F31 /* system */ = {
+			isa = PBXGroup;
+			children = (
+				EAE9122416116FAA00436F31 /* ax_poll.cpp */,
+				EAE9122516116FAA00436F31 /* axAndroid.cpp */,
+				EAE9122616116FAA00436F31 /* axApp.cpp */,
+				EAE9122716116FAA00436F31 /* axCommandLineApp.cpp */,
+				EAE9122816116FAA00436F31 /* axExecute.cpp */,
+				EAE9122916116FAA00436F31 /* axLog.cpp */,
+				EAE9122A16116FAA00436F31 /* axSharedLibrary.cpp */,
+				EAE9122B16116FAA00436F31 /* axSystem.cpp */,
 			);
 			path = system;
 			sourceTree = "<group>";
 		};
-		EA860B1515FBE53600C0511B /* thread */ = {
+		EAE9122C16116FAA00436F31 /* thread */ = {
 			isa = PBXGroup;
 			children = (
-				EA860B1615FBE53600C0511B /* axCondVar.cpp */,
-				EA860B1715FBE53600C0511B /* axMutex.cpp */,
-				EA860B1815FBE53600C0511B /* axThread.cpp */,
-				EA860B1915FBE53600C0511B /* axThreadPool.cpp */,
+				EAE9122D16116FAA00436F31 /* axCondVar.cpp */,
+				EAE9122E16116FAA00436F31 /* axMutex.cpp */,
+				EAE9122F16116FAA00436F31 /* axThread.cpp */,
+				EAE9123016116FAA00436F31 /* axThreadPool.cpp */,
 			);
 			path = thread;
 			sourceTree = "<group>";
@@ -659,7 +646,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA860B3115FBE53600C0511B /* pch.h in Headers */,
+				EAE9124B16116FAA00436F31 /* pch.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -713,48 +700,51 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA860B1A15FBE53600C0511B /* axDBConn.cpp in Sources */,
-				EA860B1B15FBE53600C0511B /* axDBStmt.cpp in Sources */,
-				EA860B1C15FBE53600C0511B /* axDir.cpp in Sources */,
-				EA860B1D15FBE53600C0511B /* axFile.cpp in Sources */,
-				EA860B1E15FBE53600C0511B /* axFileStream.cpp in Sources */,
-				EA860B1F15FBE53600C0511B /* axFileSystem.cpp in Sources */,
-				EA860B2015FBE53600C0511B /* axMemMap.cpp in Sources */,
-				EA860B2115FBE53600C0511B /* axEulerRotation3.cpp in Sources */,
-				EA860B2215FBE53600C0511B /* axFrustum3.cpp in Sources */,
-				EA860B2315FBE53600C0511B /* axIntersect3.cpp in Sources */,
-				EA860B2415FBE53600C0511B /* axMatrix4.cpp in Sources */,
-				EA860B2515FBE53600C0511B /* axQuaternion.cpp in Sources */,
-				EA860B2615FBE53600C0511B /* axRay3.cpp in Sources */,
-				EA860B2715FBE53600C0511B /* axRect2.cpp in Sources */,
-				EA860B2815FBE53600C0511B /* axVec3.cpp in Sources */,
-				EA860B2915FBE53600C0511B /* axVec4.cpp in Sources */,
-				EA860B2A15FBE53600C0511B /* axVec_Str.cpp in Sources */,
-				EA860B2B15FBE53600C0511B /* axSockAddr.cpp in Sources */,
-				EA860B2C15FBE53600C0511B /* axSocket.cpp in Sources */,
-				EA860B2D15FBE53600C0511B /* axJson.cpp in Sources */,
-				EA860B2E15FBE53600C0511B /* axCSVParser.cpp in Sources */,
-				EA860B2F15FBE53600C0511B /* axIniParser.cpp in Sources */,
-				EA860B3015FBE53600C0511B /* pch.cpp in Sources */,
-				EA860B3215FBE53600C0511B /* ax_poll.cpp in Sources */,
-				EA860B3315FBE53600C0511B /* axAndroid.cpp in Sources */,
-				EA860B3415FBE53600C0511B /* axApp.cpp in Sources */,
-				EA860B3515FBE53600C0511B /* axCommandLineApp.cpp in Sources */,
-				EA860B3615FBE53600C0511B /* axExecute.cpp in Sources */,
-				EA860B3715FBE53600C0511B /* axLog.cpp in Sources */,
-				EA860B3815FBE53600C0511B /* axSharedLibrary.cpp in Sources */,
-				EA860B3915FBE53600C0511B /* axSystem.cpp in Sources */,
-				EA860B3A15FBE53600C0511B /* axCondVar.cpp in Sources */,
-				EA860B3B15FBE53600C0511B /* axMutex.cpp in Sources */,
-				EA860B3C15FBE53600C0511B /* axThread.cpp in Sources */,
-				EA860B3D15FBE53600C0511B /* axThreadPool.cpp in Sources */,
-				EA4995501605D8B7001AE979 /* ax_c_str.cpp in Sources */,
-				EA4995511605D8B7001AE979 /* ax_print.cpp in Sources */,
-				EA4995521605D8B7001AE979 /* ax_str_encode.cpp in Sources */,
-				EA4995531605D8B7001AE979 /* ax_str_to.cpp in Sources */,
-				EA4995541605D8B7001AE979 /* axIString.cpp in Sources */,
-				EA4995551605D8B7001AE979 /* axString_Array.cpp in Sources */,
-				EA4995561605D8B7001AE979 /* axStringFormat.cpp in Sources */,
+				EAE9123116116FAA00436F31 /* axStatus.cpp in Sources */,
+				EAE9123216116FAA00436F31 /* axDBConn.cpp in Sources */,
+				EAE9123316116FAA00436F31 /* axDBStmt.cpp in Sources */,
+				EAE9123416116FAA00436F31 /* axDir.cpp in Sources */,
+				EAE9123516116FAA00436F31 /* axFile.cpp in Sources */,
+				EAE9123616116FAA00436F31 /* axFilePath.cpp in Sources */,
+				EAE9123716116FAA00436F31 /* axFileStream.cpp in Sources */,
+				EAE9123816116FAA00436F31 /* axFileSystem.cpp in Sources */,
+				EAE9123916116FAA00436F31 /* axMemMap.cpp in Sources */,
+				EAE9123A16116FAA00436F31 /* axEulerRotation3.cpp in Sources */,
+				EAE9123B16116FAA00436F31 /* axFrustum3.cpp in Sources */,
+				EAE9123C16116FAA00436F31 /* axIntersect3.cpp in Sources */,
+				EAE9123D16116FAA00436F31 /* axMatrix4.cpp in Sources */,
+				EAE9123E16116FAA00436F31 /* axQuaternion.cpp in Sources */,
+				EAE9123F16116FAA00436F31 /* axRay3.cpp in Sources */,
+				EAE9124016116FAA00436F31 /* axRect2.cpp in Sources */,
+				EAE9124116116FAA00436F31 /* axVec3.cpp in Sources */,
+				EAE9124216116FAA00436F31 /* axVec4.cpp in Sources */,
+				EAE9124316116FAA00436F31 /* axVec_Str.cpp in Sources */,
+				EAE9124416116FAA00436F31 /* axSockAddr.cpp in Sources */,
+				EAE9124516116FAA00436F31 /* axSocket.cpp in Sources */,
+				EAE9124616116FAA00436F31 /* axJson.cpp in Sources */,
+				EAE9124716116FAA00436F31 /* axSerializer.cpp in Sources */,
+				EAE9124816116FAA00436F31 /* axCSVParser.cpp in Sources */,
+				EAE9124916116FAA00436F31 /* axIniParser.cpp in Sources */,
+				EAE9124A16116FAA00436F31 /* pch.cpp in Sources */,
+				EAE9124C16116FAA00436F31 /* ax_c_str.cpp in Sources */,
+				EAE9124D16116FAA00436F31 /* ax_print.cpp in Sources */,
+				EAE9124E16116FAA00436F31 /* ax_str_encode.cpp in Sources */,
+				EAE9124F16116FAA00436F31 /* ax_str_to.cpp in Sources */,
+				EAE9125016116FAA00436F31 /* axIString.cpp in Sources */,
+				EAE9125116116FAA00436F31 /* axString_Array.cpp in Sources */,
+				EAE9125216116FAA00436F31 /* axStringFormat.cpp in Sources */,
+				EAE9125316116FAA00436F31 /* ax_poll.cpp in Sources */,
+				EAE9125416116FAA00436F31 /* axAndroid.cpp in Sources */,
+				EAE9125516116FAA00436F31 /* axApp.cpp in Sources */,
+				EAE9125616116FAA00436F31 /* axCommandLineApp.cpp in Sources */,
+				EAE9125716116FAA00436F31 /* axExecute.cpp in Sources */,
+				EAE9125816116FAA00436F31 /* axLog.cpp in Sources */,
+				EAE9125916116FAA00436F31 /* axSharedLibrary.cpp in Sources */,
+				EAE9125A16116FAA00436F31 /* axSystem.cpp in Sources */,
+				EAE9125B16116FAA00436F31 /* axCondVar.cpp in Sources */,
+				EAE9125C16116FAA00436F31 /* axMutex.cpp in Sources */,
+				EAE9125D16116FAA00436F31 /* axThread.cpp in Sources */,
+				EAE9125E16116FAA00436F31 /* axThreadPool.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
