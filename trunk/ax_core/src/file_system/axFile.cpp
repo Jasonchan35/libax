@@ -423,6 +423,11 @@ axStatus axFile::readMem( void *buf, axSize byteSize ) {
 	DWORD	result = 0;
 	BOOL ret = ::ReadFile( h_, buf, n, &result, NULL );
 	if( !ret ) {
+		DWORD e = GetLastError();
+		ax_log_win32_error("axFile read file", e);
+		switch( e ) {
+			case ERROR_LOCK_VIOLATION: return axStatus_Std::File_is_locked;
+		}
 		return axStatus_Std::File_read_error;
 	}
 	return 0;

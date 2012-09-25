@@ -11,11 +11,13 @@ public:
 	bool		containsNoCase	( const T *sz ) const;
 	
 	axStatus	append			( const T *sz );
-	axStatus	tokenize 		( const T* sz, const T* seperators = " \t\r\n" );
+	axStatus	tokenize 		( const T* sz, const T* seperators = axIString_<T>::defaultSeperators() );
+
 };
 
 typedef axString_Array<char>		axStringA_Array;
 typedef axString_Array<wchar_t>		axStringW_Array;
+
 
 template< class S, class T > inline
 axStatus ax_json_serialize_io( S &s, axString_Array<T> &v ) {

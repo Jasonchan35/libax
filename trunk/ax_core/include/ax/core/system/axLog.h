@@ -33,7 +33,7 @@ usage:
 	Log::Level	my_module_log_filter = Log::lv_error;
 	log_info( my_module_log_filter, L"something happend" );
 */
-class axLog : private axThreadPool {
+class axLog : private axThreadPool, public axSingleton< axLog > {
 	typedef axThreadPool TP;
 public:
 
@@ -113,17 +113,15 @@ private:
 	};
 };
 
-extern	axSingleton< axLog >	g_axLog;
-
 inline
 axStatus ax_log_ArgList( const char* fmt, const axStringFormat::ArgList &list ) {    
-	axLog *p = g_axLog;
+	axLog *p = axLog::instance;
 	return p->log_ArgList( p->stdTag, fmt, list );
 }
 
 inline
 axStatus ax_log_ArgList( const wchar_t* fmt, const axStringFormat::ArgList &list ) {    
-	axLog *p = g_axLog;
+	axLog *p = axLog::instance;
     return p->log_ArgList( p->stdTag, fmt, list );
 }
 
@@ -131,12 +129,12 @@ axStatus ax_log_ArgList( const wchar_t* fmt, const axStringFormat::ArgList &list
 
 inline
 axStatus ax_log_ArgList( const axLog_Tag &tag, const char* fmt, const axStringFormat::ArgList &list ) {    
-    return g_axLog->log_ArgList( tag, fmt, list );
+    return axLog::instance->log_ArgList( tag, fmt, list );
 }
 
 inline
 axStatus ax_log_ArgList( const axLog_Tag &tag, const wchar_t* fmt, const axStringFormat::ArgList &list ) {    
-    return g_axLog->log_ArgList( tag, fmt, list );
+    return axLog::instance->log_ArgList( tag, fmt, list );
 }
 
 

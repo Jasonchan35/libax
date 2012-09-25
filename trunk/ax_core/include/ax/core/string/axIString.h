@@ -30,14 +30,11 @@ public:
 	axStatus		set						( const wchar_t* sz );
 	axStatus		setWithLength			( const wchar_t* sz, axSize len );
 
-	axStatus		set						( const axUChar* sz );
-	axStatus		setWithLength			( const axUChar* sz, axSize len );
+	template<class V>
+	axStatus		convert					( const V& value )						{ return format( "{?}", value ); }
 
 	template<class V>
-	axStatus		convert					( const V& value )						{ return format( L"{?}", value ); }
-
-	template<class V>
-	axStatus		appendConvert			( const V& value )						{ return appendFormat( L"{?}", value ); }
+	axStatus		appendConvert			( const V& value )						{ return appendFormat( "{?}", value ); }
 
 	axSize			size					() const;
 
@@ -50,7 +47,8 @@ public:
 	void			clear					();
 
 	const T*		c_str					( axSize offset=0 ) const;
-	operator const T* () const { return c_str(); }
+	operator const T*						() const { return c_str(); }
+
 	bool			isEmpty					() const { return buf_.size() == 0; }
 
 	int				cmp						( const T* sz ) const		{ return ax_strcmp( this->c_str(), sz ); }
@@ -65,14 +63,15 @@ public:
 	bool			contains				( const T* sz ) const		{ return ax_strstr( c_str(), sz ) != NULL; }
 	bool			containsNoCase			( const T* sz ) const		{ return ax_strcasestr( c_str(), sz ) != NULL; }
 
-			T		operator[]				( size_t i ) const 			{ return charAt(i); }
 			T		charAt					( size_t i ) const			{ return ( i >= size() ) ? 0 : buf_[i]; }
 			T		lastChar				( size_t i = 0 ) const		{ return ( i >= size() ) ? 0 : buf_.last(i+1); }
 	
 	axStatus		setCharAt				( size_t i, T ch )			{ if( i >= size() ) return -1; buf_[i] = ch;        return 0; }
 	axStatus		setLastChar				( size_t i, T ch )			{ if( i >= size() ) return -1; buf_.last(i+1) = ch; return 0; }
 	
-	static const T*	defaultTrimChars		();
+	static	const T*	defaultSeperators	();
+	static	const T*	defaultTrimChars	();
+
 	axStatus		trimHead				( const T* char_list = defaultTrimChars() );
 	axStatus		trimTail				( const T* char_list = defaultTrimChars() );
 	axStatus		trimBoth				( const T* char_list = defaultTrimChars() );
@@ -138,8 +137,7 @@ public:
 	axStatus		serialize_io			( axDeserializer	&se );
 	axStatus		serialize_io			( axLenSerializer	&se );
 
-		bool		inMem					( const T* p ) const			{ return buf_.inMem(p); }
-		bool		inMem					( const T* p, axSize n ) const	{ return buf_.inMem(p,n); }
+		bool		isMemoryOverlapped		( const T* p, axSize n ) const	{ return buf_.isMemoryOverlapped(p,n); }
 
 protected:
 	axIArray<T>&	buf_;

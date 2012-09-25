@@ -15,9 +15,6 @@ inline	axStatus ax_str_to( const char*		sz, axIStringW &v )	{ return v.set(sz); 
 inline	axStatus ax_str_to( const wchar_t*	sz, axIStringA &v )	{ return v.set(sz); }
 inline	axStatus ax_str_to( const wchar_t*	sz, axIStringW &v )	{ return v.set(sz); }
 
-inline	axStatus ax_str_to( const axUChar*	sz, axIStringA &v )	{ return v.set(sz); }
-inline	axStatus ax_str_to( const axUChar*	sz, axIStringW &v )	{ return v.set(sz); }
-
 //==================  ax_str_to char ============================
 
 axStatus ax_str_to( const char* sz, bool		&v );

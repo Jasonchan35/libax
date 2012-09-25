@@ -13,28 +13,38 @@
 template<class T>
 class axSingleton {
 public:
-			T* operator->()			{ return  getInstance(); }
-	const	T* operator->() const	{ return  getInstance(); }
-	
-			T& operator* ()			{ return *getInstance(); }
-	const	T& operator* () const	{ return *getInstance(); }
-	
-	operator		T*()			{ return  getInstance(); }
-	operator const	T*() const		{ return  getInstance(); }
+	class Instance {
+	public:
+				T* operator->()			{ return  getInstance(); }
+		const	T* operator->() const	{ return  getInstance(); }
+		
+				T& operator* ()			{ return *getInstance(); }
+		const	T& operator* () const	{ return *getInstance(); }
+		
+		operator		T*()			{ return  getInstance(); }
+		operator const	T*() const		{ return  getInstance(); }
 
-private:
-	static T* instance;	
-	static T* getInstance() {
-		if( ! instance ) { //might init by other EXE/DLL
-			static T t;
-			instance = &t;
+	private:
+		T* getInstance() {
+			if( ! instance ) { //might init by other EXE/DLL
+				static T t;
+				instance = &t;
+			}
+			return instance;
 		}
-		return instance;
-	}
+
+		T* instance;	
+	};
+	static Instance instance;
+private:
 };
 
+// *instance will be init to NULL cause static, and also share between DLL/EXE so don't try to init to NULL here
+#define axSingleton_BODY( T )	axSingleton<T>::Instance	axSingleton<T>::instance;
+
+
 //shared symbol between DLL/EXE
-template<class T>  axDLL_EXPORT	T* axSingleton<T>::instance;
+//template<class T> axDLL_EXPORT	T* axSingleton<T>::instance;
 
 
 #endif

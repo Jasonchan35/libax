@@ -48,7 +48,7 @@ axStatus_enum( File_ended )
 axStatus_enum( File_error_delete )
 
 axStatus_enum( File_lock_error )
-
+axStatus_enum( File_is_locked )
 
 axStatus_enum( FileStream_read_error )
 axStatus_enum( FileStream_write_error )
