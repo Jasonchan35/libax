@@ -37,8 +37,8 @@ template<class T> inline bool	ax_islower( T  ch ) { return ( ch>='a' && ch <= 'z
 template<class T> inline bool	ax_isalpha( T  ch ) { return ax_isupper(ch) || ax_islower(ch); }
 template<class T> inline bool	ax_isdigit( T  ch ) { return ( ch >= '0' && ch <='9' ); }
 
-template<class T> inline int	ax_toupper( T  ch ) { return ax_islower(ch) ? (ch-('a'-'A')) : ch; }
-template<class T> inline int	ax_tolower( T  ch ) { return ax_isupper(ch) ? (ch+('a'-'A')) : ch; }
+template<class T> inline T		ax_toupper( T  ch ) { return ax_islower(ch) ? (ch-('a'-'A')) : ch; }
+template<class T> inline T		ax_tolower( T  ch ) { return ax_isupper(ch) ? (ch+('a'-'A')) : ch; }
 
 template<class T> inline const T* ax_empty_c_str( const T* foo ) { return (T*)L""; }
 

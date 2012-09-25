@@ -248,21 +248,19 @@ template< class T >  bool axIString_<T> :: operator <= ( const T* sz ) const { r
 template< class T >  bool axIString_<T> :: operator >= ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) >= 0; }
 
 template< class T > 
-axStatus	axIString_<T> :: toUpperCase () {
+void	axIString_<T> :: toUpperCase () {
 	axSize	n = size();
 	for( axSize i=0; i<n; i++ ) {
 		buf_[i] = ax_toupper( buf_[i] );
 	}
-	return 0;
 }
 
 template< class T > 
-axStatus	axIString_<T> :: toLowerCase () {
+void	axIString_<T> :: toLowerCase () {
 	axSize	n = size();
 	for( axSize i=0; i<n; i++ ) {
 		buf_[i] = ax_tolower( buf_[i] );
 	}
-	return 0;
 }
 
 template< class T > 
