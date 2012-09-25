@@ -8,8 +8,6 @@
 
 #include <ax/core/system/axLog.h>
 
-axSingleton_BODY( axLog );
-
 axLog_Tag	axLog::stdTag("log");
 /*
 axLog* axLog::getInstance() {

@@ -9,8 +9,6 @@
 #include <ax/core/common/axStatus.h>
 #include <ax/core/system/axLog.h>
 
-axSingleton_BODY( axStatus_ModuleList );
-
 axStatus_Std	axStatus_Std::inst;
 
 const char* axStatus :: c_str() const { 
