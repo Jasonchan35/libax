@@ -120,10 +120,11 @@ inline axStatus test_stl_reserve_string_array_append	( unsigned arraySize, const
 //--------------
 
 void print_result( double time_ax, double time_stl ) {
-	ax_print("{?:10}, {?:10}, {?:10} ({?:4.2}%)", 
+	ax_print("    {?:10}, {?:10}, {?:10} ({?:4.2}% faster)\n", 
 			time_ax, 
 			time_stl,
-			time_stl - time_ax, ((time_stl - time_ax) / time_stl)*100 );
+			time_stl - time_ax, 
+			((time_stl - time_ax) / time_stl)*100 );
 }
 
 axStatus	test_array() {
@@ -139,10 +140,14 @@ axStatus	test_array() {
 	axArray<int>	int_array_value;
 	vector<int>		int_vector_value;
 
-	for( unsigned i=0; i<2048; i++ ) {
+//	int_array_value.setCapacityIncrement( 204800 );
+
+#if 1 //assume some data already exists
+	for( unsigned i=0; i<256; i++ ) {
 		int_array_value.append( i );
 		int_vector_value.push_back( i );
 	}
+#endif
 
 
 	#define	run_test( func,ax_value, stl_value, n ) \
@@ -150,7 +155,7 @@ axStatus	test_array() {
 			for( unsigned loop = n; loop >= 1 ; loop /= 10, size *= 10 ) { \
 				double time_ax=0; \
 				double time_stl=0; \
-				ax_print("{?:30}, {?:16}, {?:8}, {?:8},", #func, #ax_value, size, loop ); \
+				ax_print("{?:-30}, {?:-10}, size={?}x{?}\n", #func, #ax_value, size, loop ); \
 				\
 				st = test_ax_##func(size, ax_value);		if( !st ) return st ; \
 				sw.reset(); \
@@ -174,27 +179,29 @@ axStatus	test_array() {
 	
 	ax_print("func, type, size, loop, ax, stl, diff\n");
 	
-	run_test( array_append,			int_value, int_value,	1000 )
-	run_test( reserve_array_append,	int_value, int_value,	1000 )
+	int loop_count = 10000;
 
-	run_test( array_insert,			int_value, int_value, 	1000 )
-	run_test( reserve_array_insert,	int_value, int_value, 	1000 )
+	run_test( array_append,			int_value, int_value,	loop_count )
+	run_test( reserve_array_append,	int_value, int_value,	loop_count )
+
+	run_test( array_insert,			int_value, int_value, 	loop_count )
+	run_test( reserve_array_insert,	int_value, int_value, 	loop_count )
+	/*
+	run_test( array_append,			vec3_value, vec3_value,	loop_count )
+	run_test( reserve_array_append,	vec3_value, vec3_value,	loop_count )
+
+	run_test( array_insert,			vec3_value, vec3_value,	loop_count )
+	run_test( reserve_array_insert,	vec3_value, vec3_value,	loop_count )
 	
-	run_test( array_append,			vec3_value, vec3_value,	1000 )
-	run_test( reserve_array_append,	vec3_value, vec3_value,	1000 )
+	run_test( string_array_append,			sz_value, sz_value,	loop_count )
+	run_test( reserve_string_array_append,	sz_value, sz_value,	loop_count )
 
-	run_test( array_insert,			vec3_value, vec3_value,	1000 )
-	run_test( reserve_array_insert,	vec3_value, vec3_value,	1000 )
-	
-	run_test( string_array_append,			sz_value, sz_value,	1000 )
-	run_test( reserve_string_array_append,	sz_value, sz_value,	1000 )
+	run_test( array_append,			int_array_value, int_vector_value,	loop_count )
+	run_test( reserve_array_append,	int_array_value, int_vector_value,	loop_count )
 
-	run_test( array_append,			int_array_value, int_vector_value,	1000 )
-	run_test( reserve_array_append,	int_array_value, int_vector_value,	1000 )
-
-	run_test( array_insert,			int_array_value, int_vector_value,	1000 )
-	run_test( reserve_array_insert,	int_array_value, int_vector_value,	1000 )
-
+	run_test( array_insert,			int_array_value, int_vector_value,	loop_count )
+	run_test( reserve_array_insert,	int_array_value, int_vector_value,	loop_count )
+*/
 	#undef run_test
 	return 0;
 }
@@ -205,7 +212,7 @@ public:
 	int a;
 };
 
-axStatus my_test2() {
+axStatus tiny_string_test() {
 	axTinyStringA<0>	t0;
 
 	#define	TYPE_LIST(T) \
@@ -227,7 +234,7 @@ axStatus my_test2() {
 axStatus do_test() {
     axStatus st;
 //	st = test_array();	if( !st ) return st;
-	st = my_test2();	if( !st ) return st;
+//	st = tiny_string_test();	if( !st ) return st;
 	return 0;
 }
 

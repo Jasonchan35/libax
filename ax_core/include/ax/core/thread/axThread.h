@@ -2,6 +2,7 @@
 #define __axThread_h__
 
 #include "../common/ax_common.h"
+#include "../data_structure/axPtr.h"
 
 class axThreadPool;
 
@@ -14,11 +15,16 @@ public:
 			void		join	(); //!<  called by other thread for waiting this thread terminated
 		    void		detach	(); //!< becareful, the thread still running
 
+			axStatus	setHighPriority	();
+			axStatus	setNormalPriority();
+			axStatus	setLowPriority	();
+			axStatus	setIdlePriority	();
+
 	virtual	void		onThreadProc() = 0;
 
 friend class axThreadPool;
 protected:
-    axThreadPool*	pool_;        
+    axPtr< axThreadPool >	pool_;        
     
 private:
 #ifdef axOS_WIN
