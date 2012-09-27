@@ -8,14 +8,6 @@
 
 #include <ax/core/system/axLog.h>
 
-axLog_Tag	axLog::stdTag("log");
-/*
-axLog* axLog::getInstance() {
-	static	axLog	s;
-	return &s;
-}
-*/
-
 #if axOS_WIN
 
 void ax_log_win32_error( const char* msg, DWORD error_code ) {

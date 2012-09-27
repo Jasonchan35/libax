@@ -65,8 +65,6 @@ public:
 	void        addHandler		( Handler* h );
 	void        removeHandler	( Handler* h );
 	
-//	static	axLog* getInstance();
-
 protected:
 friend class Format_Log;
 

@@ -692,7 +692,8 @@ public:
 		axTempStringW	_cmd;
 
 		st = escpaceQuote( tmp, cmd );				if( !st ) return st;
-		st =  _cmd.format( "cmd /c {?}", cmd );	if( !st ) return st;
+//		st =  _cmd.format( "cmd /c {?}", cmd );		if( !st ) return st;
+		st =  _cmd.format( "{?}", cmd );			if( !st ) return st;
 
 	//	DEBUG_ax_log_var( _cmd );
 
@@ -714,7 +715,7 @@ public:
 	 
 	// Create the child process.     
 	   bSuccess = CreateProcess( NULL,	//lpApplicationName 
-								(LPWSTR)_cmd.c_str(),	// command line 
+								ax_const_cast(_cmd.c_str()),	// command line 
 								NULL,			// process security attributes 
 								NULL,           // primary thread security attributes 
 								TRUE,           // handles are inherited 

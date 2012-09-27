@@ -21,9 +21,34 @@ DWORD WINAPI axThread_onThreadProc( LPVOID* p ) {
 	return 0;
 }
 
+axStatus axThread::setHighPriority() {
+	if( !h_ ) return -1;
+	SetThreadPriority( h_, THREAD_PRIORITY_ABOVE_NORMAL );
+	return 0;
+}
+
+axStatus axThread::setNormalPriority() {
+	if( !h_ ) return -1;
+	SetThreadPriority( h_, THREAD_PRIORITY_NORMAL );
+	return 0;
+}
+
+
+axStatus axThread::setLowPriority() {
+	if( !h_ ) return -1;
+	SetThreadPriority( h_, THREAD_PRIORITY_BELOW_NORMAL );
+	return 0;
+}
+
+
+axStatus axThread::setIdlePriority() {
+	if( !h_ ) return -1;
+	SetThreadPriority( h_, THREAD_PRIORITY_IDLE );
+	return 0;
+}
+
 axStatus axThread::create() {
 	if( h_ ) return axStatus_Std::already_exist;
-
 	h_ = CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE) axThread_onThreadProc, this, 0, NULL );
 	if( ! h_ ) return -1;
 

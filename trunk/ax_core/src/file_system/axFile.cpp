@@ -312,7 +312,7 @@ axStatus axFile::_os_open( const wchar_t* filename, DWORD access_flag, DWORD cre
 						FILE_ATTRIBUTE_NORMAL, NULL );
 	if( h_ == INVALID_HANDLE_VALUE ) {
 		DWORD err = GetLastError();
-		ax_log_win32_error( "File_open", err );
+//		ax_log_win32_error( "File_open", err );
 		switch( err ) {
 			case ERROR_FILE_EXISTS: return axStatus_Std::File_already_exists;
 		}

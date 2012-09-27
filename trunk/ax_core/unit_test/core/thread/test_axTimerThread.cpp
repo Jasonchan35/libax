@@ -1,4 +1,3 @@
-#include <ax/ax_base.h>
 #include <ax/ax_core.h>
  
 class myTimerThread : public axTimerThread {
@@ -28,12 +27,6 @@ axStatus	test_timer_thread() {
 
 	return 0;
 }
-
-
-
-
-
-
 
 int main() {
     axStatus st;

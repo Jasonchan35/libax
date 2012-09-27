@@ -27,14 +27,22 @@ public:
 	private:
 		T* get() const {
 			if( ! p ) { //might init by other EXE/DLL
-				printf( "%s\n", axPRETTY_FUNC_NAME);
-				static T t;
-				const_cast<T*&>(p) = &t;
+//				printf( "%s\n", axPRETTY_FUNC_NAME);
+				#if 0 // mutex here for thread-saft ?
+					ScopeMutex	sm(mutex)
+					if( !p ) { //double check after lock
+						static T t;
+						const_cast<T*&>(p) = &t;
+					}
+				#else
+					static T t;
+					const_cast<T*&>(p) = &t;
+				#endif
 			}
 			return p;
 		}
 
-		T* p; // will be init to zero cause static, and also share between DLL/EXE so don't try to init to NULL here
+		T* volatile p; // will be init to zero cause static, and also share between DLL/EXE so don't try to init to NULL here
 	};
 	static Instance instance;
 private:
