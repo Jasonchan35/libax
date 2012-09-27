@@ -67,8 +67,6 @@ public:
 	
 //	static	axLog* getInstance();
 
-	static	axLog_Tag		stdTag;
-
 protected:
 friend class Format_Log;
 
@@ -111,18 +109,25 @@ private:
 		kLogNodeCount = 32,
 		kLogMsgReserveSize = 2048,
 	};
+
+};
+
+
+class axLog_StdTag : public axLog_Tag, public axSingleton< axLog_StdTag > {
+public:
+	axLog_StdTag() : axLog_Tag("log") {}
 };
 
 inline
 axStatus ax_log_ArgList( const char* fmt, const axStringFormat::ArgList &list ) {    
 	axLog *p = axLog::instance;
-	return p->log_ArgList( p->stdTag, fmt, list );
+	return p->log_ArgList( *axLog_StdTag::instance, fmt, list );
 }
 
 inline
 axStatus ax_log_ArgList( const wchar_t* fmt, const axStringFormat::ArgList &list ) {    
 	axLog *p = axLog::instance;
-    return p->log_ArgList( p->stdTag, fmt, list );
+    return p->log_ArgList( *axLog_StdTag::instance, fmt, list );
 }
 
 
