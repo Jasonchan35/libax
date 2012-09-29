@@ -77,14 +77,15 @@ public:
 				case Node::t_stdout: 
 				case Node::t_stderr: {
 				//	DEBUG_ax_log("thread stdout / stderr");
-					NSData* data = [h readDataOfLength: k_buf_size ];
+					NSData* data = [h availableData];
 					size_t	n    = [data length];
 					if( n == 0 ) {
 			//			DEBUG_ax_log("thread stdout / stderr done");
 						switch( p->type ) {
 							case Node::t_stdout: 	p->type = Node::t_stdout_done;	break;
 							case Node::t_stderr: 	p->type = Node::t_stderr_done;	break;
-						}						
+						}
+						//[h closeFile]; //no need for fileHandleForReading
 						qMain->append( p );
 						goto quit;
 					}
@@ -128,9 +129,14 @@ public:
 	axPtr<axExecute> owner;
 
 	~Imp() {
+		terminate();
 		stdin_thread.join();
 		stdout_thread.join();
 		stderr_thread.join();	
+	}
+	
+	bool isRunnig() {
+		return [task isRunning];
 	}
 	
 	void terminate() {
@@ -662,9 +668,9 @@ public:
 	uint32_t polling;
 
 	axExecute_HADNLE childProcess;
-	axExecute_HADNLE childThread;
 
 	~Imp() {
+		terminate();
 		stdin_thread.join();
 		stdout_thread.join();
 		stderr_thread.join();
@@ -672,8 +678,9 @@ public:
 
 	void terminate() {
 		if( owner && childProcess ) {
-			TerminateProcess( childProcess, -9999 );
+			TerminateProcess  ( childProcess, -9999 );
 			GetExitCodeProcess( childProcess, (LPDWORD)&owner->returnValue_ );
+			childProcess.close();
 		}
 	}
 
@@ -731,14 +738,13 @@ public:
 			ax_log_win32_error("CreateProcess");
 			return axStatus_Std::Execute_error;
 		}
-
+		CloseHandle( piProcInfo.hThread );
+		childProcess = piProcInfo.hProcess;
+		owner->pid_.p_ = piProcInfo.hProcess;
+		
 		p_in.closeRead();
 		p_out.closeWrite();
 		p_err.closeWrite();
-
-		childThread  = piProcInfo.hThread;
-		childProcess = piProcInfo.hProcess;
-		owner->pid_.p_ = piProcInfo.hProcess;
 
 	//-----
 		polling = stdin_polling | stdout_polling | stderr_polling;
@@ -851,175 +857,6 @@ public:
 	}
 };
 
-/*
-axStatus axExecute::exec( int& cmd_ret, const char* cmd ) {
-	axStatus st;
-
-	axExecute_Pipe	p_in;	st = p_in.create();		if( !st ) return st;
-	axExecute_Pipe	p_out;	st = p_out.create();	if( !st ) return st;
-	axExecute_Pipe	p_err;	st = p_err.create();	if( !st ) return st;
-
-	if ( ! SetHandleInformation( p_in.w,  HANDLE_FLAG_INHERIT, 0) ) return -1;
-	if ( ! SetHandleInformation( p_out.r, HANDLE_FLAG_INHERIT, 0) ) return -1;
-	if ( ! SetHandleInformation( p_err.r, HANDLE_FLAG_INHERIT, 0) ) return -1;
-
-	axTempStringA	tmp;
-	axTempStringW	_cmd;
-
-	st = escpaceQuote( tmp, cmd );				if( !st ) return st;
-	st =  _cmd.format( "cmd /c {?}", cmd );	if( !st ) return st;
-
-//	DEBUG_ax_log_var( _cmd );
-
-	PROCESS_INFORMATION piProcInfo; 
-	STARTUPINFO siStartInfo;
-	BOOL bSuccess = FALSE;
-
-	ZeroMemory( &piProcInfo, sizeof(PROCESS_INFORMATION) );
- 
-//	Set up members of the STARTUPINFO structure. 
-//	This structure specifies the STDIN and STDOUT handles for redirection.
- 
-	ZeroMemory( &siStartInfo, sizeof(STARTUPINFO) );
-	siStartInfo.cb = sizeof(STARTUPINFO); 
-	siStartInfo.hStdInput  = p_in.r;
-	siStartInfo.hStdOutput = p_out.w;
-	siStartInfo.hStdError  = p_err.w;
-	siStartInfo.dwFlags   |= STARTF_USESTDHANDLES;
- 
-// Create the child process.     
-   bSuccess = CreateProcess( NULL,	//lpApplicationName 
-							(LPWSTR)_cmd.c_str(),	// command line 
-							NULL,			// process security attributes 
-							NULL,           // primary thread security attributes 
-							TRUE,           // handles are inherited 
-							0,              // creation flags 
-							NULL,           // use parent's environment 
-							NULL,           // use parent's current directory 
-							&siStartInfo,   // STARTUPINFO pointer 
-							&piProcInfo );  // receives PROCESS_INFORMATION 
-   
-	// If an error occurs, exit the application. 
-	if ( ! bSuccess ) {
-	  //ErrorExit(TEXT("CreateProcess"));
-		ax_log_win32_error("CreateProcess");
-		return axStatus_Std::Execute_error;
-	}
-
-	CloseHandle( p_in.r  ); p_in.r  = INVALID_HANDLE_VALUE;
-	CloseHandle( p_out.w ); p_out.w = INVALID_HANDLE_VALUE;
-	CloseHandle( p_err.w ); p_err.w = INVALID_HANDLE_VALUE;
-
-	axExecute_HADNLE childThread( piProcInfo.hThread );
-	axExecute_HADNLE child		( piProcInfo.hProcess );
-
-//-----
-	const int stdin_polling  = 0x1;
-	const int stdout_polling = 0x2;
-	const int stderr_polling = 0x4;
-	
-	uint32_t polling = stdin_polling | stdout_polling | stderr_polling;
-
-	Node	stdin_node;
-	Node	stdout_node;
-	Node	stderr_node;
-	
-	axAtomicQueue< Node >	q;	
-
-	const size_t buf_increment = 16*1024;
-	st = stdin_node.buf.reserve ( buf_increment );				if( !st ) return st;
-	stdin_node.buf.setCapacityIncrement ( buf_increment );		if( !st ) return st;
-	
-	st = stdout_node.buf.reserve( buf_increment );				if( !st ) return st;
-	st = stderr_node.buf.reserve( buf_increment );				if( !st ) return st;
-
-	stdin_node.type  = Node::t_stdin;
-	stdout_node.type = Node::t_stdout;
-	stderr_node.type = Node::t_stderr;
-
-
-	if( std_in ) {
-		st = stdin_node.buf.copy( *std_in );	if( !st ) return st;
-	}
-
-	axExecute_IOThread	stdin_thread;
-	stdin_thread.eq = &q;
-	stdin_thread.h = p_in.w;
-	stdin_thread.q.append( &stdin_node );
-
-	axExecute_IOThread	stdout_thread;
-	stdout_thread.eq = &q;
-	stdout_thread.h  = p_out.r;
-	stdout_thread.q.append( &stdout_node );
-
-	axExecute_IOThread	stderr_thread;
-	stderr_thread.eq = &q;
-	stderr_thread.h  = p_err.r;
-	stderr_thread.q.append( &stderr_node );
-
-	stdin_thread.create();
-	stdout_thread.create();
-	stderr_thread.create();
-
-	Node* p;
-	for(;;) {
-		if( ! polling ) break;
-//		ax_log("polling {?}", polling );
-		p = q.takeHead();
-		if( p ) {
-			switch( p->type ) {
-			//-- stdin
-				case Node::t_stdin: {
-					p->buf.resize(0);
-					if( on_stdin( p->buf ) ) {
-//						DEBUG_ax_log("post stdin");
-						stdin_thread.q.append( p );
-					}else{
-//						DEBUG_ax_log("post stdin done");
-						p->type = Node::t_stdin_done;
-						stdin_thread.q.append( p );
-					}
-				}break;
-				case Node::t_stdin_done: {
-//					DEBUG_ax_log("stdin done");
-					ax_unset_bits( polling, stdin_polling );
-				}break;
-			//-- stdout
-				case Node::t_stdout: {
-//					DEBUG_ax_log( "stdout {?}", (const char*)p->buf.ptr() );
-					on_stdout( p->buf );
-					stdout_thread.q.append( p );
-				}break;
-				case Node::t_stdout_done: {
-//					DEBUG_ax_log("stdout done");
-					ax_unset_bits( polling, stdout_polling );
-				}break;
-			//-- stderr
-				case Node::t_stderr: {
-//					DEBUG_ax_log( "stderr {?}", (const char*)p->buf.ptr() );
-					on_stderr( p->buf );
-					stderr_thread.q.append( p );
-				}break;
-				case Node::t_stderr_done: {
-//					DEBUG_ax_log("stderr done");
-					ax_unset_bits( polling, stderr_polling );
-				}break;
-			}
-		}
-		//Sleep( 100 );
-	}
-
-	stdin_thread.join();
-	stdout_thread.join();
-	stderr_thread.join();
-
-	DWORD	ret;
-	if( ! GetExitCodeProcess( child, &ret ) ) return -1;
-	cmd_ret = ret;
-
-	return 0;
-}
-*/
 #endif//axOS_WIN
 
 #if 0
@@ -1035,6 +872,8 @@ axStatus axExecute::asyncExec   ( const char* cmd, const char*   std_in ) {
 }
 
 axStatus axExecute::asyncExecBin( const char* cmd, const axIByteArray*   std_in ) {
+	terminate();
+	
 	axStatus st;
 	if( imp ) return -1; //already running
 	
@@ -1058,6 +897,13 @@ axStatus	axExecute::asyncPollBin( bool & isDone, uint32_t waitMilliseconds, axIB
 void	axExecute::terminate() {
 	if( ! imp ) return;
 	imp->terminate();
+	delete imp;
+	imp = NULL;
+}
+
+bool	axExecute::isRunning() {
+	if( ! imp ) return false;
+	return imp->isRunnig();
 }
 
 axExecute::axExecute() {
@@ -1066,10 +912,7 @@ axExecute::axExecute() {
 }
 
 axExecute::~axExecute() {
-	if( imp ) {
-		delete imp;
-		imp = NULL;
-	}
+	terminate();
 }
 
 
@@ -1078,7 +921,7 @@ axStatus	axExecute::exec		( const char* cmd, const char*         std_in, axIStri
 	st = asyncExec( cmd, std_in );		if( !st ) return st;
 	bool isDone = false;
 	while( ! isDone ) {
-		st = asyncPoll( isDone, 500, std_out, std_err );		if( !st ) return st;
+		st = asyncPoll( isDone, 50, std_out, std_err );		if( !st ) return st;
 	}	
 	return 0;
 }
@@ -1088,7 +931,7 @@ axStatus	axExecute::execBin	( const char* cmd, const axIByteArray* std_in, axIBy
 	st = asyncExecBin( cmd, std_in );		if( !st ) return st;
 	bool isDone = false;
 	while( ! isDone ) {
-		st = asyncPollBin( isDone, 500, std_out, std_err );		if( !st ) return st;
+		st = asyncPollBin( isDone, 50, std_out, std_err );		if( !st ) return st;
 	}	
 	return 0;
 }
