@@ -28,7 +28,7 @@ public:
 				void	remove	( T* conn );
 				void	clear	()			{ while( head_ ) { delete head_; } }
 	private:
-		T* head_;
+				T* 		head_;
 	};
 
 	class Output : public axNonCopyable {
@@ -42,7 +42,7 @@ public:
 				void	remove	( T* conn );
 				void	clear	()			{ while( head_ ) { delete head_; } }
 	private:
-		T* head_;
+				T* 		head_;
 	};
 
 				void	clear() 	{ input.clear(); output.clear(); }
@@ -72,8 +72,8 @@ public:
 	friend class List::Input;
 	friend class axConnection<T>;
 	protected:
-		T*	prev_;
-		T*	next_;
+				T*	prev_;
+				T*	next_;
 		typename List::Input*	list_;
 	};
 
@@ -91,8 +91,8 @@ public:
 	friend class List::Output;
 	friend class axConnection<T>;
 	protected:
-		T*	prev_;
-		T*	next_;
+				T*	prev_;
+				T*	next_;
 		typename List::Output*	list_;
 	};	
 	
