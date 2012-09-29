@@ -166,6 +166,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9616E4D9161729D800AF9F80 /* axConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axConnection.h; sourceTree = "<group>"; };
 		96321751155EF2000061BE21 /* axDBConn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDBConn.cpp; sourceTree = "<group>"; };
 		96321752155EF2000061BE21 /* axDBStmt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDBStmt.cpp; sourceTree = "<group>"; };
 		96321754155EF2000061BE21 /* axDir.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDir.cpp; sourceTree = "<group>"; };
@@ -496,6 +497,7 @@
 			isa = PBXGroup;
 			children = (
 				9640E04E16009DA400F9D037 /* axArray.h */,
+				9616E4D9161729D800AF9F80 /* axConnection.h */,
 				9640E05016009DA400F9D037 /* axArray_types.h */,
 				9640E05116009DA400F9D037 /* axAutoPtr.h */,
 				9640E05216009DA400F9D037 /* axChunkArray.h */,
