@@ -901,10 +901,12 @@ void	axExecute::terminate() {
 	imp = NULL;
 }
 
+/*
 bool	axExecute::isRunning() {
 	if( ! imp ) return false;
 	return imp->isRunnig();
 }
+*/
 
 axExecute::axExecute() {
 	imp = NULL;
