@@ -13,6 +13,8 @@ public:
 	void	reset();
 	bool	operator== ( axPID & s ) { return p_ == s.p_; }
 
+	operator	bool	() { return p_ != 0; }
+
 	axStatus	toStringFormat( axStringFormat & f ) const {
 		return f.format("{?}", p_ );		
 	}
@@ -58,7 +60,7 @@ public:
 			axStatus	asyncPoll	( bool & isDone, uint32_t waitMilliseconds, axIStringA*   std_out = NULL, axIStringA*   std_err = NULL );
 			axStatus	asyncPollBin( bool & isDone, uint32_t waitMilliseconds, axIByteArray* std_out = NULL, axIByteArray* std_err = NULL );
 			
-			bool		isRunning	();
+//			bool		isRunning	();
 			void		terminate	();
 			
 			int			returnValue	() { return returnValue_; }
