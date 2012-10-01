@@ -40,8 +40,8 @@ public:
 	axLog();
 	virtual ~axLog();
 
-    axStatus	log_ArgList ( const axLog_Tag &tag, const char*    fmt, const axStringFormat::ArgList &list );
-    axStatus	log_ArgList ( const axLog_Tag &tag, const wchar_t* fmt, const axStringFormat::ArgList &list );
+    axStatus	log_ArgList ( const axLog_Tag &tag, const char*    fmt, const axStringFormat::ArgList &list, const char *user_string );
+    axStatus	log_ArgList ( const axLog_Tag &tag, const wchar_t* fmt, const axStringFormat::ArgList &list, const char *user_string );
     
 	void    destroy     ();
 
@@ -53,6 +53,7 @@ public:
 		const char*					tag_name;
 		axStringA					msg;
 		axStringA					tmp;
+		axStringA					user_string;
 	};
 
 	class Handler : public axDListNode<Handler, true> {
@@ -117,27 +118,27 @@ public:
 };
 
 inline
-axStatus ax_log_ArgList( const char* fmt, const axStringFormat::ArgList &list ) {    
+axStatus ax_log_ArgList( const char* fmt, const axStringFormat::ArgList &list, const char* user_string = NULL ) {
 	axLog *p = axLog::instance;
-	return p->log_ArgList( *axLog_StdTag::instance, fmt, list );
+	return p->log_ArgList( *axLog_StdTag::instance, fmt, list, user_string );
 }
 
 inline
-axStatus ax_log_ArgList( const wchar_t* fmt, const axStringFormat::ArgList &list ) {    
+axStatus ax_log_ArgList( const wchar_t* fmt, const axStringFormat::ArgList &list, const char* user_string = NULL ) {    
 	axLog *p = axLog::instance;
-    return p->log_ArgList( *axLog_StdTag::instance, fmt, list );
+    return p->log_ArgList( *axLog_StdTag::instance, fmt, list, user_string );
 }
 
 
 
 inline
-axStatus ax_log_ArgList( const axLog_Tag &tag, const char* fmt, const axStringFormat::ArgList &list ) {    
-    return axLog::instance->log_ArgList( tag, fmt, list );
+axStatus ax_log_ArgList( const axLog_Tag &tag, const char* fmt, const axStringFormat::ArgList &list, const char* user_string = NULL ) {    
+    return axLog::instance->log_ArgList( tag, fmt, list, user_string );
 }
 
 inline
-axStatus ax_log_ArgList( const axLog_Tag &tag, const wchar_t* fmt, const axStringFormat::ArgList &list ) {    
-    return axLog::instance->log_ArgList( tag, fmt, list );
+axStatus ax_log_ArgList( const axLog_Tag &tag, const wchar_t* fmt, const axStringFormat::ArgList &list, const char* user_string = NULL ) {    
+    return axLog::instance->log_ArgList( tag, fmt, list, user_string );
 }
 
 
@@ -155,6 +156,17 @@ axLogExpandArgListUserTag( inline axStatus, ax_log,	axLog_Tag&, const char*,	con
 
 //!macro - axStatus	ax_log( const char* fmt, ... );
 axLogExpandArgListUserTag( inline axStatus, ax_log,	axLog_Tag&, const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList, ax_log_ArgList )
+
+
+axLogExpandArgListStdTag2( inline axStatus, ax_log_ex, const char*, const char*, const axStringFormat_Arg&, axStringFormat_ArgList, ax_log_ArgList )
+
+axLogExpandArgListStdTag2( inline axStatus, ax_log_ex, const char*, const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList, ax_log_ArgList )
+
+axLogExpandArgListUserTag2( inline axStatus, ax_log_ex, axLog_Tag&, const char*, const char*, const axStringFormat_Arg&, axStringFormat_ArgList, ax_log_ArgList )
+
+axLogExpandArgListUserTag2( inline axStatus, ax_log_ex, axLog_Tag&, const char*, const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList, ax_log_ArgList )
+
+
 
 #define ax_log_var(  v1 )						ax_log( "var: {?}={?}",								#v1, v1 )
 #define ax_log_var2( v1, v2 )					ax_log( "var: {?}={?}, {?}={?}",					#v1, v1, #v2, v2 )
