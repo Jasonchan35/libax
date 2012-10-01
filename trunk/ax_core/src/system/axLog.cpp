@@ -84,22 +84,24 @@ axLog::~axLog() {
     destroy();
 }
 
-axStatus  axLog :: log_ArgList ( const axLog_Tag &tag, const char* fmt, const axStringFormat::ArgList &list ) {
-	
+axStatus  axLog :: log_ArgList ( const axLog_Tag &tag, const char* fmt, const axStringFormat::ArgList &list, const char *user_string ) {
+	axStatus st;
     Node* node = getNode();
 	node->tag_name = tag.name();
     node->time.now();
-    node->msg.format_ArgList( fmt, list );
+    st = node->msg.format_ArgList( fmt, list ); if( !st ) return st;
+	st = node->user_string.set( user_string ); if( !st ) return st;
     queue( node );
 	return 0;
 }
 
-axStatus  axLog :: log_ArgList ( const axLog_Tag &tag, const wchar_t* fmt, const axStringFormat::ArgList &list ) {
-	
+axStatus  axLog :: log_ArgList ( const axLog_Tag &tag, const wchar_t* fmt, const axStringFormat::ArgList &list , const char *user_string ) {
+	axStatus st;
     Node* node = getNode();
 	node->tag_name = tag.name();
     node->time.now();
-    node->msg.format_ArgList( fmt, list );
+	st = node->msg.format_ArgList( fmt, list ); if( !st ) return st;
+	st = node->user_string.set( user_string ); if( !st ) return st;
     queue( node );
 	return 0;
 }
@@ -111,11 +113,12 @@ axLog::Node* axLog::getNode() {
         if( n ) return n;
         fl.wait();
     }
+	return NULL;
 }
 
 void axLog::queue( Node* n ) {
-    Queue q( queue_list_ );
-    
+
+    Queue q( queue_list_ ); 
     
 	
     // always output to stdout immediately
