@@ -16,7 +16,8 @@ template<class T, size_t LOCAL_BUF_SIZE>
 class axTinyString_ :private axLocalBuf< T, LOCAL_BUF_SIZE > {
 	typedef	axLocalBuf< T, LOCAL_BUF_SIZE > BUF;
 public:
-	axTinyString_() { p_ = NULL; if( LOCAL_BUF_SIZE ) BUF::_localBuf(0) = 0; }
+	axTinyString_() 	{ p_ = NULL; if( LOCAL_BUF_SIZE ) BUF::_localBuf(0) = 0; }
+	~axTinyString_() 	{ clear(); }
 	
 	axStatus	set				( const T* sz );
 	axStatus	setWithLength	( const T* sz, size_t len );
