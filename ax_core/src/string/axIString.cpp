@@ -245,6 +245,18 @@ void axIString_<T> :: clear() {
 	buf_.clear();
 }
 
+template<class T>
+axStatus  axIString_<T>::getFromPrefix	( const char* prefix, const char* full ) {
+	size_t	prefix_len = ax_strlen( prefix );
+	size_t	full_len   = ax_strlen( full );
+
+	if( full_len < prefix_len ) return -1;
+	if( 0 != ax_strncmp( prefix, full, prefix_len ) ) return -1;
+	
+	return set( full + prefix_len );
+}
+
+
 template< class T >  bool axIString_<T> :: operator == ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) == 0; }
 template< class T >  bool axIString_<T> :: operator != ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) != 0; }
 template< class T >  bool axIString_<T> :: operator <  ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) <  0; }

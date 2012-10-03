@@ -101,6 +101,8 @@ public:
 	axStatus		appendWithLength		( const wchar_t* src, axSize src_len );
 
 	axStatus		clone					( const axIString_<T> &src );
+	
+	axStatus		getFromPrefix			( const char* prefix, const char* full );
 
 	axStatus		findChar				(       T  ch,        axSize &outPos, axSize start_from     = 0 ) const;
 	axStatus		findCharFromEnd			(       T  ch,        axSize &outPos, axSize start_from_end = 0 ) const;
