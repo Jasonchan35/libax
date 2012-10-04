@@ -163,6 +163,7 @@
 		96D017F3160E4DA100A2682B /* axFilePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96D017F2160E4DA100A2682B /* axFilePath.cpp */; };
 		96D017F5160E4E6500A2682B /* axFilePath.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D017F4160E4E6500A2682B /* axFilePath.h */; };
 		96D09550160F852E00FDA718 /* axStatus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96D0954F160F852E00FDA718 /* axStatus.cpp */; };
+		EA1DC90D161DDC9200FFD681 /* axVec2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA1DC90C161DDC9200FFD681 /* axVec2.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -325,6 +326,7 @@
 		96D017F4160E4E6500A2682B /* axFilePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axFilePath.h; sourceTree = "<group>"; };
 		96D0954F160F852E00FDA718 /* axStatus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axStatus.cpp; sourceTree = "<group>"; };
 		EA15F6C81544053B00356C7C /* ax_core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_core.h; sourceTree = "<group>"; };
+		EA1DC90C161DDC9200FFD681 /* axVec2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axVec2.cpp; sourceTree = "<group>"; };
 		EA9F4E1D154414BC00C9459E /* ax_core build.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "ax_core build.xcconfig"; sourceTree = "<group>"; };
 		EA9F4E1E154414C100C9459E /* ax_core.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ax_core.xcconfig; sourceTree = "<group>"; };
 		EAD528AA154405160034A2DD /* libax_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libax_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -385,6 +387,7 @@
 		96321759155EF2000061BE21 /* math */ = {
 			isa = PBXGroup;
 			children = (
+				EA1DC90C161DDC9200FFD681 /* axVec2.cpp */,
 				9632175A155EF2000061BE21 /* axEulerRotation3.cpp */,
 				9632175B155EF2000061BE21 /* axFrustum3.cpp */,
 				9632175C155EF2000061BE21 /* axIntersect3.cpp */,
@@ -969,6 +972,7 @@
 				9640E1441600C9C200F9D037 /* axString_Array.cpp in Sources */,
 				96D017F3160E4DA100A2682B /* axFilePath.cpp in Sources */,
 				96D09550160F852E00FDA718 /* axStatus.cpp in Sources */,
+				EA1DC90D161DDC9200FFD681 /* axVec2.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
