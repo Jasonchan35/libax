@@ -2,11 +2,12 @@
 #define __axRect2_h__
 
 #include "axVec2.h"
-
+#include "axMatrix4.h"
 
 //! \addtogroup math
 //@{
 template <class T> class axRect2;
+template <class T> class axMatrix4;
 
 typedef axRect2<int>	axRect2i;
 typedef axRect2<float>	axRect2f;
@@ -62,17 +63,19 @@ public:
 	bool		operator == ( const axRect2<T> &v ) const	{ return( x == v.x && y == v.y && w == v.w && h == v.h ); }
 	bool		operator != ( const axRect2<T> &v ) const	{ return( x != v.x || y != v.y || w != v.w || h != v.h ); }
 
-	axRect2<T>	operator *  ( T s )							{ return axRect2<T>(x*s, y*s, w*s, h*s); }
-	axRect2<T>	operator *  ( const axVec2<T> & s )			{ return axRect2<T>(x*s.x, y*s.y, w*s.x, h*s.y); }
+	axRect2<T>	operator *  ( T s )	const					{ return axRect2<T>(x*s, y*s, w*s, h*s); }
+	axRect2<T>	operator *  ( const axVec2<T> & s )	const	{ return axRect2<T>(x*s.x, y*s.y, w*s.x, h*s.y); }
 	void		operator *= ( T s )							{ *this = *this * s; }
 	void		operator *= ( const axVec2<T> & s )			{ *this = *this * s; }
 
-	axRect2<T>	operator /  ( T s )							{ return axRect2<T>(x/s, y/s, w/s, h/s); }
-	axRect2<T>	operator /  ( const axVec2<T> & s )			{ return axRect2<T>(x/s.x, y/s.y, w/s.x, h/s.y); }
+	axRect2<T>	operator /  ( T s )	const					{ return axRect2<T>(x/s, y/s, w/s, h/s); }
+	axRect2<T>	operator /  ( const axVec2<T> & s )	const	{ return axRect2<T>(x/s.x, y/s.y, w/s.x, h/s.y); }
 	void		operator /= ( T s )							{ *this = *this / s; }
 	void		operator /= ( const axVec2<T> & s )			{ *this = *this / s; }
 
-
+	void		operator *= ( const axMatrix4<T> &m )		{ *this = *this * m; }
+	axRect2<T>	operator *  ( const axMatrix4<T> &m	) const;
+	
 	bool		isOverlap	( const axRect2<T> &r ) const;
 	bool		intersectOf	( axRect2<T> &a, axRect2<T> &b ) const;
 
@@ -222,6 +225,15 @@ axStatus axRect2<T>::serialize_io( S &s ) {
 	st = s.io( h );	if( !st ) return st;
 	return 0;
 }
+
+template<class T>
+axRect2<T> axRect2<T>::operator *  ( const axMatrix4<T> &m	) const {
+	axRect2<T> tmp;
+	tmp.pos() = pos() * m;
+	tmp.size() = bottomRight() * m - tmp.pos();
+	return tmp;
+}
+
 
 
 #endif // __axRect2_h__

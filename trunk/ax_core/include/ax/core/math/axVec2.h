@@ -51,6 +51,12 @@ public:
 	axVec2		operator*	( const axVec2 &v ) const		{ return axVec2( x * v.x, y * v.y ); }
 	axVec2		operator/	( const axVec2 &v ) const		{ return axVec2( x / v.x, y / v.y ); }
 
+	axVec2		operator*	( const axMatrix4<T> &m ) const { return mul3x2(m);	 }
+	void		operator*=	( const axMatrix4<T> &m )		{ *this = this->mul3x2(m); }
+	
+	axVec2		mul3x2		( const axMatrix4<T> &m ) const;
+	
+	
 	axVec2		operator-	() const					{ return axVec2( -x,-y ); }
 
 	void		operator+=	( const axVec2 &v )			{ x+=v.x; y+=v.y; }
@@ -85,7 +91,7 @@ public:
 
 	bool		isInsideTriangle( const axVec2 &v0, const axVec2 &v1, const axVec2 &v2 );
 	
-	axVec2		perpendicular()								{ return axVec2d(-y,x); }
+	axVec2		perpendicular()								{ return axVec2(-y,x); }
 
 	axVec2		normalize	() const						{ T r = magSq(); return r ? (*this/ax_sqrt(r)) : *this; }
 	void		normalizeIt	()								{ *this = normalize(); }	

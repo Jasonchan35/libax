@@ -38,4 +38,3 @@ axStatus ax_str_to( const wchar_t* sz, axRect2d &v ) {
 		return -1;
 	return 0;
 }
-
