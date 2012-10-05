@@ -51,6 +51,16 @@ public:
 	axRect2<T>	expand		( T d )	 const					{ return axRect2<T>( x-d,  y-d,  w+d*2,  h+d*2  ); }
 	axRect2<T>	expand		( T dx, T dy )	const			{ return axRect2<T>( x-dx, y-dy, w+dx*2, h+dy*2 ); }
 
+
+
+
+	void		unionRect( T xx, T yy, T ww, T hh );
+	
+	void		unionRect( const axRect2<T> &v ) {
+		unionRect( v.x, v.y, v.w, v.h );
+	}
+	
+
 	axRect2<T>	absSize		() const;
 	
 	void		set			( T xx, T yy, T ww, T hh )		{ x=xx; y=yy; w=ww; h=hh; }
@@ -233,6 +243,21 @@ axRect2<T> axRect2<T>::operator *  ( const axMatrix4<T> &m	) const {
 	tmp.size() = bottomRight() * m - tmp.pos();
 	return tmp;
 }
+
+
+template<class T>
+void axRect2<T>::unionRect( T xx, T yy, T ww, T hh ) {
+	if( w == 0 || h == 0 ) {
+		set( xx, yy, ww, hh );
+	}else {
+		ax_min_it( x, xx );
+		ax_min_it( y, yy );
+		axVec2<T> br = bottomRight();
+		ax_max_it( br, axVec2<T>( xx+ww, yy+hh) );
+		setBottomRight( br );
+	}
+}
+
 
 
 
