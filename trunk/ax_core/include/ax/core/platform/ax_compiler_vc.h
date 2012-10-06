@@ -36,17 +36,23 @@
 #endif
 
 #ifdef _M_IX86_FP
-	#define axCPU_sse2		1
+	#define axCPU_sse2		  1
 #endif
 
 //os
 
 #ifdef _WIN64
-	#define axOS_WIN64        1
+	#define axOS_WIN64     1
+	#define axOS_Win64     1
+
 #elif defined _WIN32
-	#define axOS_WIN32        1
+	#define axOS_WIN32     1
+	#define axOS_Win32     1
+
 #elif defined _WINCE
-	#define axOS_WINCE     1
+	#define axOS_WinCE     1
+	#define axOS_WinCE     1
+
 #endif
 
 

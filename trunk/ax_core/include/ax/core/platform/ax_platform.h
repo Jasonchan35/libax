@@ -75,13 +75,15 @@
 #endif
 
 #if axOS_FreeBSD || axOS_Linux || axOS_Solaris || axOS_MacOSX || axOS_iOS
-#define axOS_UNIX		1
-#define	axUSE_PTHREAD	1
-#include "ax_os_unix.h"
+	#define axOS_UNIX		1
+	#define	axOS_Unix		1
+	#define	axUSE_PTHREAD	1
+	#include "ax_os_unix.h"
 #endif
 
 #if axOS_WIN32 || axOS_WIN64 || axOS_WINCE || axOS_MinGW
-	#define axOS_WIN          1
+	#define axOS_WIN        1
+	#define axOS_Win		1
     #include "ax_os_win.h"
 #endif
 
