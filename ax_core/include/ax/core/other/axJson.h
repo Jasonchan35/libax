@@ -191,7 +191,7 @@ public:
 		st = ax_json_serialize_value( *this, value );	
 		if( !st ) {
 			log("io_value");
-			assert(false);
+//			assert(false);
 			return st;
 		}
 		return 0;
