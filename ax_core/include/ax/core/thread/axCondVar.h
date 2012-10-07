@@ -67,7 +67,17 @@ public:
         axCondVar   p_;
     };
     
-	axCondVarProtected( Data &data ) : s_( data.p_ ), data_( data ) {}
+	axCondVarProtected( Data &data, bool signalWhenUnlock )
+		: s_( data.p_ )
+		, data_( data )
+		, signalWhenUnlock_(signalWhenUnlock)
+	{}
+	
+	~axCondVarProtected() {
+		if( signalWhenUnlock_ ) signal();
+	}
+		
+		
 	T& operator*	()	{ return *data(); }
 	T* operator->	()	{ return data(); }
 	T* data			()	{ return (T*) &data_; }
@@ -78,7 +88,8 @@ public:
 	bool	timedWait	( uint32_t wait_milliseconds )	{ return s_.timedWait( wait_milliseconds ); }
 private:
 	axScopeCondVar	s_;
-	Data &data_;
+	Data 	&data_;
+	bool	signalWhenUnlock_;
 };
 
 //@}
