@@ -465,7 +465,7 @@ axStatus	axIArray<T>::removeBySwap( axSize index, axSize count ) {
 		return axStatus_Std::Array_out_of_bound;
 	}
 	
-	axSize swap_count = ax_min( count, size_ - e );
+	axSize swap_count = ax_min( count, axSize(size_ - e) );
 	
 	T* src = &p_[index];
 	T* dst = &p_[size_ - swap_count];

@@ -58,10 +58,6 @@ private:
 
 typedef uint64_t axFileSize;
 
-inline bool		ax_less_than0( axSize  value )		{ return false; }
-inline axSize	ax_min		( axSize a, axSize b )	{ return (a<b)?a:b; }
-inline axSize	ax_max		( axSize a, axSize b )	{ return (a>b)?a:b; }
-inline axSize	ax_abs		( axSize a )			{ return a; } //unsigned will always be positive
 
 template<>
 class axTypeOf<axSize> {
