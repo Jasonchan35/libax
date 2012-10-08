@@ -56,6 +56,8 @@ public:
 	axALWAYS_INLINE(	axStatus	decSize		( axSize n, bool keep_data = true ) );
 
 	axALWAYS_INLINE(	axStatus	reserve		( axSize n ) );
+	axALWAYS_INLINE(	axStatus	reserveMore	( axSize n ) )				{ return reserve( size() + n ); }
+	
 	axALWAYS_INLINE(	axStatus	setCapacity	( axSize n ) );
 						
 				virtual	void		setCapacityIncrement	( axSize n )	{}
