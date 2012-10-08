@@ -72,7 +72,7 @@ axStatus	axIArray<T>::toStringFormat( axStringFormat &f ) const {
 	f.put( '[' );
 	for( i=0; i<size(); i++ ) {
 		if( i > 0 ) f.put( ", " );
-		f.format( "{?}", indexOf(i) );
+		f.format( "{?}", at(i) );
 	}
 	f.put( ']' );
 	return 0;
