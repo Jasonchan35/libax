@@ -250,11 +250,15 @@ void axRect2<T>::unionRect( T xx, T yy, T ww, T hh ) {
 	if( w == 0 || h == 0 ) {
 		set( xx, yy, ww, hh );
 	}else {
-		ax_min_it( x, xx );
-		ax_min_it( y, yy );
+	
+		axVec2<T> lt = pos();
+		ax_min_it( lt, axVec2<T>( xx, yy) );
 		axVec2<T> br = bottomRight();
 		ax_max_it( br, axVec2<T>( xx+ww, yy+hh) );
-		setBottomRight( br );
+		
+		setPos( lt );
+		setSize( br - lt );
+		
 	}
 }
 
