@@ -64,14 +64,14 @@ public:
 						void		setAutoCapacityIncrement()				{ setCapacityIncrement(0); }						
 				virtual	axSize		capacityIncrement		() const		{ return 1; }
 
-	axALWAYS_INLINE(			T&	indexOf		( axSize i ) )				{ assert( inBound(i) ); return p_[i]; }
-	axALWAYS_INLINE(	const	T&	indexOf		( axSize i ) const )		{ assert( inBound(i) ); return p_[i]; }
+	axALWAYS_INLINE(			T&	at			( axSize i ) )				{ assert( inBound(i) ); return p_[i]; }
+	axALWAYS_INLINE(	const	T&	at			( axSize i ) const )		{ assert( inBound(i) ); return p_[i]; }
 
-	axALWAYS_INLINE( 			T&	operator[]	( axSize i ) )				{ return indexOf(i); }
-	axALWAYS_INLINE( 	const	T&	operator[]	( axSize i ) const )		{ return indexOf(i); }
+	axALWAYS_INLINE( 			T&	operator[]	( axSize i ) )				{ return at(i); }
+	axALWAYS_INLINE( 	const	T&	operator[]	( axSize i ) const )		{ return at(i); }
 
-	axALWAYS_INLINE(			T&	last		( axSize i = 0 ) )			{ return indexOf( size_-i-1 ); }
-	axALWAYS_INLINE(	const	T&	last		( axSize i = 0 ) const )	{ return indexOf( size_-i-1 ); }
+	axALWAYS_INLINE(			T&	last		( axSize i = 0 ) )			{ return at( size_-i-1 ); }
+	axALWAYS_INLINE(	const	T&	last		( axSize i = 0 ) const )	{ return at( size_-i-1 ); }
 
 						bool		isAll		( const T& v ) const;
 						bool		isAny		( const T& v ) const;

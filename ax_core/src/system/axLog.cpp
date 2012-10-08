@@ -57,25 +57,24 @@ void axLog::_to_file_stream( FILE* f, Node* n, bool with_time ) {
 axLog::axLog(){
     TP::setCount( 0, false );
     
-    {	FreeList fl( free_list_ );
+    {	FreeList fl( free_list_, true );
         axSize i;
         for( i=0; i<kLogNodeCount; i++ ) {
             Node* n = new Node;
             assert( n );
             fl->append( n );
         }
-        fl.signal();
     }
 }
 
 void axLog::destroy() {
     TP::setCount( 0, false );
-    {	Queue	q( queue_list_ );
+    {	Queue	q( queue_list_, false );
         q.broadcast();
     }
     TP::setCount( 0, true );
     
-    {	FreeList fl( free_list_ );
+    {	FreeList fl( free_list_, false );
         fl->clear();
     }
 }
@@ -107,7 +106,7 @@ axStatus  axLog :: log_ArgList ( const axLog_Tag &tag, const wchar_t* fmt, const
 }
 
 axLog::Node* axLog::getNode() {
-    FreeList fl(free_list_);
+    FreeList fl(free_list_, false);
     for(;;) {
         Node*n = fl->takeHead();
         if( n ) return n;
@@ -118,7 +117,7 @@ axLog::Node* axLog::getNode() {
 
 void axLog::queue( Node* n ) {
 
-    Queue q( queue_list_ ); 
+    Queue q( queue_list_, true );
     
 	
     // always output to stdout immediately
@@ -131,17 +130,15 @@ void axLog::queue( Node* n ) {
     
     if( TP::target() == 0 ) {
         doNode( n ); // do in this thread
-        FreeList fl( free_list_ );
+        FreeList fl( free_list_, true );
         fl->append( n );
-        fl.signal();
     }else{
         q->append( n );
-        q.signal();
     }
 }
 
 void axLog::doNode( Node* n ) {
-    HandlerList	ls( handler_list_ );
+    HandlerList	ls( handler_list_, false );
     
     Handler	*f = ls->head();
     for( ; f; f=f->next() ) {
@@ -165,10 +162,10 @@ void axLog::onThreadProc( axThread* thread ) {
     //bool lv_ok;
     Node *n = NULL;
     for(;;) {
-        {	Queue q(queue_list_);
+        {	Queue q(queue_list_, false );
             n = q->head();
             if( !n ) {
-                {	FreeList	fl( free_list_ );
+                {	FreeList	fl( free_list_, false );
                     if( fl->size() == kLogNodeCount ) {
                         if( !keeprun(thread) ) return; //only quit when all node has been free and nothing in the queue
                     }
@@ -183,9 +180,8 @@ void axLog::onThreadProc( axThread* thread ) {
 		
         doNode( n );
         
-        FreeList fl( free_list_ );
+        FreeList fl( free_list_, true );
         fl->append( n );
-        fl.signal();
     }
 }
 /*
@@ -229,12 +225,12 @@ axStatus axLog::addFile( const wchar_t* filename ) {
  */
 
 void axLog::addHandler ( Handler* h ) {
-    HandlerList	ls( handler_list_ );
+    HandlerList	ls( handler_list_, false );
     ls->append( h );
 }
 
 void axLog::removeHandler( Handler* h ) {
-    HandlerList	ls( handler_list_ );
+    HandlerList	ls( handler_list_, false );
     
     Handler* p = ls->head();
     for( ; p; p=p->next() ) {

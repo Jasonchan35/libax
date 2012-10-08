@@ -21,7 +21,7 @@ template< class T >
 bool axString_Array<T>::containsNoCase( const T *sz ) const {
 
 	for( axSize i=0; i<B::size(); i++ ) {
-		if( B::indexOf(i).cmpNoCase( sz ) == 0 ) return true;
+		if( B::at(i).cmpNoCase( sz ) == 0 ) return true;
 	}	
 	return false;
 
@@ -33,16 +33,16 @@ axStatus	axString_Array<T>::sortNoCase( bool ascending ) {
 	if( ascending ) {
 		for( axSize i=0; i<n; i++ ) {
 			for( axSize j=i+1; j<n; j++ ) {
-				if( B::indexOf(i).cmpNoCase( B::indexOf(j) ) > 0 ) {
-					ax_swap( B::indexOf(i), B::indexOf(j) );
+				if( B::at(i).cmpNoCase( B::at(j) ) > 0 ) {
+					ax_swap( B::at(i), B::at(j) );
 				}
 			}
 		}
 	}else{
 		for( axSize i=0; i<n; i++ ) {
 			for( axSize j=i+1; j<n; j++ ) {
-				if( B::indexOf(i).cmpNoCase( B::indexOf(j) ) < 0 ) {
-					ax_swap( B::indexOf(i), B::indexOf(j) );
+				if( B::at(i).cmpNoCase( B::at(j) ) < 0 ) {
+					ax_swap( B::at(i), B::at(j) );
 				}
 			}
 		}
