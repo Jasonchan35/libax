@@ -69,7 +69,7 @@ axStatus	axArray< T, LOCAL_BUF_SIZE >::onMalloc( axSize req_size, T* &newPtr, ax
 	axSize	n = 0;
 	newCapacity = 0;
 	if( capacityIncrement() == 0 ) {
-		n = ax_max( B::size() + B::size() / 2 , req_size ); //auto resize to 1.5x
+		n = ax_max( axSize( B::size() + B::size() / 2 ), req_size ); //auto resize to 1.5x
 	}else{
 		n = ax_align_multiple( req_size, capacityIncrement() );
 	}

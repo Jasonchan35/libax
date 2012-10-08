@@ -29,6 +29,13 @@ template<class T> inline T ax_max ( T a, T b )						{ return (a>b)?a:b; }
 template<class T> inline void ax_min_it		( T& a, const T& b )	{ if( b<a ) a=b; }
 template<class T> inline void ax_max_it		( T& a, const T& b )	{ if( b>a ) a=b; }
 
+
+template<> inline bool		ax_less_than0( axSize  value )		{ return false; }
+//template<> inline axSize	ax_min		( axSize a, axSize b )	{ return (a<b)?a:b; }
+//template<> inline axSize	ax_max		( axSize a, axSize b )	{ return (a>b)?a:b; }
+template<> inline axSize	ax_abs		( axSize a )			{ return a; } //unsigned will always be positive
+
+
 //! x clamped to the range [a,b]
 template<class T> inline T      ax_clamp	( T x, T a, T b )		{ if( x < a ) return a; return x > b ? b : x; }
 template<class T> inline T		ax_clamp01	( T x )					{ return ax_clamp(x,0,1); }
