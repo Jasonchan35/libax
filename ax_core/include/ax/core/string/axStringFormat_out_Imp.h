@@ -2,6 +2,7 @@
 #ifndef __axStringFormat_out_Imp_h__
 #define __axStringFormat_out_Imp_h__
 
+#include "../common/axTypeOf.h"
 #include "axStringFormat.h"
 #include "ax_str_to.h"
 
@@ -134,8 +135,6 @@ axStatus axStringFormat_out_char( axStringFormat &f, T value ) {
 inline axStatus axStringFormat_out( axStringFormat &f, wchar_t	value ) { return axStringFormat_out_char( f, value ); }
 inline axStatus axStringFormat_out( axStringFormat &f, char		value ) { return axStringFormat_out_char( f, value ); }
 
-
-
 //==== signed int
 #define	axTYPE_LIST(T)	\
 	inline axStatus axStringFormat_out( axStringFormat &f, T   value ) { return axStringFormat_out_NumberT( f, value ); } \
@@ -158,6 +157,9 @@ inline axStatus axStringFormat_out( axStringFormat &f, char		value ) { return ax
 
 inline axStatus axStringFormat_out( axStringFormat &f, float   value ) { return axStringFormat_out_NumberT( f, value ); }
 inline axStatus axStringFormat_out( axStringFormat &f, double  value ) { return axStringFormat_out_NumberT( f, value ); }
+
+
+
 
 template< class T> inline
 int axStringFormat_to_digi_floating( char* buf, const int max_digi, T value, int base, bool exponent, int precision, const char *table ) {

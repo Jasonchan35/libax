@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+#include <ax/core/string/axStringFormat_out_Imp.h>
 #include <ax/core/string/ax_print.h>
 
 axStatus ax_print_ArgList( const wchar_t* fmt, const axStringFormat_ArgList &list ) {

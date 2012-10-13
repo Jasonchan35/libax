@@ -44,7 +44,7 @@ private:
 //axStatus axStringFormat_out( axStringFormat &f, const axNSObject<T>& value ) { return axStringFormat_out( f, value.obj() ); }
 
 template<> inline
-axStatus axStringFormat_out( axStringFormat &f, NSString* v ) { 
+axStatus axStringFormat_out( axStringFormat &f, NSString* const &v ) {
 	return axStringFormat_out( f, v ? [v UTF8String] : "null" );
 }
 

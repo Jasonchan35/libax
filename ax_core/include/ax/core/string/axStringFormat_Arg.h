@@ -13,20 +13,17 @@
 
 class axStringFormat;
 
-axStatus axStringFormat_out( axStringFormat &f, uint8_t		value );
-axStatus axStringFormat_out( axStringFormat &f, uint16_t	value );
-axStatus axStringFormat_out( axStringFormat &f, uint32_t	value );
-axStatus axStringFormat_out( axStringFormat &f, uint64_t	value );
-axStatus axStringFormat_out( axStringFormat &f, int8_t		value );
-axStatus axStringFormat_out( axStringFormat &f, int16_t		value );
-axStatus axStringFormat_out( axStringFormat &f, int32_t		value );
-axStatus axStringFormat_out( axStringFormat &f, int64_t		value );
+#define axTYPE_LIST( T ) \
+	axStatus axStringFormat_out( axStringFormat &f, T value ); \
+//----
+	#include "../common/axTypeList_int.h"
+#undef axTYPE_LIST
 
-axStatus axStringFormat_out( axStringFormat &f, unsigned long value );
-axStatus axStringFormat_out( axStringFormat &f, long value );
-axStatus axStringFormat_out( axStringFormat &f, unsigned long long value );
-axStatus axStringFormat_out( axStringFormat &f, long long value );
-
+#define axTYPE_LIST( T ) \
+	axStatus axStringFormat_out( axStringFormat &f, T value ); \
+//----
+	#include "../common/axTypeList_uint.h"
+#undef axTYPE_LIST
 
 axStatus axStringFormat_out( axStringFormat &f, float		value );
 axStatus axStringFormat_out( axStringFormat &f, double		value );
@@ -43,9 +40,9 @@ inline axStatus axStringFormat_out( axStringFormat &f, char*	value ) { return ax
 inline axStatus axStringFormat_out( axStringFormat &f, wchar_t*	value ) { return axStringFormat_out( f, (const wchar_t*)value ); }
 
 axStatus axStringFormat_out( axStringFormat &f, const void* p );
-
-template<class T> inline
-axStatus axStringFormat_out( axStringFormat &f, T*	  value ) { return axStringFormat_out( f, (const void* &)value ); }
+inline axStatus  axStringFormat_out( axStringFormat &f, void* p ) {
+	return axStringFormat_out( f, (const void*) p );
+}
 
 template<class T> inline
 axStatus axStringFormat_out( axStringFormat &f, const T& value ) { return value.toStringFormat( f ); }
