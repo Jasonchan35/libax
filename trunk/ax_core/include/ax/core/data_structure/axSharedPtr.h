@@ -3,6 +3,7 @@
 
 #include "../thread/axAtomicInt.h"
 #include "../other/axSerializer.h"
+#include "../other/axJson.h"
 
 template <class T>	class axSharedPtr;
 
@@ -116,6 +117,18 @@ template <class T> inline
 axStatus axSharedPtr<T> :: serialize_io( axDeserializer &s ) {
 	axStatus st = newObject();	if( !st ) return st;
 	return s.io( *p_ );
+}
+
+template <class T> inline
+axStatus ax_json_serialize_value( axJsonWriter &s, axSharedPtr<T> &v ) {
+	if(v) return s.io_value( *v );
+	return s.nullValue();
+}
+
+template <class T> inline
+axStatus ax_json_serialize_value( axJsonParser &s, axSharedPtr<T> &v ) {
+	axStatus st = v.newObject();	if( !st ) return st;
+	return s.io_value( *v );
 }
 
 

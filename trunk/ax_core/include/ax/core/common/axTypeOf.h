@@ -163,6 +163,7 @@ template<class T> inline	axStatus	ax_take( T  &a, T  &b )  			{ return a.onTake(
 template<class T> inline	axStatus	ax_take( T* &a, T* &b )				{ a=b; return 0; }
 template<class T> inline	axStatus	ax_take( const T* &a, const T* &b )	{ a=b; return 0; }
 
+#define		ax_take_macro( A )	{ st = ax_take( A, src.A );	if( !st ) return st; }
 
 #ifdef axCOMPILER_VC
 	#pragma warning( push )
