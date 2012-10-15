@@ -25,14 +25,14 @@ public:
 			axSize		numChunk	() const					{ return chunks_.size(); }
 			axSize		chunkSize	() const					{ return CHUNK_SIZE; }
 
-	axALWAYS_INLINE(			T&			indexOf		( axSize i ) );
-	axALWAYS_INLINE(	const	T&			indexOf		( axSize i ) const );
+	axALWAYS_INLINE(			T&			at		( axSize i ) );
+	axALWAYS_INLINE(	const	T&			at		( axSize i ) const );
 
-			T&			operator[]	( axSize i )				{ return indexOf(i); }
-	const	T&			operator[]	( axSize i ) const			{ return indexOf(i); }
+			T&			operator[]	( axSize i )				{ return at(i); }
+	const	T&			operator[]	( axSize i ) const			{ return at(i); }
 
-			T&			last		( axSize i = 0 )			{ return indexOf( size_-i-1 ); }
-	const	T&			last		( axSize i = 0 ) const		{ return indexOf( size_-i-1 ); }
+			T&			last		( axSize i = 0 )			{ return at( size_-i-1 ); }
+	const	T&			last		( axSize i = 0 ) const		{ return at( size_-i-1 ); }
 
 			axStatus	append		( const T& value )			{ axStatus st = incSize(1); if( !st ) return st; return ax_copy( last(), value ); }
 
@@ -46,8 +46,8 @@ private:
 		axStatus	resize( axSize newSize );
 		char	buf[ sizeof(T) * CHUNK_SIZE ];
 
-				T&	indexOf( axSize i )			{ assert(i<size_); return ( (T*)buf) [i]; }
-		const	T&	indexOf( axSize i )	const	{ assert(i<size_); return ( (T*)buf) [i]; }
+				T&	at( axSize i )			{ assert(i<size_); return ( (T*)buf) [i]; }
+		const	T&	at( axSize i )	const	{ assert(i<size_); return ( (T*)buf) [i]; }
 		axSize	size_;
 	};
 
@@ -146,22 +146,22 @@ axStatus axChunkArray<T,CHUNK_SIZE,CHUNK_PTR_LOCAL_BUF>::resize(axSize newSize) 
 
 
 template<class T, size_t CHUNK_SIZE, size_t CHUNK_PTR_LOCAL_BUF> inline
-T&  axChunkArray<T,CHUNK_SIZE,CHUNK_PTR_LOCAL_BUF>::indexOf ( axSize i ) {
+T&  axChunkArray<T,CHUNK_SIZE,CHUNK_PTR_LOCAL_BUF>::at ( axSize i ) {
 	assert( inBound(i) );
 	size_t c = i / CHUNK_SIZE;
 	size_t e = i % CHUNK_SIZE;
 	Chunk *p = chunks_[c];
-	return p->indexOf(e);
+	return p->at(e);
 }
 
 
 template<class T, size_t CHUNK_SIZE, size_t CHUNK_PTR_LOCAL_BUF> inline
-const T&  axChunkArray<T,CHUNK_SIZE,CHUNK_PTR_LOCAL_BUF>::indexOf ( axSize i ) const {
+const T&  axChunkArray<T,CHUNK_SIZE,CHUNK_PTR_LOCAL_BUF>::at ( axSize i ) const {
 	assert( inBound(i) );
 	size_t c = i / CHUNK_SIZE;
 	size_t e = i % CHUNK_SIZE;
 	const Chunk *p = chunks_[c];
-	return p->indexOf(e);
+	return p->at(e);
 }
 
 
