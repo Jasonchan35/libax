@@ -153,7 +153,7 @@ public:
 //	if( env ) {
 //		NSMutableDictionary* dicEnv = [ [NSDictionary dictionary] mutableCopy];
 //		for( size_t i=0; i<env->size(); i++ ) {
-//			const axEnvVar & e = env->indexOf(i);
+//			const axEnvVar & e = env->at(i);
 //			[dicEnv setValue:ax_toNSString(e.value) forKey:ax_toNSString(e.name)];		
 //		}
 //		[task setEnvironment:dicEnv];
