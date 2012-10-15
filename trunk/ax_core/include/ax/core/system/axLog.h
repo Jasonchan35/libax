@@ -56,7 +56,7 @@ public:
 		axStringA					user_string;
 	};
 
-	class Handler : public axDListNode<Handler, true> {
+	class Handler : public axDListNode<Handler, false> {
 	public:
 		virtual ~Handler() {}
 		virtual void out( axLog::Node* n ) { assert( false ); }
