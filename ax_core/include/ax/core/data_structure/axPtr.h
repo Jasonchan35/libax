@@ -30,6 +30,8 @@ public:
 	
 	axStatus	newObject()				{ p_ = new T; return p_ ? 0 : axStatus_Std::not_enough_memory; }
 	void		deleteObject()			{ if( p_ ) { delete p_; p_=NULL; } }
+	
+	void		setPtr( T* p )			{ p_ = p; }
 private:
 	T* p_;
 };

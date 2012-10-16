@@ -4,6 +4,12 @@
 #define	axForArray( T, V, ARR  )	for( T *(V)=(ARR).ptr(), *axEachEnd=(V)+(ARR).size(); (V)<axEachEnd; (V)++ )
 #define axForDList( T, V, LIST )	for( T *(V)=(LIST).head(); (V); (V)=(V)->next() )
 
+
+#define	axForArrayRev( T, V, ARR )\
+	for( T *(V)=(ARR).size()?&(ARR).last():NULL, *axEachEnd=(ARR).size()?(ARR).ptr():(ARR).ptr()+1; (V)>=axEachEnd; (V)-- )
+//-----
+
+
 //! for 0 fixed parameter
 #define axExpandArgList0( ReturnType, FuncName, Arg, ArgList, ArgFunc ) \
 ReturnType	FuncName ( )																																		{ ArgList list;																				return ArgFunc( list ); } \
