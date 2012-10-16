@@ -46,6 +46,8 @@ public:
 			T& operator* ()			{ return *p_; }
 	const	T& operator* () const	{ return *p_; }
 	
+	void	operator= ( T &src )	{ ref( src ); }
+	
 	operator		T*()			{ return p_; }
 	operator const	T*() const		{ return p_; }
 	
@@ -53,10 +55,16 @@ public:
 			void	ref		( T* p );
 			void	unref	();
 	virtual void	onWillRemoveFromList() { p_=NULL; }
-	
+		
+	axStatus onTake( axWeakPtr &src ) {	 ref( src ); src.unref(); return 0; }
 private:
 	T* p_;
 };
+
+template<class T> inline axStatus ax_copy( axWeakPtr<T> &a, const axWeakPtr<T> &b ) {
+	a.ref( ax_const_cast( b ) );
+	return 0;
+}
 
 //------------
 
@@ -73,4 +81,5 @@ void	axWeakPtr<T>::unref	()	{
 	p_=NULL; 
 }
 
+ 
 #endif
