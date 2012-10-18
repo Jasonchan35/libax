@@ -42,17 +42,23 @@ public:
 	void		setSize		( const axVec2<T> &v )			{ setSize( v.x, v.y); }
 
 	void		setBottomRight ( const axVec2<T> &v )		{ w = v.x - x;  h = v.y - y; }
-	axVec2<T>	bottomRight	() const						{ return axVec2f( x+w, y+h ); }
+
+
+	axVec2<T>	topLeft		() const						{ return axVec2f( x,   y ); }
+	axVec2<T>	topRight	() const						{ return axVec2f( x+w, y ); }
 	
+	axVec2<T>	centerLeft	() const						{ return axVec2f( x,   y+h/2 ); }
+	axVec2<T>	centerRight	() const						{ return axVec2f( x+w, y+h/2 ); }
+		
+	axVec2<T>	bottomLeft	() const						{ return axVec2f( x,   y+h ); }
+	axVec2<T>	bottomRight	() const						{ return axVec2f( x+w, y+h ); }
+
 	axVec2<T>	center		() const						{ return axVec2<T>( centerX(), centerY() ); }
 	T			centerX		() const						{ return x + w / (T)2; }
 	T			centerY		() const						{ return y + h / (T)2; }
 
 	axRect2<T>	expand		( T d )	 const					{ return axRect2<T>( x-d,  y-d,  w+d*2,  h+d*2  ); }
 	axRect2<T>	expand		( T dx, T dy )	const			{ return axRect2<T>( x-dx, y-dy, w+dx*2, h+dy*2 ); }
-
-
-
 
 	void		unionRect( T xx, T yy, T ww, T hh );
 	
