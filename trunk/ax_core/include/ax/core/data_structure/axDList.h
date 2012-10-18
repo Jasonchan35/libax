@@ -3,6 +3,7 @@
 #define __axDList_h__
 
 #include "../common/ax_common.h"
+#include "axAutoPtr.h"
 
 class axStringFormat;
 
@@ -49,12 +50,6 @@ protected:
 };
 
 
-
-
-
-
-
-
 //! double linked list template
 template <class T>
 class axDList : public axNonCopyable {
@@ -79,7 +74,8 @@ public:
 	axALWAYS_INLINE(	void		append			( T* node ) );
 	axALWAYS_INLINE(	void		append			( T* node, T* after ) );
 	axALWAYS_INLINE(	void		appendByTake	( axDList<T> &src ) );
-	
+	axALWAYS_INLINE(	axStatus	appendByCopy	( const axDList<T> &src ) );
+				
 	axALWAYS_INLINE(	void		remove			( T* node, bool call_onWillRemoveFromList = true ) );
 	axALWAYS_INLINE(	void		clear			() );
 	
@@ -99,14 +95,14 @@ private:
 
 //===================== inline ==========================
 
-template<class T, bool OwnedByList>
+template<class T, bool OwnedByList> inline
 axDListNode<T,OwnedByList>::axDListNode() {
 	_list_ = NULL;
 	_prev_ = _next_ = NULL;
 }
 
 
-template<class T, bool OwnedByList>
+template<class T, bool OwnedByList> inline
 axStatus	axDListNode<T,OwnedByList> :: getIndex( axSize &idx ) {
 	if( ! list() ) return axStatus_Std::invalid_parameter;
 	T* n = list()->head();
@@ -120,7 +116,7 @@ axStatus	axDListNode<T,OwnedByList> :: getIndex( axSize &idx ) {
 	return axStatus_Std::not_found;
 }
 
-template<class T>
+template<class T> inline
 axStatus axDList<T>::onTake( axDList<T> &src ) {
 	clear();
 	_head_ = src._head_;
@@ -139,7 +135,7 @@ axStatus axDList<T>::onTake( axDList<T> &src ) {
 	return 0;
 }
 
-template<class T>
+template<class T> inline
 axDList<T>::axDList() {
 	_head_   = NULL;
 	_tail_   = NULL;
@@ -147,12 +143,12 @@ axDList<T>::axDList() {
 	_size_	 = 0;
 }
 
-template<class T>
+template<class T> inline
 axDList<T>::~axDList() {
 	clear();
 }
 
-template<class T>
+template<class T> inline
 void axDList<T>::clear() {
 	T *n;
 	for( ;; ) {
@@ -163,7 +159,7 @@ void axDList<T>::clear() {
 	}
 }
 
-template<class T>
+template<class T> inline
 void axDList<T>::insert( T *node, T *before ) {
 	if( !node )					{ assert( false ); return; }
 	if( node->_list_ )			{ assert( false ); return; } //already in other List ?
@@ -192,7 +188,7 @@ void axDList<T>::insert( T *node, T *before ) {
 	node->onDidAddToList();
 }
 
-template<class T>
+template<class T> inline
 void axDList<T>::insert( T *node ) {
 	if( !node )		   { assert( false ); return; }
 	if( node->_list_ ) { assert( false ); return; } //node already in list
@@ -210,7 +206,7 @@ void axDList<T>::insert( T *node ) {
 	node->onDidAddToList();
 }
 
-template<class T>
+template<class T> inline
 void axDList<T>::append( T *node ) {
 	if( !node )		   { assert( false ); return; }
 	if( node->_list_ ) { assert( false ); return; } //node already in list
@@ -228,7 +224,7 @@ void axDList<T>::append( T *node ) {
 	node->onDidAddToList();
 }
 
-template<class T>
+template<class T> inline
 void axDList<T>::append( T* node, T* after ) {
 	if( !node )					{ assert( false ); return; }
 	if( node->_list_ )			{ assert( false ); return; } //already in other List ?
@@ -253,7 +249,7 @@ void axDList<T>::append( T* node, T* after ) {
 	node->onDidAddToList();
 }
 
-template<class T>
+template<class T> inline
 void axDList<T>::remove( T *node, bool call_onWillRemoveFromList ) {
 	if( !node )	{ assert( false ); return; }
 	if( node->list() != this ) {
@@ -277,7 +273,7 @@ void axDList<T>::remove( T *node, bool call_onWillRemoveFromList ) {
 	node->_list_ = NULL;
 }
 
-template<class T>
+template<class T> inline
 void axDList<T>::appendByTake( axDList<T> &src ) {
 	for(;;) {
 		T *n = src.popHead();
@@ -286,7 +282,7 @@ void axDList<T>::appendByTake( axDList<T> &src ) {
 	}
 }
 
-template<class T>
+template<class T> inline
 T*	 axDList<T>::getNodeByIndex( axSize idx ) const {
 	T* n = head();
 	if( idx >= size() ) return NULL;
@@ -297,6 +293,20 @@ T*	 axDList<T>::getNodeByIndex( axSize idx ) const {
 	}
 	return NULL;
 }
+
+template<class T> inline
+axStatus axDList<T>::appendByCopy( const axDList<T> &src ) {
+	axStatus st;
+	T *n = src.head();
+	for(;n;n=n->next()) {
+		axAutoPtr< T > np( st );
+		if( !st ) return st;
+		st = ax_copy( *np, *n ); if( !st ) return st;
+		append( np.unref() );
+	}
+	return 0;
+}
+
 
 //@}
 
