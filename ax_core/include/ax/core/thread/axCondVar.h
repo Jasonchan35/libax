@@ -43,9 +43,10 @@ private:
 class axScopeCondVar  : public axNonCopyable {
 public:
 	axScopeCondVar	()												{ cv_ = NULL; }
-	axScopeCondVar	( axCondVar &condvar )							{ cv_ = NULL; lock( condvar ); }
+//	axScopeCondVar	( axCondVar &condvar )							{ cv_ = NULL; lock( condvar ); }
 	~axScopeCondVar	()												{ unlock(); }
 	
+	void	operator()( axCondVar &condvar )						{ lock(condvar); }
 	void	lock	( axCondVar &condvar )							{ unlock(); cv_ = &condvar; cv_->lock(); }
 	bool	tryLock	( axCondVar &condvar )							{ unlock(); bool b = condvar.tryLock(); if( b ) { cv_ = &condvar; } return b; }
 	void	unlock	()												{ if( cv_ ) { cv_->unlock(); cv_ = NULL; } }
@@ -68,10 +69,9 @@ public:
     };
     
 	axCondVarProtected( Data &data, bool signalWhenUnlock )
-		: s_( data.p_ )
-		, data_( data )
+		: data_( data )
 		, signalWhenUnlock_(signalWhenUnlock)
-	{}
+	{ s_( data.p_ ); }
 	
 	~axCondVarProtected() {
 		if( signalWhenUnlock_ ) signal();

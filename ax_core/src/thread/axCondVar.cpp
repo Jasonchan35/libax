@@ -1,11 +1,11 @@
 #include <ax/core/thread/axCondVar.h>
 
-void axCondVar::signal		() { axScopeMutex sm(*this); signalNL(); }
-void axCondVar::broadcast	() { axScopeMutex sm(*this); broadcastNL(); }
-void axCondVar::wait		() { axScopeMutex sm(*this); waitNL(); }
+void axCondVar::signal		() { axScopeMutex sm; sm(*this); signalNL(); }
+void axCondVar::broadcast	() { axScopeMutex sm; sm(*this); broadcastNL(); }
+void axCondVar::wait		() { axScopeMutex sm; sm(*this); waitNL(); }
 
 bool axCondVar::timedWait	( uint32_t wait_milliseconds )  { 
-	axScopeMutex sm(*this); 
+	axScopeMutex sm; sm(*this);
 	return timedWaitNL(wait_milliseconds); 
 }
 

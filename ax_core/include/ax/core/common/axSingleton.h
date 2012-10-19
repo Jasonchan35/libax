@@ -29,7 +29,7 @@ public:
 			if( ! p ) { //might init by other EXE/DLL
 //				printf( "%s\n", axPRETTY_FUNC_NAME);
 				#if 0 // mutex here for thread-saft ?
-					ScopeMutex	sm(mutex)
+					ScopeMutex	sm; sm(mutex)
 					if( !p ) { //double check after lock
 						static T t;
 						const_cast<T*&>(p) = &t;
