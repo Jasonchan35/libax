@@ -66,7 +66,10 @@ public:
 //dummy
 	class Scope_JsonCondense : public axNonCopyable {
 	public:
-		Scope_JsonCondense( axSerializerBase &s, bool b ) {}
+		Scope_JsonCondense() {}
+		void	operator()	( axSerializerBase &s, bool b ) {}
+		void	bind		( axSerializerBase &s, bool b ) {}
+		void	unbind		() {}
 	};
 };
 

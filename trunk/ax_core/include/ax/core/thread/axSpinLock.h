@@ -61,8 +61,10 @@ private:
 class axScopeSpinLock  : public axNonCopyable {
 public:
 	axScopeSpinLock	()							{ s_ = NULL; }
-	axScopeSpinLock	( axSpinLock &s )			{ s_ = NULL; lock(s); }
+//	axScopeSpinLock	( axSpinLock &s )			{ s_ = NULL; lock(s); }
 	~axScopeSpinLock()							{ unlock(); }
+
+	void	operator() ( axSpinLock &s )		{ lock(s); }
 
 	void	lock	( axSpinLock &s )			{ s.unlock();	s.lock();	s_ = &s; }
 	void	unlock	()							{ if( s_ ) { s_->unlock(); s_=NULL; } }

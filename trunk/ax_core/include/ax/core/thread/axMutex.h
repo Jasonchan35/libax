@@ -35,14 +35,16 @@ protected:
 	
 class axScopeMutex  : public axNonCopyable {
 public:
-	axScopeMutex	()											{ m_ = NULL; }
-	axScopeMutex	( axMutex &mutex )							{ m_ = NULL; lock( mutex ); }
-	~axScopeMutex	()											{ unlock(); }
-	
-	void	lock	( axMutex &mutex )							{ unlock(); m_ = &mutex; m_->lock(); }
-	bool	tryLock	( axMutex &mutex )							{ unlock(); bool b = mutex.tryLock(); if(b) {m_ = &mutex; } return b; }
+	axScopeMutex	()						{ m_ = NULL; }
+//	axScopeMutex	( axMutex &mutex )		{ m_ = NULL; lock( mutex ); }
+	~axScopeMutex	()						{ unlock(); }
 
-	void	unlock	()											{ if( m_ ) { m_->unlock(); m_ = NULL; } }
+	void	operator()( axMutex &mutex )	{ lock(mutex); }
+	
+	void	lock	( axMutex &mutex )		{ unlock(); m_ = &mutex; m_->lock(); }
+	bool	tryLock	( axMutex &mutex )		{ unlock(); bool b = mutex.tryLock(); if(b) {m_ = &mutex; } return b; }
+
+	void	unlock	()						{ if( m_ ) { m_->unlock(); m_ = NULL; } }
 
 private:
 	axMutex*	m_; //!< mutex in lock
@@ -58,7 +60,7 @@ public:
         axMutex   p_;
     };
     
-	axMutexProtected( Data &data ) : s_( data.p_ ), data_( data ) {}
+	axMutexProtected( Data &data ) : data_( data ) { s_(data.p_); }
 	T& operator*	()	{ return *data(); }
 	T* operator->	()	{ return data(); }
 	T* data			()	{ return (T*) &data_; }
