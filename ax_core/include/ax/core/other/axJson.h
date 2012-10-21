@@ -117,17 +117,15 @@ public:
 	
 	class Scope_JsonCondense : public axNonCopyable {
 	public:
-		Scope_JsonCondense() :w_(NULL) {}
 		~Scope_JsonCondense() { unbind(); }
 
-		void	operator() ( axJsonWriter &w, bool b ) { bind(w,b); }
-		
-		void	bind	( axJsonWriter &w, bool b ) { unbind(); w_=&w; old=w_->isCondense(); }
-		void 	unbind	() { if(w_) { w_->setCondense(old); w_=NULL; } }
+		void	operator() 	( axJsonWriter &w, bool b ) { bind(w,b); }
+		void	bind		( axJsonWriter &w, bool b ) { unbind(); w_=&w; old=w_->isCondense(); w_->setCondense(b); }
+		void 	unbind		() { if(w_) { w_->setCondense(old); w_=NULL; } }
 		
 	private:
-		axJsonWriter*	w_;
-		bool			old;
+		axPtr<axJsonWriter>	w_;
+		bool				old;
 	};	
 	
 private:

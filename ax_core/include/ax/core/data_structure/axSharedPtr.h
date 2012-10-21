@@ -31,13 +31,15 @@ public:
 	axSharedPtr	()							{ p_ = NULL; }
 	axSharedPtr	( axStatus &st )			{ p_ = NULL; st = newObject(); 	}	
 	axSharedPtr	( T* p )					{ p_ = NULL; ref( p );			}
-	axSharedPtr	( const axSharedPtr &s )	{ p_ = NULL; ref( s.ptr() );	}
+	axSharedPtr	( axSharedPtr &s )			{ p_ = NULL; ref( s.ptr() );	}
 	~axSharedPtr()							{ unref();	}
 	
 	axALWAYS_INLINE(	axStatus	newObject		() );
 						axStatus	newObjectIfNull	()		{ return p_ ? axStatus(0) : newObject(); }
 	
 	axALWAYS_INLINE(	axStatus	unshare	() );
+
+//	axALWAYS_INLINE(	void		ref			( const T* p ) const );
 	
 	axALWAYS_INLINE(	void		ref			( T* p ) );
 	axALWAYS_INLINE(	void		unref		() );
