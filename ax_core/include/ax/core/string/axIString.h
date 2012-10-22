@@ -141,6 +141,8 @@ public:
 
 		bool		isMemoryOverlapped		( const T* p, axSize n ) const	{ return buf_.isMemoryOverlapped(p,n); }
 
+	axStatus		onTake					( axIString_ &src ) { return set( src.c_str() ); }
+
 protected:
 	axIArray<T>&	buf_;
 	axIString_( axIArray<T> &buf ) : buf_(buf) {}
@@ -163,6 +165,5 @@ template< class T > inline
 axSize	axIString_<T> :: size	() const {
 	return ( buf_.size() ) ? ( buf_.size()-1 ) : 0;
 }
-
 
 #endif //__axIString_h__
