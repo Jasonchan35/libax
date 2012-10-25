@@ -15,12 +15,10 @@ public:
 	axConstString_  ( const T* sz = NULL ) { setExternal(sz); }
 	axConstString_  ( const axConstString_<T> &src ) { setExternal(src); }
 
-	void setExternal( const T* sz )	{ 
-		( const_cast< axExternalString_<T>&>(v_) ).setExternal( (T*)sz ); 
-	}
+	void setExternal( const T* sz )	{ ax_const_cast(v_).setExternal( (T*)sz ); }
 
-	operator const axIString_<T> & () 				{ return v_; }
-			 const axIString_<T> & asIString () 	{ return v_; }
+	operator const axIString_<T> & () const				{ return v_; }
+			 const axIString_<T> & asIString () const	{ return v_; }
 
 	axStatus		toStringFormat( axStringFormat &f ) const { return v_.toStringFormat(f); }
 

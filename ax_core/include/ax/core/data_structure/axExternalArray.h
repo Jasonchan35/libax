@@ -15,11 +15,11 @@ class axExternalArray : public axIArray<T> {
 	typedef	axIArray<T>	B;
 public:
 	axExternalArray( T* buf=NULL, axSize buf_len=0 ) 	{ setExternal( buf, buf_len ); }
-	axExternalArray( const axExternalArray<T> & src ) 	{ setExternal( src.buf_, bufLen_ ); }
+	axExternalArray( axExternalArray<T> & src ) 		{ setExternal( src.buf_, bufLen_ ); }
 	
-	virtual ~axExternalArray();
-
+	void	setExternal( axIArray<T> & a )		{ setExternal( a.ptr(), a.size() ); }
 	void	setExternal( T* buf, axSize bufLen );
+	
 private:
 	virtual	axStatus	onMalloc	( axSize req_size, T* &newPtr, axSize &newCapacity );
 	virtual void		onFree		( T* p ) { /*do nothing*/ }
@@ -27,6 +27,34 @@ private:
 	T*		buf_;
 	axSize	bufLen_;
 };
+
+template<class T>
+class axConstArray {
+public:
+	axConstArray	() {}
+	axConstArray	( const T* p, size_t n  )			{ setExternal(p,n); }
+	axConstArray  	( const axIArray<T> 	& a )		{ setExternal(a);  }
+	axConstArray  	( const	axConstArray<T> & a )		{ setExternal(a);  }
+	
+	void	setExternal( const T* p, size_t n  )	{ ax_const_cast(v_).setExternal( ax_const_cast(p),n ); }
+	void	setExternal( const axIArray<T> & a )	{ ax_const_cast(v_).setExternal( ax_const_cast(a) ); }
+
+	void	operator=( const axConstArray &o )		{ setExternal(o); }
+
+	operator const axIArray<T> & () const			{ return v_; }
+			 const axIArray<T> & axIArray () const 	{ return v_; }
+			 
+			axSize	size() const { return v_.size(); }
+	const	T&		operator[]	( size_t i ) const	{ return v_[i]; }
+	const	T&		at			( size_t i ) const	{ return v_[i]; }
+	
+	axStatus	toStringFormat( axStringFormat &f ) const { return v_.toStringFormat(f); }
+private:
+	const axExternalArray<T> v_;
+};
+
+template<class T> inline
+axStatus axStringFormat_out( axStringFormat &f, const axConstArray<T> & value ) { return value.toStringFormat( f ); }
 
 
 //-----------
@@ -37,17 +65,9 @@ void axExternalArray<T> :: setExternal( T* buf, axSize bufLen ) {
 	B::_init( buf, bufLen, bufLen );
 }
 
-template< class T >
-axExternalArray<T> :: ~axExternalArray() {
-	B::clear();  // must call clear here, because ~axIArray() cannot call virtual function to free memory
-}
-
 template<class T>
 axStatus	axExternalArray<T> ::onMalloc	( axSize req_size, T* &newPtr, axSize &newCapacity ) { 
-	if( req_size > bufLen_ ) return axStatus_Std::ExternalArray_excess_limit;  
-	newPtr = buf_;
-	newCapacity = bufLen_;
-	return 0;
+	return axStatus_Std::ExternalArray_excess_limit;
 }
 
 //@}
