@@ -45,7 +45,7 @@ public:
 	axALWAYS_INLINE(	void		unref		() );
 						int			refCount	()			{ return p_ ? p_->refCount() : 0; }
 
-	void operator= ( const axSharedPtr<T> &src )		{ ref( src.p_ ); }
+	void operator= ( 		axSharedPtr<T> &src )		{ ref( src.p_ ); }
 
 	bool operator==( const axSharedPtr<T> &src ) const	{ return p_ == src.p_; }
 	bool operator!=( const axSharedPtr<T> &src ) const	{ return p_ != src.p_; }
@@ -69,6 +69,37 @@ public:
 
 private:
 	T*	p_;
+};
+
+
+template<class T>
+class axSharedObj {
+public:
+	axSharedObj	()							{}
+	axSharedObj	( axStatus &st )			{ st = p_.newObject(); }
+	axSharedObj	( axSharedObj &s )			{ p_.ref( s.ptr() );	}
+	~axSharedObj()							{ p_.unref(); }
+	
+	axALWAYS_INLINE(	axStatus	newObject		() );
+						axStatus	newObjectIfNull	()	{ return p_ ? axStatus(0) : p_.newObject(); }
+
+	void operator= ( 		axSharedObj<T> &src )		{ p_.ref( src.p_ ); }
+	
+		  T* ptr()				{ return  p_; }
+	const T* ptr() const		{ return  p_; }
+
+		  T* operator->()		{ return  p_; }
+	const T* operator->() const	{ return  p_; }
+
+		  T& operator* ()		{ return *p_; }
+	const T& operator* () const	{ return *p_; }
+
+	operator		T*()		{ return p_; }
+	operator const	T*() const	{ return p_; }
+
+private:
+	class	Pte : public axSharedPte, public T {};
+	axSharedPtr<Pte>	p_;
 };
 
 //-------------------------
