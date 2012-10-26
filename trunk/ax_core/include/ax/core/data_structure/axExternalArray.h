@@ -36,17 +36,19 @@ public:
 	axConstArray  	( const axIArray<T> 	& a )		{ setExternal(a);  }
 	axConstArray  	( const	axConstArray<T> & a )		{ setExternal(a);  }
 	
-	void	setExternal( const T* p, size_t n  )	{ ax_const_cast(v_).setExternal( ax_const_cast(p),n ); }
-	void	setExternal( const axIArray<T> & a )	{ ax_const_cast(v_).setExternal( ax_const_cast(a) ); }
+	void	setExternal( const T* p, size_t n  )		{ ax_const_cast(v_).setExternal( ax_const_cast(p),n ); }
+	void	setExternal( const axIArray<T> & a )		{ ax_const_cast(v_).setExternal( ax_const_cast(a) ); }
 
-	void	operator=( const axConstArray &o )		{ setExternal(o); }
+	void	operator=( const axConstArray &o )			{ setExternal(o); }
 
-	operator const axIArray<T> & () const			{ return v_; }
-			 const axIArray<T> & axIArray () const 	{ return v_; }
+	const axIArray<T> & operator->	() const			{ return v_; }
+	const axIArray<T> & operator* 	() const			{ return v_; }
+	const axIArray<T> & asIArray	() const 			{ return v_; }
+	operator const axIArray<T> & 	() const			{ return v_; }
 			 
-			axSize	size() const { return v_.size(); }
-	const	T&		operator[]	( size_t i ) const	{ return v_[i]; }
-	const	T&		at			( size_t i ) const	{ return v_[i]; }
+			axSize	size		() const 				{ return v_.size(); }
+	const	T&		operator[]	( size_t i ) const		{ return v_[i]; }
+	const	T&		at			( size_t i ) const		{ return v_[i]; }
 	
 	axStatus	toStringFormat( axStringFormat &f ) const { return v_.toStringFormat(f); }
 private:

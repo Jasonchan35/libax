@@ -50,7 +50,9 @@ public:
 						bool		inBound		( axSize i ) const			{ return i < size_; }
 
 	axALWAYS_INLINE(	axStatus	resize		( axSize new_size, bool keep_data = true ) );					
-						axStatus	resizeToCapacity ()			{ return resize( capacity() ); }
+						axStatus	resizeToCapacity ()						{ return resize( capacity() ); }
+
+						axStatus	resizeAndFill( axSize new_size, const T& value );
 
 	axALWAYS_INLINE(	axStatus	incSize		( axSize n,	bool keep_data = true ) );
 	axALWAYS_INLINE(	axStatus	decSize		( axSize n, bool keep_data = true ) );
@@ -388,6 +390,19 @@ axStatus	axIArray<T>::onTake( axIArray<T>	&src )	{
 		src.clear();
 		return 0;
 	}
+}
+
+template< class T > inline
+axStatus	axIArray<T>::resizeAndFill( axSize new_size, const T& value ) {
+	size_t old_size = size_;
+	axStatus st;
+	st = resize( new_size );		if( !st ) return st;
+
+	for( size_t i=old_size; i<new_size; i++ ) {
+		p_[i] = value;
+	}
+
+	return 0;
 }
 
 template< class T > inline
