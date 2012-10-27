@@ -47,7 +47,7 @@
 #include "core/database/axDBConn.h"
 #include "core/database/axDBStmt.h"
 
-#include "core/data_structure/axSharedPtr.h"
+#include "core/data_structure/axSharedObj.h"
 
 #include "core/other/axSerializer_Helper.h"
 #include "core/other/axJson.h"
