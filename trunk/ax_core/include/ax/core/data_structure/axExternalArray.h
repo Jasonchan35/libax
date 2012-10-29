@@ -46,6 +46,7 @@ public:
 	const axIArray<T> & asIArray	() const 			{ return v_; }
 	operator const axIArray<T> & 	() const			{ return v_; }
 			 
+	const	T*		ptr			() const				{ return v_.ptr(); }
 			axSize	size		() const 				{ return v_.size(); }
 	const	T&		operator[]	( size_t i ) const		{ return v_[i]; }
 	const	T&		at			( size_t i ) const		{ return v_[i]; }
