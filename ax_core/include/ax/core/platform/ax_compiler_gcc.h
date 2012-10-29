@@ -31,7 +31,13 @@
 
 #define axDEPRECATED( f )		f __attribute__( (deprecated) )
 #define axPACKED_ALIGN( f )		f __attribute__( (packed) )
-#define	axALWAYS_INLINE( f )	f __attribute__( (always_inline) )
+
+#ifdef _DEBUG
+	#define	axALWAYS_INLINE( f )	f
+#else
+	#define	axALWAYS_INLINE( f )	f __attribute__( (always_inline) )
+#endif
+
 
 #define axTHREAD_LOCAL	__thread
 #define axL( n ) L""#n

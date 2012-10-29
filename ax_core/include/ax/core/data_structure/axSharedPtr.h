@@ -62,7 +62,9 @@ public:
 	operator		T*()		{ return p_; }
 	operator const	T*() const	{ return p_; }
 	
-	axStatus onTake( axSharedPtr<T>& src )			{ ref( src ); src.unref(); return 0; }
+	axStatus 	onTake( axSharedPtr<T>& src )			{ ref( src ); src.unref(); return 0; }
+
+	axStatus	toStringFormat( axStringFormat &f ) const { return p_? f.format("{?}",*p_) : f.out("null"); }
 
 	axStatus	serialize_io( axSerializer 	 &s );
 	axStatus	serialize_io( axDeserializer &s );
