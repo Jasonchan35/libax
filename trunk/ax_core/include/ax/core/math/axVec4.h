@@ -111,32 +111,11 @@ template<class T> inline axVec4<T> ax_abs( const axVec4<T> &v ) { return axVec4<
 template<class T> inline axVec4<T> ax_min ( const axVec4<T> &a, const axVec4<T> &b ) { return axVec4<T>( ax_min(a.x,b.x), ax_min(a.y,b.y), ax_min(a.z,b.z), ax_min(a.w,b.w) );  }
 template<class T> inline axVec4<T> ax_max ( const axVec4<T> &a, const axVec4<T> &b ) { return axVec4<T>( ax_max(a.x,b.x), ax_max(a.y,b.y), ax_max(a.z,b.z), ax_max(a.w,b.w) );  }
 
-template<class T> inline void ax_min_it( axVec4<T> &a, const axVec4<T> &b ) { 
-    ax_min_it( a.x, b.x );
-    ax_min_it( a.y, b.y );
-    ax_min_it( a.z, b.z );
-    ax_min_it( a.w, b.w );
-}
-
-template<class T> inline void ax_max_it( axVec4<T> &a, const axVec4<T> &b ) { 
-    ax_max_it( a.x, b.x );
-    ax_max_it( a.y, b.y );
-    ax_max_it( a.z, b.z );    
-    ax_max_it( a.w, b.w );    
-}
-
 template<class T> inline axVec4<T> ax_clamp( const axVec4<T> &v, const axVec4<T> a,  const axVec4<T> b ) {
 	return axVec4<T>(ax_clamp( v.x, a.x, b.x ),
                          ax_clamp( v.y, a.y, b.y ),
                          ax_clamp( v.z, a.z, b.z ),
                          ax_clamp( v.w, a.w, b.w ) );
-}
-
-template<class T> inline void ax_clamp_it ( axVec4<T>  &o,  const axVec4<T> a,  const axVec4<T> b )	{ 
-	ax_clamp_it( o.x, a.x, b.x );
-	ax_clamp_it( o.y, a.y, b.y );
-	ax_clamp_it( o.z, a.z, b.z );
-	ax_clamp_it( o.w, a.w, b.w );
 }
 
 template<class T> inline

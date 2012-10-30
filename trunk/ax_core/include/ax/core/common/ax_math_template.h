@@ -22,12 +22,13 @@ template<class T> inline T ax_sign( T a )					{ if( a == 0 ) return 0; return ax
 #undef axTYPE_LIST
 
 template<class T> inline T ax_abs ( T a )       { return a>0 ? a : -a ; } 
+template<class T> inline T ax_abs_it( T &a )	{ a = ax_abs(a); }
 
 template<class T> inline T ax_min ( T a, T b )						{ return (a<b)?a:b; }
 template<class T> inline T ax_max ( T a, T b )						{ return (a>b)?a:b; }
 
-template<class T> inline void ax_min_it		( T& a, const T& b )	{ if( b<a ) a=b; }
-template<class T> inline void ax_max_it		( T& a, const T& b )	{ if( b>a ) a=b; }
+template<class T> inline void ax_min_it		( T& a, const T& b )	{ a = ax_min(a,b); }
+template<class T> inline void ax_max_it		( T& a, const T& b )	{ a = ax_max(a,b); }
 
 
 template<> inline bool		ax_less_than0( axSize  value )		{ return false; }
@@ -35,12 +36,11 @@ template<> inline bool		ax_less_than0( axSize  value )		{ return false; }
 //template<> inline axSize	ax_max		( axSize a, axSize b )	{ return (a>b)?a:b; }
 template<> inline axSize	ax_abs		( axSize a )			{ return a; } //unsigned will always be positive
 
-
 //! x clamped to the range [a,b]
 template<class T> inline T      ax_clamp	( T x, T a, T b )		{ if( x < a ) return a; return x > b ? b : x; }
 template<class T> inline T		ax_clamp01	( T x )					{ return ax_clamp(x,0,1); }
 
-template<class T> inline void   ax_clamp_it		( T &x, T a, T b )	{ if( x < a ) x=a; else if( x > b ) x=b; }
+template<class T> inline void   ax_clamp_it		( T &x, T a, T b )	{ x = ax_clamp(x,a,b); }
 template<class T> inline void	ax_clamp01_it	( T &x )			{ ax_clamp_it(x,0,1); }
 
 inline	int  ax_align_pow2	( int v )	{ v--; v |= v >> 1; v |= v >> 2; v |= v >> 4;	v |= v >> 8; v |= v >> 16; v++;	return v; }
