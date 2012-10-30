@@ -261,6 +261,27 @@ void axMatrix4<T>::set( T v00, T v01, T v02, T v03,
 	cw.set( v30, v31, v32, v33 );
 }
 
+template<class T>
+void axMatrix4<T>::setTRS ( const axVec3<T> & translate, const axVec3<T> & rotate, const axVec3<T> & scale ) {
+	T cx = ax_cos(rotate.x), cy = ax_cos(rotate.y), cz = ax_cos(rotate.z);
+	T sx = ax_sin(rotate.x), sy = ax_sin(rotate.y), sz = ax_sin(rotate.z);
+	
+	this->cx.set( scale.x * (cy*cz),			scale.x * (cy*sz),				scale.x * (-sy),		0 );
+	this->cy.set( scale.y * (sx*sy*cz - cx*sz),	scale.y * (cx*cz + sx*sy*sz),	scale.y * (sx*cy),		0 );
+	this->cz.set( scale.z * (sx*sz + cx*sy*cz),	scale.z * (cx*sy*sz - sx*cz),	scale.z * (cx*cy),		0 );
+	this->cw.set( translate.x,					translate.y,					translate.z,			1 );
+}
+
+template <class T>
+void axMatrix4<T>::setRotate ( const axVec3<T> &   eulerAngle ) {
+	T cx = ax_cos(eulerAngle.x), cy = ax_cos(eulerAngle.y), cz = ax_cos(eulerAngle.z);
+	T sx = ax_sin(eulerAngle.x), sy = ax_sin(eulerAngle.y), sz = ax_sin(eulerAngle.z);
+	
+	this->cx.set( cy*cz,			cy*sz,				-sy,		0 );
+	this->cy.set( sx*sy*cz - cx*sz,	cx*cz + sx*sy*sz,	sx*cy,		0 );
+	this->cz.set( sx*sz + cx*sy*cz,	cx*sy*sz - sx*cz,	cx*cy,		0 );
+	this->cw.set( 0,				0,					0,			1 );
+}
 
 template <class T>
 void axMatrix4<T>::setTranslate ( const axVec3<T> &v )	{
@@ -336,7 +357,7 @@ axMatrix4<T> axMatrix4<T>::transpose () const  {
 
 
 template<class T> 
-void axMatrix4<T>::setRotate ( T rad, const axVec3<T> &axis ) {
+void axMatrix4<T>::setRotateAxis ( T rad, const axVec3<T> &axis ) {
 	axVec3<T>	a = axis.normalize();
 	
 	T c   = ax_cos( rad );
@@ -356,16 +377,6 @@ void axMatrix4<T>::setRotate ( T rad, const axVec3<T> &axis ) {
 	cz.set( (i_c * xz) + ys, (i_c * yz) - xs, (i_c * zz) + c,  0 );
 	cw.set( 0,               0,               0,               1 );
 }
-
-template<class T>  axVec4<T> axMatrix4<T>::position() const    { return cw; }
-
-template<class T>  axVec3<T> axMatrix4<T>::dirX() const       { return axVec3<T>( cx.x, cy.x, cz.x ).normalize(); }
-template<class T>  axVec3<T> axMatrix4<T>::dirY() const       { return axVec3<T>( cx.y, cy.y, cz.y ).normalize(); }
-template<class T>  axVec3<T> axMatrix4<T>::dirZ() const       { return axVec3<T>( -cx.z, -cy.z, -cz.z ).normalize(); }
-
-template<class T>  axVec3<T> axMatrix4<T>::dirX_transpose() const   { return axVec3<T>( cx.x, cx.y, cx.z ).normalize(); }
-template<class T>  axVec3<T> axMatrix4<T>::dirY_transpose() const   { return axVec3<T>( cy.x, cy.y, cy.z ).normalize(); }
-template<class T>  axVec3<T> axMatrix4<T>::dirZ_transpose() const   { return axVec3<T>( -cz.x, -cz.y, -cz.z ).normalize(); }
 
 template<class T> 
 axMatrix4<T> axMatrix4<T>::operator* ( const axMatrix4<T> &v ) const{

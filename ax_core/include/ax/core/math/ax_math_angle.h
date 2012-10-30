@@ -11,6 +11,10 @@ inline float  ax_deg_to_rad( int    x )	{ return x * ((float) ax_math_PI / 180.0
 inline float  ax_deg_to_rad( float  x )	{ return x * ((float) ax_math_PI / 180.0f); }
 inline double ax_deg_to_rad( double x )	{ return x * (ax_math_PI / 180.0);  }
 
+template<class T> inline void	ax_deg_to_rad_it( T & v ) { v = ax_deg_to_rad(v); }
+template<class T> inline void	ax_rad_to_deg_it( T & v ) { v = ax_rad_to_deg(v); }
+
+
 float  ax_angle_normalize_180( float  angle );
 double ax_angle_normalize_180( double angle );
 float  ax_angle_normalize_360( float  angle );

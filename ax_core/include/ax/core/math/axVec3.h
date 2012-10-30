@@ -126,9 +126,9 @@ public:
 	axTYPE_LIST( axVec3d )
 #undef axTYPE_LIST
 
-template< class T > inline axVec3i to_axVec3i( const axVec3<T>& v ) { return axVec3i( (int   )v.x, (int   )v.y, (int   )v.z ); }
-template< class T > inline axVec3f to_axVec3f( const axVec3<T>& v ) { return axVec3f( (float )v.x, (float )v.y, (float )v.z ); }
-template< class T > inline axVec3d to_axVec3d( const axVec3<T>& v ) { return axVec3d( (double)v.x, (double)v.y, (double)v.z ); }
+template<class T> inline axVec3i to_axVec3i( const axVec3<T>& v ) { return axVec3i( (int   )v.x, (int   )v.y, (int   )v.z ); }
+template<class T> inline axVec3f to_axVec3f( const axVec3<T>& v ) { return axVec3f( (float )v.x, (float )v.y, (float )v.z ); }
+template<class T> inline axVec3d to_axVec3d( const axVec3<T>& v ) { return axVec3d( (double)v.x, (double)v.y, (double)v.z ); }
 
 
 template<class T> inline axVec3<T> ax_abs( const axVec3<T> &v ) { return axVec3<T>( ax_abs(v.x), ax_abs(v.y), ax_abs(v.z) ); }
@@ -136,28 +136,13 @@ template<class T> inline axVec3<T> ax_abs( const axVec3<T> &v ) { return axVec3<
 template<class T> inline axVec3<T> ax_min ( const axVec3<T> &a, const axVec3<T> &b ) { return axVec3<T>( ax_min(a.x,b.x), ax_min(a.y,b.y), ax_min(a.z,b.z) ); }
 template<class T> inline axVec3<T> ax_max ( const axVec3<T> &a, const axVec3<T> &b ) { return axVec3<T>( ax_max(a.x,b.x), ax_max(a.y,b.y), ax_max(a.z,b.z) ); }
 
-template<class T> inline void ax_min_it( axVec3<T> &a, const axVec3<T> &b ) { 
-    ax_min_it( a.x, b.x );
-    ax_min_it( a.y, b.y );
-    ax_min_it( a.z, b.z );
-}
-
-template<class T> inline void ax_max_it( axVec3<T> &a, const axVec3<T> &b ) { 
-    ax_max_it( a.x, b.x );
-    ax_max_it( a.y, b.y );
-    ax_max_it( a.z, b.z );    
-}
+template<class T> inline axVec3<T> ax_deg_to_rad( const axVec3<T> & deg ) { return axVec3<T>( ax_deg_to_rad(deg.x), ax_deg_to_rad(deg.y), ax_deg_to_rad(deg.z) ); }
+template<class T> inline axVec3<T> ax_rad_to_deg( const axVec3<T> & rad ) { return axVec3<T>( ax_rad_to_deg(rad.x), ax_rad_to_deg(rad.y), ax_rad_to_deg(rad.z) ); }
 
 template<class T> inline axVec3<T> ax_clamp ( const axVec3<T> &v, const axVec3<T> a,  const axVec3<T> b ) {
 	return axVec3<T>( ax_clamp( v.x, a.x, b.x ),
 			  ax_clamp( v.y, a.y, b.y ),
 			  ax_clamp( v.z, a.z, b.z ) );
-}
-
-template<class T> inline void ax_clamp_it ( axVec3<T>  &o,  const axVec3<T> a,  const axVec3<T> b )	{ 
-	ax_clamp_it( o.x, a.x, b.x );
-	ax_clamp_it( o.y, a.y, b.y );
-	ax_clamp_it( o.z, a.z, b.z );
 }
 
 template<class T> inline
