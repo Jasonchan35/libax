@@ -33,6 +33,7 @@ public:
 	axALWAYS_INLINE( void toListTail	() )	{ axDList<T>* a=list(); if(a){ a->remove((T*)this); a->append((T*)this); } }
 
 	axDList<T>*	list() const                    { return (axDList<T>*) _list_; }
+	void*		listOwner() const				{ return list() ? list()->owner() : NULL; }
 
 	axStatus	getIndex        ( axSize &idx );
 	void        removeFromList	()				{ if( list() ) list()->remove( (T*)this ); }
