@@ -28,7 +28,7 @@ public:
 		T* get() const {
 			if( ! p ) { //might init by other EXE/DLL
 //				printf( "%s\n", axPRETTY_FUNC_NAME);
-				#if 0 // mutex here for thread-saft ?
+				#if 0 // mutex here for thread-safe ?
 					ScopeMutex	sm; sm(mutex)
 					if( !p ) { //double check after lock
 						static T t;
