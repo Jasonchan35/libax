@@ -52,10 +52,11 @@ public:
 	axALWAYS_INLINE(	axStatus	resize		( axSize new_size, bool keep_data = true ) );					
 						axStatus	resizeToCapacity ()						{ return resize( capacity() ); }
 
-						axStatus	resizeAndFill( axSize new_size, const T& value );
-
 	axALWAYS_INLINE(	axStatus	incSize		( axSize n,	bool keep_data = true ) );
 	axALWAYS_INLINE(	axStatus	decSize		( axSize n, bool keep_data = true ) );
+
+						axStatus	resizeAndFill	( axSize new_size, 	const T& value );
+						axStatus	incSizeAndFill	( axSize n,			const T& value );
 
 	axALWAYS_INLINE(	axStatus	reserve		( axSize n ) );
 	axALWAYS_INLINE(	axStatus	reserveMore	( axSize n ) )				{ return reserve( size() + n ); }
@@ -401,8 +402,12 @@ axStatus	axIArray<T>::resizeAndFill( axSize new_size, const T& value ) {
 	for( size_t i=old_size; i<new_size; i++ ) {
 		p_[i] = value;
 	}
-
 	return 0;
+}
+
+template< class T > inline
+axStatus	axIArray<T>::incSizeAndFill( axSize n, const T& value ) {
+	return resizeAndFill( n + size(), value );
 }
 
 template< class T > inline
