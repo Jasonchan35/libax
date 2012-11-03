@@ -181,6 +181,28 @@ inline double ax_sin( double a ) { return ::sin (a); }
 inline float  ax_atan2( float  a, float  b ) { return ::atan2f(a,b); }
 inline double ax_atan2( double a, double b ) { return ::atan2 (a,b); }
 
+template < class T, class W >
+inline T ax_bezier( T p0, T p1, T p2, T p3, W w) {
+/* 	R = p0 * (1-w)^3
+	  + p1 * 3 * (1-w)^2 * w
+	  + p2 * 3 * (1-w) * w^2
+	  + p3 * w^3
+*/
+
+	W iw  = 1-w;
+	W iw2 = iw*iw;
+	W w2  = w*w;
+	
+	return	p0 * iw * iw2
+		  + p1 * 3  * iw2 * w
+		  + p2 * 3  * iw  * w2
+		  + p3 * w2 * w;
+}
+
+
+
+
+
 //@}
 
 #endif //__ax_math_template_h__
