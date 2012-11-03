@@ -328,6 +328,7 @@
 		96D0954F160F852E00FDA718 /* axStatus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axStatus.cpp; sourceTree = "<group>"; };
 		EA15F6C81544053B00356C7C /* ax_core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_core.h; sourceTree = "<group>"; };
 		EA1DC90C161DDC9200FFD681 /* axVec2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axVec2.cpp; sourceTree = "<group>"; };
+		EA628606164167CA00532B3E /* axCubicBezierCurve.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axCubicBezierCurve.h; sourceTree = "<group>"; };
 		EA9F4E1D154414BC00C9459E /* ax_core build.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "ax_core build.xcconfig"; sourceTree = "<group>"; };
 		EA9F4E1E154414C100C9459E /* ax_core.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ax_core.xcconfig; sourceTree = "<group>"; };
 		EAD528AA154405160034A2DD /* libax_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libax_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -563,6 +564,7 @@
 				9640E07616009DA400F9D037 /* axVec3.h */,
 				9640E07716009DA400F9D037 /* axVec4.h */,
 				9640E07816009DA400F9D037 /* axVec_Str.h */,
+				EA628606164167CA00532B3E /* axCubicBezierCurve.h */,
 			);
 			path = math;
 			sourceTree = "<group>";
