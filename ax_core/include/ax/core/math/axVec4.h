@@ -79,12 +79,11 @@ public:
 	T			dot			( const axVec4 &v ) const		{ return (x*v.x) + (y*v.y) + (z*v.z) + (w*v.w); }
 	T			average		() const						{ return (x + y + z + w) / (T)4; }
 
-	axVec3<T>	to_Vec3		();
+	template<class D>	axVec4<D>	to_Vec4	() const { return axVec4<D>( (T)x, (T)y, (T)z, (T)w ); }
 
+						axVec3<T>	to_Vec3	() const;
 	template<class S>	axStatus	serialize_io	( S &se );
-		
 						axStatus	toStringFormat	( axStringFormat &f ) const;
-
 						axStatus	onTake( axVec4<T> &b )				{ *this = b; return 0; }
 };
 
@@ -101,15 +100,38 @@ public:
     axTYPE_LIST( axVec4d )
 #undef axTYPE_LIST
 
-template< class T > inline axVec4i to_axVec4i( const axVec4<T>& v ) { return axVec4i( (int   )v.x, (int   )v.y, (int   )v.z, (int   )v.w ); }
-template< class T > inline axVec4f to_axVec4f( const axVec4<T>& v ) { return axVec4f( (float )v.x, (float )v.y, (float )v.z, (float )v.w ); }
-template< class T > inline axVec4d to_axVec4d( const axVec4<T>& v ) { return axVec4d( (double)v.x, (double)v.y, (double)v.z, (double)v.w ); }
+template<class T> inline axVec4<T> operator+ ( T a, const axVec4<T> & b ) { return axVec4<T>( a + b.x, a + b.y, a + b.z, a + b.w ); }
+template<class T> inline axVec4<T> operator- ( T a, const axVec4<T> & b ) { return axVec4<T>( a - b.x, a - b.y, a - b.z, a - b.w ); }
+template<class T> inline axVec4<T> operator* ( T a, const axVec4<T> & b ) { return axVec4<T>( a * b.x, a * b.y, a * b.z, a * b.w ); }
+template<class T> inline axVec4<T> operator/ ( T a, const axVec4<T> & b ) { return axVec4<T>( a / b.x, a / b.y, a / b.z, a / b.w ); }
 
+template< class T > inline axVec4i to_axVec4i( const axVec4<T>& v ) { return v.template to_Vec4<int>(); }
+template< class T > inline axVec4f to_axVec4f( const axVec4<T>& v ) { return v.template to_Vec4<float>(); }
+template< class T > inline axVec4d to_axVec4d( const axVec4<T>& v ) { return v.template to_Vec4<double>(); }
 
-template<class T> inline axVec4<T> ax_abs( const axVec4<T> &v ) { return axVec4<T>( ax_abs(v.x), ax_abs(v.y), ax_abs(v.z), ax_abs(v.w) ); }
+// 1 arg
+#define axVec_FUNC( FUNC )	\
+	template<class T> inline axVec4<T> FUNC( const axVec4<T> &v ) { \
+		return axVec4<T>( FUNC(v.x), FUNC(v.y), FUNC(v.z), FUNC(v.w) ); \
+	} \
+//----
+	axVec_FUNC( ax_abs )
+	axVec_FUNC( ax_deg_to_rad )
+	axVec_FUNC( ax_rad_to_deg )
+	axVec_FUNC( ax_floor )
+	axVec_FUNC( ax_ceil )
+	axVec_FUNC( ax_round )
+#undef axVec_FUNC
 
-template<class T> inline axVec4<T> ax_min ( const axVec4<T> &a, const axVec4<T> &b ) { return axVec4<T>( ax_min(a.x,b.x), ax_min(a.y,b.y), ax_min(a.z,b.z), ax_min(a.w,b.w) );  }
-template<class T> inline axVec4<T> ax_max ( const axVec4<T> &a, const axVec4<T> &b ) { return axVec4<T>( ax_max(a.x,b.x), ax_max(a.y,b.y), ax_max(a.z,b.z), ax_max(a.w,b.w) );  }
+// 2 arg
+#define axVec_FUNC( FUNC )	\
+	template<class T> inline axVec4<T> FUNC( const axVec4<T> &a, const axVec4<T> &b ) { \
+		return axVec4<T>( FUNC( a.x, b.x ), FUNC( a.y, b.y ), FUNC( a.z, b.z ), FUNC( a.w, b.w ) ); \
+	} \
+//----
+	axVec_FUNC( ax_min )
+	axVec_FUNC( ax_max )
+#undef axVec_FUNC
 
 template<class T> inline axVec4<T> ax_clamp( const axVec4<T> &v, const axVec4<T> a,  const axVec4<T> b ) {
 	return axVec4<T>(ax_clamp( v.x, a.x, b.x ),
@@ -119,7 +141,7 @@ template<class T> inline axVec4<T> ax_clamp( const axVec4<T> &v, const axVec4<T>
 }
 
 template<class T> inline
-axVec3<T>	 axVec4<T>::to_Vec3() {
+axVec3<T>	 axVec4<T>::to_Vec3() const {
 	if( w == 0 ) return axVec3<T>( 0,0,0 );
 	if( w == 1 ) return axVec3<T>( x,y,z );
 	return axVec3<T>( x/w,y/w,z/w );

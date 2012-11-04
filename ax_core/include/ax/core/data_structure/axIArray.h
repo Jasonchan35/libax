@@ -31,21 +31,14 @@ class axStringFormat;
 
 */
 
-class axIArrayBase : public axNonCopyable { 
-public:
-	virtual	~axIArrayBase() {}
-	virtual void	clear() {}
-};
-
 template< class T >
-class axIArray : public axIArrayBase {
+class axIArray : public axNonCopyable {
 public:
 	typedef	T	Element;
 
 	axIArray();
-	void operator=	( const axIArray &src )	{ copy(src); }
-
 	virtual	~axIArray();
+//	void operator=	( const axIArray &src )	{ copy(src); }
 
 						bool		inBound		( axSize i ) const			{ return i < size_; }
 
