@@ -331,6 +331,8 @@
 		EA628606164167CA00532B3E /* axCubicBezierCurve.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axCubicBezierCurve.h; sourceTree = "<group>"; };
 		EA9F4E1D154414BC00C9459E /* ax_core build.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "ax_core build.xcconfig"; sourceTree = "<group>"; };
 		EA9F4E1E154414C100C9459E /* ax_core.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ax_core.xcconfig; sourceTree = "<group>"; };
+		EAB48F681646CE8500ABDA74 /* axUnitCircle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axUnitCircle.h; sourceTree = "<group>"; };
+		EAB48F6C1646D02E00ABDA74 /* axRoundedRect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRoundedRect.h; sourceTree = "<group>"; };
 		EAD528AA154405160034A2DD /* libax_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libax_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -565,6 +567,8 @@
 				9640E07716009DA400F9D037 /* axVec4.h */,
 				9640E07816009DA400F9D037 /* axVec_Str.h */,
 				EA628606164167CA00532B3E /* axCubicBezierCurve.h */,
+				EAB48F681646CE8500ABDA74 /* axUnitCircle.h */,
+				EAB48F6C1646D02E00ABDA74 /* axRoundedRect.h */,
 			);
 			path = math;
 			sourceTree = "<group>";

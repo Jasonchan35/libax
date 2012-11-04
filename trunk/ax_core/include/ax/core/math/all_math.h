@@ -15,5 +15,7 @@
 #include "axFrustum3.h"
 #include "axMargin2.h"
 #include "axCubicBezierCurve.h"
+#include "axUnitCircle.h"
+#include "axRoundedRect.h"
 
 #endif //__ax_all_math_h__

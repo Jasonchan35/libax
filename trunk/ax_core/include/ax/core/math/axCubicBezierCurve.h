@@ -33,8 +33,6 @@ public:
 
 	}
 	
-	size_t size() const { return DIV+1; }
-	
 	
 	axStatus onTake( axCubicBezierCurve2f &src ) {
 		return ax_take( vtx, src.vtx );
