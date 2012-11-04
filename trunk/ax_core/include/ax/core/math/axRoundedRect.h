@@ -31,10 +31,10 @@ public:
 		size_t s3 = s*3;
 		
 		for( size_t i=0; i<s; i++ ) {
-			vtx[i   ] = _unitCircle.vtx[i   ] * round + axVec2f( w, h )	- round;
-			vtx[i+s ] = _unitCircle.vtx[i+s ] * round + axVec2f( w, 0 ) + axVec2f( -round,  round );
-			vtx[i+s2] = _unitCircle.vtx[i+s2] * round					+ round;
-			vtx[i+s3] = _unitCircle.vtx[i+s3] * round + axVec2f( 0, h )	+ axVec2f(  round, -round );
+			vtx[i   ] = _unitCircle.vtx[i   ] * round + axVec2f( w, h )	- round;						//Right bottom
+			vtx[i+s ] = _unitCircle.vtx[i+s ] * round + axVec2f( w, 0 ) + axVec2f( -round,  round );	//Right top
+			vtx[i+s2] = _unitCircle.vtx[i+s2] * round					+ round;						//Left top
+			vtx[i+s3] = _unitCircle.vtx[i+s3] * round + axVec2f( 0, h )	+ axVec2f(  round, -round );	//Left bottom
 		}	
 	}
 	
