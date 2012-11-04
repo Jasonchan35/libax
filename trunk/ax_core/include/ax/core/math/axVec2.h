@@ -98,10 +98,8 @@ public:
 
 	axVec2		dir			( const axVec2 &v ) const		{ return (*this - v).normalize(); }
 	
-	void		roundX()									{ x = ax_round(x); }
-	void		roundY()									{ y = ax_round(y); }	
-	void		round()										{ roundX(); roundY(); }
-
+	template<class D>	axVec2<D>	to_Vec2 () const { return axVec2<D>( (T)x, (T)y ); }
+	
 	axStatus	onTake( axVec2<T> &b )				{ *this = b; return 0; }
 
 	template<class S>	axStatus	serialize_io	( S &se );
@@ -137,14 +135,16 @@ public:
 #endif //axOS_MacOSX	
 
 };
+
+template<class T> inline axVec2<T> operator+ ( T a, const axVec2<T> & b ) { return axVec2<T>( a + b.x, a + b.y ); }
+template<class T> inline axVec2<T> operator- ( T a, const axVec2<T> & b ) { return axVec2<T>( a - b.x, a - b.y ); }
+template<class T> inline axVec2<T> operator* ( T a, const axVec2<T> & b ) { return axVec2<T>( a * b.x, a * b.y ); }
+template<class T> inline axVec2<T> operator/ ( T a, const axVec2<T> & b ) { return axVec2<T>( a / b.x, a / b.y ); }
+
 	
-template<class T> inline axVec2i to_axVec2i( const axVec2<T>& v ) { return axVec2i( (int   )v.x, (int   )v.y ); }
-template<class T> inline axVec2f to_axVec2f( const axVec2<T>& v ) { return axVec2f( (float )v.x, (float )v.y ); }
-template<class T> inline axVec2d to_axVec2d( const axVec2<T>& v ) { return axVec2d( (double)v.x, (double)v.y ); }
-
-template<class T> inline axVec2<T> ax_deg_to_rad( const axVec2<T> & deg ) { return axVec2<T>( ax_deg_to_rad(deg.x), ax_deg_to_rad(deg.y) ); }
-template<class T> inline axVec2<T> ax_rad_to_deg( const axVec2<T> & rad ) { return axVec2<T>( ax_rad_to_deg(rad.x), ax_rad_to_deg(rad.y) ); }
-
+template<class T> inline axVec2i to_axVec2i( const axVec2<T>& v ) { return v.template to_Vec2<int>(); }
+template<class T> inline axVec2f to_axVec2f( const axVec2<T>& v ) { return v.template to_Vec2<float>(); }
+template<class T> inline axVec2d to_axVec2d( const axVec2<T>& v ) { return v.template to_Vec2<double>(); }
 
 template<class T> inline
 axStatus axVec2<T> :: toStringFormat( axStringFormat &f ) const {
@@ -192,16 +192,32 @@ template< class T > inline axStatus ax_json_serialize_value( axJsonParser &s, ax
     axTYPE_LIST( axVec2f )
     axTYPE_LIST( axVec2d )
 #undef axTYPE_LIST
+
+
+// 1 arg
+#define axVec_FUNC( FUNC )	\
+	template<class T> inline axVec2<T> FUNC( const axVec2<T> &v ) { \
+		return axVec2<T>( FUNC(v.x), FUNC(v.y) ); \
+	} \
+//----
+	axVec_FUNC( ax_abs )
+	axVec_FUNC( ax_deg_to_rad )
+	axVec_FUNC( ax_rad_to_deg )
+	axVec_FUNC( ax_floor )
+	axVec_FUNC( ax_ceil )
+	axVec_FUNC( ax_round )
+#undef axVec_FUNC
+
+// 2 arg
+#define axVec_FUNC( FUNC )	\
+	template<class T> inline axVec2<T> FUNC( const axVec2<T> &a, const axVec2<T> &b ) { \
+		return axVec2<T>( FUNC( a.x, b.x ), FUNC( a.y, b.y ) ); \
+	} \
+//----
+	axVec_FUNC( ax_min )
+	axVec_FUNC( ax_max )
+#undef axVec_FUNC
     
-    
-template<class T> inline axVec2<T> ax_abs( const axVec2<T> &v ) { return axVec2<T>( ax_abs(v.x), ax_abs(v.y) ); }
-
-template<class T> inline axVec2<T> ax_min ( const axVec2<T> &a, const axVec2<T> &b ) { return axVec2<T>( ax_min(a.x,b.x), ax_min(a.y,b.y) ); }
-template<class T> inline axVec2<T> ax_max ( const axVec2<T> &a, const axVec2<T> &b ) { return axVec2<T>( ax_max(a.x,b.x), ax_max(a.y,b.y) ); }
-
-template<class T> inline axVec2<T> ax_floor( const axVec2<T> &a ) { axVec2<T>( ax_floor(a.x), ax_floor(a.y) ); }
-template<class T> inline axVec2<T> ax_ceil ( const axVec2<T> &a ) { axVec2<T>( ax_ceil (a.x), ax_ceil (a.y) ); }
-
 template<class T> inline axVec2<T> ax_clamp ( const axVec2<T> &v, const axVec2<T> a,  const axVec2<T> b ) {
 	return axVec2<T>( ax_clamp( v.x, a.x, b.x ), 
                           ax_clamp( v.y, a.y, b.y ) );

@@ -78,6 +78,10 @@ inline double ax_floor( double a )	{ return ::floor(a); }
 inline float  ax_round( float a  )	{ return ax_floor( a > 0 ? a+0.5f : a-0.5f ); }
 inline double ax_round( double a )	{ return ax_floor( a > 0 ? a+0.5  : a-0.5  ); }
 
+template<class T> inline void ax_round_it( T &v ) { v = ax_round(v); }
+template<class T> inline void ax_floor_it( T &v ) { v = ax_floor(v); }
+template<class T> inline void ax_ceil_it ( T &v ) { v = ax_ceil(v); }
+
 //! Equivalent
 template<class T>
 inline bool ax_math_equals( T  a, T  b, T ep=ax_epsilon<T>() )  { return ( ax_abs(a-b) < ep) ; }
