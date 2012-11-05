@@ -333,6 +333,7 @@
 		EA9F4E1E154414C100C9459E /* ax_core.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ax_core.xcconfig; sourceTree = "<group>"; };
 		EAB48F681646CE8500ABDA74 /* axUnitCircle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axUnitCircle.h; sourceTree = "<group>"; };
 		EAB48F6C1646D02E00ABDA74 /* axRoundedRect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRoundedRect.h; sourceTree = "<group>"; };
+		EAB48F6D1646E70D00ABDA74 /* ax_linear_algebra.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_linear_algebra.h; sourceTree = "<group>"; };
 		EAD528AA154405160034A2DD /* libax_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libax_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -569,6 +570,7 @@
 				EA628606164167CA00532B3E /* axCubicBezierCurve.h */,
 				EAB48F681646CE8500ABDA74 /* axUnitCircle.h */,
 				EAB48F6C1646D02E00ABDA74 /* axRoundedRect.h */,
+				EAB48F6D1646E70D00ABDA74 /* ax_linear_algebra.h */,
 			);
 			path = math;
 			sourceTree = "<group>";

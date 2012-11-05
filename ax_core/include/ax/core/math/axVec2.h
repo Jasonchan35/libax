@@ -79,6 +79,8 @@ public:
 	bool		isAll		( const T v ) const				{ return (x==v && y==v); }
 	bool		isAny		( const T v ) const				{ return (x==v || y==v); }
 
+
+	T			dot			( const axVec2 &v ) const		{ return (x * v.x + y * v.y) ; }
 	//magnitude
 	T			mag			() const						{ return sqrt( magSq() ); }
 	T			magSq		() const						{ return ( x*x + y*y ); }
