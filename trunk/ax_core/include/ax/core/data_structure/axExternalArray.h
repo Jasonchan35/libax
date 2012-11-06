@@ -34,7 +34,7 @@ public:
 	axConstArray	() {}
 	axConstArray	( const T* p, size_t n  )			{ setExternal(p,n); }
 	axConstArray  	( const axIArray<T> 	& a )		{ setExternal(a);  }
-	axConstArray  	( const	axConstArray<T> & a )		{ setExternal(a);  }
+	axConstArray  	( const	axConstArray<T> & a )		{ setExternal(a.asIArray());  }
 	
 	void	setExternal( const T* p, size_t n  )		{ ax_const_cast(v_).setExternal( ax_const_cast(p),n ); }
 	void	setExternal( const axIArray<T> & a )		{ ax_const_cast(v_).setExternal( ax_const_cast(a) ); }
@@ -44,7 +44,6 @@ public:
 	const axIArray<T> & operator->	() const			{ return v_; }
 	const axIArray<T> & operator* 	() const			{ return v_; }
 	const axIArray<T> & asIArray	() const 			{ return v_; }
-	operator const axIArray<T> & 	() const			{ return v_; }
 			 
 	const	T*		ptr			() const				{ return v_.ptr(); }
 			axSize	size		() const 				{ return v_.size(); }
