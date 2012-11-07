@@ -21,22 +21,22 @@ template<class T>
 const axPlane3<T>*	axFrustum3<T>::planes() const {
     axFrustum3<T> *c = (axFrustum3<T>*)this; // cahnge "const" this to not "const" this
 	if( c->plane_dirty ) {
-		c->_plane[0].n.faceNormal( pt[0], pt[2], pt[1] );	//near
+		c->_plane[0].n = ax_tri_normal( pt[0], pt[2], pt[1] );	//near
 		c->_plane[0].p = pt[0];
 
-		c->_plane[1].n.faceNormal( pt[4], pt[5], pt[6] );	//far
+		c->_plane[1].n = ax_tri_normal( pt[4], pt[5], pt[6] );	//far
 		c->_plane[1].p = pt[4];
 
-		c->_plane[2].n.faceNormal( pt[2], pt[3], pt[6] );	//top
+		c->_plane[2].n = ax_tri_normal( pt[2], pt[3], pt[6] );	//top
 		c->_plane[2].p = pt[2];
 
-		c->_plane[3].n.faceNormal( pt[0], pt[1], pt[4] );	//bottom
+		c->_plane[3].n = ax_tri_normal( pt[0], pt[1], pt[4] );	//bottom
 		c->_plane[3].p = pt[0];
 
-		c->_plane[4].n.faceNormal( pt[0], pt[4], pt[3] );	//left
+		c->_plane[4].n = ax_tri_normal( pt[0], pt[4], pt[3] );	//left
 		c->_plane[4].p = pt[0];
 
-		c->_plane[5].n.faceNormal( pt[1], pt[2], pt[5] );	//right
+		c->_plane[5].n = ax_tri_normal( pt[1], pt[2], pt[5] );	//right
 		c->_plane[5].p = pt[1];
 
 		c->plane_dirty = false;

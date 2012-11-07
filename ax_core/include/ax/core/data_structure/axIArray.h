@@ -2,7 +2,8 @@
 #ifndef __axIArray_h__
 #define __axIArray_h__
 
-#include "../common/ax_common.h"
+#include "ax_array.h"
+
 class axStringFormat;
 
 
@@ -91,6 +92,13 @@ public:
 						void		setAll		( const T& value );
 						axStatus	setValues	( const T* src, axSize count )  { resize(0); return appendN(src,count); }
 						axStatus	setValues	( const axIArray<T> &src )		{ resize(0); return appendN(src); }
+				
+						T*			getMin		()  		{ return ax_array_min( p_, size_ ); }
+						T*			getMax		() 			{ return ax_array_max( p_, size_ ); }
+
+				const	T*			getMin		() const 	{ return ax_array_min( p_, size_ ); }
+				const	T*			getMax		() const	{ return ax_array_max( p_, size_ ); }
+
 
 			//! (element order might be changed) try to swap from tail to prevent large memory copy
 	axALWAYS_INLINE(	axStatus	removeBySwap	( axSize index, axSize count=1 ) );
@@ -149,107 +157,6 @@ axStatus	ax_copy( axIArray<T> &dst, const axIArray<T> &src ) {
 template< class T > inline
 void ax_dump_hex( const axIArray<T> &buf, FILE* f = stdout ) {
 	ax_dump_hex_mem( buf.ptr(), buf.size(), f );
-}
-
-// ----------
-template<class T> axALWAYS_INLINE( void		ax_array_constructor( T* p, axSize n ) );
-template<class T> axALWAYS_INLINE( void		ax_array_destructor	( T* p, axSize n ) );
-
-template<class T> axALWAYS_INLINE( bool		ax_array_is_equals	( T* dst, const T* src, axSize n ) );
-template<class T> axALWAYS_INLINE( axStatus ax_array_copy		( T* dst, const T* src, axSize n ) );
-template<class T> axALWAYS_INLINE( axStatus ax_array_take		( T* dst, const T* src, axSize n ) );
-
-template< class T > inline
-void	ax_array_constructor( T* p, axSize n ) {
-	if( axTypeOf<T>::isPOD ) return;
-	T *e = p + n;
-	for( ; p<e; p++ )
-		::new(p) T;
-}
-
-template< class T > inline
-void	ax_array_destructor( T* p, axSize n ) {
-	if( axTypeOf<T>::isPOD ) return;
-	T *e = p + n;
-	for( ; p<e; p++ )
-		p->~T();
-}
-
-template<class T> inline
-bool ax_array_is_equals( const T* dst, const T* src, axSize n ) {
-	if( axTypeOf<T>::isPOD ) {
-		return ( 0 == memcmp( dst, src, n * sizeof(T) ) );
-	}else{
-		const T* end = src + n;
-		for( ; src < end; src++, dst++ ) {
-			if( *dst != *src ) return false;
-		}
-	}
-	return true;
-}
-
-template<class T> inline
-axStatus ax_array_copy( T* dst, const T* src, axSize n ) {
-	if( dst+n > src && dst < src+n ) {
-		assert( false );
-		return axStatus_Std::cannot_be_itself;
-	}
-
-	axStatus st;
-	if( axTypeOf<T>::isPOD ) {
-		memcpy( (void*)dst, (void*)src, n * sizeof(T) );
-	}else{
-		const T* end = src + n;
-		for( ; src < end; src++, dst++ ) {
-			ax_copy( *dst, *src );
-		}
-	}
-	return 0;
-}
-
-template<class T> inline
-axStatus ax_array_take( T* dst, T* src, axSize n ) {
-	axStatus st;
-
-	if( dst == src ) return 0;
-	if( n == 0 ) return 0;
-
-	if( dst+n > src && dst < src+n ) {
-		//overlapped
-		if( axTypeOf<T>::isPOD ) {
-			memmove( (void*)dst, (void*)src, n * sizeof(T) );
-			return 0;
-		}else{
-			if( src > dst ) { 
-				//move forward
-				T* s = src;
-				T* e = s + n;
-				T* d = dst;
-				for( ; s<e; s++, d++ ) {
-					st = ax_take( *d, *s );	if( !st ) return st;
-				}
-			}else{ 
-				//move backward
-				T* s = src + n - 1;
-				T* d = dst + n - 1;
-				for( ; s>=src; s--, d--) {
-					st = ax_take( *d, *s );	if( !st ) return st;
-				}
-			}
-		}
-		return 0;
-	}
-
-	if( axTypeOf<T>::isPOD ) {
-		//warning: destination for this 'memcpy' call is a pointer to dynamic class 'axArray<int, 0>'; vtable pointer will be overwritten [-Wnon-pod-memaccess,3]
-		memcpy( (void*)dst, (void*)src, n * sizeof(T) );
-	}else{
-		T* end = src + n;
-		for( ; src < end; src++, dst++ ) {
-			st = ax_take( *dst, *src );		if( !st ) return st;
-		}
-	}
-	return 0;
 }
 
 //==========

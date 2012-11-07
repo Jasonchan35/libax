@@ -38,7 +38,7 @@ template<class T> void axQuaternion<T>::setAlign( const axVec3<T> &src, const ax
 		//double s = sqrt( 2 * ( 1 + src_dot_dst ) );
 		//axVec3<T> r;	r.cross( src, dst );
 		//c.set( r.x / s, r.y / s, r.z / s, 0.5f * s );
-		setRotate( acos( src_dot_dst ), ( src ^ dst ).normalize() );
+		setRotate( acos( src_dot_dst ), src.cross(dst ).normalize() );
 	}
 	normalize();
 }

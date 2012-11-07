@@ -165,8 +165,8 @@ void axMatrix4<T>::setAimZ_UpY ( const axVec3<T> &eye, const axVec3<T> &aim, con
 	axVec3<T> f = ( eye - aim ).normalize();
 	if( neg_z_aim ) f = -f;
 
-	axVec3<T> s = (f ^ up).normalize();
-	axVec3<T> u = s ^ f;
+	axVec3<T> s = f.cross(up).normalize();
+	axVec3<T> u = s.cross(f);
 
 	cx.set(  s.x,  s.y,  s.z, 0.0 );
 	cy.set(  u.x,  u.y,  u.z, 0.0 );
@@ -178,8 +178,8 @@ void axMatrix4<T>::setAimZ_UpY ( const axVec3<T> &eye, const axVec3<T> &aim, con
 template<class T>
 void axMatrix4<T>::setLookAt ( const axVec3<T> &eye, const axVec3<T> &aim, const axVec3<T> &up ) {
 	axVec3<T> f = ( aim - eye ).normalize();
-	axVec3<T> s = (f ^ up).normalize();
-	axVec3<T> u = s ^ f;
+	axVec3<T> s = f.cross(up).normalize();
+	axVec3<T> u = s.cross(f);
 
 	cx.set(  s.x,  u.x, -f.x, 0.0 );
 	cy.set(  s.y,  u.y, -f.y, 0.0 );

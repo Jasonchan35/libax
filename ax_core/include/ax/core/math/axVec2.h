@@ -88,10 +88,9 @@ public:
 	T			distance	( const axVec2 &v ) const		{ return sqrt ( distanceSq( v ) ); }
 	T			distanceSq	( const axVec2 &v ) const		{ return (x-v.x)*(x-v.x) + (y-v.y)*(y-v.y);	}
 
-	//! cross product in 2D should return scaler, not vector
-	T			operator^	( const axVec2 &v ) const		{ return x*v.y - y*v.x; }
+	T			cross		( const axVec2 &v ) const		{ return x*v.y - y*v.x; }
 
-	bool		isInsideTriangle( const axVec2 &v0, const axVec2 &v1, const axVec2 &v2 );
+	bool		isInTriangle( const axVec2 &v0, const axVec2 &v1, const axVec2 &v2 );
 	
 	axVec2		perpendicular()								{ return axVec2(-y,x); }
 
@@ -102,7 +101,7 @@ public:
 	
 	template<class D>	axVec2<D>	to_Vec2 () const { return axVec2<D>( (T)x, (T)y ); }
 	
-	axStatus	onTake( axVec2<T> &b )				{ *this = b; return 0; }
+						axStatus	onTake	( axVec2<T> &b )				{ *this = b; return 0; }
 
 	template<class S>	axStatus	serialize_io	( S &se );
 	
@@ -236,15 +235,15 @@ axVec2<T> ax_lerp ( const axVec2<T> &a, const axVec2<T> b, T  weight ) {
 //--------------------------
 
 template <class T> inline
-bool axVec2<T>::isInsideTriangle( const axVec2 &v0, const axVec2 &v1, const axVec2 &v2 ) {
-	if( (v2.y - v0.y)*(v1.x - v0.x) - (v2.x - v0.x)*(v1.y - v0.y) < 0 ) {
-		if( (y - v0.y)*(v1.x - v0.x) - (x - v0.x)*(v1.y - v0.y) > 0 ) return false;
-		if( (y - v1.y)*(v2.x - v1.x) - (x - v1.x)*(v2.y - v1.y) > 0 ) return false;
-		if( (y - v2.y)*(v0.x - v2.x) - (x - v2.x)*(v0.y - v2.y) > 0 ) return false;
-	}else {
-		if( (y - v0.y)*(v1.x - v0.x) - (x - v0.x)*(v1.y - v0.y) < 0 ) return false;
-		if( (y - v1.y)*(v2.x - v1.x) - (x - v1.x)*(v2.y - v1.y) < 0 ) return false;
-		if( (y - v2.y)*(v0.x - v2.x) - (x - v2.x)*(v0.y - v2.y) < 0 ) return false;
+bool axVec2<T>::isInTriangle( const axVec2 &v0, const axVec2 &v1, const axVec2 &v2 ) {
+	if( (v2 - v0).cross(v1 - v0) < 0 ) {
+		if( (*this - v0).cross(v1 - v0) > 0 ) return false;
+		if( (*this - v1).cross(v2 - v1) > 0 ) return false;
+		if( (*this - v2).cross(v0 - v2) > 0 ) return false;
+	}else{
+		if( (*this - v0).cross(v1 - v0) < 0 ) return false;
+		if( (*this - v1).cross(v2 - v1) < 0 ) return false;
+		if( (*this - v2).cross(v0 - v2) < 0 ) return false;
 	}
 	return true;
 }
