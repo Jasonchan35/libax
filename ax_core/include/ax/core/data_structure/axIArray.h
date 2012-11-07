@@ -128,8 +128,8 @@ public:
 protected:
 	axALWAYS_INLINE(	void	_init( T* p, axSize size, axSize capacity ) );
 
-	virtual	axStatus	onMalloc	( axSize req_size, T* &newPtr, axSize &newCapacity ) { return -1; }
-	virtual void		onFree		( T* p ) {}
+	virtual	axStatus	onMalloc	( axSize req_size, void* &newPtr, axSize &newCapacity ) { return -1; }
+	virtual void		onFree		( void* p ) {}
 
 	virtual	bool		_canBeTakenDirectly	 () const { return false; }
 	virtual bool		_canTakeOtherDirectly() const { return false; }
@@ -292,28 +292,31 @@ axStatus	axIArray<T>::setCapacity ( axSize n ) {
 	axStatus st;
 	ax_max_it( n, size() );
 
-	T* np = NULL;
+	void* np_void = NULL;
 	axSize newCapacity;
-	st = onMalloc( n, np, newCapacity );		if( !st ) return st;
+	st = onMalloc( n, np_void, newCapacity );		if( !st ) return st;
+	T* np = (T*)np_void;
 
-	if( size_ && p_ != np ) {
-		if( axTypeOf<T>::isPOD ) {
-			memcpy( (void*)np, (void*)p_, size_ * sizeof(T) );
-		}else{
-			T* s = p_; //old data
-			T* e = p_ + size_;
-			T* d = np; //new data
+	if( p_ != np ) {
+		if( size_ ) {
+			if( axTypeOf<T>::isPOD ) {
+				memcpy( (void*)np, (void*)p_, size_ * sizeof(T) );
+			}else{
+				T* s = p_; //old data
+				T* e = p_ + size_;
+				T* d = np; //new data
 
-			for( ; s<e; s++, d++ ) {
-				::new( d ) T; // constructor
-				st = ax_take( *d, *s );		if( !st ) return st;
-				s->~T(); // call destructor
+				for( ; s<e; s++, d++ ) {
+					::new( d ) T; // constructor
+					st = ax_take( *d, *s );		if( !st ) return st;
+					s->~T(); // call destructor
+				}
 			}
 		}
 		onFree( p_ );
+		p_ = np;
 	}
 
-	p_ = np;
 	capacity_ = newCapacity;
 	return 0;
 }

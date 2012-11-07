@@ -22,8 +22,8 @@ public:
 
 private:
 	void	_ctor();
-	virtual	axStatus	onMalloc	( axSize req_size, T* &newPtr, axSize &newCapacity );
-	virtual void		onFree		( T* p ) { /*do nothing*/ }
+	virtual	axStatus	onMalloc	( axSize req_size, void* &newPtr, axSize &newCapacity );
+	virtual void		onFree		( void* p ) { /*do nothing*/ }
 };
 
 
@@ -39,7 +39,7 @@ axLocalArray<T,LOCAL_BUF_SIZE> :: ~axLocalArray() {
 }
 
 template<class T, size_t LOCAL_BUF_SIZE>
-axStatus	axLocalArray<T,LOCAL_BUF_SIZE> ::onMalloc	( axSize req_size, T* &newPtr, axSize &newCapacity ) { 
+axStatus	axLocalArray<T,LOCAL_BUF_SIZE> ::onMalloc	( axSize req_size, void* &newPtr, axSize &newCapacity ) { 
 	if( req_size > LOCAL_BUF_SIZE ) return axStatus_Std::LocalArray_excess_limit;  
 	newPtr = BUF::_localBufPtr();
 	newCapacity = LOCAL_BUF_SIZE;
