@@ -368,15 +368,8 @@ axStatus	axIArray<T>::remove( axSize index, axSize count ) {
 		return 0;
 	}
 
-	T* src = &p_[ index ];
-	T* dst = &p_[ e ];
-	axSize n = size() - e;
-	for( axSize i=0; i<n; i++ ) {
-		ax_swap( *src, *dst );
-		src++;	dst++;
-	}
-
-	st = resize( index + n );		if( !st ) return st;
+	st = ax_array_take( p_+index, p_+e, size_ - e );		if( !st ) return st;
+	st = resize( size_ - count );							if( !st ) return st;
 	return 0;
 }
 
@@ -396,14 +389,9 @@ axStatus	axIArray<T>::removeBySwap( axSize index, axSize count ) {
 	}
 	
 	axSize swap_count = ax_min( count, axSize(size_ - e) );
+		
+	st = ax_array_take( p_+index, p_+size_-swap_count, swap_count );		if( !st ) return st;
 	
-	T* src = &p_[index];
-	T* dst = &p_[size_ - swap_count];
-	
-	for( axSize i=0; i<swap_count; i++ ) {
-		ax_swap( *src, *dst );
-		src++;	dst++;
-	}
 	st = decSize( count );		if( !st ) return st;
 	return 0;
 }
@@ -439,55 +427,37 @@ axStatus	axIArray<T>::reserve( axSize n ) {
 
 template<class T> inline
 axStatus	axIArray<T>::insertN( axSize pos, const T* src, axSize count ) {
-	if( pos >  size_ ) { assert(false); return -1; }
 	if( pos == size_ ) return appendN( src, count );
+	if( pos >  size_ ) { assert(false); return -1; }
 
 	axStatus st;
 	axSize new_size = size_ + count;
 
-	bool move_at_same_buffer = false;
+	T* np = NULL;
 	if( new_size <= capacity_ ) {
-		move_at_same_buffer = true;
+		np = p_;
+		ax_array_constructor( np + size_, count );
 	}else{
 		void* np_void = NULL;
-		st = onMalloc( new_size, np_void, capacity() );		if( !st ) return st;
-		T* np = (T*)np_void;
-		if( size_ ) {
-			if( p_ == np ) {
-				move_at_same_buffer = true;
-			}else{
-				ax_array_constructor( np, new_size );
-				//data those before insert pos
-				st = ax_array_take( np, p_, pos );	if( !st ) return st;
-				
-				//data those after  insert pos
-				st = ax_array_take( np+pos+count, p_+pos, size_-pos );	if( !st ) return st;
+		st = onMalloc( new_size, np_void, capacity_ );		if( !st ) return st;
+		np = (T*)np_void;
+		
+		ax_array_constructor( np, new_size );
+		//data before pos
+		st = ax_array_take( np, p_, pos );	if( !st ) return st;
+	}
+	
+	//move data those after  insert pos
+	st = ax_array_take( np + pos + count, p_ + pos, size_ - pos );		if( !st ) return st;
 
-				ax_array_destructor( p_, size_ );
-				onFree(p_);
-				p_ = np;
-			}
-		}
+	st = ax_array_copy( np + pos, src, count );							if( !st ) return st;
+	
+	if( p_ != np ) {
+		ax_array_destructor( p_, size_ );
+		onFree(p_);
+		p_ = np;
 	}
 
-	if( move_at_same_buffer ) {
-		if( axTypeOf<T>::isPOD ) {
-			T* s = p_ + pos;
-			T* d = s + count;
-			axSize n = size_ - pos;
-			memmove( (void*)d, (void*)s, n * sizeof(T) );
-		}else{
-			T* s = p_ + size_ - 1;
-			T* d = s + count;
-			T* e = p_+pos;
-			for( ; s>=e; s--, d--) {
-				::new(d) T;
-				st = ax_take( *d, *s );	if( !st ) return st;
-			}
-		}
-	}
-
-	ax_array_copy( p_+pos, src, count );
 	size_ = new_size;
 	return 0;
 }
