@@ -120,7 +120,7 @@ inline axStatus test_stl_reserve_string_array_append	( unsigned arraySize, const
 //--------------
 
 void print_result( double time_ax, double time_stl ) {
-	ax_print("    {?:10}, {?:10}, {?:10} ({?:4.2}% faster)\n", 
+	ax_print("    {?:-13}, {?:-13}, {?:-13} ({?:4.2}% faster)\n", 
 			time_ax, 
 			time_stl,
 			time_stl - time_ax, 
@@ -155,7 +155,7 @@ axStatus	test_array() {
 			for( unsigned loop = n; loop >= 1 ; loop /= 10, size *= 10 ) { \
 				double time_ax=0; \
 				double time_stl=0; \
-				ax_print("{?:-30}, {?:-10}, size={?}x{?}\n", #func, #ax_value, size, loop ); \
+				ax_print("{?:-20}, {?:14}, size={?}x{?}", #func, #ax_value, size, loop ); \
 				\
 				st = test_ax_##func(size, ax_value);		if( !st ) return st ; \
 				sw.reset(); \
@@ -171,7 +171,6 @@ axStatus	test_array() {
 				} \
 				time_stl += sw.get();	\
 				print_result( time_ax, time_stl ); \
-				ax_print("\n"); \
 			} \
 			ax_print("\n"); \
 		}\
@@ -186,13 +185,13 @@ axStatus	test_array() {
 
 	run_test( array_insert,			int_value, int_value, 	loop_count )
 	run_test( reserve_array_insert,	int_value, int_value, 	loop_count )
-	/*
+	
 	run_test( array_append,			vec3_value, vec3_value,	loop_count )
 	run_test( reserve_array_append,	vec3_value, vec3_value,	loop_count )
 
 	run_test( array_insert,			vec3_value, vec3_value,	loop_count )
 	run_test( reserve_array_insert,	vec3_value, vec3_value,	loop_count )
-	
+
 	run_test( string_array_append,			sz_value, sz_value,	loop_count )
 	run_test( reserve_string_array_append,	sz_value, sz_value,	loop_count )
 
@@ -201,7 +200,7 @@ axStatus	test_array() {
 
 	run_test( array_insert,			int_array_value, int_vector_value,	loop_count )
 	run_test( reserve_array_insert,	int_array_value, int_vector_value,	loop_count )
-*/
+
 	#undef run_test
 	return 0;
 }
@@ -233,7 +232,7 @@ axStatus tiny_string_test() {
 
 axStatus do_test() {
     axStatus st;
-//	st = test_array();	if( !st ) return st;
+	st = test_array();	if( !st ) return st;
 //	st = tiny_string_test();	if( !st ) return st;
 	return 0;
 }

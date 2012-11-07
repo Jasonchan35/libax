@@ -139,6 +139,13 @@ private:
 	T*		p_;
 };
 
+template<class T>  inline
+axStatus	ax_copy( axIArray<T> &dst, const axIArray<T> &src ) {
+	return dst.copy( src );
+}
+
+
+
 template< class T > inline
 void ax_dump_hex( const axIArray<T> &buf, FILE* f = stdout ) {
 	ax_dump_hex_mem( buf.ptr(), buf.size(), f );
@@ -535,8 +542,9 @@ axStatus	axIArray<T>::insertN( axSize pos, const T* src, axSize count ) {
 	if( new_size <= capacity_ ) {
 		move_at_same_buffer = true;
 	}else{
-		T* np = NULL;
-		st = onMalloc( new_size, np, capacity_ );		if( !st ) return st;
+		void* np_void = NULL;
+		st = onMalloc( new_size, np_void, capacity() );		if( !st ) return st;
+		T* np = (T*)np_void;
 		if( size_ ) {
 			if( p_ == np ) {
 				move_at_same_buffer = true;

@@ -45,6 +45,12 @@ private:
 	void	_ctor();
 };
 
+
+template<class T>  inline
+axStatus	ax_copy( axArray<T> &dst, const axArray<T> &src ) {
+	return dst.copy( src );
+}
+
 // -----------
 
 template<class T, size_t LOCAL_BUF_SIZE, size_t CAP_INC> inline
