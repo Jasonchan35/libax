@@ -21,8 +21,8 @@ public:
 	void	setExternal( T* buf, axSize bufLen );
 	
 private:
-	virtual	axStatus	onMalloc	( axSize req_size, T* &newPtr, axSize &newCapacity );
-	virtual void		onFree		( T* p ) { /*do nothing*/ }
+	virtual	axStatus	onMalloc	( axSize req_size, void* &newPtr, axSize &newCapacity );
+	virtual void		onFree		( void* p ) { /*do nothing*/ }
 
 	T*		buf_;
 	axSize	bufLen_;
@@ -68,7 +68,7 @@ void axExternalArray<T> :: setExternal( T* buf, axSize bufLen ) {
 }
 
 template<class T>
-axStatus	axExternalArray<T> ::onMalloc	( axSize req_size, T* &newPtr, axSize &newCapacity ) { 
+axStatus	axExternalArray<T> ::onMalloc	( axSize req_size, void* &newPtr, axSize &newCapacity ) { 
 	return axStatus_Std::ExternalArray_excess_limit;
 }
 
