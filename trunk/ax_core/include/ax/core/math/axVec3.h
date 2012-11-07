@@ -74,8 +74,7 @@ public:
 	void		operator*=	( const T v )				{ x*=v; y*=v; z*=v; }
 	void		operator/=	( const T v )				{ x/=v; y/=v; z/=v; }
 
-	//! cross product
-	axVec3		operator^	( const axVec3 &v ) const		{ return axVec3( y*v.z - z*v.y, z*v.x - x*v.z,x*v.y - y*v.x ); }
+	axVec3		cross		( const axVec3 &v ) const		{ return axVec3( y*v.z - z*v.y, z*v.x - x*v.z,x*v.y - y*v.x ); }
 	T			dot			( const axVec3 &v ) const		{ return (x*v.x) + (y*v.y) + (z*v.z); }
 
 	bool		operator==	( const axVec3 &v ) const		{ return ( x == v.x && y == v.y && z == v.z ); }
@@ -100,20 +99,18 @@ public:
 	void		normalizeIt	()								{ *this = normalize(); }
 
 
-	bool		isParallel          ( const axVec3 &v, T tolerance = ax_epsilon<T>() ) const;
-	void		faceNormal			( const axVec3 &v0, const axVec3 &v1, const axVec3 &v2 );
+	bool		isParallel          ( const axVec3 &v, T tolerance = ax_epsilon<T>() ) const { return ax_math_equals( ax_abs( normalize().dot( v.normalize() ) ), (T)1, tolerance ); }
 
 	//! angle between this and v
 	T			angle		        ( const axVec3 &v );
-	bool		isInsideTriangle	( const axVec3 &v0, const axVec3 &v1, const axVec3 &v2 ) const;
-	bool		isInsideTriangle	( const axVec3 &v0, const axVec3 &v1, const axVec3 &v2, const axVec3 &normal ) const;
+	bool		isInTriangle		( const axVec3 &v0, const axVec3 &v1, const axVec3 &v2 ) const;
 
 	template<class D>	axVec3<D>	to_Vec3 () const { return axVec3<D>( (T)x, (T)y, (T)z ); }
 
 	template<class S>	axStatus	serialize_io	( S &se );
 						
 						axStatus	toStringFormat	( axStringFormat &f ) const;
-	axStatus	onTake( axVec3<T> &b )				{ *this = b; return 0; }
+						axStatus	onTake			( axVec3<T> &b )			{ *this = b; return 0; }
 };
 
 #define axTYPE_LIST(T) \
@@ -127,6 +124,17 @@ public:
 	axTYPE_LIST( axVec3f )
 	axTYPE_LIST( axVec3d )
 #undef axTYPE_LIST
+
+template<class T> inline
+axVec3<T>	ax_tri_front( const axVec3<T> &v0, const axVec3<T> &v1, const axVec3<T> &v2 ) {
+	return (v1-v0).cross(v2-v0);
+}
+
+template<class T> inline
+axVec3<T>	ax_tri_normal( const axVec3<T> &v0, const axVec3<T> &v1, const axVec3<T> &v2 ) {
+	return ax_tri_front(v0,v1,v2).normalize();
+}
+
 
 template<class T> inline axVec3<T> operator+ ( T a, const axVec3<T> & b ) { return axVec3<T>( a + b.x, a + b.y, a + b.z ); }
 template<class T> inline axVec3<T> operator- ( T a, const axVec3<T> & b ) { return axVec3<T>( a - b.x, a - b.y, a - b.z ); }
@@ -172,11 +180,6 @@ axVec3<T> ax_lerp ( const axVec3<T> &a, const axVec3<T> b, T  weight ) {
 	return axVec3<T>( ax_lerp( a.x, b.x, weight ),
 			  ax_lerp( a.y, b.y, weight ),
 			  ax_lerp( a.z, b.z, weight ) );
-}
-
-template <class T> inline
-void axVec3<T>::faceNormal( const axVec3 &v0, const axVec3 &v1, const axVec3 &v2 ) {
-	*this = ( (v1-v0)^(v2-v0) ).normalize();
 }
 
 template<class T> inline

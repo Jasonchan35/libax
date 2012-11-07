@@ -29,4 +29,5 @@ axVec2<T> ax_line_closest_point( T &out_w, const axVec2<T> &line0, const axVec2<
 	return line0 + vAB * out_w;
 }
 
+
 #endif

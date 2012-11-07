@@ -24,7 +24,7 @@ public:
 	axArray() 											{ _ctor(); }
 //	axArray( const axArray<T, LOCAL_BUF_SIZE> & src ) 	{ _ctor(); B::copy(src); }
 
-	virtual	~axArray()	{ clear(); }
+	virtual	~axArray()	{ B::clear(); }
 
 
 	template<class S>	axStatus	serialize_io	 ( S &s )	{ return B::serialize_io(s); }

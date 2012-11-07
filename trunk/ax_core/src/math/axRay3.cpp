@@ -56,8 +56,7 @@ bool	axRay3<T>::hitTest( HitResult &result, const axPlane3<T> &plane, bool test_
 template<class T>
 bool	axRay3<T>::hitTestTriangle( HitResult &result, const axVec3<T> &p0, const axVec3<T> &p1, const axVec3<T> &p2, bool test_double_side ) const
 {
-	axVec3<T> face_n;
-	face_n.faceNormal( p0, p1, p2 );
+	axVec3<T> face_n = ax_tri_normal( p0, p1, p2 );
 	T pd = -p0.dot( face_n );
 
 	T s = v.dot( face_n );
@@ -78,22 +77,22 @@ bool	axRay3<T>::hitTestTriangle( HitResult &result, const axVec3<T> &p0, const a
 
 //in triangle test
 	if( s > 0 ) {
-		axVec3<T>	n0 = (e1 ^ e0).normalize();
+		axVec3<T>	n0 = e1.cross(e0).normalize();
 		if( ( hp.dot( n0 ) - o.dot( n0 )  ) > 0 ) return false;
 
-		axVec3<T>	n1 = (e2 ^ e1).normalize();
+		axVec3<T>	n1 = e2.cross(e1).normalize();
 		if( ( hp.dot( n1 ) - o.dot( n1 )  ) > 0 ) return false;
 
-		axVec3<T>	n2 = (e0 ^ e2).normalize();
+		axVec3<T>	n2 = e0.cross(e2).normalize();
 		if( ( hp.dot( n2 ) - o.dot( n2 )  ) > 0 ) return false;
 	}else{
-		axVec3<T>	n0 = (e1 ^ e0).normalize();
+		axVec3<T>	n0 = e1.cross(e0).normalize();
 		if( ( hp.dot( n0 ) - o.dot( n0 )  ) < 0 ) return false;
 
-		axVec3<T>	n1 = (e2 ^ e1).normalize();
+		axVec3<T>	n1 = e2.cross(e1).normalize();
 		if( ( hp.dot( n1 ) - o.dot( n1 )  ) < 0 ) return false;
 
-		axVec3<T>	n2 = (e0 ^ e2).normalize();
+		axVec3<T>	n2 = e0.cross(e2).normalize();
 		if( ( hp.dot( n2 ) - o.dot( n2 )  ) < 0 ) return false;
 	}
 	

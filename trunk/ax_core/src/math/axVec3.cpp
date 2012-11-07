@@ -16,7 +16,7 @@ template<class T> axVec3<T> axVec3<T>::operator*( const axQuaternion<T> &q ) con
 	axVec3<T>	n ( q.c.x, q.c.y, q.c.z );
 	
 	T v_mul = 2 * n.dot( *this );
-	axVec3<T> c_cross_v = n ^ *this;
+	axVec3<T> c_cross_v = n.cross(*this);
 	
 	return axVec3<T>(	p_mul * x + v_mul * n.x + w2 * c_cross_v.x,
 						p_mul * y + v_mul * n.y + w2 * c_cross_v.y,
@@ -57,44 +57,23 @@ T axVec3<T>::angle( const axVec3 &v ) {
 }
 
 template <class T>
-bool axVec3<T>::isInsideTriangle ( const axVec3 &v0, const axVec3 &v1, const axVec3 &v2 ) const {
+bool axVec3<T>::isInTriangle ( const axVec3 &v0, const axVec3 &v1, const axVec3 &v2 ) const {
 	axVec3 c;
-	axVec3 normal;
-	normal.faceNormal( v0, v1, v2 );
+	axVec3 v10 = v1 - v0;
+	axVec3 v21 = v2 - v1;
+	axVec3 faceFront = v10.cross(v21);
+		
+	c = v10.cross(*this-v0);
+	if ( c.dot( faceFront ) < 0.0 ) return false;
 
-	c = (v1-v0) ^ (*this-v0);
-	if ( c.dot( normal ) < 0.0 ) return false;
+	c = v21.cross(*this-v1);
+	if ( c.dot( faceFront ) < 0.0 ) return false;
 
-	c = (v2-v1) ^ (*this-v1);
-	if ( c.dot( normal ) < 0.0 ) return false;
-
-	c = (v0-v2) ^ (*this-v2);
-	if ( c.dot( normal ) < 0.0 ) return false;
+	c = (v0-v2).cross(*this-v2);
+	if ( c.dot( faceFront ) < 0.0 ) return false;
 
 	return true;
 }
-
-template <class T>
-bool axVec3<T>::isInsideTriangle ( const axVec3 &v0, const axVec3 &v1, const axVec3 &v2, const axVec3 &normal ) const {
-	axVec3 c;
-	
-	c = (v1-v0) ^ (*this-v0);
-	if ( c.dot( normal ) < 0.0 ) return false;
-
-	c = (v2-v1) ^ (*this-v1);
-	if ( c.dot( normal ) < 0.0 ) return false;
-
-	c = (v0-v2) ^ (*this-v2);
-	if ( c.dot( normal ) < 0.0 ) return false;
-
-	return true;
-}
-
-template <class T>
-bool axVec3<T>::isParallel( const axVec3 &v, T tolerance ) const{
-	return ax_math_equals( ax_abs( normalize().dot( v.normalize() ) ), (T)1, tolerance );
-}
-
 
 //---- The explicit instantiation ----
 template class axVec3<float>;
