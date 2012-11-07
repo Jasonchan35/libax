@@ -316,7 +316,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\core\thread\test_axThread.cpp"
+			RelativePath="..\..\..\src\data_structure\test_performance.cpp"
 			>
 		</File>
 	</Files>
