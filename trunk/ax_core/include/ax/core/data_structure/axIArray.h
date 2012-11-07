@@ -403,7 +403,7 @@ axStatus	axIArray<T>::resizeAndFill( axSize new_size, const T& value ) {
 	st = resize( new_size );		if( !st ) return st;
 
 	for( size_t i=old_size; i<new_size; i++ ) {
-		p_[i] = value;
+		ax_copy( p_[i], value );
 	}
 	return 0;
 }
