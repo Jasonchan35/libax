@@ -74,7 +74,7 @@ class axJsonWriter : public axJsonWriterBase {
 public:
 	template<class T>	axStatus io	( T& value, const char* name )	{ 
 		axStatus st;
-		if( ! name|| ! name[0] ) return axStatus_Std::JSON_deserialize_format_error;
+		if( ! name|| ! name[0] ) return axStatus_Std::JsonParser_format_error;
 		st = member( name );		if( !st ) return st;
 		st = io_value( value );		if( !st ) return st;
 		st = nextElement();			if( !st ) return st;
@@ -152,7 +152,7 @@ public:
 	template<class T>	axStatus parse( T& value, const char* name ) {	
 		axStatus st;
 		st = io( value, name );
-		if( st.code() == axStatus_Std::JSON_deserialize_internal_found ) {
+		if( st.code() == axStatus_Std::JsonParser_internal_found ) {
 			st = 0;
 		}
 		
@@ -164,10 +164,10 @@ public:
 	
 	template<class T>	axStatus io	( T& value, const char* name )	{ 
 		axStatus st;
-		if( ! name ) return axStatus_Std::JSON_deserialize_format_error;
+		if( ! name ) return axStatus_Std::JsonParser_format_error;
 		
 		if( ! checkStringToken(name) ) {
-			if( memberMustInOrder_ ) return axStatus_Std::JSON_deserialize_format_error;
+			if( memberMustInOrder_ ) return axStatus_Std::JsonParser_format_error;
 			return k_name_mismatch;
 		}
 		
@@ -183,7 +183,7 @@ public:
 			st = nextElement();			if( !st ) return st;
 			return 0;
 		}
-		return axStatus_Std::JSON_deserialize_internal_found;
+		return axStatus_Std::JsonParser_internal_found;
 	}
 	
 	template<class T>	axStatus io_value( T& value ) {
@@ -549,18 +549,18 @@ axStatus ax_json_serialize_object_value( axJsonParser &s, T &value ) {
 	for(;;) {
 		st = ax_json_serialize_object_members( s, value );
 		if( ! s.memberMustInOrder() ) {		
-			if( st.code() == axStatus_Std::JSON_deserialize_internal_found ) {
+			if( st.code() == axStatus_Std::JsonParser_internal_found ) {
 				if( s.checkToken("}") ) break;
 				if( s.checkToken(",") ) {
 					st = s.nextToken();		if( !st ) return st;
 					continue;		
 				}
-				return axStatus_Std::JSON_deserialize_format_error;
+				return axStatus_Std::JsonParser_format_error;
 			}
 		}		
 		
 		if( ! s.ignoreUnknownMemeber() ) {
-			return axStatus_Std::JSON_deserialize_member_not_found;
+			return axStatus_Std::JsonParser_member_not_found;
 		}
 		
 		if( s.checkToken("}") ) break;

@@ -49,7 +49,7 @@ axStatus	ax_from_json_str	( axIStringA & str, const char* json, bool withQuote )
 	axStatus st;	
 	axJsonParser	parse( json, true );
 	parse.nextToken();
-	if( withQuote != parse.tokenIsString ) return axStatus_Std::JSON_deserialize_bool_format_error;
+	if( withQuote != parse.tokenIsString ) return axStatus_Std::JsonParser_bool_format_error;
 	return str.set( parse.token );
 }
 
@@ -133,7 +133,7 @@ axStatus axJsonWriter::beginArrayValue	() 	{ return begin_('['); }
 axStatus axJsonWriter::endArrayValue	() 	{ return end_('[',']'); }
 
 axStatus axJsonWriter::begin_( const char ch ) { 
-	if( ended_ ) return axStatus_Std::JSON_deserialize_format_error;
+	if( ended_ ) return axStatus_Std::JsonParser_format_error;
 
 	axStatus st;
 	st = str_->append(ch);		if( !st ) return st;
@@ -143,12 +143,12 @@ axStatus axJsonWriter::begin_( const char ch ) {
 
 axStatus axJsonWriter::end_( const char begin, const char ch ) {
 	axStatus st;
-	if( depth_ == 0 )  		return axStatus_Std::JSON_deserialize_format_error;
+	if( depth_ == 0 )  		return axStatus_Std::JsonParser_format_error;
 	depth_--;
 
 	if( depth_ == 0 ) ended_ = true;
 	
-	if( str_->size() == 0 ) return axStatus_Std::JSON_deserialize_format_error;
+	if( str_->size() == 0 ) return axStatus_Std::JsonParser_format_error;
 	
 	char e = str_->lastChar();
 	if( e == ',' ) {
@@ -156,8 +156,9 @@ axStatus axJsonWriter::end_( const char begin, const char ch ) {
 		st = newline();			if( !st ) return st;
 	}else{
 		if( e != begin ) {
-			ax_log("Json end of {?} error", ch );
-			return axStatus_Std::JSON_deserialize_format_error;
+			ax_log("Json missing ',' end of {?} error", ch );
+			assert(false);
+			return axStatus_Std::JsonParser_format_error;
 		}
 	}
 	st = str_->append(ch);			if( !st ) return st;		
@@ -216,7 +217,7 @@ axStatus ax_json_serialize_value( axJsonParser &s, bool &v ) {
 	}else if( s.checkToken( "false" ) ) {
 		v = false;
 	}else {
-		return axStatus_Std::JSON_deserialize_bool_format_error;
+		return axStatus_Std::JsonParser_bool_format_error;
 	}
 	
 	st = s.nextToken();		if( !st ) return st;
@@ -257,7 +258,7 @@ axStatus	axJsonParser::_nextToken() {
 			if( *r_ == '\\' ) {
 				r_++;
 				switch( *r_ ) {
-					case 0: return axStatus_Std::JSON_deserialize_expected_close_quota;
+					case 0: return axStatus_Std::JsonParser_expected_close_quota;
 				//------
 					case '\\': { st = token.append('\\'); if( !st ) return st; continue; }
 					case '\"': { st = token.append('\"'); if( !st ) return st; continue; }
@@ -282,7 +283,7 @@ axStatus	axJsonParser::_nextToken() {
 					}continue;
 				//--------	
 					default: { //unknown escape
-						return axStatus_Std::JSON_deserialize_unknown_escape_in_string;
+						return axStatus_Std::JsonParser_unknown_escape_in_string;
 					}
 				}
 			}
@@ -316,22 +317,22 @@ axStatus	axJsonParser::_nextToken() {
 
 	if( tokenIsString ) {
 		assert(false);	// quota excepted for close string
-		return axStatus_Std::JSON_deserialize_expected_close_quota;
+		return axStatus_Std::JsonParser_expected_close_quota;
 	}
 	return 0;
 }
 
 axStatus	axJsonParser::checkToken( const char* sz ) {
 	axStatus st;
-	if( tokenIsString )		return axStatus_Std::JSON_deserialize_format_error;
-	if( !token.equals(sz) )	return axStatus_Std::JSON_deserialize_format_error;
+	if( tokenIsString )		return axStatus_Std::JsonParser_format_error;
+	if( !token.equals(sz) )	return axStatus_Std::JsonParser_format_error;
 	return 0;
 }
 
 axStatus	axJsonParser::checkStringToken( const char* sz ) {
 	axStatus st;
-	if( !tokenIsString )	return axStatus_Std::JSON_deserialize_format_error;
-	if( !token.equals(sz) )	return axStatus_Std::JSON_deserialize_format_error;
+	if( !tokenIsString )	return axStatus_Std::JsonParser_format_error;
+	if( !token.equals(sz) )	return axStatus_Std::JsonParser_format_error;
 	return 0;
 }
 
@@ -377,7 +378,7 @@ axStatus	axJsonParser::skipValue() {
 	if( st ) return nextToken();
 	
 	assert(false);
-	return axStatus_Std::JSON_deserialize_format_error;
+	return axStatus_Std::JsonParser_format_error;
 }
 
 axStatus axJsonParser::skipBlock( char open, char close ) {
@@ -393,7 +394,7 @@ axStatus axJsonParser::skipBlock( char open, char close ) {
 			lv--;
 		}
 	}
-	return axStatus_Std::JSON_deserialize_format_error;
+	return axStatus_Std::JsonParser_format_error;
 }
 
 axStatus axJsonParser::beginObject( const char* name ) {

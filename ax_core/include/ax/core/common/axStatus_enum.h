@@ -98,19 +98,20 @@ axStatus_enum( DB_invalid_value_type )
 
 //-------------
 
-axStatus_enum( JSON_serialize_not_init )
-axStatus_enum( JSON_deserialize_internal_found )
+axStatus_enum( JsonWriter_not_init )
+axStatus_enum( JsonWriter_missing_comma )
+axStatus_enum( JsonParser_internal_found )
 
-axStatus_enum( JSON_deserialize_format_error )
-axStatus_enum( JSON_deserialize_cannot_find_string )
-axStatus_enum( JSON_deserialize_name_not_equal )
-axStatus_enum( JSON_deserialize_cannot_find_colon )
-axStatus_enum( JSON_deserialize_cannot_find_end_token )
-axStatus_enum( JSON_deserialize_element_not_found )
-axStatus_enum( JSON_deserialize_bool_format_error )
-axStatus_enum( JSON_deserialize_member_not_found )
-axStatus_enum( JSON_deserialize_expected_close_quota )
-axStatus_enum( JSON_deserialize_unknown_escape_in_string )
+axStatus_enum( JsonParser_format_error )
+axStatus_enum( JsonParser_cannot_find_string )
+axStatus_enum( JsonParser_name_not_equal )
+axStatus_enum( JsonParser_cannot_find_colon )
+axStatus_enum( JsonParser_cannot_find_end_token )
+axStatus_enum( JsonParser_element_not_found )
+axStatus_enum( JsonParser_bool_format_error )
+axStatus_enum( JsonParser_member_not_found )
+axStatus_enum( JsonParser_expected_close_quota )
+axStatus_enum( JsonParser_unknown_escape_in_string )
 
 //-------------
 axStatus_enum( error_encodeJSON )
