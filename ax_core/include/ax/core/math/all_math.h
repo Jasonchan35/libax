@@ -17,5 +17,7 @@
 #include "axCubicBezierCurve.h"
 #include "axUnitCircle.h"
 #include "axRoundedRect.h"
+#include "axRange.h"
+
 
 #endif //__ax_all_math_h__
