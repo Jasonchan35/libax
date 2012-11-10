@@ -722,6 +722,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\include\ax\core\data_structure\axLinkedPtrArray.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\ax\core\data_structure\axLocalArray.h"
 					>
 				</File>

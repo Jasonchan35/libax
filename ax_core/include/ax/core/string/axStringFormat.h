@@ -69,7 +69,7 @@ private:
 template< class T > inline
 axStatus	axIArray<T>::toStringFormat( axStringFormat &f ) const {
 	axSize i;
-	f.put( '[' );
+	f.format( "(size:{?})[", size() );
 	for( i=0; i<size(); i++ ) {
 		if( i > 0 ) f.put( ", " );
 		f.format( "{?}", at(i) );

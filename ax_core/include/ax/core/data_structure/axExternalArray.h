@@ -16,7 +16,8 @@ class axExternalArray : public axIArray<T> {
 public:
 	axExternalArray( T* buf=NULL, axSize buf_len=0 ) 	{ setExternal( buf, buf_len ); }
 	axExternalArray( axExternalArray<T> & src ) 		{ setExternal( src.buf_, bufLen_ ); }
-	
+	virtual ~axExternalArray() { B::clear(); }  // must call clear here, because ~axIArray() cannot call virtual function to free memory
+
 	void	setExternal( axIArray<T> & a )		{ setExternal( a.ptr(), a.size() ); }
 	void	setExternal( T* buf, axSize bufLen );
 	
