@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		96515AD2164AA29200F0519C /* test_axIArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96515AD1164AA29200F0519C /* test_axIArray.cpp */; };
 		96515AE9164AA5D300F0519C /* libax_core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96515ACB164AA14D00F0519C /* libax_core.a */; };
+		9690C62B164EA08F007BBD2E /* test_performance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9690C62A164EA08F007BBD2E /* test_performance.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,8 +36,8 @@
 /* Begin PBXFileReference section */
 		96515AA7164AA0CC00F0519C /* ax_core_unit_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ax_core_unit_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		96515AC2164AA14D00F0519C /* ax_core.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ax_core.xcodeproj; path = ../../../../projects/Xcode/OSX/ax_core.xcodeproj; sourceTree = "<group>"; };
-		96515AD1164AA29200F0519C /* test_axIArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_axIArray.cpp; path = ../../../src/data_structure/test_axIArray.cpp; sourceTree = "<group>"; };
 		96515AD3164AA2BE00F0519C /* ax_core_unit_test.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ax_core_unit_test.xcconfig; sourceTree = "<group>"; };
+		9690C62A164EA08F007BBD2E /* test_performance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_performance.cpp; path = ../../../src/data_structure/test_performance.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +55,7 @@
 		96515A9C164AA0CC00F0519C = {
 			isa = PBXGroup;
 			children = (
-				96515AD1164AA29200F0519C /* test_axIArray.cpp */,
+				9690C62A164EA08F007BBD2E /* test_performance.cpp */,
 				96515AA8164AA0CC00F0519C /* Products */,
 				96515AD3164AA2BE00F0519C /* ax_core_unit_test.xcconfig */,
 				96515AC2164AA14D00F0519C /* ax_core.xcodeproj */,
@@ -145,7 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				96515AD2164AA29200F0519C /* test_axIArray.cpp in Sources */,
+				9690C62B164EA08F007BBD2E /* test_performance.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,7 +158,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -187,7 +186,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;

@@ -46,8 +46,8 @@ private:
 };
 
 
-template<class T>  inline
-axStatus	ax_copy( axArray<T> &dst, const axArray<T> &src ) {
+template<class T, size_t N>  inline
+axStatus	ax_copy( axArray<T,N> &dst, const axArray<T,N> &src ) {
 	return dst.copy( src );
 }
 

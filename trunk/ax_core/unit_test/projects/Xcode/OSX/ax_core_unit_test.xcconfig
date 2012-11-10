@@ -1,8 +1,8 @@
 ax_core_path = ../../../../
 #include      "../../../../projects/Xcode/OSX/ax_core.xcconfig"
 
-OTHER_CFLAGS  = $(OTHER_CFLAGS)  $(ax_core_CFLAGS)
-OTHER_LDFLAGS = $(OTHER_LDFLAGS) $(ax_core_LDFLAGS)
+OTHER_CFLAGS  = $(OTHER_CFLAGS)  $(ax_core_CFLAGS) -I../../../src/data_structure/EASTL-community/include/
+OTHER_LDFLAGS = $(OTHER_LDFLAGS) $(ax_core_LDFLAGS) -L../../../src/data_structure/EASTL-community/lib/ -lEASTL
 
 //GCC_PRECOMPILE_PREFIX_HEADER = YES
 //GCC_PREFIX_HEADER = ../../../src/pch/pch.h
