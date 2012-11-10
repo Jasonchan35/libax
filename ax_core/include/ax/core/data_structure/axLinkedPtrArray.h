@@ -46,9 +46,8 @@ public:
 
 	void	remove	( size_t i )		{
 		T *p = arr_[i];
-		size_t idx = p->indexInArray_;
-		assert( p->ptrArr_ == this );
-		assert( idx == i );
+		if( p->ptrArr_ != this ) 	{ assert(false); return; }
+		if( p->indexInArray_ == i ) { assert(false); return; }
 
 		//swap with the last one
 		arr_[i] = arr_.last();
