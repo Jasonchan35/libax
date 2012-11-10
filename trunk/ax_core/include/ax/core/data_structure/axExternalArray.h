@@ -29,6 +29,10 @@ private:
 	axSize	bufLen_;
 };
 
+template<class T> inline
+const  axIArray<T> &	axIArray<T>::kEmpty() { static axExternalArray<T> e; return e; }
+
+
 template<class T>
 class axConstArray {
 public:
