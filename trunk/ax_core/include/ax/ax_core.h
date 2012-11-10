@@ -13,6 +13,7 @@
 #include "core/data_structure/axArray_types.h"
 #include "core/data_structure/axHashTable.h"
 #include "core/data_structure/axChunkArray.h"
+#include "core/data_structure/axLinkedPtrArray.h"
 
 #include "core/time/axDateTime.h"
 #include "core/time/axTimeStamp.h"

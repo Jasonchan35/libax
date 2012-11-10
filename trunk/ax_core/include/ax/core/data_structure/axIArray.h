@@ -136,8 +136,8 @@ public:
 protected:
 	axALWAYS_INLINE(	void	_init( T* p, axSize size, axSize capacity ) );
 
-	virtual	axStatus	onMalloc	( axSize req_size, void* &newPtr, axSize &newCapacity ) { return -1; }
-	virtual void		onFree		( void* p ) {}
+	virtual	axStatus	onMalloc	( axSize req_size, void* &newPtr, axSize &newCapacity ) = 0;
+	virtual void		onFree		( void* p ) = 0;
 
 	virtual	bool		_canBeTakenDirectly	 () const { return false; }
 	virtual bool		_canTakeOtherDirectly() const { return false; }
@@ -170,7 +170,7 @@ axIArray<T>::axIArray() {
 
 template< class T > inline
 axIArray<T>::~axIArray() {
-	clear();
+	assert( p_ == NULL ); //clear(); must be called be derived class
 }
 
 template< class T > inline
