@@ -132,7 +132,7 @@ public:
 						T*	_IArrayForPtr	() 			{ return ptr(); }
 				const 	T*	_IArrayForPtr	() const 	{ return ptr(); }
 			
-	static		const  axIArray<T> &	kEmpty()		{ static axIArray<T> e; return e; }
+	static		const  axIArray<T> &	kEmpty(); //axIArray is abstruct class, so implement this function in axExternalArray.cpp
 protected:
 	axALWAYS_INLINE(	void	_init( T* p, axSize size, axSize capacity ) );
 
