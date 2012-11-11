@@ -211,7 +211,7 @@ axStatus axStringFormat_out_NumberT( axStringFormat &f, T value ) {
 	//printf("to_str(int) value=%X opt=%ls\n", value, opt );
 	bool	plus_sign	= false;
 	bool	align_left  = false;
-	char	float_type	= 'f';
+	char	float_type	= 'g'; //default float_type
 	int		padding		= 0;
 	int		base		= 10; //default is dec
 	int		precision   = -1;

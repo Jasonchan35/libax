@@ -194,14 +194,14 @@ void ax_log_errno( const char* msg );
 		#define DEBUG_ax_log_win32_error	ax_log_win32_error
 	#endif
 #else
-	#define DEBUG_ax_log
-	#define DEBUG_ax_log_errno
-	#define	DEBUG_ax_log_var
-	#define	DEBUG_ax_log_var2
-	#define	DEBUG_ax_log_var3
-	#define	DEBUG_ax_log_var4
-	#define	DEBUG_ax_log_var5
-	#define	DEBUG_ax_log_var6
+	#define DEBUG_ax_log(...)			//nothing
+	#define DEBUG_ax_log_errno(...)		//nothing
+	#define	DEBUG_ax_log_var(...)		//nothing
+	#define	DEBUG_ax_log_var2(...)		//nothing
+	#define	DEBUG_ax_log_var3(...)		//nothing
+	#define	DEBUG_ax_log_var4(...)		//nothing
+	#define	DEBUG_ax_log_var5(...)		//nothing
+	#define	DEBUG_ax_log_var6(...)		//nothing
 	#if axOS_WIN
 		#define	DEBUG_ax_log_win32_error
 	#endif

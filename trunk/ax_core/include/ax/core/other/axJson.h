@@ -343,13 +343,12 @@ axStatus	ax_json_serialize_value ( axJsonParser &s, axDList<T> &v ) {
 	st = s.beginArrayValue();			if( !st ) return st;
 	if( ! s.checkToken("]") ) {
 		for(;;) {
-			axAutoPtr<T> p;
-			st = p.newObject();				if( !st ) return st;
-			st = s.io_value( *p );			if( !st ) return st;
+			axAutoPtr<T> p(st);			if( !st ) return st;
+			st = s.io_value( *p );		if( !st ) return st;
 			v.append( p.unref() );
 			
 			if( s.checkToken("]") ) break;	
-			st = s.nextElement();			if( !st ) return st;
+			st = s.nextElement();		if( !st ) return st;
 		}
 	}
 	st = s.endArrayValue();				if( !st ) return st;

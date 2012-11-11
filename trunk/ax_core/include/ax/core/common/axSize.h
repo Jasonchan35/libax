@@ -37,7 +37,7 @@ public:
 	#error
 #endif
 
-	operator size_t() const					{ return value_; }
+	axALWAYS_INLINE(	operator size_t() const )	{ return value_; }
 
 	axSize	operator++(int)					{ axSize o=value_; value_++; return o; }
 	axSize	operator--(int)					{ axSize o=value_; value_--; return o; }
