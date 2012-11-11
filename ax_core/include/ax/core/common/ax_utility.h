@@ -82,6 +82,10 @@ private:
 	void operator=( const axNonCopyable &s ); //!< not allow by default
 };
 
+class axUnused  {
+public:
+};
+
 template<class T>
 class axScopeValue : public axNonCopyable {
 public:
