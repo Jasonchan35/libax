@@ -12,6 +12,8 @@
 #include "axTinyString.h"
 #include "axString.h"
 #include "axString_Array.h"
+#include "axHumanString.h"
+
 #include "ax_str_to.h"
 #include "ax_str_encode.h"
 

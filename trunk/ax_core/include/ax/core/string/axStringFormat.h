@@ -20,6 +20,18 @@
 
 	- {?:option}, anything follow ':' is option passed to formater
 	- '{{', for single '{' print out
+	
+	== option for number ===
+	{?:10.3f}	//float point
+	{?:10.3g}	//float point
+	{?:10.3e}	//float point
+	
+	{?:-10x}	//hex align left
+	{?: 10X}	//hex in upcase
+	
+	{?: 10d}	//dec
+	{?: 10D}	//dec with comma e.g.  "10,000,000"
+	
 */
 class	axStringFormat : public axNonCopyable {
 public:
