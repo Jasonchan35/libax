@@ -321,7 +321,34 @@ axStatus	test_list() {
 	return 0;
 }
 
+axStatus do_test_cache_line( axArray<char> &v, int loop, size_t interval_max ) {
+	size_t n = v.size();
+	axStopWatch	watch;
+	
+	ax_log(" ==== cach line test ====");
+	ax_log("size={?} ({?}KB, {?}MB) loop={?}", n, n/1024, n/1024/1024, loop );
 
+	for( size_t interval = 1; interval <= interval_max; interval *= 2 ) {
+		if( interval >= n ) break;
+		watch.reset();
+		size_t m = n / interval;
+
+		for( int t=0; t<loop; t++ ) {
+			for( size_t j=0; j<interval; j++ ) {
+				for( size_t i=0; i<m; i++ ) {
+					size_t idx = ( i * interval ) + j;
+					v[idx] += v[0];
+//					ax_print("{?:3} ", idx);
+				}
+			}
+		}
+//		ax_print("\n");
+			
+		double time = watch.get();
+		ax_log("interval={?:10} ({?:8}KB, {?:4}MB) time={?}", interval, interval/1024, interval/1024/1024, time );
+	}
+	return 0;
+}
 axStatus do_test() {
     axStatus st;
 //	st = test_list();			if( !st ) return st;
