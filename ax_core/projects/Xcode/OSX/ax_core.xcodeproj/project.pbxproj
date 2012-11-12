@@ -324,6 +324,7 @@
 		964B7B6D163C9BFD0087A3CD /* axSharedObj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axSharedObj.h; sourceTree = "<group>"; };
 		964CADB11649783100EADA03 /* ax_array.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_array.h; sourceTree = "<group>"; };
 		9659F0F6164C0251005F86FC /* axRange.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRange.h; sourceTree = "<group>"; };
+		96672BA916518F1C007CB393 /* axHumanString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axHumanString.h; sourceTree = "<group>"; };
 		966A56C415F3BEF300012DCA /* axJson.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axJson.cpp; sourceTree = "<group>"; };
 		96D017F2160E4DA100A2682B /* axFilePath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axFilePath.cpp; sourceTree = "<group>"; };
 		96D017F4160E4E6500A2682B /* axFilePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axFilePath.h; sourceTree = "<group>"; };
@@ -646,6 +647,7 @@
 				9640E1391600AD1E00F9D037 /* axStringFormat_Arg.h */,
 				9640E0A116009DA400F9D037 /* axStringFormat_out_Imp.h */,
 				9640E0A216009DA400F9D037 /* axTinyString.h */,
+				96672BA916518F1C007CB393 /* axHumanString.h */,
 			);
 			path = string;
 			sourceTree = "<group>";

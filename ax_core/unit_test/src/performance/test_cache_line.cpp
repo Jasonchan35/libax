@@ -2,43 +2,49 @@
 #include <iostream>
 #include <new>
 
-axStatus do_test_cache_line( axArray<char> &v, int loop, size_t interval_max ) {
+
+template<class T>
+axStatus do_test_cache_line( const char* type, int sizePow2, int loop, bool dumpIndex ) {
+	axArray<int>	v;
+	v.resize( 1<<sizePow2 );
+
 	size_t n = v.size();
 	axStopWatch	watch;
 	
+	size_t interleave_max = 1 << 30;
+	
 	ax_log(" ==== cach line test ====");
-	ax_log("size={?} ({?}KB, {?}MB) loop={?}", n, n/1024, n/1024/1024, loop );
+	ax_log("type=\"{?}\" size={?} loop={?}", type, axHumanString_Byte(n).c_str(), loop );
 
-	for( size_t interval = 1; interval <= interval_max; interval *= 2 ) {
-		if( interval >= n ) break;
+	for( size_t interleave = 1; interleave <= interleave_max; interleave *= 2 ) {
+		if( interleave >= n ) break;
 		watch.reset();
-		size_t m = n / interval;
+		size_t m = n / interleave;
 
 		for( int t=0; t<loop; t++ ) {
-			for( size_t j=0; j<interval; j++ ) {
+			for( size_t j=0; j<interleave; j++ ) {
 				for( size_t i=0; i<m; i++ ) {
-					size_t idx = ( i * interval ) + j;
-					v[idx] += v[0];
-//					ax_print("{?:3} ", idx);
+					size_t idx = ( i * interleave ) + j;
+					v[idx]++;
+					if( dumpIndex ) ax_print("{?:3} ", idx);
 				}
 			}
 		}
-//		ax_print("\n");
+		if( dumpIndex ) ax_print("\n");
 			
 		double time = watch.get();
-		ax_log("interval={?:10} ({?:8}KB, {?:4}MB) time={?}", interval, interval/1024, interval/1024/1024, time );
+		ax_log("[interleave {?:6}] [row {?:10D}] [time {?:10.3f}s]", axHumanString_Byte(interleave).c_str(), m, time );
 	}
 	return 0;
 }
 
 axStatus test_cache_line() {
-	axArray<char>	v;
-	v.resize( 1<<23 );
-	v.setAll(0);
-	
-	int 	loop = 1;
-	int 	interval_pow2 = 30;
-	do_test_cache_line(v, loop, 1<<interval_pow2 );
+//	do_test_cache_line<char>( "char", 4, 1, true );
+
+	int 	loop = 4;
+	int		sizePow2 = 25;
+	do_test_cache_line<char>( "char", sizePow2, loop, false );
+//	do_test_cache_line<int> ( "int ", sizePow2, loop, false ); //almost the same of char
 
 	return 0;
 }

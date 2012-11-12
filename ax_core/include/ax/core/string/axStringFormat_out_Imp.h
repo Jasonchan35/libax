@@ -83,7 +83,7 @@ inline axStatus axStringFormat_out( axStringFormat &f, char		value ) { return ax
 
 
 template< class T> inline
-int axStringFormat_to_digi_signed_int( char* buf, const int max_digi, T value, int base, char float_type, int precision, const char *table ) {
+int axStringFormat_to_digi_signed_int( char* buf, const int max_digi, T value, int base, char type, int precision, const char *table ) {
 	T v = value;
 	T b = (T)base;
 	int n;
@@ -92,49 +92,65 @@ int axStringFormat_to_digi_signed_int( char* buf, const int max_digi, T value, i
 		n++;
 		if( v == 0 ) break;
 	}
+	if( type == ',' ) n += (n-1)/3;
 	if( value < 0 ) n++;
+	
 	if( n >= max_digi ) { assert( false ); return 0; }
-
+	
+	buf[n] = 0;
 	char* out = buf + n - 1;
 
 	if( value < 0 ) buf[0] = L'-';
 
 	v = value;
-	int i;
-	for( i=0; i<n; ) {
+	for( int i=0; i<n; ) {
+		if( type == ',' && (i % 4) == 3 ) {
+			*out = ',';
+			out--; i++;
+			continue;
+		}
+		
 		T a = v % b;
 		*out = (value < 0) ? table[-a] : table[a];
-		out--;
+		out--; i++;
 		v /= b;
-		i++;
 		if( v == 0 ) break;
 	}
 	return n;
 }
 
 template< class T> inline
-int axStringFormat_to_digi_unsigned_int( char* buf, const int max_digi, T value, int base, char float_type, int precision, const char *table ) {
+int axStringFormat_to_digi_unsigned_int( char* buf, const int max_digi, T value, int base, char type, int precision, const char *table ) {
 	T v = value;
 	T b = (T)base;
-	int i;
-
-	for( i=0; i<max_digi; ) {
+	int n;
+	for( n=0; n<max_digi; ) {
 		v /= b;
-		i++;
+		n++;
 		if( v == 0 ) break;
 	}
-	char* out = buf + i - 1;
+	if( type == ',' ) n += (n-1)/3;
+
+	if( n >= max_digi ) { assert( false ); return 0; }
+	
+	buf[n] = 0;
+	char* out = buf + n - 1;
 
 	v = value;
-	for( i=0; i<max_digi; ) {
+	for( int i=0; i<max_digi; ) {
+		if( type == ',' && (i % 4) == 3 ) {
+			*out = ',';
+			out--; i++;
+			continue;
+		}
+	
 		T a = v % b;
 		*out = table[a];
-		out--;
+		out--; i++;
 		v /= b;
-		i++;
 		if( v == 0 ) break;
 	}
-	return i;
+	return n;
 }
 
 //==== signed int
@@ -211,7 +227,7 @@ axStatus axStringFormat_out_NumberT( axStringFormat &f, T value ) {
 	//printf("to_str(int) value=%X opt=%ls\n", value, opt );
 	bool	plus_sign	= false;
 	bool	align_left  = false;
-	char	float_type	= 'g'; //default float_type
+	char	type		= 'g'; //default float_type
 	int		padding		= 0;
 	int		base		= 10; //default is dec
 	int		precision   = -1;
@@ -228,12 +244,13 @@ axStatus axStringFormat_out_NumberT( axStringFormat &f, T value ) {
 			case 'b': len--; base = 2;  break; //binary
 			case 'o': len--; base = 8;  break; //octer
 			case 'd': len--; base = 10; break; //decmial
+			case 'D': len--; base = 10; type=','; break;
 			case 'X': len--; base = 16; break; //hex
 			case 'x': len--; base = 16; break; table =  ax_hex_chars(); break; //lower HEX
 				
-			case 'f': len--; float_type = 'f'; break; //for floating point only
-			case 'g': len--; float_type = 'g'; break; //for floating point only
-			case 'e': len--; float_type = 'e'; break; //for floating point only
+			case 'f': len--; type = 'f'; break; //for floating point only
+			case 'g': len--; type = 'g'; break; //for floating point only
+			case 'e': len--; type = 'e'; break; //for floating point only
 		}
 		
 		const char *p = opt;
@@ -267,7 +284,7 @@ axStatus axStringFormat_out_NumberT( axStringFormat &f, T value ) {
 		ch[utf8_len] = 0 ;
 		plus_sign = false;
 	}else{
-		digi = axStringFormat_to_digi( ch, max_digi, value, base, float_type, precision, table );
+		digi = axStringFormat_to_digi( ch, max_digi, value, base, type, precision, table );
 		if( digi < 0 ) { assert(false); return -1; }        
 		if( ! axTypeOf<T>::isUnsigned && ax_less_than0( value ) ) {
 			plus_sign = false;
