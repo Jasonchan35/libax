@@ -1,4 +1,4 @@
-log,  ==== cach line test ====
+log,  ==== cache line test ====
 log, type="char" size=32M loop=4
 log, [interleave     1B] [row 33,554,432] [time      0.452s]
 log, [interleave     2B] [row 16,777,216] [time      0.582s]

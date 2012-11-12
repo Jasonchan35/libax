@@ -13,7 +13,7 @@ axStatus do_test_cache_line( const char* type, int sizePow2, int loop, bool dump
 	
 	size_t interleave_max = 1 << 30;
 	
-	ax_log(" ==== cach line test ====");
+	ax_log(" ==== cache line test ====");
 	ax_log("type=\"{?}\" size={?} loop={?}", type, axHumanString_Byte(n).c_str(), loop );
 
 	for( size_t interleave = 1; interleave <= interleave_max; interleave *= 2 ) {
