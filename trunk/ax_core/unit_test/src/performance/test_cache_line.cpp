@@ -14,14 +14,33 @@ axStatus do_test_cache_line( const char* type, axIArray<T> &v, int loop ) {
 	ax_log(" ==== cache line test ====");
 	ax_log("type=\"{?}\" size {?}x{?} = {?}  loop={?}", type, n, sizeof(T), axHumanString_Byte( n *sizeof(T) ).c_str(), loop );
 
-	watch.reset();
-	for( int t=0; t<loop; t++ ) {
-		axForArray( T, p, v ) {
-			(*p)++;
-		}
+//warm up cache
+	axForArray( T, p, v ) {
+		(*p)++;
 	}
-	double time = watch.get();
-	ax_log(" Raw loop                                         [time {?:10.3f}s] ", time );
+
+	T	foo = 1234;
+
+	{	watch.reset();
+		for( int t=0; t<loop; t++ ) {
+			memset( v.ptr(), 0x1234, v.byteSize() );
+		}
+		double time = watch.get();
+		ax_log(" msetset                                          [time {?:10.3f}s] ", time );
+	}
+
+	{	watch.reset();
+		for( int t=0; t<loop; t++ ) {
+			axForArray( T, p, v ) {
+	//			(*p)++;			//  read/write test
+	//			foo += *p;	  	//  read only
+				*p = foo;   	//  write only
+			}
+		}
+		double time = watch.get();
+		ax_log(" Raw loop                                         [time {?:10.3f}s] ", time );
+	}
+
 
 	for( size_t interleave = 1; interleave <= interleave_max; interleave *= 2 ) {
 		if( interleave >= n ) break;
@@ -31,7 +50,9 @@ axStatus do_test_cache_line( const char* type, axIArray<T> &v, int loop ) {
 			for( size_t j=0; j<interleave; j++ ) {
 				for( size_t i=0; i<m; i++ ) {
 					size_t idx = ( i * interleave ) + j;
-					v[idx]++;
+					//v[idx]++;		//  read/write test
+//					foo += v[idx];  //  read only
+					v[idx] = foo;   //  write only
 					//ax_print("{?:3} ", idx);
 				}
 			}
@@ -47,7 +68,7 @@ axStatus do_test_cache_line( const char* type, axIArray<T> &v, int loop ) {
 			speed = time / base_time;
 		}
 			
-		ax_log("[interleave  {?:14D}] [row {?:14D}] [time {?:10.3f}s] {?:10.2f} slower", interleave, m, time, speed );
+		ax_log("[interleave  {?:14D}] [row {?:14D}] [time {?:10.3f}s] {?:10.2f} slower", interleave, m, time, speed, foo );
 	}
 	
 	
@@ -56,14 +77,14 @@ axStatus do_test_cache_line( const char* type, axIArray<T> &v, int loop ) {
 
 axStatus test_cache_line() {
 	int 	loop 	 = 4;
-	int		sizePow2 = 27;
+	int		sizePow2 = 24;
 	
 	#define TEST(T) { axArray<T>	v;	v.resize( 1<<sizePow2 );	do_test_cache_line<T>		( #T, v, loop ); } \
 		
-	TEST(uint8_t);
-	TEST(uint16_t);
+//	TEST(uint8_t);
+//	TEST(uint16_t);
 	TEST(uint32_t);
-	TEST(uint64_t);
+//	TEST(uint64_t);
 
 	return 0;
 }
