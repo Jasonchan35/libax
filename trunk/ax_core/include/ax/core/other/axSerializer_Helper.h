@@ -5,6 +5,19 @@
 #include "../other/axSerializer.h"
 #include "../file_system/axFileSystem.h"
 
+template<class T> inline
+axStatus ax_serialize_io_enum( axSerializer &s, T &value ) {
+	int t = value;
+	return s.io( t );
+}
+
+template<class T> inline
+axStatus ax_serialize_io_enum( axDeserializer &s, T &value ) {
+	int t = 0;
+	axStatus st = s.io( t );	if( !st ) return st;
+	value = t;
+}
+
 template<class T> inline 
 axStatus ax_serialize_append_to_buf( axIByteArray	&buf, T &v ) {
 	axStatus st;
