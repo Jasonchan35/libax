@@ -48,7 +48,7 @@ axStatus	axCSVParserBase::readLine_() {
 	return 0;
 }
 
-axStatus axCSVParserBase::getCell_( axStringA &cell ) {
+axStatus axCSVParserBase::getCell_( axIStringA &cell ) {
 	axStatus st;
 	if( ! *r_ ) return -1;
 

@@ -8,6 +8,15 @@
 
 #include <ax/core/string/ax_c_str.h>
 
+template<class T>
+bool	_ax_str_has_prefix( const T* sz, const T* prefix ) {
+	size_t	prefix_len = ax_strlen( prefix );
+	return 0 == ax_strncmp( prefix, sz, prefix_len );
+}
+
+bool ax_str_has_prefix( const char*    sz, const char*    prefix ) { return _ax_str_has_prefix(sz,prefix); }
+bool ax_str_has_prefix( const wchar_t* sz, const wchar_t* prefix ) { return _ax_str_has_prefix(sz,prefix); }
+
 template<class T> inline
 size_t _ax_strnlen( const T* s, size_t len ) {
 	if( !s ) return 0;
