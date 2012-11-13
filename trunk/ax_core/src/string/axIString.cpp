@@ -246,7 +246,7 @@ void axIString_<T> :: clear() {
 }
 
 template<class T>
-axStatus  axIString_<T>::getFromPrefix	( const char* prefix, const char* full ) {
+axStatus  axIString_<T>::getFromPrefix	( const T* prefix, const T* full ) {
 	size_t	prefix_len = ax_strlen( prefix );
 	size_t	full_len   = ax_strlen( full );
 
@@ -646,4 +646,10 @@ axStatus	axIString_<char> :: appendFormat_ArgList( const wchar_t* fmt, const axS
 //---- The explicit instantiation ----
 template class axIString_<char>;
 template class axIString_<wchar_t>;
+
+
+
+
+
+
 

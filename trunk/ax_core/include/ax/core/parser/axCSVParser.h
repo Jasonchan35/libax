@@ -23,7 +23,7 @@ protected:
 
 private:
 	axStatus	readLine_	();
-	axStatus	getCell_	( axStringA &cell );
+	axStatus	getCell_	( axIStringA &cell );
 };
 
 

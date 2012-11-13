@@ -63,6 +63,9 @@ public:
 	bool			contains				( const T* sz ) const		{ return ax_strstr( c_str(), sz ) != NULL; }
 	bool			containsNoCase			( const T* sz ) const		{ return ax_strcasestr( c_str(), sz ) != NULL; }
 
+	axStatus		getFromPrefix			( const T* prefix, const T* full );
+	bool			hasPrefix				( const T* prefix ) const 	{ return ax_str_has_prefix( c_str(), prefix ); }
+
 			T		charAt					( size_t i ) const			{ return ( i >= size() ) ? 0 : buf_[i]; }
 			T		lastChar				( size_t i = 0 ) const		{ return ( i >= size() ) ? 0 : buf_.last(i+1); }
 	
@@ -102,8 +105,6 @@ public:
 
 	axStatus		clone					( const axIString_<T> &src );
 	
-	axStatus		getFromPrefix			( const char* prefix, const char* full );
-
 	axStatus		findChar				(       T  ch,        axSize &outPos, axSize start_from     = 0 ) const;
 	axStatus		findCharFromEnd			(       T  ch,        axSize &outPos, axSize start_from_end = 0 ) const;
 	axStatus		findAnyChar				( const T* char_list, axSize &outPos, axSize start_from     = 0 ) const;

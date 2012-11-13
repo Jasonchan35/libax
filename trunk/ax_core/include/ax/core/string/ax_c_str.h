@@ -145,6 +145,9 @@ inline bool	ax_str_equals( const axUChar* s1, const axUChar* s2 ) { return 0 == 
  const axUChar* ax_strrstr( const axUChar* a, const axUChar* b );
 
 
+bool ax_str_has_prefix( const char*    sz, const char*    prefix );
+bool ax_str_has_prefix( const wchar_t* sz, const wchar_t* prefix );
+
 //@}
 
 #endif //__ax_c_str_h__
