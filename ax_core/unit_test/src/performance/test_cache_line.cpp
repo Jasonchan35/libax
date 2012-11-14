@@ -19,7 +19,7 @@ axStatus do_test_cache_line( const char* type, axIArray<T> &v, int loop ) {
 		(*p)++;
 	}
 
-	T	foo = 1234;
+	T	foo = (T)1234;
 
 	{	watch.reset();
 		for( int t=0; t<loop; t++ ) {

@@ -5,6 +5,9 @@
 #if ! __OBJC__
 	//dummy class when not in ObjC
 	class axScope_NSAutoreleasePool {
+	public:
+		axScope_NSAutoreleasePool() {
+		}
 	};
 #else
 
