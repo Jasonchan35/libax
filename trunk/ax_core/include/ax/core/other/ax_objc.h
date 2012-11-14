@@ -1,7 +1,12 @@
-#ifdef __OBJC__
-
 #ifndef __ax_objc_h__
 #define __ax_objc_h__
+
+
+#if ! __OBJC__
+	//dummy class when not in ObjC
+	class axScope_NSAutoreleasePool {
+	};
+#else
 
 #include "../common/axStatus.h"
 #include "../common/ax_utility.h"
@@ -62,6 +67,6 @@ NSString* ax_toNSString( const wchar_t *sz ) {
 	return ax_toNSString( lstr );
 }
 
+#endif //__OBJC__
 #endif //__ax_objc_h__
 
-#endif //__OBJC__

@@ -316,7 +316,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\src\data_structure\test_axLinkedPtrArray.cpp"
+			RelativePath="..\..\..\src\performance\test_cache_line.cpp"
 			>
 		</File>
 	</Files>
