@@ -352,7 +352,7 @@ axStatus do_test_cache_line( axArray<char> &v, int loop, size_t interval_max ) {
 axStatus do_test() {
     axStatus st;
 //	st = test_list();			if( !st ) return st;
-//	st = test_array();			if( !st ) return st;
+	st = test_array();			if( !st ) return st;
 //	st = tiny_string_test();	if( !st ) return st;
 	return 0;
 }
