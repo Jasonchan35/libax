@@ -26,15 +26,15 @@ axStatus do_test_cache_line( const char* type, axIArray<T> &v, int loop ) {
 			memset( v.ptr(), 0x1234, v.byteSize() );
 		}
 		double time = watch.get();
-		ax_log(" msetset                                          [time {?:10.3f}s] ", time );
+		ax_log(" memset                                           [time {?:10.3f}s] ", time );
 	}
 
 	{	watch.reset();
 		for( int t=0; t<loop; t++ ) {
 			axForArray( T, p, v ) {
-	//			(*p)++;			//  read/write test
+				(*p)++;			//  read/write test
 	//			foo += *p;	  	//  read only
-				*p = foo;   	//  write only
+	//			*p = foo;   	//  write only
 			}
 		}
 		double time = watch.get();
@@ -50,9 +50,9 @@ axStatus do_test_cache_line( const char* type, axIArray<T> &v, int loop ) {
 			for( size_t j=0; j<interleave; j++ ) {
 				for( size_t i=0; i<m; i++ ) {
 					size_t idx = ( i * interleave ) + j;
-					//v[idx]++;		//  read/write test
+					v[idx]++;		//  read/write test
 //					foo += v[idx];  //  read only
-					v[idx] = foo;   //  write only
+//					v[idx] = foo;   //  write only
 					//ax_print("{?:3} ", idx);
 				}
 			}
@@ -77,13 +77,13 @@ axStatus do_test_cache_line( const char* type, axIArray<T> &v, int loop ) {
 
 axStatus test_cache_line() {
 	int 	loop 	 = 4;
-	int		sizePow2 = 24;
+	int		sizePow2 = 27;
 	
 	#define TEST(T) { axArray<T>	v;	v.resize( 1<<sizePow2 );	do_test_cache_line<T>		( #T, v, loop ); } \
 		
-//	TEST(uint8_t);
+	TEST(uint8_t);
 //	TEST(uint16_t);
-	TEST(uint32_t);
+//	TEST(uint32_t);
 //	TEST(uint64_t);
 
 	return 0;
