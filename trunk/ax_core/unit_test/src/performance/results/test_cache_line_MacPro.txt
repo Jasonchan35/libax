@@ -1,3 +1,39 @@
+================== Win 7 ====================
+
+log,  ==== cache line test ====
+log, type="uint8_t" size 134217728x1 = 128M  loop=4
+log,  memset                                           [time      0.284s]
+log,  Raw loop                                         [time      0.400s]
+log, [interleave               1] [row    134,217,728] [time      0.818s]       1.00 slower
+log, [interleave               2] [row     67,108,864] [time      0.876s]       1.07 slower
+log, [interleave               4] [row     33,554,432] [time      1.157s]       1.41 slower
+log, [interleave               8] [row     16,777,216] [time      2.262s]       2.76 slower
+log, [interleave              16] [row      8,388,608] [time      4.298s]       5.25 slower
+log, [interleave              32] [row      4,194,304] [time      8.247s]      10.08 slower
+log, [interleave              64] [row      2,097,152] [time     16.506s]      20.17 slower
+log, [interleave             128] [row      1,048,576] [time     21.239s]      25.95 slower
+log, [interleave             256] [row        524,288] [time     31.730s]      38.77 slower
+log, [interleave             512] [row        262,144] [time     40.070s]      48.96 slower
+log, [interleave           1,024] [row        131,072] [time     67.031s]      81.90 slower
+log, [interleave           2,048] [row         65,536] [time     65.609s]      80.16 slower
+log, [interleave           4,096] [row         32,768] [time     65.112s]      79.55 slower
+log, [interleave           8,192] [row         16,384] [time     65.178s]      79.63 slower
+log, [interleave          16,384] [row          8,192] [time     65.112s]      79.55 slower
+log, [interleave          32,768] [row          4,096] [time     64.750s]      79.11 slower
+log, [interleave          65,536] [row          2,048] [time     57.590s]      70.36 slower
+log, [interleave         131,072] [row          1,024] [time     15.131s]      18.49 slower
+log, [interleave         262,144] [row            512] [time      8.020s]       9.80 slower
+log, [interleave         524,288] [row            256] [time      8.073s]       9.86 slower
+log, [interleave       1,048,576] [row            128] [time      7.684s]       9.39 slower
+log, [interleave       2,097,152] [row             64] [time     10.285s]      12.57 slower
+log, [interleave       4,194,304] [row             32] [time      9.562s]      11.68 slower
+log, [interleave       8,388,608] [row             16] [time      9.303s]      11.37 slower
+log, [interleave      16,777,216] [row              8] [time      3.674s]       4.49 slower
+log, [interleave      33,554,432] [row              4] [time      2.005s]       2.45 slower
+log, [interleave      67,108,864] [row              2] [time      1.601s]       1.96 slower
+==== return (0:OK) ====
+
+=========== Mac OS X ================
 log,  ==== cache line test ====
 log, type="uint8_t" size 134217728x1 = 128M  loop=4
 log,  Raw loop                                         [time      0.544s] 
