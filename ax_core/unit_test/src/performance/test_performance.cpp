@@ -358,18 +358,24 @@ public:
 class Observer {
 public:
 
+	static	size_t called_count;
+
 	axEventFunc< Observer, int >	hook;
 
 	void onFunc0( int& a ) {
+		called_count++;
 	}
 };
+
+size_t Observer::called_count = 0;
+
 
 axStatus test_event_hook() {
 	const size_t	nLoop		= 10;
 	const size_t	nSender		= 1000;
 	const size_t	nObserver	= 100;
 	
-	size_t	count = 0;
+	size_t	connect_count = 0;
 	axStopWatch	watch;
 
 	for( size_t loop=0; loop<nLoop; loop++ ) {
@@ -379,7 +385,7 @@ axStatus test_event_hook() {
 		
 		for( size_t s=0; s<nSender; ++s ) {
 			for( size_t o=0; o<nObserver; ++o ) {
-				count++;
+				connect_count++;
 				ob[o].hook.hook( senders[s].ev, &ob[o], &Observer::onFunc0 );
 			}
 
@@ -395,17 +401,45 @@ axStatus test_event_hook() {
 	ax_log_var( nLoop );
 	ax_log_var( nSender );
 	ax_log_var( nObserver );
-	ax_log_var( count );
+	ax_log_var( connect_count );
 	ax_log_var( time );	
+	return 0;
+}
+
+axStatus test_event_hook_call() {
+	printf("%s\n",__FUNCTION__);
+	const size_t	nCall		= 100000;
+	const size_t	nObserver	= 1000;
+
+	Sender		sender;
+	Observer	ob[ nObserver ];
+
+	for( size_t o=0; o<nObserver; ++o ) {
+		ob[o].hook.hook( sender.ev, &ob[o], &Observer::onFunc0 );
+	}
+
+	axStopWatch	watch;
+
+	int a = 0;
+	for( size_t i=0; i<nCall; i++ ) {
+		sender.ev(a);
+	}
+
+	double time = watch.get();
+	ax_log_var( nObserver );
+	ax_log_var( nCall );
+	ax_log_var( Observer::called_count );
+	ax_log_var( time );
 	return 0;
 }
 
 axStatus do_test() {
     axStatus st;
-	st = test_event_hook();		if( !st ) return st;
-//	st = test_list();			if( !st ) return st;
-//	st = test_array();			if( !st ) return st;
-//	st = tiny_string_test();	if( !st ) return st;
+//	st = test_event_hook();			if( !st ) return st;
+	st = test_event_hook_call();	if( !st ) return st;
+//	st = test_list();				if( !st ) return st;
+//	st = test_array();				if( !st ) return st;
+//	st = tiny_string_test();		if( !st ) return st;
 	return 0;
 }
 

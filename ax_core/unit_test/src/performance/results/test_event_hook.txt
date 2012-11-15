@@ -1,13 +1,39 @@
-sigslot connect /disconnect performance
+==== sigslot connect /disconnect performance ====
 
 nLoop = 10
 nSender = 1000
 nObserver = 100
 count = 1000000
 
-Sigslot  using System malloc 			time = 3.9
-Sigslot  with dlmalloc				time = 0.234
+Sigslot  using System malloc 				time = 3.9
+Sigslot  with dlmalloc						time = 0.234
 Boost signal / bind   using System malloc	time = 19.656
 Boost signal / bind   with dlmalloc 		time = 16.661
 
-simple DList event hook			time=0.00544776
+axEvent										time = 0.00544776
+
+
+====== call test =======
+nObserver = 100
+nCall=100000
+
+sigslot										time = 0.686
+boost::signal/bind							time = 10.281
+
+axEvent										time = 0.240976
+
+
+
+do_test_sigslot_call
+nObserver=1000
+nCall=100000
+Observer::called_count=100000000
+time=0.702
+=========== End ===========
+
+
+do_test_boost_signal_call
+nCall=100000
+Observer::called_count=100000000
+time=10.219
+=========== End ===========
