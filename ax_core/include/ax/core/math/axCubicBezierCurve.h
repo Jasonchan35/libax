@@ -61,6 +61,13 @@ public:
 	}
 	
 	axArray< axVec2f, DIV+1 > vtx;
+	
+	axRect2f getRect() {
+		axRect2f r;
+		r.pos() = vtx[0];
+		r.setBottomRight( vtx[DIV] );
+		return r;
+	}
 };
 
 
