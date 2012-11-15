@@ -51,7 +51,7 @@ axStatus	axString_Array<T>::sortNoCase( bool ascending ) {
 }
 
 template< class T >
-axStatus	axString_Array<T> :: tokenize ( const T* sz, const T* seperators ) {
+axStatus	axString_Array<T> :: tokenize ( const T* sz, const T* seperators, const T* trim ) {
 	axStatus st;
 	B::resize(0);
 	
@@ -102,7 +102,13 @@ axStatus	axString_Array<T> :: tokenize ( const T* sz, const T* seperators ) {
 			started = true;
 		}
 	}
-	
+
+	if( trim ) {
+		for( size_t i=0; i<B::size(); i++ ) {
+			B::at(i).trimBoth( trim );
+		}
+	}
+		
 	return 0;
 }
 

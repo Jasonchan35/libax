@@ -35,7 +35,7 @@ public:
 	operator const	T*() const	{ return p_; }
 	
 	void operator= ( const	axObject<T> &src )		{ p_ = src.p_; }
-	axStatus	onTake( axObject &src ) 				{ p_ = src.p_; src.p_.unref(); return 0; }
+	axStatus	onTake( axObject &src ) 			{ p_ = src.p_; src.p_.unref(); return 0; }
 
 	axStatus	toStringFormat( axStringFormat &f ) const	{ return p_ ? axStringFormat_out(f,*p_) : f.out("null"); }
 
