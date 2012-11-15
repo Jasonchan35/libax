@@ -5,13 +5,16 @@
 
 template< class T >
 class axString_Array : public axArray< axString_<T, 32>, 16 > {
+	typedef axString_<T,32>	String;
 	typedef axArray< axString_<T, 32>, 16 > B;
 public:
+
+
 	axStatus	sortNoCase		( bool ascending = true );
 	bool		containsNoCase	( const T *sz ) const;
 	
 	axStatus	append			( const T *sz );
-	axStatus	tokenize 		( const T* sz, const T* seperators = axIString_<T>::defaultSeperators() );
+	axStatus	tokenize 		( const T* sz, const T* seperators = String::defaultSeperators(), const T* trim = NULL );
 
 };
 
