@@ -1,0 +1,13 @@
+sigslot connect /disconnect performance
+
+nLoop = 10
+nSender = 1000
+nObserver = 100
+count = 1000000
+
+Sigslot  using System malloc 			time = 3.9
+Sigslot  with dlmalloc				time = 0.234
+Boost signal / bind   using System malloc	time = 19.656
+Boost signal / bind   with dlmalloc 		time = 16.661
+
+simple DList event hook			time=0.00544776

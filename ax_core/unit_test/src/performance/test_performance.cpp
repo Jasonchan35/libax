@@ -349,10 +349,62 @@ axStatus do_test_cache_line( axArray<char> &v, int loop, size_t interval_max ) {
 	}
 	return 0;
 }
+
+class Sender {
+public:
+	axEventCaster<int>	ev;
+};
+
+class Observer {
+public:
+
+	axEventFunc< Observer, int >	hook;
+
+	void onFunc0( int& a ) {
+	}
+};
+
+axStatus test_event_hook() {
+	const size_t	nLoop		= 10;
+	const size_t	nSender		= 1000;
+	const size_t	nObserver	= 100;
+	
+	size_t	count = 0;
+	axStopWatch	watch;
+
+	for( size_t loop=0; loop<nLoop; loop++ ) {
+		
+		Sender		senders[ nSender ];
+		Observer	ob[ nObserver ];
+		
+		for( size_t s=0; s<nSender; ++s ) {
+			for( size_t o=0; o<nObserver; ++o ) {
+				count++;
+				ob[o].hook.hook( senders[s].ev, &ob[o], &Observer::onFunc0 );
+			}
+
+			for( size_t o=0; o<nObserver; ++o ) {
+				ob[o].hook.unhook();
+			}
+
+		}
+
+	}
+
+	double time = watch.get();
+	ax_log_var( nLoop );
+	ax_log_var( nSender );
+	ax_log_var( nObserver );
+	ax_log_var( count );
+	ax_log_var( time );	
+	return 0;
+}
+
 axStatus do_test() {
     axStatus st;
+	st = test_event_hook();		if( !st ) return st;
 //	st = test_list();			if( !st ) return st;
-	st = test_array();			if( !st ) return st;
+//	st = test_array();			if( !st ) return st;
 //	st = tiny_string_test();	if( !st ) return st;
 	return 0;
 }
