@@ -113,7 +113,7 @@ public:
 	axStatus		splitByChar				( T ch,         axIString_<T> &part1, axIString_<T> &part2 ) const;
 
 	axStatus		substring				( axSize start, axSize count, axIString_<T> &out ) const;
-
+	
 	void			toUpperCase				();
 	void			toLowerCase				();
 	
