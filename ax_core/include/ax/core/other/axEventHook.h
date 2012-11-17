@@ -25,10 +25,14 @@ template< class OBJ, class EV > class axEventFunc;
 template< class EV >
 class axEventHookBase : public axTinyListNode< axEventHookBase<EV>, false > {
 	typedef	axTinyListNode< axEventHookBase<EV>, false > B;
+
 public:
+	typedef	axEventCaster<EV>		Caster;
+	
 	virtual ~axEventHookBase() {}
 	virtual	void	call	( EV &ev ) = 0;
-			void	unhook	()				{ B::removeFromList(); }
+			void	unhook	()		{ B::removeFromList(); }
+			Caster*	caster	()		{ return (Caster*) B::list();   }
 };
 
 template< class EV >
@@ -59,6 +63,16 @@ public:
 			void	hook	( Caster &caster, OBJ *obj, Func func ) { B::unhook(); obj_=obj; func_=func; caster._hook(this); }	
 	virtual	void	call	( EV &ev )								{ (obj_->*func_)(ev); }
 	virtual ~axEventFunc	() {}
+	
+		axStatus	onTake( axEventFunc & src ) {
+			if( src.caster() ) {
+				hook( *src.caster(), src.obj_, src.func_ );
+				src.unhook();
+			}else{
+				B::unhook();
+			}
+			return 0;
+		}
 private:
 	OBJ*	obj_;
 	Func	func_;
