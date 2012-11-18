@@ -18,7 +18,7 @@ private:
 
 template<class T> inline
 T* axAtomicQueue<T>::takeHead() {
-	axScopeCondVar	cv; cv(cv_);
+	axScopeCondVar	cv(cv_);
 	T* p;
 	for(;;) {
 		p = q_.takeHead();
@@ -29,7 +29,7 @@ T* axAtomicQueue<T>::takeHead() {
 
 template<class T> inline
 T* axAtomicQueue<T>::takeHead( uint32_t waitMilliseconds ) {
-	axScopeCondVar	cv; cv(cv_);
+	axScopeCondVar	cv(cv_);
 	T* p;
 	for(;;) {
 		p = q_.takeHead();
@@ -44,7 +44,7 @@ T* axAtomicQueue<T>::takeHead( uint32_t waitMilliseconds ) {
 template<class T> inline
 void axAtomicQueue<T>::append( T* p ) {
 	if( !p ) return;
-	axScopeCondVar	cv; cv(cv_);
+	axScopeCondVar	cv(cv_);
 	q_.append( p );
 	cv.signal();
 }
