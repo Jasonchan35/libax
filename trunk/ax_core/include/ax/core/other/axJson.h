@@ -118,9 +118,9 @@ public:
 	
 	class Scope_JsonCondense : public axNonCopyable {
 	public:
-		~Scope_JsonCondense() { unbind(); }
+		Scope_JsonCondense	( axJsonWriter &w, bool b ) { bind(w,b); }
+		~Scope_JsonCondense	() { unbind(); }
 
-		void	operator() 	( axJsonWriter &w, bool b ) { bind(w,b); }
 		void	bind		( axJsonWriter &w, bool b ) { unbind(); w_=&w; old=w_->isCondense(); w_->setCondense(b); }
 		void 	unbind		() { if(w_) { w_->setCondense(old); w_=NULL; } }
 		

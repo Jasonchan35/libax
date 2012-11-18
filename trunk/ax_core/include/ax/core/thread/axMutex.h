@@ -36,10 +36,8 @@ protected:
 class axScopeMutex  : public axNonCopyable {
 public:
 	axScopeMutex	()						{ m_ = NULL; }
-//	axScopeMutex	( axMutex &mutex )		{ m_ = NULL; lock( mutex ); }
+	axScopeMutex	( axMutex &mutex )		{ m_ = NULL; lock( mutex ); }
 	~axScopeMutex	()						{ unlock(); }
-
-	void	operator()( axMutex &mutex )	{ lock(mutex); }
 	
 	void	lock	( axMutex &mutex )		{ unlock(); m_ = &mutex; m_->lock(); }
 	bool	tryLock	( axMutex &mutex )		{ unlock(); bool b = mutex.tryLock(); if(b) {m_ = &mutex; } return b; }
@@ -60,14 +58,20 @@ public:
         axMutex   p_;
     };
     
-	axMutexProtected( Data &data ) : data_( data ) { s_(data.p_); }
+	axMutexProtected( Data &data )
+		: data_( data )
+		, s_(data.p_)
+	{
+	}
+	
+	
 	T& operator*	()	{ return *data(); }
 	T* operator->	()	{ return data(); }
 	T* data			()	{ return (T*) &data_; }
     
 private:
-	axScopeMutex	s_;
 	Data &data_;
+	axScopeMutex	s_;
 };
 
 

@@ -89,14 +89,10 @@ public:
 template<class T>
 class axScopeValue : public axNonCopyable {
 public:
-	axScopeValue	()			{ p_ = NULL; }
-	~axScopeValue	() 			{ unbind(); }
-	
-	void	operator() 	( T &p ) 					{ bind(p); }
-	void	operator() 	( T &p, const T &newValue ) { bind(p, newValue); }
-	void	bind		( T &p  )					{ unbind(); p_=&p; old_=p; }
-	void	bind		( T &p, const T &newValue )	{ unbind(); p_=&p; old_=p; p=newValue; }
-	
+	axScopeValue	( T &p )					{ p_ = &p; old_=p; }
+	axScopeValue	( T &p, T newValue )		{ p_ = &p; old_=p; p=newValue; }
+	~axScopeValue	() 				{ unbind(); }
+		
 	void	unbind		()			{ if(p_) {*p_ = old_; p_=NULL; } }
 	void	rollback	()			{ if(p_) *p_  = old_; }
 	void	save		()			{ if(p_) old_ = *p_;  }
