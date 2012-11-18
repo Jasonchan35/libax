@@ -63,11 +63,11 @@ public:
 
 	T*		getNodeByIndex( axSize idx ) const;
 	
-	axALWAYS_INLINE( axSize	size	() const )	{ return _size_; }
-	axALWAYS_INLINE( T*		head	() const )	{ return _head_; }
-	axALWAYS_INLINE( T*		tail	() const )	{ return _tail_; }
+	axALWAYS_INLINE( 	axSize		size			() const )	{ return _size_; }
+	axALWAYS_INLINE( 	T*			head			() const )	{ return _head_; }
+	axALWAYS_INLINE( 	T*			tail			() const )	{ return _tail_; }
 
-	axALWAYS_INLINE( T*		takeHead	()	)		{ T* h = _head_; if (h) h->removeFromList(); return h; }
+	axALWAYS_INLINE( 	T*			takeHead		()	)		{ T* h = _head_; if (h) h->removeFromList(); return h; }
 
 	axALWAYS_INLINE(	void		insert			( T* node ) );
 	axALWAYS_INLINE(	void		insert			( T* node, T* before ) );
@@ -76,7 +76,7 @@ public:
 	axALWAYS_INLINE(	void		append			( T* node, T* after ) );
 	axALWAYS_INLINE(	void		appendByTake	( axDList<T> &src ) );
 	axALWAYS_INLINE(	axStatus	appendByCopy	( const axDList<T> &src ) );
-				
+	
 	axALWAYS_INLINE(	void		remove			( T* node, bool call_onWillRemoveFromList = true ) );
 	axALWAYS_INLINE(	void		clear			() );
 	
