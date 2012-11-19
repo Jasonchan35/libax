@@ -1,0 +1,109 @@
+log,  ==== cache line test ====
+log, type="uint8_t" size 134217728x1 = 128M  loop=4
+log,  memset                                           [time      0.053s]
+log,  Raw loop                                         [time      0.528s]
+log, [interleave               1] [row    134,217,728] [time      0.863s]       1.00 slower
+log, [interleave               2] [row     67,108,864] [time      0.718s]       0.83 slower
+log, [interleave               4] [row     33,554,432] [time      0.675s]       0.78 slower
+log, [interleave               8] [row     16,777,216] [time      0.772s]       0.89 slower
+log, [interleave              16] [row      8,388,608] [time      1.012s]       1.17 slower
+log, [interleave              32] [row      4,194,304] [time      1.940s]       2.25 slower
+log, [interleave              64] [row      2,097,152] [time      3.822s]       4.43 slower
+log, [interleave             128] [row      1,048,576] [time      7.379s]       8.55 slower
+log, [interleave             256] [row        524,288] [time      9.724s]      11.27 slower
+log, [interleave             512] [row        262,144] [time      7.721s]       8.95 slower
+log, [interleave           1,024] [row        131,072] [time      7.893s]       9.15 slower
+log, [interleave           2,048] [row         65,536] [time      8.196s]       9.50 slower
+log, [interleave           4,096] [row         32,768] [time      9.035s]      10.47 slower
+log, [interleave           8,192] [row         16,384] [time      9.480s]      10.99 slower
+log, [interleave          16,384] [row          8,192] [time     10.631s]      12.32 slower
+log, [interleave          32,768] [row          4,096] [time     10.694s]      12.39 slower
+log, [interleave          65,536] [row          2,048] [time      7.333s]       8.50 slower
+log, [interleave         131,072] [row          1,024] [time      6.905s]       8.00 slower
+log, [interleave         262,144] [row            512] [time      7.090s]       8.22 slower
+log, [interleave         524,288] [row            256] [time      7.477s]       8.66 slower
+log, [interleave       1,048,576] [row            128] [time      8.367s]       9.70 slower
+log, [interleave       2,097,152] [row             64] [time      8.429s]       9.77 slower
+log, [interleave       4,194,304] [row             32] [time      6.433s]       7.46 slower
+log, [interleave       8,388,608] [row             16] [time      6.207s]       7.19 slower
+log, [interleave      16,777,216] [row              8] [time      2.721s]       3.15 slower
+log, [interleave      33,554,432] [row              4] [time      0.743s]       0.86 slower
+log, [interleave      67,108,864] [row              2] [time      0.684s]       0.79 slower
+==== return (0:OK) ====
+
+
+Open 2 at the same time
+1: 
+log,  ==== cache line test ====
+log, type="uint8_t" size 134217728x1 = 128M  loop=4
+log,  memset                                           [time      0.041s]
+log,  Raw loop                                         [time      0.408s]
+log, [interleave               1] [row    134,217,728] [time      0.717s]       1.00 slower
+log, [interleave               2] [row     67,108,864] [time      0.650s]       0.91 slower
+log, [interleave               4] [row     33,554,432] [time      0.714s]       1.00 slower
+log, [interleave               8] [row     16,777,216] [time      1.054s]       1.47 slower
+log, [interleave              16] [row      8,388,608] [time      1.947s]       2.71 slower
+log, [interleave              32] [row      4,194,304] [time      3.878s]       5.41 slower
+log, [interleave              64] [row      2,097,152] [time      7.418s]      10.34 slower
+log, [interleave             128] [row      1,048,576] [time     11.528s]      16.07 slower
+log, [interleave             256] [row        524,288] [time     14.562s]      20.30 slower
+log, [interleave             512] [row        262,144] [time     12.020s]      16.75 slower
+log, [interleave           1,024] [row        131,072] [time     10.015s]      13.96 slower
+log, [interleave           2,048] [row         65,536] [time     10.027s]      13.98 slower
+log, [interleave           4,096] [row         32,768] [time     10.292s]      14.35 slower
+log, [interleave           8,192] [row         16,384] [time     11.173s]      15.57 slower
+log, [interleave          16,384] [row          8,192] [time     14.778s]      20.60 slower
+log, [interleave          32,768] [row          4,096] [time     15.091s]      21.04 slower
+log, [interleave          65,536] [row          2,048] [time      8.170s]      11.39 slower
+log, [interleave         131,072] [row          1,024] [time      7.137s]       9.95 slower
+log, [interleave         262,144] [row            512] [time      7.325s]      10.21 slower
+log, [interleave         524,288] [row            256] [time      7.757s]      10.81 slower
+log, [interleave       1,048,576] [row            128] [time      8.668s]      12.08 slower
+log, [interleave       2,097,152] [row             64] [time      8.779s]      12.24 slower
+log, [interleave       4,194,304] [row             32] [time      6.541s]       9.12 slower
+log, [interleave       8,388,608] [row             16] [time      6.304s]       8.79 slower
+log, [interleave      16,777,216] [row              8] [time      2.798s]       3.90 slower
+log, [interleave      33,554,432] [row              4] [time      0.761s]       1.06 slower
+log, [interleave      67,108,864] [row              2] [time      0.696s]       0.97 slower
+==== return (0:OK) ====
+
+2:
+
+log,  ==== cache line test ====
+log, type="uint8_t" size 134217728x1 = 128M  loop=4
+log,  memset                                           [time      0.053s]
+log,  Raw loop                                         [time      0.537s]
+log, [interleave               1] [row    134,217,728] [time      0.871s]       1.00 slower
+log, [interleave               2] [row     67,108,864] [time      0.727s]       0.84 slower
+log, [interleave               4] [row     33,554,432] [time      0.686s]       0.79 slower
+log, [interleave               8] [row     16,777,216] [time      0.891s]       1.02 slower
+log, [interleave              16] [row      8,388,608] [time      1.769s]       2.03 slower
+log, [interleave              32] [row      4,194,304] [time      3.609s]       4.14 slower
+log, [interleave              64] [row      2,097,152] [time      7.261s]       8.34 slower
+log, [interleave             128] [row      1,048,576] [time     11.759s]      13.50 slower
+log, [interleave             256] [row        524,288] [time     14.790s]      16.98 slower
+log, [interleave             512] [row        262,144] [time     12.394s]      14.23 slower
+log, [interleave           1,024] [row        131,072] [time     10.162s]      11.67 slower
+log, [interleave           2,048] [row         65,536] [time     10.071s]      11.56 slower
+log, [interleave           4,096] [row         32,768] [time     10.256s]      11.77 slower
+log, [interleave           8,192] [row         16,384] [time     11.158s]      12.81 slower
+log, [interleave          16,384] [row          8,192] [time     14.777s]      16.96 slower
+log, [interleave          32,768] [row          4,096] [time     15.129s]      17.37 slower
+log, [interleave          65,536] [row          2,048] [time      8.314s]       9.54 slower
+log, [interleave         131,072] [row          1,024] [time      7.091s]       8.14 slower
+log, [interleave         262,144] [row            512] [time      7.283s]       8.36 slower
+log, [interleave         524,288] [row            256] [time      7.690s]       8.83 slower
+log, [interleave       1,048,576] [row            128] [time      8.599s]       9.87 slower
+log, [interleave       2,097,152] [row             64] [time      8.741s]      10.03 slower
+log, [interleave       4,194,304] [row             32] [time      6.711s]       7.70 slower
+log, [interleave       8,388,608] [row             16] [time      6.348s]       7.29 slower
+log, [interleave      16,777,216] [row              8] [time      2.808s]       3.22 slower
+log, [interleave      33,554,432] [row              4] [time      0.762s]       0.87 slower
+log, [interleave      67,108,864] [row              2] [time      0.702s]       0.81 slower
+==== return (0:OK) ====
+
+
+vm:
+
+
+
