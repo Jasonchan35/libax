@@ -19,8 +19,11 @@ public:
 	axTinyListNode();
 	~axTinyListNode()		{ removeFromList(); }
 
-	axALWAYS_INLINE( T*	prev() )	{ return _prev_; }
-	axALWAYS_INLINE( T*	next() )    { return _next_; }
+	axALWAYS_INLINE(		 T*	prev()			)	{ return _prev_; }
+	axALWAYS_INLINE(		T*	next()			)   { return _next_; }
+
+	axALWAYS_INLINE( const	T*	prev() const	)	{ return _prev_; }
+	axALWAYS_INLINE( const	T*	next() const	)   { return _next_; }
 
 	axTinyList<T>*	list() const				{ return (axTinyList<T>*) _list_; }
 
@@ -52,6 +55,18 @@ public:
 	axALWAYS_INLINE( void		insert	( T* node )	);
 	axALWAYS_INLINE( void		remove	( T* node, bool call_onWillRemoveFromList = true ) );
 	axALWAYS_INLINE( axStatus	onTake	( axTinyList<T> &src ) );
+
+	axStatus	toStringFormat( axStringFormat &f ) const {
+		const T* p = _head_;
+		f.out("[");
+		size_t i = 0;
+		for( ; p; p=p->next() ) {
+			if( i > 0 ) f.out(", ");
+			f.format("{?}", *p );
+		}
+		f.out("]");
+		return 0;
+	}
 
 private:
 	T*	_head_;

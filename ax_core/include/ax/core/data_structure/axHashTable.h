@@ -25,9 +25,13 @@ class axHashTable_List : public axTinyList<T> {
 	typedef axTinyList<T>       B;
     typedef axHashTable<T>      Table;
 public:
-    axHashTable_List()          { node_.This = this; }
+    axHashTable_List()          {}
     ~axHashTable_List()         { B::clear(); }
     
+	axStatus	toStringFormat( axStringFormat &f ) const {
+		return f.format("{?}\n", *(B*)this );
+	}
+
 friend class axHashTable<T>;
 friend class axHashTableNode<T,true>;
 friend class axHashTableNode<T,false>;
@@ -37,12 +41,13 @@ protected:
     
     Table*  table_;    
     
-    class   Node : public axDListNode< Node, false> {
-        typedef axDListNode< Node, false > B;
+    class   InTable : public axDListNode< InTable, false> {
+        typedef axDListNode< InTable, false > B;
+		typedef	axHashTable_List<T> Owner;
     public:
-        axHashTable_List<T> *This;
+		Owner* getOwner() { return ax_class_of( &Owner::inTable_, this ); }
     };
-    Node    node_;
+    InTable   inTable_;
 };
 
 //----------------------------
@@ -69,13 +74,21 @@ public:
     axSize      tableSize   () const			{ return table_.size(); }
 
 
-	class Iterator : public axNonCopyable {
-		public:
+	axStatus	toStringFormat( axStringFormat &f ) const {
+		return f.format("{?}", table_ );
+	}
 
-		Iterator ( const axHashTable &table ) : table_(table)		{ reset(); }
+	class Iterator : public axNonCopyable {
+		typedef	axHashTable_List<T>	List;
+	public:
+
+		Iterator ( axHashTable &table ) : table_(table)		{ reset(); }
 
 		void	reset	();
 		bool	goNext	();
+
+		void	operator++()			{ goNext(); }
+		void	operator++(int)			{ goNext(); }
 
 			  Node* node()				{ return  p_; }
 		const Node* node() const		{ return  p_; }
@@ -90,9 +103,9 @@ public:
 		operator const Node*() const	{ return  p_; }
 
 	private:
-		const axHashTable		&table_;
-		axHashTable_List<T>*	list_;
-		Node*                   p_;
+		const axHashTable	&table_;
+		List*				list_;
+		Node*				p_;
 	};
 
 friend class axHashTable_List<T>;
@@ -102,7 +115,7 @@ protected:
     
 private:
    	axArray< List >  table_;
-    axDList< typename axHashTable_List<T>::Node >   nonEmptyList_;
+    axDList< typename axHashTable_List<T>::InTable >   nonEmptyList_;
 	axSize		nodeCount_;
 
 	axStatus	getList( List* & list, uint32_t hash )   { 
@@ -173,7 +186,7 @@ void axHashTable<T>::clear() {
 template < class T >
 void axHashTable_List<T> :: insert( T* item ) {
 	if( ! B::head() ) {
-        table_->nonEmptyList_.insert( &node_ );
+        table_->nonEmptyList_.insert( &inTable_ );
     }
     B::insert(item);
 	table_->_incNodeCount();
@@ -184,16 +197,15 @@ void axHashTable_List<T> :: remove( T* item ) {
     B::remove(item);
 	table_->_decNodeCount();
 	if( ! B::head() ) {//only remove from nonEmptyList when no more node
-		table_->nonEmptyList_.remove( &node_ );
+		table_->nonEmptyList_.remove( &inTable_ );
     }
 }
 
 template< class T >
 void axHashTable<T> :: Iterator :: reset() {
-	list_ = table_.nonEmptyList_.head()->This; 
+	list_ = table_.nonEmptyList_.head()->getOwner(); 
 	p_ = list_ ? list_->head() : NULL;
 }
-
 
 template< class T >
 bool axHashTable<T> :: Iterator :: goNext() {
@@ -203,9 +215,11 @@ bool axHashTable<T> :: Iterator :: goNext() {
 	}
 
 	if( ! list_ ) return false;
-	if( ! list_->node_.next() ) return false;
-	list_ = list_->node_.next()->This;
-    
+
+	List::InTable* p = list_->inTable_.next();
+	if( !p ) return false;
+
+	list_ = p->getOwner();
 	if( ! list_ ) return false;
 
 	p_ = list_->head();

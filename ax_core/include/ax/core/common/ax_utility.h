@@ -15,6 +15,15 @@ template<class T> inline T& ax_const_cast( const T& v ) { return const_cast<T&>(
 
 #define	ax_this	ax_const_cast(this)
 
+template<class Class, typename Type > inline
+size_t	ax_offsetof( Type Class::*PtrToMember ) { return offsetof( Class, *PtrToMember ); }
+
+
+template< class Class, typename Type > inline
+Class*	ax_class_of( Type Class::*PtrToMember, Type *p ) {
+	return (Class*)( (char*)p - ax_offsetof( PtrToMember ) );
+}
+
 
 template<class T> inline bool ax_is_memory_overlapped( const T* a, size_t a_size, const T* b, size_t b_size ) {
 	return (a + a_size >= b) && (a < b + b_size ); 
