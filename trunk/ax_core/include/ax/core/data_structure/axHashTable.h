@@ -216,7 +216,7 @@ bool axHashTable<T> :: Iterator :: goNext() {
 
 	if( ! list_ ) return false;
 
-	List::InTable* p = list_->inTable_.next();
+	typename List::InTable* p = list_->inTable_.next();
 	if( !p ) return false;
 
 	list_ = p->getOwner();
