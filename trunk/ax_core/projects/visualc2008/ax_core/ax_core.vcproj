@@ -746,6 +746,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\include\ax\core\data_structure\axTinyMap.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\ax\core\data_structure\axWeakPtr.h"
 					>
 				</File>
