@@ -26,11 +26,15 @@ public:
 	axDListNode();
 	~axDListNode()                              { removeFromList(); }
 
-	axALWAYS_INLINE( T*	prev() )                { return _prev_; }
-	axALWAYS_INLINE( T*	next() )                { return _next_; }
+	axALWAYS_INLINE( 		T*	prev() 				) { return _prev_; }
+	axALWAYS_INLINE( 		T*	next() 				) { return _next_; }
+
+	axALWAYS_INLINE( const	T*	prev() const 		) { return _prev_; }
+	axALWAYS_INLINE( const	T*	next() const 		) { return _next_; }
 	
-	axALWAYS_INLINE( void toListHead	() )	{ axDList<T>* a=list(); if(a){ a->remove((T*)this); a->insert((T*)this); } }
-	axALWAYS_INLINE( void toListTail	() )	{ axDList<T>* a=list(); if(a){ a->remove((T*)this); a->append((T*)this); } }
+	
+	axALWAYS_INLINE( void 		toListHead	() 		) { axDList<T>* a=list(); if(a){ a->remove((T*)this); a->insert((T*)this); } }
+	axALWAYS_INLINE( void 		toListTail	() 		) { axDList<T>* a=list(); if(a){ a->remove((T*)this); a->append((T*)this); } }
 
 	axDList<T>*	list() const                    { return (axDList<T>*) _list_; }
 	void*		listOwner() const				{ return list() ? list()->owner() : NULL; }
