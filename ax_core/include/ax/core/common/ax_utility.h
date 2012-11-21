@@ -15,13 +15,13 @@ template<class T> inline T& ax_const_cast( const T& v ) { return const_cast<T&>(
 
 #define	ax_this	ax_const_cast(this)
 
-#ifdef axCOMPILER_VC
-	template<class Class, typename Type > inline
-	size_t	ax_offsetof( Type Class::*PtrToMember ) { return offsetof( Class, *PtrToMember ); }
-#else
-	template<class Class, typename Type > inline
-	size_t	ax_offsetof( Type Class::*PtrToMember ) { return offsetof( Class, PtrToMember ); }
-#endif
+#define ax_offsetof_macro(st, m) \
+	((size_t) ( (char *)&((st *)0)->*m - (char *)0 ))
+
+template<class Class, typename Type>
+size_t	ax_offsetof( Type Class::*PtrToMember ) {
+	return (char*)&( ( (Class*)0 )->*PtrToMember ) - (char*)0;
+}
 
 template< class Class, typename Type > inline
 Class*	ax_class_of( Type Class::*PtrToMember, Type *p ) {

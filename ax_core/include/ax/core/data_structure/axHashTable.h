@@ -29,7 +29,7 @@ public:
     ~axHashTable_List()         { B::clear(); }
     
 	axStatus	toStringFormat( axStringFormat &f ) const {
-		return f.format("{?}\n", *(B*)this );
+		return B::toStringFormat(f);
 	}
 
 friend class axHashTable<T>;
@@ -39,10 +39,10 @@ protected:
 	void insert ( T* item );
 	void remove ( T* item );
     
-    Table*  table_;    
+    Table*  table_;
     
-    class   InTable : public axDListNode< InTable, false> {
-        typedef axDListNode< InTable, false > B;
+    class   InTable : public axTinyListNode< InTable, false> {
+        typedef axTinyListNode< InTable, false > B;
 		typedef	axHashTable_List<T> Owner;
     public:
 		Owner* getOwner() { return ax_class_of( &Owner::inTable_, this ); }
@@ -61,18 +61,17 @@ public:
 	axHashTable();
     ~axHashTable();
 
-	T*          getListHead ( uint32_t hash )   { List* list; axStatus st = getList( list, hash ); return st ? list->head() : NULL; }
+	T*          getListHead ( uint32_t hash )   { List* list = getList( hash ); return list ? list->head() : NULL; }
 
-	axStatus	insert		( T* item )			{ List* list; axStatus st = getList( list, item->hashTableValue() ); if( !st ) return st; list->insert( item ); return 0; }
-	axStatus	remove		( T* item )			{ List* list; axStatus st = getList( list, item->hashTableValue() ); if( !st ) return st; list->remove( item ); return 0; }
+	axStatus	insert		( T* item );
+	axStatus	remove		( T* item )			{ List* list = getList( item->hashTableValue() ); return list ? list->remove( item ) : -1; }
 
 	void        clear       ();
-    
-	axSize      nodeCount   () const			{ return nodeCount_; }
 
 	axStatus	setTableSize( axSize table_size );	
     axSize      tableSize   () const			{ return table_.size(); }
 
+	axSize      nodeCount   () const			{ return nodeCount_; }
 
 	axStatus	toStringFormat( axStringFormat &f ) const {
 		return f.format("{?}", table_ );
@@ -103,9 +102,9 @@ public:
 		operator const Node*() const	{ return  p_; }
 
 	private:
-		const axHashTable	&table_;
-		List*				list_;
-		Node*				p_;
+		axHashTable	&table_;
+		List*		list_;
+		Node*		p_;
 	};
 
 friend class axHashTable_List<T>;
@@ -114,19 +113,14 @@ protected:
 	void	_incNodeCount() { nodeCount_++; }
     
 private:
-   	axArray< List >  table_;
-    axDList< typename axHashTable_List<T>::InTable >   nonEmptyList_;
+
+   	axArray< List, 1 >  table_;
+    axTinyList< typename axHashTable_List<T>::InTable >   nonEmptyList_;
 	axSize		nodeCount_;
 
-	axStatus	getList( List* & list, uint32_t hash )   { 
-		axStatus st;
-		if( table_.size() == 0 ) { 
-			st = setTableSize( 64 ); 
-			list = NULL;
-			if( !st ) return st;
-		}
-		list = &table_[ hash % table_.size() ]; 
-		return 0;
+	List*	getList( uint32_t hash )   {
+		if( table_.size() == 0 ) return NULL;
+		return &table_[ hash % table_.size() ];
 	}
 };
 
@@ -174,6 +168,24 @@ axStatus axHashTable<T>::setTableSize( axSize table_size ) {
     }
 	return 0;
 }
+
+template < class T > inline
+axStatus axHashTable<T>::insert	 ( T* item ) {
+	axStatus st;
+	if( tableSize() == 0 ) {
+		st = setTableSize(1);		if( !st ) return st;
+	}else{
+		if( tableSize() < ( nodeCount_ >> 3 ) + 1 ) {
+			st = setTableSize( nodeCount_ >> 2 );	if( !st ) return st;
+		}
+	}
+
+	List* list = getList( item->hashTableValue() );
+	list->insert( item );
+	
+	return 0;
+}
+
 
 template < class T >
 void axHashTable<T>::clear() {
