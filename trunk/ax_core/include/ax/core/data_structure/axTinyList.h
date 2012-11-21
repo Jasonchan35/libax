@@ -49,8 +49,11 @@ public:
 
 	void	clear		();
 
-	axALWAYS_INLINE( T*	head		() )	{ return _head_; }
-	axALWAYS_INLINE( T*	takeHead	() )	{ T* h = _head_; if (h) h->removeFromList(); return h; }
+	axALWAYS_INLINE( 		T*	head		() )	{ return _head_; }
+	axALWAYS_INLINE( const	T*	head		() const	)	{ return _head_; }
+
+
+	axALWAYS_INLINE( 		T*	takeHead	() )	{ T* h = _head_; if (h) h->removeFromList(); return h; }
 
 	axALWAYS_INLINE( void		insert	( T* node )	);
 	axALWAYS_INLINE( void		remove	( T* node, bool call_onWillRemoveFromList = true ) );
@@ -60,7 +63,7 @@ public:
 		const T* p = _head_;
 		f.out("[");
 		size_t i = 0;
-		for( ; p; p=p->next() ) {
+		for( ; p; p=p->next(), i++ ) {
 			if( i > 0 ) f.out(", ");
 			f.format("{?}", *p );
 		}

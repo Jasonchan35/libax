@@ -142,7 +142,7 @@ public:
 
 		bool		isMemoryOverlapped		( const T* p, axSize n ) const	{ return buf_.isMemoryOverlapped(p,n); }
 
-	axStatus		onTake					( axIString_ &src ) { return set( src.c_str() ); }
+	axStatus		onTake					( axIString_ &src ) { return ax_take( buf_, src.buf_ ); }
 
 protected:
 	axIArray<T>&	buf_;
