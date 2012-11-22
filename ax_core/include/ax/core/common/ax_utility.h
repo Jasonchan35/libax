@@ -18,7 +18,7 @@ template<class T> inline T& ax_const_cast( const T& v ) { return const_cast<T&>(
 #define ax_offsetof_macro(st, m) \
 	((size_t) ( (char *)&((st *)0)->*m - (char *)0 ))
 
-template<class Class, typename Type>
+template<class Class, typename Type> inline
 size_t	ax_offsetof( Type Class::*PtrToMember ) {
 	return (char*)&( ( (Class*)0 )->*PtrToMember ) - (char*)0;
 }
