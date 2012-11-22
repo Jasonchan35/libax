@@ -64,7 +64,7 @@ public:
 	T*          getListHead ( uint32_t hash )   { List* list = getList( hash ); return list ? list->head() : NULL; }
 
 	axStatus	insert		( T* item );
-	axStatus	remove		( T* item )			{ List* list = getList( item->hashTableValue() ); return list ? list->remove( item ) : -1; }
+	axStatus	remove		( T* item )			{ List* list = getList( item->hashTableValue() ); if( ! list ) return -1; list->remove( item ); return 0; }
 
 	void        clear       ();
 
