@@ -3,6 +3,7 @@
 
 #include "axVec2.h"
 #include "axMatrix4.h"
+#include "axMargin2.h"
 
 //! \addtogroup math
 //@{
@@ -91,6 +92,9 @@ public:
 
 	void		operator *= ( const axMatrix4<T> &m )		{ *this = *this * m; }
 	axRect2<T>	operator *  ( const axMatrix4<T> &m	) const;
+	
+	
+	axRect2<T>	operator -  ( const axMargin2<T> &m ) const	{ return axRect2<T>( pos() + m.topLeft(), size() - m.both() ); };
 	
 	bool		isOverlap	( const axRect2<T> &r ) const;
 	bool		intersectOf	( axRect2<T> &a, axRect2<T> &b ) const;
