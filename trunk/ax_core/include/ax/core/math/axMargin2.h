@@ -23,8 +23,8 @@ public:
 	T			vertical	() const							{ return top+bottom; }
 	axVec2<T>	both		() const							{ return axVec2<T>( horizontal(), vertical() ); }
 
-	axVec2<T>	leftTop		() const							{ return axVec2<T>( left, top ); }
-	axVec2<T>	rightBottom	() const							{ return axVec2<T>( right, bottom ); }
+	axVec2<T>	topLeft		() const							{ return axVec2<T>( left, top ); }
+	axVec2<T>	bottomRight	() const							{ return axVec2<T>( right, bottom ); }
 	
 	
 	T	top, bottom, left, right;
