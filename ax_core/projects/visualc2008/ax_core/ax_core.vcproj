@@ -962,6 +962,50 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="platform"
+				>
+				<File
+					RelativePath="..\..\..\include\ax\core\platform\ax_compiler_gcc.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\ax\core\platform\ax_compiler_vc.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\ax\core\platform\ax_os_android.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\ax\core\platform\ax_os_freebsd.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\ax\core\platform\ax_os_iOS.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\ax\core\platform\ax_os_linux.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\ax\core\platform\ax_os_mac.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\ax\core\platform\ax_os_unix.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\ax\core\platform\ax_os_win.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\ax\core\platform\ax_platform.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
