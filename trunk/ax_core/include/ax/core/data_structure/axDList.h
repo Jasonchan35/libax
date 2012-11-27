@@ -80,7 +80,8 @@ public:
 	axALWAYS_INLINE(	void		append			( T* node, T* after ) );
 	axALWAYS_INLINE(	void		appendByTake	( axDList<T> &src ) );
 	axALWAYS_INLINE(	axStatus	appendByCopy	( const axDList<T> &src ) );
-	
+	axALWAYS_INLINE(	axStatus	copy			( const axDList<T> &src ) ) { clear(); return appendByCopy( src ); }
+		
 	axALWAYS_INLINE(	void		remove			( T* node, bool call_onWillRemoveFromList = true ) );
 	axALWAYS_INLINE(	void		clear			() );
 	
