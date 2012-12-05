@@ -58,6 +58,9 @@ public:
 	typedef	axConnectionList<T>		List;
 	~axConnection();
 	
+	void removeFromList();
+	bool isInList();
+	
 	class Input : public axNonCopyable {
 	public:
 		Input() : prev_(NULL), next_(NULL), list_(NULL) {}
@@ -109,9 +112,22 @@ protected:
 
 template<class T> inline
 axConnection<T> :: ~axConnection() {
+	removeFromList();
+}
+
+template<class T> inline
+void axConnection<T> :: removeFromList() {
 	if( input.list_  ) input.list_ ->remove( (T*)this );
 	if( output.list_ ) output.list_->remove( (T*)this );
 }
+
+template<class T> inline
+bool axConnection<T> :: isInList() {
+	if( input.list_ || output.list_ ) return true;
+	return false;
+}
+
+
 
 template<class T> inline
 void axConnectionList<T>::Output :: insert( T* conn ) {
