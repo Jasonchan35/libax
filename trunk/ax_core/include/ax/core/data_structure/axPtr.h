@@ -32,6 +32,9 @@ public:
 	void		deleteObject()			{ if( p_ ) { delete p_; p_=NULL; } }
 	
 	void		setPtr( T* p )			{ p_ = p; }
+	
+	T* &		ptrRef()				{ return p_; }
+	
 private:
 	T* p_;
 };

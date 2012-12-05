@@ -6,7 +6,7 @@
 //! timestamp - UTC millisecond based on Unix epoch ( 1970-01-01 )
 class axTimeStamp {
 public:
-	axTimeStamp ()										{ second_ = 0; }
+	axTimeStamp ()										{ now(); }
 	axTimeStamp	( double second )						{ second_ = second; }
 
 	void	setSecond	( double second )				{ second_  = second; }
