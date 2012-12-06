@@ -72,7 +72,8 @@ public:
 class axJsonWriter : public axJsonWriterBase {
 	typedef axJsonWriterBase B;
 public:
-	template<class T>	axStatus io	( T& value, const char* name )	{ 
+	template<class T>	axStatus io_vary( T& value, const char* name )	{ return io(value,name); }
+	template<class T>	axStatus io		( T& value, const char* name )	{
 		axStatus st;
 		if( ! name|| ! name[0] ) return axStatus_Std::JsonParser_format_error;
 		st = member( name );		if( !st ) return st;
@@ -162,7 +163,8 @@ public:
 		return 0;
 	}
 	
-	template<class T>	axStatus io	( T& value, const char* name )	{ 
+	template<class T>	axStatus io_vary( T& value, const char* name )	{ return io(value,name); }	
+	template<class T>	axStatus io		( T& value, const char* name )	{
 		axStatus st;
 		if( ! name ) return axStatus_Std::JsonParser_format_error;
 		

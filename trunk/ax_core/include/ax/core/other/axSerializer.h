@@ -13,6 +13,11 @@
 	st = s.io( value, #value ); 	if( !st ) return st;
 //-------------
 
+#define ax_io_vary( value ) \
+	st = s.io_vary( value, #value ); 	if( !st ) return st;
+//-------------
+
+
 #define ax_io_named( value, name ) \
 	st = s.io( value, name ); 	if( !st ) return st;
 //-------------
@@ -115,6 +120,7 @@ public:
 	}
 	
 	template<class T>	axStatus io			( T& value, const char* name ) { return io(value); }
+	template<class T>	axStatus io_vary	( T& value, const char* name ) { return io_vary(value); }
 	
 	template<class T>	axStatus io_value	( T& value )	{ return ax_serialize_io		( *this, value ); }	
 	template<class T>	axStatus io			( T& value )	{ return ax_serialize_io		( *this, value ); }
@@ -164,6 +170,7 @@ public:
 	axStatus getLine( axIStringW	&str );
 
 	template<class T>	axStatus io			( T& value, const char* name ) { return io(value); }
+	template<class T>	axStatus io_vary	( T& value, const char* name ) { return io_vary(value); }
 	
 	template<class T>	axStatus io_value	( T& value )	{ return ax_serialize_io		( *this, value ); }	
 	template<class T>	axStatus io			( T& value )	{ return ax_serialize_io		( *this, value ); }
