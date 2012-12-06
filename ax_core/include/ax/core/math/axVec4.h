@@ -79,7 +79,7 @@ public:
 	T			dot			( const axVec4 &v ) const		{ return (x*v.x) + (y*v.y) + (z*v.z) + (w*v.w); }
 	T			average		() const						{ return (x + y + z + w) / (T)4; }
 
-	template<class D>	axVec4<D>	to_Vec4	() const { return axVec4<D>( (T)x, (T)y, (T)z, (T)w ); }
+	template<class D>	axVec4<D>	to_Vec4	() const { return axVec4<D>( (D)x, (D)y, (D)z, (D)w ); }
 
 						axVec3<T>	to_Vec3	() const;
 	template<class S>	axStatus	serialize_io	( S &se );
