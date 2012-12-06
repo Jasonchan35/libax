@@ -29,12 +29,13 @@
 
 /*
 #include "../../external/glew/glew.h"
-
 #include <GL/gl.h>
 #include <GL/glu.h>
+*/
+
 #define	axUSE_OpenGL        1
 #define	axUSE_OpenGL_ShadingProgram		1
-*/
+
 
 #ifdef axCOMPILER_VC
 	#pragma comment( lib, "ws2_32.lib" )
