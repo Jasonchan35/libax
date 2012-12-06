@@ -99,7 +99,7 @@ public:
 
 	axVec2		dir			( const axVec2 &v ) const		{ return (*this - v).normalize(); }
 	
-	template<class D>	axVec2<D>	to_Vec2 () const { return axVec2<D>( (T)x, (T)y ); }
+	template<class D>	axVec2<D>	to_Vec2 () const { return axVec2<D>( (D)x, (D)y ); }
 	
 						axStatus	onTake	( axVec2<T> &b )				{ *this = b; return 0; }
 

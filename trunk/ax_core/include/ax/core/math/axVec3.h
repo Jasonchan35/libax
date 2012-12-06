@@ -105,7 +105,7 @@ public:
 	T			angle		        ( const axVec3 &v );
 	bool		isInTriangle		( const axVec3 &v0, const axVec3 &v1, const axVec3 &v2 ) const;
 
-	template<class D>	axVec3<D>	to_Vec3 () const { return axVec3<D>( (T)x, (T)y, (T)z ); }
+	template<class D>	axVec3<D>	to_Vec3 () const { return axVec3<D>( (D)x, (D)y, (D)z ); }
 
 	template<class S>	axStatus	serialize_io	( S &se );
 						

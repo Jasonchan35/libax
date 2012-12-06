@@ -454,6 +454,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\math\axVec2.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\ax\core\math\axVec2.h"
 					>
 				</File>
