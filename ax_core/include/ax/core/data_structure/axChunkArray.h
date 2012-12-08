@@ -6,7 +6,6 @@
 #include "axAutoPtr.h"
 
 
-
 //! Chunk Array
 //! - The memory address of element will always the same
 //! - cannot using as axIArray, because the memory is not in linear
@@ -53,24 +52,26 @@ axSize	axChunkArray<T,CHUNK_SIZE,CHUNK_PTR_LOCAL_BUF>::size() const {
 
 template<class T, size_t CHUNK_SIZE, size_t CHUNK_PTR_LOCAL_BUF> inline
 axStatus axChunkArray<T,CHUNK_SIZE,CHUNK_PTR_LOCAL_BUF>::resize(axSize newSize) {
+
 	axStatus st;
 	if( newSize == size_ ) return 0;
 	if( newSize == 0 ) {
 		chunks_.resize(0);
 		chunks_.shrink(0);
 	}else{
-		size_t d = newSize / CHUNK_SIZE;
-		size_t r = newSize % CHUNK_SIZE;
+		size_t d = (newSize-1) / CHUNK_SIZE;
+		size_t r = (newSize-1) % CHUNK_SIZE;
+		size_t od = chunks_.size();
+		
 		st = chunks_.resize(d+1);		if( !st ) return st;
 		st = chunks_.shrink(0);			if( !st ) return st;
 		
-		size_t od = size_ / CHUNK_SIZE;
 		for( size_t i=od; i<d; i++ ) {
-			st = chunks_[i].newObject();			if( !st ) return st;
+			st = chunks_[i].newObjectIfNull();		if( !st ) return st;
 			st = chunks_[i]->resize(CHUNK_SIZE);	if( !st ) return st;
 		}
 		st = chunks_[d].newObjectIfNull();			if( !st ) return st;
-		st = chunks_[d]->resize(r);					if( !st ) return st;
+		st = chunks_[d]->resize(r+1);				if( !st ) return st;
 	}
 	size_ = newSize;
 	return 0;

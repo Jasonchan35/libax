@@ -322,6 +322,7 @@ axStatus	axIArray<T>::incSizeAndFill( axSize n, const T& value ) {
 
 template< class T > inline
 axStatus	axIArray<T>::resize( axSize new_size, bool keep_data ) {
+	if( new_size == size_ ) return 0;
 	axSize old_size = size_;
 	axStatus st;
 	if( size_ ) {
