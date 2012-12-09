@@ -185,7 +185,7 @@ void axDList<T>::insert( T *node, T *before ) {
 		before->_prev_->_next_ = node;
 	}
 
-	node->_prev_ = before->prev_;
+	node->_prev_ = before->_prev_;
 	node->_next_ = before;
 	node->_list_ = this;
 
