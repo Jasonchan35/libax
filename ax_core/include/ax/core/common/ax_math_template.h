@@ -22,7 +22,7 @@ template<class T> inline T ax_sign( T a )					{ if( a == 0 ) return 0; return ax
 #undef axTYPE_LIST
 
 template<class T> inline T ax_abs ( T a )       { return a>0 ? a : -a ; } 
-template<class T> inline T ax_abs_it( T &a )	{ a = ax_abs(a); }
+template<class T> inline void ax_abs_it( T &a )	{ a = ax_abs(a); }
 
 template<class T> inline T ax_min ( T a, T b )						{ return (a<b)?a:b; }
 template<class T> inline T ax_max ( T a, T b )						{ return (a>b)?a:b; }
