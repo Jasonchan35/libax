@@ -255,7 +255,7 @@ private:
 template<class T> inline
 axStatus	ax_to_json  ( axIStringA &json, const T & v, bool condense = true, const char* indent = " " ) {
 	axJsonWriter	s( json, condense, indent );
-	return s.io_value( *const_cast<T*>(&v) );
+	return s.io_value( ax_const_cast(v) );
 }
 
 template<class T> inline
