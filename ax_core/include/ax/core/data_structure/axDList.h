@@ -71,13 +71,11 @@ public:
 	axALWAYS_INLINE( 	T*			head			() const )	{ return _head_; }
 	axALWAYS_INLINE( 	T*			tail			() const )	{ return _tail_; }
 
-	axALWAYS_INLINE( 	T*			takeHead		()	)		{ T* h = _head_; if (h) h->removeFromList(); return h; }
+	axALWAYS_INLINE( 	T*			takeHead		()	)						{ T* h = _head_; if (h) h->removeFromList(); return h; }
 
-	axALWAYS_INLINE(	void		insert			( T* node ) );
-	axALWAYS_INLINE(	void		insert			( T* node, T* before ) );
-
-	axALWAYS_INLINE(	void		append			( T* node ) );
-	axALWAYS_INLINE(	void		append			( T* node, T* after ) );
+	axALWAYS_INLINE(	void		insert			( T* node )	)				{ append( node, _head_ ); }
+	axALWAYS_INLINE(	void		append			( T* node, T* before = NULL ) );
+	
 	axALWAYS_INLINE(	void		appendByTake	( axDList<T> &src ) );
 	axALWAYS_INLINE(	axStatus	appendByCopy	( const axDList<T> &src ) );
 	axALWAYS_INLINE(	axStatus	copy			( const axDList<T> &src ) ) { clear(); return appendByCopy( src ); }
@@ -166,92 +164,34 @@ void axDList<T>::clear() {
 }
 
 template<class T> inline
-void axDList<T>::insert( T *node, T *before ) {
+void axDList<T>::append( T *node, T *before ) {
 	if( !node )					{ assert( false ); return; }
 	if( node->_list_ )			{ assert( false ); return; } //already in other List ?
 
-	if( ! before )				{ assert( false ); return; }
-	if( before->_list_ != this ) {
-		assert( false ); return;
-	} // before is not node of this list
+	if( before ) {
+		if( before->_list_ != this ) { assert(false);	return; }
+		node->_prev_ = before->_prev_;
+		node->_next_ = before;
+		
+		if( before->_prev_ ) {
+			before->_prev_->_next_ = node;
+		}else{
+			_head_ = node;
+		}
+		before->_prev_ = node;
+	}else{ //append to end
+		node->_next_ = NULL;
+		node->_prev_ = _tail_;
+		if( _tail_ ) {
+			_tail_->_next_ = node;
+			_tail_ = node;
+		}else{
+			_head_ = _tail_ = node;
+		}
+	}
 
 	_size_++;
-
-	if( _head_ == before ) {
-		_head_ = node ;
-	}
-
-	if( before->_prev_ ) {
-		before->_prev_->_next_ = node;
-	}
-
-	node->_prev_ = before->_prev_;
-	node->_next_ = before;
 	node->_list_ = this;
-
-	before->_prev_ = node;
-
-	node->onDidAddToList();
-}
-
-template<class T> inline
-void axDList<T>::insert( T *node ) {
-	if( !node )		   { assert( false ); return; }
-	if( node->_list_ ) { assert( false ); return; } //node already in list
-
-	_size_++;
-	node->_next_ = _head_;
-	node->_prev_ = NULL;
-	node->_list_ = this;
-	if( !_head_ ) {
-		_tail_ = _head_ = node;
-	}else{
-		_head_->_prev_ = node;
-		_head_ = node;
-	}
-	node->onDidAddToList();
-}
-
-template<class T> inline
-void axDList<T>::append( T *node ) {
-	if( !node )		   { assert( false ); return; }
-	if( node->_list_ ) { assert( false ); return; } //node already in list
-
-	_size_++;
-	node->_next_ = NULL;
-	node->_prev_ = _tail_;
-	node->_list_ = this;
-	if( !_tail_ ) {
-		_tail_ = _head_ = node;
-	}else{
-		_tail_->_next_ = node;
-		_tail_ = node;
-	}
-	node->onDidAddToList();
-}
-
-template<class T> inline
-void axDList<T>::append( T* node, T* after ) {
-	if( !node )					{ assert( false ); return; }
-	if( node->_list_ )			{ assert( false ); return; } //already in other List ?
-
-	if( ! after )				{ assert( false ); return; }
-	if( after->_list_ != this )  {
-		assert( false ); return;
-	} // after is not node of this list
-
-	_size_++;
-
-
-	if( _tail_ == after ) {
-		_tail_ = node;
-	}
-
-	node->_next_ = after->_next_;
-	node->_prev_ = after;
-	after->_next_ = node;
-	node->_list_ = this;
-
 	node->onDidAddToList();
 }
 
