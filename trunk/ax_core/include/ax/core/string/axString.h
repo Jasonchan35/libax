@@ -42,7 +42,7 @@ private:
 
 //------------------
 
-template< class T, size_t LOCAL_BUF_SIZE = 0 >
+template< class T, size_t LOCAL_BUF_SIZE = 32 >
 class axString_ : public axIString_<T> {
 	typedef	axIString_<T>	B;
 public:

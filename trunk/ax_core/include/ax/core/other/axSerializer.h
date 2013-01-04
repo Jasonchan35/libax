@@ -64,7 +64,6 @@ typedef	 uint16_t	ax_serialize_wchar_t;	//!< using uint16 to handle wchar_t
 
 template<class S, class T>	axStatus ax_serialize_io		( S &s, T &v );
 template<class S, class T>	axStatus ax_serialize_io_vary	( S &s, T &v );
-template<class S, class T>	axStatus ax_serialize_io_vary32	( S &s, T &v );
 
 class axSerializerBase : public axNonCopyable{
 public:
@@ -75,28 +74,6 @@ public:
 		void	bind		( axSerializerBase &s, bool b ) {}
 		void	unbind		() {}
 	};
-};
-
-class axLenSerializer : public axSerializerBase {
-public:
-	axLenSerializer()		{ used_ = 0; }
-
-	axStatus io_raw( const void* ptr, axSize len ) { _advance( len ); return 0; }
-
-	template<class T>	axStatus io			( T& value, const char* name ) { return io(value); }
-	template<class T>	axStatus io			( T& value )	{ return ax_serialize_io		( *this, value ); }
-	template<class T>	axStatus io_vary	( T& value )	{ return ax_serialize_io_vary	( *this, value ); }
-	template<class T>	axStatus io_vary32	( T& value )	{ return ax_serialize_io_vary32	( *this, value ); }
-	template<class T>	axStatus io_le		( T& value )	{ return ax_serialize_io_le		( *this, value ); }
-	template<class T>	axStatus io_be		( T& value )	{ return ax_serialize_io_be		( *this, value ); }
-
-	axSize	usedSize()		{ return used_; }
-
-	axStatus	checkRemain( axSize n )		{ return 0; }
-	void		_advance( axSize n ) { used_ += n; }
-
-private:
-	axSize	used_;
 };
 
 class axSerializer : public axSerializerBase {
@@ -125,7 +102,6 @@ public:
 	template<class T>	axStatus io_value	( T& value )	{ return ax_serialize_io		( *this, value ); }	
 	template<class T>	axStatus io			( T& value )	{ return ax_serialize_io		( *this, value ); }
 	template<class T>	axStatus io_vary	( T& value )	{ return ax_serialize_io_vary	( *this, value ); }
-	template<class T>	axStatus io_vary32	( T& value )	{ return ax_serialize_io_vary32	( *this, value ); }
 	template<class T>	axStatus io_le		( T& value )	{ return ax_serialize_io_le		( *this, value ); }
 	template<class T>	axStatus io_be		( T& value )	{ return ax_serialize_io_be		( *this, value ); }
 
@@ -150,12 +126,11 @@ private:
 class axDeserializer : public axSerializerBase {
 	typedef axSerializerBase B;
 public:
-	axDeserializer()									{ buf_ = NULL; r_ = NULL; used_ = 0; remain_ = 0; }
+	axDeserializer()									{ buf_ = NULL; r_ = NULL; remain_ = 0; }
 	axDeserializer( const axIByteArray &buf )			{ set( buf ); }
 	void set( const axIByteArray &buf ) {
 		buf_ = &buf;
 		r_ = buf.ptr();
-		used_   = 0;
 		remain_ = buf.size();
 	}
 
@@ -175,41 +150,23 @@ public:
 	template<class T>	axStatus io_value	( T& value )	{ return ax_serialize_io		( *this, value ); }	
 	template<class T>	axStatus io			( T& value )	{ return ax_serialize_io		( *this, value ); }
 	template<class T>	axStatus io_vary	( T& value )	{ return ax_serialize_io_vary	( *this, value ); }
-	template<class T>	axStatus io_vary32	( T& value )	{ return ax_serialize_io_vary32	( *this, value ); }
 	template<class T>	axStatus io_le		( T& value )	{ return ax_serialize_io_le		( *this, value ); }
 	template<class T>	axStatus io_be		( T& value )	{ return ax_serialize_io_be		( *this, value ); }
 
 
-	axSize		usedSize	()				{ return used_; }
+	axSize		usedSize	()				{ return r_ - buf_->ptr(); }
 	axSize		remainSize	()				{ return remain_; }
 	axStatus	checkRemain	( axSize n )	{ return remain_ < n ? axStatus_Std::serialize_out_of_bound : 0; }
-	void		_advance	( axSize n )	{ used_ += n; remain_ -= n; r_ += n; }
+	void		_advance	( axSize n )	{ remain_ -= n; r_ += n; }
 
 	const uint8_t*	r_;
 private:
-	axSize	used_;
 	axSize	remain_;
 
 	const axIByteArray*	buf_;
 };
 
-
-/*
-template<class T> inline
-void ax_serialize_io_template_specialization_helper( T &v ){
-	axIByteArray		buf;
-	{	axLenSerializer	s;			serialize_io( s, v );	}
-	{	axSerializer	s(buf);		serialize_io( s, v );	}
-	{	axDeserializer	s(buf);		serialize_io( s, v );	}
-}
-*/
-
 //------------ serialize_io_be_primitive ------------------
-
-template<class T> inline axStatus ax_serialize_io_be_primitive( axLenSerializer &s, T &v ) {
-	s._advance( sizeof(v) );
-	return 0;
-}
 
 template<class T> inline axStatus ax_serialize_io_be_primitive( axSerializer &s, T &v ) {
 	axStatus st = s.checkRemain( sizeof(v) );	if( !st ) return st;
@@ -249,13 +206,8 @@ template<class T> inline axStatus ax_serialize_io_be_primitive( axDeserializer &
 //======== 64 bits =====
 
 template<class T> inline 
-axStatus ax_serialize_io_be_primitive64( axLenSerializer &s, T &v ) {
-	s._advance( sizeof(v) );
-	return 0;
-}
-
-template<class T> inline 
 axStatus ax_serialize_io_be_primitive64( axSerializer &s, T &v ) {
+	assert( sizeof(T) == 8 );
 	axStatus st = s.checkRemain( sizeof(v) );	if( !st ) return st;
 
 #if axCPU_SUPPORT_MEMORY_MISALIGNED >= 64
@@ -289,6 +241,7 @@ axStatus ax_serialize_io_be_primitive64( axSerializer &s, T &v ) {
 
 template<class T> inline 
 axStatus ax_serialize_io_be_primitive64( axDeserializer &s, T &v ) {
+	assert( sizeof(T) == 8 );
 
 #if axCPU_SUPPORT_MEMORY_MISALIGNED >= 64
 	v = ax_be_to_host( *((T*)s.r_) );
@@ -323,25 +276,8 @@ axStatus ax_serialize_io_be_primitive64( axDeserializer &s, T &v ) {
 
 
 // ------ serialize_io_be -------
-template<class S> inline axStatus ax_serialize_io_be( S &s, uint8_t  &v ) { return ax_serialize_io_be_primitive( s,v ); }
-template<class S> inline axStatus ax_serialize_io_be( S &s, uint16_t &v ) { return ax_serialize_io_be_primitive( s,v ); }
-template<class S> inline axStatus ax_serialize_io_be( S &s, uint32_t &v ) { return ax_serialize_io_be_primitive( s,v ); }
-template<class S> inline axStatus ax_serialize_io_be( S &s, uint64_t &v ) { return ax_serialize_io_be_primitive64( s,v ); }
-
-template<class S> inline axStatus ax_serialize_io_be( S &s, int8_t  &v ) { return ax_serialize_io_be_primitive( s,v ); }
-template<class S> inline axStatus ax_serialize_io_be( S &s, int16_t &v ) { return ax_serialize_io_be_primitive( s,v ); }
-template<class S> inline axStatus ax_serialize_io_be( S &s, int32_t &v ) { return ax_serialize_io_be_primitive( s,v ); }									
-template<class S> inline axStatus ax_serialize_io_be( S &s, int64_t &v ) { return ax_serialize_io_be_primitive64( s,v ); }
-
-template<class S> inline axStatus ax_serialize_io_be( S &s, float   &v ) { return ax_serialize_io_be_primitive( s,v ); }
-template<class S> inline axStatus ax_serialize_io_be( S &s, double  &v ) { return ax_serialize_io_be_primitive64( s,v ); }
 
 //------------ serialize_io_le_primitive ------------------
-
-template<class T> inline axStatus ax_serialize_io_le_primitive( axLenSerializer &s, T &v ) {
-	s._advance( sizeof(v) );
-	return 0;
-}
 
 template<class T> inline axStatus ax_serialize_io_le_primitive( axSerializer &s, T &v ) {	
 	axStatus st = s.checkRemain( sizeof(v) );	if( !st ) return st;
@@ -379,13 +315,9 @@ template<class T> inline axStatus ax_serialize_io_le_primitive( axDeserializer &
 
 //======== 64 bits =====
 
-template<class T> inline axStatus ax_serialize_io_le_primitive64( axLenSerializer &s, T &v ) {
-	s._advance( sizeof(v) );
-	return 0;
-}
-
 template<class T> inline 
 axStatus ax_serialize_io_le_primitive64( axSerializer &s, T &v ) {
+	assert( sizeof(T) == 8 );
 	axStatus st = s.checkRemain( sizeof(v) );	if( !st ) return st;
 	
 #if axCPU_SUPPORT_MEMORY_MISALIGNED >= 64
@@ -418,6 +350,7 @@ axStatus ax_serialize_io_le_primitive64( axSerializer &s, T &v ) {
 
 template<class T> inline 
 axStatus ax_serialize_io_le_primitive64( axDeserializer &s, T &v ) {
+	assert( sizeof(T) == 8 );
 	
 #if axCPU_SUPPORT_MEMORY_MISALIGNED >= 64
 	v = ax_le_to_host( *((T*)s.r_) );
@@ -455,18 +388,6 @@ axStatus ax_serialize_io_le_primitive64( axDeserializer &s, T &v ) {
 
 
 // ------ serialize_io_le -------
-template<class S> inline axStatus ax_serialize_io_le( S &s, uint8_t  &v ) { return ax_serialize_io_le_primitive( s,v ); }
-template<class S> inline axStatus ax_serialize_io_le( S &s, uint16_t &v ) { return ax_serialize_io_le_primitive( s,v ); }
-template<class S> inline axStatus ax_serialize_io_le( S &s, uint32_t &v ) { return ax_serialize_io_le_primitive( s,v ); }
-template<class S> inline axStatus ax_serialize_io_le( S &s, uint64_t &v ) { return ax_serialize_io_le_primitive64( s,v ); }
-
-template<class S> inline axStatus ax_serialize_io_le( S &s, int8_t  &v ) { return ax_serialize_io_le_primitive( s,v ); }
-template<class S> inline axStatus ax_serialize_io_le( S &s, int16_t &v ) { return ax_serialize_io_le_primitive( s,v ); }
-template<class S> inline axStatus ax_serialize_io_le( S &s, int32_t &v ) { return ax_serialize_io_le_primitive( s,v ); }
-template<class S> inline axStatus ax_serialize_io_le( S &s, int64_t &v ) { return ax_serialize_io_le_primitive64( s,v ); }
-
-template<class S> inline axStatus ax_serialize_io_le( S &s, float  &v ) { return ax_serialize_io_le_primitive( s,v ); }
-template<class S> inline axStatus ax_serialize_io_le( S &s, double &v ) { return ax_serialize_io_le_primitive64( s,v ); }
 
 
 //------------ primitive ------------------
@@ -491,24 +412,36 @@ template<class S,class T> inline axStatus ax_serialize_io_primitive64( S &s, T &
 #endif
 }
 
-template< class S > inline axStatus ax_serialize_io( S &s, uint8_t	&v ) { return ax_serialize_io_primitive( s,v ); }
-template< class S > inline axStatus ax_serialize_io( S &s, uint16_t	&v ) { return ax_serialize_io_primitive( s,v ); }
-template< class S > inline axStatus ax_serialize_io( S &s, uint32_t	&v ) { return ax_serialize_io_primitive( s,v ); }
-template< class S > inline axStatus ax_serialize_io( S &s, uint64_t	&v ) { return ax_serialize_io_primitive64( s,v ); }
 
-template< class S > inline axStatus ax_serialize_io( S &s, int8_t	&v ) { return ax_serialize_io_primitive( s,v ); }
-template< class S > inline axStatus ax_serialize_io( S &s, int16_t	&v ) { return ax_serialize_io_primitive( s,v ); }
-template< class S > inline axStatus ax_serialize_io( S &s, int32_t	&v ) { return ax_serialize_io_primitive( s,v ); }
-template< class S > inline axStatus ax_serialize_io( S &s, int64_t	&v ) { return ax_serialize_io_primitive64( s,v ); }
+#define axTYPE_LIST( T ) \
+	template<class S> inline axStatus ax_serialize_io_le( S &s, T &v ) { return ax_serialize_io_le_primitive( s,v ); } \
+	template<class S> inline axStatus ax_serialize_io_be( S &s, T &v ) { return ax_serialize_io_be_primitive( s,v ); } \
+	template<class S> inline axStatus ax_serialize_io	( S &s, T &v ) { return ax_serialize_io_primitive	( s,v ); } \
+//--- end of macro ---
+	axTYPE_LIST( int8_t )
+	axTYPE_LIST( int16_t )
+	axTYPE_LIST( int32_t )
 
-template< class S > inline axStatus ax_serialize_io( S &s, float	&v ) { return ax_serialize_io_primitive( s,v ); }
-template< class S > inline axStatus ax_serialize_io( S &s, double	&v ) { return ax_serialize_io_primitive64( s,v ); }
+	axTYPE_LIST( uint8_t )
+	axTYPE_LIST( uint16_t )
+	axTYPE_LIST( uint32_t )
+
+	axTYPE_LIST( float )
+
+#undef axTYPE_LIST
+
+#define axTYPE_LIST( T ) \
+	template<class S> inline axStatus ax_serialize_io_le( S &s, T &v ) { return ax_serialize_io_le_primitive64( s,v ); } \
+	template<class S> inline axStatus ax_serialize_io_be( S &s, T &v ) { return ax_serialize_io_be_primitive64( s,v ); } \
+	template<class S> inline axStatus ax_serialize_io	( S &s, T &v ) { return ax_serialize_io_primitive64	  ( s,v ); } \
+//--- end of macro ---
+	axTYPE_LIST( int64_t )
+	axTYPE_LIST( uint64_t )
+	axTYPE_LIST( double )
+#undef axTYPE_LIST
+
 
 //------ bool -------
-inline axStatus ax_serialize_io( axLenSerializer &s, bool &v ) {
-	s._advance(1);
-	return 0;
-}
 
 inline axStatus ax_serialize_io( axSerializer &s, bool &v )	{
 	uint8_t ch = v ? 1:0;
@@ -526,12 +459,6 @@ inline axStatus ax_serialize_io( axDeserializer &s, bool &v ) {
 //------ array size -------
 
 template<class T> inline
-axStatus ax_serialize_io_array_size( axLenSerializer &s, T& v )	{
-	axSize z = v.size();
-	return s.io_vary( z );
-}
-
-template<class T> inline
 axStatus ax_serialize_io_array_size( axSerializer &s, T& v )	{
 	axSize z = v.size();
 	return s.io_vary( z );
@@ -539,9 +466,8 @@ axStatus ax_serialize_io_array_size( axSerializer &s, T& v )	{
 
 template<class T> inline
 axStatus ax_serialize_io_array_size( axDeserializer &s, T& v )	{
-	axStatus st;
 	axSize z;
-	st = s.io_vary( z );		if( !st ) return st;
+	axStatus st = s.io_vary( z );		if( !st ) return st;
 	return v.resize( z, false );
 }
 
@@ -550,15 +476,14 @@ axStatus ax_serialize_io_array_size( axDeserializer &s, T& v )	{
 template<class T>
 template<class S> inline 
 axStatus axIArray<T>::serialize_io( S &s ) {
-	axStatus st;
-	st = ax_serialize_io_array_size( s, *this );	if( !st ) return st;
+	axStatus st = ax_serialize_io_array_size( s, *this );	if( !st ) return st;
 #if ( axBYTE_ORDER == axSERIALIZE_BYTE_ORDER )
 	if( axTypeOf<T>::rawSerializable ) {
 		return s.io_raw( ptr(), size() * sizeof(T) );
 	}
 #endif
 	for( axSize i=0; i<size(); i++ ) {
-		st = s.io( p_[i] );	if( !st ) return st;
+		st = s.io( p_[i] );			if( !st ) return st;
 	}
 	return 0;
 }
@@ -567,8 +492,7 @@ axStatus axIArray<T>::serialize_io( S &s ) {
 template<class T>
 template<class S> inline 
 axStatus axIArray<T>::serialize_io_vary( S &s ) {
-	axStatus st;
-	st = ax_serialize_io_array_size( s, *this );	if( !st ) return st;
+	axStatus st = ax_serialize_io_array_size( s, *this );	if( !st ) return st;
 	for( axSize i=0; i<size(); i++ ) {
 		st = s.io_vary( p_[i] );	if( !st ) return st;
 	}
@@ -581,46 +505,26 @@ axStatus axIArray<T>::serialize_io_vary( S &s ) {
 
 template<class T> inline 
 axStatus	axDList<T>::serialize_io	( axSerializer		&se ) {
-	axStatus st;
 	axSize c = size();
-	se.io_vary( c );
+	axStatus st = se.io_vary( c );		if( !st ) return st;
 		
 	T* n = head();
     for( ; n; n=n->next() ) {
-        st = se.io( *n );    if( !st ) return st;
-    }
-	
+        st = se.io( *n );    			if( !st ) return st;
+    }	
 	return 0;
 }
 
 template<class T> inline 
 axStatus	axDList<T>::serialize_io	( axDeserializer	&se ) {
-    axStatus st;
-	
 	axSize  c = 0;
-    st = se.io_vary( c ); if( !st ) return st;
+	axStatus st = se.io_vary( c ); 		if( !st ) return st;
 	
     axSize i;
     for( i=0; i<c; i++ ) {
-		axAutoPtr< T > n; 
-		st = n.newObject(); if( !st ) return st;
-        st = se.io( *(n.ptr()) );    if( !st ) return st;
+		axAutoPtr< T > n( st );			if( !st ) return st;
+        st = se.io( *n );		  		if( !st ) return st;
         append( n.unref() );		
-    }
-	
-	
-	return 0;
-}
-
-template<class T> inline 
-axStatus	axDList<T>::serialize_io	( axLenSerializer	&se ) {
-	axStatus st;
-	axSize s = size();
-	se.io_vary( s );
-	
-	T* n = head();
-    for( ; n; n=n->next() ) {
-        st = se.io( *n );    if( !st ) return st;
     }
 	return 0;
 }

@@ -72,28 +72,6 @@ axStatus axDeserializer :: getLine( axIStringW &str ) {
 }
 
 //------- io vary ---------
-axStatus ax_serialize_io_vary( axLenSerializer &s, uint32_t &v ){
-	if( v < (1<<(7*1)) ) { s._advance(1); return 0; }
-	if( v < (1<<(7*2)) ) { s._advance(2); return 0; }
-	if( v < (1<<(7*3)) ) { s._advance(3); return 0; }
-	if( v < (1<<(7*4)) ) { s._advance(4); return 0; }
-	s._advance(5);
-	return 0;
-}
-
-axStatus ax_serialize_io_vary( axLenSerializer &s, uint64_t &v ){
-	if( v < (1ULL<<(7*1)) ) { s._advance(1);  return 0; }
-	if( v < (1ULL<<(7*2)) ) { s._advance(2); return 0; }
-	if( v < (1ULL<<(7*3)) ) { s._advance(3); return 0; }
-	if( v < (1ULL<<(7*4)) ) { s._advance(4); return 0; }
-	if( v < (1ULL<<(7*5)) ) { s._advance(5); return 0; }
-	if( v < (1ULL<<(7*6)) ) { s._advance(6); return 0; }
-	if( v < (1ULL<<(7*7)) ) { s._advance(7); return 0; }
-	if( v < (1ULL<<(7*8)) ) { s._advance(8); return 0; }
-	if( v < (1ULL<<(7*9)) ) { s._advance(9); return 0; }
-	s._advance(10);
-	return 0;
-}
 
 axStatus ax_serialize_io_vary( axSerializer &s, uint32_t &v ){
 	axStatus st;

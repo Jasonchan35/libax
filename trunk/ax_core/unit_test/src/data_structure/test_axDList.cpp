@@ -30,7 +30,7 @@ axStatus test_axDList() {
 		list.append( new Obj( i ) );
 	}
 
-	list.insert( new Obj(99), list.getNodeByIndex(2) );
+	list.append( new Obj(99), list.getNodeByIndex(2) );
 
 	ax_log_var( list );
 
