@@ -546,16 +546,6 @@ axStatus	axIString_<T> :: replaceString ( const T* from, const T* to, axSize sta
 //---------- String ----------------
 
 //-------------- axIStringA -------
-
-template<>
-axStatus axIString_<char>::serialize_io( axLenSerializer &se ) {
-	axStatus st;
-	axSize	n = size();
-	st = se.io_vary( n );		if( !st ) return st;
-	se._advance( n );
-	return 0;
-}
-
 template<>
 axStatus axIString_<char>::serialize_io( axSerializer &se ) {
 	axSize n = size();
@@ -578,16 +568,6 @@ axStatus axIString_<char>::serialize_io( axDeserializer &se ) {
 }
 
 //-------------- axIStringW -------
-
-template<>
-axStatus axIString_<wchar_t>::serialize_io( axLenSerializer &se ) {
-	axSize	n;
-	axStatus st;
-	st = ax_utf8_count_in_wchar( n, c_str() );		if( !st ) return st;
-	st = se.io_vary( n );							if( !st ) return st;
-	se._advance( n );
-	return 0;
-}
 
 template<>
 axStatus axIString_<wchar_t>::serialize_io( axSerializer &se ) {

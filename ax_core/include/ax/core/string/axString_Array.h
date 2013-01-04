@@ -4,9 +4,9 @@
 #include "axString.h"
 
 template< class T >
-class axString_Array : public axArray< axString_<T, 32>, 16 > {
-	typedef axString_<T,32>	String;
-	typedef axArray< axString_<T, 32>, 16 > B;
+class axString_Array : public axArray< axString_<T>, 16 > {
+	typedef axString_<T>	String;
+	typedef axArray< axString_<T>, 16 > B;
 public:
 
 
