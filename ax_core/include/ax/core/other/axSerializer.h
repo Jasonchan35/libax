@@ -23,7 +23,6 @@
 //-------------
 
 
-class axLenSerializer;
 class axSerializer;
 class axDeserializer;
 
@@ -531,8 +530,6 @@ axStatus	axDList<T>::serialize_io	( axDeserializer	&se ) {
 
 //------- io vary ---------
 
-axStatus ax_serialize_io_vary( axLenSerializer 	&s, uint32_t &v );
-axStatus ax_serialize_io_vary( axLenSerializer 	&s, uint64_t &v );
 axStatus ax_serialize_io_vary( axSerializer 	&s, uint32_t &v );
 axStatus ax_serialize_io_vary( axSerializer 	&s, uint64_t &v );
 axStatus ax_serialize_io_vary( axDeserializer 	&s, uint32_t &v );

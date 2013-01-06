@@ -9,7 +9,6 @@
 
 class axSerializer;
 class axDeserializer;
-class axLenSerializer;
 
 //! \ingroup base_string
 //@{
@@ -138,7 +137,6 @@ public:
 	
 	axStatus		serialize_io			( axSerializer		&se );
 	axStatus		serialize_io			( axDeserializer	&se );
-	axStatus		serialize_io			( axLenSerializer	&se );
 
 		bool		isMemoryOverlapped		( const T* p, axSize n ) const	{ return buf_.isMemoryOverlapped(p,n); }
 

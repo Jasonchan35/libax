@@ -7,7 +7,6 @@
 
 class axStringFormat;
 
-class axLenSerializer;
 class axSerializer;
 class axDeserializer;
 
@@ -85,7 +84,6 @@ public:
 	
 	axALWAYS_INLINE(	axStatus	serialize_io	( axSerializer		&se ) );
 	axALWAYS_INLINE(	axStatus	serialize_io	( axDeserializer	&se ) );
-	axALWAYS_INLINE(	axStatus	serialize_io	( axLenSerializer	&se ) );
 	
 	axALWAYS_INLINE(	axStatus	toStringFormat	( axStringFormat &f ) const );
 	axALWAYS_INLINE(	axStatus	onTake			( axDList<T> &src ) );
