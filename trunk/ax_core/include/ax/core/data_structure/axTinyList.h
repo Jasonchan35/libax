@@ -4,7 +4,6 @@
 #include "../common/ax_common.h"
 
 class axStringFormat;
-class axLenSerializer;
 class axSerializer;
 class axDeserializer;
 

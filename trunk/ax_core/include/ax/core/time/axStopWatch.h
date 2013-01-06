@@ -2,12 +2,6 @@
 #define	__axStopWatch_h__
 
 #include "../platform/ax_platform.h"
-#include "../other/axSerializer.h"
-
-class axLenSerializer;
-class axSerializer;
-class axDeserializer;
-
 
 //! axStopWatch
 /*!
