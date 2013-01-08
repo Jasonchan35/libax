@@ -28,4 +28,7 @@ public:
 	}
 };
 
+typedef	axRange<int>		axRange1i;
+typedef	axRange<float>		axRange1f;
+
 #endif
