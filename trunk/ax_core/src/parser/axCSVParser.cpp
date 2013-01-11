@@ -93,15 +93,23 @@ axStatus axCSVParserBase::getCell_( axIStringA &cell ) {
 				continue;
 			}
 			
-			if( *p == seperators_ ) break;
+			if( *p == seperators_ ) {
+				st = cell.appendWithLength( r_, p-r_ );		if( !st ) return st;
+				p++;
+				break;
+			}
 			else if( *p == '\r' ) { //handle Windows Line Feed "\r\n"
 				if( p[1] != '\n' ) {
 					assert( false );
 					return -1;
 				}
+				st = cell.appendWithLength( r_, p-r_ );		if( !st ) return st;
+				p++;
 				p++;
 				break;
 			}else if( *p == '\n' ) { //handle Unix Line Feed  "\n"
+				st = cell.appendWithLength( r_, p-r_ );		if( !st ) return st;
+				p++;
 				break;
 			}
 			if( *p == 0 ) {
@@ -113,8 +121,6 @@ axStatus axCSVParserBase::getCell_( axIStringA &cell ) {
 		p++;
 	}
 
-	st = cell.appendWithLength( r_, p-r_ );		if( !st ) return st;
-	p++;
 	r_ = p;
 	return 0;
 }
