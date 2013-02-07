@@ -11,79 +11,83 @@
 
 #include "axDB_common.h"
 
-class axDBStmt_Interface;
+class axDBStmt_Imp;
 class axDBResultSet;
 
 class axDBStmt : public axNonCopyable {
 public:	
 	axDBStmt();
 	
-	axStatus	exec_ParamList( const axDB_ParamList & list );
+	axStatus	create	( axDBStmt & stmt, const char* sql );
+		
+	axStatus	exec_ParamList		( const axDB_ParamList & list );
+	// exec( ... )
 	axExpandArgList0 ( axStatus, exec,   const axDB_Param & , axDB_ParamList, exec_ParamList )
 	
-	axStatus	getRow_ValueList( const axDB_ValueList & list );
-	axExpandArgList0 ( axStatus, getRow, const axDB_Value & , axDB_ValueList, getRow_ValueList )
+	// getResult( ... )
+	axStatus	getResult_ValueList	( const axDB_ValueList & list );
+	axExpandArgList0 ( axStatus, getResult, const axDB_Value & , axDB_ValueList, getResult_ValueList )
 	
-	axStatus	fetch		();
-	axSize		colCount	();
+	axStatus	fetch			();
 	
 	template<class T>
-	axStatus	getValue	( axSize col, T & value );
-	int			getValueType( axSize col );
-	
-	const char*	getColumnName( axSize col );
+	axStatus	getResultAtCol	( axSize col, T & value );
+
+	axSize		numColumns		();
+	int			columnType		( axSize col );
+	const char*	columnName		( axSize col );
 			
-	void	_setInstance( axDBStmt_Interface* p );
+		void	_setImp			( axDBStmt_Imp* p );
 protected:
-	axSize	colCount_;
-	axSharedPtr< axDBStmt_Interface >	p_;
+	axSize	numColumns_;
+	axSharedPtr< axDBStmt_Imp >	p_;
 };
 
-class axDBStmt_Interface :  public axNonCopyable, public axSharedPte {
+class axDBStmt_Imp :  public axNonCopyable, public axSharedPte {
 public:
-	virtual ~axDBStmt_Interface() {}
+	virtual ~axDBStmt_Imp() {}
 	virtual	axStatus	exec_ParamList	( const axDB_ParamList & list ) = 0;
 	
-	virtual axStatus	fetch	() = 0;
-	virtual axSize		colCount() = 0;
+	virtual axStatus	fetch			() = 0;
+	virtual axSize		numColumns		() = 0;
 	
-	virtual int			getValueType	( axSize col ) = 0;
-	virtual const char* getColumnName	( axSize col ) = 0;
+	virtual int			columnType		( axSize col ) = 0;
+	virtual const char* columnName		( axSize col ) = 0;
 	
-	virtual axStatus	getValue( axSize col, int8_t		&value ) = 0;
-	virtual axStatus	getValue( axSize col, int16_t		&value ) = 0;
-	virtual axStatus	getValue( axSize col, int32_t		&value ) = 0;
-	virtual axStatus	getValue( axSize col, int64_t		&value ) = 0;
+	virtual axStatus	getResultAtCol	( axSize col, int8_t		&value ) = 0;
+	virtual axStatus	getResultAtCol	( axSize col, int16_t		&value ) = 0;
+	virtual axStatus	getResultAtCol	( axSize col, int32_t		&value ) = 0;
+	virtual axStatus	getResultAtCol	( axSize col, int64_t		&value ) = 0;
 	
-	virtual axStatus	getValue( axSize col, float			&value ) = 0;
-	virtual axStatus	getValue( axSize col, double		&value ) = 0;
+	virtual axStatus	getResultAtCol	( axSize col, float			&value ) = 0;
+	virtual axStatus	getResultAtCol	( axSize col, double		&value ) = 0;
 	
-	virtual axStatus	getValue( axSize col, bool			&value ) = 0;
+	virtual axStatus	getResultAtCol	( axSize col, bool			&value ) = 0;
 	
-	virtual axStatus	getValue( axSize col, axIStringA    &value ) = 0;
-	virtual axStatus	getValue( axSize col, axIStringW    &value ) = 0;
+	virtual axStatus	getResultAtCol	( axSize col, axIStringA   	&value ) = 0;
+	virtual axStatus	getResultAtCol	( axSize col, axIStringW   	&value ) = 0;
 	
-	virtual axStatus	getValue( axSize col, axIByteArray	&value ) = 0;
-	virtual axStatus	getValue( axSize col, axTimeStamp	&value ) = 0;
+	virtual axStatus	getResultAtCol	( axSize col, axIByteArray	&value ) = 0;
+	virtual axStatus	getResultAtCol	( axSize col, axTimeStamp	&value ) = 0;
 
-	virtual axStatus	getValue( axSize col, axDateTime	&value ) {
+	virtual axStatus	getResultAtCol	( axSize col, axDateTime	&value ) {
 		axStatus st;
 		axTimeStamp ts;
-		st = getValue( col, ts );	if( !st ) return st;
+		st = getResultAtCol( col, ts );	if( !st ) return st;
 		value.set( ts );
 		return 0;
 	}
 };
 
 template<class T>
-axStatus	axDBStmt::getValue	( axSize col, T & value ) {
+axStatus	axDBStmt::getResultAtCol	( axSize col, T & value ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->getValue( col, value );
+	return p_->getResultAtCol( col, value );
 }
 
-inline	axStatus	axDBStmt::fetch		() { if( !p_ ) return axStatus_Std::not_initialized; return p_->fetch(); }
-inline	axSize		axDBStmt::colCount	() { return colCount_; }
-inline	int			axDBStmt::getValueType	( axSize col ) { if( !p_ ) return axDB_c_type_null; return p_->getValueType(col); }
-inline	const char*	axDBStmt::getColumnName	( axSize col ) { if( !p_ ) return NULL; return p_->getColumnName(col); }
+inline	axStatus	axDBStmt::fetch			() { if( !p_ ) return axStatus_Std::not_initialized; return p_->fetch(); }
+inline	axSize		axDBStmt::numColumns	() { return numColumns_; }
+inline	int			axDBStmt::columnType	( axSize col ) { if( !p_ ) return axDB_c_type_null; return p_->columnType(col); }
+inline	const char*	axDBStmt::columnName	( axSize col ) { if( !p_ ) return NULL; return p_->columnName(col); }
 
 #endif //__axDBStmt_h__
