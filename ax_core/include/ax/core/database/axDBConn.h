@@ -11,7 +11,7 @@
 
 #include "axDB_common.h"
 
-class axDBConn_Interface;
+class axDBConn_Imp;
 class axDBResultSet;
 class axDBStmt;
 class axDB_Param;
@@ -22,22 +22,17 @@ public:
     axDBConn();
     ~axDBConn();
 	
-	void			close		();
-	axStatus		prepareStmt		( axDBStmt & stmt, const char* sql );
-	
-	axStatus		exec_ParamList	( axDBStmt & stmt, const char* sql, const axDB_ParamList &list );
-	axExpandArgList2 ( axStatus, exec, axDBStmt&, const char *, const axDB_Param &, axDB_ParamList, exec_ParamList )
+	void	close	();
 
-	void	_setInstance( axDBConn_Interface* p );
+	void	_setImp	( axDBConn_Imp* p );
 private:
-	axSharedPtr< axDBConn_Interface >	p_;
+	axSharedPtr< axDBConn_Imp >	p_;
 };
 
-class axDBConn_Interface : public axNonCopyable, public axSharedPte {
+class axDBConn_Imp : public axNonCopyable, public axSharedPte {
 public:
-	virtual ~axDBConn_Interface() {}
-	virtual axStatus	prepareStmt		( axDBStmt & stmt, const char * sql ) = 0;
-	virtual axStatus	exec_ParamList	( axDBStmt & stmt, const char * sql, const axDB_ParamList & list );
+	virtual ~axDBConn_Imp() {}
+	virtual axStatus	createStmt	( axDBStmt & stmt, const char * sql ) = 0;
 };
 
 #endif //__axDBConn_h__
