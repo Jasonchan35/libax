@@ -316,7 +316,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\src\data_structure\test_axHashTable.cpp"
+			RelativePath="..\..\..\src\data_structure\test_axIArray.cpp"
 			>
 		</File>
 	</Files>

@@ -168,10 +168,10 @@ axLogExpandArgListUserTag2( inline axStatus, ax_log_ex, axLog_Tag&, const char*,
 
 
 
-#define ax_log_var(  v1 )						ax_log( "var: {?}={?}",								#v1, v1 )
-#define ax_log_var2( v1, v2 )					ax_log( "var: {?}={?}, {?}={?}",					#v1, v1, #v2, v2 )
-#define ax_log_var3( v1, v2, v3 )				ax_log( "var: {?}={?}, {?}={?}, {?}={?}",			#v1, v1, #v2, v2, #v3, v3 )
-#define ax_log_var4( v1, v2, v3, v4 )			ax_log( "var: {?}={?}, {?}={?}, {?}={?}, {?}={?}",	#v1, v1, #v2, v2, #v3, v3, #v4, v4 )
+#define ax_log_var(  v1 )						ax_log( "var: {?}=[{?}]",									#v1, v1 )
+#define ax_log_var2( v1, v2 )					ax_log( "var: {?}=[{?}], {?}=[{?}]",						#v1, v1, #v2, v2 )
+#define ax_log_var3( v1, v2, v3 )				ax_log( "var: {?}=[{?}], {?}=[{?}], {?}=[{?}]",				#v1, v1, #v2, v2, #v3, v3 )
+#define ax_log_var4( v1, v2, v3, v4 )			ax_log( "var: {?}=[{?}], {?}=[{?}], {?}=[{?}], {?}=[{?}]",	#v1, v1, #v2, v2, #v3, v3, #v4, v4 )
 
 void ax_log_errno( const char* msg, int code );
 void ax_log_errno( const char* msg );

@@ -15,7 +15,7 @@ axStatus axSQLite3_open( axDBConn & conn, const char* filename ) {
 	axStatus st;
 	axDBConn_SQLite3* p = new axDBConn_SQLite3;
 	if( !p ) return axStatus_Std::not_enough_memory;
-	conn._setInstance( p );
+	conn._setImp( p );
 	return p->openFile( filename );
 }
 
@@ -23,7 +23,7 @@ axStatus axSQLite3_openMemory( axDBConn & conn ) {
 	axStatus st;
 	axDBConn_SQLite3* p = new axDBConn_SQLite3;
 	if( !p ) return axStatus_Std::not_enough_memory;
-	conn._setInstance( p );
+	conn._setImp( p );
 	return p->openMemory();
 }
 
@@ -64,27 +64,36 @@ axDBConn_SQLite3::~axDBConn_SQLite3() {
 	}
 }
 
-bool axDBConn_SQLite3::hasError( int code ) {
+bool axDBConn_SQLite3::hasError( int code, const char* sql ) {
 	switch( code ) {
 		case SQLITE_OK:
 		case SQLITE_DONE:
 		case SQLITE_ROW:
 			return false;
 	}
+
 	if( p_ ) {
-		ax_log( "SQLite3: {?} {?}", code, sqlite3_errmsg( p_ )  );
+		if( sql ) {
+			ax_log( "SQLite3 Error({?}): {?}\n SQL: {?}", code, sqlite3_errmsg( p_ ), sql );
+		}else{
+			ax_log( "SQLite3 Error({?}): {?}", code, sqlite3_errmsg( p_ ) );
+		}
 	}else{
-		ax_log( "SQLite3: error {?}", code  );
+		if( sql ) {
+			ax_log( "SQLite3 Error({?})", code  );
+		}else{
+			ax_log( "SQLite3 Error({?})\n  SQL: {?}", code, sql  );
+		}
 	}
 	return true;
 }
 
 //virtual 
-axStatus axDBConn_SQLite3::prepareStmt( axDBStmt & stmt, const char* sql ) {
+axStatus axDBConn_SQLite3::createStmt( axDBStmt & stmt, const char* sql ) {
 	axDBStmt_SQLite3* p = new axDBStmt_SQLite3( this );
 	if( !p ) return axStatus_Std::not_enough_memory;	
-	stmt._setInstance( p );
+	stmt._setImp( p );
 	
-	return p->prepare( sql );	
+	return p->create( sql );	
 }
 

@@ -12,7 +12,7 @@
 axStatus_Std	axStatus_Std::inst;
 
 const char* axStatus :: c_str() const { 
-	if( code_ == k_undefine ) return "undefine";
+	if( code_ == kUndefine ) return "undefine";
 
 	const char* sz = axStatus_ModuleList::instance->c_str(code_);
 	if( sz ) return sz;

@@ -24,7 +24,8 @@ public:
 	
 	void	close	();
 
-	void	_setImp	( axDBConn_Imp* p );
+	void			_setImp	( axDBConn_Imp* p );
+	axDBConn_Imp*	_getImp	()	{ return p_; }
 private:
 	axSharedPtr< axDBConn_Imp >	p_;
 };

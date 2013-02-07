@@ -910,7 +910,7 @@ bool	axExecute::isRunning() {
 
 axExecute::axExecute() {
 	imp = NULL;
-	returnValue_ = axStatus::k_undefine;
+	returnValue_ = axStatus::kUndefine;
 }
 
 axExecute::~axExecute() {

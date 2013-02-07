@@ -11,17 +11,17 @@
 
 #include "axDBStmt_SQLite3.h"
 
-class axDBConn_SQLite3 : public axDBConn_Interface {
+class axDBConn_SQLite3 : public axDBConn_Imp {
 public:
 	axDBConn_SQLite3();
 	virtual ~axDBConn_SQLite3();
 
-	virtual axStatus	prepareStmt	( axDBStmt & stmt, const char * sql );
+	virtual axStatus	createStmt	( axDBStmt & stmt, const char * sql );
 		
 			axStatus	openFile	( const char* filename );
 			axStatus	openMemory	();
 			
-			bool		hasError	( int code );
+			bool		hasError	( int code, const char* sql = NULL );
 			
 	operator sqlite3* () { return p_; }
 			
