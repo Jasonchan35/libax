@@ -245,6 +245,8 @@ axStatus	axDBStmt_SQLite3::getValue( axSize col, axIByteArray	&value ) {
 
 axStatus	axDBStmt_SQLite3::getValue( axSize col, axTimeStamp	&value ) {
 	if( !stmt_ ) return axStatus_Std::not_initialized;
+	if( col >= colCount_ ) return axStatus_Std::DB_no_such_column;
+
 	axStatus st;
 
 	int c = (int) col;

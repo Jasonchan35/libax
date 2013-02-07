@@ -83,7 +83,7 @@ axStatus	axDBStmt::getValue	( axSize col, T & value ) {
 
 inline	axStatus	axDBStmt::fetch		() { if( !p_ ) return axStatus_Std::not_initialized; return p_->fetch(); }
 inline	axSize		axDBStmt::colCount	() { return colCount_; }
-inline	int			axDBStmt::getValueType	( axSize col ) { if( !p_ ) return axStatus_Std::not_initialized; return p_->getValueType(col); }
+inline	int			axDBStmt::getValueType	( axSize col ) { if( !p_ ) return axDB_c_type_null; return p_->getValueType(col); }
 inline	const char*	axDBStmt::getColumnName	( axSize col ) { if( !p_ ) return NULL; return p_->getColumnName(col); }
 
 #endif //__axDBStmt_h__
