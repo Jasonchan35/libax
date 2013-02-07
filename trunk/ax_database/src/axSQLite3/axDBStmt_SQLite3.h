@@ -20,48 +20,52 @@
 
 class axDBConn_SQLite3;
 
-class axDBStmt_SQLite3 : public axDBStmt_Interface {
+class axDBStmt_SQLite3 : public axDBStmt_Imp {
 public:
 	axDBStmt_SQLite3( axDBConn_SQLite3* db );
 	virtual ~axDBStmt_SQLite3() {}
 	
-	virtual axStatus	prepare ( const char * sql );	
+			 axStatus	create ( const char * sql );	
+
 	virtual	axStatus	exec_ParamList	( const axDB_ParamList & list );
 
-	virtual axStatus	fetch		();
-	virtual axSize		colCount	() { return colCount_; }
-	virtual int			getValueType	( axSize col );
-	virtual const char* getColumnName	( axSize col );
+	virtual axSize		numColumns	() { return numColumns_; }
+	virtual int			columnType	( axSize col );
+	virtual const char* columnName	( axSize col );
 	
-	template< class T > axStatus getValue_int( axSize col, T & value );
-	virtual axStatus	getValue( axSize col, int8_t	&value );
-	virtual axStatus	getValue( axSize col, int16_t	&value );
-	virtual axStatus	getValue( axSize col, int32_t	&value );
-	virtual axStatus	getValue( axSize col, int64_t	&value );
-	
-	virtual axStatus	getValue( axSize col, float		&value );
-	virtual axStatus	getValue( axSize col, double	&value );
-	
-	virtual axStatus	getValue( axSize col, bool		&value );
-	
-	virtual axStatus	getValue( axSize col, axIStringA    &value );
-	virtual axStatus	getValue( axSize col, axIStringW    &value );
-	
-	virtual axStatus	getValue( axSize col, axIByteArray	&value );
-	
-	virtual axStatus	getValue( axSize col, axTimeStamp	&value );
+	virtual	axStatus	getRow_ValueList( axDB_ValueList & list );
 
+			axStatus	fetch		();
+
+	template< class T > axStatus getResultAtCol_int( axSize col, T & value );
+			axStatus	getResultAtCol	( axSize col, int8_t			&value );
+			axStatus	getResultAtCol	( axSize col, int16_t			&value );
+			axStatus	getResultAtCol	( axSize col, int32_t			&value );
+			axStatus	getResultAtCol	( axSize col, int64_t			&value );
 	
+			axStatus	getResultAtCol	( axSize col, float				&value );
+			axStatus	getResultAtCol	( axSize col, double			&value );
+	
+			axStatus	getResultAtCol	( axSize col, bool				&value );
+	
+			axStatus	getResultAtCol	( axSize col, axIStringA		&value );
+			axStatus	getResultAtCol	( axSize col, axIStringW		&value );
+	
+			axStatus	getResultAtCol	( axSize col, axIByteArray		&value );
+	
+			axStatus	getResultAtCol	( axSize col, axTimeStamp		&value );
+			axStatus	getResultAtCol	( axSize col, axDateTime		&value );
+
 	axSharedPtr< axDBConn_SQLite3 >	db_;
 	axStringA	sql_;
 	axSize		paramCount_;
 	
-	axArray< int, 32 >				tmpData;
-	axArray< axStringA_<32>, 32 >	strData;
+	axArray< int, 32 >				tmpIntData;
+	axArray< axStringA_<32>, 32 >	tmpStrData;
 	
 	void	releaseStmt();
 	
-	axSize	colCount_;
+	axSize	numColumns_;
 	sqlite3_stmt*	stmt_;	
 };
 

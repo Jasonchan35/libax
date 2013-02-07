@@ -1,6 +1,8 @@
 #include <ax/core/system/axAndroid.h>
 #include <ax/core/system/axLog.h>
 
+void axAndroid_dummy_func_for_stop_the_compile_warning() {}
+
 #ifdef axOS_Android
 
 axAndroid axAndroid::instance;

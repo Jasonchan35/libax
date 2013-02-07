@@ -63,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
+				OutputFile="../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -126,7 +126,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
+				OutputFile="../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -189,7 +189,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
+				OutputFile="../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -253,7 +253,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
+				OutputFile="../../lib/Windows/$(PlatformName)/$(ConfigurationName)/$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -281,7 +281,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\..\src\external\sqlite3\sqlite3.c"
+				RelativePath="..\..\external\sqlite3\sqlite3.c"
 				>
 			</File>
 		</Filter>
@@ -291,11 +291,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\..\src\external\sqlite3\sqlite3.h"
+				RelativePath="..\..\external\sqlite3\sqlite3.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\external\sqlite3\sqlite3ext.h"
+				RelativePath="..\..\external\sqlite3\sqlite3ext.h"
 				>
 			</File>
 		</Filter>

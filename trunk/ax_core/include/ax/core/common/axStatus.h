@@ -52,15 +52,21 @@ private:
 
 class axStatus {
 public:
-	axStatus()						{ code_ = k_undefine; }
+	axStatus()						{ code_ = kUndefine; }
 	axStatus( const axStatus &src )	{ code_ = src.code_; }
 	axStatus( int n )				{ code_ = n; }
+
+	//end of file
+	bool	isEOF () const			{ return code_ == kEOF; }
 	
 	operator		bool () const	{ return code_ >= 0; }		
 			int		code () const	{ return code_; }
 	const	char*	c_str() const; //!< error code in C string (end with zero)
 		
-	enum { k_undefine = -9999 };
+	enum { 
+		kUndefine	= -9999,
+		kEOF,
+	};
 
 private:
 	int code_;
