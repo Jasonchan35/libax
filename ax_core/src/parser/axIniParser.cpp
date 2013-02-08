@@ -45,7 +45,7 @@ axStatus	axIniParser::readMem ( const axIByteArray & buf ) {
 	axTempStringA	lineBuf;
 	for( ;; line_no++ ) {
 		st = ds.getLine( lineBuf );		
-		if( st.code() == axStatus_Std::the_end ) break;
+		if( st.isEOF() ) break;
 		if( !st ) return st;
 		
 		//ax_log( "{?}", lineBuf );

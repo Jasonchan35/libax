@@ -11,7 +11,7 @@
 axStatus axDeserializer :: getLine( axIStringA &str ) {
 	axStatus st;
 	str.resize( 0 );
-	if( remain_ <= 0 ) return axStatus_Std::the_end;
+	if( remain_ <= 0 ) return axStatus::kEOF;
 		
 	char* start = (char*)r_;
 	char* c = start;
@@ -45,7 +45,7 @@ axStatus axDeserializer :: getLine( axIStringA &str ) {
 axStatus axDeserializer :: getLine( axIStringW &str ) {
 	axStatus st;
 	str.resize( 0 );
-	if( remain_ <= 0 ) return axStatus_Std::the_end;
+	if( remain_ <= 0 ) return axStatus::kEOF;
 	
 	wchar_t* start = (wchar_t*)r_;
 	wchar_t* c = start;

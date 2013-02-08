@@ -15,7 +15,6 @@ axStatus_enum( will_cause_recursion )
 axStatus_enum( timed_out )
 axStatus_enum( data_corrupted )
 axStatus_enum( opengl_unsupported_extension )
-axStatus_enum( the_end )
 
 //-------------
 axStatus_enum( serialize_out_of_bound )
@@ -44,7 +43,6 @@ axStatus_enum( File_open_error )
 
 axStatus_enum( File_not_found )
 axStatus_enum( File_access_denied )
-axStatus_enum( File_ended )
 axStatus_enum( File_error_delete )
 
 axStatus_enum( File_lock_error )
@@ -58,7 +56,6 @@ axStatus_enum( FileStream_readline_error )
 //----
 axStatus_enum( Dir_not_open_yet )
 axStatus_enum( Dir_error_open )
-axStatus_enum( Dir_not_more_file )
 
 //-----
 axStatus_enum( IniParser_invalid_section )

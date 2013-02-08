@@ -30,7 +30,7 @@ axStatus axDir::getEntries( const char* path, axIArray<Entry> & entries ) {
 	for(;;) {
 		st = d.next( e );
 		if( !st ) {
-			if( st.code() == axStatus_Std::Dir_not_more_file ) break;
+			if( st.isEOF() ) break;
 			return st;
 		}
 		st = entries.appendByTake( e );		if( !st ) return st;
@@ -57,7 +57,7 @@ axStatus	axDir::getCount( const char* path, axSize &res ) {
 	for(;;) {
 		st = d.next( e );
 		if( !st ) {
-			if( st.code() == axStatus_Std::Dir_not_more_file ) break;
+			if( st.isEOF() ) break;
 			return st;
 		}
 		res++;
@@ -108,7 +108,7 @@ axStatus axDir :: open( const wchar_t* path ) {
 	if( ! isValid() ) {
 		DWORD err = GetLastError();
 		data_.cFileName[0] = 0;
-		if( err == ERROR_FILE_NOT_FOUND ) return axStatus_Std::Dir_not_more_file;
+		if( err == ERROR_FILE_NOT_FOUND ) return axStatus::kEOF;
 		return axStatus_Std::Dir_error_open;
 	}
 
@@ -128,7 +128,7 @@ axStatus axDir :: next( Entry & entry ) {
 	axStatus st;
 
 	if( ! data_.cFileName[0] ) {
-		return axStatus_Std::Dir_not_more_file;
+		return axStatus::kEOF;
 	}
 
 	st = entry.filename.set( data_.cFileName );		if( !st ) return st;
@@ -188,7 +188,7 @@ axStatus axDir :: next( Entry &e ) {
 	for(;;) {
 		if( 0 != readdir_r( dir_, &entry_, &result_ ) )
 			return -1;
-		if( !result_ ) return axStatus_Std::Dir_not_more_file;
+		if( !result_ ) return axStatus::kEOF;
 		if( ax_strcmp( result_->d_name, "."  ) == 0 ) continue;
 		if( ax_strcmp( result_->d_name, ".." ) == 0 ) continue;
 
