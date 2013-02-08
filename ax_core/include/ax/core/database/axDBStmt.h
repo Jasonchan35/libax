@@ -19,46 +19,89 @@ class axDBStmt : public axNonCopyable {
 public:	
 	axDBStmt();
 	
-	axStatus	create	( axDBConn & db , const char* sql );		
+		axStatus	create			( axDBConn & db, const char* sql );
 
-	template<class T>
-	axStatus	create_update( axDBConn &db, const char* table, T &values );
+	template<class T>	axStatus	createForInsert			( axDBConn & db, const char* table, const T & dummy );
+	template<class T>	axStatus	createForInsert			( axDBConn & db, const char* table );
+
+	template<class T>	axStatus	createForUpdate			( axDBConn & db, const char* table, const T & dummy,	const char* szWhere );
+	template<class T>	axStatus	createForUpdate			( axDBConn & db, const char* table,						const char* szWhere );
+
+	template<class T>	axStatus	createForSelect			( axDBConn & db, const char* table, const T & dummy,	const char* szWhere );
+	template<class T>	axStatus	createForSelect			( axDBConn & db, const char* table,						const char* szWhere );
 
 
-//	axStatus	exec( ... )
-	axStatus	exec_ParamList		( const axDB_ParamList & list );
-	axExpandArgList0 ( axStatus, exec,   const axDB_Param & , axDB_ParamList, exec_ParamList )
-	
-//	axStatus	createExec( db, sql, ... )
-	axStatus	createExec_ParamList( axDBConn & db, const char* sql, const axDB_ParamList & list );
-	axExpandArgList2 ( axStatus, createExec, axDBConn &, const char*, const axDB_Param & , axDB_ParamList, createExec_ParamList )
-
-//	axStatus	getRow( ... )
-	axStatus	getRow_ValueList	( axDB_ValueList & list );
-	axExpandArgList0 ( axStatus, getRow, const axDB_Value & , axDB_ValueList, getRow_ValueList )
+	//	axStatus	exec			( ... )
+		axStatus	exec_ParamList	( const axDB_ParamList & list );
+		axExpandArgList0			( axStatus, exec,   const axDB_Param & , axDB_ParamList, exec_ParamList )
 		
-	axSize		numColumns		();
-	int			columnType		( axSize col );
-	const char*	columnName		( axSize col );
+	//	axStatus	createExec		( db, sql, ... )
+		axStatus	createExec_ParamList( axDBConn & db, const char* sql, const axDB_ParamList & list );
+		axExpandArgList2			( axStatus, createExec, axDBConn &, const char*, const axDB_Param & , axDB_ParamList, createExec_ParamList )
+
+	//	axStatus	getRow			( ... )
+		axStatus	getRow_ValueList	( axDB_ValueList & list );
+		axExpandArgList0			( axStatus, getRow, const axDB_Value & , axDB_ValueList, getRow_ValueList )
 			
-		void	_setImp			( axDBStmt_Imp* p );
+		axSize		numColumns		();
+		int			columnType		( axSize col );
+		const char*	columnName		( axSize col );
+				
+			void	_setImp			( axDBStmt_Imp* p );
 protected:
 	axSize	numColumns_;
 	axSharedPtr< axDBStmt_Imp >	p_;
 };
 
+template<class PKey, class T>
+class axDBStmt_SingleUpdate {
+public:
+	axStatus	create() {
+		T tmp;
+		axDB_ColumnList	list;
+		list.io(tmp);
+	}
 
-template<class T> inline
-axStatus axDBStmt::create_update( axDBConn &db, const char* table, T &values ) {
-	axTempStringA	sql;
+	axStatus	exec( T & value );
+};
+
+template<class PKey, class T>
+class axDBStmt_SingleInsert {
+public:
+	axStatus	create() {
+		T tmp;
+		axDB_ColumnList	list;
+		list.io(tmp);
+	}
+
+	axStatus	exec( T & value );
+};
+
+template<class PKey, class T>
+class axDBStmt_SingleSelect {
+public:
+	axStatus	create() {
+		T tmp;
+		axDB_ColumnList	list;
+		list.io(tmp);
+	}
+
+	axStatus	exec( T & value );
+};
 
 
+template<class PKey, class T>
+class axDBStmt_Single {
+public:
+	axStatus	create() {
+	}
 
-
-
-	st = create( db, sql );		if( !st ) return st;
-	return 0;
-}
+	axDBStmt_SingleSelect	select;
+	axDBStmt_SingleSelect	insert;
+	axDBStmt_SingleSelect	update;
+	axDBStmt_SingleSelect	deleteRow;
+	axDBStmt_SingleSelect	createTable;
+};
 
 
 class axDBStmt_Imp :  public axNonCopyable, public axSharedPte {
@@ -77,5 +120,47 @@ public:
 inline	axSize		axDBStmt::numColumns	() { return numColumns_; }
 inline	int			axDBStmt::columnType	( axSize col ) { if( !p_ ) return axDB_c_type_null; return p_->columnType(col); }
 inline	const char*	axDBStmt::columnName	( axSize col ) { if( !p_ ) return NULL; return p_->columnName(col); }
+
+
+//=== insert ===
+template<class T> inline
+axStatus axDBStmt::createForInsert	( axDBConn & db, const char* table ) {
+	axTempStringA	sql;
+	axStatus	st = db.createSQL_Insert<T>( sql, table );	if( !st ) return st;
+	return create( db, sql );
+}
+template<class T> inline
+axStatus axDBStmt::createForInsert	( axDBConn & db, const char* table, const T & dummy ) {
+	return createForInsert<T>( db, table );
+}
+
+//=== update ===
+template<class T> inline
+axStatus axDBStmt::createForUpdate	( axDBConn & db, const char* table,	const char* szWhere ) {
+	axTempStringA	sql;
+	axStatus	st = db.createSQL_Update<T>( sql, table, szWhere );	if( !st ) return st;
+	return create( db, sql );
+}
+template<class T> inline
+axStatus axDBStmt::createForUpdate	( axDBConn & db, const char* table, const T & dummy, const char* szWhere ) {
+	return createForUpdate<T>( db, table, szWhere );
+}
+
+
+//=== select ===
+template<class T> inline
+axStatus axDBStmt::createForSelect	( axDBConn & db, const char* table,	const char* szWhere ) {
+	axTempStringA	sql;
+	axStatus	st = db.createSQL_Select<T>( sql, table, szWhere );	if( !st ) return st;
+	return create( db, sql );
+}
+template<class T> inline
+axStatus axDBStmt::createForSelect	( axDBConn & db, const char* table, const T & dummy, const char* szWhere ) {
+	return createForSelect<T>( db, table, szWhere );
+}
+
+
+
+
 
 #endif //__axDBStmt_h__

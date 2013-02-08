@@ -13,8 +13,6 @@
 #include "../time/axTimeStamp.h"
 #include "../time/axDateTime.h"
 
-const size_t	axDB_kArgListLocalBufSize = 32;
-
 enum {
 	axDB_c_type_null = 0,
 	axDB_c_type_bool,
@@ -30,6 +28,9 @@ enum {
 	axDB_c_type_TimeStamp,
 	axDB_c_type_DateTime,
 };
+
+const size_t	axDB_kArgListLocalBufSize = 32;
+const size_t	axDB_kRowIdType	= axDB_c_type_int64;
 
 class axDB_Param {
 public:
@@ -130,46 +131,87 @@ public:
 	}
 };
 
-//
-//class axDB_Column {
-//public:
-//	axDB_Column() { type_ = axDB_c_type_null; }
-//	
-//	template<class T> 
-//	axDB_Value( const char* _name )	{ 
-//		name.set( _name );
-//		type_ = axDB_ValueType( v );
-//	}
-//
-//	axStatus	onTake( axDB_Column &src ) { 
-//		axStatus st;
-//		ax_take_macro( type );
-//		ax_take_macro( name );
-//		return 0; 
-//	}
-//	
-//	int					type;
-//	axStringA_<64>		name;
-//};
-//
-//class axDB_ColumnList : public axArray< axDB_Column, axDB_kArgListLocalBufSize > {
-//public:
-//	template<class T>
-//	axStatus	io	( T &value, const char* name ) {
-//		return axDB_ColumnList_io( *this, value, name );
-//	}
-//};
-//
-//template<class T> inline
-//axStatus	axDB_ColumnList_io( axDB_ColumnList &s, T & value, const char* name ) {
-//	value.serialize_io( *this );
-//}
-//
-//template<> inline
-//axStatus	axDB_ColumnList_io( axDB_ColumnList &s, int8_t &value, const char* name ) {
-//	s.append( axDB_Column(value) );
-//}
-//
+
+class axDB_Column {
+public:
+	axDB_Column() { type = axDB_c_type_null; }
+	
+	axStatus	onTake( axDB_Column &src ) { 
+		axStatus st;
+		ax_take_macro( type );
+		ax_take_macro( name );
+		return 0; 
+	}
+
+	axStatus	toStringFormat( axStringFormat &f ) const {
+		return f.format("{?} {?}", type, name );
+	}
+	
+	int					type;
+	axStringA_<64>		name;
+};
+
+class axDB_ColumnList;
+template<class T> axStatus	axDB_ColumnList_io( axDB_ColumnList &s, T & value, const char* name );
+
+class axDB_ColumnList : public axArray< axDB_Column, axDB_kArgListLocalBufSize > {
+	typedef	axArray< axDB_Column, axDB_kArgListLocalBufSize > B;
+public:
+	axDB_ColumnList() {
+		prefix = NULL;
+	}
+
+	template<class T>
+	axStatus	io	( T &value, const char* name ) {
+		return axDB_ColumnList_io( *this, value, name );
+	}
+
+	template<class T>
+	axStatus	_io	( T & value, const char* name ) {
+		axStatus st;
+		st = incSize(1);		if( !st ) return st;
+		axDB_Column & c = last();
+
+		if( prefix && prefix[0] ) {
+			st = c.name.format("{?}_{?}", prefix, name );
+		}else{
+			st = c.name.set( name );
+		}
+		c.type = axDB_ValueType(value);
+		return 0;
+	}
+
+	axStatus	toStringFormat( axStringFormat &f ) const {
+		return B::toStringFormat(f);
+	}
+
+	const char* prefix;
+};
+
+template<> inline axStatus axDB_ColumnList_io( axDB_ColumnList &s, int8_t		& value, const char* name )	{ return s._io( value, name ); }
+template<> inline axStatus axDB_ColumnList_io( axDB_ColumnList &s, int16_t		& value, const char* name )	{ return s._io( value, name ); }
+template<> inline axStatus axDB_ColumnList_io( axDB_ColumnList &s, int32_t		& value, const char* name )	{ return s._io( value, name ); }
+template<> inline axStatus axDB_ColumnList_io( axDB_ColumnList &s, int64_t		& value, const char* name )	{ return s._io( value, name ); }
+template<> inline axStatus axDB_ColumnList_io( axDB_ColumnList &s, float		& value, const char* name )	{ return s._io( value, name ); }
+template<> inline axStatus axDB_ColumnList_io( axDB_ColumnList &s, double		& value, const char* name )	{ return s._io( value, name ); }
+
+template<class T> inline //for user-define structure
+axStatus	axDB_ColumnList_io( axDB_ColumnList &s, T & value, const char* name ) {
+	axStatus st;
+	axScopeValue<const char*>	old( s.prefix );
+
+	axStringA_<64>	prefix;
+	if( s.prefix && s.prefix[0] ) {
+		st = prefix.format( "{?}_{?}", s.prefix, name );
+	}else{
+		st = prefix.set( name );
+	}
+	s.prefix = prefix.c_str();
+
+	st = value.serialize_io( s );	if( !st ) return st;
+	return 0;
+}
+
 
 #endif //__axDB_common_h__
 

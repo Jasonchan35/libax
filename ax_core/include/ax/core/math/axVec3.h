@@ -107,6 +107,7 @@ public:
 
 	template<class D>	axVec3<D>	to_Vec3 () const { return axVec3<D>( (D)x, (D)y, (D)z ); }
 
+						axStatus	serialize_io	( axDB_ColumnList &s );
 	template<class S>	axStatus	serialize_io	( S &se );
 						
 						axStatus	toStringFormat	( axStringFormat &f ) const;
@@ -203,6 +204,16 @@ axStatus axVec3<T>::serialize_io( S &s ) {
 
 template< class T > inline axStatus ax_json_serialize_value( axJsonWriter &s, axVec3<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 3 ); }
 template< class T > inline axStatus ax_json_serialize_value( axJsonParser &s, axVec3<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 3 ); }
+
+template<class T> inline 
+axStatus axVec3<T>::serialize_io( axDB_ColumnList &s ) {
+	axStatus st;
+	ax_io(x);
+	ax_io(y);
+	ax_io(z);
+	return 0;
+}
+
 
 inline axVec3d ax_toVec3d( const axVec3f& v ) { return axVec3d(v.x,v.y,v.z); }
 

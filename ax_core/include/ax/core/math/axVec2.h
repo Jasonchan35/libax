@@ -4,6 +4,7 @@
 #include "../common/ax_common.h"
 #include "../string/ax_string.h"
 #include "../other/axJson.h"
+#include "../database/axDB_common.h"
 
 //! \addtogroup math
 //@{
