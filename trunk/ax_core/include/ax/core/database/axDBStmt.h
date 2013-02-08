@@ -21,6 +21,10 @@ public:
 	
 	axStatus	create	( axDBConn & db , const char* sql );		
 
+	template<class T>
+	axStatus	create_update( axDBConn &db, const char* table, T &values );
+
+
 //	axStatus	exec( ... )
 	axStatus	exec_ParamList		( const axDB_ParamList & list );
 	axExpandArgList0 ( axStatus, exec,   const axDB_Param & , axDB_ParamList, exec_ParamList )
@@ -29,13 +33,10 @@ public:
 	axStatus	createExec_ParamList( axDBConn & db, const char* sql, const axDB_ParamList & list );
 	axExpandArgList2 ( axStatus, createExec, axDBConn &, const char*, const axDB_Param & , axDB_ParamList, createExec_ParamList )
 
-
 //	axStatus	getRow( ... )
 	axStatus	getRow_ValueList	( axDB_ValueList & list );
 	axExpandArgList0 ( axStatus, getRow, const axDB_Value & , axDB_ValueList, getRow_ValueList )
-	
-	axStatus	fetch			();
-	
+		
 	axSize		numColumns		();
 	int			columnType		( axSize col );
 	const char*	columnName		( axSize col );
@@ -45,6 +46,20 @@ protected:
 	axSize	numColumns_;
 	axSharedPtr< axDBStmt_Imp >	p_;
 };
+
+
+template<class T> inline
+axStatus axDBStmt::create_update( axDBConn &db, const char* table, T &values ) {
+	axTempStringA	sql;
+
+
+
+
+
+	st = create( db, sql );		if( !st ) return st;
+	return 0;
+}
+
 
 class axDBStmt_Imp :  public axNonCopyable, public axSharedPte {
 public:

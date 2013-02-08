@@ -13,6 +13,8 @@
 #include "../time/axTimeStamp.h"
 #include "../time/axDateTime.h"
 
+const size_t	axDB_kArgListLocalBufSize = 32;
+
 enum {
 	axDB_c_type_null = 0,
 	axDB_c_type_bool,
@@ -72,9 +74,8 @@ template<class T> axDB_Param::axDB_Param( const T &v ) { axDB_ParamType( *this, 
 
 
 
-class axDB_ParamList : public axArray< axDB_Param, 32 > {
+class axDB_ParamList : public axArray< axDB_Param, axDB_kArgListLocalBufSize > {
 public:
-	axDB_ParamList() { setCapacityIncrement( 32 ); }
 	axDB_ParamList&	operator << ( const axDB_Param &p ) {
 		axStatus st;
 		st = append( p );	assert(st);
@@ -120,9 +121,8 @@ private:
 	int		type_;
 };
 
-class axDB_ValueList : public axArray< axDB_Value, 32 > {
+class axDB_ValueList : public axArray< axDB_Value, axDB_kArgListLocalBufSize > {
 public:
-	axDB_ValueList() { setCapacityIncrement( 32 ); }
 	axDB_ValueList&	operator << ( const axDB_Value &p ) {
 		axStatus st;
 		st = append( p );	assert(st);
@@ -130,6 +130,46 @@ public:
 	}
 };
 
+//
+//class axDB_Column {
+//public:
+//	axDB_Column() { type_ = axDB_c_type_null; }
+//	
+//	template<class T> 
+//	axDB_Value( const char* _name )	{ 
+//		name.set( _name );
+//		type_ = axDB_ValueType( v );
+//	}
+//
+//	axStatus	onTake( axDB_Column &src ) { 
+//		axStatus st;
+//		ax_take_macro( type );
+//		ax_take_macro( name );
+//		return 0; 
+//	}
+//	
+//	int					type;
+//	axStringA_<64>		name;
+//};
+//
+//class axDB_ColumnList : public axArray< axDB_Column, axDB_kArgListLocalBufSize > {
+//public:
+//	template<class T>
+//	axStatus	io	( T &value, const char* name ) {
+//		return axDB_ColumnList_io( *this, value, name );
+//	}
+//};
+//
+//template<class T> inline
+//axStatus	axDB_ColumnList_io( axDB_ColumnList &s, T & value, const char* name ) {
+//	value.serialize_io( *this );
+//}
+//
+//template<> inline
+//axStatus	axDB_ColumnList_io( axDB_ColumnList &s, int8_t &value, const char* name ) {
+//	s.append( axDB_Column(value) );
+//}
+//
 
 #endif //__axDB_common_h__
 
