@@ -60,8 +60,8 @@ public:
 	axStringA	sql_;
 	axSize		paramCount_;
 	
-	axArray< int, 32 >				tmpIntData;
-	axArray< axStringA_<32>, 32 >	tmpStrData;
+	axArray< int, axDB_kArgListLocalBufSize >			tmpIntData;
+	axArray< axStringA, axDB_kArgListLocalBufSize >		tmpStrData;
 	
 	void	releaseStmt();
 	
