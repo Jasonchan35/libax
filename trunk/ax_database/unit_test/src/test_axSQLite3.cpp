@@ -13,20 +13,20 @@ axStatus test_ax_SQLite3_case1() {
 	axDBStmt	stmt;
 
 	st = stmt.create( db, "drop table if exists table001;" );			if( !st ) return st;
-	st = stmt.exec();		if( !st ) return st;
+	st = stmt.exec();													if( !st ) return st;
 
 	st = stmt.create( db, "create table table001 ( id int, name text );" );		if( !st ) return st;
-	st = stmt.exec();		if( !st ) return st;
+	st = stmt.exec();															if( !st ) return st;
 
 	st = stmt.createExec( db, "insert into table001 (id,name) values(?,?)", 5, "string ' testing" );		if( !st ) return st;
 
 	st = stmt.create( db, "select id, name from table001" );		if( !st ) return st;
-	st = stmt.exec();		if( !st ) return st;
+	st = stmt.exec();												if( !st ) return st;
+
+	int			recId;
+	axStringA	name;
 
 	for(;;) {
-		int			recId;
-		axStringA	name;
-
 		st = stmt.getRow( recId, name );	
 		if( st.isEOF() ) break;
 		if( !st ) return st;
@@ -34,7 +34,6 @@ axStatus test_ax_SQLite3_case1() {
 		ax_log_var( recId );
 		ax_log_var( name );
 	}
-
 
 	return 0;
 }

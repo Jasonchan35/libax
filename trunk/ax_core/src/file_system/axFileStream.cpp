@@ -155,7 +155,7 @@ axStatus axFileStream::readLine ( axIStringA &buf, axSize buf_max_size ) {
 	int n;
 	st = ax_safe_assign( n, buf.size() );		if( !st ) return st;
 	if( NULL == fgets( buf._getInternalBufferPtr(), n, p_ ) ) {
-		if( feof(p_) ) return axStatus_Std::File_ended;
+		if( feof(p_) ) return axStatus::kEOF;
 		return axStatus_Std::FileStream_readline_error;
 	}
 	
