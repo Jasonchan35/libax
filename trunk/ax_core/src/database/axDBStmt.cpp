@@ -8,6 +8,7 @@
 
 #include <ax/core/database/axDBStmt.h>
 #include <ax/core/database/axDBConn.h>
+#include <ax/core/system/axLog.h>
 
 axDBStmt::axDBStmt() {
 	numColumns_ = 0;

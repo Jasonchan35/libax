@@ -5,6 +5,23 @@
 
 #include <ax/ax_unit_test.h>
 
+class Row {
+public:
+	int64_t		id;
+	axVec3f		vec3;
+	float		float1;
+
+	template<class S>
+	axStatus	serialize_io( S &s ) {
+		axStatus st;
+		ax_io( id );
+		ax_io( vec3 );
+		ax_io( float1 );
+		return 0;
+	}
+};
+
+
 axStatus test_ax_SQLite3_case1() {
 	axStatus st;
 	axDBConn	db;
@@ -34,6 +51,31 @@ axStatus test_ax_SQLite3_case1() {
 		ax_log_var( recId );
 		ax_log_var( name );
 	}
+
+	Row	row;
+
+	st = db.dropTableIfExists( "table'002" );						if( !st ) return st;
+	st = db.createTable( "table'002", row );						if( !st ) return st;
+
+	st = stmt.createForInsert( db, "table'002", row );				if( !st ) return st;
+
+
+	st = stmt.createForUpdate( db, "table'002", row, "id=?" );		if( !st ) return st;
+//	stmt.exec( row, 3, "aaa" );
+
+	st = stmt.createForSelect( db, "table'002", row, "id=?" );		if( !st ) return st;
+
+
+	//axDBStmt_Single<Row>	table1;
+
+	//table1.create( "table1" );
+
+	//table1.select( row, 10 );
+	//table1.insert( row );
+	//table1.update( row );
+	//table1.deleteRow( 10 );
+	//table1.createTable();
+
 
 	return 0;
 }
