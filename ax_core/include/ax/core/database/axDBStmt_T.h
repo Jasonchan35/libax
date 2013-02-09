@@ -4,7 +4,7 @@
 #include "axDBStmt.h"
 
 
-template<class T>
+template<class T, class PKey=int64_t, PKey T::*PKeyMember=&T::id>
 class axDBStmt_Insert {
 public:
 	axStatus	create	( axDBConn & db, const char* table ) {
@@ -73,11 +73,11 @@ private:
 
 
 template<class T >
-class axDBStmt_SelectWhere {
+class axDBStmt_SelectAll {
 public:
-	axStatus	create	( axDBConn & db, const char* table, const char* szWhere ) {
+	axStatus	create	( axDBConn & db, const char* table ) {
 		axStatus st;
-		st = stmt_.create_Select<T>( db, table, szWhere );	if( !st ) return st;
+		st = stmt_.create_Select<T>( db, table, NULL );		if( !st ) return st;
 		return 0;
 	}
 	axStatus	exec() {
@@ -86,18 +86,15 @@ public:
 	
 	axStatus getRow( T & v ) { return stmt_.getRow( v );	}
 
-
 	axStatus execGetAllRow( axIArray<T> &v )	{
 		axStatus st;
 		st = exec(); if( !st ) return st;
-		
 		for(;;) {
 			st = v.incSize(1);	if( !st ) return st;
 			st = getRow( v.last() );
 			if( st.isEOF() )	{ v.decSize(1); return 1; }
 			if( !st )			{ v.decSize(1); return st; }
 		}
-		
 		return 0;
 	}
 	
@@ -112,8 +109,6 @@ private:
 template<class T, class PKey=int64_t, PKey T::*PKeyMember=&T::id>
 class axDBTableAccessor {
 public:
-	
-
 	/*
 		ToDo
 		create :
@@ -121,29 +116,27 @@ public:
 		dump : rec, all,
 		insert : get last id
 	 
-	*/
-	
+	*/	
 	axStatus create( axDBConn & db, const char* table ) {
 		axStatus st;
-		st = _insert.create( db, table );			if( !st ) return st;
-		st = _update.create( db, table );			if( !st ) return st;
-		st = _select.create( db, table );			if( !st ) return st;
-		st = selectAll.create( db, table, NULL );	if( !st ) return st;
+		st = stmtInsert.create( db, table );			if( !st ) return st;
+		st = stmtUpdate.create( db, table );			if( !st ) return st;
+		st = stmtSelect.create( db, table );			if( !st ) return st;
+		st = stmtSelectAll.create( db, table );			if( !st ) return st;
 		return 0;
 	}
 	
-	axStatus insert( const T &v )				{ return _insert.exec( v );	}
-	axStatus update( const T &v )				{ return _update.exec( v );	}
-	axStatus select( T &v, const PKey& pkey )	{ return _select.exec( v, pkey ); }
+	axStatus insert		( const T &v )				{ return stmtInsert.exec( v );	}
+	axStatus update		( const T &v )				{ return stmtUpdate.exec( v );	}
+	axStatus select		( T &v, const PKey& pkey )	{ return stmtSelect.exec( v, pkey ); }
+	axStatus selectAll	( axIArray<T> &v )			{ return stmtSelectAll.execGetAllRow( v ); }
 	
-	axDBStmt_SelectWhere		< T >			selectAll;
+	axDBStmt_SelectAll< T >		stmtSelectAll;
 	
 private:
-	
-	axDBStmt_Insert			< T >					_insert;
-	axDBStmt_Update			< T, PKey, PKeyMember > _update;
-	axDBStmt_Select			< T, PKey, PKeyMember > _select;
-	
+	axDBStmt_Insert< T, PKey, PKeyMember >	stmtInsert;
+	axDBStmt_Update< T, PKey, PKeyMember > stmtUpdate;
+	axDBStmt_Select< T, PKey, PKeyMember > stmtSelect;
 };
 
 #endif //__axDBStmt_T_h__

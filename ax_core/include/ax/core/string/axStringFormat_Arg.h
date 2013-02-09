@@ -54,42 +54,30 @@ axStatus axStringFormat_out( axStringFormat &f, axStatus value );
 enum { axStringFormat_ArgListMaxSize = 16 };
 
 //--------
-class axStringFormat_FuncClass {
-public:
-	axStatus func( axStringFormat &f ) { assert(false); return -1; }
-	const void* data_;
-};
-typedef axStatus (axStringFormat_FuncClass::*StringFormat_Func)( axStringFormat &f );
+typedef axStatus (*axStringFormat_Func)( axStringFormat &f, const void* v );
 
-template< class T >
-class axStringFormat_FuncClass_T : public axStringFormat_FuncClass {
-public:
-	axStatus func( axStringFormat &f ) { return axStringFormat_out( f, *data() ); }
-	const T* data() { return (const T*)data_; }
-};
+template<class T> inline
+axStatus axStringFormat_Func_T( axStringFormat &f, const void* v ) {
+	return axStringFormat_out( f, *(const T*)v );
+}
 
 class axStringFormat_Arg {
 public:
-	axStringFormat_Arg() { data_=NULL; callback_=NULL; }
+	axStringFormat_Arg() { data=NULL; func=NULL; }
 
 	template<class T> 
 	axStringFormat_Arg( const T &v )	{ 
-		data_ = &v;
-		callback_ = static_cast< StringFormat_Func > ( &axStringFormat_FuncClass_T<T>::func );
+		data = &v;
+		func = axStringFormat_Func_T<T>;
 	}
-
 	axStatus	call( axStringFormat &f ) const {
-		axStringFormat_FuncClass	wrapper;
-		wrapper.data_ = data_;
-		return (wrapper.*callback_)( f );
+		return func( f, data );
 	}
-
+	
 	axStatus	onTake( axStringFormat_Arg &src ) { operator=( src ); return 0; }
 
-	const void*	data() const { return data_; }
-private:
-	const void*			data_;
-	StringFormat_Func	callback_;
+	const void*			data;
+	axStringFormat_Func	func;
 };
 
 class axStringFormat_ArgList : public axLocalArray< axStringFormat_Arg, axStringFormat_ArgListMaxSize > {

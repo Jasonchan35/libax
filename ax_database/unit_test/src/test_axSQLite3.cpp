@@ -124,7 +124,7 @@ axStatus test_axSQLite3_case2() {
 		Row row;
 		row.my_id = 100;
 		row.vec3.set( 9, 10, 11 );
-		axDBStmt_Insert<Row>	insertRow;
+		axDBStmt_Insert<Row, int64_t, &Row::my_id >	insertRow;
 		st = insertRow.create( db, table );		if( !st ) return st;
 		insertRow.exec( row );
 	}
