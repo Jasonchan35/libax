@@ -219,6 +219,9 @@ int main() {
     axStatus st;
 	st = test_axSQLite3();
     printf("==== return %d %s ====\n", st.code(), st.c_str() );
+#if axOS_Win
 	getchar();
+#endif
+	
     return 0;
 }
