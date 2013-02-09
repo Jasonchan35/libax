@@ -116,9 +116,12 @@ public:
 		dump : rec, all,
 		insert : get last id
 	 
-	*/	
+	*/
+
 	axStatus create( axDBConn & db, const char* table ) {
 		axStatus st;
+		db_ = &db;
+		st = table_.set( table );						if( !st ) return st;
 		st = stmtInsert.create( db, table );			if( !st ) return st;
 		st = stmtUpdate.create( db, table );			if( !st ) return st;
 		st = stmtSelect.create( db, table );			if( !st ) return st;
@@ -126,17 +129,24 @@ public:
 		return 0;
 	}
 	
+	axStatus createStmt_Insert ( axDBStmt & stmt ) 							{ return stmt.create_Insert<T>( db_, table_ ); }
+	axStatus createStmt_Update ( axDBStmt & stmt, const char* szWhere ) 	{ return stmt.create_Update<T>( db_, table_, szWhere ); }
+	axStatus createStmt_Select ( axDBStmt & stmt, const char* szWhere ) 	{ return stmt.create_Select<T>( db_, table_, szWhere ); }
+
+	
 	axStatus insert		( const T &v )				{ return stmtInsert.exec( v );	}
 	axStatus update		( const T &v )				{ return stmtUpdate.exec( v );	}
 	axStatus select		( T &v, const PKey& pkey )	{ return stmtSelect.exec( v, pkey ); }
 	axStatus selectAll	( axIArray<T> &v )			{ return stmtSelectAll.execGetAllRow( v ); }
-	
+
 	axDBStmt_SelectAll< T >		stmtSelectAll;
 	
 private:
-	axDBStmt_Insert< T, PKey, PKeyMember >	stmtInsert;
+	axDBStmt_Insert< T, PKey, PKeyMember > stmtInsert;
 	axDBStmt_Update< T, PKey, PKeyMember > stmtUpdate;
 	axDBStmt_Select< T, PKey, PKeyMember > stmtSelect;
+	axPtr<axDBConn> 	db_;
+	axStringA			table_;
 };
 
 #endif //__axDBStmt_T_h__

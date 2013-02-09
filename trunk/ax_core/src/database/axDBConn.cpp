@@ -67,14 +67,14 @@ axStatus	axDBConn_Imp::identifierString( axIStringA & out, const char* sz ) {
 }
 
 //== create table ==
-axStatus axDBConn::_createTable	( const char* table, const axDBColumnList & list ) {
+axStatus axDBConn::createTable	( const char* table, const axDBColumnList & list ) {
 	axStatus	st;
 	axTempStringA	sql;
-	st = _createSQL_CreateTable( sql, table, list );		if( !st ) return st;
+	st = createSQL_CreateTable( sql, table, list );		if( !st ) return st;
 	return exec( sql );
 }
 
-axStatus axDBConn::_createSQL_CreateTable( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
+axStatus axDBConn::createSQL_CreateTable( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->createSQL_CreateTable( outSQL, table, list );
 }
@@ -122,7 +122,7 @@ axStatus axDBConn_Imp::createSQL_DropTableIfExists(axIStringA &outSQL, const cha
 }
 
 //==== insert ===
-axStatus axDBConn::_createSQL_Insert( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
+axStatus axDBConn::createSQL_Insert( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->createSQL_Insert( outSQL, table, list );
 }
@@ -161,7 +161,7 @@ axStatus axDBConn_Imp::createSQL_Insert( axIStringA & outSQL, const char* table,
 
 
 //=== update ===
-axStatus axDBConn::_createSQL_Update( axIStringA & outSQL, const char* table, const axDBColumnList & list , const char* szWhere ) {
+axStatus axDBConn::createSQL_Update( axIStringA & outSQL, const char* table, const axDBColumnList & list , const char* szWhere ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->createSQL_Update( outSQL, table, list, szWhere );
 }
@@ -190,7 +190,7 @@ axStatus axDBConn_Imp::createSQL_Update( axIStringA & outSQL, const char* table,
 }
 
 //=== select ====
-axStatus axDBConn::_createSQL_Select( axIStringA & outSQL, const char* table, const axDBColumnList & list , const char* szWhere ) {
+axStatus axDBConn::createSQL_Select( axIStringA & outSQL, const char* table, const axDBColumnList & list , const char* szWhere ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->createSQL_Select( outSQL, table, list, szWhere );
 }

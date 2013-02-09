@@ -35,6 +35,7 @@ public:
 						//! SQL identifier for table/column
 						axStatus	identifierString		( axIStringA & out, const char* sz );
 
+						axStatus	createTable			( const char* table, const axDBColumnList & list );
 	template<class T>	axStatus	createTable				( const char* table, const T &dummy );
 	template<class T>	axStatus	createTable				( const char* table );
 
@@ -42,18 +43,22 @@ public:
 						axStatus	dropTableIfExists		( const char* table );
 
 //createSQL
+						axStatus	createSQL_CreateTable	( axIStringA & outSQL, const char* table, const axDBColumnList & list );
 	template<class T>	axStatus	createSQL_CreateTable	( axIStringA & outSQL, const char* table, const T &dummy );
 	template<class T>	axStatus	createSQL_CreateTable	( axIStringA & outSQL, const char* table );
 
 						axStatus	createSQL_DropTable		( axIStringA & outSQL, const char* table );
 						axStatus	createSQL_DropTableIfExists( axIStringA & outSQL, const char * table );
 
+						axStatus	createSQL_Insert		( axIStringA & outSQL, const char* table, const axDBColumnList & list );
 	template<class T>	axStatus	createSQL_Insert		( axIStringA & outSQL, const char* table, const T &dummy );
 	template<class T>	axStatus	createSQL_Insert		( axIStringA & outSQL, const char* table );
 
+						axStatus	createSQL_Update		( axIStringA & outSQL, const char* table, const axDBColumnList & list,	const char* szWhere );
 	template<class T>	axStatus	createSQL_Update		( axIStringA & outSQL, const char* table, const T &dummy,	const char* szWhere );
 	template<class T>	axStatus	createSQL_Update		( axIStringA & outSQL, const char* table, 					const char* szWhere );
 
+						axStatus	createSQL_Select		( axIStringA & outSQL, const char* table, const axDBColumnList & list,	const char* szWhere );
 	template<class T>	axStatus	createSQL_Select		( axIStringA & outSQL, const char* table, const T &dummy,	const char* szWhere );
 	template<class T>	axStatus	createSQL_Select		( axIStringA & outSQL, const char* table, 					const char* szWhere );
 
@@ -63,12 +68,6 @@ public:
 	axDBConn_Imp*	_getImp	()	{ return p_; }
 private:
 
-	axStatus	_createTable			( const char* table, const axDBColumnList & list );
-
-	axStatus	_createSQL_CreateTable	( axIStringA & outSQL, const char* table, const axDBColumnList & list );
-	axStatus	_createSQL_Insert		( axIStringA & outSQL, const char* table, const axDBColumnList & list );
-	axStatus	_createSQL_Update		( axIStringA & outSQL, const char* table, const axDBColumnList & list,	const char* szWhere );
-	axStatus	_createSQL_Select		( axIStringA & outSQL, const char* table, const axDBColumnList & list,	const char* szWhere );
 
 	axSharedPtr< axDBConn_Imp >	p_;
 };
@@ -85,7 +84,7 @@ template<class T> inline
 axStatus	axDBConn::createTable				( const char* table, const T &dummy ) {
 	axDBColumnList	list;
 	axStatus st = list.io( ax_const_cast(dummy), NULL );		if( !st ) return st;
-	return _createTable( table, list );
+	return createTable( table, list );
 }
 
 //== create table ==
@@ -98,7 +97,7 @@ template<class T> inline
 axStatus	axDBConn::createSQL_CreateTable( axIStringA & outSQL, const char* table, const T & dummy ) {
 	axDBColumnList	list;
 	axStatus st = list.io( ax_const_cast(dummy), NULL );		if( !st ) return st;
-	return _createSQL_CreateTable( outSQL, table, list );
+	return createSQL_CreateTable( outSQL, table, list );
 }
 
 
@@ -112,7 +111,7 @@ template<class T> inline
 axStatus	axDBConn::createSQL_Insert( axIStringA & outSQL, const char* table, const T & dummy ) {
 	axDBColumnList	list;
 	axStatus st = list.io( ax_const_cast(dummy), NULL );		if( !st ) return st;
-	return _createSQL_Insert( outSQL, table, list );
+	return createSQL_Insert( outSQL, table, list );
 }
 
 //== update ==
@@ -125,7 +124,7 @@ template<class T> inline
 axStatus	axDBConn::createSQL_Update( axIStringA & outSQL, const char* table, const T & dummy, const char* szWhere ) {
 	axDBColumnList	list;
 	axStatus st = list.io( ax_const_cast(dummy), NULL );		if( !st ) return st;
-	return _createSQL_Update( outSQL, table, list, szWhere );
+	return createSQL_Update( outSQL, table, list, szWhere );
 }
 
 //== select ==
@@ -138,11 +137,11 @@ template<class T> inline
 axStatus	axDBConn::createSQL_Select( axIStringA & outSQL, const char* table, const T & dummy, const char* szWhere ) {
 	axDBColumnList	list;
 	axStatus st = list.io( ax_const_cast(dummy), NULL );		if( !st ) return st;
-	return _createSQL_Select( outSQL, table, list, szWhere );
+	return createSQL_Select( outSQL, table, list, szWhere );
 }
 
 
-
+//=====
 template<class T> inline
 axStatus   axDBConn::getWherePKey( axIStringA &wherePKey, T &dummy, void *PKeyMember ) {
 	axStatus st ;
@@ -157,7 +156,6 @@ axStatus   axDBConn::getWherePKey( axIStringA &wherePKey, T &dummy, void *PKeyMe
 
 	return 0;
 }
-
 
 
 //!
