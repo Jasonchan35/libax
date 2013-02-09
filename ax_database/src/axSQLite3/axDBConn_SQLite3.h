@@ -19,8 +19,6 @@ public:
 	virtual axStatus	createStmt	( axDBStmt & stmt, const char * sql );
 	
 	virtual	axStatus	createSQL_CreateTable		( axIStringA & outSQL, const char* table, const axDB_ColumnList & list );
-	virtual	axStatus	createSQL_DropTableIfExists	( axIStringA & outSQL, const char* table );
-
 
 			axStatus	openFile	( const char* filename );
 			axStatus	openMemory	();

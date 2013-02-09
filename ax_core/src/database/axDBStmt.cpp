@@ -18,7 +18,6 @@ void	axDBStmt::_setImp( axDBStmt_Imp* p ) {
 	p_.ref( p );
 }
 
-
 axStatus axDBStmt::create ( axDBConn &db, const char* sql ) { 
 	if( ! db._getImp() ) return axStatus_Std::not_initialized;
 	return db._getImp()->createStmt( *this, sql);

@@ -18,6 +18,7 @@ void axDBStmt_SQLite3::releaseStmt() {
 	if( stmt_ ) {
 		sqlite3_finalize( stmt_ );
 		stmt_ = NULL;
+		sql_.clear();
 	}
 }
 
@@ -36,10 +37,10 @@ int	axDBStmt_SQLite3 :: columnType( axSize col ) {
 	st = ax_safe_assign( i, col );	if( !st ) return axDB_c_type_null;
 	int t = sqlite3_column_type( stmt_, i );
 	switch( t ) {
-		case SQLITE_INTEGER: return axDB_c_type_int64;
+		case SQLITE_INTEGER: return axDB_c_type_int64_t;
 		case SQLITE_FLOAT:	 return axDB_c_type_double;
-		case SQLITE3_TEXT:	 return axDB_c_type_StringA;
-		case SQLITE_BLOB:	 return axDB_c_type_ByteArray;
+		case SQLITE3_TEXT:	 return axDB_c_type_axIStringA;
+		case SQLITE_BLOB:	 return axDB_c_type_axIByteArray;
 	}
 	return axDB_c_type_null;
 }
@@ -47,8 +48,11 @@ int	axDBStmt_SQLite3 :: columnType( axSize col ) {
 axStatus axDBStmt_SQLite3::exec_ParamList( const axDB_ParamList & list ) {
 	if( !stmt_ ) return axStatus_Std::DB_error;
 
-	sqlite3_reset( stmt_ );
+	if( db_->echoSQL() ) {
+		ax_log("--- ExecSQL: ---\n{?}\nParams:{?}", sql_, list );
+	}
 
+	sqlite3_reset( stmt_ );
 	axStatus st;
 			
 	int ret;	
@@ -64,13 +68,13 @@ axStatus axDBStmt_SQLite3::exec_ParamList( const axDB_ParamList & list ) {
 	if( c > n ) return axStatus_Std::DB_invalid_param_count;
 			
 	for( int i=0; i<c; i++ ) {
-		const axDB_Param &param = list[i];
+		const axDBParam &param = list[i];
 		switch( param.type ) {
 		
-			case axDB_c_type_int8:		ret = sqlite3_bind_int   ( stmt_, i+1, param.int8_  );	break;
-			case axDB_c_type_int16: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.int16_ );	break;
-			case axDB_c_type_int32: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.int32_ );	break;
-			case axDB_c_type_int64: 	ret = sqlite3_bind_int64 ( stmt_, i+1, param.int64_ );	break;
+			case axDB_c_type_int8_t:	ret = sqlite3_bind_int   ( stmt_, i+1, param.int8_  );	break;
+			case axDB_c_type_int16_t: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.int16_ );	break;
+			case axDB_c_type_int32_t: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.int32_ );	break;
+			case axDB_c_type_int64_t: 	ret = sqlite3_bind_int64 ( stmt_, i+1, param.int64_ );	break;
 			
 			case axDB_c_type_bool: {
 				tmpIntData[i] = param.bool_ ? 1 : 0;
@@ -80,15 +84,20 @@ axStatus axDBStmt_SQLite3::exec_ParamList( const axDB_ParamList & list ) {
 			case axDB_c_type_float: 	ret = sqlite3_bind_double( stmt_, i+1, (double) param.float_  ); break;
 			case axDB_c_type_double: 	ret = sqlite3_bind_double( stmt_, i+1,          param.double_ ); break;
 			
-			case axDB_c_type_StringA: 	ret = sqlite3_bind_text  ( stmt_, i+1, param.strA, -1, NULL ); break;				
-			case axDB_c_type_StringW: {
+			case axDB_c_type_axIStringA: ret = sqlite3_bind_text  ( stmt_, i+1, param.strA, -1, NULL ); break;				
+			case axDB_c_type_axIStringW: {
 				st = tmpStrData[i].set( param.strW );	if( !st ) return st;
 				ret = sqlite3_bind_text( stmt_, i+1, tmpStrData[i], -1, NULL );
 			}break;
 			
-			case axDB_c_type_TimeStamp:{
-				axDateTime	dt( param.timestamp_ );
+			case axDB_c_type_axTimeStamp: {
+				axDateTime	dt( *param.p_timeStamp );
 				st = tmpStrData[i].convert( dt );	if( !st ) return st;
+				ret = sqlite3_bind_text( stmt_, i+1, tmpStrData[i], -1, NULL );
+			}break;
+
+			case axDB_c_type_axDateTime: {
+				st = tmpStrData[i].convert( *param.p_dateTime );	if( !st ) return st;
 				ret = sqlite3_bind_text( stmt_, i+1, tmpStrData[i], -1, NULL );
 			}break;
 			
@@ -120,7 +129,11 @@ axStatus axDBStmt_SQLite3::fetch () {
 }
 
 axStatus axDBStmt_SQLite3::create ( const char * sql ) {
+	axStatus st;
+
 	releaseStmt();	
+	st = sql_.set( sql );		if( !st ) return st;
+
 	const char* remainSQL = NULL;
 	int ret = sqlite3_prepare( *db_, sql, -1, &stmt_, &remainSQL );
 	if( db_->hasError(ret, sql) ) {
@@ -131,6 +144,7 @@ axStatus axDBStmt_SQLite3::create ( const char * sql ) {
 		ax_log("cannot contain multiple commands into a prepared statement");
 		return axStatus_Std::DB_error;
 	}
+
 	return 0;
 }
 
@@ -141,19 +155,13 @@ axStatus axDBStmt_SQLite3::getRow_ValueList( axDB_ValueList & list ) {
 	if( numColumns_ < list.size() ) return axStatus_Std::DB_invalid_param_count;
 	
 	for( axSize i=0; i<list.size(); i++ ) {
-		switch( list[i].type() ) {
-			case axDB_c_type_int8:		st = getResultAtCol( i, *(int8_t*		) list[i].data() );	break;
-			case axDB_c_type_int16:		st = getResultAtCol( i, *(int16_t*		) list[i].data() );	break;
-			case axDB_c_type_int32:		st = getResultAtCol( i, *(int32_t*		) list[i].data() );	break;
-			case axDB_c_type_int64:		st = getResultAtCol( i, *(int64_t*		) list[i].data() );	break;
-			case axDB_c_type_float:		st = getResultAtCol( i, *(float*		) list[i].data() );	break;
-			case axDB_c_type_double:	st = getResultAtCol( i, *(double*		) list[i].data() );	break;
-			case axDB_c_type_bool:		st = getResultAtCol( i, *(bool*			) list[i].data() );	break;
-			case axDB_c_type_StringA:	st = getResultAtCol( i, *(axIStringA*	) list[i].data() );	break;
-			case axDB_c_type_StringW:	st = getResultAtCol( i, *(axIStringW*	) list[i].data() );	break;
-			case axDB_c_type_ByteArray:	st = getResultAtCol( i, *(axIByteArray*	) list[i].data() ); break;
-			case axDB_c_type_TimeStamp:	st = getResultAtCol( i, *(axTimeStamp* 	) list[i].data() ); break;
-			case axDB_c_type_DateTime:	st = getResultAtCol( i, *(axDateTime*	) list[i].data() ); break;
+		axDBValue & v = list[i];
+		switch( v.type ) {
+			#define axDB_c_type_list( T ) \
+				case axDB_c_type_##T:		st = getResultAtCol( i, *(T*)v.data );	break; \
+			//-----
+				#include <ax/core/database/axDB_c_type_list.h>
+			#undef axDB_c_type_list
 		}
 		if( !st ) return st;
 	}
@@ -170,6 +178,9 @@ axStatus axDBStmt_SQLite3::getResultAtCol_int( axSize col, T & value ) {
 	axStatus st;
 	switch( type ) {
 		case SQLITE_NULL:
+		case SQLITE_TEXT: {
+			ax_log("====> {?}", (const char*) sqlite3_column_text( stmt_,c ) );
+		}break;
 		case SQLITE_INTEGER: {
 			// SQLite using int64 internal in memory
 			st = ax_safe_assign( value, sqlite3_column_int64( stmt_, c ) );

@@ -107,8 +107,11 @@ public:
 
 	template<class D>	axVec3<D>	to_Vec3 () const { return axVec3<D>( (D)x, (D)y, (D)z ); }
 
-						axStatus	serialize_io	( axDB_ColumnList &s );
-	template<class S>	axStatus	serialize_io	( S &se );
+	template<class S>	axStatus	serialize_io_bin( S &s );
+						axStatus	serialize_io	( axSerializer	 &s ) { return serialize_io_bin(s); }
+						axStatus	serialize_io	( axDeserializer &s ) { return serialize_io_bin(s); }
+
+	template<class S>	axStatus	serialize_io	( S &s );
 						
 						axStatus	toStringFormat	( axStringFormat &f ) const;
 						axStatus	onTake			( axVec3<T> &b )			{ *this = b; return 0; }
@@ -190,7 +193,7 @@ axStatus axVec3<T> :: toStringFormat( axStringFormat &f ) const {
 
 template<class T>
 template<class S> inline 
-axStatus axVec3<T>::serialize_io( S &s ) {
+axStatus axVec3<T>::serialize_io_bin( S &s ) {
 	#if axBYTE_ORDER == axSERIALIZE_BYTE_ORDER
 		return s.io_raw( this, sizeof(x)*kElementCount );
 	#else
@@ -202,11 +205,9 @@ axStatus axVec3<T>::serialize_io( S &s ) {
 	#endif
 }
 
-template< class T > inline axStatus ax_json_serialize_value( axJsonWriter &s, axVec3<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 3 ); }
-template< class T > inline axStatus ax_json_serialize_value( axJsonParser &s, axVec3<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 3 ); }
-
-template<class T> inline 
-axStatus axVec3<T>::serialize_io( axDB_ColumnList &s ) {
+template<class T>
+template<class S> inline 
+axStatus axVec3<T>::serialize_io( S &s ) {
 	axStatus st;
 	ax_io(x);
 	ax_io(y);
@@ -214,6 +215,9 @@ axStatus axVec3<T>::serialize_io( axDB_ColumnList &s ) {
 	return 0;
 }
 
+
+template< class T > inline axStatus ax_json_serialize_value( axJsonWriter &s, axVec3<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 3 ); }
+template< class T > inline axStatus ax_json_serialize_value( axJsonParser &s, axVec3<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 3 ); }
 
 inline axVec3d ax_toVec3d( const axVec3f& v ) { return axVec3d(v.x,v.y,v.z); }
 

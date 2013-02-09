@@ -9,14 +9,6 @@
 #include <ax/core/database/axDBStmt.h>
 #include <ax/core/system/axLog.h>
 
-axStatus	ax_sql_escape_str( axIStringA & out, const char* sz ) {
-	axStatus st;
-	axTempStringA	tmp;
-	st = tmp.set( sz );					if( !st ) return st;
-	st = tmp.replaceString("'","''");	if( !st ) return st;
-	return out.format("'{?}'", tmp );
-}
-
 axDBConn::axDBConn() {
 }
 
@@ -37,17 +29,48 @@ axStatus axDBConn::exec	( const char* sql ) {
 	return stmt.createExec( *this, sql );
 }
 
+axStatus axDBConn::setEchoSQL ( bool b ) {
+	if( !p_ ) return axStatus_Std::not_initialized;
+	return p_->setEchoSQL(b);
+}
+
+bool axDBConn::echoSQL () {
+	if( !p_ ) return false;
+	return p_->echoSQL();
+}
+
+axStatus	axDBConn::escapeString( axIStringA & out, const char* sz ) {
+	if( !p_ ) return axStatus_Std::not_initialized;
+	return p_->escapeString( out, sz );
+}
+
+
+axStatus	axDBConn_Imp::escapeString( axIStringA & out, const char* sz ) {
+	axStatus st;
+	axTempStringA	tmp;
+	st = tmp.set( sz );					if( !st ) return st;
+	st = tmp.replaceString("'","''");	if( !st ) return st;
+	return out.format("'{?}'", tmp );
+}
+
+axStatus	axDBConn::identifierString( axIStringA & out, const char* sz ) {
+	if( !p_ ) return axStatus_Std::not_initialized;
+	return p_->identifierString( out, sz );
+}
+
+axStatus	axDBConn_Imp::identifierString( axIStringA & out, const char* sz ) {
+	axStatus st;
+	axTempStringA	tmp;
+	st = tmp.set( sz );						if( !st ) return st;
+	st = tmp.replaceString("\"","\"\"");	if( !st ) return st;
+	return out.format("\"{?}\"", tmp );
+}
+
+//== create table ==
 axStatus axDBConn::_createTable	( const char* table, const axDB_ColumnList & list ) {
 	axStatus	st;
 	axTempStringA	sql;
 	st = _createSQL_CreateTable( sql, table, list );		if( !st ) return st;
-	return exec( sql );
-}
-
-axStatus axDBConn::dropTableIfExists		( const char* table ) {
-	axStatus	st;
-	axTempStringA	sql;
-	st = createSQL_DropTableIfExists( sql, table );			if( !st ) return st;
 	return exec( sql );
 }
 
@@ -56,25 +79,52 @@ axStatus axDBConn::_createSQL_CreateTable( axIStringA & outSQL, const char* tabl
 	return p_->createSQL_CreateTable( outSQL, table, list );
 }
 
+//== drop table ==
+axStatus axDBConn::dropTable ( const char* table ) {
+	axStatus	st;
+	axTempStringA	sql;
+	st = createSQL_DropTable( sql, table );			if( !st ) return st;
+	return exec( sql );
+}
+
+axStatus axDBConn::createSQL_DropTable( axIStringA & outSQL, const char* table ) {
+	if( !p_ ) return axStatus_Std::not_initialized;
+	return p_->createSQL_DropTable( outSQL, table );
+}
+
+axStatus axDBConn_Imp::createSQL_DropTable( axIStringA & outSQL, const char* table ) {
+	axStatus	st;
+	axTempStringA	tableName;
+	st = identifierString( tableName, table );		if( !st ) return st;
+	st = outSQL.format("DROP TABLE {?};", tableName);
+	return 0;
+}
+
+// === drop table if exists
+axStatus axDBConn::dropTableIfExists		( const char* table ) {
+	axStatus	st;
+	axTempStringA	sql;
+	st = createSQL_DropTableIfExists( sql, table );			if( !st ) return st;
+	return exec( sql );
+}
+
 axStatus axDBConn::createSQL_DropTableIfExists( axIStringA & outSQL, const char* table ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->createSQL_DropTableIfExists( outSQL, table );
 }
 
+axStatus axDBConn_Imp::createSQL_DropTableIfExists(axIStringA &outSQL, const char *table) {
+	axStatus st;
+	axTempStringA	tableName;
+	st = identifierString( tableName, table );		if( !st ) return st;
+	st = outSQL.format("DROP TABLE IF EXISTS {?};", tableName);
+	return 0;
+}
+
+//==== insert ===
 axStatus axDBConn::_createSQL_Insert( axIStringA & outSQL, const char* table, const axDB_ColumnList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->createSQL_Insert( outSQL, table, list );
-}
-
-axStatus axDBConn::_createSQL_Update( axIStringA & outSQL, const char* table, const axDB_ColumnList & list , const char* szWhere ) {
-	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->createSQL_Update( outSQL, table, list, szWhere );
-}
-
-
-axStatus axDBConn::_createSQL_Select( axIStringA & outSQL, const char* table, const axDB_ColumnList & list , const char* szWhere ) {
-	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->createSQL_Select( outSQL, table, list, szWhere );
 }
 
 axStatus axDBConn_Imp::createSQL_Insert( axIStringA & outSQL, const char* table, const axDB_ColumnList & list ) {
@@ -82,7 +132,7 @@ axStatus axDBConn_Imp::createSQL_Insert( axIStringA & outSQL, const char* table,
 	axTempStringA	colName;
 
 	axTempStringA	tableName;
-	st = ax_sql_escape_str( tableName, table );		if( !st ) return st;
+	st = identifierString( tableName, table );		if( !st ) return st;
 
 	st = outSQL.format("INSERT INTO {?} (\n", tableName );
 
@@ -92,7 +142,7 @@ axStatus axDBConn_Imp::createSQL_Insert( axIStringA & outSQL, const char* table,
 			st = outSQL.append(",\n");					if( !st ) return st;
 		}
 
-		st = ax_sql_escape_str( colName, c.name );		if( !st ) return st;
+		st = identifierString( colName, c.name );		if( !st ) return st;
 		st = outSQL.appendFormat( "  {?}", colName );	if( !st ) return st;
 	}
 
@@ -106,18 +156,21 @@ axStatus axDBConn_Imp::createSQL_Insert( axIStringA & outSQL, const char* table,
 	}
 
 	st = outSQL.append(");");							if( !st ) return st;
-
-	ax_log( "SQL:\n{?}",outSQL );
-
 	return 0;
 }
 
+
+//=== update ===
+axStatus axDBConn::_createSQL_Update( axIStringA & outSQL, const char* table, const axDB_ColumnList & list , const char* szWhere ) {
+	if( !p_ ) return axStatus_Std::not_initialized;
+	return p_->createSQL_Update( outSQL, table, list, szWhere );
+}
 
 axStatus axDBConn_Imp::createSQL_Update( axIStringA & outSQL, const char* table, const axDB_ColumnList & list, const char* szWhere ) {
 	axStatus st;
 	axTempStringA	colName;
 	axTempStringA	tableName;
-	st = ax_sql_escape_str( tableName, table );		if( !st ) return st;
+	st = identifierString( tableName, table );		if( !st ) return st;
 
 
 	st = outSQL.format("UPDATE {?} SET\n", tableName );		if( !st ) return st;
@@ -128,22 +181,25 @@ axStatus axDBConn_Imp::createSQL_Update( axIStringA & outSQL, const char* table,
 			st = outSQL.append(",\n");					if( !st ) return st;
 		}
 
-		st = ax_sql_escape_str( colName, c.name );		if( !st ) return st;
+		st = identifierString( colName, c.name );		if( !st ) return st;
 		st = outSQL.appendFormat( "  {?}=?", colName );	if( !st ) return st;
 	}
 
 	st = outSQL.appendFormat("\n  WHERE {?};", szWhere );	if( !st ) return st;
-	
-	ax_log( "SQL:\n{?}",outSQL );
-
 	return 0;
+}
+
+//=== select ====
+axStatus axDBConn::_createSQL_Select( axIStringA & outSQL, const char* table, const axDB_ColumnList & list , const char* szWhere ) {
+	if( !p_ ) return axStatus_Std::not_initialized;
+	return p_->createSQL_Select( outSQL, table, list, szWhere );
 }
 
 axStatus axDBConn_Imp::createSQL_Select	( axIStringA & outSQL, const char* table, const axDB_ColumnList & list, const char* szWhere ) {
 	axStatus st;
 	axTempStringA	colName;
 	axTempStringA	tableName;
-	st = ax_sql_escape_str( tableName, table );		if( !st ) return st;
+	st = identifierString( tableName, table );		if( !st ) return st;
 
 	st = outSQL.format("SELECT\n" );
 
@@ -153,13 +209,10 @@ axStatus axDBConn_Imp::createSQL_Select	( axIStringA & outSQL, const char* table
 			st = outSQL.append(",\n");					if( !st ) return st;
 		}
 
-		st = ax_sql_escape_str( colName, c.name );		if( !st ) return st;
+		st = identifierString( colName, c.name );		if( !st ) return st;
 		st = outSQL.appendFormat( "  {?}", colName );		if( !st ) return st;
 	}
 
 	st = outSQL.appendFormat("\n  FROM {?}\n  WHERE {?};", tableName, szWhere );		if( !st ) return st;
-
-	ax_log( "SQL:\n{?}",outSQL );
-
 	return 0;
 }

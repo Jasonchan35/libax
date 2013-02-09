@@ -298,6 +298,14 @@
 				Name="database"
 				>
 				<File
+					RelativePath="..\..\..\include\ax\core\database\axDB_c_type_list.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\database\axDB_common.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\ax\core\database\axDB_common.h"
 					>
 				</File>
@@ -307,10 +315,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\ax\core\database\axDBConn.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\database\axDBRow.h"
 					>
 				</File>
 				<File

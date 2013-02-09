@@ -14,30 +14,38 @@
 class axDBConn_Imp;
 class axDBResultSet;
 class axDBStmt;
-class axDB_Param;
+class axDBParam;
 class axDB_ParamList;
 
-axStatus	ax_sql_escape_str( axIStringA & out, const char* sz );
 
 
 class axDBConn : public axNonCopyable {
 public:	
     axDBConn();
     ~axDBConn();
-	
-	void		close	();
+						void		close					();
+
+						axStatus	setEchoSQL				( bool b );
+						bool		echoSQL					();
 
 						axStatus	exec					( const char* sql );
+
+						axStatus	escapeString			( axIStringA & out, const char* sz );
+
+						//! SQL identifier for table/column
+						axStatus	identifierString		( axIStringA & out, const char* sz );
 
 	template<class T>	axStatus	createTable				( const char* table, const T &dummy );
 	template<class T>	axStatus	createTable				( const char* table );
 
+						axStatus	dropTable				( const char* table );
 						axStatus	dropTableIfExists		( const char* table );
 
 //createSQL
 	template<class T>	axStatus	createSQL_CreateTable	( axIStringA & outSQL, const char* table, const T &dummy );
 	template<class T>	axStatus	createSQL_CreateTable	( axIStringA & outSQL, const char* table );
 
+						axStatus	createSQL_DropTable		( axIStringA & outSQL, const char* table );
 						axStatus	createSQL_DropTableIfExists( axIStringA & outSQL, const char * table );
 
 	template<class T>	axStatus	createSQL_Insert		( axIStringA & outSQL, const char* table, const T &dummy );
@@ -133,15 +141,25 @@ axStatus	axDBConn::createSQL_Select( axIStringA & outSQL, const char* table, con
 
 class axDBConn_Imp : public axNonCopyable, public axSharedPte {
 public:
+	axDBConn_Imp() : echoSQL_(false) {}
 	virtual ~axDBConn_Imp() {}
+
+			axStatus	setEchoSQL	( bool b )	{ echoSQL_ = b; return 0; }
+			bool		echoSQL		()			{ return echoSQL_; }
+
+	virtual	axStatus	escapeString			( axIStringA & out, const char* sz );
+	virtual	axStatus	identifierString		( axIStringA & out, const char* sz );
 
 	virtual axStatus	createStmt				( axDBStmt & stmt, const char * sql ) = 0;
 	virtual	axStatus	createSQL_CreateTable	( axIStringA & outSQL, const char* table, const axDB_ColumnList & list ) = 0;
-	virtual axStatus	createSQL_DropTableIfExists( axIStringA & outSQL, const char * table ) = 0;
+	virtual axStatus	createSQL_DropTable		( axIStringA & outSQL, const char * table );
+	virtual axStatus	createSQL_DropTableIfExists( axIStringA & outSQL, const char * table );
 
 	virtual	axStatus	createSQL_Insert		( axIStringA & outSQL, const char* table, const axDB_ColumnList & list );
 	virtual	axStatus	createSQL_Update		( axIStringA & outSQL, const char* table, const axDB_ColumnList & list, const char* szWhere );
 	virtual	axStatus	createSQL_Select		( axIStringA & outSQL, const char* table, const axDB_ColumnList & list, const char* szWhere );
+
+	bool	echoSQL_;
 };
 
 #endif //__axDBConn_h__
