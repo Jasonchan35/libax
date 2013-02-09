@@ -57,7 +57,6 @@ public:
 			axStatus	getResultAtCol	( axSize col, axDateTime		&value );
 
 	axSharedPtr< axDBConn_SQLite3 >	db_;
-	axStringA	sql_;
 	axSize		paramCount_;
 	
 	axArray< int, axDB_kArgListLocalBufSize >			tmpIntData;

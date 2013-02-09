@@ -97,22 +97,11 @@ axStatus axDBConn_SQLite3::createStmt( axDBStmt & stmt, const char* sql ) {
 	return p->create( sql );	
 }
 
-//virtual
-axStatus axDBConn_SQLite3::createSQL_DropTableIfExists( axIStringA & outSQL, const char* table ) {
-	axTempStringA	tableName;
-	axStatus st;
-	st = ax_sql_escape_str( tableName, table );						if( !st ) return st;
-	st = outSQL.format("DROP TABLE IF EXISTS {?};", tableName );		if( !st ) return st;
-
-	ax_log( "SQL:\n{?}",outSQL );
-	return 0;
-}
-
 //virtual	
 axStatus axDBConn_SQLite3::createSQL_CreateTable ( axIStringA & outSQL, const char* table, const axDB_ColumnList & list ) {
 	axStatus st;
 	axTempStringA	tableName;
-	st = ax_sql_escape_str( tableName, table );						if( !st ) return st;
+	st = identifierString( tableName, table );						if( !st ) return st;
 
 	st = outSQL.format("CREATE TABLE {?} (\n", tableName );			if( !st ) return st;
 
@@ -130,33 +119,30 @@ axStatus axDBConn_SQLite3::createSQL_CreateTable ( axIStringA & outSQL, const ch
 			st = outSQL.append(",\n");
 		}
 
-		st = ax_sql_escape_str( colName, c.name );		if( !st ) return st;
+		st = identifierString( colName, c.name );		if( !st ) return st;
 		st = outSQL.appendFormat( "  {?}\t{?}", colName, dbTypeName(c.type) );		if( !st ) return st;
 	}
 
 	st = outSQL.appendFormat( "\n);" );
-
-	ax_log( "SQL:\n{?}",outSQL );
-
 	return 0;
 }
 
 const char*	axDBConn_SQLite3::dbTypeName( int c_type ) {
 	switch( c_type ) {
 		case axDB_c_type_bool:
-		case axDB_c_type_int8:
-		case axDB_c_type_int16:
-		case axDB_c_type_int32:
+		case axDB_c_type_int8_t:
+		case axDB_c_type_int16_t:
+		case axDB_c_type_int32_t:
 					return "INTEGER";
 
-		case axDB_c_type_int64:		return "BIGINT";
-		case axDB_c_type_float:		return "FLOAT";
-		case axDB_c_type_double:	return "DOUBLE";
-		case axDB_c_type_StringA:	return "TEXT";
-		case axDB_c_type_StringW:	return "TEXT";
-		case axDB_c_type_ByteArray:	return "BLOB";
-		case axDB_c_type_TimeStamp:	return "DATETIME";
-		case axDB_c_type_DateTime:	return "DATETIME";
+		case axDB_c_type_int64_t:		return "BIGINT";
+		case axDB_c_type_float:			return "FLOAT";
+		case axDB_c_type_double:		return "DOUBLE";
+		case axDB_c_type_axIStringA:	return "TEXT";
+		case axDB_c_type_axIStringW:	return "TEXT";
+		case axDB_c_type_axIByteArray:	return "BLOB";
+		case axDB_c_type_axTimeStamp:	return "DATETIME";
+		case axDB_c_type_axDateTime:	return "DATETIME";
 	}
 	assert( false );
 	return "Unknown";

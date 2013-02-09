@@ -5,27 +5,12 @@
 
 #include <ax/ax_unit_test.h>
 
-class Row {
-public:
-	int64_t		id;
-	axVec3f		vec3;
-	float		float1;
-
-	template<class S>
-	axStatus	serialize_io( S &s ) {
-		axStatus st;
-		ax_io( id );
-		ax_io( vec3 );
-		ax_io( float1 );
-		return 0;
-	}
-};
-
-
-axStatus test_ax_SQLite3_case1() {
+axStatus test_axSQLite3_case1() {
 	axStatus st;
 	axDBConn	db;
 	st = axSQLite3_open( db, "test.db" );		if( !st ) return st;
+
+	db.setEchoSQL( true );
 
 	axDBStmt	stmt;
 
@@ -52,19 +37,72 @@ axStatus test_ax_SQLite3_case1() {
 		ax_log_var( name );
 	}
 
+	return 0;
+}
+
+
+class Row {
+public:
+	int64_t		id;
+	axVec3f		vec3;
+	float		float1;
+
+	template<class S>
+	axStatus	serialize_io( S &s ) {
+		axStatus st;
+		ax_io( id );
+		ax_io( vec3 );
+		ax_io( float1 );
+		return 0;
+	}
+
+	axStatus	toStringFormat( axStringFormat &f ) const {
+		return f.format("row = {?}, {?}, {?}", id, vec3, float1 );
+	}
+};
+
+
+axStatus test_axSQLite3_case2() {
+	axStatus st;
+	axDBConn	db;
+	st = axSQLite3_open( db, "test.db" );		if( !st ) return st;
+
+	db.setEchoSQL( true );
+
 	Row	row;
 
-	st = db.dropTableIfExists( "table'002" );						if( !st ) return st;
-	st = db.createTable( "table'002", row );						if( !st ) return st;
+	axStringA	table;
+	st = table.set( "table'0\"02" );	if( !st ) return st;
 
-	st = stmt.createForInsert( db, "table'002", row );				if( !st ) return st;
+	st = db.dropTableIfExists( table );					if( !st ) return st;
+	st = db.createTable( table, row );					if( !st ) return st;
+
+	axDBStmt	stmt;
 
 
-	st = stmt.createForUpdate( db, "table'002", row, "id=?" );		if( !st ) return st;
-//	stmt.exec( row, 3, "aaa" );
+	axTempStringA	sql;
+	st = db.createSQL_Insert( sql, table, row );		if( !st ) return st;
+	st = stmt.create( db, sql );						if( !st ) return st;
 
-	st = stmt.createForSelect( db, "table'002", row, "id=?" );		if( !st ) return st;
+	row.id = 10;
+	row.float1 = 2.4f;
+	row.vec3.set( 5,6,7 );
+	st = stmt.exec( row );	if( !st ) return st;
 
+	{
+		Row	row;
+
+		axTempStringA	sql;
+		st = db.createSQL_Select( sql, table, row, "1=1" );		if( !st ) return st;
+		st = stmt.createExec( db, sql );							if( !st ) return st;
+
+		for(;;) {
+			st = stmt.getRow( row );	if( st.isEOF() ) break;
+			if( !st ) return st;
+
+			ax_log_var( row );
+		}
+	}
 
 	//axDBStmt_Single<Row>	table1;
 
@@ -83,7 +121,8 @@ axStatus test_ax_SQLite3_case1() {
 
 axStatus test_axSQLite3() {
 	axStatus st;
-	axUTestCase( test_ax_SQLite3_case1 );
+//	axUTestCase( test_axSQLite3_case1 );
+	axUTestCase( test_axSQLite3_case2 );
 
 	return 0;
 }
