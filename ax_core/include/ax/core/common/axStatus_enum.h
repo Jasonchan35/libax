@@ -91,8 +91,8 @@ axStatus_enum( DB_no_such_column )
 axStatus_enum( DB_invalid_param_count )
 axStatus_enum( DB_invalid_param_type )
 axStatus_enum( DB_invalid_value_type )
-axStatus_enum( DB_id_column_is_not_first_one )
 axStatus_enum( DB_id_column_type_error )
+axStatus_enum( DB_primary_key_not_found )
 
 //-------------
 

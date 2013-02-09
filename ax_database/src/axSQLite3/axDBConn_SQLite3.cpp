@@ -101,15 +101,9 @@ axStatus axDBConn_SQLite3::createStmt( axDBStmt & stmt, const char* sql ) {
 axStatus axDBConn_SQLite3::createSQL_CreateTable ( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
 	axStatus st;
 	axTempStringA	tableName;
+    
 	st = identifierString( tableName, table );						if( !st ) return st;
-
 	st = outSQL.format("CREATE TABLE {?} (\n", tableName );			if( !st ) return st;
-
-	if( list.size() < 1 ) return axStatus_Std::DB_invalid_param_count;
-
-	if( ! list[0].name.equals("id") )		return axStatus_Std::DB_id_column_is_not_first_one;
-	if( list[0].type != axDB_kRowIdType )	return axStatus_Std::DB_id_column_type_error;
-
 
 	axTempStringA	colName;
 
