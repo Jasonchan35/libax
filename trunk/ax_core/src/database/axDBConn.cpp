@@ -84,33 +84,28 @@ axStatus axDBConn_Imp::createSQL_Insert( axIStringA & outSQL, const char* table,
 	axTempStringA	tableName;
 	st = ax_sql_escape_str( tableName, table );		if( !st ) return st;
 
-	st = outSQL.format("INSERT INTO {?} (", tableName );
+	st = outSQL.format("INSERT INTO {?} (\n", tableName );
 
-	if( list.size() < 1 ) return axStatus_Std::DB_invalid_param_count;
-
-	if( ! list[0].name.equals("id") )		return axStatus_Std::DB_id_column_is_not_first_one;
-	if( list[0].type != axDB_kRowIdType )	return axStatus_Std::DB_id_column_type_error;
-
-	for( size_t i=1; i<list.size(); i++ ) {
+	for( size_t i=0; i<list.size(); i++ ) {
 		const axDB_Column & c = list[i];
-		if( i > 1 ) {
-			st = outSQL.append(", ");			if( !st ) return st;
+		if( i > 0 ) {
+			st = outSQL.append(",\n");					if( !st ) return st;
 		}
 
 		st = ax_sql_escape_str( colName, c.name );		if( !st ) return st;
-		st = outSQL.append( colName );	if( !st ) return st;
+		st = outSQL.appendFormat( "  {?}", colName );	if( !st ) return st;
 	}
 
-	st = outSQL.append( ") VALUES (" );		if( !st ) return st;
+	st = outSQL.append( ")\n  VALUES (" );					if( !st ) return st;
 
-	for( size_t i=1; i<list.size(); i++ ) {
-		if( i > 1 ) {
-			st = outSQL.append(", ");			if( !st ) return st;
+	for( size_t i=0; i<list.size(); i++ ) {
+		if( i > 0 ) {
+			st = outSQL.append(",");					if( !st ) return st;
 		}
-		st = outSQL.append( "?" );				if( !st ) return st;
+		st = outSQL.append( "?" );						if( !st ) return st;
 	}
 
-	st = outSQL.append(");");	if( !st ) return st;
+	st = outSQL.append(");");							if( !st ) return st;
 
 	ax_log( "SQL:\n{?}",outSQL );
 
@@ -125,24 +120,19 @@ axStatus axDBConn_Imp::createSQL_Update( axIStringA & outSQL, const char* table,
 	st = ax_sql_escape_str( tableName, table );		if( !st ) return st;
 
 
-	st = outSQL.format("UPDATE {?} SET ", tableName );		if( !st ) return st;
+	st = outSQL.format("UPDATE {?} SET\n", tableName );		if( !st ) return st;
 
-	if( list.size() < 1 ) return axStatus_Std::DB_invalid_param_count;
-
-	if( ! list[0].name.equals("id") )		return axStatus_Std::DB_id_column_is_not_first_one;
-	if( list[0].type != axDB_kRowIdType )	return axStatus_Std::DB_id_column_type_error;
-
-	for( size_t i=1; i<list.size(); i++ ) {
+	for( size_t i=0; i<list.size(); i++ ) {
 		const axDB_Column & c = list[i];
-		if( i > 1 ) {
-			st = outSQL.append(", ");					if( !st ) return st;
+		if( i > 0 ) {
+			st = outSQL.append(",\n");					if( !st ) return st;
 		}
 
 		st = ax_sql_escape_str( colName, c.name );		if( !st ) return st;
-		st = outSQL.appendFormat( "{?}=?", colName );	if( !st ) return st;
+		st = outSQL.appendFormat( "  {?}=?", colName );	if( !st ) return st;
 	}
 
-	st = outSQL.appendFormat(" WHERE {?};", szWhere );	if( !st ) return st;
+	st = outSQL.appendFormat("\n  WHERE {?};", szWhere );	if( !st ) return st;
 	
 	ax_log( "SQL:\n{?}",outSQL );
 
@@ -155,19 +145,19 @@ axStatus axDBConn_Imp::createSQL_Select	( axIStringA & outSQL, const char* table
 	axTempStringA	tableName;
 	st = ax_sql_escape_str( tableName, table );		if( !st ) return st;
 
-	st = outSQL.format("SELECT " );
+	st = outSQL.format("SELECT\n" );
 
 	for( size_t i=0; i<list.size(); i++ ) {
 		const axDB_Column & c = list[i];
 		if( i > 0 ) {
-			st = outSQL.append(", ");					if( !st ) return st;
+			st = outSQL.append(",\n");					if( !st ) return st;
 		}
 
 		st = ax_sql_escape_str( colName, c.name );		if( !st ) return st;
-		st = outSQL.appendFormat( "{?}", colName );		if( !st ) return st;
+		st = outSQL.appendFormat( "  {?}", colName );		if( !st ) return st;
 	}
 
-	st = outSQL.appendFormat(" FROM {?} WHERE {?};", tableName, szWhere );		if( !st ) return st;
+	st = outSQL.appendFormat("\n  FROM {?}\n  WHERE {?};", tableName, szWhere );		if( !st ) return st;
 
 	ax_log( "SQL:\n{?}",outSQL );
 

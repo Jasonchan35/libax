@@ -310,6 +310,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\include\ax\core\database\axDBRow.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\database\axDBStmt.cpp"
 					>
 				</File>
