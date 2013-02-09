@@ -47,6 +47,12 @@ public:
 	axVec3f		vec3;
 	float		float1;
 
+	Row() {
+		id = 0;
+		vec3.set( 0,0,0 );
+		float1 = 0;
+	}
+
 	template<class S>
 	axStatus	serialize_io( S &s ) {
 		axStatus st;
@@ -57,7 +63,7 @@ public:
 	}
 
 	axStatus	toStringFormat( axStringFormat &f ) const {
-		return f.format("row = {?}, {?}, {?}", id, vec3, float1 );
+		return f.format("{?}, {?}, {?}", id, vec3, float1 );
 	}
 };
 
@@ -69,25 +75,45 @@ axStatus test_axSQLite3_case2() {
 
 	db.setEchoSQL( true );
 
-	Row	row;
 
 	axStringA	table;
-	st = table.set( "table'0\"02" );	if( !st ) return st;
+	st = table.set( "table002" );	if( !st ) return st;
 
 	st = db.dropTableIfExists( table );					if( !st ) return st;
-	st = db.createTable( table, row );					if( !st ) return st;
+	st = db.createTable<Row>( table );					if( !st ) return st;
 
 	axDBStmt	stmt;
 
+	{//insert
+		Row	row;
+		axTempStringA	sql;
+		st = db.createSQL_Insert( sql, table, row );		if( !st ) return st;
+		st = stmt.create( db, sql );						if( !st ) return st;
 
-	axTempStringA	sql;
-	st = db.createSQL_Insert( sql, table, row );		if( !st ) return st;
-	st = stmt.create( db, sql );						if( !st ) return st;
+		row.id = 10;
+		row.float1 = 2.4f;
+		row.vec3.set( 5,6,7 );
+		st = stmt.exec( row );	if( !st ) return st;
+	}
 
-	row.id = 10;
-	row.float1 = 2.4f;
-	row.vec3.set( 5,6,7 );
-	st = stmt.exec( row );	if( !st ) return st;
+	{
+		Row row;
+		row.id = 100;
+		row.vec3.set( 9, 10, 11 );
+		axDBStmt_Insert<Row>	insertRow;
+		st = insertRow.create( db, table );		if( !st ) return st;
+		insertRow.exec( row );
+	}
+
+	{
+		Row row;
+		row.id = 100;
+		row.vec3.set( 90, 100, 110 );
+		axDBStmt_Update<Row>	updateRow;
+		st = updateRow.create( db, table );		if( !st ) return st;
+		updateRow.exec( row );
+	}
+
 
 	{
 		Row	row;

@@ -19,42 +19,41 @@ class axDBStmt : public axNonCopyable {
 public:	
 	axDBStmt();
 	
-		axStatus	create			( axDBConn & db, const char* sql );
+			axStatus	create			( axDBConn & db, const char* sql );
 
-	//	axStatus	exec			( ... )
-		axStatus	exec_ParamList	( const axDB_ParamList & list );
-		axExpandArgList0			( axStatus, exec,   const axDBParam_CB & , axDB_ParamList, exec_ParamList )
-		
-	//	axStatus	createExec		( db, sql, ... )
-		axStatus	createExec_ParamList( axDBConn & db, const char* sql, const axDB_ParamList & list );
-		axExpandArgList2			( axStatus, createExec, axDBConn &, const char*, const axDBParam_CB & , axDB_ParamList, createExec_ParamList )
-
-	//	axStatus	getRow			( ... )
-		axStatus	getRow_ValueList( axDB_ValueList & list );
-		axExpandArgList0			( axStatus, getRow, const axDBValue_CB & , axDB_ValueList, getRow_ValueList )
+		//	axStatus	exec			( ... )
+			axStatus	exec_ParamList	( const axDBParamList & list );
+			axExpandArgList0			( axStatus, exec,   const axDBParam_CB & , axDBParamList, exec_ParamList )
 			
-		axSize		numColumns		();
-		int			columnType		( axSize col );
-		const char*	columnName		( axSize col );
+		//	axStatus	createExec		( db, sql, ... )
+			axStatus	createExec_ParamList( axDBConn & db, const char* sql, const axDBParamList & list );
+			axExpandArgList2			( axStatus, createExec, axDBConn &, const char*, const axDBParam_CB & , axDBParamList, createExec_ParamList )
+
+		//	axStatus	getRow			( ... )
+			axStatus	getRow_ValueList( axDBValueList & list );
+			axExpandArgList0			( axStatus, getRow, const axDBValue_CB & , axDBValueList, getRow_ValueList )
 				
-			void	_setImp			( axDBStmt_Imp* p );
+			axSize		numColumns		();
+			int			columnType		( axSize col );
+			const char*	columnName		( axSize col );
+					
+				void	_setImp			( axDBStmt_Imp* p );
 protected:
 	axSize	numColumns_;
 	axSharedPtr< axDBStmt_Imp >	p_;
 };
 
-
 class axDBStmt_Imp :  public axNonCopyable, public axSharedPte {
 public:
 	virtual ~axDBStmt_Imp() {}
-	virtual	axStatus	exec_ParamList	( const axDB_ParamList & list ) = 0;
+	virtual	axStatus	exec_ParamList	( const axDBParamList & list ) = 0;
 	
 	virtual axSize		numColumns		() = 0;
 	
 	virtual int			columnType		( axSize col ) = 0;
 	virtual const char* columnName		( axSize col ) = 0;
 	
-	virtual	axStatus	getRow_ValueList	( axDB_ValueList & list ) = 0;
+	virtual	axStatus	getRow_ValueList	( axDBValueList & list ) = 0;
 
 	axStringA	sql_;
 };

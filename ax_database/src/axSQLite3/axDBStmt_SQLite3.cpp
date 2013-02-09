@@ -45,11 +45,11 @@ int	axDBStmt_SQLite3 :: columnType( axSize col ) {
 	return axDB_c_type_null;
 }
 
-axStatus axDBStmt_SQLite3::exec_ParamList( const axDB_ParamList & list ) {
+axStatus axDBStmt_SQLite3::exec_ParamList( const axDBParamList & list ) {
 	if( !stmt_ ) return axStatus_Std::DB_error;
 
 	if( db_->echoSQL() ) {
-		ax_log("--- ExecSQL: ---\n{?}\nParams:{?}", sql_, list );
+		ax_log("--- ExecSQL: ---\n{?}\nParams:{?}\n", sql_, list );
 	}
 
 	sqlite3_reset( stmt_ );
@@ -148,7 +148,7 @@ axStatus axDBStmt_SQLite3::create ( const char * sql ) {
 	return 0;
 }
 
-axStatus axDBStmt_SQLite3::getRow_ValueList( axDB_ValueList & list ) {
+axStatus axDBStmt_SQLite3::getRow_ValueList( axDBValueList & list ) {
 	axStatus st;
 	st = fetch();		if( !st ) return st;
 
@@ -178,9 +178,6 @@ axStatus axDBStmt_SQLite3::getResultAtCol_int( axSize col, T & value ) {
 	axStatus st;
 	switch( type ) {
 		case SQLITE_NULL:
-		case SQLITE_TEXT: {
-			ax_log("====> {?}", (const char*) sqlite3_column_text( stmt_,c ) );
-		}break;
 		case SQLITE_INTEGER: {
 			// SQLite using int64 internal in memory
 			st = ax_safe_assign( value, sqlite3_column_int64( stmt_, c ) );

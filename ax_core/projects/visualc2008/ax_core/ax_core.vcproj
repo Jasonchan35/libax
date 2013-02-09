@@ -325,6 +325,10 @@
 					RelativePath="..\..\..\include\ax\core\database\axDBStmt.h"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\include\ax\core\database\axDBStmt_T.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="file_system"

@@ -67,14 +67,14 @@ axStatus	axDBConn_Imp::identifierString( axIStringA & out, const char* sz ) {
 }
 
 //== create table ==
-axStatus axDBConn::_createTable	( const char* table, const axDB_ColumnList & list ) {
+axStatus axDBConn::_createTable	( const char* table, const axDBColumnList & list ) {
 	axStatus	st;
 	axTempStringA	sql;
 	st = _createSQL_CreateTable( sql, table, list );		if( !st ) return st;
 	return exec( sql );
 }
 
-axStatus axDBConn::_createSQL_CreateTable( axIStringA & outSQL, const char* table, const axDB_ColumnList & list ) {
+axStatus axDBConn::_createSQL_CreateTable( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->createSQL_CreateTable( outSQL, table, list );
 }
@@ -122,12 +122,12 @@ axStatus axDBConn_Imp::createSQL_DropTableIfExists(axIStringA &outSQL, const cha
 }
 
 //==== insert ===
-axStatus axDBConn::_createSQL_Insert( axIStringA & outSQL, const char* table, const axDB_ColumnList & list ) {
+axStatus axDBConn::_createSQL_Insert( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->createSQL_Insert( outSQL, table, list );
 }
 
-axStatus axDBConn_Imp::createSQL_Insert( axIStringA & outSQL, const char* table, const axDB_ColumnList & list ) {
+axStatus axDBConn_Imp::createSQL_Insert( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
 	axStatus st;
 	axTempStringA	colName;
 
@@ -137,7 +137,7 @@ axStatus axDBConn_Imp::createSQL_Insert( axIStringA & outSQL, const char* table,
 	st = outSQL.format("INSERT INTO {?} (\n", tableName );
 
 	for( size_t i=0; i<list.size(); i++ ) {
-		const axDB_Column & c = list[i];
+		const axDBColumn & c = list[i];
 		if( i > 0 ) {
 			st = outSQL.append(",\n");					if( !st ) return st;
 		}
@@ -161,12 +161,12 @@ axStatus axDBConn_Imp::createSQL_Insert( axIStringA & outSQL, const char* table,
 
 
 //=== update ===
-axStatus axDBConn::_createSQL_Update( axIStringA & outSQL, const char* table, const axDB_ColumnList & list , const char* szWhere ) {
+axStatus axDBConn::_createSQL_Update( axIStringA & outSQL, const char* table, const axDBColumnList & list , const char* szWhere ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->createSQL_Update( outSQL, table, list, szWhere );
 }
 
-axStatus axDBConn_Imp::createSQL_Update( axIStringA & outSQL, const char* table, const axDB_ColumnList & list, const char* szWhere ) {
+axStatus axDBConn_Imp::createSQL_Update( axIStringA & outSQL, const char* table, const axDBColumnList & list, const char* szWhere ) {
 	axStatus st;
 	axTempStringA	colName;
 	axTempStringA	tableName;
@@ -176,7 +176,7 @@ axStatus axDBConn_Imp::createSQL_Update( axIStringA & outSQL, const char* table,
 	st = outSQL.format("UPDATE {?} SET\n", tableName );		if( !st ) return st;
 
 	for( size_t i=0; i<list.size(); i++ ) {
-		const axDB_Column & c = list[i];
+		const axDBColumn & c = list[i];
 		if( i > 0 ) {
 			st = outSQL.append(",\n");					if( !st ) return st;
 		}
@@ -190,12 +190,12 @@ axStatus axDBConn_Imp::createSQL_Update( axIStringA & outSQL, const char* table,
 }
 
 //=== select ====
-axStatus axDBConn::_createSQL_Select( axIStringA & outSQL, const char* table, const axDB_ColumnList & list , const char* szWhere ) {
+axStatus axDBConn::_createSQL_Select( axIStringA & outSQL, const char* table, const axDBColumnList & list , const char* szWhere ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->createSQL_Select( outSQL, table, list, szWhere );
 }
 
-axStatus axDBConn_Imp::createSQL_Select	( axIStringA & outSQL, const char* table, const axDB_ColumnList & list, const char* szWhere ) {
+axStatus axDBConn_Imp::createSQL_Select	( axIStringA & outSQL, const char* table, const axDBColumnList & list, const char* szWhere ) {
 	axStatus st;
 	axTempStringA	colName;
 	axTempStringA	tableName;
@@ -204,7 +204,7 @@ axStatus axDBConn_Imp::createSQL_Select	( axIStringA & outSQL, const char* table
 	st = outSQL.format("SELECT\n" );
 
 	for( size_t i=0; i<list.size(); i++ ) {
-		const axDB_Column & c = list[i];
+		const axDBColumn & c = list[i];
 		if( i > 0 ) {
 			st = outSQL.append(",\n");					if( !st ) return st;
 		}

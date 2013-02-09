@@ -15,7 +15,7 @@ class axDBConn_Imp;
 class axDBResultSet;
 class axDBStmt;
 class axDBParam;
-class axDB_ParamList;
+class axDBParamList;
 
 
 
@@ -61,12 +61,12 @@ public:
 	axDBConn_Imp*	_getImp	()	{ return p_; }
 private:
 
-	axStatus	_createTable			( const char* table, const axDB_ColumnList & list );
+	axStatus	_createTable			( const char* table, const axDBColumnList & list );
 
-	axStatus	_createSQL_CreateTable	( axIStringA & outSQL, const char* table, const axDB_ColumnList & list );
-	axStatus	_createSQL_Insert		( axIStringA & outSQL, const char* table, const axDB_ColumnList & list );
-	axStatus	_createSQL_Update		( axIStringA & outSQL, const char* table, const axDB_ColumnList & list,	const char* szWhere );
-	axStatus	_createSQL_Select		( axIStringA & outSQL, const char* table, const axDB_ColumnList & list,	const char* szWhere );
+	axStatus	_createSQL_CreateTable	( axIStringA & outSQL, const char* table, const axDBColumnList & list );
+	axStatus	_createSQL_Insert		( axIStringA & outSQL, const char* table, const axDBColumnList & list );
+	axStatus	_createSQL_Update		( axIStringA & outSQL, const char* table, const axDBColumnList & list,	const char* szWhere );
+	axStatus	_createSQL_Select		( axIStringA & outSQL, const char* table, const axDBColumnList & list,	const char* szWhere );
 
 	axSharedPtr< axDBConn_Imp >	p_;
 };
@@ -81,7 +81,7 @@ axStatus	axDBConn::createTable				( const char* table ) {
 
 template<class T> inline
 axStatus	axDBConn::createTable				( const char* table, const T &dummy ) {
-	axDB_ColumnList	list;
+	axDBColumnList	list;
 	axStatus st = list.io( ax_const_cast(dummy), NULL );		if( !st ) return st;
 	return _createTable( table, list );
 }
@@ -94,7 +94,7 @@ axStatus	axDBConn::createSQL_CreateTable( axIStringA & outSQL, const char* table
 }
 template<class T> inline
 axStatus	axDBConn::createSQL_CreateTable( axIStringA & outSQL, const char* table, const T & dummy ) {
-	axDB_ColumnList	list;
+	axDBColumnList	list;
 	axStatus st = list.io( ax_const_cast(dummy), NULL );		if( !st ) return st;
 	return _createSQL_CreateTable( outSQL, table, list );
 }
@@ -108,7 +108,7 @@ axStatus	axDBConn::createSQL_Insert( axIStringA & outSQL, const char* table ) {
 }
 template<class T> inline
 axStatus	axDBConn::createSQL_Insert( axIStringA & outSQL, const char* table, const T & dummy ) {
-	axDB_ColumnList	list;
+	axDBColumnList	list;
 	axStatus st = list.io( ax_const_cast(dummy), NULL );		if( !st ) return st;
 	return _createSQL_Insert( outSQL, table, list );
 }
@@ -121,7 +121,7 @@ axStatus	axDBConn::createSQL_Update( axIStringA & outSQL, const char* table, con
 }
 template<class T> inline
 axStatus	axDBConn::createSQL_Update( axIStringA & outSQL, const char* table, const T & dummy, const char* szWhere ) {
-	axDB_ColumnList	list;
+	axDBColumnList	list;
 	axStatus st = list.io( ax_const_cast(dummy), NULL );		if( !st ) return st;
 	return _createSQL_Update( outSQL, table, list, szWhere );
 }
@@ -134,7 +134,7 @@ axStatus	axDBConn::createSQL_Select( axIStringA & outSQL, const char* table, con
 }
 template<class T> inline
 axStatus	axDBConn::createSQL_Select( axIStringA & outSQL, const char* table, const T & dummy, const char* szWhere ) {
-	axDB_ColumnList	list;
+	axDBColumnList	list;
 	axStatus st = list.io( ax_const_cast(dummy), NULL );		if( !st ) return st;
 	return _createSQL_Select( outSQL, table, list, szWhere );
 }
@@ -151,13 +151,13 @@ public:
 	virtual	axStatus	identifierString		( axIStringA & out, const char* sz );
 
 	virtual axStatus	createStmt				( axDBStmt & stmt, const char * sql ) = 0;
-	virtual	axStatus	createSQL_CreateTable	( axIStringA & outSQL, const char* table, const axDB_ColumnList & list ) = 0;
+	virtual	axStatus	createSQL_CreateTable	( axIStringA & outSQL, const char* table, const axDBColumnList & list ) = 0;
 	virtual axStatus	createSQL_DropTable		( axIStringA & outSQL, const char * table );
 	virtual axStatus	createSQL_DropTableIfExists( axIStringA & outSQL, const char * table );
 
-	virtual	axStatus	createSQL_Insert		( axIStringA & outSQL, const char* table, const axDB_ColumnList & list );
-	virtual	axStatus	createSQL_Update		( axIStringA & outSQL, const char* table, const axDB_ColumnList & list, const char* szWhere );
-	virtual	axStatus	createSQL_Select		( axIStringA & outSQL, const char* table, const axDB_ColumnList & list, const char* szWhere );
+	virtual	axStatus	createSQL_Insert		( axIStringA & outSQL, const char* table, const axDBColumnList & list );
+	virtual	axStatus	createSQL_Update		( axIStringA & outSQL, const char* table, const axDBColumnList & list, const char* szWhere );
+	virtual	axStatus	createSQL_Select		( axIStringA & outSQL, const char* table, const axDBColumnList & list, const char* szWhere );
 
 	bool	echoSQL_;
 };

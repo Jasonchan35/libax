@@ -47,6 +47,7 @@
 
 #include "core/database/axDBConn.h"
 #include "core/database/axDBStmt.h"
+#include "core/database/axDBStmt_T.h"
 
 #include "core/data_structure/axObject.h"
 
