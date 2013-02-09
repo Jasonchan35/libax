@@ -78,8 +78,8 @@ axStatus	axStringFormat::_processT( const T* fmt, const ArgList &list ) {
 				last_index = index;
 
 				if( list.inBound( index ) ) {
-					assert( list[index].data() != (void*)strA_ ); //cannot be itself
-					assert( list[index].data() != (void*)strW_ ); //cannot be itself
+					assert( list[index].data != (void*)strA_ ); //cannot be itself
+					assert( list[index].data != (void*)strW_ ); //cannot be itself
 					st = list[index].call( *this );	if( !st ) return st;
 				}else{
 					// out "{?} directly"
