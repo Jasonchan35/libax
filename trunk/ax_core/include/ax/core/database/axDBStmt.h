@@ -10,6 +10,7 @@
 #define __axDBStmt_h__
 
 #include "axDB_common.h"
+#include "axDBConn.h"
 
 class axDBConn;
 class axDBStmt_Imp;
@@ -56,6 +57,7 @@ protected:
 //=== insert ===
 template<class T> inline
 axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table ) {
+    axStatus st;
 	axTempStringA	sql;
 	st = db.createSQL_Insert<T>( sql, table );	if( !st ) return st;
 	return create( db, sql );
@@ -70,6 +72,7 @@ axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table, T & dummy ) 
 
 template<class T> inline
 axStatus	axDBStmt::create_Update( axDBConn & db, const char* table, const char* szWhere ) {
+    axStatus st;
 	axTempStringA	sql;
 	st = db.createSQL_Update<T>( sql, table, szWhere );	if( !st ) return st;
 	return create( db, sql );
@@ -84,6 +87,7 @@ axStatus	axDBStmt::create_Update( axDBConn & db, const char* table, T & dummy, c
 //=== select ===
 template<class T> inline
 axStatus	axDBStmt::create_Select( axDBConn & db, const char* table, const char* szWhere ) {
+    axStatus st;
 	axTempStringA	sql;
 	st = db.createSQL_Select<T>( sql, table, szWhere );	if( !st ) return st;
 	return create( db, sql );

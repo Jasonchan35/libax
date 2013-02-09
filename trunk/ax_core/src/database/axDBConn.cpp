@@ -199,20 +199,27 @@ axStatus axDBConn_Imp::createSQL_Select	( axIStringA & outSQL, const char* table
 	axStatus st;
 	axTempStringA	colName;
 	axTempStringA	tableName;
-	st = identifierString( tableName, table );		if( !st ) return st;
+	st = identifierString( tableName, table );                  if( !st ) return st;
 
 	st = outSQL.format("SELECT\n" );
 
 	for( size_t i=0; i<list.size(); i++ ) {
 		const axDBColumn & c = list[i];
 		if( i > 0 ) {
-			st = outSQL.append(",\n");					if( !st ) return st;
+			st = outSQL.append(",\n");                          if( !st ) return st;
 		}
 
-		st = identifierString( colName, c.name );		if( !st ) return st;
-		st = outSQL.appendFormat( "  {?}", colName );		if( !st ) return st;
+		st = identifierString( colName, c.name );               if( !st ) return st;
+		st = outSQL.appendFormat( "  {?}", colName );           if( !st ) return st;
 	}
 
-	st = outSQL.appendFormat("\n  FROM {?}\n  WHERE {?};", tableName, szWhere );		if( !st ) return st;
+	st = outSQL.appendFormat("\n  FROM {?}", tableName );		if( !st ) return st;
+    
+    if( szWhere ) {
+        st = outSQL.appendFormat( "\n  WHERE {?}", szWhere );   if( !st ) return st;
+    }
+        
+    st = outSQL.append( ";" );                                  if( !st ) return st;
+    
 	return 0;
 }

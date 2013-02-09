@@ -1,0 +1,235 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		EAEBFFBD16C69EBD00AC4659 /* axDBConn_SQLite3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAEBFFB916C69EBD00AC4659 /* axDBConn_SQLite3.cpp */; };
+		EAEBFFBE16C69EBD00AC4659 /* axDBConn_SQLite3.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEBFFBA16C69EBD00AC4659 /* axDBConn_SQLite3.h */; };
+		EAEBFFBF16C69EBD00AC4659 /* axDBStmt_SQLite3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAEBFFBB16C69EBD00AC4659 /* axDBStmt_SQLite3.cpp */; };
+		EAEBFFC016C69EBD00AC4659 /* axDBStmt_SQLite3.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEBFFBC16C69EBD00AC4659 /* axDBStmt_SQLite3.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		EA8FCDDC16C69CCD0040D4B9 /* libaxSQLite3.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libaxSQLite3.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		EAEBFFB716C69EA700AC4659 /* axSQLite3 build.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "axSQLite3 build.xcconfig"; sourceTree = "<group>"; };
+		EAEBFFB916C69EBD00AC4659 /* axDBConn_SQLite3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDBConn_SQLite3.cpp; sourceTree = "<group>"; };
+		EAEBFFBA16C69EBD00AC4659 /* axDBConn_SQLite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axDBConn_SQLite3.h; sourceTree = "<group>"; };
+		EAEBFFBB16C69EBD00AC4659 /* axDBStmt_SQLite3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDBStmt_SQLite3.cpp; sourceTree = "<group>"; };
+		EAEBFFBC16C69EBD00AC4659 /* axDBStmt_SQLite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axDBStmt_SQLite3.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EA8FCDD916C69CCD0040D4B9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		EA8FCDD316C69CCD0040D4B9 = {
+			isa = PBXGroup;
+			children = (
+				EAEBFFB716C69EA700AC4659 /* axSQLite3 build.xcconfig */,
+				EAEBFFB816C69EBD00AC4659 /* axSQLite3 */,
+				EA8FCDDD16C69CCD0040D4B9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EA8FCDDD16C69CCD0040D4B9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EA8FCDDC16C69CCD0040D4B9 /* libaxSQLite3.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EAEBFFB816C69EBD00AC4659 /* axSQLite3 */ = {
+			isa = PBXGroup;
+			children = (
+				EAEBFFB916C69EBD00AC4659 /* axDBConn_SQLite3.cpp */,
+				EAEBFFBA16C69EBD00AC4659 /* axDBConn_SQLite3.h */,
+				EAEBFFBB16C69EBD00AC4659 /* axDBStmt_SQLite3.cpp */,
+				EAEBFFBC16C69EBD00AC4659 /* axDBStmt_SQLite3.h */,
+			);
+			name = axSQLite3;
+			path = ../../../src/axSQLite3;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		EA8FCDDA16C69CCD0040D4B9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EAEBFFBE16C69EBD00AC4659 /* axDBConn_SQLite3.h in Headers */,
+				EAEBFFC016C69EBD00AC4659 /* axDBStmt_SQLite3.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		EA8FCDDB16C69CCD0040D4B9 /* axSQLite3 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EA8FCDE016C69CCD0040D4B9 /* Build configuration list for PBXNativeTarget "axSQLite3" */;
+			buildPhases = (
+				EA8FCDD816C69CCD0040D4B9 /* Sources */,
+				EA8FCDD916C69CCD0040D4B9 /* Frameworks */,
+				EA8FCDDA16C69CCD0040D4B9 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = axSQLite3;
+			productName = axSQLite3;
+			productReference = EA8FCDDC16C69CCD0040D4B9 /* libaxSQLite3.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EA8FCDD416C69CCD0040D4B9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = Tony;
+			};
+			buildConfigurationList = EA8FCDD716C69CCD0040D4B9 /* Build configuration list for PBXProject "axSQLite3" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = EA8FCDD316C69CCD0040D4B9;
+			productRefGroup = EA8FCDDD16C69CCD0040D4B9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EA8FCDDB16C69CCD0040D4B9 /* axSQLite3 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		EA8FCDD816C69CCD0040D4B9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EAEBFFBD16C69EBD00AC4659 /* axDBConn_SQLite3.cpp in Sources */,
+				EAEBFFBF16C69EBD00AC4659 /* axDBStmt_SQLite3.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		EA8FCDDE16C69CCD0040D4B9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EAEBFFB716C69EA700AC4659 /* axSQLite3 build.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx10.7;
+			};
+			name = Debug;
+		};
+		EA8FCDDF16C69CCD0040D4B9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EAEBFFB716C69EA700AC4659 /* axSQLite3 build.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx10.7;
+			};
+			name = Release;
+		};
+		EA8FCDE116C69CCD0040D4B9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		EA8FCDE216C69CCD0040D4B9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		EA8FCDD716C69CCD0040D4B9 /* Build configuration list for PBXProject "axSQLite3" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA8FCDDE16C69CCD0040D4B9 /* Debug */,
+				EA8FCDDF16C69CCD0040D4B9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EA8FCDE016C69CCD0040D4B9 /* Build configuration list for PBXNativeTarget "axSQLite3" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA8FCDE116C69CCD0040D4B9 /* Debug */,
+				EA8FCDE216C69CCD0040D4B9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EA8FCDD416C69CCD0040D4B9 /* Project object */;
+}

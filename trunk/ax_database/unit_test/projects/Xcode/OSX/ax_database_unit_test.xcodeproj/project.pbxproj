@@ -1,0 +1,280 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		EAD5E05F16C6A05D007AB3D1 /* test_axSQLite3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAD5E05E16C6A05D007AB3D1 /* test_axSQLite3.cpp */; };
+		EAD5E07116C6A6E8007AB3D1 /* libax_core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAD5E07016C6A6CC007AB3D1 /* libax_core.a */; };
+		EAD5E07216C6A6E8007AB3D1 /* libaxSQLite3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAD5E06916C6A6BB007AB3D1 /* libaxSQLite3.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		EAD5E06816C6A6BB007AB3D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EAD5E06416C6A6BB007AB3D1 /* axSQLite3.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EA8FCDDC16C69CCD0040D4B9;
+			remoteInfo = axSQLite3;
+		};
+		EAD5E06F16C6A6CC007AB3D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EAD5E06A16C6A6CC007AB3D1 /* ax_core.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EAD528AA154405160034A2DD;
+			remoteInfo = ax_core;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EA37CEC616C69B49004CFE52 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		EA37CEC816C69B49004CFE52 /* ax_database_unit_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ax_database_unit_test; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA8FCDD216C69BD30040D4B9 /* ax_database_unit_test.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ax_database_unit_test.xcconfig; sourceTree = SOURCE_ROOT; };
+		EAD5E05E16C6A05D007AB3D1 /* test_axSQLite3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_axSQLite3.cpp; path = ../../../src/test_axSQLite3.cpp; sourceTree = "<group>"; };
+		EAD5E06416C6A6BB007AB3D1 /* axSQLite3.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = axSQLite3.xcodeproj; path = ../../../../projects/Xcode/OSX/axSQLite3.xcodeproj; sourceTree = "<group>"; };
+		EAD5E06A16C6A6CC007AB3D1 /* ax_core.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ax_core.xcodeproj; path = ../../../../../ax_core/projects/Xcode/OSX/ax_core.xcodeproj; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EA37CEC516C69B49004CFE52 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EAD5E07116C6A6E8007AB3D1 /* libax_core.a in Frameworks */,
+				EAD5E07216C6A6E8007AB3D1 /* libaxSQLite3.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		EA37CEBF16C69B49004CFE52 = {
+			isa = PBXGroup;
+			children = (
+				EAD5E06A16C6A6CC007AB3D1 /* ax_core.xcodeproj */,
+				EAD5E06416C6A6BB007AB3D1 /* axSQLite3.xcodeproj */,
+				EAD5E05E16C6A05D007AB3D1 /* test_axSQLite3.cpp */,
+				EA8FCDD216C69BD30040D4B9 /* ax_database_unit_test.xcconfig */,
+				EA37CEC916C69B49004CFE52 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EA37CEC916C69B49004CFE52 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EA37CEC816C69B49004CFE52 /* ax_database_unit_test */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EAD5E06516C6A6BB007AB3D1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EAD5E06916C6A6BB007AB3D1 /* libaxSQLite3.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EAD5E06B16C6A6CC007AB3D1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EAD5E07016C6A6CC007AB3D1 /* libax_core.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		EA37CEC716C69B49004CFE52 /* ax_database_unit_test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EA37CED116C69B49004CFE52 /* Build configuration list for PBXNativeTarget "ax_database_unit_test" */;
+			buildPhases = (
+				EA37CEC416C69B49004CFE52 /* Sources */,
+				EA37CEC516C69B49004CFE52 /* Frameworks */,
+				EA37CEC616C69B49004CFE52 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ax_database_unit_test;
+			productName = ax_database_unit_test;
+			productReference = EA37CEC816C69B49004CFE52 /* ax_database_unit_test */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EA37CEC016C69B49004CFE52 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = Tony;
+			};
+			buildConfigurationList = EA37CEC316C69B49004CFE52 /* Build configuration list for PBXProject "ax_database_unit_test" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = EA37CEBF16C69B49004CFE52;
+			productRefGroup = EA37CEC916C69B49004CFE52 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = EAD5E06B16C6A6CC007AB3D1 /* Products */;
+					ProjectRef = EAD5E06A16C6A6CC007AB3D1 /* ax_core.xcodeproj */;
+				},
+				{
+					ProductGroup = EAD5E06516C6A6BB007AB3D1 /* Products */;
+					ProjectRef = EAD5E06416C6A6BB007AB3D1 /* axSQLite3.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				EA37CEC716C69B49004CFE52 /* ax_database_unit_test */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		EAD5E06916C6A6BB007AB3D1 /* libaxSQLite3.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libaxSQLite3.a;
+			remoteRef = EAD5E06816C6A6BB007AB3D1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EAD5E07016C6A6CC007AB3D1 /* libax_core.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libax_core.a;
+			remoteRef = EAD5E06F16C6A6CC007AB3D1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		EA37CEC416C69B49004CFE52 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EAD5E05F16C6A05D007AB3D1 /* test_axSQLite3.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		EA37CECF16C69B49004CFE52 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA8FCDD216C69BD30040D4B9 /* ax_database_unit_test.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx10.7;
+			};
+			name = Debug;
+		};
+		EA37CED016C69B49004CFE52 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA8FCDD216C69BD30040D4B9 /* ax_database_unit_test.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx10.7;
+			};
+			name = Release;
+		};
+		EA37CED216C69B49004CFE52 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		EA37CED316C69B49004CFE52 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		EA37CEC316C69B49004CFE52 /* Build configuration list for PBXProject "ax_database_unit_test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA37CECF16C69B49004CFE52 /* Debug */,
+				EA37CED016C69B49004CFE52 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EA37CED116C69B49004CFE52 /* Build configuration list for PBXNativeTarget "ax_database_unit_test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA37CED216C69B49004CFE52 /* Debug */,
+				EA37CED316C69B49004CFE52 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EA37CEC016C69B49004CFE52 /* Project object */;
+}

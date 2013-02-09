@@ -192,21 +192,23 @@ void axDBValueList_io( axDBValueList & list, T & v ) {
 
 class axDBColumn {
 public:
-	axDBColumn() { type = axDB_c_type_null; }
+	axDBColumn() { type = axDB_c_type_null; data = NULL; }
 	
 	axStatus	onTake( axDBColumn &src ) { 
 		axStatus st;
 		ax_take_macro( type );
 		ax_take_macro( name );
+        ax_take_macro( data );
 		return 0; 
 	}
 
 	axStatus	toStringFormat( axStringFormat &f ) const {
-		return f.format("{?} {?}", type, name );
+		return f.format("{?} {?} {?}", type, name, data );
 	}
 	
 	int					type;
 	axStringA_<64>		name;
+    void*               data;
 };
 
 class axDBColumnList;
@@ -236,12 +238,21 @@ public:
 			st = c.name.set( name );
 		}
 		c.type = axDBValueType(value);
+        c.data = &value;
 		return 0;
 	}
 
 	axStatus	toStringFormat( axStringFormat &f ) const {
 		return B::toStringFormat(f);
 	}
+
+    axDBColumn * findColumn( void * p ) {
+        for( axSize i=0; i<size(); i++ ) {
+            axDBColumn &c = at(i);
+            if( c.data == p ) return &c;
+        }
+        return NULL;
+    }
 
 	const char* prefix;
 };

@@ -43,12 +43,12 @@ axStatus test_axSQLite3_case1() {
 
 class Row {
 public:
-	int64_t		id;
+	int64_t		my_id;
 	axVec3f		vec3;
 	float		float1;
 
 	Row() {
-		id = 0;
+		my_id = 0;
 		vec3.set( 0,0,0 );
 		float1 = 0;
 	}
@@ -56,14 +56,38 @@ public:
 	template<class S>
 	axStatus	serialize_io( S &s ) {
 		axStatus st;
-		ax_io( id );
+		ax_io( my_id );
 		ax_io( vec3 );
 		ax_io( float1 );
 		return 0;
 	}
 
 	axStatus	toStringFormat( axStringFormat &f ) const {
-		return f.format("{?}, {?}, {?}", id, vec3, float1 );
+		return f.format("{?}, {?}, {?}", my_id, vec3, float1 );
+	}
+};
+
+
+class Row2 {
+public:
+	int64_t		my_id;
+	axVec3f		vec3;
+    
+	Row2() {
+		my_id = 0;
+		vec3.set( 0,0,0 );
+	}
+    
+	template<class S>
+	axStatus	serialize_io( S &s ) {
+		axStatus st;
+		ax_io( my_id );
+		ax_io( vec3 );
+		return 0;
+	}
+    
+	axStatus	toStringFormat( axStringFormat &f ) const {
+		return f.format("{?}, {?}", my_id, vec3 );
 	}
 };
 
@@ -90,7 +114,7 @@ axStatus test_axSQLite3_case2() {
 		st = db.createSQL_Insert( sql, table, row );		if( !st ) return st;
 		st = stmt.create( db, sql );						if( !st ) return st;
 
-		row.id = 10;
+		row.my_id = 10;
 		row.float1 = 2.4f;
 		row.vec3.set( 5,6,7 );
 		st = stmt.exec( row );	if( !st ) return st;
@@ -98,7 +122,7 @@ axStatus test_axSQLite3_case2() {
 
 	{
 		Row row;
-		row.id = 100;
+		row.my_id = 100;
 		row.vec3.set( 9, 10, 11 );
 		axDBStmt_Insert<Row>	insertRow;
 		st = insertRow.create( db, table );		if( !st ) return st;
@@ -107,31 +131,65 @@ axStatus test_axSQLite3_case2() {
 
 	{
 		Row row;
-		row.id = 100;
+		row.my_id = 100;
 		row.vec3.set( 90, 100, 110 );
-//		axDBStmt_Update<Row, int64_t, &Row::id >	updateRow;
-		axDBStmt_Update<Row>	updateRow;
+		axDBStmt_Update<Row, int64_t, &Row::my_id >	updateRow;
+		//axDBStmt_Update<Row>	updateRow;
 
 		st = updateRow.create( db, table );			if( !st ) return st;
 		updateRow.exec( row );
 	}
 
-
+    
 	{
 		Row	row;
-
+        
 		axTempStringA	sql;
-		st = db.createSQL_Select( sql, table, row, "1=1" );		if( !st ) return st;
-		st = stmt.createExec( db, sql );							if( !st ) return st;
-
+		st = db.createSQL_Select( sql, table, row, NULL );		if( !st ) return st;
+		st = stmt.createExec( db, sql );						if( !st ) return st;
+        
 		for(;;) {
 			st = stmt.getRow( row );	if( st.isEOF() ) break;
 			if( !st ) return st;
-
+            
 			ax_log_var( row );
 		}
 	}
+	{
+	
+		axDBStmt_Select< Row, int64_t, &Row::my_id > stmt;
+		st = stmt.create( db, table );		if( !st ) return st;
+		
+		Row single_row;
+		st = stmt.exec( single_row, 10 );		if( !st ) return st;
+		ax_log_var( single_row );
+		
+	}
 
+	
+	{
+		axDBTableAccessor< Row, int64_t, &Row::my_id > ta;
+		
+		st = ta.create( db, table ); if(!st ) return st;
+		
+		
+		Row row;
+		
+		row.my_id = 20;
+		row.float1 = 7.4f;
+		row.vec3.set( 1,7,3 );
+		st = ta.insert( row );		if( !st ) return st;
+
+		row.float1 = 9999.4f;
+		st = ta.update( row );		if( !st ) return st;
+		
+		ax_log_var( row );
+		
+		Row row_select;
+		st = ta.select( row_select, 20 );		if( !st ) return st;
+		
+		ax_log_var( row_select );
+	}
 	//axDBStmt_Single<Row>	table1;
 
 	//table1.create( "table1" );

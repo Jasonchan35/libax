@@ -1,0 +1,16 @@
+
+ax_core_path     = ../../../../../ax_core
+#include          "../../../../../ax_core/projects/Xcode/OSX/ax_core.xcconfig"
+
+ax_database_path = ../../../../../ax_database
+#include          "../../../../../ax_database/projects/Xcode/OSX/axSQLite3.xcconfig"
+
+OTHER_CFLAGS  = $(OTHER_CFLAGS)  $(axSQLite3_CFLAGS) $(ax_core_CFLAGS)
+OTHER_LDFLAGS = $(OTHER_LDFLAGS) $(axSQLite3_LDFLAGS) $(ax_core_LDFLAGS) -lsqlite3
+
+//GCC_PRECOMPILE_PREFIX_HEADER = YES
+//GCC_PREFIX_HEADER = ../../../src/pch/pch.h
+
+//DEPLOYMENT_LOCATION = YES
+//DSTROOT = $(ax_core_path)
+//INSTALL_PATH = /lib/$(axPLATFORM)/$(CONFIGURATION)

@@ -57,6 +57,8 @@ public:
 	template<class T>	axStatus	createSQL_Select		( axIStringA & outSQL, const char* table, const T &dummy,	const char* szWhere );
 	template<class T>	axStatus	createSQL_Select		( axIStringA & outSQL, const char* table, 					const char* szWhere );
 
+    template<class T>   axStatus    getWherePKey            ( axIStringA &wherePKey, T &dummy, void *PKeyMember );    
+    
 	void			_setImp	( axDBConn_Imp* p );
 	axDBConn_Imp*	_getImp	()	{ return p_; }
 private:
@@ -139,6 +141,26 @@ axStatus	axDBConn::createSQL_Select( axIStringA & outSQL, const char* table, con
 	return _createSQL_Select( outSQL, table, list, szWhere );
 }
 
+
+
+template<class T> inline
+axStatus   axDBConn::getWherePKey( axIStringA &wherePKey, T &dummy, void *PKeyMember ) {
+	axStatus st ;
+	
+	axDBColumnList list;
+	st = list.io( ax_const_cast(dummy), NULL );				if( !st ) return st;
+	axDBColumn *pkey = list.findColumn( PKeyMember );
+	
+	if( ! pkey ) return axStatus_Std::DB_primary_key_not_found;
+	st = identifierString( wherePKey, pkey->name );			if( !st ) return st;
+	st = wherePKey.append( "=?" );							if( !st ) return st;
+
+	return 0;
+}
+
+
+
+//!
 class axDBConn_Imp : public axNonCopyable, public axSharedPte {
 public:
 	axDBConn_Imp() : echoSQL_(false) {}

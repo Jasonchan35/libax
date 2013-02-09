@@ -22,7 +22,7 @@ const char*	axDBStmt::sql() {
 	return p_->sql_;
 }
 
-axSize		axDBStmt::numColumns	()				{ return p_ ? p_->numColumns() : 0; }
+axSize		axDBStmt::numColumns	()				{ return p_ ? p_->numColumns() : axSize(0); }
 int			axDBStmt::columnType	( axSize col )	{ return p_ ? p_->columnType(col) : axDB_c_type_null; }
 const char*	axDBStmt::columnName	( axSize col )	{ return p_ ? p_->columnName(col) : NULL; }
 

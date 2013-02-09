@@ -1,0 +1,6 @@
+// ======== MacOSX ============
+
+axSQLite3_CFLAGS = 	-I$(ax_database_path)/include
+axSQLite3_LDFLAGS = -L$(ax_database_path)/lib/$(axPLATFORM)/$(CONFIGURATION) -L$(ax_database_path)/lib/$(axPLATFORM) -laxSQLite3
+
+
