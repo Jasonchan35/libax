@@ -17,6 +17,9 @@ public:
 	axStatus	exec( const T & values ) {
 		return stmt_.exec( values );
 	}
+
+	const char*	sql	() { return stmt_.sql(); }
+
 private:
 	axDBStmt	stmt_;
 };
@@ -35,6 +38,9 @@ public:
 	axStatus	exec( const T & values ) {
 		return stmt_.exec( values, values.id );
 	}
+
+	const char*	sql	() { return stmt_.sql(); }
+
 private:
 	axDBStmt	stmt_;
 };

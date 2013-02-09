@@ -38,6 +38,8 @@ public:
 			const char*	columnName		( axSize col );
 					
 				void	_setImp			( axDBStmt_Imp* p );
+
+			const char*	sql				();
 protected:
 	axSize	numColumns_;
 	axSharedPtr< axDBStmt_Imp >	p_;
