@@ -98,7 +98,7 @@ axStatus axDBConn_SQLite3::createStmt( axDBStmt & stmt, const char* sql ) {
 }
 
 //virtual	
-axStatus axDBConn_SQLite3::createSQL_CreateTable ( axIStringA & outSQL, const char* table, const axDB_ColumnList & list ) {
+axStatus axDBConn_SQLite3::createSQL_CreateTable ( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
 	axStatus st;
 	axTempStringA	tableName;
 	st = identifierString( tableName, table );						if( !st ) return st;
@@ -114,7 +114,7 @@ axStatus axDBConn_SQLite3::createSQL_CreateTable ( axIStringA & outSQL, const ch
 	axTempStringA	colName;
 
 	for( size_t i=0; i<list.size(); i++ ) {
-		const axDB_Column & c = list[i];
+		const axDBColumn & c = list[i];
 		if( i > 0 ) {
 			st = outSQL.append(",\n");
 		}

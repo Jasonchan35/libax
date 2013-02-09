@@ -27,13 +27,13 @@ public:
 	
 			 axStatus	create ( const char * sql );	
 
-	virtual	axStatus	exec_ParamList	( const axDB_ParamList & list );
+	virtual	axStatus	exec_ParamList	( const axDBParamList & list );
 
 	virtual axSize		numColumns	() { return numColumns_; }
 	virtual int			columnType	( axSize col );
 	virtual const char* columnName	( axSize col );
 	
-	virtual	axStatus	getRow_ValueList( axDB_ValueList & list );
+	virtual	axStatus	getRow_ValueList( axDBValueList & list );
 
 			axStatus	fetch		();
 
