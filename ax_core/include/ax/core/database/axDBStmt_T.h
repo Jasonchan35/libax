@@ -24,8 +24,7 @@ private:
 	axDBStmt	stmt_;
 };
 
-
-template<class T>
+template<class T, class PKey=int64_t, PKey T::*PkeyMember=&T::id>
 class axDBStmt_Update {
 public:
 	axStatus	create	( axDBConn & db, const char* table ) {

@@ -11,7 +11,6 @@
 #include <ax/core/system/axLog.h>
 
 axDBStmt::axDBStmt() {
-	numColumns_ = 0;
 }
 
 void	axDBStmt::_setImp( axDBStmt_Imp* p ) {
@@ -23,6 +22,10 @@ const char*	axDBStmt::sql() {
 	return p_->sql_;
 }
 
+axSize		axDBStmt::numColumns	()				{ return p_ ? p_->numColumns() : 0; }
+int			axDBStmt::columnType	( axSize col )	{ return p_ ? p_->columnType(col) : axDB_c_type_null; }
+const char*	axDBStmt::columnName	( axSize col )	{ return p_ ? p_->columnName(col) : NULL; }
+
 axStatus axDBStmt::create ( axDBConn &db, const char* sql ) { 
 	if( ! db._getImp() ) return axStatus_Std::not_initialized;
 	return db._getImp()->createStmt( *this, sql);
@@ -32,7 +35,6 @@ axStatus axDBStmt::exec_ParamList( const axDBParamList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	axStatus st;
 	st = p_->exec_ParamList( list );	if( !st ) return st;
-	numColumns_ = p_->numColumns();
 	return 0;
 }
 

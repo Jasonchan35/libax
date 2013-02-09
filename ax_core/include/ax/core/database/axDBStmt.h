@@ -21,6 +21,15 @@ public:
 	
 			axStatus	create			( axDBConn & db, const char* sql );
 
+		template<class T>	axStatus	create_Insert	( axDBConn & db, const char* table );
+		template<class T>	axStatus	create_Insert	( axDBConn & db, const char* table, T & dummy );
+
+		template<class T>	axStatus	create_Update	( axDBConn & db, const char* table,				const char* szWhere );
+		template<class T>	axStatus	create_Update	( axDBConn & db, const char* table, T & dummy,	const char* szWhere );
+
+		template<class T>	axStatus	create_Select	( axDBConn & db, const char* table,				const char* szWhere );
+		template<class T>	axStatus	create_Select	( axDBConn & db, const char* table, T & dummy,	const char* szWhere );
+
 		//	axStatus	exec			( ... )
 			axStatus	exec_ParamList	( const axDBParamList & list );
 			axExpandArgList0			( axStatus, exec,   const axDBParam_CB & , axDBParamList, exec_ParamList )
@@ -41,9 +50,52 @@ public:
 
 			const char*	sql				();
 protected:
-	axSize	numColumns_;
 	axSharedPtr< axDBStmt_Imp >	p_;
 };
+
+//=== insert ===
+template<class T> inline
+axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table ) {
+	axTempStringA	sql;
+	st = db.createSQL_Insert<T>( sql, table );	if( !st ) return st;
+	return create( db, sql );
+}
+
+template<class T> inline
+axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table, T & dummy ) {
+	return create_Insert<T>( db, table );
+}
+
+//=== update ==
+
+template<class T> inline
+axStatus	axDBStmt::create_Update( axDBConn & db, const char* table, const char* szWhere ) {
+	axTempStringA	sql;
+	st = db.createSQL_Update<T>( sql, table, szWhere );	if( !st ) return st;
+	return create( db, sql );
+}
+
+template<class T> inline
+axStatus	axDBStmt::create_Update( axDBConn & db, const char* table, T & dummy, const char* szWhere ) {
+	return create_Update<T>( db, table, szWhere );
+}
+
+
+//=== select ===
+template<class T> inline
+axStatus	axDBStmt::create_Select( axDBConn & db, const char* table, const char* szWhere ) {
+	axTempStringA	sql;
+	st = db.createSQL_Select<T>( sql, table, szWhere );	if( !st ) return st;
+	return create( db, sql );
+}
+
+template<class T> inline
+axStatus	axDBStmt::create_Select( axDBConn & db, const char* table, T & dummy, const char* szWhere ) {
+	return create_Select<T>( db, table, szWhere );
+}
+
+
+//==== Implementation ===
 
 class axDBStmt_Imp :  public axNonCopyable, public axSharedPte {
 public:
@@ -59,9 +111,5 @@ public:
 
 	axStringA	sql_;
 };
-
-inline	axSize		axDBStmt::numColumns	() { return numColumns_; }
-inline	int			axDBStmt::columnType	( axSize col ) { if( !p_ ) return axDB_c_type_null; return p_->columnType(col); }
-inline	const char*	axDBStmt::columnName	( axSize col ) { if( !p_ ) return NULL; return p_->columnName(col); }
 
 #endif //__axDBStmt_h__

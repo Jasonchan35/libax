@@ -109,8 +109,10 @@ axStatus test_axSQLite3_case2() {
 		Row row;
 		row.id = 100;
 		row.vec3.set( 90, 100, 110 );
+//		axDBStmt_Update<Row, int64_t, &Row::id >	updateRow;
 		axDBStmt_Update<Row>	updateRow;
-		st = updateRow.create( db, table );		if( !st ) return st;
+
+		st = updateRow.create( db, table );			if( !st ) return st;
 		updateRow.exec( row );
 	}
 
