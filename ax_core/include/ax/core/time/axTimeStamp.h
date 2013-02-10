@@ -9,6 +9,8 @@ public:
 	axTimeStamp ()										{ now(); }
 	axTimeStamp	( double second )						{ second_ = second; }
 
+	axStatus	onTake( axTimeStamp & src )				{ *this = src; return 0; }
+
 	void	setSecond	( double second )				{ second_  = second; }
 	void	addSecond	( double second )				{ second_ += second; }
 	double	second		() const						{ return second_; }
