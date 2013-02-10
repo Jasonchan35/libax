@@ -124,7 +124,7 @@ axStatus axDList<T>::onTake( axDList<T> &src ) {
 	_head_ = src._head_;
 	_tail_ = src._tail_;
 	_size_ = src._size_;
-	_owner_ = _owner_;
+	_owner_ = src._owner_;
 	
 	src._head_ = NULL;
 	src._tail_ = NULL;
