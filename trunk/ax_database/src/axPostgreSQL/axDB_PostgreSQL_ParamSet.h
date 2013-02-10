@@ -17,11 +17,11 @@ public:
 	axStatus	resize		( axSize n );
 	axSize		size		() { return types.size(); }
 	
-	axStatus	bind		( axSize index, const axDB_Param & param );
-	axStatus	bindList	( const axDB_ParamList & list );
+	axStatus	bind		( axSize index, const axDBParam & param );
+	axStatus	bindList	( const axDBParamList & list );
 
-	axStatus	setTypes	( const axDB_ParamList & list );
-	bool		isSameTypes	( const axDB_ParamList & list );
+	axStatus	setTypes	( const axDBParamList & list );
+	bool		isSameTypes	( const axDBParamList & list );
 		
 	static	Oid	c_type_to_Oid( int c );
 	

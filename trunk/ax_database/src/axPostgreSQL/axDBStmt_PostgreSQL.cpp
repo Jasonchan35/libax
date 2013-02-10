@@ -12,7 +12,7 @@
 axStatus	axDBStmt_PostgreSQL::fetch() {
 	if( ! res_ ) return 0;
 	res_.curRow_++;
-	if( res_.curRow_ >= res_.rowCount_ ) return axStatus_Std::DB_no_more_row;
+	if( res_.curRow_ >= res_.rowCount_ ) return axStatus::kEOF;
 	return 0;
 }
 
@@ -29,31 +29,31 @@ axStatus	axDBStmt_PostgreSQL::Result::status() {
 	}
 }
 
-int axDBStmt_PostgreSQL::getValueType( axSize col ) {
+int axDBStmt_PostgreSQL::columnType( axSize col ) {
 	Oid oid = PQftype( res_, col );
 	switch( oid ) {
 		case BOOLOID:		return axDB_c_type_bool;
-		case BYTEAOID:		return axDB_c_type_ByteArray;
-		case CHAROID:		return axDB_c_type_StringA;
-		case INT8OID:		return axDB_c_type_int64;
-		case INT2OID:		return axDB_c_type_int16;
-		case INT4OID:		return axDB_c_type_int32;
-		case TEXTOID:		return axDB_c_type_StringA;
+		case BYTEAOID:		return axDB_c_type_axIByteArray;
+		case CHAROID:		return axDB_c_type_axIStringA;
+		case INT8OID:		return axDB_c_type_int64_t;
+		case INT2OID:		return axDB_c_type_int16_t;
+		case INT4OID:		return axDB_c_type_int32_t;
+		case TEXTOID:		return axDB_c_type_axIStringA;
 		case FLOAT4OID:		return axDB_c_type_float;
 		case FLOAT8OID:		return axDB_c_type_double;
-		case BPCHAROID:		return axDB_c_type_StringA;
-		case VARCHAROID:	return axDB_c_type_StringA;
-		case DATEOID:		return axDB_c_type_TimeStamp;
-		case TIMEOID:		return axDB_c_type_TimeStamp;
-		case TIMESTAMPOID:	return axDB_c_type_TimeStamp;
-		case TIMESTAMPTZOID:return axDB_c_type_TimeStamp;
-		case TIMETZOID:		return axDB_c_type_TimeStamp;
+		case BPCHAROID:		return axDB_c_type_axIStringA;
+		case VARCHAROID:	return axDB_c_type_axIStringA;
+		case DATEOID:		return axDB_c_type_axTimeStamp;
+		case TIMEOID:		return axDB_c_type_axTimeStamp;
+		case TIMESTAMPOID:	return axDB_c_type_axTimeStamp;
+		case TIMESTAMPTZOID:return axDB_c_type_axTimeStamp;
+		case TIMETZOID:		return axDB_c_type_axTimeStamp;
 	}
 
 	return axDB_c_type_null;
 }
 
-const char* axDBStmt_PostgreSQL::getColumnName	( axSize col ) {
+const char* axDBStmt_PostgreSQL::columnName	( axSize col ) {
 	if( ! res_ ) return NULL;
 	return PQfname( res_, col );
 }
@@ -71,7 +71,7 @@ axStatus	axDBStmt_PostgreSQL::getValue_number( axSize col, T &value, Oid oid ) {
 	return 1;
 }
 
-axStatus	axDBStmt_PostgreSQL::getValue( axSize col, int8_t &	value ) { 
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, int8_t &	value ) { 
 	int16_t tmp;
 	axStatus st;
 	st = getValue_number( col, tmp, INT2OID );	if( !st ) return st;
@@ -79,14 +79,14 @@ axStatus	axDBStmt_PostgreSQL::getValue( axSize col, int8_t &	value ) {
 	return 0;
 }
 
-axStatus	axDBStmt_PostgreSQL::getValue( axSize col, int16_t &	value ) { return getValue_number( col, value, INT2OID ); }
-axStatus	axDBStmt_PostgreSQL::getValue( axSize col, int32_t &	value ) { return getValue_number( col, value, INT4OID ); }
-axStatus	axDBStmt_PostgreSQL::getValue( axSize col, int64_t &	value ) { return getValue_number( col, value, INT8OID ); }
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, int16_t &	value ) { return getValue_number( col, value, INT2OID ); }
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, int32_t &	value ) { return getValue_number( col, value, INT4OID ); }
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, int64_t &	value ) { return getValue_number( col, value, INT8OID ); }
 
-axStatus	axDBStmt_PostgreSQL::getValue( axSize col, float   &	value ) { return getValue_number( col, value, FLOAT4OID ); }
-axStatus	axDBStmt_PostgreSQL::getValue( axSize col, double  &	value ) { return getValue_number( col, value, FLOAT8OID ); }
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, float   &	value ) { return getValue_number( col, value, FLOAT4OID ); }
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, double  &	value ) { return getValue_number( col, value, FLOAT8OID ); }
 
-axStatus	axDBStmt_PostgreSQL::getValue( axSize col, bool    &	value ) {
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, bool    &	value ) {
 	if( !res_) return axStatus_Std::not_initialized;
 	int c = (int) col;
 	int r = (int) res_.curRow_;
@@ -98,7 +98,7 @@ axStatus	axDBStmt_PostgreSQL::getValue( axSize col, bool    &	value ) {
 	return 1;
 }
 
-axStatus	axDBStmt_PostgreSQL::getValue( axSize col, axIStringA    &value ) {
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, axIStringA    &value ) {
 	value.clear();
 	if( !res_) return axStatus_Std::not_initialized;
 	int c = (int) col;
@@ -112,7 +112,7 @@ axStatus	axDBStmt_PostgreSQL::getValue( axSize col, axIStringA    &value ) {
 	return 1;
 }
 
-axStatus	axDBStmt_PostgreSQL::getValue( axSize col, axIStringW    &value ) {
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, axIStringW    &value ) {
 	value.clear();
 	if( !res_) return axStatus_Std::not_initialized;
 	int c = (int) col;
@@ -126,7 +126,7 @@ axStatus	axDBStmt_PostgreSQL::getValue( axSize col, axIStringW    &value ) {
 	return 1;
 }
 
-axStatus	axDBStmt_PostgreSQL::getValue( axSize col, axIByteArray	&value ) {
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, axIByteArray	&value ) {
 	value.clear();
 	if( !res_) return axStatus_Std::not_initialized;
 	int c = (int) col;
@@ -144,8 +144,14 @@ axStatus	axDBStmt_PostgreSQL::getValue( axSize col, axIByteArray	&value ) {
 	memcpy( value.ptr(), p, n );
 	return 1;
 }
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, axDateTime	&value ) {
+	axTimeStamp	tmp;
+	axStatus st = getResultAtCol( col, tmp );		if( !st ) return st;
+	value.set( tmp );
+	return 0;
+}
 
-axStatus	axDBStmt_PostgreSQL::getValue( axSize col, axTimeStamp	&value ) {
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, axTimeStamp	&value ) {
 	if( !res_) return axStatus_Std::not_initialized;
 
 	int c = (int) col;
@@ -177,7 +183,7 @@ axStatus	axDBStmt_PostgreSQL::getValue( axSize col, axTimeStamp	&value ) {
 }
 
 //virtual	
-axStatus axDBStmt_PostgreSQL::exec_ParamList ( const axDB_ParamList & list ) {
+axStatus axDBStmt_PostgreSQL::exec_ParamList ( const axDBParamList & list ) {
 	axStatus st;
 	res_.colCount_ = 0;
 	res_.rowCount_ = 0;
@@ -200,14 +206,16 @@ axStatus axDBStmt_PostgreSQL::exec_ParamList ( const axDB_ParamList & list ) {
 
 }
 
-axStatus axDBStmt_PostgreSQL::doPrepare( const axDB_ParamList & list ) {
+axStatus axDBStmt_PostgreSQL::doPrepare( const axDBParamList & list ) {
 	release();
 	
 	axStatus st;
 	Result rs;
 
-	st = paramSet_.setTypes( list );				if( !st ) return st;
-	st = stmtName_.format( "{?}", this );			if( !st ) return st;
+	st = paramSet_.setTypes( list );					if( !st ) return st;
+
+	//using pointer as unique stmt name
+	st = stmtName_.format( "{?}", (void*)this );		if( !st ) return st;
 	rs.set( PQprepare( *db_, stmtName_, sql_, (int)paramSet_.size(), paramSet_.types.ptr() ) );
 	st = rs.status();	
 	if( !st ) {

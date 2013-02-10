@@ -173,13 +173,13 @@ public:
 	virtual	axStatus	identifierString		( axIStringA & out, const char* sz );
 
 	virtual axStatus	createStmt				( axDBStmt & stmt, const char * sql ) = 0;
-	virtual	axStatus	getSQL_CreateTable	( axIStringA & outSQL, const char* table, const axDBColumnList & list ) = 0;
+	virtual	axStatus	getSQL_CreateTable		( axIStringA & outSQL, const char* table, const axDBColumnList & list ) = 0;
 	virtual axStatus	getSQL_DropTable		( axIStringA & outSQL, const char * table );
 	virtual axStatus	getSQL_DropTableIfExists( axIStringA & outSQL, const char * table );
 
-	virtual	axStatus	getSQL_Insert		( axIStringA & outSQL, const char* table, const axDBColumnList & list );
-	virtual	axStatus	getSQL_Update		( axIStringA & outSQL, const char* table, const axDBColumnList & list, const char* szWhere );
-	virtual	axStatus	getSQL_Select		( axIStringA & outSQL, const char* table, const axDBColumnList & list, const char* szWhere );
+	virtual	axStatus	getSQL_Insert			( axIStringA & outSQL, const char* table, const axDBColumnList & list );
+	virtual	axStatus	getSQL_Update			( axIStringA & outSQL, const char* table, const axDBColumnList & list, const char* szWhere );
+	virtual	axStatus	getSQL_Select			( axIStringA & outSQL, const char* table, const axDBColumnList & list, const char* szWhere );
 
 	bool	echoSQL_;
 };

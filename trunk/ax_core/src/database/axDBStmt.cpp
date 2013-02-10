@@ -42,3 +42,23 @@ axStatus axDBStmt::getRow_ValueList	( axDBValueList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->getRow_ValueList( list );
 }
+
+axStatus axDBStmt_Imp::getRow_ValueList( axDBValueList & list ) {
+	axStatus st;
+	st = fetch();		if( !st ) return st;
+
+	if( numColumns() < list.size() ) return axStatus_Std::DB_invalid_param_count;
+	
+	for( axSize i=0; i<list.size(); i++ ) {
+		axDBValue & v = list[i];
+		switch( v.type ) {
+			#define axDB_c_type_list( T ) \
+				case axDB_c_type_##T:		st = getResultAtCol( i, *(T*)v.data );	break; \
+			//-----
+				#include <ax/core/database/axDB_c_type_list.h>
+			#undef axDB_c_type_list
+		}
+		if( !st ) return st;
+	}
+	return 0;
+}

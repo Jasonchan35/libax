@@ -13,44 +13,46 @@
 
 class axDBConn_PostgreSQL;
 
-class axDBStmt_PostgreSQL : public axDBStmt_Interface {
+class axDBStmt_PostgreSQL : public axDBStmt_Imp {
 public:
 	axDBStmt_PostgreSQL( axDBConn_PostgreSQL* db ) { db_.ref( db ); }
 	~axDBStmt_PostgreSQL();
 	void release();
 	
 	virtual axStatus	prepare ( const char * sql );	
-	virtual	axStatus	exec_ParamList	( const axDB_ParamList & list );	
+	virtual	axStatus	exec_ParamList	( const axDBParamList & list );	
 
-	virtual axStatus	fetch	();
-	virtual axSize		colCount() { return res_.colCount_; }
-	virtual const char* getColumnName	( axSize col );
 
-	virtual int			getValueType	( axSize col );
+	virtual axSize		numColumns	() { return res_.colCount_; }
+	virtual const char* columnName	( axSize col );
+	virtual int			columnType	( axSize col );
 
-	virtual axStatus	getValue( axSize col, int8_t	&value );
-	virtual axStatus	getValue( axSize col, int16_t	&value );
-	virtual axStatus	getValue( axSize col, int32_t	&value );
-	virtual axStatus	getValue( axSize col, int64_t	&value );
-	
-	virtual axStatus	getValue( axSize col, float		&value );
-	virtual axStatus	getValue( axSize col, double	&value );
-	
-	virtual axStatus	getValue( axSize col, bool		&value );
-	
-	virtual axStatus	getValue( axSize col, axIStringA    &value );
-	virtual axStatus	getValue( axSize col, axIStringW    &value );
-	
-	virtual axStatus	getValue( axSize col, axIByteArray	&value );
-	
-	virtual axStatus	getValue( axSize col, axTimeStamp	&value );
+	virtual	axStatus	fetch		();
+
+	virtual axStatus	getResultAtCol	( axSize col, int8_t	&value );
+	virtual axStatus	getResultAtCol	( axSize col, int16_t	&value );
+	virtual axStatus	getResultAtCol	( axSize col, int32_t	&value );
+	virtual axStatus	getResultAtCol	( axSize col, int64_t	&value );
+
+	virtual axStatus	getResultAtCol	( axSize col, float		&value );
+	virtual axStatus	getResultAtCol	( axSize col, double	&value );
+
+	virtual axStatus	getResultAtCol	( axSize col, bool		&value );
+
+	virtual axStatus	getResultAtCol	( axSize col, axIStringA    &value );
+	virtual axStatus	getResultAtCol	( axSize col, axIStringW    &value );
+
+	virtual axStatus	getResultAtCol	( axSize col, axIByteArray	&value );
+
+	virtual axStatus	getResultAtCol	( axSize col, axTimeStamp	&value );
+	virtual axStatus	getResultAtCol	( axSize col, axDateTime	&value );
 
 	template<class T>
-			axStatus	getValue_number( axSize col, T & value, Oid oid );
+			axStatus	getValue_number	( axSize col, T & value, Oid oid );
 
 
 		
-	axStatus doPrepare			( const axDB_ParamList & list );
+	axStatus doPrepare			( const axDBParamList & list );
 	static	axStatus convertSQL	( axIStringA &out, const char* inSQL );
 			
 	axSharedPtr< axDBConn_PostgreSQL >	db_;

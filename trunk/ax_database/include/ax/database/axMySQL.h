@@ -1,7 +1,7 @@
 #ifndef __axDB_MySQL_h__
 #define __axDB_MySQL_h__
 
-#include "../ax_core.h"
+#include <ax/ax_core.h>
 
 class axDBConn;
 

@@ -1,7 +1,7 @@
 #ifndef __axPostgreSQL_h__
 #define __axPostgreSQL_h__
 
-#include "../ax_core.h"
+#include <ax/ax_core.h>
 
 class axDBConn;
 
