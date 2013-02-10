@@ -13,7 +13,7 @@ Win32:
 class axStopWatch {
 public:
 	axStopWatch();
-	double		get			();
+	double		get			() const;
 	double		getAndReset	();
 	
 	void		reset	();
@@ -21,7 +21,11 @@ public:
 
 	void		pause	();
 	void		resume	();
-	 
+	
+	axStatus	toStringFormat( axStringFormat &f ) const {
+		return f.out( get() );
+	}
+
 private:
 #ifdef axOS_WIN
 	LARGE_INTEGER	fq_;
@@ -33,8 +37,8 @@ private:
 	TIMESTAMP_	start_, get_;
 	
 	void		ctor_		();
-	void		updateTime_	( TIMESTAMP_ &t );
-	double		diff_		( TIMESTAMP_ &a, TIMESTAMP_ &b );
+	void		updateTime_	( TIMESTAMP_ &t ) const;
+	double		diff_		( const TIMESTAMP_ &a, const TIMESTAMP_ &b ) const;
 	
 	bool		pause_;
 	double		pauseAccumulate_;
@@ -69,11 +73,11 @@ void axStopWatch::resume() {
 }
 
 inline
-double axStopWatch::get() {
+double axStopWatch::get() const {
 	if( pause_ ) {
 		return pauseAccumulate_;
 	}else{
-		updateTime_( get_ );
+		updateTime_( ax_this->get_ );
 		return diff_( get_, start_ ) + pauseAccumulate_;
 	}
 }
@@ -99,12 +103,12 @@ void	axStopWatch::ctor_() {
 }
 
 inline
-void	axStopWatch::updateTime_ ( TIMESTAMP_ &t ) {
+void	axStopWatch::updateTime_ ( TIMESTAMP_ &t ) const {
 	QueryPerformanceCounter( &t );
 }
 
 inline
-double	axStopWatch::diff_	( TIMESTAMP_ &a, TIMESTAMP_ &b ) {
+double	axStopWatch::diff_	( const TIMESTAMP_ &a, const TIMESTAMP_ &b ) const {
 	return (double) ( a.QuadPart - b.QuadPart ) / ( double ) fq_.QuadPart;
 }
 
@@ -115,12 +119,12 @@ void	axStopWatch::ctor_() {
 }
 
 inline
-void	axStopWatch::updateTime_ ( TIMESTAMP_ &t ) {
+void	axStopWatch::updateTime_ ( TIMESTAMP_ &t ) const {
 	gettimeofday( &t, 0 );
 }
 
 inline
-double axStopWatch::diff_( TIMESTAMP_ &a, TIMESTAMP_ &b ) {
+double axStopWatch::diff_( const  TIMESTAMP_ &a, const TIMESTAMP_ &b ) const {
 	return (double)( a.tv_sec  - b.tv_sec ) + ( (double)a.tv_usec - (double)b.tv_usec ) / 1000000.0;
 	// the usec is unsigned, and now.tv_usec can be smaller than start.tv_usec
 	// therefore, we cast to double before subtract
