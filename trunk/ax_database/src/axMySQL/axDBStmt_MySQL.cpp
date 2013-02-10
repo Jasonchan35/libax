@@ -67,6 +67,10 @@ axStatus axDBStmt_MySQL::exec_ParamList( const axDBParamList & list ) {
 	if( !stmt_ ) return axStatus_Std::not_initialized;
 	axStatus st;	
 
+	if( db_->echoSQL() ) {
+		ax_log("--- ExecSQL: ---\n{?}\n  with Params:{?}\n", sql_, list );
+	}
+
 	axSize n =  mysql_stmt_param_count(stmt_);
 
 	if( list.size() < n ) return axStatus_Std::DB_invalid_param_count;
@@ -78,42 +82,49 @@ axStatus axDBStmt_MySQL::exec_ParamList( const axDBParamList & list ) {
 	for( axSize i=0; i<n; i++ ) {
 		const axDBParam & p = list[i];
 		MYSQL_BIND & b = bind_[i];
-		axIStringA & str = tempStr_[i];
+		axIStringA & tmpStr = tempStr_[i];
 		unsigned long & len = tempLen_[i];
 		memset( &b, 0, sizeof(b) );	
 		switch( p.type ) {
 			case axDB_c_type_bool: {
-				//using str as buffer
-				st = str.resize(1);		if( !st ) return st;
-				char *buf = str._getInternalBufferPtr();
-				buf[0] = p.bool_ ? 1:0;
+				//using tmpStr as buffer
+				st = tmpStr.resize(1);		if( !st ) return st;
+				char *buf = tmpStr._getInternalBufferPtr();
+				buf[0] = p.p_bool ? 1:0;
 				b.buffer_type = MYSQL_TYPE_TINY;
 				b.buffer      = buf;
 			}break;
-			case axDB_c_type_int8_t:		{ b.buffer_type = MYSQL_TYPE_TINY;		b.buffer = (void*)&p.int8_;		}break;
-			case axDB_c_type_int16_t:		{ b.buffer_type = MYSQL_TYPE_SHORT;		b.buffer = (void*)&p.int16_;	}break;
-			case axDB_c_type_int32_t:		{ b.buffer_type = MYSQL_TYPE_LONG;		b.buffer = (void*)&p.int32_;	}break;
-			case axDB_c_type_int64_t:		{ b.buffer_type = MYSQL_TYPE_LONGLONG;	b.buffer = (void*)&p.int64_;	}break;
-			case axDB_c_type_float:			{ b.buffer_type = MYSQL_TYPE_FLOAT;		b.buffer = (void*)&p.float_;	}break;
-			case axDB_c_type_double:		{ b.buffer_type = MYSQL_TYPE_DOUBLE;	b.buffer = (void*)&p.double_;	}break;
-			case axDB_c_type_axIStringA:	{
+			case axDB_c_type_int8:		{ b.buffer_type = MYSQL_TYPE_TINY;		b.buffer = (void*)&p.p_int8;	}break;
+			case axDB_c_type_int16:		{ b.buffer_type = MYSQL_TYPE_SHORT;		b.buffer = (void*)&p.p_int16;	}break;
+			case axDB_c_type_int32:		{ b.buffer_type = MYSQL_TYPE_LONG;		b.buffer = (void*)&p.p_int32;	}break;
+			case axDB_c_type_int64:		{ b.buffer_type = MYSQL_TYPE_LONGLONG;	b.buffer = (void*)&p.p_int64;	}break;
+			case axDB_c_type_float:		{ b.buffer_type = MYSQL_TYPE_FLOAT;		b.buffer = (void*)&p.p_float;	}break;
+			case axDB_c_type_double:	{ b.buffer_type = MYSQL_TYPE_DOUBLE;	b.buffer = (void*)&p.p_double;	}break;
+
+			case axDB_c_type_ByteArray: {
+				b.buffer_type	= MYSQL_TYPE_BLOB;
+				b.buffer		= (void*) p.p_ByteArray->ptr();
+				st = ax_safe_assign( b.buffer_length, p.p_ByteArray->byteSize() );	if( !st ) return st;
+			}break;
+
+			case axDB_c_type_StringA:	{
+				len = (long)ax_strlen( p.p_strA );
 				b.buffer_type = MYSQL_TYPE_STRING;
-				b.buffer      = (void*)p.strA;
-				len = (long)ax_strlen( p.strA );
+				b.buffer      = (void*)p.p_strA;
 				b.buffer_length = len;
 			}break;
-			case axDB_c_type_axIStringW: {
-				st = str.set( p.strW );		if( !st ) return st;
-				b.buffer_type = MYSQL_TYPE_STRING;
-				b.buffer      = (void*)str.c_str();
-				b.buffer_length = (long)str.size();
+			case axDB_c_type_StringW: {
+				st = tmpStr.set( p.p_strW );		if( !st ) return st;
+				b.buffer_type	= MYSQL_TYPE_STRING;
+				b.buffer		= (void*)tmpStr.c_str();
+				st = ax_safe_assign( b.buffer_length, tmpStr.size() );		if( !st ) return st;
 			}break;
-			case axDB_c_type_axDateTime: {
-				//using str as buffer
-				st = str.resize( sizeof(MYSQL_TIME) );		if( !st ) return st;
-				MYSQL_TIME* buf = (MYSQL_TIME*) str._getInternalBufferPtr();
+			case axDB_c_type_DateTime: {
+				//using tmpStr as buffer
+				st = tmpStr.resize( sizeof(MYSQL_TIME) );		if( !st ) return st;
+				MYSQL_TIME* buf = (MYSQL_TIME*) tmpStr._getInternalBufferPtr();
 
-				const axDateTime	& dt = *p.p_dateTime;
+				const axDateTime	& dt = *p.p_DateTime;
 				buf->year	= dt.year;
 				buf->month	= dt.month;
 				buf->day	= dt.day;
@@ -127,12 +138,13 @@ axStatus axDBStmt_MySQL::exec_ParamList( const axDBParamList & list ) {
 				b.buffer_type = MYSQL_TYPE_TIMESTAMP;
 				b.buffer      = buf;
 			}break;
-			case axDB_c_type_axTimeStamp: {
-				//using str as buffer
-				st = str.resize( sizeof(MYSQL_TIME) );		if( !st ) return st;
-				MYSQL_TIME* buf = (MYSQL_TIME*) str._getInternalBufferPtr();
 
-				axDateTime	dt( *p.p_timeStamp );
+			case axDB_c_type_TimeStamp: {
+				//using tmpStr as buffer
+				st = tmpStr.resize( sizeof(MYSQL_TIME) );		if( !st ) return st;
+				MYSQL_TIME* buf = (MYSQL_TIME*) tmpStr._getInternalBufferPtr();
+
+				axDateTime	dt( *p.p_TimeStamp );
 				buf->year	= dt.year;
 				buf->month	= dt.month;
 				buf->day	= dt.day;
@@ -146,8 +158,8 @@ axStatus axDBStmt_MySQL::exec_ParamList( const axDBParamList & list ) {
 				b.buffer_type = MYSQL_TYPE_DATETIME;
 				b.buffer      = buf;
 			}break;
+
 				/*
-			axDB_c_type_ByteArray,
 			axDB_c_type_Date,
 			axDB_c_type_Time,
 			axDB_c_type_TimeStamp,
@@ -173,19 +185,19 @@ int			axDBStmt_MySQL::columnType	( axSize col ) {
 	
 	MYSQL_FIELD* f = &columns_[col];
 	switch( f->type ) {
-		case MYSQL_TYPE_TINY:		return axDB_c_type_int8_t;
-		case MYSQL_TYPE_SHORT:		return axDB_c_type_int16_t;
-		case MYSQL_TYPE_LONG:		return axDB_c_type_int32_t;
-		case MYSQL_TYPE_LONGLONG:	return axDB_c_type_int64_t;
+		case MYSQL_TYPE_TINY:		return axDB_c_type_int8;
+		case MYSQL_TYPE_SHORT:		return axDB_c_type_int16;
+		case MYSQL_TYPE_LONG:		return axDB_c_type_int32;
+		case MYSQL_TYPE_LONGLONG:	return axDB_c_type_int64;
 		case MYSQL_TYPE_FLOAT:		return axDB_c_type_float;
 		case MYSQL_TYPE_DOUBLE:		return axDB_c_type_double;
-		case MYSQL_TYPE_TIME:		return axDB_c_type_axTimeStamp;
-		case MYSQL_TYPE_DATE:		return axDB_c_type_axDateTime;
-		case MYSQL_TYPE_DATETIME:	return axDB_c_type_axDateTime;
-		case MYSQL_TYPE_TIMESTAMP:	return axDB_c_type_axTimeStamp;
-		case MYSQL_TYPE_VAR_STRING:	return axDB_c_type_axIStringA;
-		case MYSQL_TYPE_STRING:		return axDB_c_type_axIStringA;
-		case MYSQL_TYPE_BLOB:		return axDB_c_type_axIByteArray;
+		case MYSQL_TYPE_TIME:		return axDB_c_type_TimeStamp;
+		case MYSQL_TYPE_DATE:		return axDB_c_type_DateTime;
+		case MYSQL_TYPE_DATETIME:	return axDB_c_type_DateTime;
+		case MYSQL_TYPE_TIMESTAMP:	return axDB_c_type_TimeStamp;
+		case MYSQL_TYPE_VAR_STRING:	return axDB_c_type_StringA;
+		case MYSQL_TYPE_STRING:		return axDB_c_type_StringA;
+		case MYSQL_TYPE_BLOB:		return axDB_c_type_ByteArray;
 	}
 	return axDB_c_type_null;
 }
@@ -320,49 +332,46 @@ axStatus axDBStmt_MySQL::getResultAtCol( axSize col, axIStringA & value ) {
 	MYSQL_BIND  b;
 	memset( &b, 0, sizeof(b) );	
 
-	axIStringA & str = tempStr_[col];
-	
-	unsigned long len = columns_[col].length + 1;
-	st = str.resize( len );	if( !st ) return st;
+	unsigned long len = *bind_[col].length + 1;
+	st = value.resize( len );	if( !st ) return st;
 
-	b.buffer_type = MYSQL_TYPE_STRING;
-	b.buffer	  = str._getInternalBufferPtr();
+	b.buffer_type	= MYSQL_TYPE_STRING;
+	b.buffer		= value._getInternalBufferPtr();
 	b.buffer_length = len;
-	b.length	  = &len;
+	b.length		= &len;
 
 	if( 0 != mysql_stmt_fetch_column( stmt_, &b, (unsigned)col, 0 ) ) {
 		return axStatus_Std::DB_invalid_param_type;
 	}
 	
-	st = value.setWithLength( str, len );		if( !st ) return st;	
 	return 0;
 }	
 
 axStatus axDBStmt_MySQL::getResultAtCol( axSize col, axIStringW & value ) {
+	axTempStringA	tmp;
+	axStatus st = getResultAtCol( col, tmp );		if( !st ) return st;
+	return value.set( tmp );
+}	
+
+axStatus axDBStmt_MySQL::getResultAtCol( axSize col, axIByteArray & value ) {
 	if( col >= numColumns_ ) return axStatus_Std::DB_no_such_column;
 	axStatus st;
+
+	unsigned long len = *bind_[col].length;
+
+	st = value.resize( len );		if( !st ) return st;
+
 	MYSQL_BIND  b;
 	memset( &b, 0, sizeof(b) );	
-	
-	axIStringA & str = tempStr_[col];
+	b.buffer_type	= MYSQL_TYPE_BLOB;
+	b.buffer		= value.ptr();
 
-	unsigned long len = columns_[col].length + 1;
-	st = str.resize( len );	if( !st ) return st;
-
-	b.buffer_type = MYSQL_TYPE_STRING;
-	b.buffer	  = str._getInternalBufferPtr();
-	b.buffer_length = len;
-	b.length	  = &len;
+	st = ax_safe_assign( b.buffer_length, value.byteSize() );		if( !st ) return st;
+	b.length		= &len;
 
 	if( 0 != mysql_stmt_fetch_column( stmt_, &b, (unsigned)col, 0 ) ) {
 		return axStatus_Std::DB_invalid_param_type;
 	}
-	
-	st = value.setWithLength( str, len );		if( !st ) return st;	
-	return 0;
-}	
-
-axStatus axDBStmt_MySQL::getResultAtCol( axSize col, axIByteArray & value ) {
 	return 0;
 }
 
@@ -374,6 +383,11 @@ axStatus axDBStmt_MySQL::fetch() {
 	st = tempStr_.resize( numColumns_ );		if( !st ) return st;
 	st = tempLen_.resize( numColumns_ );		if( !st ) return st;
 	memset( bind_.ptr(), 0, bind_.byteSize() );
+
+	for( size_t i=0; i<numColumns_; i++ ) {
+		bind_[i].length = &tempLen_[i];
+	}
+
 	mysql_stmt_bind_result( stmt_, bind_.ptr() );	//bind dummy here
 	
 	int ret = mysql_stmt_fetch( stmt_ );

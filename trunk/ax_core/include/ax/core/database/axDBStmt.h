@@ -22,14 +22,11 @@ public:
 	
 			axStatus	create			( axDBConn & db, const char* sql );
 
-		template<class T>	axStatus	create_Insert	( axDBConn & db, const char* table );
-		template<class T>	axStatus	create_Insert	( axDBConn & db, const char* table, T & dummy );
+							axStatus	create_Insert	( axDBConn & db, const char* table, const axDBColumnList & list );
+		template<class T>	axStatus	create_Insert	( axDBConn & db, const char* table, const char* pkey );
 
-		template<class T>	axStatus	create_Update	( axDBConn & db, const char* table,				const char* szWhere );
-		template<class T>	axStatus	create_Update	( axDBConn & db, const char* table, T & dummy,	const char* szWhere );
-
-		template<class T>	axStatus	create_Select	( axDBConn & db, const char* table,				const char* szWhere );
-		template<class T>	axStatus	create_Select	( axDBConn & db, const char* table, T & dummy,	const char* szWhere );
+		template<class T>	axStatus	create_Update	( axDBConn & db, const char* table,	const char* szWhere );
+		template<class T>	axStatus	create_Select	( axDBConn & db, const char* table,	const char* szWhere );
 
 		//	axStatus	exec			( ... )
 			axStatus	exec_ParamList	( const axDBParamList & list );
@@ -44,7 +41,7 @@ public:
 			const char*	columnName		( axSize col );
 					
 				void	_setImp			( axDBStmt_Imp* p );
-
+		axDBStmt_Imp*	_getImp			()		{ return p_; }
 			const char*	sql				();
 protected:
 	axSharedPtr< axDBStmt_Imp >	p_;
@@ -52,16 +49,11 @@ protected:
 
 //=== insert ===
 template<class T> inline
-axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table ) {
+axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table, const char* pkey ) {
     axStatus st;
 	axTempStringA	sql;
 	st = db.getSQL_Insert<T>( sql, table );	if( !st ) return st;
 	return create( db, sql );
-}
-
-template<class T> inline
-axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table, T & dummy ) {
-	return create_Insert<T>( db, table );
 }
 
 //=== update ==
@@ -74,12 +66,6 @@ axStatus	axDBStmt::create_Update( axDBConn & db, const char* table, const char* 
 	return create( db, sql );
 }
 
-template<class T> inline
-axStatus	axDBStmt::create_Update( axDBConn & db, const char* table, T & dummy, const char* szWhere ) {
-	return create_Update<T>( db, table, szWhere );
-}
-
-
 //=== select ===
 template<class T> inline
 axStatus	axDBStmt::create_Select( axDBConn & db, const char* table, const char* szWhere ) {
@@ -88,12 +74,6 @@ axStatus	axDBStmt::create_Select( axDBConn & db, const char* table, const char* 
 	st = db.getSQL_Select<T>( sql, table, szWhere );	if( !st ) return st;
 	return create( db, sql );
 }
-
-template<class T> inline
-axStatus	axDBStmt::create_Select( axDBConn & db, const char* table, T & dummy, const char* szWhere ) {
-	return create_Select<T>( db, table, szWhere );
-}
-
 
 //==== Implementation ===
 
@@ -128,7 +108,6 @@ public:
 
 	virtual axStatus	getResultAtCol( axSize col, axTimeStamp		&value )= 0;
 	virtual axStatus	getResultAtCol( axSize col, axDateTime		&value )= 0;
-
 
 	axStringA	sql_;
 };

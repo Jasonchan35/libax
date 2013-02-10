@@ -410,27 +410,27 @@ axStatus ax_json_serialize_value( axJsonParser &s, axIArray<T> &v ) {
 
 template< class S, class T > inline
 axStatus ax_json_serialize_value( S &s, axExternalArray<T> &v ) {
-	return ax_json_serialize_value( s, (axIArray<T>&) v );
+	return ax_json_serialize_value( s, v.asInterface() );
 }
 template< class S, class T, size_t N > inline
 axStatus ax_json_serialize_value( S &s, axLocalArray<T,N> &v ) {
-	return ax_json_serialize_value( s, (axIArray<T>&) v );
+	return ax_json_serialize_value( s, v.asInterface() );
 }
 
 template< class S, class T > inline
 axStatus ax_json_serialize_value( S &s, axArray<T> &v ) {
-	return ax_json_serialize_value( s, (axIArray<T>&) v );
+	return ax_json_serialize_value( s, v.asInterface() );
 }
 
 template< class S, class T, size_t LOCAL_BUF_SIZE > inline
 axStatus ax_json_serialize_value( S &s, axArray<T,LOCAL_BUF_SIZE> &v ) {
-	return ax_json_serialize_value( s, (axIArray<T>&) v );
+	return ax_json_serialize_value( s, v.asInterface() );
 }
 
 
 template< class S, class T, size_t CS, size_t LB > inline
 axStatus ax_json_serialize_value( S &s, axChunkArray<T,CS,LB> &v ) {
-	return ax_json_serialize_value( s, (axIArray<T>&) v );
+	return ax_json_serialize_value( s, v.asInterface() );
 }
 
 //---------- String ----------------
@@ -455,28 +455,28 @@ axStatus ax_json_serialize_value( axJsonParser &s, axIString_<T> &v ) {
 }
 
 template< class S, class T, size_t N > inline
-axStatus ax_json_serialize_value( S &s, axString_<T,N> &v ) { return ax_json_serialize_value( s, (axIString_<T>&) v ); }
+axStatus ax_json_serialize_value( S &s, axString_<T,N> &v ) { return ax_json_serialize_value( s, v.asInterface() ); }
 
 template< class S, size_t N > inline
-axStatus ax_json_serialize_value( S &s, axStringA_<N> &v ) { return ax_json_serialize_value( s, (axIString_<char>&) v ); }
+axStatus ax_json_serialize_value( S &s, axStringA_<N>  &v ) { return ax_json_serialize_value( s, v.asInterface() ); }
 
 template< class S, size_t N > inline
-axStatus ax_json_serialize_value( S &s, axStringW_<N> &v ) { return ax_json_serialize_value( s, (axIString_<wchar_t>&) v ); }
+axStatus ax_json_serialize_value( S &s, axStringW_<N>  &v ) { return ax_json_serialize_value( s, v.asInterface() ); }
 
 template< class S, class T, size_t N > inline
-axStatus ax_json_serialize_value( S &s, axLocalString_<T,N> 	&v ) { return ax_json_serialize_value( s, (axIString_<T>&) v ); }
+axStatus ax_json_serialize_value( S &s, axLocalString_<T,N> 	&v ) { return ax_json_serialize_value( s, v.asInterface() ); }
 
 template< class S, size_t N > inline
-axStatus ax_json_serialize_value( S &s, axLocalStringA<N> 		&v ) { return ax_json_serialize_value( s, (axIStringA &) v ); }
+axStatus ax_json_serialize_value( S &s, axLocalStringA<N> 		&v ) { return ax_json_serialize_value( s, v.asInterface() ); }
 
 template< class S, size_t N > inline
-axStatus ax_json_serialize_value( S &s, axLocalStringW<N> 		&v ) { return ax_json_serialize_value( s, (axIStringW &) v ); }
+axStatus ax_json_serialize_value( S &s, axLocalStringW<N> 		&v ) { return ax_json_serialize_value( s, v.asInterface() ); }
 
 template< class S, class T > inline
-axStatus ax_json_serialize_value( S &s, axConstString_<T> 		&v ) {	return ax_json_serialize_value( s, (axIString_<T>&) v ); }
+axStatus ax_json_serialize_value( S &s, axConstString_<T> 		&v ) {	return ax_json_serialize_value( s, v.asInterface() ); }
 
 template< class S, class T > inline
-axStatus ax_json_serialize_value( S &s, axExternalString_<T> 	&v ) { return ax_json_serialize_value( s, (axIString_<T>&) v ); }
+axStatus ax_json_serialize_value( S &s, axExternalString_<T> 	&v ) { return ax_json_serialize_value( s, v.asInterface() ); }
 
 
 //===============

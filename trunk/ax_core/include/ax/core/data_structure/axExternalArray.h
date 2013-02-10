@@ -21,6 +21,9 @@ public:
 	void	setExternal( axIArray<T> & a )		{ setExternal( a.ptr(), a.size() ); }
 	void	setExternal( T* buf, axSize bufLen );
 	
+			B & asInterface()		{ return (B&)*this; }
+	const	B & asInterface() const	{ return (B&)*this; }
+
 private:
 	virtual	axStatus	onMalloc	( axSize req_size, void* &newPtr, axSize &newCapacity );
 	virtual void		onFree		( void* p ) { /*do nothing*/ }

@@ -26,6 +26,8 @@ public:
 
 	virtual	~axArray()	{ B::clear(); }
 
+			B & asInterface()		{ return (B&)*this; }
+	const	B & asInterface() const	{ return (B&)*this; }
 
 	template<class S>	axStatus	serialize_io	 ( S &s )	{ return B::serialize_io(s); }
 	template<class S>	axStatus	serialize_io_vary( S &s )	{ return B::serialize_io_vary(s); }

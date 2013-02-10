@@ -3,8 +3,8 @@
 const char* axDB_c_type_name( int type ) {
 	switch( type ) {
 		case axDB_c_type_null: return "null";
-		#define axDB_c_type_list(T) \
-			case axDB_c_type_##T: return #T;\
+		#define axDB_c_type_list( NAME, C_TYPE, C_ITYPE ) \
+			case axDB_c_type_##NAME: return #NAME;\
 		//-----
 			#include <ax/core/database/axDB_c_type_list.h>
 		#undef axDB_c_type_list
@@ -13,20 +13,53 @@ const char* axDB_c_type_name( int type ) {
 }
 
 axStatus	axDBParam::toStringFormat( axStringFormat & f ) const {
-	switch( type) {
-		case axDB_c_type_null:			return f.format("\nnull");
-		case axDB_c_type_bool:			return f.format("\n  ({?}) [{?}]", axDB_c_type_name(type), bool_ );
-		case axDB_c_type_int8_t:		return f.format("\n  ({?}) [{?}]", axDB_c_type_name(type), int8_ );
-		case axDB_c_type_int16_t:		return f.format("\n  ({?}) [{?}]", axDB_c_type_name(type), int16_ );
-		case axDB_c_type_int32_t:		return f.format("\n  ({?}) [{?}]", axDB_c_type_name(type), int32_ );
-		case axDB_c_type_int64_t:		return f.format("\n  ({?}) [{?}]", axDB_c_type_name(type), int64_ );
-		case axDB_c_type_float:			return f.format("\n  ({?}) [{?}]", axDB_c_type_name(type), float_ );
-		case axDB_c_type_double:		return f.format("\n  ({?}) [{?}]", axDB_c_type_name(type), double_ );
-		case axDB_c_type_axIStringA:	return f.format("\n  ({?}) [{?}]", axDB_c_type_name(type), strA );
-		case axDB_c_type_axIStringW:	return f.format("\n  ({?}) [{?}]", axDB_c_type_name(type), strW );
-		case axDB_c_type_axTimeStamp:	return f.format("\n  ({?}) [{?}]", axDB_c_type_name(type), axDateTime( *p_timeStamp ) );
-		case axDB_c_type_axDateTime:	return f.format("\n  ({?}) [{?}]", axDB_c_type_name(type), *p_dateTime );
+	f.format("\n    ({?})\t", axDB_c_type_name(type) );
+
+	switch( type ) {
+		case axDB_c_type_null:			return 0;
+		case axDB_c_type_ByteArray:		return f.format("size={?}", p_ByteArray->size() );
+
+		case axDB_c_type_TimeStamp:		return f.format("{?}", *p_TimeStamp );
+		case axDB_c_type_DateTime:		return f.format("{?}", *p_DateTime  );
+
+		case axDB_c_type_StringA:		return f.format("[{?}]", p_strA );
+		case axDB_c_type_StringW:		return f.format("[{?}]", p_strW  );
+
+		#define axTYPE_LIST( NAME ) \
+			case axDB_c_type_##NAME: return f.format("{?}", p_##NAME ); \
+		//-----
+			axTYPE_LIST( bool )
+			axTYPE_LIST( float )
+			axTYPE_LIST( double )
+			axTYPE_LIST( int8 )
+			axTYPE_LIST( int16 )
+			axTYPE_LIST( int32 )
+			axTYPE_LIST( int64 )
+		#undef axDB_c_type_list
 	}
 	assert(false);
 	return f.out("Unknown");
+}
+
+
+axStatus	axDBColumnList::toStringFormat( axStringFormat &f ) const {
+	return B::toStringFormat(f);
+}
+
+axDBColumn* axDBColumnList::findColumnByData( void * p ) {
+    for( axSize i=0; i<size(); i++ ) {
+        axDBColumn &c = at(i);
+        if( c.data == p ) return &c;
+    }
+    return NULL;
+}
+
+axDBColumn* axDBColumnList::findColumnByName( const char * p ) {
+	if( !p ) return NULL;
+
+    for( axSize i=0; i<size(); i++ ) {
+        axDBColumn &c = at(i);
+        if( c.name.equals(p) ) return &c;
+    }
+    return NULL;
 }

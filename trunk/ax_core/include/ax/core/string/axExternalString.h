@@ -15,6 +15,8 @@ public:
 	axExternalString_( T* sz=NULL )	: axIString_<T>(buf_)	{ if( sz ) setExternal( sz ); } 
 	void setExternal( T* sz )								{ buf_.setExternal( sz, ax_strlen(sz) ); }
 
+	B & asInterface() { return (B&)*this; }
+
 private:
 	axExternalArray<T>	buf_;
 };

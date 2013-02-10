@@ -52,8 +52,8 @@ axStatus axDBStmt_Imp::getRow_ValueList( axDBValueList & list ) {
 	for( axSize i=0; i<list.size(); i++ ) {
 		axDBValue & v = list[i];
 		switch( v.type ) {
-			#define axDB_c_type_list( T ) \
-				case axDB_c_type_##T:		st = getResultAtCol( i, *(T*)v.data );	break; \
+			#define axDB_c_type_list( NAME, C_TYPE, C_ITYPE ) \
+				case axDB_c_type_##NAME: st = getResultAtCol( i, *(C_ITYPE*)v.data );	break; \
 			//-----
 				#include <ax/core/database/axDB_c_type_list.h>
 			#undef axDB_c_type_list
@@ -61,4 +61,11 @@ axStatus axDBStmt_Imp::getRow_ValueList( axDBValueList & list ) {
 		if( !st ) return st;
 	}
 	return 0;
+}
+
+axStatus axDBStmt::create_Insert	( axDBConn & db, const char* table, const axDBColumnList & list ) {
+	axStatus st;
+	axTempStringA	sql;
+	st = db.getSQL_Insert( sql, table, list );		if( !st ) return st;
+	return create( db, sql );
 }

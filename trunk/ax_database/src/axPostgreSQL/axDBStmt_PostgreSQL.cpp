@@ -163,14 +163,16 @@ axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, axTimeStamp	&value ) {
 		case TIMESTAMPOID: {
 			double d;
 			if( PQgetisnull( res_, r, c ) ) { value = 0; return 0; }
-#if USE_INTEGER_DATETIMES
-			int64_t* p = (int64_t*)PQgetvalue( res_, r, c );
-			int64_t  t = ax_be_to_host(*p);
-			d = (long double)t / 1000000 + date_1970_to_2000;
-#else
-			double *p = (double *)PQgetvalue( res_, r, c );
-			d = ax_be_to_host(*p) + date_1970_to_2000;
-#endif
+
+			#if USE_INTEGER_DATETIMES
+				int64_t* p = (int64_t*)PQgetvalue( res_, r, c );
+				int64_t  t = ax_be_to_host(*p);
+				d = (long double)t / 1000000 + date_1970_to_2000;
+			#else
+				double *p = (double *)PQgetvalue( res_, r, c );
+				d = ax_be_to_host(*p) + date_1970_to_2000;
+			#endif
+
 			if( oid == TIMESTAMPOID ) {
 				d -= axDateTime::getTimeZone();
 			}
