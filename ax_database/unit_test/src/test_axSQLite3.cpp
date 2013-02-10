@@ -14,16 +14,17 @@ axStatus test_axSQLite3_case1() {
 
 	axDBStmt	stmt;
 
-	st = stmt.create( db, "drop table if exists table001;" );			if( !st ) return st;
-	st = stmt.exec();													if( !st ) return st;
+	st = stmt.create( db, "drop table if exists table001;" );					if( !st ) return st;
+	st = stmt.exec();															if( !st ) return st;
 
 	st = stmt.create( db, "create table table001 ( id int, name text );" );		if( !st ) return st;
 	st = stmt.exec();															if( !st ) return st;
 
-	st = stmt.createExec( db, "insert into table001 (id,name) values(?,?)", 5, "string ' testing" );		if( !st ) return st;
+	st = stmt.create( db, "insert into table001 (id,name) values(?,?)" );		if( !st ) return st;
+	st = stmt.exec( 5, "string ' testing" );
 
-	st = stmt.create( db, "select id, name from table001" );		if( !st ) return st;
-	st = stmt.exec();												if( !st ) return st;
+	st = stmt.create( db, "select id, name from table001" );					if( !st ) return st;
+	st = stmt.exec();															if( !st ) return st;
 
 	int			recId;
 	axStringA	name;
@@ -111,8 +112,8 @@ axStatus test_axSQLite3_case2() {
 	{//insert
 		Row	row;
 		axTempStringA	sql;
-		st = db.createSQL_Insert( sql, table, row );		if( !st ) return st;
-		st = stmt.create( db, sql );						if( !st ) return st;
+		st = db.getSQL_Insert( sql, table, row );		if( !st ) return st;
+		st = stmt.create( db, sql );					if( !st ) return st;
 
 		row.my_id = 10;
 		row.float1 = 2.4f;
@@ -143,15 +144,19 @@ axStatus test_axSQLite3_case2() {
     
 	{
 		Row	row;
+		st = stmt.create_Select<Row>( db, table, NULL );		if( !st ) return st;
+		st = stmt.exec();
         
-		axTempStringA	sql;
-		st = db.createSQL_Select( sql, table, row, NULL );		if( !st ) return st;
-		st = stmt.createExec( db, sql );						if( !st ) return st;
-        
+		size_t n = stmt.numColumns();
+		ax_print("{?} columns = ", n );
+		for( size_t i=0; i<n; i++ ) {
+			ax_print("[{?}] ", stmt.columnName( i ) );
+		}
+		ax_print("\n");
+		
 		for(;;) {
 			st = stmt.getRow( row );	if( st.isEOF() ) break;
 			if( !st ) return st;
-            
 			ax_log_var( row );
 		}
 	}

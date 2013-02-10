@@ -98,7 +98,7 @@ axStatus axDBConn_SQLite3::createStmt( axDBStmt & stmt, const char* sql ) {
 }
 
 //virtual	
-axStatus axDBConn_SQLite3::createSQL_CreateTable ( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
+axStatus axDBConn_SQLite3::getSQL_CreateTable ( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
 	axStatus st;
 	axTempStringA	tableName;
     
@@ -127,9 +127,9 @@ const char*	axDBConn_SQLite3::dbTypeName( int c_type ) {
 		case axDB_c_type_int8_t:
 		case axDB_c_type_int16_t:
 		case axDB_c_type_int32_t:
-					return "INTEGER";
+		case axDB_c_type_int64_t:
+					return "INTEGER"; //in SQLite, AUTO INCREMENT must primary key and INTEGER (even INT/SMALLINT are the same but it is not working)
 
-		case axDB_c_type_int64_t:		return "BIGINT";
 		case axDB_c_type_float:			return "FLOAT";
 		case axDB_c_type_double:		return "DOUBLE";
 		case axDB_c_type_axIStringA:	return "TEXT";
