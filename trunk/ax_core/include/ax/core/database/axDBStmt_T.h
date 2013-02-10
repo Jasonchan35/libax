@@ -7,22 +7,38 @@
 template<class T, class PKey=int64_t, PKey T::*PKeyMember=&T::id>
 class axDBStmt_Insert {
 public:
+	axDBStmt_Insert() : pkeyIndex(-1) {}
+
 	axStatus	create	( axDBConn & db, const char* table ) {
 		axStatus st;
 
 		axDBColumnList	list;
 		st = list._build<T, PKey, PKeyMember >();		if( !st ) return st;
+
+		pkeyIndex = -1;
+		for( size_t i=0; i<list.size(); i++ ) {
+			if( list[i].pkey ) {
+				pkeyIndex = i;
+				break;
+			}
+		}
+
 		st = stmt_.create_Insert( db, table, list );	if( !st ) return st;
 		return 0;
 	}
 	axStatus	exec( const T & values ) {
-		return stmt_.exec( values );
+		axDBParamList	list;
+		axStatus st;
+		list.skipPkeyAtIndex = pkeyIndex;
+		st = list.io( values, NULL );					if( !st ) return st;
+		return stmt_.exec_ParamList( list );
 	}
 
 	const char*	sql	() { return stmt_.sql(); }
 
 private:
 	axDBStmt	stmt_;
+	axSize		pkeyIndex;
 };
 
 template<class T, class PKey=int64_t, PKey T::*PKeyMember=&T::id>

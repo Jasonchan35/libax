@@ -154,19 +154,23 @@ axStatus axDBConn_Imp::getSQL_Insert( axIStringA & outSQL, const char* table, co
 
 	st = outSQL.format("INSERT INTO {?} (\n", tableName );
 
+	size_t col = 0;
 	for( size_t i=0; i<list.size(); i++ ) {
 		const axDBColumn & c = list[i];
-		if( i > 0 ) {
+
+		if( c.pkey ) continue; //don't insert data to pkey column
+
+		if( col > 0 ) {
 			st = outSQL.append(",\n");					if( !st ) return st;
 		}
-
 		st = identifierString( colName, c.name );		if( !st ) return st;
 		st = outSQL.appendFormat( "  {?}", colName );	if( !st ) return st;
+		col++;
 	}
 
 	st = outSQL.append( ")\n  VALUES (" );					if( !st ) return st;
 
-	for( size_t i=0; i<list.size(); i++ ) {
+	for( size_t i=0; i<col; i++ ) {
 		if( i > 0 ) {
 			st = outSQL.append(",");					if( !st ) return st;
 		}

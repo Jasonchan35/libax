@@ -4,7 +4,7 @@
 
 #include <ax/database/axSQLite3.h>
 #include <ax/database/axMySQL.h>
-#include <ax/database/axPostgreSQL.h>
+//#include <ax/database/axPostgreSQL.h>
 
 
 class Row {
@@ -72,23 +72,20 @@ public:
 	template<class S>
 	axStatus serialize_io( S & s ) {
 		axStatus st;
-
-		ax_io( id );
-
 		#define axDB_c_type_list( NAME, TYPE, C_ITYPE )	\
 			ax_io( v_##NAME );
 		//----
 			#include <ax/core/database/axDB_c_type_list.h>
 		#undef axDB_c_type_list
 
+		ax_io( id );
 		return 0;
 	}
 };
 
 axStatus test_ax_database_common( axDBConn & db ) {
 	axStatus st;
-
-	db.setEchoSQL( true );
+//	db.setEchoSQL( true );
 
 	const char* table = "unitTestTable01";
 
@@ -100,15 +97,15 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		st = tbl.create( db, table );		if( !st ) return st;
 
 		Row	row;
-		for( size_t i=0; i<5; i++ ) {
+		for( size_t i=0; i<200; i++ ) {
 			st = tbl.insert( row );			if( !st ) return st;
 		}
 
-
 		axArray< Row >	results;
+		results.reserve( 1000 );
 		st = tbl.selectAll( results );		if( !st ) return st;
 
-		ax_log_var( results );
+//		ax_log_var( results );
 	}
 
 	return 0;
@@ -134,8 +131,8 @@ axStatus test_MySQL() {
 axStatus test_ax_database() {
 	axStatus st;
 
-	//axUTestCase( test_SQLite3() );
-	axUTestCase( test_MySQL() );
+	axUTestCase( test_SQLite3() );
+//	axUTestCase( test_MySQL() );
 
 	return 0;
 }
@@ -144,8 +141,13 @@ int main() {
 	axScope_NSAutoreleasePool	pool;
 
     axStatus st;
+
+	axStopWatch	timer;
+
 	st = test_ax_database();
     printf("==== return %d %s ====\n", st.code(), st.c_str() );
+
+	ax_log_var( timer );
 #if axOS_Win
 	getchar();
 #endif

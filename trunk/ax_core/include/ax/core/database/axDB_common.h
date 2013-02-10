@@ -79,13 +79,18 @@ public:
 
 class axDBParamList : public axArray< axDBParam, axDB_kArgListLocalBufSize > {
 public:
+	axDBParamList() : skipPkeyAtIndex(-1) {}
+
 	axDBParamList&	operator << ( const axDBParam_CB &p ) {
 		p.func( *this, p.data );
 		return *this;
 	}
 
 	axDBParamList&	operator << ( const axDBParam &p ) {
-		axStatus st = append( p );	assert(st);
+		if( skipPkeyAtIndex != curIndex ) {
+			axStatus st = append( p );	assert(st);
+		}
+		curIndex++;
 		return *this;
 	}
 
@@ -93,6 +98,9 @@ public:
 	axStatus io( T &v, const char* name ) {
 		axDBParamList_io( *this, v );	return 0;
 	}
+
+	axSize	curIndex;
+	axSize	skipPkeyAtIndex;
 };
 
 inline void axDBParamList_io( axDBParamList & list, bool				v ) { axDBParam p( axDB_c_type_bool		);	p.p_bool	=v;	list<<(p); }
