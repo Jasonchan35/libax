@@ -11,18 +11,21 @@
 
 #include "axDB_MySQL_common.h"
 
-class axDBConn_MySQL : public axDBConn_Interface {
+class axDBConn_MySQL : public axDBConn_Imp {
 public:
 	axDBConn_MySQL();
 	virtual ~axDBConn_MySQL();
 	
 	axStatus	connect	( const char* db, const char* user, const char* password, const char* host, uint32_t port );
 	void		close	();
-	
-	virtual axStatus	prepareStmt		( axDBStmt & stmt, const char * sql );
+
+	virtual axStatus	createStmt			( axDBStmt & stmt, const char * sql );
+	virtual	axStatus	getSQL_CreateTable	( axIStringA & outSQL, const char* table, const axDBColumnList & list );
 		
 	operator MYSQL* () { return &p_; }
 	
+	const char*	dbTypeName( int c_type );
+
 	MYSQL	p_;
 };
 

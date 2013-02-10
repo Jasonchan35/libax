@@ -11,15 +11,19 @@
 
 #include "axDBStmt_PostgreSQL.h"
 
-class axDBConn_PostgreSQL : public axDBConn_Interface {
+class axDBConn_PostgreSQL : public axDBConn_Imp {
 public:
 	axDBConn_PostgreSQL();
 	~axDBConn_PostgreSQL();
 
-	virtual axStatus	prepareStmt		( axDBStmt & stmt, const char * sql );
+	virtual axStatus	createStmt			( axDBStmt & stmt, const char * sql );
+	virtual	axStatus	getSQL_CreateTable	( axIStringA & outSQL, const char* table, const axDBColumnList & list );
 	
 	axStatus	connect	( const char * dsn );
 	void		close	();
+
+	const char*	dbTypeName( int c_type );
+
 
 	operator PGconn*() { return p_; }
 

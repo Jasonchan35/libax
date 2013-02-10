@@ -25,36 +25,34 @@ public:
 	axDBStmt_SQLite3( axDBConn_SQLite3* db );
 	virtual ~axDBStmt_SQLite3() {}
 	
-			 axStatus	create ( const char * sql );	
+						 axStatus	create ( const char * sql );	
 
-	virtual	axStatus	exec_ParamList	( const axDBParamList & list );
+				virtual	axStatus	exec_ParamList	( const axDBParamList & list );
 
-	virtual axSize		numColumns	() { return numColumns_; }
-	virtual int			columnType	( axSize col );
-	virtual const char* columnName	( axSize col );
-	
-	virtual	axStatus	getRow_ValueList( axDBValueList & list );
+				virtual axSize		numColumns	() { return numColumns_; }
+				virtual int			columnType	( axSize col );
+				virtual const char* columnName	( axSize col );
+				
+				virtual	axStatus	fetch			();
 
-			axStatus	fetch		();
+	template< class T > axStatus	getResultAtCol_int( axSize col, T & value );
+				virtual axStatus	getResultAtCol	( axSize col, int8_t			&value );
+				virtual axStatus	getResultAtCol	( axSize col, int16_t			&value );
+				virtual axStatus	getResultAtCol	( axSize col, int32_t			&value );
+				virtual axStatus	getResultAtCol	( axSize col, int64_t			&value );
 
-	template< class T > axStatus getResultAtCol_int( axSize col, T & value );
-			axStatus	getResultAtCol	( axSize col, int8_t			&value );
-			axStatus	getResultAtCol	( axSize col, int16_t			&value );
-			axStatus	getResultAtCol	( axSize col, int32_t			&value );
-			axStatus	getResultAtCol	( axSize col, int64_t			&value );
-	
-			axStatus	getResultAtCol	( axSize col, float				&value );
-			axStatus	getResultAtCol	( axSize col, double			&value );
-	
-			axStatus	getResultAtCol	( axSize col, bool				&value );
-	
-			axStatus	getResultAtCol	( axSize col, axIStringA		&value );
-			axStatus	getResultAtCol	( axSize col, axIStringW		&value );
-	
-			axStatus	getResultAtCol	( axSize col, axIByteArray		&value );
-	
-			axStatus	getResultAtCol	( axSize col, axTimeStamp		&value );
-			axStatus	getResultAtCol	( axSize col, axDateTime		&value );
+				virtual axStatus	getResultAtCol	( axSize col, float				&value );
+				virtual axStatus	getResultAtCol	( axSize col, double			&value );
+
+				virtual axStatus	getResultAtCol	( axSize col, bool				&value );
+
+				virtual axStatus	getResultAtCol	( axSize col, axIStringA		&value );
+				virtual axStatus	getResultAtCol	( axSize col, axIStringW		&value );
+
+				virtual axStatus	getResultAtCol	( axSize col, axIByteArray		&value );
+
+				virtual axStatus	getResultAtCol	( axSize col, axTimeStamp		&value );
+				virtual axStatus	getResultAtCol	( axSize col, axDateTime		&value );
 
 	axSharedPtr< axDBConn_SQLite3 >	db_;
 	axSize		paramCount_;

@@ -107,7 +107,28 @@ public:
 	virtual int			columnType		( axSize col ) = 0;
 	virtual const char* columnName		( axSize col ) = 0;
 	
-	virtual	axStatus	getRow_ValueList	( axDBValueList & list ) = 0;
+	virtual	axStatus	getRow_ValueList	( axDBValueList & list );
+
+	virtual	axStatus	fetch() = 0;
+
+	virtual axStatus	getResultAtCol( axSize col, int8_t			&value )= 0;
+	virtual axStatus	getResultAtCol( axSize col, int16_t			&value )= 0;
+	virtual axStatus	getResultAtCol( axSize col, int32_t			&value )= 0;
+	virtual axStatus	getResultAtCol( axSize col, int64_t			&value )= 0;
+
+	virtual axStatus	getResultAtCol( axSize col, float			&value )= 0;
+	virtual axStatus	getResultAtCol( axSize col, double			&value )= 0;
+
+	virtual axStatus	getResultAtCol( axSize col, bool			&value )= 0;
+
+	virtual axStatus	getResultAtCol( axSize col, axIStringA		&value )= 0;
+	virtual axStatus	getResultAtCol( axSize col, axIStringW		&value )= 0;
+
+	virtual axStatus	getResultAtCol( axSize col, axIByteArray	&value )= 0;
+
+	virtual axStatus	getResultAtCol( axSize col, axTimeStamp		&value )= 0;
+	virtual axStatus	getResultAtCol( axSize col, axDateTime		&value )= 0;
+
 
 	axStringA	sql_;
 };
