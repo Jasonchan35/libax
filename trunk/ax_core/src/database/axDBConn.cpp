@@ -24,11 +24,6 @@ void axDBConn::_setImp( axDBConn_Imp* p ) {
 	p_.ref( p );
 }
 
-axStatus axDBConn::exec	( const char* sql ) {
-	axDBStmt	stmt;
-	return stmt.createExec( *this, sql );
-}
-
 axStatus axDBConn::setEchoSQL ( bool b ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->setEchoSQL(b);
@@ -68,31 +63,38 @@ axStatus	axDBConn_Imp::identifierString( axIStringA & out, const char* sz ) {
 
 //== create table ==
 axStatus axDBConn::createTable	( const char* table, const axDBColumnList & list ) {
-	axStatus	st;
+	axStatus		st;
 	axTempStringA	sql;
-	st = createSQL_CreateTable( sql, table, list );		if( !st ) return st;
-	return exec( sql );
+	axDBStmt		stmt;
+
+	st = getSQL_CreateTable( sql, table, list );		if( !st ) return st;
+	st = stmt.create( *this, sql );						if( !st ) return st;
+	st = stmt.exec();									if( !st ) return st;
+	return 0;
 }
 
-axStatus axDBConn::createSQL_CreateTable( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
+axStatus axDBConn::getSQL_CreateTable( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->createSQL_CreateTable( outSQL, table, list );
+	return p_->getSQL_CreateTable( outSQL, table, list );
 }
 
 //== drop table ==
 axStatus axDBConn::dropTable ( const char* table ) {
-	axStatus	st;
+	axStatus		st;
 	axTempStringA	sql;
-	st = createSQL_DropTable( sql, table );			if( !st ) return st;
-	return exec( sql );
+	axDBStmt		stmt;
+	st = getSQL_DropTable( sql, table );			if( !st ) return st;
+	st = stmt.create( *this, sql );					if( !st ) return st;
+	st = stmt.exec();								if( !st ) return st;
+	return 0;
 }
 
-axStatus axDBConn::createSQL_DropTable( axIStringA & outSQL, const char* table ) {
+axStatus axDBConn::getSQL_DropTable( axIStringA & outSQL, const char* table ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->createSQL_DropTable( outSQL, table );
+	return p_->getSQL_DropTable( outSQL, table );
 }
 
-axStatus axDBConn_Imp::createSQL_DropTable( axIStringA & outSQL, const char* table ) {
+axStatus axDBConn_Imp::getSQL_DropTable( axIStringA & outSQL, const char* table ) {
 	axStatus	st;
 	axTempStringA	tableName;
 	st = identifierString( tableName, table );		if( !st ) return st;
@@ -102,18 +104,21 @@ axStatus axDBConn_Imp::createSQL_DropTable( axIStringA & outSQL, const char* tab
 
 // === drop table if exists
 axStatus axDBConn::dropTableIfExists		( const char* table ) {
-	axStatus	st;
+	axStatus		st;
 	axTempStringA	sql;
-	st = createSQL_DropTableIfExists( sql, table );			if( !st ) return st;
-	return exec( sql );
+	axDBStmt		stmt;
+	st = getSQL_DropTableIfExists( sql, table );		if( !st ) return st;
+	st = stmt.create( *this, sql );						if( !st ) return st;
+	st = stmt.exec();									if( !st ) return st;
+	return 0;
 }
 
-axStatus axDBConn::createSQL_DropTableIfExists( axIStringA & outSQL, const char* table ) {
+axStatus axDBConn::getSQL_DropTableIfExists( axIStringA & outSQL, const char* table ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->createSQL_DropTableIfExists( outSQL, table );
+	return p_->getSQL_DropTableIfExists( outSQL, table );
 }
 
-axStatus axDBConn_Imp::createSQL_DropTableIfExists(axIStringA &outSQL, const char *table) {
+axStatus axDBConn_Imp::getSQL_DropTableIfExists(axIStringA &outSQL, const char *table) {
 	axStatus st;
 	axTempStringA	tableName;
 	st = identifierString( tableName, table );		if( !st ) return st;
@@ -122,12 +127,12 @@ axStatus axDBConn_Imp::createSQL_DropTableIfExists(axIStringA &outSQL, const cha
 }
 
 //==== insert ===
-axStatus axDBConn::createSQL_Insert( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
+axStatus axDBConn::getSQL_Insert( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->createSQL_Insert( outSQL, table, list );
+	return p_->getSQL_Insert( outSQL, table, list );
 }
 
-axStatus axDBConn_Imp::createSQL_Insert( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
+axStatus axDBConn_Imp::getSQL_Insert( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
 	axStatus st;
 	axTempStringA	colName;
 
@@ -161,12 +166,12 @@ axStatus axDBConn_Imp::createSQL_Insert( axIStringA & outSQL, const char* table,
 
 
 //=== update ===
-axStatus axDBConn::createSQL_Update( axIStringA & outSQL, const char* table, const axDBColumnList & list , const char* szWhere ) {
+axStatus axDBConn::getSQL_Update( axIStringA & outSQL, const char* table, const axDBColumnList & list , const char* szWhere ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->createSQL_Update( outSQL, table, list, szWhere );
+	return p_->getSQL_Update( outSQL, table, list, szWhere );
 }
 
-axStatus axDBConn_Imp::createSQL_Update( axIStringA & outSQL, const char* table, const axDBColumnList & list, const char* szWhere ) {
+axStatus axDBConn_Imp::getSQL_Update( axIStringA & outSQL, const char* table, const axDBColumnList & list, const char* szWhere ) {
 	axStatus st;
 	axTempStringA	colName;
 	axTempStringA	tableName;
@@ -190,12 +195,12 @@ axStatus axDBConn_Imp::createSQL_Update( axIStringA & outSQL, const char* table,
 }
 
 //=== select ====
-axStatus axDBConn::createSQL_Select( axIStringA & outSQL, const char* table, const axDBColumnList & list , const char* szWhere ) {
+axStatus axDBConn::getSQL_Select( axIStringA & outSQL, const char* table, const axDBColumnList & list , const char* szWhere ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->createSQL_Select( outSQL, table, list, szWhere );
+	return p_->getSQL_Select( outSQL, table, list, szWhere );
 }
 
-axStatus axDBConn_Imp::createSQL_Select	( axIStringA & outSQL, const char* table, const axDBColumnList & list, const char* szWhere ) {
+axStatus axDBConn_Imp::getSQL_Select	( axIStringA & outSQL, const char* table, const axDBColumnList & list, const char* szWhere ) {
 	axStatus st;
 	axTempStringA	colName;
 	axTempStringA	tableName;

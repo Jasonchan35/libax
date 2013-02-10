@@ -38,12 +38,6 @@ axStatus axDBStmt::exec_ParamList( const axDBParamList & list ) {
 	return 0;
 }
 
-axStatus axDBStmt::createExec_ParamList( axDBConn & db, const char* sql, const axDBParamList & list ) {
-	axStatus st;
-	st = create( db, sql );		if( !st ) return st;
-	return exec_ParamList( list );
-}
-
 axStatus axDBStmt::getRow_ValueList	( axDBValueList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->getRow_ValueList( list );

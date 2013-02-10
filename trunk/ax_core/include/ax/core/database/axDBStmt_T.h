@@ -10,7 +10,7 @@ public:
 	axStatus	create	( axDBConn & db, const char* table ) {
 		axStatus st;
 		axTempStringA	sql;
-		st = db.createSQL_Insert<T>( sql, table );
+		st = db.getSQL_Insert<T>( sql, table );
 		st = stmt_.create( db, sql );	if( !st ) return st;
 		return 0;
 	}

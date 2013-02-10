@@ -35,10 +35,6 @@ public:
 			axStatus	exec_ParamList	( const axDBParamList & list );
 			axExpandArgList0			( axStatus, exec,   const axDBParam_CB & , axDBParamList, exec_ParamList )
 			
-		//	axStatus	createExec		( db, sql, ... )
-			axStatus	createExec_ParamList( axDBConn & db, const char* sql, const axDBParamList & list );
-			axExpandArgList2			( axStatus, createExec, axDBConn &, const char*, const axDBParam_CB & , axDBParamList, createExec_ParamList )
-
 		//	axStatus	getRow			( ... )
 			axStatus	getRow_ValueList( axDBValueList & list );
 			axExpandArgList0			( axStatus, getRow, const axDBValue_CB & , axDBValueList, getRow_ValueList )
@@ -59,7 +55,7 @@ template<class T> inline
 axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table ) {
     axStatus st;
 	axTempStringA	sql;
-	st = db.createSQL_Insert<T>( sql, table );	if( !st ) return st;
+	st = db.getSQL_Insert<T>( sql, table );	if( !st ) return st;
 	return create( db, sql );
 }
 
@@ -74,7 +70,7 @@ template<class T> inline
 axStatus	axDBStmt::create_Update( axDBConn & db, const char* table, const char* szWhere ) {
     axStatus st;
 	axTempStringA	sql;
-	st = db.createSQL_Update<T>( sql, table, szWhere );	if( !st ) return st;
+	st = db.getSQL_Update<T>( sql, table, szWhere );	if( !st ) return st;
 	return create( db, sql );
 }
 
@@ -89,7 +85,7 @@ template<class T> inline
 axStatus	axDBStmt::create_Select( axDBConn & db, const char* table, const char* szWhere ) {
     axStatus st;
 	axTempStringA	sql;
-	st = db.createSQL_Select<T>( sql, table, szWhere );	if( !st ) return st;
+	st = db.getSQL_Select<T>( sql, table, szWhere );	if( !st ) return st;
 	return create( db, sql );
 }
 
