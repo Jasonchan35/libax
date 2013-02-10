@@ -13,6 +13,10 @@ public:
 	axStringA_() : B(buf_) { buf_.setCapacityIncrement( kDefaultCapacityIncrement ); } 
 	axStatus	onTake( axStringA_<LOCAL_BUF_SIZE> &src )	{  return ax_take( buf_, src.buf_ ); }
 	void		setCapacityIncrement( axSize  n )			{ buf_.setCapacityIncrement(n); }
+
+			B & asInterface()		{ return (B&)*this; }
+	const	B & asInterface() const	{ return (B&)*this; }
+
 private:
 	axArray<char, LOCAL_BUF_SIZE>	buf_;
 };
@@ -25,19 +29,12 @@ public:
 	axStringW_() : B(buf_) { buf_.setCapacityIncrement( kDefaultCapacityIncrement ); } 
 	axStatus	onTake( axStringW_<LOCAL_BUF_SIZE> &src )	{  return buf_.onTake( src.buf_ ); }
 	void		setCapacityIncrement( axSize  n )			{ buf_.setCapacityIncrement(n); }
+
+			B & asInterface()		{ return (B&)*this; }
+	const	B & asInterface() const	{ return (B&)*this; }
+
 private:
 	axArray<wchar_t, LOCAL_BUF_SIZE>	buf_;
-};
-
-template< size_t LOCAL_BUF_SIZE >
-class axStringU_ : public axIString_<axUChar> {
-	typedef	axIString_<axUChar>	B;
-public:
-	axStringU_() : B(buf_) { buf_.setCapacityIncrement( kDefaultCapacityIncrement ); } 
-	axStatus	onTake( axStringU_<LOCAL_BUF_SIZE> &src )	{  return buf_.onTake( src.buf_ ); }
-	void		setCapacityIncrement( axSize  n )			{ buf_.setCapacityIncrement(n); }
-private:
-	axArray<axUChar, LOCAL_BUF_SIZE>	buf_;
 };
 
 //------------------
@@ -49,6 +46,10 @@ public:
 	axString_() : B(buf_) { buf_.setCapacityIncrement( B::kDefaultCapacityIncrement ); } 
 	axStatus	onTake( axString_<T, LOCAL_BUF_SIZE>	&src )	{  return ax_take( buf_, src.buf_ ); }
 	void		setCapacityIncrement( axSize  n )	{ buf_.setCapacityIncrement(n); }
+
+			B & asInterface()		{ return (B&)*this; }
+	const	B & asInterface() const	{ return (B&)*this; }
+
 private:
 	axArray<T,LOCAL_BUF_SIZE>	buf_;
 };

@@ -9,9 +9,10 @@ class axDBStmt_Insert {
 public:
 	axStatus	create	( axDBConn & db, const char* table ) {
 		axStatus st;
-		axTempStringA	sql;
-		st = db.getSQL_Insert<T>( sql, table );
-		st = stmt_.create( db, sql );	if( !st ) return st;
+
+		axDBColumnList	list;
+		st = list._build<T, PKey, PKeyMember >();		if( !st ) return st;
+		st = stmt_.create_Insert( db, table, list );	if( !st ) return st;
 		return 0;
 	}
 	axStatus	exec( const T & values ) {
@@ -30,9 +31,8 @@ public:
 	axStatus	create	( axDBConn & db, const char* table ) {
 		axStatus st;
 		axStringA wherePKey;
-		T dummy;
-		st = db.getWherePKey( wherePKey, dummy, &( dummy.*PKeyMember ) );		if( !st ) return st;
-		st = stmt_.create_Update<T>( db, table, wherePKey );					if( !st ) return st;
+		st = db.getWherePKey<T,PKey,PKeyMember>( wherePKey );	if( !st ) return st;
+		st = stmt_.create_Update<T>( db, table, wherePKey );	if( !st ) return st;
 		return 0;
 	}
 	axStatus	exec( const T & values ) {
@@ -52,9 +52,8 @@ public:
 	axStatus	create	( axDBConn & db, const char* table ) {
 		axStatus st;
 		axStringA wherePKey;
-		T dummy;
-		st = db.getWherePKey( wherePKey, dummy, &( dummy.*PKeyMember ) );		if( !st ) return st;
-		st = stmt_.create_Select<T>( db, table, wherePKey );					if( !st ) return st;
+		st = db.getWherePKey<T,PKey,PKeyMember>( wherePKey );	if( !st ) return st;
+		st = stmt_.create_Select<T>( db, table, wherePKey );	if( !st ) return st;
 		return 0;
 	}
 	axStatus	exec( T & values, const PKey &pkey ) {

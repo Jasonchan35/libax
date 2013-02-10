@@ -34,8 +34,7 @@ public:
 						axStatus	identifierString		( axIStringA & out, const char* sz );
 
 						axStatus	createTable				( const char* table, const axDBColumnList & list );
-	template<class T>	axStatus	createTable				( const char* table, const T &dummy );
-	template<class T>	axStatus	createTable				( const char* table );
+	template<class T>	axStatus	createTable				( const char* table, const char* pkey );
 	
 			//		TODO
 				//		axStatus	setTableAutoIncrement	( const char* table, int64_t   value );
@@ -46,25 +45,22 @@ public:
 
 //Get SQL String
 						axStatus	getSQL_CreateTable		( axIStringA & outSQL, const char* table, const axDBColumnList & list );
-	template<class T>	axStatus	getSQL_CreateTable		( axIStringA & outSQL, const char* table, const T &dummy );
-	template<class T>	axStatus	getSQL_CreateTable		( axIStringA & outSQL, const char* table );
+	template<class T>	axStatus	getSQL_CreateTable		( axIStringA & outSQL, const char* table, const char* pkey );
 
 						axStatus	getSQL_DropTable		( axIStringA & outSQL, const char* table );
 						axStatus	getSQL_DropTableIfExists( axIStringA & outSQL, const char* table );
 
 						axStatus	getSQL_Insert			( axIStringA & outSQL, const char* table, const axDBColumnList & list );
-	template<class T>	axStatus	getSQL_Insert			( axIStringA & outSQL, const char* table, const T &dummy );
-	template<class T>	axStatus	getSQL_Insert			( axIStringA & outSQL, const char* table );
+	template<class T>	axStatus	getSQL_Insert			( axIStringA & outSQL, const char* table, const char* pkey );
 
-						axStatus	getSQL_Update			( axIStringA & outSQL, const char* table, const axDBColumnList & list,	const char* szWhere );
-	template<class T>	axStatus	getSQL_Update			( axIStringA & outSQL, const char* table, const T &dummy,	const char* szWhere );
-	template<class T>	axStatus	getSQL_Update			( axIStringA & outSQL, const char* table, 					const char* szWhere );
+						axStatus	getSQL_Update			( axIStringA & outSQL, const char* table, const char* szWhere, const axDBColumnList & list );
+	template<class T>	axStatus	getSQL_Update			( axIStringA & outSQL, const char* table, const char* szWhere );
 
-						axStatus	getSQL_Select			( axIStringA & outSQL, const char* table, const axDBColumnList & list,	const char* szWhere );
-	template<class T>	axStatus	getSQL_Select			( axIStringA & outSQL, const char* table, const T &dummy,	const char* szWhere );
-	template<class T>	axStatus	getSQL_Select			( axIStringA & outSQL, const char* table, 					const char* szWhere );
+						axStatus	getSQL_Select			( axIStringA & outSQL, const char* table, const char* szWhere, const axDBColumnList & list );
+	template<class T>	axStatus	getSQL_Select			( axIStringA & outSQL, const char* table, const char* szWhere );
 
-    template<class T>   axStatus    getWherePKey            	( axIStringA &wherePKey, T &dummy, void *PKeyMember );    
+	template<class T, class PKey, PKey T::*PKeyMember>   
+						axStatus    getWherePKey           	( axIStringA &out );    
     
 	void			_setImp	( axDBConn_Imp* p );
 	axDBConn_Imp*	_getImp	()	{ return p_; }
@@ -75,89 +71,6 @@ private:
 };
 
 
-//==== create table ==
-template<class T> inline
-axStatus	axDBConn::createTable				( const char* table ) {
-	T dummy;
-	return createTable( table, dummy );
-}
-
-template<class T> inline
-axStatus	axDBConn::createTable				( const char* table, const T &dummy ) {
-	axDBColumnList	list;
-	axStatus st = list.io( ax_const_cast(dummy), NULL );		if( !st ) return st;
-	return createTable( table, list );
-}
-
-//== create table ==
-template<class T> inline
-axStatus	axDBConn::getSQL_CreateTable( axIStringA & outSQL, const char* table ) {
-	T dummy;
-	return getSQL_CreateTable( outSQL, table, dummy );
-}
-template<class T> inline
-axStatus	axDBConn::getSQL_CreateTable( axIStringA & outSQL, const char* table, const T & dummy ) {
-	axDBColumnList	list;
-	axStatus st = list.io( ax_const_cast(dummy), NULL );		if( !st ) return st;
-	return getSQL_CreateTable( outSQL, table, list );
-}
-
-
-//== insert ==
-template<class T> inline
-axStatus	axDBConn::getSQL_Insert( axIStringA & outSQL, const char* table ) {
-	T dummy;
-	return getSQL_Insert( outSQL, table, dummy );
-}
-template<class T> inline
-axStatus	axDBConn::getSQL_Insert( axIStringA & outSQL, const char* table, const T & dummy ) {
-	axDBColumnList	list;
-	axStatus st = list.io( ax_const_cast(dummy), NULL );		if( !st ) return st;
-	return getSQL_Insert( outSQL, table, list );
-}
-
-//== update ==
-template<class T> inline
-axStatus	axDBConn::getSQL_Update( axIStringA & outSQL, const char* table, const char* szWhere ) {
-	T dummy;
-	return getSQL_Update( outSQL, table, dummy, szWhere );
-}
-template<class T> inline
-axStatus	axDBConn::getSQL_Update( axIStringA & outSQL, const char* table, const T & dummy, const char* szWhere ) {
-	axDBColumnList	list;
-	axStatus st = list.io( ax_const_cast(dummy), NULL );		if( !st ) return st;
-	return getSQL_Update( outSQL, table, list, szWhere );
-}
-
-//== select ==
-template<class T> inline
-axStatus	axDBConn::getSQL_Select( axIStringA & outSQL, const char* table, const char* szWhere ) {
-	T dummy;
-	return getSQL_Select( outSQL, table, dummy, szWhere );
-}
-template<class T> inline
-axStatus	axDBConn::getSQL_Select( axIStringA & outSQL, const char* table, const T & dummy, const char* szWhere ) {
-	axDBColumnList	list;
-	axStatus st = list.io( ax_const_cast(dummy), NULL );		if( !st ) return st;
-	return getSQL_Select( outSQL, table, list, szWhere );
-}
-
-
-//=====
-template<class T> inline
-axStatus   axDBConn::getWherePKey( axIStringA &wherePKey, T &dummy, void *PKeyMember ) {
-	axStatus st ;
-	
-	axDBColumnList list;
-	st = list.io( ax_const_cast(dummy), NULL );				if( !st ) return st;
-	axDBColumn *pkey = list.findColumn( PKeyMember );
-	
-	if( ! pkey ) return axStatus_Std::DB_primary_key_not_found;
-	st = identifierString( wherePKey, pkey->name );			if( !st ) return st;
-	st = wherePKey.append( "=?" );							if( !st ) return st;
-
-	return 0;
-}
 
 
 //!
@@ -172,16 +85,83 @@ public:
 	virtual	axStatus	escapeString			( axIStringA & out, const char* sz );
 	virtual	axStatus	identifierString		( axIStringA & out, const char* sz );
 
-	virtual axStatus	createStmt				( axDBStmt & stmt, const char * sql ) = 0;
+			axStatus	createStmt				( axDBStmt & stmt, const char * sql );
+	virtual axStatus	onCreateStmt			( axDBStmt & stmt, const char * sql ) = 0;
+
 	virtual	axStatus	getSQL_CreateTable		( axIStringA & outSQL, const char* table, const axDBColumnList & list ) = 0;
-	virtual axStatus	getSQL_DropTable		( axIStringA & outSQL, const char * table );
-	virtual axStatus	getSQL_DropTableIfExists( axIStringA & outSQL, const char * table );
+	virtual axStatus	getSQL_DropTable		( axIStringA & outSQL, const char* table );
+	virtual axStatus	getSQL_DropTableIfExists( axIStringA & outSQL, const char* table );
 
 	virtual	axStatus	getSQL_Insert			( axIStringA & outSQL, const char* table, const axDBColumnList & list );
-	virtual	axStatus	getSQL_Update			( axIStringA & outSQL, const char* table, const axDBColumnList & list, const char* szWhere );
-	virtual	axStatus	getSQL_Select			( axIStringA & outSQL, const char* table, const axDBColumnList & list, const char* szWhere );
+	virtual	axStatus	getSQL_Update			( axIStringA & outSQL, const char* table, const char* szWhere,	const axDBColumnList & list );
+	virtual	axStatus	getSQL_Select			( axIStringA & outSQL, const char* table, const char* szWhere,	const axDBColumnList & list );
 
 	bool	echoSQL_;
 };
+
+
+//==== create table ==
+template<class T> inline
+axStatus	axDBConn::createTable	( const char* table, const char* pkey ) {
+	axStatus st;
+	axDBColumnList	list;
+	st = list.build<T>( pkey );		if( !st ) return st;
+	return createTable( table, list );
+}
+
+//== create table ==
+template<class T> inline
+axStatus	axDBConn::getSQL_CreateTable( axIStringA & outSQL, const char* table, const char* pkey ) {
+	axStatus st;
+	axDBColumnList	list;
+	st = list.build<T>( pkey );		if( !st ) return st;
+	return getSQL_CreateTable( outSQL, table, list );
+}
+
+//== insert ==
+template<class T> inline
+axStatus	axDBConn::getSQL_Insert( axIStringA & outSQL, const char* table, const char* pkey ) {
+	axStatus st;
+	axDBColumnList	list;
+	st = list.build<T>( pkey );		if( !st ) return st;
+	return getSQL_Insert( outSQL, table, list );
+}
+
+//== update ==
+template<class T> inline
+axStatus	axDBConn::getSQL_Update( axIStringA & outSQL, const char* table, const char* szWhere ) {
+	axStatus st;
+	axDBColumnList	list;
+	st = list.build<T>( NULL );		if( !st ) return st;
+	return getSQL_Update( outSQL, table, szWhere, list );
+}
+
+//== select ==
+template<class T> inline
+axStatus	axDBConn::getSQL_Select( axIStringA & outSQL, const char* table, const char* szWhere ) {
+	axStatus st;
+	axDBColumnList	list;
+	st = list.build<T>( NULL );		if( !st ) return st;
+	return getSQL_Select( outSQL, table, szWhere, list );
+}
+
+//=====
+template<class T, class PKey, PKey T::*PKeyMember> inline
+axStatus   axDBConn::getWherePKey( axIStringA &out ) {
+	axStatus		st;
+	T				t;
+
+	axDBColumnList	list;
+	st = list.io( t, NULL );					if( !st ) return st;
+
+	axDBColumn* pkey = list.findColumnByData( &(t.*PKeyMember) );
+	if( ! pkey ) return axStatus_Std::DB_primary_key_not_found;
+
+	st = identifierString( out, pkey->name );	if( !st ) return st;
+	st = out.append( "=?" );					if( !st ) return st;
+
+	return 0;
+}
+
 
 #endif //__axDBConn_h__

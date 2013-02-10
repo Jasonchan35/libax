@@ -38,7 +38,15 @@ axStatus axDBConn_MySQL::connect( const char* dbname, const char* user, const ch
 	return 0;
 }
 
-axStatus axDBConn_MySQL::createStmt	( axDBStmt & stmt, const char * sql ) {
+axStatus	axDBConn_MySQL::identifierString( axIStringA & out, const char* sz ) {
+	axStatus st;
+	axTempStringA	tmp;
+	st = tmp.set( sz );						if( !st ) return st;
+	st = tmp.replaceString("`","``");		if( !st ) return st;
+	return out.format("`{?}`", tmp );
+}
+
+axStatus axDBConn_MySQL::onCreateStmt	( axDBStmt & stmt, const char * sql ) {
 	axDBStmt_MySQL* p = new axDBStmt_MySQL( this );
 	if( !p ) return axStatus_Std::not_enough_memory;	
 	stmt._setImp( p );
@@ -64,6 +72,10 @@ axStatus axDBConn_MySQL::getSQL_CreateTable ( axIStringA & outSQL, const char* t
 
 		st = identifierString( colName, c.name );		if( !st ) return st;
 		st = outSQL.appendFormat( "  {?}\t{?}", colName, dbTypeName(c.type) );		if( !st ) return st;
+
+		if( c.pkey ) {
+			st = outSQL.append( " PRIMARY KEY AUTO_INCREMENT" );	if( !st ) return st;
+		}
 	}
 
 	st = outSQL.appendFormat( "\n);" );
@@ -72,21 +84,21 @@ axStatus axDBConn_MySQL::getSQL_CreateTable ( axIStringA & outSQL, const char* t
 
 const char*	axDBConn_MySQL::dbTypeName( int c_type ) {
 	switch( c_type ) {
-		case axDB_c_type_bool:
-		case axDB_c_type_int8_t:		return "TINYINT";
-		case axDB_c_type_int16_t:		return "SMALLINT";
-		case axDB_c_type_int32_t:		return "INT";
-		case axDB_c_type_int64_t:		return "BIGINT";
+		case axDB_c_type_bool:			return "TINYINT";
+		case axDB_c_type_int8:			return "TINYINT";
+		case axDB_c_type_int16:			return "SMALLINT";
+		case axDB_c_type_int32:			return "INT";
+		case axDB_c_type_int64:			return "BIGINT";
 
 		case axDB_c_type_float:			return "FLOAT";
 		case axDB_c_type_double:		return "DOUBLE";
 
-		case axDB_c_type_axIStringA:	return "VARCHAR";
-		case axDB_c_type_axIStringW:	return "VARCHAR";
+		case axDB_c_type_StringA:		return "TEXT";
+		case axDB_c_type_StringW:		return "TEXT";
 
-		case axDB_c_type_axIByteArray:	return "BLOB";
-		case axDB_c_type_axTimeStamp:	return "TIMESTAMP";
-		case axDB_c_type_axDateTime:	return "DATETIME";
+		case axDB_c_type_ByteArray:		return "BLOB";
+		case axDB_c_type_TimeStamp:		return "TIMESTAMP";
+		case axDB_c_type_DateTime:		return "DATETIME";
 	}
 	assert( false );
 	return "Unknown";

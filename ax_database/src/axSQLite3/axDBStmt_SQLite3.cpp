@@ -37,10 +37,10 @@ int	axDBStmt_SQLite3 :: columnType( axSize col ) {
 	st = ax_safe_assign( i, col );	if( !st ) return axDB_c_type_null;
 	int t = sqlite3_column_type( stmt_, i );
 	switch( t ) {
-		case SQLITE_INTEGER: return axDB_c_type_int64_t;
+		case SQLITE_INTEGER: return axDB_c_type_int64;
 		case SQLITE_FLOAT:	 return axDB_c_type_double;
-		case SQLITE3_TEXT:	 return axDB_c_type_axIStringA;
-		case SQLITE_BLOB:	 return axDB_c_type_axIByteArray;
+		case SQLITE3_TEXT:	 return axDB_c_type_StringA;
+		case SQLITE_BLOB:	 return axDB_c_type_ByteArray;
 	}
 	return axDB_c_type_null;
 }
@@ -49,7 +49,7 @@ axStatus axDBStmt_SQLite3::exec_ParamList( const axDBParamList & list ) {
 	if( !stmt_ ) return axStatus_Std::DB_error;
 
 	if( db_->echoSQL() ) {
-		ax_log("--- ExecSQL: ---\n{?}\nParams:{?}\n", sql_, list );
+		ax_log("--- ExecSQL: ---\n{?}\n  with Params:{?}\n", sql_, list );
 	}
 
 	sqlite3_reset( stmt_ );
@@ -71,36 +71,43 @@ axStatus axDBStmt_SQLite3::exec_ParamList( const axDBParamList & list ) {
 		const axDBParam &param = list[i];
 		switch( param.type ) {
 		
-			case axDB_c_type_int8_t:	ret = sqlite3_bind_int   ( stmt_, i+1, param.int8_  );	break;
-			case axDB_c_type_int16_t: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.int16_ );	break;
-			case axDB_c_type_int32_t: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.int32_ );	break;
-			case axDB_c_type_int64_t: 	ret = sqlite3_bind_int64 ( stmt_, i+1, param.int64_ );	break;
+			case axDB_c_type_int8:		ret = sqlite3_bind_int   ( stmt_, i+1, param.p_int8  );	break;
+			case axDB_c_type_int16: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.p_int16 );	break;
+			case axDB_c_type_int32: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.p_int32 );	break;
+			case axDB_c_type_int64: 	ret = sqlite3_bind_int64 ( stmt_, i+1, param.p_int64 );	break;
 			
 			case axDB_c_type_bool: {
-				tmpIntData[i] = param.bool_ ? 1 : 0;
+				tmpIntData[i] = param.p_bool ? 1 : 0;
 				ret = sqlite3_bind_int( stmt_, i+1, tmpIntData[i] );
 			}break;
 								
-			case axDB_c_type_float: 	ret = sqlite3_bind_double( stmt_, i+1, (double) param.float_  ); break;
-			case axDB_c_type_double: 	ret = sqlite3_bind_double( stmt_, i+1,          param.double_ ); break;
+			case axDB_c_type_float: 	ret = sqlite3_bind_double( stmt_, i+1, (double) param.p_float  ); break;
+			case axDB_c_type_double: 	ret = sqlite3_bind_double( stmt_, i+1,          param.p_double ); break;
 			
-			case axDB_c_type_axIStringA: ret = sqlite3_bind_text  ( stmt_, i+1, param.strA, -1, NULL ); break;				
-			case axDB_c_type_axIStringW: {
-				st = tmpStrData[i].set( param.strW );	if( !st ) return st;
+			case axDB_c_type_StringA: ret = sqlite3_bind_text  ( stmt_, i+1, param.p_strA, -1, NULL ); break;				
+			case axDB_c_type_StringW: {
+				st = tmpStrData[i].set( param.p_strW );	if( !st ) return st;
 				ret = sqlite3_bind_text( stmt_, i+1, tmpStrData[i], -1, NULL );
 			}break;
 			
-			case axDB_c_type_axTimeStamp: {
-				axDateTime	dt( *param.p_timeStamp );
+			case axDB_c_type_TimeStamp: {
+				axDateTime	dt( *param.p_TimeStamp );
 				st = tmpStrData[i].convert( dt );	if( !st ) return st;
 				ret = sqlite3_bind_text( stmt_, i+1, tmpStrData[i], -1, NULL );
 			}break;
 
-			case axDB_c_type_axDateTime: {
-				st = tmpStrData[i].convert( *param.p_dateTime );	if( !st ) return st;
+			case axDB_c_type_DateTime: {
+				st = tmpStrData[i].convert( *param.p_DateTime );	if( !st ) return st;
 				ret = sqlite3_bind_text( stmt_, i+1, tmpStrData[i], -1, NULL );
 			}break;
 			
+			case axDB_c_type_ByteArray: {
+				const axIByteArray* data = param.p_ByteArray;
+				int n;
+				st = ax_safe_assign( n, data->byteSize() );		if( !st ) return st;
+				sqlite3_bind_blob( stmt_, i+1, data->ptr(), n, NULL );
+			}break;
+
 			default: {
 				assert( false );
 				return axStatus_Std::DB_invalid_param_type;
@@ -130,9 +137,7 @@ axStatus axDBStmt_SQLite3::fetch () {
 
 axStatus axDBStmt_SQLite3::create ( const char * sql ) {
 	axStatus st;
-
 	releaseStmt();	
-	st = sql_.set( sql );		if( !st ) return st;
 
 	const char* remainSQL = NULL;
 	int ret = sqlite3_prepare( *db_, sql, -1, &stmt_, &remainSQL );

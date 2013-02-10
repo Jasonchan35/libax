@@ -20,6 +20,9 @@ public:
 
 	virtual	~axLocalArray();
 
+			B & asInterface() { return (B&)*this; }
+	const	B & asInterface() const	{ return (B&)*this; }
+
 private:
 	void	_ctor();
 	virtual	axStatus	onMalloc	( axSize req_size, void* &newPtr, axSize &newCapacity );

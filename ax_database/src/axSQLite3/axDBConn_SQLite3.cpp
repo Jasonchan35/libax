@@ -89,7 +89,7 @@ bool axDBConn_SQLite3::hasError( int code, const char* sql ) {
 }
 
 //virtual 
-axStatus axDBConn_SQLite3::createStmt( axDBStmt & stmt, const char* sql ) {
+axStatus axDBConn_SQLite3::onCreateStmt( axDBStmt & stmt, const char* sql ) {
 	axDBStmt_SQLite3* p = new axDBStmt_SQLite3( this );
 	if( !p ) return axStatus_Std::not_enough_memory;	
 	stmt._setImp( p );
@@ -115,6 +115,10 @@ axStatus axDBConn_SQLite3::getSQL_CreateTable ( axIStringA & outSQL, const char*
 
 		st = identifierString( colName, c.name );		if( !st ) return st;
 		st = outSQL.appendFormat( "  {?}\t{?}", colName, dbTypeName(c.type) );		if( !st ) return st;
+
+		if( c.pkey ) {
+			st = outSQL.append( " PRIMARY KEY AUTOINCREMENT" );	if( !st ) return st;
+		}
 	}
 
 	st = outSQL.appendFormat( "\n);" );
@@ -124,19 +128,19 @@ axStatus axDBConn_SQLite3::getSQL_CreateTable ( axIStringA & outSQL, const char*
 const char*	axDBConn_SQLite3::dbTypeName( int c_type ) {
 	switch( c_type ) {
 		case axDB_c_type_bool:
-		case axDB_c_type_int8_t:
-		case axDB_c_type_int16_t:
-		case axDB_c_type_int32_t:
-		case axDB_c_type_int64_t:
+		case axDB_c_type_int8:
+		case axDB_c_type_int16:
+		case axDB_c_type_int32:
+		case axDB_c_type_int64:
 					return "INTEGER"; //in SQLite, AUTO INCREMENT must primary key and INTEGER (even INT/SMALLINT are the same but it is not working)
 
-		case axDB_c_type_float:			return "FLOAT";
-		case axDB_c_type_double:		return "DOUBLE";
-		case axDB_c_type_axIStringA:	return "TEXT";
-		case axDB_c_type_axIStringW:	return "TEXT";
-		case axDB_c_type_axIByteArray:	return "BLOB";
-		case axDB_c_type_axTimeStamp:	return "DATETIME";
-		case axDB_c_type_axDateTime:	return "DATETIME";
+		case axDB_c_type_float:		return "FLOAT";
+		case axDB_c_type_double:	return "DOUBLE";
+		case axDB_c_type_StringA:	return "TEXT";
+		case axDB_c_type_StringW:	return "TEXT";
+		case axDB_c_type_ByteArray:	return "BLOB";
+		case axDB_c_type_TimeStamp:	return "DATETIME";
+		case axDB_c_type_DateTime:	return "DATETIME";
 	}
 	assert( false );
 	return "Unknown";

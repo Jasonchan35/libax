@@ -774,6 +774,10 @@
 				Name="time"
 				>
 				<File
+					RelativePath="..\..\..\src\time\axDateTime.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\ax\core\time\axDateTime.h"
 					>
 				</File>

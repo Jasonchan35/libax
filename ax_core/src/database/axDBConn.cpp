@@ -61,6 +61,19 @@ axStatus	axDBConn_Imp::identifierString( axIStringA & out, const char* sz ) {
 	return out.format("\"{?}\"", tmp );
 }
 
+axStatus	axDBConn_Imp::createStmt ( axDBStmt & stmt, const char * sql ) {
+	axStatus st;
+	if( echoSQL() ) {
+		ax_log("--- CreateStmt SQL: ---\n: {?}\n", sql );
+	}
+	st = onCreateStmt( stmt, sql );		if( !st ) return st;
+
+	if( stmt._getImp() ) {
+		st = stmt._getImp()->sql_.set( sql );	if( !st ) return st;
+	}
+	return 0;
+}
+
 //== create table ==
 axStatus axDBConn::createTable	( const char* table, const axDBColumnList & list ) {
 	axStatus		st;
@@ -166,12 +179,12 @@ axStatus axDBConn_Imp::getSQL_Insert( axIStringA & outSQL, const char* table, co
 
 
 //=== update ===
-axStatus axDBConn::getSQL_Update( axIStringA & outSQL, const char* table, const axDBColumnList & list , const char* szWhere ) {
+axStatus axDBConn::getSQL_Update( axIStringA & outSQL, const char* table, const char* szWhere, const axDBColumnList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->getSQL_Update( outSQL, table, list, szWhere );
+	return p_->getSQL_Update( outSQL, table, szWhere, list );
 }
 
-axStatus axDBConn_Imp::getSQL_Update( axIStringA & outSQL, const char* table, const axDBColumnList & list, const char* szWhere ) {
+axStatus axDBConn_Imp::getSQL_Update( axIStringA & outSQL, const char* table, const char* szWhere, const axDBColumnList & list ) {
 	axStatus st;
 	axTempStringA	colName;
 	axTempStringA	tableName;
@@ -195,12 +208,12 @@ axStatus axDBConn_Imp::getSQL_Update( axIStringA & outSQL, const char* table, co
 }
 
 //=== select ====
-axStatus axDBConn::getSQL_Select( axIStringA & outSQL, const char* table, const axDBColumnList & list , const char* szWhere ) {
+axStatus axDBConn::getSQL_Select( axIStringA & outSQL, const char* table, const char* szWhere, const axDBColumnList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->getSQL_Select( outSQL, table, list, szWhere );
+	return p_->getSQL_Select( outSQL, table, szWhere, list );
 }
 
-axStatus axDBConn_Imp::getSQL_Select	( axIStringA & outSQL, const char* table, const axDBColumnList & list, const char* szWhere ) {
+axStatus axDBConn_Imp::getSQL_Select	( axIStringA & outSQL, const char* table, const char* szWhere, const axDBColumnList & list ) {
 	axStatus st;
 	axTempStringA	colName;
 	axTempStringA	tableName;

@@ -57,13 +57,6 @@ private:
 
 //-------------
 
-inline
-axStatus	axTimeStamp::toStringFormat( axStringFormat &f ) const{
-    // ISO 8601 Date time format
-	return f.format( "{?}", second_ );
-}
-
-
 #if axOS_WIN
 
 inline
