@@ -25,51 +25,51 @@ axStatus axDB_PostgreSQL_ParamSet::resize( axSize n ) {
 axStatus axDB_PostgreSQL_ParamSet::bind( axSize index, const axDBParam & param ) {
 	axStatus st;
 	switch( param.type ) {
-		case axDB_c_type_int8_t:  {
-			int16_t tmp = *(int16_t*) param.int8_;
+		case axDB_c_type_int8:  {
+			int16_t tmp = *(int16_t*) param.v_int8;
 			uniData[index].int16_ = ax_host_to_be( tmp ); //convert to big-endian int16
 			pData  [index] = & uniData[index].int16_;
 			lengths[index] = sizeof( uniData[index].int16_ );
 			formats [index] = BINARY_FORMAT;
 		}break;
 		
-		case axDB_c_type_int16_t: {
-			uniData[index].int16_ = ax_host_to_be( param.int16_ );
+		case axDB_c_type_int16: {
+			uniData[index].int16_ = ax_host_to_be( param.v_int16 );
 			pData  [index] = & uniData[index].int16_;
 			lengths[index] = sizeof( uniData[index].int16_ );
 			formats [index] = BINARY_FORMAT;
 		}break;
 
-		case axDB_c_type_int32_t: {
-			uniData[index].int32_ = ax_host_to_be( param.int32_ );
+		case axDB_c_type_int32: {
+			uniData[index].int32_ = ax_host_to_be( param.v_int32 );
 			pData  [index] = & uniData[index].int32_;
 			lengths[index] = sizeof( uniData[index].int32_ );
 			formats [index] = BINARY_FORMAT;
 		}break;
 
-		case axDB_c_type_int64_t: {
-			uniData[index].int64_ = ax_host_to_be( param.int64_ );
+		case axDB_c_type_int64: {
+			uniData[index].int64_ = ax_host_to_be( param.v_int64 );
 			pData  [index] = & uniData[index].int64_;
 			lengths[index] = sizeof( uniData[index].int64_ );
 			formats [index] = BINARY_FORMAT;
 		}break;
 		
 		case axDB_c_type_float: {
-			uniData[index].float_ = ax_host_to_be( param.float_ );
+			uniData[index].float_ = ax_host_to_be( param.v_float );
 			pData  [index] = & uniData[index].float_;
 			lengths[index] = sizeof( uniData[index].float_ );
 			formats [index] = BINARY_FORMAT;
 		}break;
 	
 		case axDB_c_type_double: {
-			uniData[index].double_ = ax_host_to_be( param.double_ );
+			uniData[index].double_ = ax_host_to_be( param.v_double );
 			pData  [index] = & uniData[index].double_;
 			lengths[index] = sizeof( uniData[index].double_ );
 			formats [index] = BINARY_FORMAT;
 		}break;
 	
-		case axDB_c_type_axIStringA: {
-			const char* sz = param.strA;
+		case axDB_c_type_StringA: {
+			const char* sz = param.v_strA;
 			if( sz == NULL ) {
 				lengths[index] = 0;
 			}else{
@@ -81,8 +81,8 @@ axStatus axDB_PostgreSQL_ParamSet::bind( axSize index, const axDBParam & param )
 			formats [index] = BINARY_FORMAT;			
 		}break;
 		
-		case axDB_c_type_axIStringW: {
-			const wchar_t* sz = param.strW;
+		case axDB_c_type_StringW: {
+			const wchar_t* sz = param.v_strW;
 			st = strData [index].set( sz );		if( !st ) return st;
 			pData	[index] = strData[index].c_str();
 			int len;
@@ -92,21 +92,21 @@ axStatus axDB_PostgreSQL_ParamSet::bind( axSize index, const axDBParam & param )
 		}break;
 		
 		case axDB_c_type_bool: {
-			uniData	[index].int8_ = param.bool_ ? 1: 0;
+			uniData	[index].int8_ = param.v_bool ? 1: 0;
 			pData   [index] = &uniData[index].int8_;
 			lengths [index] = 1;
 			formats [index] = BINARY_FORMAT;
 		}break;
 			
-		case axDB_c_type_axIByteArray: {
-			const axIByteArray* a = (const axIByteArray*)param.p_byteArray;
+		case axDB_c_type_ByteArray: {
+			const axIByteArray* a = param.v_ByteArray;
 			pData  [index] = a->ptr();
 			st = ax_safe_assign( lengths[index], a->size() );	if( !st ) return st;
 			formats[index] = BINARY_FORMAT;			
 		}break;
 
-		case axDB_c_type_axTimeStamp: {
-			double v = *param.p_timeStamp - date_1970_to_2000 + axDateTime::getTimeZone();
+		case axDB_c_type_TimeStamp: {
+			double v = param.v_TimeStamp - date_1970_to_2000 + axDateTime::getTimeZone();
 			#if USE_INTEGER_DATETIMES
 				int64_t	i64 = (int64_t) ( v * 1000000 );
 				uniData[index].int64_ = ax_host_to_be(i64);
@@ -119,7 +119,9 @@ axStatus axDB_PostgreSQL_ParamSet::bind( axSize index, const axDBParam & param )
 				lengths[index] = sizeof(uniData[index].double_);
 				formats[index] = BINARY_FORMAT;
 			#endif
+
 		}break;
+
 			
 		default: {
 			assert( false );
@@ -142,16 +144,15 @@ axStatus axDB_PostgreSQL_ParamSet::bindList( const axDBParamList & list ) {
 
 Oid	axDB_PostgreSQL_ParamSet::c_type_to_Oid( int c ) {	
 	switch( c ) {
-		case axDB_c_type_bool:				return BOOLOID;
-		case axDB_c_type_int32_t:			return INT4OID;
-		case axDB_c_type_int64_t:			return INT8OID;
-		case axDB_c_type_float:				return FLOAT4OID;
-		case axDB_c_type_double:			return FLOAT8OID;
-		case axDB_c_type_axIStringA:		return VARCHAROID;
-		case axDB_c_type_axIStringW:		return VARCHAROID;
-		case axDB_c_type_axIByteArray:		return BYTEAOID;
-		case axDB_c_type_axTimeStamp:		return TIMESTAMPOID;
-		case axDB_c_type_axDateTime:		return TIMESTAMPOID;
+		case axDB_c_type_bool:			return BOOLOID;
+		case axDB_c_type_int32:			return INT4OID;
+		case axDB_c_type_int64:			return INT8OID;
+		case axDB_c_type_float:			return FLOAT4OID;
+		case axDB_c_type_double:		return FLOAT8OID;
+		case axDB_c_type_StringA:		return VARCHAROID;
+		case axDB_c_type_StringW:		return VARCHAROID;
+		case axDB_c_type_ByteArray:		return BYTEAOID;
+		case axDB_c_type_TimeStamp:		return TIMESTAMPOID;
 	}
 	return 0; //error
 }

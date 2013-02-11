@@ -20,6 +20,8 @@ public:
 	axStatus	bind		( axSize index, const axDBParam & param );
 	axStatus	bindList	( const axDBParamList & list );
 
+	axStatus	_bindValue	( axSize index, axTimeStamp ts );
+
 	axStatus	setTypes	( const axDBParamList & list );
 	bool		isSameTypes	( const axDBParamList & list );
 		

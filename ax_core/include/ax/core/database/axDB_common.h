@@ -57,18 +57,17 @@ public:
 	{}
 
 	union {
-		bool				p_bool;
-		int8_t				p_int8;
-		int16_t				p_int16;
-		int32_t				p_int32;
-		int64_t				p_int64;
-		float				p_float;
-		double				p_double;
-		const char*			p_strA;
-		const wchar_t*		p_strW;
-		const axTimeStamp*	p_TimeStamp;
-		const axDateTime*	p_DateTime;
-		const axIByteArray* p_ByteArray;
+		bool				v_bool;
+		int8_t				v_int8;
+		int16_t				v_int16;
+		int32_t				v_int32;
+		int64_t				v_int64;
+		float				v_float;
+		double				v_double;
+		const char*			v_strA;
+		const wchar_t*		v_strW;
+		double				v_TimeStamp;
+		const axIByteArray* v_ByteArray;
 	};
 
 	axStatus	onTake( axDBParam &src ) { *this=src; return 0; }
@@ -88,8 +87,7 @@ public:
 
 	axDBParamList&	operator << ( const axDBParam &p ) {
 		if( skipPkeyAtIndex != curIndex ) {
-			axStatus st;
-			st = append( p );	assert(st);
+			axStatus st = append( p );	assert(st);
 		}
 		curIndex++;
 		return *this;
@@ -104,27 +102,27 @@ public:
 	axSize	skipPkeyAtIndex;
 };
 
-inline void axDBParamList_io( axDBParamList & list, bool				v ) { axDBParam p( axDB_c_type_bool		);	p.p_bool	=v;	list<<(p); }
-inline void axDBParamList_io( axDBParamList & list, float				v ) { axDBParam p( axDB_c_type_float	);	p.p_float	=v;	list<<(p); }
-inline void axDBParamList_io( axDBParamList & list, double				v ) { axDBParam p( axDB_c_type_double	);	p.p_double	=v;	list<<(p); }
-inline void axDBParamList_io( axDBParamList & list, int8_t				v ) { axDBParam p( axDB_c_type_int8		);	p.p_int8	=v;	list<<(p); }
-inline void axDBParamList_io( axDBParamList & list, int16_t				v ) { axDBParam p( axDB_c_type_int16	);	p.p_int16	=v;	list<<(p); }
-inline void axDBParamList_io( axDBParamList & list, int32_t				v ) { axDBParam p( axDB_c_type_int32	);	p.p_int32	=v;	list<<(p); }
-inline void axDBParamList_io( axDBParamList & list, int64_t				v ) { axDBParam p( axDB_c_type_int64	);	p.p_int64	=v;	list<<(p); }
+inline void axDBParamList_io( axDBParamList & list, bool				v ) { axDBParam p( axDB_c_type_bool		);	p.v_bool	=v;	list<<(p); }
+inline void axDBParamList_io( axDBParamList & list, float				v ) { axDBParam p( axDB_c_type_float	);	p.v_float	=v;	list<<(p); }
+inline void axDBParamList_io( axDBParamList & list, double				v ) { axDBParam p( axDB_c_type_double	);	p.v_double	=v;	list<<(p); }
+inline void axDBParamList_io( axDBParamList & list, int8_t				v ) { axDBParam p( axDB_c_type_int8		);	p.v_int8	=v;	list<<(p); }
+inline void axDBParamList_io( axDBParamList & list, int16_t				v ) { axDBParam p( axDB_c_type_int16	);	p.v_int16	=v;	list<<(p); }
+inline void axDBParamList_io( axDBParamList & list, int32_t				v ) { axDBParam p( axDB_c_type_int32	);	p.v_int32	=v;	list<<(p); }
+inline void axDBParamList_io( axDBParamList & list, int64_t				v ) { axDBParam p( axDB_c_type_int64	);	p.v_int64	=v;	list<<(p); }
 
-inline void axDBParamList_io( axDBParamList & list, const char*			v ) { axDBParam p( axDB_c_type_StringA );	p.p_strA	=v;	list<<(p); }
-inline void axDBParamList_io( axDBParamList & list, const axStringA  &	v ) { axDBParam p( axDB_c_type_StringA );	p.p_strA	=v;	list<<(p); }
-inline void axDBParamList_io( axDBParamList & list, const axIStringA &	v ) { axDBParam p( axDB_c_type_StringA );	p.p_strA	=v;	list<<(p); }
+inline void axDBParamList_io( axDBParamList & list, const char*			v ) { axDBParam p( axDB_c_type_StringA );	p.v_strA	=v;	list<<(p); }
+inline void axDBParamList_io( axDBParamList & list, const axStringA  &	v ) { axDBParam p( axDB_c_type_StringA );	p.v_strA	=v;	list<<(p); }
+inline void axDBParamList_io( axDBParamList & list, const axIStringA &	v ) { axDBParam p( axDB_c_type_StringA );	p.v_strA	=v;	list<<(p); }
 
-inline void axDBParamList_io( axDBParamList & list, const wchar_t*		v ) { axDBParam p( axDB_c_type_StringW );	p.p_strW	=v;	list<<(p); }
-inline void axDBParamList_io( axDBParamList & list, const axStringW  &	v ) { axDBParam p( axDB_c_type_StringW );	p.p_strW	=v;	list<<(p); }
-inline void axDBParamList_io( axDBParamList & list, const axIStringW &	v ) { axDBParam p( axDB_c_type_StringW );	p.p_strW	=v;	list<<(p); }
+inline void axDBParamList_io( axDBParamList & list, const wchar_t*		v ) { axDBParam p( axDB_c_type_StringW );	p.v_strW	=v;	list<<(p); }
+inline void axDBParamList_io( axDBParamList & list, const axStringW  &	v ) { axDBParam p( axDB_c_type_StringW );	p.v_strW	=v;	list<<(p); }
+inline void axDBParamList_io( axDBParamList & list, const axIStringW &	v ) { axDBParam p( axDB_c_type_StringW );	p.v_strW	=v;	list<<(p); }
 
-inline void axDBParamList_io( axDBParamList & list, const axIByteArray & v ) { axDBParam p( axDB_c_type_ByteArray ); p.p_ByteArray =&v; list<<(p); }
-inline void axDBParamList_io( axDBParamList & list, const axByteArray  & v ) { axDBParam p( axDB_c_type_ByteArray ); p.p_ByteArray =&v; list<<(p); }
+inline void axDBParamList_io( axDBParamList & list, const axIByteArray & v ) { axDBParam p( axDB_c_type_ByteArray ); p.v_ByteArray =&v; list<<(p); }
+inline void axDBParamList_io( axDBParamList & list, const axByteArray  & v ) { axDBParam p( axDB_c_type_ByteArray ); p.v_ByteArray =&v; list<<(p); }
 
-inline void axDBParamList_io( axDBParamList & list, const axTimeStamp  & v ) { axDBParam p( axDB_c_type_TimeStamp ); p.p_TimeStamp =&v; list<<(p); }
-inline void axDBParamList_io( axDBParamList & list, const axDateTime   & v ) { axDBParam p( axDB_c_type_DateTime  ); p.p_DateTime  =&v; list<<(p); }
+inline void axDBParamList_io( axDBParamList & list, axTimeStamp			 v ) { axDBParam p( axDB_c_type_TimeStamp ); p.v_TimeStamp = v; list<<(p); }
+inline void axDBParamList_io( axDBParamList & list, const axDateTime   & v ) { axDBParamList_io( list, v.toTimeStamp() );  }
 
 
 

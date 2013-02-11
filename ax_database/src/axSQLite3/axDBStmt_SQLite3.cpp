@@ -71,38 +71,33 @@ axStatus axDBStmt_SQLite3::exec_ParamList( const axDBParamList & list ) {
 		const axDBParam &param = list[i];
 		switch( param.type ) {
 		
-			case axDB_c_type_int8:		ret = sqlite3_bind_int   ( stmt_, i+1, param.p_int8  );	break;
-			case axDB_c_type_int16: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.p_int16 );	break;
-			case axDB_c_type_int32: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.p_int32 );	break;
-			case axDB_c_type_int64: 	ret = sqlite3_bind_int64 ( stmt_, i+1, param.p_int64 );	break;
+			case axDB_c_type_int8:		ret = sqlite3_bind_int   ( stmt_, i+1, param.v_int8  );	break;
+			case axDB_c_type_int16: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.v_int16 );	break;
+			case axDB_c_type_int32: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.v_int32 );	break;
+			case axDB_c_type_int64: 	ret = sqlite3_bind_int64 ( stmt_, i+1, param.v_int64 );	break;
 			
 			case axDB_c_type_bool: {
-				tmpIntData[i] = param.p_bool ? 1 : 0;
+				tmpIntData[i] = param.v_bool ? 1 : 0;
 				ret = sqlite3_bind_int( stmt_, i+1, tmpIntData[i] );
 			}break;
 								
-			case axDB_c_type_float: 	ret = sqlite3_bind_double( stmt_, i+1, (double) param.p_float  ); break;
-			case axDB_c_type_double: 	ret = sqlite3_bind_double( stmt_, i+1,          param.p_double ); break;
+			case axDB_c_type_float: 	ret = sqlite3_bind_double( stmt_, i+1, (double) param.v_float  ); break;
+			case axDB_c_type_double: 	ret = sqlite3_bind_double( stmt_, i+1,          param.v_double ); break;
 			
-			case axDB_c_type_StringA: ret = sqlite3_bind_text  ( stmt_, i+1, param.p_strA, -1, NULL ); break;				
+			case axDB_c_type_StringA: ret = sqlite3_bind_text  ( stmt_, i+1, param.v_strA, -1, NULL ); break;				
 			case axDB_c_type_StringW: {
-				st = tmpStrData[i].set( param.p_strW );	if( !st ) return st;
+				st = tmpStrData[i].set( param.v_strW );	if( !st ) return st;
 				ret = sqlite3_bind_text( stmt_, i+1, tmpStrData[i], -1, NULL );
 			}break;
 			
 			case axDB_c_type_TimeStamp: {
-				axDateTime	dt( *param.p_TimeStamp );
+				axDateTime	dt( param.v_TimeStamp );
 				st = tmpStrData[i].convert( dt );	if( !st ) return st;
-				ret = sqlite3_bind_text( stmt_, i+1, tmpStrData[i], -1, NULL );
-			}break;
-
-			case axDB_c_type_DateTime: {
-				st = tmpStrData[i].convert( *param.p_DateTime );	if( !st ) return st;
 				ret = sqlite3_bind_text( stmt_, i+1, tmpStrData[i], -1, NULL );
 			}break;
 			
 			case axDB_c_type_ByteArray: {
-				const axIByteArray* data = param.p_ByteArray;
+				const axIByteArray* data = param.v_ByteArray;
 				int n;
 				st = ax_safe_assign( n, data->byteSize() );		if( !st ) return st;
 				sqlite3_bind_blob( stmt_, i+1, data->ptr(), n, NULL );

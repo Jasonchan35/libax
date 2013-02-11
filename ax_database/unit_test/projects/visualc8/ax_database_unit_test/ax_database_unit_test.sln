@@ -7,6 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ax_core", "..\..\..\..\..\a
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ax_database_unit_test", "ax_database_unit_test.vcproj", "{2543C61B-C7B9-448C-BF9A-AD46213439A9}"
 	ProjectSection(ProjectDependencies) = postProject
+		{488DA319-11CB-4478-B4D1-3B0BEA2FFE17} = {488DA319-11CB-4478-B4D1-3B0BEA2FFE17}
 		{13FC117D-9AD1-442E-912D-48B9AD78ADB8} = {13FC117D-9AD1-442E-912D-48B9AD78ADB8}
 		{D26435BE-EED3-4972-BC53-52D3E3EB39C3} = {D26435BE-EED3-4972-BC53-52D3E3EB39C3}
 		{0E8DF8EB-5CC3-41EB-8262-23F45ABCD6C9} = {0E8DF8EB-5CC3-41EB-8262-23F45ABCD6C9}
@@ -16,6 +17,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ax_external_sqlite3", "..\..\..\..\projects\visualc2008\ax_external_sqlite3.vcproj", "{D26435BE-EED3-4972-BC53-52D3E3EB39C3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "axMySQL", "..\..\..\..\projects\visualc2008\axMySQL.vcproj", "{13FC117D-9AD1-442E-912D-48B9AD78ADB8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "axPostgreSQL", "..\..\..\..\projects\visualc2008\axPostgreSQL.vcproj", "{488DA319-11CB-4478-B4D1-3B0BEA2FFE17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +68,14 @@ Global
 		{13FC117D-9AD1-442E-912D-48B9AD78ADB8}.Release|Win32.Build.0 = Release|Win32
 		{13FC117D-9AD1-442E-912D-48B9AD78ADB8}.Release|x64.ActiveCfg = Release|x64
 		{13FC117D-9AD1-442E-912D-48B9AD78ADB8}.Release|x64.Build.0 = Release|x64
+		{488DA319-11CB-4478-B4D1-3B0BEA2FFE17}.Debug|Win32.ActiveCfg = Debug|Win32
+		{488DA319-11CB-4478-B4D1-3B0BEA2FFE17}.Debug|Win32.Build.0 = Debug|Win32
+		{488DA319-11CB-4478-B4D1-3B0BEA2FFE17}.Debug|x64.ActiveCfg = Debug|x64
+		{488DA319-11CB-4478-B4D1-3B0BEA2FFE17}.Debug|x64.Build.0 = Debug|x64
+		{488DA319-11CB-4478-B4D1-3B0BEA2FFE17}.Release|Win32.ActiveCfg = Release|Win32
+		{488DA319-11CB-4478-B4D1-3B0BEA2FFE17}.Release|Win32.Build.0 = Release|Win32
+		{488DA319-11CB-4478-B4D1-3B0BEA2FFE17}.Release|x64.ActiveCfg = Release|x64
+		{488DA319-11CB-4478-B4D1-3B0BEA2FFE17}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -39,7 +39,6 @@ public:
 		}
 
 		v_TimeStamp.now();
-		v_DateTime.set( v_TimeStamp );
 	}
 
 	axStatus	onTake( Row & src ) {
@@ -95,7 +94,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 	axDBTableAccessor<Row>	tbl;
 	st = tbl.create( db, table );		if( !st ) return st;
 
-	const size_t n = 100;
+	const size_t n = 10;
 	{	
 		Row	row;
 
@@ -124,7 +123,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		axStopWatch	timer;
 		st = tbl.selectAll( results );		if( !st ) return st;
 		ax_log("select {?} records in {?}s", results.size(), timer.get() );
-//		ax_log_var( results );
+		ax_log_var( results );
 	}
 
 	return 0;
@@ -153,8 +152,8 @@ axStatus test_MySQL() {
 axStatus test_ax_database() {
 	axStatus st;
 
-	axUTestCase( test_SQLite3() );
-//	axUTestCase( test_MySQL() );
+//	axUTestCase( test_SQLite3() );
+	axUTestCase( test_MySQL() );
 
 	return 0;
 }
