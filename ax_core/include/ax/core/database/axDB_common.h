@@ -219,6 +219,7 @@ public:
 	axDBColumn() 
 		: type(axDB_c_type_null)
 		, pkey(false)
+		, pkey_auto_increment(false)
 		, data(NULL)
 	{}
 	
@@ -238,6 +239,7 @@ public:
 	int					type;
 	axStringA_<64>		name;
 	bool				pkey;
+	bool				pkey_auto_increment;
     void*               data;
 };
 
@@ -252,20 +254,26 @@ public:
 	}
 
 	template<class T>
-	axStatus	build( const char* pkey ) {
+	axStatus	build( const char* pkey, bool pkey_auto_increment ) {
 		T	t;
 		axStatus st = io( t, NULL );		if( !st ) return st;
 		axDBColumn* c = findColumnByName( pkey );
-		if( c ) c->pkey = true;
+		if( c ) {
+			c->pkey = true;
+			if( pkey_auto_increment ) c->pkey_auto_increment = true;
+		}
 		return 0;
 	}
 
-	template<class T, class PKey, PKey T::*PKeyMember >
+	template<class T, class PKey, PKey T::*PKeyMember, bool pkey_auto_increment >
 	axStatus	_build() {
 		T	t;
 		axStatus st = io( t, NULL );		if( !st ) return st;
 		axDBColumn* c = findColumnByData( &(t.*PKeyMember) );
-		if( c ) c->pkey = true;
+		if( c ) {
+			c->pkey = true;
+			if( pkey_auto_increment ) c->pkey_auto_increment = true;
+		}
 		return 0;
 	}
 

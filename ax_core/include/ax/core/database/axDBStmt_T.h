@@ -4,7 +4,7 @@
 #include "axDBStmt.h"
 
 
-template<class T, class PKey=int64_t, PKey T::*PKeyMember=&T::id>
+template<class T, class PKey=int64_t, PKey T::*PKeyMember=&T::id, bool pkey_auto_increment=true >
 class axDBStmt_Insert {
 public:
 	axDBStmt_Insert() : pkeyIndex(-1) {}
@@ -13,7 +13,7 @@ public:
 		axStatus st;
 
 		axDBColumnList	list;
-		st = list._build<T, PKey, PKeyMember >();		if( !st ) return st;
+		st = list._build<T, PKey, PKeyMember, pkey_auto_increment >();		if( !st ) return st;
 
 		pkeyIndex = -1;
 		for( size_t i=0; i<list.size(); i++ ) {
@@ -121,7 +121,7 @@ private:
 
 
 
-template<class T, class PKey=int64_t, PKey T::*PKeyMember=&T::id>
+template<class T, class PKey=int64_t, PKey T::*PKeyMember=&T::id, bool pkey_auto_increment=true>
 class axDBTableAccessor {
 public:
 	/*
@@ -157,7 +157,7 @@ public:
 	axDBStmt_SelectAll< T >		stmtSelectAll;
 	
 private:
-	axDBStmt_Insert< T, PKey, PKeyMember > stmtInsert;
+	axDBStmt_Insert< T, PKey, PKeyMember, pkey_auto_increment > stmtInsert;
 	axDBStmt_Update< T, PKey, PKeyMember > stmtUpdate;
 	axDBStmt_Select< T, PKey, PKeyMember > stmtSelect;
 	axPtr<axDBConn> 	db_;

@@ -25,8 +25,15 @@ axStatus axDB_PostgreSQL_ParamSet::resize( axSize n ) {
 axStatus axDB_PostgreSQL_ParamSet::bind( axSize index, const axDBParam & param ) {
 	axStatus st;
 	switch( param.type ) {
+		case axDB_c_type_bool: {
+			uniData	[index].bool_ = param.v_bool ? 1 : 0;
+			pData   [index] = &uniData[index].bool_;
+			lengths [index] = 1;
+			formats [index] = BINARY_FORMAT;
+		}break;
+
 		case axDB_c_type_int8:  {
-			int16_t tmp = *(int16_t*) param.v_int8;
+			int16_t	tmp = param.v_int8;
 			uniData[index].int16_ = ax_host_to_be( tmp ); //convert to big-endian int16
 			pData  [index] = & uniData[index].int16_;
 			lengths[index] = sizeof( uniData[index].int16_ );
@@ -90,13 +97,6 @@ axStatus axDB_PostgreSQL_ParamSet::bind( axSize index, const axDBParam & param )
 			lengths [index] = len;
 			formats [index] = BINARY_FORMAT;			
 		}break;
-		
-		case axDB_c_type_bool: {
-			uniData	[index].int8_ = param.v_bool ? 1: 0;
-			pData   [index] = &uniData[index].int8_;
-			lengths [index] = 1;
-			formats [index] = BINARY_FORMAT;
-		}break;
 			
 		case axDB_c_type_ByteArray: {
 			const axIByteArray* a = param.v_ByteArray;
@@ -145,6 +145,8 @@ axStatus axDB_PostgreSQL_ParamSet::bindList( const axDBParamList & list ) {
 Oid	axDB_PostgreSQL_ParamSet::c_type_to_Oid( int c ) {	
 	switch( c ) {
 		case axDB_c_type_bool:			return BOOLOID;
+		case axDB_c_type_int8:			return INT2OID;
+		case axDB_c_type_int16:			return INT2OID;
 		case axDB_c_type_int32:			return INT4OID;
 		case axDB_c_type_int64:			return INT8OID;
 		case axDB_c_type_float:			return FLOAT4OID;
@@ -154,6 +156,7 @@ Oid	axDB_PostgreSQL_ParamSet::c_type_to_Oid( int c ) {
 		case axDB_c_type_ByteArray:		return BYTEAOID;
 		case axDB_c_type_TimeStamp:		return TIMESTAMPOID;
 	}
+	assert( false );
 	return 0; //error
 }
 
@@ -163,7 +166,6 @@ axStatus	axDB_PostgreSQL_ParamSet::setTypes	( const axDBParamList & list ) {
 	for( axSize i=0; i<list.size(); i++ ) {
 		Oid t = c_type_to_Oid( list[i].type );
 		if( t == 0 ) {
-			assert(false);
 			return axStatus_Std::DB_invalid_param_type;
 		}
 		types[i] = t;

@@ -25,7 +25,7 @@ public:
 	axDBStmt_SQLite3( axDBConn_SQLite3* db );
 	virtual ~axDBStmt_SQLite3() {}
 	
-						 axStatus	create ( const char * sql );	
+						 axStatus	prepare ( const char * sql );	
 
 				virtual	axStatus	exec_ParamList	( const axDBParamList & list );
 
@@ -54,6 +54,8 @@ public:
 				virtual axStatus	getResultAtCol	( axSize col, axTimeStamp		&value );
 				virtual axStatus	getResultAtCol	( axSize col, axDateTime		&value );
 
+				virtual	const char*	sql	() { return sql_; }
+
 	axSharedPtr< axDBConn_SQLite3 >	db_;
 	axSize		paramCount_;
 	
@@ -62,7 +64,8 @@ public:
 	
 	void	releaseStmt();
 	
-	axSize	numColumns_;
+	axTempStringA	sql_;
+	axSize			numColumns_;
 	sqlite3_stmt*	stmt_;	
 };
 

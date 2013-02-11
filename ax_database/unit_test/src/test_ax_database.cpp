@@ -4,7 +4,7 @@
 
 #include <ax/database/axSQLite3.h>
 #include <ax/database/axMySQL.h>
-//#include <ax/database/axPostgreSQL.h>
+#include <ax/database/axPostgreSQL.h>
 
 
 class Row {
@@ -71,59 +71,62 @@ public:
 	template<class S>
 	axStatus serialize_io( S & s ) {
 		axStatus st;
+		ax_io( id );
+
 		#define axDB_c_type_list( NAME, TYPE, C_ITYPE )	\
 			ax_io( v_##NAME );
 		//----
 			#include <ax/core/database/axDB_c_type_list.h>
 		#undef axDB_c_type_list
 
-		ax_io( id );
 		return 0;
 	}
 };
 
 axStatus test_ax_database_common( axDBConn & db ) {
 	axStatus st;
+
 //	db.setEchoSQL( true );
+	const size_t numRows = 10000;
 
 	const char* table = "unitTestTable01";
 
-	st = db.dropTableIfExists( table );				if( !st ) return st;
-	st = db.createTable<Row>( table, "id" );		if( !st ) return st;
+	st = db.dropTableIfExists( table );					if( !st ) return st;
+	st = db.createTable<Row>( table, "id", true );		if( !st ) return st;
 
 	axDBTableAccessor<Row>	tbl;
 	st = tbl.create( db, table );		if( !st ) return st;
 
-	const size_t n = 10;
 	{	
 		Row	row;
 
 		axStopWatch	timer;
-		for( size_t i=0; i<n; i++ ) {
+		for( size_t i=0; i<numRows; i++ ) {
+			row.v_bool = (i % 2 == 0);
 			st = tbl.insert( row );			if( !st ) return st;
 		}
-		ax_log("insert {?} records in {?}s", n, timer.get() );
+		ax_log("insert {?} records in {?}s", numRows, timer.get() );
 	}
 
 	{	
 		Row	row;
 
 		axStopWatch	timer;
-		for( size_t i=0; i<n; i++ ) {
+		for( size_t i=0; i<numRows; i++ ) {
 			row.id = i+1;
 			st = tbl.update( row );			if( !st ) return st;
 		}
-		ax_log("update {?} records in {?}s", n, timer.get() );
+		ax_log("update {?} records in {?}s", numRows, timer.get() );
 	}
 
 	{
 		axArray< Row >	results;
-		results.reserve( n );
+		results.reserve( numRows );
 
 		axStopWatch	timer;
 		st = tbl.selectAll( results );		if( !st ) return st;
 		ax_log("select {?} records in {?}s", results.size(), timer.get() );
-		ax_log_var( results );
+		//ax_log_var( results );
 	}
 
 	return 0;
@@ -149,11 +152,22 @@ axStatus test_MySQL() {
 }
 
 
+axStatus test_PostgreSQL() {
+	axStatus st;
+	axDBConn	db;
+	st = axPostgreSQL_connect ( db, "host=localhost port=5432 dbname=testdb user=test password=1234" );	if( !st ) return st;
+	st = test_ax_database_common(db);			if( !st ) return st;
+	return 0;
+}
+
+
+
 axStatus test_ax_database() {
 	axStatus st;
 
 //	axUTestCase( test_SQLite3() );
-	axUTestCase( test_MySQL() );
+//	axUTestCase( test_MySQL() );
+	axUTestCase( test_PostgreSQL() );
 
 	return 0;
 }

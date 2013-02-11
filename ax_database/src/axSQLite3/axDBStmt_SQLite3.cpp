@@ -130,9 +130,14 @@ axStatus axDBStmt_SQLite3::fetch () {
 	return 0;
 }
 
-axStatus axDBStmt_SQLite3::create ( const char * sql ) {
+axStatus axDBStmt_SQLite3::prepare ( const char * sql ) {
 	axStatus st;
-	releaseStmt();	
+	releaseStmt();
+
+	st = sql_.set( sql );		if( !st ) return st;
+	if( db_->echoSQL() ) {
+		ax_log("--- CreateStmt SQL: ---\n: {?}\n", sql_ );
+	}
 
 	const char* remainSQL = NULL;
 	int ret = sqlite3_prepare( *db_, sql, -1, &stmt_, &remainSQL );

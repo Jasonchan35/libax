@@ -202,16 +202,25 @@ axStatus	ax_safe_assign( DST &dst, const SRC &src ) {
 	if( axTypeOf<DST>::isUnsigned ) {
 		if( ! axTypeOf<SRC>::isUnsigned ) {
 			//unsigned <<= signed
-			if( ax_less_than0( src ) ) return axStatus_Std::non_safe_assign;
+			if( ax_less_than0( src ) ) {
+				assert(false);
+				return axStatus_Std::non_safe_assign;
+			}
 		}
 	}else{
 		// signed <<= unsigned
 		if( axTypeOf<SRC>::isUnsigned ) {
-			if( ax_less_than0( tmp ) ) return axStatus_Std::non_safe_assign;	
+			if( ax_less_than0( tmp ) ) {
+				assert(false);
+				return axStatus_Std::non_safe_assign;	
+			}
 		}
 	}
 	//avoid overflow
-	if( src != (SRC) tmp ) return axStatus_Std::non_safe_assign;
+	if( src != (SRC) tmp ) {
+		assert(false);
+		return axStatus_Std::non_safe_assign;
+	}
 	
 	dst = tmp; //done
 	return 0;

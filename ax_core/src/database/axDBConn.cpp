@@ -61,19 +61,6 @@ axStatus	axDBConn_Imp::identifierString( axIStringA & out, const char* sz ) {
 	return out.format("\"{?}\"", tmp );
 }
 
-axStatus	axDBConn_Imp::createStmt ( axDBStmt & stmt, const char * sql ) {
-	axStatus st;
-	if( echoSQL() ) {
-		ax_log("--- CreateStmt SQL: ---\n: {?}\n", sql );
-	}
-	st = onCreateStmt( stmt, sql );		if( !st ) return st;
-
-	if( stmt._getImp() ) {
-		st = stmt._getImp()->sql_.set( sql );	if( !st ) return st;
-	}
-	return 0;
-}
-
 //== create table ==
 axStatus axDBConn::createTable	( const char* table, const axDBColumnList & list ) {
 	axStatus		st;
@@ -158,7 +145,7 @@ axStatus axDBConn_Imp::getSQL_Insert( axIStringA & outSQL, const char* table, co
 	for( size_t i=0; i<list.size(); i++ ) {
 		const axDBColumn & c = list[i];
 
-		if( c.pkey ) continue; //don't insert data to pkey column
+		if( c.pkey_auto_increment ) continue; //don't insert data to pkey_auto_increment column
 
 		if( col > 0 ) {
 			st = outSQL.append(",\n");					if( !st ) return st;
@@ -200,11 +187,11 @@ axStatus axDBConn_Imp::getSQL_Update( axIStringA & outSQL, const char* table, co
 	for( size_t i=0; i<list.size(); i++ ) {
 		const axDBColumn & c = list[i];
 		if( i > 0 ) {
-			st = outSQL.append(",\n");					if( !st ) return st;
+			st = outSQL.append(",\n");						if( !st ) return st;
 		}
 
-		st = identifierString( colName, c.name );		if( !st ) return st;
-		st = outSQL.appendFormat( "  {?}=?", colName );	if( !st ) return st;
+		st = identifierString( colName, c.name );			if( !st ) return st;
+		st = outSQL.appendFormat( "  {?}\t= ?", colName );	if( !st ) return st;
 	}
 
 	st = outSQL.appendFormat("\n  WHERE {?};", szWhere );	if( !st ) return st;

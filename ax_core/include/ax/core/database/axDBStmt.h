@@ -20,10 +20,10 @@ class axDBStmt : public axNonCopyable {
 public:	
 	axDBStmt();
 	
-			axStatus	create			( axDBConn & db, const char* sql );
+							axStatus	create			( axDBConn & db, const char* sql );
 
 							axStatus	create_Insert	( axDBConn & db, const char* table, const axDBColumnList & list );
-		template<class T>	axStatus	create_Insert	( axDBConn & db, const char* table, const char* pkey );
+		template<class T>	axStatus	create_Insert	( axDBConn & db, const char* table, const char* pkey, bool pkey_auto_increment );
 
 		template<class T>	axStatus	create_Update	( axDBConn & db, const char* table,	const char* szWhere );
 		template<class T>	axStatus	create_Select	( axDBConn & db, const char* table,	const char* szWhere );
@@ -47,33 +47,6 @@ protected:
 	axSharedPtr< axDBStmt_Imp >	p_;
 };
 
-//=== insert ===
-template<class T> inline
-axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table, const char* pkey ) {
-    axStatus st;
-	axTempStringA	sql;
-	st = db.getSQL_Insert<T>( sql, table );	if( !st ) return st;
-	return create( db, sql );
-}
-
-//=== update ==
-
-template<class T> inline
-axStatus	axDBStmt::create_Update( axDBConn & db, const char* table, const char* szWhere ) {
-    axStatus st;
-	axTempStringA	sql;
-	st = db.getSQL_Update<T>( sql, table, szWhere );	if( !st ) return st;
-	return create( db, sql );
-}
-
-//=== select ===
-template<class T> inline
-axStatus	axDBStmt::create_Select( axDBConn & db, const char* table, const char* szWhere ) {
-    axStatus st;
-	axTempStringA	sql;
-	st = db.getSQL_Select<T>( sql, table, szWhere );	if( !st ) return st;
-	return create( db, sql );
-}
 
 //==== Implementation ===
 
@@ -109,7 +82,36 @@ public:
 	virtual axStatus	getResultAtCol( axSize col, axTimeStamp		&value )= 0;
 	virtual axStatus	getResultAtCol( axSize col, axDateTime		&value )= 0;
 
-	axStringA	sql_;
+	virtual const char*	sql() = 0;
 };
+
+
+//=== insert ===
+template<class T> inline
+axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table, const char* pkey, bool pkey_auto_increment ) {
+    axStatus st;
+	axTempStringA	sql;
+	st = db.getSQL_Insert<T>( sql, table );	if( !st ) return st;
+	return create( db, sql );
+}
+
+//=== update ==
+
+template<class T> inline
+axStatus	axDBStmt::create_Update( axDBConn & db, const char* table, const char* szWhere ) {
+    axStatus st;
+	axTempStringA	sql;
+	st = db.getSQL_Update<T>( sql, table, szWhere );	if( !st ) return st;
+	return create( db, sql );
+}
+
+//=== select ===
+template<class T> inline
+axStatus	axDBStmt::create_Select( axDBConn & db, const char* table, const char* szWhere ) {
+    axStatus st;
+	axTempStringA	sql;
+	st = db.getSQL_Select<T>( sql, table, szWhere );	if( !st ) return st;
+	return create( db, sql );
+}
 
 #endif //__axDBStmt_h__
