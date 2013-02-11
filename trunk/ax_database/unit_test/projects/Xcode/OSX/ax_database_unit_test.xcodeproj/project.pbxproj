@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EAD5E05F16C6A05D007AB3D1 /* test_axSQLite3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAD5E05E16C6A05D007AB3D1 /* test_axSQLite3.cpp */; };
+		EAC3A05F16C8CA90009F1667 /* test_ax_database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAC3A05E16C8CA90009F1667 /* test_ax_database.cpp */; };
 		EAD5E07116C6A6E8007AB3D1 /* libax_core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAD5E07016C6A6CC007AB3D1 /* libax_core.a */; };
 		EAD5E07216C6A6E8007AB3D1 /* libaxSQLite3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAD5E06916C6A6BB007AB3D1 /* libaxSQLite3.a */; };
 /* End PBXBuildFile section */
@@ -44,7 +44,7 @@
 /* Begin PBXFileReference section */
 		EA37CEC816C69B49004CFE52 /* ax_database_unit_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ax_database_unit_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA8FCDD216C69BD30040D4B9 /* ax_database_unit_test.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ax_database_unit_test.xcconfig; sourceTree = SOURCE_ROOT; };
-		EAD5E05E16C6A05D007AB3D1 /* test_axSQLite3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_axSQLite3.cpp; path = ../../../src/test_axSQLite3.cpp; sourceTree = "<group>"; };
+		EAC3A05E16C8CA90009F1667 /* test_ax_database.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_ax_database.cpp; path = ../../../src/test_ax_database.cpp; sourceTree = "<group>"; };
 		EAD5E06416C6A6BB007AB3D1 /* axSQLite3.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = axSQLite3.xcodeproj; path = ../../../../projects/Xcode/OSX/axSQLite3.xcodeproj; sourceTree = "<group>"; };
 		EAD5E06A16C6A6CC007AB3D1 /* ax_core.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ax_core.xcodeproj; path = ../../../../../ax_core/projects/Xcode/OSX/ax_core.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -67,7 +67,7 @@
 			children = (
 				EAD5E06A16C6A6CC007AB3D1 /* ax_core.xcodeproj */,
 				EAD5E06416C6A6BB007AB3D1 /* axSQLite3.xcodeproj */,
-				EAD5E05E16C6A05D007AB3D1 /* test_axSQLite3.cpp */,
+				EAC3A05E16C8CA90009F1667 /* test_ax_database.cpp */,
 				EA8FCDD216C69BD30040D4B9 /* ax_database_unit_test.xcconfig */,
 				EA37CEC916C69B49004CFE52 /* Products */,
 			);
@@ -175,7 +175,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EAD5E05F16C6A05D007AB3D1 /* test_axSQLite3.cpp in Sources */,
+				EAC3A05F16C8CA90009F1667 /* test_ax_database.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
