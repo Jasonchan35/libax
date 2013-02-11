@@ -33,21 +33,21 @@ int axDBStmt_PostgreSQL::columnType( axSize col ) {
 	Oid oid = PQftype( res_, col );
 	switch( oid ) {
 		case BOOLOID:		return axDB_c_type_bool;
-		case BYTEAOID:		return axDB_c_type_axIByteArray;
-		case CHAROID:		return axDB_c_type_axIStringA;
-		case INT8OID:		return axDB_c_type_int64_t;
-		case INT2OID:		return axDB_c_type_int16_t;
-		case INT4OID:		return axDB_c_type_int32_t;
-		case TEXTOID:		return axDB_c_type_axIStringA;
+		case BYTEAOID:		return axDB_c_type_ByteArray;
+		case CHAROID:		return axDB_c_type_StringA;
+		case INT8OID:		return axDB_c_type_int64;
+		case INT2OID:		return axDB_c_type_int16;
+		case INT4OID:		return axDB_c_type_int32;
+		case TEXTOID:		return axDB_c_type_StringA;
 		case FLOAT4OID:		return axDB_c_type_float;
 		case FLOAT8OID:		return axDB_c_type_double;
-		case BPCHAROID:		return axDB_c_type_axIStringA;
-		case VARCHAROID:	return axDB_c_type_axIStringA;
-		case DATEOID:		return axDB_c_type_axTimeStamp;
-		case TIMEOID:		return axDB_c_type_axTimeStamp;
-		case TIMESTAMPOID:	return axDB_c_type_axTimeStamp;
-		case TIMESTAMPTZOID:return axDB_c_type_axTimeStamp;
-		case TIMETZOID:		return axDB_c_type_axTimeStamp;
+		case BPCHAROID:		return axDB_c_type_StringA;
+		case VARCHAROID:	return axDB_c_type_StringA;
+		case DATEOID:		return axDB_c_type_TimeStamp;
+		case TIMEOID:		return axDB_c_type_TimeStamp;
+		case TIMESTAMPOID:	return axDB_c_type_TimeStamp;
+		case TIMESTAMPTZOID:return axDB_c_type_TimeStamp;
+		case TIMETZOID:		return axDB_c_type_TimeStamp;
 	}
 
 	return axDB_c_type_null;

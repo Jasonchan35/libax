@@ -97,8 +97,10 @@ const char*	axDBConn_MySQL::dbTypeName( int c_type ) {
 		case axDB_c_type_StringW:		return "TEXT";
 
 		case axDB_c_type_ByteArray:		return "BLOB";
-		case axDB_c_type_TimeStamp:		return "TIMESTAMP";
-		case axDB_c_type_DateTime:		return "DATETIME";
+
+		// TIMESTAMP in MySQL is 32bit, so only support ( '1970-01-01 00:00:01' UTC to '2038-01-19 03:14:07' UTC )
+		// therefore we using DATETIME instead ( '1000-01-01 00:00:00' to '9999-12-31 23:59:59'.  )
+		case axDB_c_type_TimeStamp:		return "DATETIME";	
 	}
 	assert( false );
 	return "Unknown";

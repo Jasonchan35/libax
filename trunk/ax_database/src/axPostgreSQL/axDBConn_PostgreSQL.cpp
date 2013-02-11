@@ -41,7 +41,7 @@ axStatus axDBConn_PostgreSQL::connect( const char * dsn ) {
 	return 0;
 }
 
-axStatus axDBConn_PostgreSQL::createStmt( axDBStmt & stmt, const char * sql ) {
+axStatus axDBConn_PostgreSQL::onCreateStmt( axDBStmt & stmt, const char * sql ) {
 	axDBStmt_PostgreSQL* p = new axDBStmt_PostgreSQL( this );
 	if( !p ) return axStatus_Std::not_enough_memory;	
 	stmt._setImp( p );
@@ -75,20 +75,19 @@ axStatus axDBConn_PostgreSQL::getSQL_CreateTable ( axIStringA & outSQL, const ch
 const char*	axDBConn_PostgreSQL::dbTypeName( int c_type ) {
 	switch( c_type ) {
 		case axDB_c_type_bool:
-		case axDB_c_type_int8_t:		return "TINYINT";
-		case axDB_c_type_int16_t:		return "SMALLINT";
-		case axDB_c_type_int32_t:		return "INT";
-		case axDB_c_type_int64_t:		return "BIGINT";
+		case axDB_c_type_int8:		return "SMALLINT";
+		case axDB_c_type_int16:		return "SMALLINT";
+		case axDB_c_type_int32:		return "INTEGER";
+		case axDB_c_type_int64:		return "BIGINT";
 
-		case axDB_c_type_float:			return "FLOAT";
-		case axDB_c_type_double:		return "DOUBLE";
+		case axDB_c_type_float:		return "REAL";
+		case axDB_c_type_double:	return "DOUBLE PRECISION";
 
-		case axDB_c_type_axIStringA:	return "VARCHAR";
-		case axDB_c_type_axIStringW:	return "VARCHAR";
+		case axDB_c_type_StringA:	return "VARCHAR";
+		case axDB_c_type_StringW:	return "VARCHAR";
 
-		case axDB_c_type_axIByteArray:	return "BLOB";
-		case axDB_c_type_axTimeStamp:	return "TIMESTAMP";
-		case axDB_c_type_axDateTime:	return "DATETIME";
+		case axDB_c_type_ByteArray:	return "BLOB";
+		case axDB_c_type_TimeStamp:	return "TIMESTAMP"; //support ( from 4713 BC to 294276 AD )	Resolution( 1 microsecond / 14 digits )
 	}
 	assert( false );
 	return "Unknown";

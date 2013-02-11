@@ -17,16 +17,15 @@ axStatus	axDBParam::toStringFormat( axStringFormat & f ) const {
 
 	switch( type ) {
 		case axDB_c_type_null:			return 0;
-		case axDB_c_type_ByteArray:		return f.format("size={?}", p_ByteArray->size() );
+		case axDB_c_type_ByteArray:		return f.format("size={?}", v_ByteArray->size() );
 
-		case axDB_c_type_TimeStamp:		return f.format("{?}", *p_TimeStamp );
-		case axDB_c_type_DateTime:		return f.format("{?}", *p_DateTime  );
+		case axDB_c_type_TimeStamp:		return f.format("{?}", axTimeStamp( v_TimeStamp ) );
 
-		case axDB_c_type_StringA:		return f.format("[{?}]", p_strA );
-		case axDB_c_type_StringW:		return f.format("[{?}]", p_strW  );
+		case axDB_c_type_StringA:		return f.format("[{?}]", v_strA );
+		case axDB_c_type_StringW:		return f.format("[{?}]", v_strW  );
 
 		#define axTYPE_LIST( NAME ) \
-			case axDB_c_type_##NAME: return f.format("{?}", p_##NAME ); \
+			case axDB_c_type_##NAME: return f.format("{?}", v_##NAME ); \
 		//-----
 			axTYPE_LIST( bool )
 			axTYPE_LIST( float )
