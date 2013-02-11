@@ -92,19 +92,38 @@ axStatus test_ax_database_common( axDBConn & db ) {
 	st = db.dropTableIfExists( table );				if( !st ) return st;
 	st = db.createTable<Row>( table, "id" );		if( !st ) return st;
 
-	{
-		axDBTableAccessor<Row>	tbl;
-		st = tbl.create( db, table );		if( !st ) return st;
+	axDBTableAccessor<Row>	tbl;
+	st = tbl.create( db, table );		if( !st ) return st;
 
+	const size_t n = 00;
+	{	
 		Row	row;
-		for( size_t i=0; i<200; i++ ) {
+
+		axStopWatch	timer;
+		for( size_t i=0; i<n; i++ ) {
 			st = tbl.insert( row );			if( !st ) return st;
 		}
+		ax_log("insert {?} records in {?}s", n, timer.get() );
+	}
 
+	{	
+		Row	row;
+
+		axStopWatch	timer;
+		for( size_t i=0; i<n; i++ ) {
+			row.id = i+1;
+			st = tbl.update( row );			if( !st ) return st;
+		}
+		ax_log("update {?} records in {?}s", n, timer.get() );
+	}
+
+	{
 		axArray< Row >	results;
-		results.reserve( 1000 );
-		st = tbl.selectAll( results );		if( !st ) return st;
+		results.reserve( n );
 
+		axStopWatch	timer;
+		st = tbl.selectAll( results );		if( !st ) return st;
+		ax_log("select {?} records in {?}s", results.size(), timer.get() );
 //		ax_log_var( results );
 	}
 
@@ -114,7 +133,10 @@ axStatus test_ax_database_common( axDBConn & db ) {
 axStatus test_SQLite3() {
 	axStatus st;
 	axDBConn	db;
+
 	st = axSQLite3_open( db, "test.db" );		if( !st ) return st;
+//	st = axSQLite3_openMemory( db );			if( !st ) return st;
+
 	st = test_ax_database_common(db);			if( !st ) return st;
 	return 0;
 }
