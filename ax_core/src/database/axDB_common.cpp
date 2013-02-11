@@ -45,20 +45,26 @@ axStatus	axDBColumnList::toStringFormat( axStringFormat &f ) const {
 	return B::toStringFormat(f);
 }
 
-axDBColumn* axDBColumnList::findColumnByData( void * p ) {
+axDBColumn* axDBColumnList::findColumnByData( void * p, axSize * outIndex ) {
     for( axSize i=0; i<size(); i++ ) {
         axDBColumn &c = at(i);
-        if( c.data == p ) return &c;
+		if( c.data == p ) {
+			if( outIndex ) *outIndex = i;
+			return &c;
+		}
     }
     return NULL;
 }
 
-axDBColumn* axDBColumnList::findColumnByName( const char * p ) {
+axDBColumn* axDBColumnList::findColumnByName( const char * p, axSize * outIndex ) {
 	if( !p ) return NULL;
 
     for( axSize i=0; i<size(); i++ ) {
         axDBColumn &c = at(i);
-        if( c.name.equals(p) ) return &c;
+		if( c.name.equals(p) ) {
+			if( outIndex ) *outIndex = i;
+			return &c;
+		}
     }
     return NULL;
 }

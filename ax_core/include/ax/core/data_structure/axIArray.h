@@ -72,7 +72,10 @@ public:
 
 						bool		isAll		( const T& v ) const;
 						bool		isAny		( const T& v ) const;
+
 						bool		find		( axSize &index, const T& value ) const;
+						axStatus	getIndexOf	( axSize &index, const T& element ) const;
+
 
 	axALWAYS_INLINE(	axStatus	copy		( const axIArray<T> &src ) );
 	axALWAYS_INLINE(	axStatus	onTake		( axIArray<T> &src ) );
@@ -98,7 +101,6 @@ public:
 
 				const	T*			getMin		() const 	{ return ax_array_min( p_, size_ ); }
 				const	T*			getMax		() const	{ return ax_array_max( p_, size_ ); }
-
 
 			//! (element order might be changed) try to swap from tail to prevent large memory copy
 	axALWAYS_INLINE(	axStatus	removeBySwap	( axSize index, axSize count=1 ) );
@@ -267,6 +269,18 @@ bool	axIArray<T>::find	( axSize & index, const T& v ) const {
 	}
 	return false;
 }
+
+template< class T > inline
+axStatus	axIArray<T>::getIndexOf	( axSize &out, const T & element ) const {
+	if( ! size ) return axStatus_Std::not_found;
+	const T* e = &element;
+	if( e < p_ || e >= p_ * size_ ) return axStatus_Std::not_found;
+	size_t x = (e - p_) / sizeof(T);
+	if( p_[x] != e ) return axStatus_Std::not_found;
+	out = x;
+	return 0;
+}
+
 
 template< class T > inline
 axStatus	axIArray<T>::shrink( axSize tolerance ) {

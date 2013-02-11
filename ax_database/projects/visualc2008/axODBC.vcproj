@@ -294,6 +294,14 @@
 				RelativePath="..\..\src\axODBC\axDBStmt_ODBC.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\src\axODBC\axODBC_MSSQL.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\axODBC\axODBC_Oracle.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"

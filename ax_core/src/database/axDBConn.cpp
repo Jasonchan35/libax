@@ -145,7 +145,7 @@ axStatus axDBConn_Imp::getSQL_Insert( axIStringA & outSQL, const char* table, co
 	for( size_t i=0; i<list.size(); i++ ) {
 		const axDBColumn & c = list[i];
 
-		if( c.pkey_auto_increment ) continue; //don't insert data to pkey_auto_increment column
+		if( c.pkey_auto_inc ) continue; //don't insert data to pkey_auto_inc column
 
 		if( col > 0 ) {
 			st = outSQL.append(",\n");					if( !st ) return st;
@@ -155,7 +155,7 @@ axStatus axDBConn_Imp::getSQL_Insert( axIStringA & outSQL, const char* table, co
 		col++;
 	}
 
-	st = outSQL.append( ")\n  VALUES (" );					if( !st ) return st;
+	st = outSQL.append( " )\n  VALUES ( " );			if( !st ) return st;
 
 	for( size_t i=0; i<col; i++ ) {
 		if( i > 0 ) {
@@ -164,7 +164,7 @@ axStatus axDBConn_Imp::getSQL_Insert( axIStringA & outSQL, const char* table, co
 		st = outSQL.append( "?" );						if( !st ) return st;
 	}
 
-	st = outSQL.append(");");							if( !st ) return st;
+	st = outSQL.append(" );");							if( !st ) return st;
 	return 0;
 }
 
@@ -184,14 +184,16 @@ axStatus axDBConn_Imp::getSQL_Update( axIStringA & outSQL, const char* table, co
 
 	st = outSQL.format("UPDATE {?} SET\n", tableName );		if( !st ) return st;
 
+	size_t col = 0;
 	for( size_t i=0; i<list.size(); i++ ) {
 		const axDBColumn & c = list[i];
-		if( i > 0 ) {
+		if( c.pkey_auto_inc ) continue; //MSSQL cannot update pkey_auto_inc column
+		if( col > 0 ) {
 			st = outSQL.append(",\n");						if( !st ) return st;
 		}
-
 		st = identifierString( colName, c.name );			if( !st ) return st;
 		st = outSQL.appendFormat( "  {?}\t= ?", colName );	if( !st ) return st;
+		col++;
 	}
 
 	st = outSQL.appendFormat("\n  WHERE {?};", szWhere );	if( !st ) return st;

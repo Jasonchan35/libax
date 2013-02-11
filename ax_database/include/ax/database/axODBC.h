@@ -5,7 +5,11 @@
 
 class axDBConn;
 
-axStatus axODBC_connect ( axDBConn & conn, const char * dsn );
+axStatus axODBC_connect		( axDBConn & conn, const char * dsn );
+
+axStatus axODBC_MSSQL_connect	( axDBConn & conn, const char * dsn );
+axStatus axODBC_Oracle_connect	( axDBConn & conn, const char * dsn );
+
 
 #ifdef _MSC_VER
 	#pragma comment( lib, "ODBC32.lib" )

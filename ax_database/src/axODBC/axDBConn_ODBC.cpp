@@ -1,5 +1,12 @@
 #include "axDBConn_ODBC.h"
 
+axStatus	axODBC_connect( axDBConn & db, const char* dsn ) {
+	axDBConn_ODBC* p = new axDBConn_ODBC();
+	if( !p ) return axStatus_Std::not_enough_memory;
+	db._setImp(p);
+	return p->connect( dsn );
+}
+
 axDBConn_ODBC::axDBConn_ODBC() {
 	env_ = NULL;
 	dbc_ = NULL;
@@ -45,13 +52,13 @@ axStatus	axDBConn_ODBC::getSQL_CreateTable	( axIStringA & outSQL, const char* ta
 
 		st = identifierString( colName, c.name );		if( !st ) return st;
 
-		if( c.pkey_auto_increment ) {
+		if( c.pkey_auto_inc ) {
 			if( c.type != axDB_c_type_int64 ) {
 				return axStatus_Std::DB_invalid_primary_key_type;
 			}
 			st = outSQL.appendFormat("  {?}\t{?}", colName, "BIGSERIAL" );				if( !st ) return st;
 		}else{
-			st = outSQL.appendFormat("  {?}\t{?}", colName, dbTypeName(c.type) );		if( !st ) return st;
+			st = outSQL.appendFormat("  {?}\t{?}", colName, DBTypeName(c.type) );		if( !st ) return st;
 		}
 
 		if( c.pkey ) {
@@ -65,12 +72,6 @@ axStatus	axDBConn_ODBC::getSQL_CreateTable	( axIStringA & outSQL, const char* ta
 
 }
 
-axStatus	axODBC_connect( axDBConn & db, const char* dsn ) {
-	axDBConn_ODBC* p = new axDBConn_ODBC();
-	if( !p ) return axStatus_Std::not_enough_memory;
-	db._setImp(p);
-	return p->connect( dsn );
-}
 
 axStatus	axDBConn_ODBC::connect	( const char* dsn ) {
 	axStatus st;
@@ -114,10 +115,10 @@ bool axDBConn_ODBC::hasError ( RETCODE code, const char* sql ) {
 	return true;
 }
 
-const char*	axDBConn_ODBC::dbTypeName( int c_type ) {
+const char*	axDBConn_ODBC::DBTypeName( int c_type ) {
 	switch( c_type ) {
 		case axDB_c_type_bool:		return "BOOLEAN";
-		case axDB_c_type_int8:		return "SMALLINT";
+		case axDB_c_type_int8:		return "TINYINT";
 		case axDB_c_type_int16:		return "SMALLINT";
 		case axDB_c_type_int32:		return "INTEGER";
 		case axDB_c_type_int64:		return "BIGINT";
@@ -128,8 +129,10 @@ const char*	axDBConn_ODBC::dbTypeName( int c_type ) {
 		case axDB_c_type_StringA:	return "VARCHAR";
 		case axDB_c_type_StringW:	return "VARCHAR";
 
-		case axDB_c_type_ByteArray:	return "BYTEA";
-		case axDB_c_type_TimeStamp:	return "TIMESTAMP";
+		case axDB_c_type_ByteArray:	return "BINARY VARYING";
+		case axDB_c_type_TimeStamp:	return "DATETIME";
+
+	//	case axDB_c_type_GUID:		return "uniqueidentifier";
 	}
 	assert( false );
 	return "Unknown";

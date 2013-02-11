@@ -22,7 +22,7 @@ public:
 	axStatus	connect	( const char * dsn );
 	void		close	();
 
-	const char*	dbTypeName( int c_type );
+	const char*	DBTypeName( int c_type );
 
 
 	operator PGconn*() { return p_; }

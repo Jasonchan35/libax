@@ -23,9 +23,10 @@ public:
 							axStatus	create			( axDBConn & db, const char* sql );
 
 							axStatus	create_Insert	( axDBConn & db, const char* table, const axDBColumnList & list );
-		template<class T>	axStatus	create_Insert	( axDBConn & db, const char* table, const char* pkey, bool pkey_auto_increment );
+		template<class T>	axStatus	create_Insert	( axDBConn & db, const char* table, const char* pkey = NULL, bool pkey_auto_inc = false );
 
-		template<class T>	axStatus	create_Update	( axDBConn & db, const char* table,	const char* szWhere );
+							axStatus	create_Update	( axDBConn & db, const char* table,	const char* szWhere, const axDBColumnList & list );
+		template<class T>	axStatus	create_Update	( axDBConn & db, const char* table,	const char* szWhere, const char* pkey = NULL, bool pkey_auto_inc = false );
 		template<class T>	axStatus	create_Select	( axDBConn & db, const char* table,	const char* szWhere );
 
 		//	axStatus	exec			( ... )
@@ -88,7 +89,7 @@ public:
 
 //=== insert ===
 template<class T> inline
-axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table, const char* pkey, bool pkey_auto_increment ) {
+axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table, const char* pkey, bool pkey_auto_inc ) {
     axStatus st;
 	axTempStringA	sql;
 	st = db.getSQL_Insert<T>( sql, table );	if( !st ) return st;
@@ -98,10 +99,10 @@ axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table, const char* 
 //=== update ==
 
 template<class T> inline
-axStatus	axDBStmt::create_Update( axDBConn & db, const char* table, const char* szWhere ) {
+axStatus	axDBStmt::create_Update( axDBConn & db, const char* table, const char* szWhere, const char* pkey, bool pkey_auto_inc ) {
     axStatus st;
 	axTempStringA	sql;
-	st = db.getSQL_Update<T>( sql, table, szWhere );	if( !st ) return st;
+	st = db.getSQL_Update<T>( sql, table, szWhere, pkey, pkey_auto_inc );	if( !st ) return st;
 	return create( db, sql );
 }
 

@@ -56,7 +56,7 @@ bool axDBStmt_ODBC::hasError ( RETCODE code ) {
 
 void axDBStmt_ODBC::logError() {
     SQLSMALLINT iRec = 0;
-    SQLINTEGER  iError;
+    SQLINTEGER  iNativeError;
 	const size_t len = 2040;
 	WCHAR       wszMessage[len];
     WCHAR       wszState[SQL_SQLSTATE_SIZE+1];
@@ -64,12 +64,12 @@ void axDBStmt_ODBC::logError() {
 	SQLRETURN ret;
 	for(;;)
     {
-		ret = SQLGetDiagRec( SQL_HANDLE_STMT, stmt_, ++iRec, wszState, &iError, wszMessage, len, NULL );
+		ret = SQLGetDiagRec( SQL_HANDLE_STMT, stmt_, ++iRec, wszState, &iNativeError, wszMessage, len, NULL );
 		if( ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO ) break;
 
 		// Hide data truncated..
 		if( wcsncmp(wszState, L"01004", 5) ) {
-			ax_log("ODBC Error ({?}): {?} {?}\nSQL:{?}\n", wszState, wszMessage, (int)iError, sql_ );
+			ax_log("ODBC Error [{?}] [{?}]: {?}\nSQL:\n{?}\n", wszState, (int)iNativeError, wszMessage, sql_ );
 		}
     }
 }
@@ -118,7 +118,7 @@ axStatus	axDBStmt_ODBC::exec_ParamList	( const axDBParamList & list ) {
 
 			case axDB_c_type_float: {
 				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
-										SQL_C_FLOAT,	SQL_FLOAT,		0, 0, ax_const_cast(&param.v_float),  0, &len );
+										SQL_C_FLOAT,	SQL_REAL,		0, 0, ax_const_cast(&param.v_float),  0, &len );
 			}break;
 
 			case axDB_c_type_double: {
@@ -169,11 +169,12 @@ axStatus	axDBStmt_ODBC::exec_ParamList	( const axDBParamList & list ) {
 				ts->fraction = (unsigned long)( ax_modf( dt.second, &int_part ) * 1000000000 ); //nano-second
 
 				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
-										SQL_C_TYPE_TIMESTAMP, SQL_TYPE_TIMESTAMP,		0, 0, ts, sizeof(*ts), &len );
+										SQL_C_TYPE_TIMESTAMP, SQL_TYPE_TIMESTAMP,		0, 0, ts, 0, &len );
 			}break;
 
 			default: {
 				assert( false );
+				len = SQL_NULL_DATA;
 				return axStatus_Std::DB_invalid_param_type;
 			}break;
 		}

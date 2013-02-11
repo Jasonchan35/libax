@@ -65,13 +65,13 @@ axStatus axDBConn_PostgreSQL::getSQL_CreateTable ( axIStringA & outSQL, const ch
 
 		st = identifierString( colName, c.name );		if( !st ) return st;
 
-		if( c.pkey_auto_increment ) {
+		if( c.pkey_auto_inc ) {
 			if( c.type != axDB_c_type_int64 ) {
 				return axStatus_Std::DB_invalid_primary_key_type;
 			}
 			st = outSQL.appendFormat("  {?}\t{?}", colName, "BIGSERIAL" );				if( !st ) return st;
 		}else{
-			st = outSQL.appendFormat("  {?}\t{?}", colName, dbTypeName(c.type) );		if( !st ) return st;
+			st = outSQL.appendFormat("  {?}\t{?}", colName, DBTypeName(c.type) );		if( !st ) return st;
 		}
 
 		if( c.pkey ) {
@@ -84,7 +84,7 @@ axStatus axDBConn_PostgreSQL::getSQL_CreateTable ( axIStringA & outSQL, const ch
 	return 0;
 }
 
-const char*	axDBConn_PostgreSQL::dbTypeName( int c_type ) {
+const char*	axDBConn_PostgreSQL::DBTypeName( int c_type ) {
 	switch( c_type ) {
 		case axDB_c_type_bool:		return "BOOLEAN";
 		case axDB_c_type_int8:		return "SMALLINT";
