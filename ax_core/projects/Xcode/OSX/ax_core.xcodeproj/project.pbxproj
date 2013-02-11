@@ -163,6 +163,7 @@
 		96D017F5160E4E6500A2682B /* axFilePath.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D017F4160E4E6500A2682B /* axFilePath.h */; };
 		96D09550160F852E00FDA718 /* axStatus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96D0954F160F852E00FDA718 /* axStatus.cpp */; };
 		EA1DC90D161DDC9200FFD681 /* axVec2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA1DC90C161DDC9200FFD681 /* axVec2.cpp */; };
+		EAC3A06516C8CB5B009F1667 /* axDateTime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAC3A06416C8CB5B009F1667 /* axDateTime.cpp */; };
 		EAD5E06316C6A11E007AB3D1 /* axDB_common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAD5E06216C6A11E007AB3D1 /* axDB_common.cpp */; };
 /* End PBXBuildFile section */
 
@@ -337,6 +338,7 @@
 		EAB48F681646CE8500ABDA74 /* axUnitCircle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axUnitCircle.h; sourceTree = "<group>"; };
 		EAB48F6C1646D02E00ABDA74 /* axRoundedRect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRoundedRect.h; sourceTree = "<group>"; };
 		EAB48F6D1646E70D00ABDA74 /* ax_linear_algebra.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_linear_algebra.h; sourceTree = "<group>"; };
+		EAC3A06416C8CB5B009F1667 /* axDateTime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDateTime.cpp; sourceTree = "<group>"; };
 		EAD528AA154405160034A2DD /* libax_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libax_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAD5E06016C6A111007AB3D1 /* axDB_c_type_list.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDB_c_type_list.h; sourceTree = "<group>"; };
 		EAD5E06116C6A111007AB3D1 /* axDBStmt_T.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDBStmt_T.h; sourceTree = "<group>"; };
@@ -357,6 +359,7 @@
 		9632174E155EF2000061BE21 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				EAC3A06316C8CB5B009F1667 /* time */,
 				96D0954D160F852000FDA718 /* common */,
 				9640E1321600A9A100F9D037 /* string */,
 				966A56C315F3BEF300012DCA /* other */,
@@ -741,6 +744,14 @@
 			path = ../../../include/ax;
 			sourceTree = "<group>";
 		};
+		EAC3A06316C8CB5B009F1667 /* time */ = {
+			isa = PBXGroup;
+			children = (
+				EAC3A06416C8CB5B009F1667 /* axDateTime.cpp */,
+			);
+			path = time;
+			sourceTree = "<group>";
+		};
 		EAD5289F154405160034A2DD = {
 			isa = PBXGroup;
 			children = (
@@ -995,6 +1006,7 @@
 				96D09550160F852E00FDA718 /* axStatus.cpp in Sources */,
 				EA1DC90D161DDC9200FFD681 /* axVec2.cpp in Sources */,
 				EAD5E06316C6A11E007AB3D1 /* axDB_common.cpp in Sources */,
+				EAC3A06516C8CB5B009F1667 /* axDateTime.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
