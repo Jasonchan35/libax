@@ -10,7 +10,6 @@ axStatus	axODBC_connect( axDBConn & db, const char* dsn ) {
 axDBConn_ODBC::axDBConn_ODBC() {
 	env_ = NULL;
 	dbc_ = NULL;
-	desc_ = NULL;
 }
 
 axDBConn_ODBC::~axDBConn_ODBC() {
@@ -18,10 +17,6 @@ axDBConn_ODBC::~axDBConn_ODBC() {
 }
 
 void axDBConn_ODBC::close() {
-	if( desc_ ) {
-		SQLFreeHandle( SQL_HANDLE_DESC, desc_ );
-		desc_ = NULL;
-	}
 	if( dbc_ ) {
 		SQLFreeHandle( SQL_HANDLE_DBC, dbc_ );
 		dbc_ = NULL;
@@ -108,19 +103,6 @@ axStatus	axDBConn_ODBC::connect	( const wchar_t* dsn ) {
 	if( hasError(ret) ) {
 		return axStatus_Std::DB_error_connect;
 	}
-
-	ret = SQLAllocHandle( SQL_HANDLE_DESC, dbc_, &desc_ );
-	if( hasError(ret) ) {
-		return axStatus_Std::DB_error_connect;
-	}
-
-
-	//SQLSMALLINT precision = 15;
-	//ret = SQLSetDescField( desc_, 0, SQL_DESC_PRECISION, &precision, 0 );
-	//if( hasError(ret) ) {
-	//	return axStatus_Std::DB_error_connect;
-	//}
-
 	return 0;
 }
 

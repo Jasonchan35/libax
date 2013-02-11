@@ -21,7 +21,6 @@ public:
 
 	SQLHENV		env_;
 	SQLHDBC		dbc_;
-	SQLHDESC	desc_;
 };
 
 
