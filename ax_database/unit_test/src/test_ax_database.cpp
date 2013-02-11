@@ -67,6 +67,8 @@ public:
 		v_StringW.set( L"This is WString" );
 
 		v_TimeStamp.now();
+
+		ax_log_var( v_TimeStamp );
 	}
 
 	axStatus	onTake( Row & src ) {
@@ -157,9 +159,13 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		st = tbl.selectAll( results );		if( !st ) return st;
 		ax_log("select {?} records in {?}s", results.size(), timer.get() );
 
-		if( results.size() ) {
-			ax_log_var( results.last() );
-		}
+		#if 0 // dump last only
+			if( results.size() ) {
+				ax_log_var( results.last() );
+			}
+		#else
+			ax_log_var( results );
+		#endif
 	}
 
 	return 0;

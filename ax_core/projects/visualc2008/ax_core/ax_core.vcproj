@@ -786,6 +786,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\time\axTimeStamp.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\ax\core\time\axTimeStamp.h"
 					>
 				</File>
