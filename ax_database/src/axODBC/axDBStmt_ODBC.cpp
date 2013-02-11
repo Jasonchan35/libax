@@ -36,6 +36,14 @@ axStatus	axDBStmt_ODBC::create ( const char * sql ) {
 		return axStatus_Std::DB_error_prepare_stmtement;
 	}
 
+	SQLSMALLINT	paramCount = 0;
+	ret = SQLNumParams( stmt_, &paramCount );
+	if( hasError( ret ) ) {
+		logError();
+		return axStatus_Std::DB_error_prepare_stmtement;
+	}
+
+	paramCount_ = paramCount;
 	return 0;
 }
 
@@ -154,7 +162,7 @@ axStatus	axDBStmt_ODBC::exec_ParamList	( const axDBParamList & list ) {
 				//using tmpStrData as buffer
 
 				st = tmpStrData[i].resize( sizeof( TIMESTAMP_STRUCT ) );		if( !st ) return st;
-				TIMESTAMP_STRUCT *ts = (TIMESTAMP_STRUCT*) tmpStrData[i]._getInternalBufferPtr();
+				SQL_TIMESTAMP_STRUCT *ts = (TIMESTAMP_STRUCT*) tmpStrData[i]._getInternalBufferPtr();
 
 				axDateTime	dt( param.v_TimeStamp );
 
@@ -165,11 +173,19 @@ axStatus	axDBStmt_ODBC::exec_ParamList	( const axDBParamList & list ) {
 				ts->minute		= dt.minute;
 				ts->second		= (SQLUSMALLINT)dt.second;
 
-				double int_part;
-				ts->fraction = (unsigned long)( ax_modf( dt.second, &int_part ) * 1000000000 ); //nano-second
+				//seems not working on MSSQL
+				//double int_part; 
+				//ts->fraction = (SQLUINTEGER)( ax_modf( dt.second, &int_part ) * 1000000000 ); //nano-second
+				ts->fraction = 0;
 
+				SQLSMALLINT paramType = 0;
+				SQLULEN		paramSize = 0;
+				SQLSMALLINT paramDecimalDigits = 0;
+				SQLSMALLINT paramNullable = 0;
+
+				len = sizeof(SQL_TIMESTAMP_STRUCT);
 				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
-										SQL_C_TYPE_TIMESTAMP, SQL_TYPE_TIMESTAMP,		0, 0, ts, 0, &len );
+					SQL_C_TYPE_TIMESTAMP, SQL_TYPE_TIMESTAMP, 27, 7, ts, 0, &len );
 			}break;
 
 			default: {

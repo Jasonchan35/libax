@@ -207,8 +207,9 @@ axStatus test_ODBC() {
 axStatus test_ODBC_MSSQL() {
 	axStatus st;
 	axDBConn	db;
-	st = axODBC_MSSQL_connect ( db, "DRIVER={SQL Server}; DATABASE=testdb; SERVER=192.168.1.56; UID=test; PWD=1234;");	if( !st ) return st;
-//	st = axODBC_MSSQL_connect ( db, "DRIVER={SQL Server Native Client}; DATABASE=testdb; SERVER=192.168.1.56; UID=test; PWD=1234;");	if( !st ) return st;
+//	st = axODBC_MSSQL_connect ( db, "DRIVER={SQL Server}; DATABASE=testdb; SERVER=192.168.1.56; UID=test; PWD=1234;");	if( !st ) return st;
+	st = axODBC_MSSQL_connect ( db, "DRIVER={SQL Server Native Client 10.0}; "
+									"DATABASE=testdb; SERVER=192.168.1.56; UID=test; PWD=1234;");	if( !st ) return st;
 	st = test_ax_database_common(db);			if( !st ) return st;
 	return 0;
 }
