@@ -137,14 +137,14 @@ axStatus	axDBStmt_ODBC::exec_ParamList	( const axDBParamList & list ) {
 			case axDB_c_type_StringA: {
 				len = SQL_NTS;
 				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
-										SQL_C_CHAR,		SQL_CHAR,		0, 0, ax_const_cast(param.v_strA), 0, &len );
+										SQL_C_CHAR,		SQL_VARCHAR,	0, 0, ax_const_cast(param.v_strA), 0, &len );
 			}break;
 
 			case axDB_c_type_StringW: {
 				st = tmpStrData[i].set( param.v_strW );		if( !st ) return st;
 				len = SQL_NTS;
 				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
-										SQL_C_CHAR,		SQL_CHAR,		0, 0, ax_const_cast(tmpStrData[i].c_str()), 0, &len );
+										SQL_C_CHAR,		SQL_VARCHAR,	0, 0, ax_const_cast(tmpStrData[i].c_str()), 0, &len );
 			}break;
 
 			case axDB_c_type_ByteArray: {
@@ -155,7 +155,7 @@ axStatus	axDBStmt_ODBC::exec_ParamList	( const axDBParamList & list ) {
 					ptr = (uint8_t*)1; // ptr cannot be NULL anyway even size = 0
 				}
 				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
-										SQL_C_BINARY,	SQL_BINARY,		0, 0, ax_const_cast(ptr), 0, &len );
+										SQL_C_BINARY,	SQL_VARBINARY,	0, 0, ax_const_cast(ptr), 0, &len );
 			}break;
 
 			case axDB_c_type_TimeStamp: {
@@ -185,7 +185,7 @@ axStatus	axDBStmt_ODBC::exec_ParamList	( const axDBParamList & list ) {
 
 				len = sizeof(SQL_TIMESTAMP_STRUCT);
 				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
-					SQL_C_TYPE_TIMESTAMP, SQL_TYPE_TIMESTAMP, 27, 7, ts, 0, &len );
+					SQL_C_TYPE_TIMESTAMP, SQL_TYPE_TIMESTAMP, 27, 7, ts, len, &len );
 			}break;
 
 			default: {

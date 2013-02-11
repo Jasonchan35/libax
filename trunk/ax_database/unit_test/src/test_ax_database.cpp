@@ -15,9 +15,9 @@ const size_t numRows = 5;
 	myTEST_TYPE( int64,		int64_t,		int64_t ) \
 \
 	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
-//	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
-//	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
-//	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
+	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
+	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
+	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
 //---------------
 
 
