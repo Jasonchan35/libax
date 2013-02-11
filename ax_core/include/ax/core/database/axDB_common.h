@@ -88,7 +88,8 @@ public:
 
 	axDBParamList&	operator << ( const axDBParam &p ) {
 		if( skipPkeyAtIndex != curIndex ) {
-			axStatus st = append( p );	assert(st);
+			axStatus st;
+			st = append( p );	assert(st);
 		}
 		curIndex++;
 		return *this;
