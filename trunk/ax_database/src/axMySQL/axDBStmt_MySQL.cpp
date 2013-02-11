@@ -38,6 +38,12 @@ void axDBStmt_MySQL::release() {
 axStatus axDBStmt_MySQL::prepare( const char * sql ) {
 	axStatus st;
 	release();
+
+	st = sql_.set( sql );		if( !st ) return st;
+	if( db_->echoSQL() ) {
+		ax_log("--- CreateStmt SQL: ---\n: {?}\n", sql_ );
+	}
+
 	stmt_ = mysql_stmt_init( *db_ );	if( !stmt_ ) return axStatus_Std::not_enough_memory;
 	
 	unsigned long len;
@@ -45,7 +51,7 @@ axStatus axDBStmt_MySQL::prepare( const char * sql ) {
 	
 	int ret = mysql_stmt_prepare( stmt_, sql, len );
 	if( ret != 0 ) {
-		ax_log( "MySQL Stmt Error {?}: {?}", mysql_stmt_errno(stmt_), mysql_stmt_error(stmt_) );
+		ax_log( "MySQL Stmt Error {?}: {?}\nSQL:{?}\n", mysql_stmt_errno(stmt_), mysql_stmt_error(stmt_), sql );
 		return axStatus_Std::DB_error;
 	}
 	
@@ -149,7 +155,7 @@ axStatus axDBStmt_MySQL::exec_ParamList( const axDBParamList & list ) {
 	mysql_stmt_bind_param( stmt_, bind_.ptr() );
 	int ret = mysql_stmt_execute(stmt_);
 	if( ret != 0 ) {
-		ax_log( "MySQL Stmt Error {?}: {?}", mysql_stmt_errno(stmt_), mysql_stmt_error(stmt_) );
+		ax_log( "MySQL Stmt Error {?}: {?}\nSQL:{?}\n", mysql_stmt_errno(stmt_), mysql_stmt_error(stmt_), sql_ );
 		return axStatus_Std::DB_error;
 	}
 		
@@ -377,7 +383,7 @@ axStatus axDBStmt_MySQL::fetch() {
 	}
 
 	if( ret != 0 ) {
-		ax_log( "MySQL Stmt Error {?}: {?}", mysql_stmt_errno(stmt_), mysql_stmt_error(stmt_) );
+		ax_log( "MySQL Stmt Error {?}: {?}\nSQL:{?}\n", mysql_stmt_errno(stmt_), mysql_stmt_error(stmt_), sql_ );
 		return axStatus_Std::DB_error;		
 	}	
 	return 0;

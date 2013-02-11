@@ -23,7 +23,7 @@ axStatus	axDBStmt_PostgreSQL::Result::status() {
 		case PGRES_TUPLES_OK:	return 0;
 		case PGRES_COMMAND_OK:	return 0;
 		default: {
-			ax_log( "PostgreSQL: {?}\n", PQresultErrorMessage( p_ ) );
+			ax_log( "PostgreSQL: {?}SQL:\n{?}\n", PQresultErrorMessage( p_ ), stmt_->sql_ );
 			return axStatus_Std::DB_error;
 		}
 	}
@@ -187,6 +187,11 @@ axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, axTimeStamp	&value ) {
 //virtual	
 axStatus axDBStmt_PostgreSQL::exec_ParamList ( const axDBParamList & list ) {
 	axStatus st;
+
+	if( db_->echoSQL() ) {
+		ax_log("--- ExecSQL: ---\n{?}\n  with Params:{?}\n", sql_, list );
+	}
+
 	res_.colCount_ = 0;
 	res_.rowCount_ = 0;
 
@@ -196,10 +201,10 @@ axStatus axDBStmt_PostgreSQL::exec_ParamList ( const axDBParamList & list ) {
 		
 	st = paramSet_.bindList( list );	if( !st ) return st;
 		
-	res_.set( PQexecPrepared( *db_, stmtName_.c_str(), (int)paramSet_.size(), 
-							(const char* const*)paramSet_.pData.ptr(), 
-							paramSet_.lengths.ptr(), 
-							paramSet_.formats.ptr(), BINARY_FORMAT ) );
+	res_.set( this, PQexecPrepared( *db_, stmtName_.c_str(), (int)paramSet_.size(), 
+									(const char* const*)paramSet_.pData.ptr(), 
+									paramSet_.lengths.ptr(), 
+									paramSet_.formats.ptr(), BINARY_FORMAT ) );
 							
 	st = res_.status();		if( !st ) return st;
 	res_.colCount_ = PQnfields( res_ );
@@ -218,7 +223,7 @@ axStatus axDBStmt_PostgreSQL::doPrepare( const axDBParamList & list ) {
 
 	//using pointer as unique stmt name
 	st = stmtName_.format( "{?}", (void*)this );		if( !st ) return st;
-	rs.set( PQprepare( *db_, stmtName_, sql_, (int)paramSet_.size(), paramSet_.types.ptr() ) );
+	rs.set( this, PQprepare( *db_, stmtName_, sql_, (int)paramSet_.size(), paramSet_.types.ptr() ) );
 	st = rs.status();	
 	if( !st ) {
 		stmtName_.clear();
@@ -236,7 +241,9 @@ axStatus axDBStmt_PostgreSQL::prepare( const char * sql ) {
 	release();
 	axStatus st;
 	st = convertSQL( sql_, sql );	if( !st ) return st;
-//	ax_log( "converted SQL: {?}", sql_ );
+	if( db_->echoSQL() ) {
+		ax_log("--- CreateStmt SQL: ---\n: {?}\n", sql_ );
+	}
 	return 0;
 }
 			  
@@ -252,7 +259,7 @@ void axDBStmt_PostgreSQL::release() {
 	stmtName_.clear();
 	
 	Result rs;
-	rs.set( PQexec( *db_, sql.c_str() ) );
+	rs.set( this, PQexec( *db_, sql.c_str() ) );
 	st = rs.status();	if( !st ) { assert(false); return; }
 }
 			  

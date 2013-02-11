@@ -41,7 +41,7 @@ axStatus axDBConn_PostgreSQL::connect( const char * dsn ) {
 	return 0;
 }
 
-axStatus axDBConn_PostgreSQL::onCreateStmt( axDBStmt & stmt, const char * sql ) {
+axStatus axDBConn_PostgreSQL::createStmt( axDBStmt & stmt, const char * sql ) {
 	axDBStmt_PostgreSQL* p = new axDBStmt_PostgreSQL( this );
 	if( !p ) return axStatus_Std::not_enough_memory;	
 	stmt._setImp( p );
@@ -56,7 +56,7 @@ axStatus axDBConn_PostgreSQL::getSQL_CreateTable ( axIStringA & outSQL, const ch
 	st = identifierString( tableName, table );						if( !st ) return st;
 	st = outSQL.format("CREATE TABLE {?} (\n", tableName );			if( !st ) return st;
 
-	axTempStringA	colName;
+	axStringA	colName;
 
 	for( size_t i=0; i<list.size(); i++ ) {
 		const axDBColumn & c = list[i];
@@ -65,7 +65,20 @@ axStatus axDBConn_PostgreSQL::getSQL_CreateTable ( axIStringA & outSQL, const ch
 		}
 
 		st = identifierString( colName, c.name );		if( !st ) return st;
-		st = outSQL.appendFormat( "  {?}\t{?}", colName, dbTypeName(c.type) );		if( !st ) return st;
+
+		if( c.pkey_auto_increment ) {
+			if( c.type != axDB_c_type_int64 ) {
+				return axStatus_Std::DB_invalid_primary_key_type;
+			}
+			st = outSQL.appendFormat("  {?}\t{?}", colName, "BIGSERIAL" );				if( !st ) return st;
+		}else{
+			st = outSQL.appendFormat("  {?}\t{?}", colName, dbTypeName(c.type) );		if( !st ) return st;
+		}
+
+		if( c.pkey ) {
+			st = outSQL.append(" PRIMARY KEY");
+		}
+
 	}
 
 	st = outSQL.appendFormat( "\n);" );
@@ -74,7 +87,7 @@ axStatus axDBConn_PostgreSQL::getSQL_CreateTable ( axIStringA & outSQL, const ch
 
 const char*	axDBConn_PostgreSQL::dbTypeName( int c_type ) {
 	switch( c_type ) {
-		case axDB_c_type_bool:
+		case axDB_c_type_bool:		return "BOOLEAN";
 		case axDB_c_type_int8:		return "SMALLINT";
 		case axDB_c_type_int16:		return "SMALLINT";
 		case axDB_c_type_int32:		return "INTEGER";
@@ -86,7 +99,7 @@ const char*	axDBConn_PostgreSQL::dbTypeName( int c_type ) {
 		case axDB_c_type_StringA:	return "VARCHAR";
 		case axDB_c_type_StringW:	return "VARCHAR";
 
-		case axDB_c_type_ByteArray:	return "BLOB";
+		case axDB_c_type_ByteArray:	return "BYTEA";
 		case axDB_c_type_TimeStamp:	return "TIMESTAMP"; //support ( from 4713 BC to 294276 AD )	Resolution( 1 microsecond / 14 digits )
 	}
 	assert( false );

@@ -19,7 +19,7 @@ void	axDBStmt::_setImp( axDBStmt_Imp* p ) {
 
 const char*	axDBStmt::sql() {
 	if( !p_ ) return NULL;
-	return p_->sql_;
+	return p_->sql();
 }
 
 axSize		axDBStmt::numColumns	()				{ return p_ ? p_->numColumns() : axSize(0); }

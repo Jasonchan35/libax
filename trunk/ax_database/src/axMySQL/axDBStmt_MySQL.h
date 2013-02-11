@@ -22,7 +22,7 @@ public:
 
 	void release();
 	
-	virtual axStatus	prepare ( const char * sql );	
+			axStatus	prepare ( const char * sql );	
 	virtual	axStatus	exec_ParamList	( const axDBParamList & list );
 
 	virtual axSize		numColumns	()	{ return numColumns_; }
@@ -49,7 +49,10 @@ public:
 	virtual axStatus	getResultAtCol( axSize col, axTimeStamp		&value );
 	virtual axStatus	getResultAtCol( axSize col, axDateTime		&value );
 
+	virtual	const char*	sql	() { return sql_; }
+
 	axSharedPtr< axDBConn_MySQL >	db_;
+	axTempStringA		sql_;
 	MYSQL_STMT* stmt_;
 	
 	axArray< MYSQL_BIND, 32 >		bind_;

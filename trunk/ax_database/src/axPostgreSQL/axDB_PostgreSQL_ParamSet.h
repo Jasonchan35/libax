@@ -29,7 +29,7 @@ public:
 	
 	struct UnionType {
 		union {
-			int8_t	int8_;
+			char	bool_;	//1:true, 0:false in pgSQL
 			int16_t int16_;
 			int32_t int32_;
 			int64_t int64_;
@@ -41,12 +41,12 @@ public:
 		
 	enum { BUF_SIZE = 32 };
 
-	axArray< Oid, BUF_SIZE >				types;
-	axArray< int, BUF_SIZE >				lengths;
-	axArray< int, BUF_SIZE >				formats;
-	axArray< const void*, BUF_SIZE >		pData; //point to strData or uniData
-	axArray< axStringA_<32>, BUF_SIZE >		strData;	
-	axArray< UnionType, BUF_SIZE >			uniData;	
+	axArray< Oid,			BUF_SIZE >		types;
+	axArray< int,			BUF_SIZE >		lengths;
+	axArray< int,			BUF_SIZE >		formats;
+	axArray< const void*,	BUF_SIZE >		pData; //point to strData or uniData
+	axArray< axStringA,		BUF_SIZE >		strData;	
+	axArray< UnionType,		BUF_SIZE >		uniData;	
 };
 
 #endif //__axDB_PostgreSQL_ParamSet_h__

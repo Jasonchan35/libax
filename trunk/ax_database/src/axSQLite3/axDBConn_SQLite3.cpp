@@ -89,12 +89,12 @@ bool axDBConn_SQLite3::hasError( int code, const char* sql ) {
 }
 
 //virtual 
-axStatus axDBConn_SQLite3::onCreateStmt( axDBStmt & stmt, const char* sql ) {
+axStatus axDBConn_SQLite3::createStmt( axDBStmt & stmt, const char* sql ) {
 	axDBStmt_SQLite3* p = new axDBStmt_SQLite3( this );
 	if( !p ) return axStatus_Std::not_enough_memory;	
 	stmt._setImp( p );
 	
-	return p->create( sql );	
+	return p->prepare( sql );	
 }
 
 //virtual	
@@ -117,7 +117,10 @@ axStatus axDBConn_SQLite3::getSQL_CreateTable ( axIStringA & outSQL, const char*
 		st = outSQL.appendFormat( "  {?}\t{?}", colName, dbTypeName(c.type) );		if( !st ) return st;
 
 		if( c.pkey ) {
-			st = outSQL.append( " PRIMARY KEY AUTOINCREMENT" );	if( !st ) return st;
+			st = outSQL.append( " PRIMARY KEY" );					if( !st ) return st;
+			if( c.pkey_auto_increment ) {
+				st = outSQL.append( " AUTOINCREMENT" );				if( !st ) return st;
+			}			
 		}
 	}
 

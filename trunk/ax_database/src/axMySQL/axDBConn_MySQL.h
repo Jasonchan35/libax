@@ -19,7 +19,7 @@ public:
 	axStatus	connect	( const char* db, const char* user, const char* password, const char* host, uint32_t port );
 	void		close	();
 
-	virtual axStatus	onCreateStmt		( axDBStmt & stmt, const char * sql );
+	virtual axStatus	createStmt			( axDBStmt & stmt, const char * sql );
 	virtual	axStatus	getSQL_CreateTable	( axIStringA & outSQL, const char* table, const axDBColumnList & list );
 
 	virtual	axStatus	identifierString	( axIStringA & out, const char* sz );

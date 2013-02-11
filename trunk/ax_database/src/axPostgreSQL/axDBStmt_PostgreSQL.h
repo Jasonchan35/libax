@@ -50,28 +50,30 @@ public:
 	template<class T>
 			axStatus	getValue_number	( axSize col, T & value, Oid oid );
 
+	virtual	const char*	sql	() { return sql_; }
 
 		
 	axStatus doPrepare			( const axDBParamList & list );
 	static	axStatus convertSQL	( axIStringA &out, const char* inSQL );
 			
 	axSharedPtr< axDBConn_PostgreSQL >	db_;
-	axStringA_<32>	stmtName_;
+
+	axTempStringA		sql_;
+	axStringA_<32>		stmtName_;
 		
-	axTempStringA	sql_;
 	axDB_PostgreSQL_ParamSet	paramSet_;
 	
 		
 	class Result : public axNonCopyable {
 	public:
-		Result()  { p_=NULL; curRow_=-1; colCount_=0; rowCount_=0; }
-		virtual ~Result() { release(); }
+		Result()			{ stmt_ = NULL; p_=NULL; curRow_=-1; colCount_=0; rowCount_=0; }
+		virtual ~Result()	{ release(); }
 		
-		axStatus	status();
+				axStatus	status();
 		
-		void set( PGresult* p ) { release(); p_ = p; }	
-		void release() { if( p_ ) { PQclear( p_ ); p_ = NULL; } }
-		
+				void		set		( axDBStmt_PostgreSQL* stmt, PGresult* p )	{ release(); stmt_=stmt; p_ = p; }	
+				void		release	()											{ if( p_ ) { PQclear( p_ ); stmt_ = NULL; p_ = NULL; } }
+				
 		virtual axSize		rowCount() { return (axSize) rowCount_; }
 		virtual axSize		colCount() { return (axSize) colCount_; }
 				
@@ -83,7 +85,9 @@ public:
 		int curRow_;
 		int colCount_;
 		int rowCount_;
+
 	private:
+		axDBStmt_PostgreSQL*	stmt_;
 		PGresult* p_;
 	};
 	Result	res_;
