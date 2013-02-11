@@ -19,8 +19,9 @@ public:
 			
 	virtual	const char*	DBTypeName( int c_type );
 
-	SQLHENV	env_;
-	SQLHDBC	dbc_;
+	SQLHENV		env_;
+	SQLHDBC		dbc_;
+	SQLHDESC	desc_;
 };
 
 
