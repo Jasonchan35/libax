@@ -95,7 +95,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 	axDBTableAccessor<Row>	tbl;
 	st = tbl.create( db, table );		if( !st ) return st;
 
-	const size_t n = 00;
+	const size_t n = 100;
 	{	
 		Row	row;
 
