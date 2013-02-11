@@ -171,21 +171,15 @@ axStatus	axDBStmt_ODBC::exec_ParamList	( const axDBParamList & list ) {
 				ts->day			= dt.day;
 				ts->hour		= dt.hour;
 				ts->minute		= dt.minute;
-				ts->second		= (SQLUSMALLINT)dt.second;
 
-				//seems not working on MSSQL
-				//double int_part; 
-				//ts->fraction = (SQLUINTEGER)( ax_modf( dt.second, &int_part ) * 1000000000 ); //nano-second
-				ts->fraction = 0;
-
-				SQLSMALLINT paramType = 0;
-				SQLULEN		paramSize = 0;
-				SQLSMALLINT paramDecimalDigits = 0;
-				SQLSMALLINT paramNullable = 0;
+				double int_part; 
+				int micro_second = (int)(ax_modf( dt.second, &int_part ) * 1000000); //round to micro-second
+				ts->fraction = (SQLUINTEGER)( micro_second * 1000 ); //nano-second
+				ts->second	 = (SQLUSMALLINT) int_part;
 
 				len = sizeof(SQL_TIMESTAMP_STRUCT);
 				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
-					SQL_C_TYPE_TIMESTAMP, SQL_TYPE_TIMESTAMP, 27, 7, ts, len, &len );
+										SQL_C_TYPE_TIMESTAMP, SQL_TYPE_TIMESTAMP, 27, 7, ts, 0, &len );
 			}break;
 
 			default: {
@@ -412,7 +406,7 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, axDateTime		&value ) {
 	value.day		= ts.day;
 	value.hour		= ts.hour;
 	value.minute	= ts.minute;
-	value.second	= ts.second + (double) ts.fraction / 1000000000.0f;
+	value.second	= ts.second + (double) ts.fraction / 1000000000.0f; ////nano-second
 	return 0; 
 }
 

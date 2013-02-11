@@ -8,7 +8,9 @@ axStatus	axTimeStamp::toStringFormat( axStringFormat &f ) const{
 
 axStatus	axDateTime::toStringFormat( axStringFormat &f ) const{
     // ISO 8601 Date time format
-	return f.format( "{?:04}-{?:02}-{?:02} {?:02}:{?:02}:{?:02}", year, month, day, hour, minute, (int)second );
+	double int_part;
+	double frac_part = ax_modf( second, &int_part );
+	return f.format( "{?:04}-{?:02}-{?:02} {?:02}:{?:02}:{?:02}.{?:03}", year, month, day, hour, minute, (int)int_part, (int)(frac_part*1000) );
 }
 
 
