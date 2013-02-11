@@ -6,6 +6,7 @@ axTYPE_LIST( int64_t )
 #if axTypeHas_long 
 	axTYPE_LIST( long )
 #endif
+
 #if axTypeHas_long_long
 	axTYPE_LIST( long long )
 #endif	

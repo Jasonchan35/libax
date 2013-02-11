@@ -9,24 +9,19 @@
 #include "axDBConn_SQLite3.h"
 #include "axDBStmt_SQLite3.h"
 
-
-
 axStatus axSQLite3_open( axDBConn & conn, const char* filename ) {
 	axStatus st;
-	axDBConn_SQLite3* p = new axDBConn_SQLite3;
-	if( !p ) return axStatus_Std::not_enough_memory;
+	axPtr< axDBConn_SQLite3 > p(st);	if( !st ) return st;
 	conn._setImp( p );
 	return p->openFile( filename );
 }
 
 axStatus axSQLite3_openMemory( axDBConn & conn ) {
 	axStatus st;
-	axDBConn_SQLite3* p = new axDBConn_SQLite3;
-	if( !p ) return axStatus_Std::not_enough_memory;
+	axPtr< axDBConn_SQLite3 > p(st);	if( !st ) return st;
 	conn._setImp( p );
 	return p->openMemory();
 }
-
 	
 axStatus axDBConn_SQLite3::openFile( const char * filename ) {
 #if axOS_WIN
@@ -93,8 +88,7 @@ axStatus axDBConn_SQLite3::createStmt( axDBStmt & stmt, const char* sql ) {
 	axDBStmt_SQLite3* p = new axDBStmt_SQLite3( this );
 	if( !p ) return axStatus_Std::not_enough_memory;	
 	stmt._setImp( p );
-	
-	return p->prepare( sql );	
+	return p->create( sql );	
 }
 
 //virtual	

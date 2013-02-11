@@ -20,9 +20,10 @@ public:
 	axDBStmt_MySQL( axDBConn_MySQL* db );
 	virtual ~axDBStmt_MySQL();
 
-	void release();
 	
-			axStatus	prepare ( const char * sql );	
+			axStatus	create		( const char * sql );	
+			void		destroy		();
+
 	virtual	axStatus	exec_ParamList	( const axDBParamList & list );
 
 	virtual axSize		numColumns	()	{ return numColumns_; }

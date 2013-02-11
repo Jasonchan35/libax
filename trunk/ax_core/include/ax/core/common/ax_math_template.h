@@ -15,10 +15,7 @@ template<class T> inline T ax_sign( T a )					{ if( a == 0 ) return 0; return ax
 #define	axTYPE_LIST(T)\
 	inline T	ax_abs( T  a ) { return a; }
 //-----
-	axTYPE_LIST( uint8_t  )
-	axTYPE_LIST( uint16_t )
-	axTYPE_LIST( uint32_t )
-	axTYPE_LIST( uint64_t )
+	#include "axTypeList_uint.h"
 #undef axTYPE_LIST
 
 template<class T> inline T ax_abs ( T a )       { return a>0 ? a : -a ; } 

@@ -201,7 +201,8 @@ axStatus axDBStmt_PostgreSQL::exec_ParamList ( const axDBParamList & list ) {
 		
 	st = paramSet_.bindList( list );	if( !st ) return st;
 		
-	res_.set( this, PQexecPrepared( *db_, stmtName_.c_str(), (int)paramSet_.size(), 
+	res_.set( this, PQexecPrepared( *db_, stmtName_.c_str(), 
+									(int)paramSet_.size(), 
 									(const char* const*)paramSet_.pData.ptr(), 
 									paramSet_.lengths.ptr(), 
 									paramSet_.formats.ptr(), BINARY_FORMAT ) );
@@ -214,7 +215,7 @@ axStatus axDBStmt_PostgreSQL::exec_ParamList ( const axDBParamList & list ) {
 }
 
 axStatus axDBStmt_PostgreSQL::doPrepare( const axDBParamList & list ) {
-	release();
+	destroy();
 	
 	axStatus st;
 	Result rs;
@@ -227,7 +228,7 @@ axStatus axDBStmt_PostgreSQL::doPrepare( const axDBParamList & list ) {
 	st = rs.status();	
 	if( !st ) {
 		stmtName_.clear();
-		return st;
+		return axStatus_Std::DB_error_prepare_stmtement;
 	}
 
 
@@ -237,21 +238,25 @@ axStatus axDBStmt_PostgreSQL::doPrepare( const axDBParamList & list ) {
 	return 0;	
 }
 
-axStatus axDBStmt_PostgreSQL::prepare( const char * sql ) {
-	release();
+axStatus axDBStmt_PostgreSQL::create( const char * sql ) {
+	destroy();
 	axStatus st;
 	st = convertSQL( sql_, sql );	if( !st ) return st;
 	if( db_->echoSQL() ) {
-		ax_log("--- CreateStmt SQL: ---\n: {?}\n", sql_ );
+		ax_log("--- CreateStmt SQL: ---\n{?}\n", sql_ );
 	}
 	return 0;
 }
+
+axDBStmt_PostgreSQL::axDBStmt_PostgreSQL( axDBConn_PostgreSQL* db ) { 
+	db_.ref( db ); 
+}
 			  
 axDBStmt_PostgreSQL::~axDBStmt_PostgreSQL() {
-	release();
+	destroy();
 }
 			
-void axDBStmt_PostgreSQL::release() {
+void axDBStmt_PostgreSQL::destroy() {
 	if( stmtName_.isEmpty() ) return;
 	axStatus st;
 	axTempStringA	sql;

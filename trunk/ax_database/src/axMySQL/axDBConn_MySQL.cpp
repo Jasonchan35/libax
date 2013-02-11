@@ -11,8 +11,7 @@
 
 axStatus axMySQL_connect ( axDBConn & conn, const char* dbname, const char* user, const char* password, const char* host, uint32_t port ) {
 	axStatus st;
-	axDBConn_MySQL* p = new axDBConn_MySQL;
-	if( !p ) return axStatus_Std::not_enough_memory;
+	axPtr< axDBConn_MySQL > p(st);		if( !st ) return st;
 	conn._setImp( p );
 	return p->connect( dbname, user, password, host, port );
 }
@@ -50,7 +49,7 @@ axStatus axDBConn_MySQL::createStmt	( axDBStmt & stmt, const char * sql ) {
 	axDBStmt_MySQL* p = new axDBStmt_MySQL( this );
 	if( !p ) return axStatus_Std::not_enough_memory;	
 	stmt._setImp( p );
-	return p->prepare( sql );		
+	return p->create( sql );		
 }
 
 

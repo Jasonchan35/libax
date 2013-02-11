@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "axPostgreSQL", "axPostgreSQ
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ax_core", "..\..\..\ax_core\projects\visualc2008\ax_core\ax_core.vcproj", "{0E8DF8EB-5CC3-41EB-8262-23F45ABCD6C9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "axODBC", "axODBC.vcproj", "{21914D66-3E89-4348-B771-78624CD152B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -49,6 +51,14 @@ Global
 		{0E8DF8EB-5CC3-41EB-8262-23F45ABCD6C9}.Release|Win32.Build.0 = Release|Win32
 		{0E8DF8EB-5CC3-41EB-8262-23F45ABCD6C9}.Release|x64.ActiveCfg = Release|x64
 		{0E8DF8EB-5CC3-41EB-8262-23F45ABCD6C9}.Release|x64.Build.0 = Release|x64
+		{21914D66-3E89-4348-B771-78624CD152B2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{21914D66-3E89-4348-B771-78624CD152B2}.Debug|Win32.Build.0 = Debug|Win32
+		{21914D66-3E89-4348-B771-78624CD152B2}.Debug|x64.ActiveCfg = Debug|x64
+		{21914D66-3E89-4348-B771-78624CD152B2}.Debug|x64.Build.0 = Debug|x64
+		{21914D66-3E89-4348-B771-78624CD152B2}.Release|Win32.ActiveCfg = Release|Win32
+		{21914D66-3E89-4348-B771-78624CD152B2}.Release|Win32.Build.0 = Release|Win32
+		{21914D66-3E89-4348-B771-78624CD152B2}.Release|x64.ActiveCfg = Release|x64
+		{21914D66-3E89-4348-B771-78624CD152B2}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
