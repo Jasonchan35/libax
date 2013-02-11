@@ -4,15 +4,41 @@
 
 const size_t numRows = 5;
 
+#define myTEST_TYPE_LIST \
+	myTEST_TYPE( bool,		bool,			bool   ) \
+	myTEST_TYPE( float,		float,			float  ) \
+	myTEST_TYPE( double,	double,			double ) \
+\
+	myTEST_TYPE( int8,		int8_t,			int8_t  ) \
+	myTEST_TYPE( int16,		int16_t,		int16_t ) \
+	myTEST_TYPE( int32,		int32_t,		int32_t ) \
+	myTEST_TYPE( int64,		int64_t,		int64_t ) \
+\
+	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
+//	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
+//	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
+//	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
+//---------------
+
+
 class Row {
 public:
 	int64_t			id;
 
-	#define axDB_c_type_list( NAME, TYPE, C_ITYPE )	\
-		TYPE		v_##NAME; \
-	//----
-		#include <ax/core/database/axDB_c_type_list.h>
-	#undef axDB_c_type_list
+	bool			v_bool;
+	float			v_float;
+	double			v_double;
+
+	int8_t			v_int8;
+	int16_t			v_int16;
+	int32_t			v_int32;
+	int64_t			v_int64;
+
+	axStringA		v_StringA;
+	axStringW		v_StringW;
+
+	axByteArray		v_ByteArray;
+	axTimeStamp		v_TimeStamp;
 
 	Row() {
 		v_bool = false;
@@ -35,7 +61,7 @@ public:
 		v_bool	 = true;
 
 		v_float  = 123.456f;
-		v_double = 789.1234;
+		v_double = 123456789.1234;
 
 		v_StringA.set( "This is String" );
 		v_StringW.set( L"This is WString" );
@@ -48,11 +74,11 @@ public:
 
 		ax_take_macro( id );
 
-		#define axDB_c_type_list( NAME, TYPE, C_ITYPE )	\
+		#define myTEST_TYPE( NAME, TYPE, C_ITYPE )	\
 			ax_take_macro( v_##NAME );
 		//----
-			#include <ax/core/database/axDB_c_type_list.h>
-		#undef axDB_c_type_list
+			myTEST_TYPE_LIST
+		#undef myTEST_TYPE
 
 		return 0;
 	}
@@ -61,11 +87,11 @@ public:
 		axStatus st;
 		st = f.format("\n=== Row id={?} ===", id );
 
-		#define axDB_c_type_list( NAME, TYPE, C_ITYPE )	\
+		#define myTEST_TYPE( NAME, TYPE, C_ITYPE )	\
 			st = f.format("\n  {?} = {?}", "v_"#NAME, v_##NAME );		if( !st ) return st; \
 		//----
-			#include <ax/core/database/axDB_c_type_list.h>
-		#undef axDB_c_type_list
+			myTEST_TYPE_LIST
+		#undef myTEST_TYPE
 
 		return 0;
 	}
@@ -75,11 +101,11 @@ public:
 		axStatus st;
 		ax_io( id );
 
-		#define axDB_c_type_list( NAME, TYPE, C_ITYPE )	\
+		#define myTEST_TYPE( NAME, TYPE, C_ITYPE )	\
 			ax_io( v_##NAME );
 		//----
-			#include <ax/core/database/axDB_c_type_list.h>
-		#undef axDB_c_type_list
+			myTEST_TYPE_LIST
+		#undef myTEST_TYPE
 
 		return 0;
 	}
@@ -98,7 +124,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 	axDBTableAccessor<Row>	tbl;
 	st = tbl.create( db, table );				if( !st ) return st;
 
-	{	
+	{	ax_log("===== insert ======");
 		Row	row;
 		row.testValue();
 
@@ -109,7 +135,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		ax_log("insert {?} records in {?}s", numRows, timer.get() );
 	}
 
-	{	
+	{	ax_log("===== update ======");
 		Row	row;
 		row.testValue();
 
@@ -123,7 +149,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		ax_log("update {?} records in {?}s", numRows, timer.get() );
 	}
 
-	{
+	{	ax_log("===== select all ======");
 		axArray< Row >	results;
 		results.reserve( numRows );
 
@@ -178,13 +204,33 @@ axStatus test_ODBC() {
 	return 0;
 }
 
+axStatus test_ODBC_MSSQL() {
+	axStatus st;
+	axDBConn	db;
+	st = axODBC_MSSQL_connect ( db, "DRIVER={SQL Server}; DATABASE=testdb; SERVER=192.168.1.56; UID=test; PWD=1234;");	if( !st ) return st;
+//	st = axODBC_MSSQL_connect ( db, "DRIVER={SQL Server Native Client}; DATABASE=testdb; SERVER=192.168.1.56; UID=test; PWD=1234;");	if( !st ) return st;
+	st = test_ax_database_common(db);			if( !st ) return st;
+	return 0;
+}
+
+axStatus test_ODBC_Oracle() {
+	axStatus st;
+	axDBConn	db;
+
+	st = axODBC_Oracle_connect ( db, "DRIVER={Oracle}; DATABASE=testdb; SERVER=192.168.1.56; UID=test; PWD=1234;" ); if( !st ) return st;
+	st = test_ax_database_common(db);			if( !st ) return st;
+	return 0;
+}
+
 axStatus test_ax_database() {
 	axStatus st;
 
 //	axUTestCase( test_SQLite3() );
 //	axUTestCase( test_MySQL() );
 //	axUTestCase( test_PostgreSQL() );
-	axUTestCase( test_ODBC() );
+//	axUTestCase( test_ODBC() );
+	axUTestCase( test_ODBC_MSSQL() );
+//	axUTestCase( test_ODBC_Oracle() );
 
 	return 0;
 }

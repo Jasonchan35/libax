@@ -70,11 +70,11 @@ axStatus axDBConn_MySQL::getSQL_CreateTable ( axIStringA & outSQL, const char* t
 		}
 
 		st = identifierString( colName, c.name );					if( !st ) return st;
-		st = outSQL.appendFormat( "  {?}\t{?}", colName, dbTypeName(c.type) );		if( !st ) return st;
+		st = outSQL.appendFormat( "  {?}\t{?}", colName, DBTypeName(c.type) );		if( !st ) return st;
 
 		if( c.pkey ) {
 			st = outSQL.append( " PRIMARY KEY" );					if( !st ) return st;
-			if( c.pkey_auto_increment ) {
+			if( c.pkey_auto_inc ) {
 				st = outSQL.append( " AUTO_INCREMENT" );			if( !st ) return st;
 			}
 		}
@@ -84,7 +84,7 @@ axStatus axDBConn_MySQL::getSQL_CreateTable ( axIStringA & outSQL, const char* t
 	return 0;
 }
 
-const char*	axDBConn_MySQL::dbTypeName( int c_type ) {
+const char*	axDBConn_MySQL::DBTypeName( int c_type ) {
 	switch( c_type ) {
 		case axDB_c_type_bool:			return "TINYINT";
 		case axDB_c_type_int8:			return "TINYINT";

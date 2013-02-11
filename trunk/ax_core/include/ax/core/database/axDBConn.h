@@ -34,7 +34,7 @@ public:
 						axStatus	identifierString		( axIStringA & out, const char* sz );
 
 						axStatus	createTable				( const char* table, const axDBColumnList & list );
-	template<class T>	axStatus	createTable				( const char* table, const char* pkey, bool pkey_auto_increment );
+	template<class T>	axStatus	createTable				( const char* table, const char* pkey = NULL, bool pkey_auto_inc = false );
 	
 			//		TODO
 				//		axStatus	setTableAutoIncrement	( const char* table, int64_t   value );
@@ -45,16 +45,16 @@ public:
 
 //Get SQL String
 						axStatus	getSQL_CreateTable		( axIStringA & outSQL, const char* table, const axDBColumnList & list );
-	template<class T>	axStatus	getSQL_CreateTable		( axIStringA & outSQL, const char* table, const char* pkey, bool pkey_auto_increment );
+	template<class T>	axStatus	getSQL_CreateTable		( axIStringA & outSQL, const char* table, const char* pkey = NULL, bool pkey_auto_inc = false );
 
 						axStatus	getSQL_DropTable		( axIStringA & outSQL, const char* table );
 						axStatus	getSQL_DropTableIfExists( axIStringA & outSQL, const char* table );
 
 						axStatus	getSQL_Insert			( axIStringA & outSQL, const char* table, const axDBColumnList & list );
-	template<class T>	axStatus	getSQL_Insert			( axIStringA & outSQL, const char* table, const char* pkey, bool pkey_auto_increment );
+	template<class T>	axStatus	getSQL_Insert			( axIStringA & outSQL, const char* table, const char* pkey = NULL, bool pkey_auto_inc = false );
 
 						axStatus	getSQL_Update			( axIStringA & outSQL, const char* table, const char* szWhere, const axDBColumnList & list );
-	template<class T>	axStatus	getSQL_Update			( axIStringA & outSQL, const char* table, const char* szWhere );
+	template<class T>	axStatus	getSQL_Update			( axIStringA & outSQL, const char* table, const char* szWhere, const char* pkey = NULL, bool pkey_auto_inc = false );
 
 						axStatus	getSQL_Select			( axIStringA & outSQL, const char* table, const char* szWhere, const axDBColumnList & list );
 	template<class T>	axStatus	getSQL_Select			( axIStringA & outSQL, const char* table, const char* szWhere );
@@ -85,6 +85,8 @@ public:
 	virtual	axStatus	escapeString			( axIStringA & out, const char* sz );
 	virtual	axStatus	identifierString		( axIStringA & out, const char* sz );
 
+	virtual	const char*	DBTypeName				( int c_type ) = 0;
+
 	virtual axStatus	createStmt				( axDBStmt & stmt, const char * sql ) = 0;
 
 	virtual	axStatus	getSQL_CreateTable		( axIStringA & outSQL, const char* table, const axDBColumnList & list ) = 0;
@@ -101,37 +103,37 @@ public:
 
 //==== create table ==
 template<class T> inline
-axStatus	axDBConn::createTable	( const char* table, const char* pkey, bool pkey_auto_increment ) {
+axStatus	axDBConn::createTable	( const char* table, const char* pkey, bool pkey_auto_inc ) {
 	axStatus st;
 	axDBColumnList	list;
-	st = list.build<T>( pkey, pkey_auto_increment );		if( !st ) return st;
+	st = list.build<T>( pkey, pkey_auto_inc );		if( !st ) return st;
 	return createTable( table, list );
 }
 
 //== create table ==
 template<class T> inline
-axStatus	axDBConn::getSQL_CreateTable( axIStringA & outSQL, const char* table, const char* pkey, bool pkey_auto_increment ) {
+axStatus	axDBConn::getSQL_CreateTable( axIStringA & outSQL, const char* table, const char* pkey, bool pkey_auto_inc ) {
 	axStatus st;
 	axDBColumnList	list;
-	st = list.build<T>( pkey, pkey_auto_increment );		if( !st ) return st;
+	st = list.build<T>( pkey, pkey_auto_inc );		if( !st ) return st;
 	return getSQL_CreateTable( outSQL, table, list );
 }
 
 //== insert ==
 template<class T> inline
-axStatus	axDBConn::getSQL_Insert( axIStringA & outSQL, const char* table, const char* pkey, bool pkey_auto_increment ) {
+axStatus	axDBConn::getSQL_Insert( axIStringA & outSQL, const char* table, const char* pkey, bool pkey_auto_inc ) {
 	axStatus st;
 	axDBColumnList	list;
-	st = list.build<T>( pkey, pkey_auto_increment );		if( !st ) return st;
+	st = list.build<T>( pkey, pkey_auto_inc );		if( !st ) return st;
 	return getSQL_Insert( outSQL, table, list );
 }
 
 //== update ==
 template<class T> inline
-axStatus	axDBConn::getSQL_Update( axIStringA & outSQL, const char* table, const char* szWhere ) {
+axStatus	axDBConn::getSQL_Update( axIStringA & outSQL, const char* table, const char* szWhere, const char* pkey, bool pkey_auto_inc ) {
 	axStatus st;
 	axDBColumnList	list;
-	st = list.build<T>( NULL, false );		if( !st ) return st;
+	st = list.build<T>( pkey, pkey_auto_inc );		if( !st ) return st;
 	return getSQL_Update( outSQL, table, szWhere, list );
 }
 

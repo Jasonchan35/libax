@@ -27,7 +27,7 @@ public:
 	operator sqlite3* () { return p_; }
 			
 
-	const char*	dbTypeName( int c_type );
+	const char*	DBTypeName( int c_type );
 
 	sqlite3* p_;
 };

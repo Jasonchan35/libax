@@ -17,7 +17,7 @@ public:
 			
 			bool		hasError	( RETCODE code, const char* sql = NULL );
 			
-	const char*	dbTypeName( int c_type );
+	virtual	const char*	DBTypeName( int c_type );
 
 	SQLHENV	env_;
 	SQLHDBC	dbc_;

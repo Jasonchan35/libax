@@ -108,11 +108,11 @@ axStatus axDBConn_SQLite3::getSQL_CreateTable ( axIStringA & outSQL, const char*
 		}
 
 		st = identifierString( colName, c.name );		if( !st ) return st;
-		st = outSQL.appendFormat( "  {?}\t{?}", colName, dbTypeName(c.type) );		if( !st ) return st;
+		st = outSQL.appendFormat( "  {?}\t{?}", colName, DBTypeName(c.type) );		if( !st ) return st;
 
 		if( c.pkey ) {
 			st = outSQL.append( " PRIMARY KEY" );					if( !st ) return st;
-			if( c.pkey_auto_increment ) {
+			if( c.pkey_auto_inc ) {
 				st = outSQL.append( " AUTOINCREMENT" );				if( !st ) return st;
 			}			
 		}
@@ -122,7 +122,7 @@ axStatus axDBConn_SQLite3::getSQL_CreateTable ( axIStringA & outSQL, const char*
 	return 0;
 }
 
-const char*	axDBConn_SQLite3::dbTypeName( int c_type ) {
+const char*	axDBConn_SQLite3::DBTypeName( int c_type ) {
 	switch( c_type ) {
 		case axDB_c_type_bool:
 		case axDB_c_type_int8:

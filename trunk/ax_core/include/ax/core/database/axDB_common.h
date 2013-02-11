@@ -78,7 +78,7 @@ public:
 
 class axDBParamList : public axArray< axDBParam, axDB_kArgListLocalBufSize > {
 public:
-	axDBParamList() : skipPkeyAtIndex(-1) {}
+	axDBParamList() : skipPkeyAtIndex_(-1) {}
 
 	axDBParamList&	operator << ( const axDBParam_CB &p ) {
 		p.func( *this, p.data );
@@ -86,7 +86,7 @@ public:
 	}
 
 	axDBParamList&	operator << ( const axDBParam &p ) {
-		if( skipPkeyAtIndex != curIndex ) {
+		if( skipPkeyAtIndex_ != curIndex ) {
 			axStatus st;
 			st = append( p );	assert(st);
 		}
@@ -95,12 +95,19 @@ public:
 	}
 
 	template<class T>
+	axStatus build( T &v, size_t skipPkeyAtIndex = -1 ) {
+		curIndex = 0;
+		skipPkeyAtIndex_ = skipPkeyAtIndex;
+		return io( v, NULL );
+	}
+
+	template<class T>
 	axStatus io( T &v, const char* name ) {
 		axDBParamList_io( *this, v );	return 0;
 	}
 
 	axSize	curIndex;
-	axSize	skipPkeyAtIndex;
+	axSize	skipPkeyAtIndex_;
 };
 
 inline void axDBParamList_io( axDBParamList & list, bool				v ) { axDBParam p( axDB_c_type_bool		);	p.v_bool	=v;	list<<(p); }
@@ -219,7 +226,7 @@ public:
 	axDBColumn() 
 		: type(axDB_c_type_null)
 		, pkey(false)
-		, pkey_auto_increment(false)
+		, pkey_auto_inc(false)
 		, data(NULL)
 	{}
 	
@@ -239,7 +246,7 @@ public:
 	int					type;
 	axStringA_<64>		name;
 	bool				pkey;
-	bool				pkey_auto_increment;
+	bool				pkey_auto_inc;
     void*               data;
 };
 
@@ -254,25 +261,27 @@ public:
 	}
 
 	template<class T>
-	axStatus	build( const char* pkey, bool pkey_auto_increment ) {
+	axStatus	build( const char* pkey, bool pkey_auto_inc ) {
 		T	t;
 		axStatus st = io( t, NULL );		if( !st ) return st;
 		axDBColumn* c = findColumnByName( pkey );
 		if( c ) {
 			c->pkey = true;
-			if( pkey_auto_increment ) c->pkey_auto_increment = true;
+			if( pkey_auto_inc ) c->pkey_auto_inc = true;
 		}
 		return 0;
 	}
 
-	template<class T, class PKey, PKey T::*PKeyMember, bool pkey_auto_increment >
-	axStatus	_build() {
+	template<class T, class PKey, PKey T::*PKeyMember, bool pkey_auto_inc >
+	axStatus	_build( axSize * outPKeyIndex ) {
 		T	t;
 		axStatus st = io( t, NULL );		if( !st ) return st;
-		axDBColumn* c = findColumnByData( &(t.*PKeyMember) );
+		PKey & p = t.*PKeyMember;
+
+		axDBColumn* c = findColumnByData( &p, outPKeyIndex );
 		if( c ) {
 			c->pkey = true;
-			if( pkey_auto_increment ) c->pkey_auto_increment = true;
+			c->pkey_auto_inc = pkey_auto_inc;
 		}
 		return 0;
 	}
@@ -300,8 +309,8 @@ public:
 	}
 
 	axStatus	toStringFormat		( axStringFormat &f ) const;
-    axDBColumn* findColumnByData	( void * p );
-    axDBColumn* findColumnByName	( const char * p );
+    axDBColumn* findColumnByData	(		void * p, axSize * outIndex = NULL );
+    axDBColumn* findColumnByName	( const char * p, axSize * outIndex = NULL );
 
 	const char* prefix;
 };

@@ -26,7 +26,7 @@ public:
 		
 	operator MYSQL* () { return &p_; }
 	
-	const char*	dbTypeName( int c_type );
+	const char*	DBTypeName( int c_type );
 
 	MYSQL	p_;
 };

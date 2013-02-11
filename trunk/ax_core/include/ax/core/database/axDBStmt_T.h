@@ -4,33 +4,26 @@
 #include "axDBStmt.h"
 
 
-template<class T, class PKey=int64_t, PKey T::*PKeyMember=&T::id, bool pkey_auto_increment=true >
+template<class T, class PKey=int64_t, PKey T::*PKeyMember=&T::id, bool pkey_auto_inc=true >
 class axDBStmt_Insert {
 public:
 	axDBStmt_Insert() : pkeyIndex(-1) {}
 
 	axStatus	create	( axDBConn & db, const char* table ) {
 		axStatus st;
-
 		axDBColumnList	list;
-		st = list._build<T, PKey, PKeyMember, pkey_auto_increment >();		if( !st ) return st;
 
 		pkeyIndex = -1;
-		for( size_t i=0; i<list.size(); i++ ) {
-			if( list[i].pkey ) {
-				pkeyIndex = i;
-				break;
-			}
-		}
+		st = list._build<T, PKey, PKeyMember, pkey_auto_inc >( &pkeyIndex );
+		if( !st ) return st;
 
 		st = stmt_.create_Insert( db, table, list );	if( !st ) return st;
 		return 0;
 	}
 	axStatus	exec( const T & values ) {
-		axDBParamList	list;
 		axStatus st;
-		list.skipPkeyAtIndex = pkeyIndex;
-		st = list.io( values, NULL );					if( !st ) return st;
+		axDBParamList	list;
+		st = list.build( values, pkeyIndex );			if( !st ) return st;
 		return stmt_.exec_ParamList( list );
 	}
 
@@ -41,24 +34,37 @@ private:
 	axSize		pkeyIndex;
 };
 
-template<class T, class PKey=int64_t, PKey T::*PKeyMember=&T::id>
+template<class T, class PKey=int64_t, PKey T::*PKeyMember=&T::id, bool pkey_auto_inc=true >
 class axDBStmt_Update {
 public:
 	axStatus	create	( axDBConn & db, const char* table ) {
 		axStatus st;
-		axStringA wherePKey;
-		st = db.getWherePKey<T,PKey,PKeyMember>( wherePKey );	if( !st ) return st;
-		st = stmt_.create_Update<T>( db, table, wherePKey );	if( !st ) return st;
+		axDBColumnList	list;
+
+		pkeyIndex = -1;
+		st = list._build<T, PKey, PKeyMember, pkey_auto_inc >( &pkeyIndex );
+		if( !st ) return st;
+
+		axStringA whereStr;
+		st = db.getWherePKey<T,PKey,PKeyMember>( whereStr );		if( !st ) return st;
+
+		st = stmt_.create_Update( db, table, whereStr, list );		if( !st ) return st;
 		return 0;
 	}
 	axStatus	exec( const T & values ) {
-		return stmt_.exec( values, values.*PKeyMember );
+		axStatus st;
+		axDBParamList	list;
+		st = list.build( values, pkeyIndex );			if( !st ) return st;
+		//add param for "where pkey=?"
+		st = list.io( values.*PKeyMember, NULL );		if( !st ) return st;
+		return stmt_.exec_ParamList( list );
 	}
 
 	const char*	sql	() { return stmt_.sql(); }
 
 private:
 	axDBStmt	stmt_;
+	axSize		pkeyIndex;
 };
 
 
@@ -67,9 +73,9 @@ class axDBStmt_Select {
 public:
 	axStatus	create	( axDBConn & db, const char* table ) {
 		axStatus st;
-		axStringA wherePKey;
-		st = db.getWherePKey<T,PKey,PKeyMember>( wherePKey );	if( !st ) return st;
-		st = stmt_.create_Select<T>( db, table, wherePKey );	if( !st ) return st;
+		axStringA whereStr;
+		st = db.getWherePKey<T,PKey,PKeyMember>( whereStr );	if( !st ) return st;
+		st = stmt_.create_Select<T>( db, table, whereStr );	if( !st ) return st;
 		return 0;
 	}
 	axStatus	exec( T & values, const PKey &pkey ) {
@@ -121,7 +127,7 @@ private:
 
 
 
-template<class T, class PKey=int64_t, PKey T::*PKeyMember=&T::id, bool pkey_auto_increment=true>
+template<class T, class PKey=int64_t, PKey T::*PKeyMember=&T::id, bool pkey_auto_inc=true>
 class axDBTableAccessor {
 public:
 	/*
@@ -157,8 +163,8 @@ public:
 	axDBStmt_SelectAll< T >		stmtSelectAll;
 	
 private:
-	axDBStmt_Insert< T, PKey, PKeyMember, pkey_auto_increment > stmtInsert;
-	axDBStmt_Update< T, PKey, PKeyMember > stmtUpdate;
+	axDBStmt_Insert< T, PKey, PKeyMember, pkey_auto_inc > stmtInsert;
+	axDBStmt_Update< T, PKey, PKeyMember, pkey_auto_inc > stmtUpdate;
 	axDBStmt_Select< T, PKey, PKeyMember > stmtSelect;
 	axPtr<axDBConn> 	db_;
 	axStringA			table_;
