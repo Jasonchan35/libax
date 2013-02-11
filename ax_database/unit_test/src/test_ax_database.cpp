@@ -2,10 +2,7 @@
 
 #include <ax/ax_unit_test.h>
 
-#include <ax/database/axSQLite3.h>
-#include <ax/database/axMySQL.h>
-#include <ax/database/axPostgreSQL.h>
-
+const size_t numRows = 5;
 
 class Row {
 public:
@@ -18,6 +15,16 @@ public:
 	#undef axDB_c_type_list
 
 	Row() {
+		v_bool = false;
+		v_int8 = 0;
+		v_int16 = 0;
+		v_int32 = 0;
+		v_int64 = 0;
+		v_float = 0;
+		v_double = 0;
+	}
+
+	void testValue() {
 		id = -1;
 
 		v_int8  = 8;
@@ -32,11 +39,6 @@ public:
 
 		v_StringA.set( "This is String" );
 		v_StringW.set( L"This is WString" );
-
-		v_ByteArray.resize( 10 );
-		for( size_t i=0; i<v_ByteArray.size(); i++ ) {
-			v_ByteArray[i] = i;
-		}
 
 		v_TimeStamp.now();
 	}
@@ -86,8 +88,7 @@ public:
 axStatus test_ax_database_common( axDBConn & db ) {
 	axStatus st;
 
-//	db.setEchoSQL( true );
-	const size_t numRows = 10000;
+	db.setEchoSQL( true );
 
 	const char* table = "unitTestTable01";
 
@@ -95,26 +96,29 @@ axStatus test_ax_database_common( axDBConn & db ) {
 	st = db.createTable<Row>( table, "id", true );		if( !st ) return st;
 
 	axDBTableAccessor<Row>	tbl;
-	st = tbl.create( db, table );		if( !st ) return st;
+	st = tbl.create( db, table );				if( !st ) return st;
 
 	{	
 		Row	row;
+		row.testValue();
 
 		axStopWatch	timer;
 		for( size_t i=0; i<numRows; i++ ) {
-			row.v_bool = (i % 2 == 0);
-			st = tbl.insert( row );			if( !st ) return st;
+			st = tbl.insert( row );				if( !st ) return st;
 		}
 		ax_log("insert {?} records in {?}s", numRows, timer.get() );
 	}
 
 	{	
 		Row	row;
+		row.testValue();
 
 		axStopWatch	timer;
 		for( size_t i=0; i<numRows; i++ ) {
 			row.id = i+1;
-			st = tbl.update( row );			if( !st ) return st;
+			row.v_bool = (i % 2 == 1);
+			st = tbl.update( row );					if( !st ) return st;
+			st = row.v_ByteArray.append(i);			if( !st ) return st;
 		}
 		ax_log("update {?} records in {?}s", numRows, timer.get() );
 	}
@@ -126,12 +130,16 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		axStopWatch	timer;
 		st = tbl.selectAll( results );		if( !st ) return st;
 		ax_log("select {?} records in {?}s", results.size(), timer.get() );
-		//ax_log_var( results );
+
+		if( results.size() ) {
+			ax_log_var( results.last() );
+		}
 	}
 
 	return 0;
 }
 
+#include <ax/database/axSQLite3.h>
 axStatus test_SQLite3() {
 	axStatus st;
 	axDBConn	db;
@@ -143,6 +151,7 @@ axStatus test_SQLite3() {
 	return 0;
 }
 
+#include <ax/database/axMySQL.h>
 axStatus test_MySQL() {
 	axStatus st;
 	axDBConn	db;
@@ -151,7 +160,7 @@ axStatus test_MySQL() {
 	return 0;
 }
 
-
+#include <ax/database/axPostgreSQL.h>
 axStatus test_PostgreSQL() {
 	axStatus st;
 	axDBConn	db;
@@ -160,14 +169,22 @@ axStatus test_PostgreSQL() {
 	return 0;
 }
 
-
+#include <ax/database/axODBC.h>
+axStatus test_ODBC() {
+	axStatus st;
+	axDBConn	db;
+	st = axODBC_connect ( db, "DRIVER={PostgreSQL ANSI}; DATABASE=testdb; SERVER=localhost;  PORT=5432;UID=test; PWD=1234;" );	if( !st ) return st;
+	st = test_ax_database_common(db);			if( !st ) return st;
+	return 0;
+}
 
 axStatus test_ax_database() {
 	axStatus st;
 
 //	axUTestCase( test_SQLite3() );
 //	axUTestCase( test_MySQL() );
-	axUTestCase( test_PostgreSQL() );
+//	axUTestCase( test_PostgreSQL() );
+	axUTestCase( test_ODBC() );
 
 	return 0;
 }

@@ -29,14 +29,14 @@ public:
 	
 	struct UnionType {
 		union {
-			char	bool_;	//1:true, 0:false in pgSQL
-			int16_t int16_;
-			int32_t int32_;
-			int64_t int64_;
-			double	double_;
-			float	float_;
+			int8_t		bool_as_int8;	//1:true, 0:false in pgSQL
+			int16_t		int16_;
+			int32_t		int32_;
+			int64_t		int64_;
+			double		double_;
+			float		float_;
 		};
-		axStatus	onTake( UnionType &src ) { int64_ = src.int64_; return 0; }
+		axStatus	onTake( UnionType &src ) { *this = src; return 0; }
 	};
 		
 	enum { BUF_SIZE = 32 };

@@ -14,7 +14,11 @@ axDBStmt_SQLite3::axDBStmt_SQLite3( axDBConn_SQLite3* db ) {
 	stmt_ = NULL;
 }
 
-void axDBStmt_SQLite3::releaseStmt() {
+axDBStmt_SQLite3::~axDBStmt_SQLite3() {
+	destroy();
+}
+
+void axDBStmt_SQLite3::destroy() {
 	if( stmt_ ) {
 		sqlite3_finalize( stmt_ );
 		stmt_ = NULL;
@@ -130,24 +134,24 @@ axStatus axDBStmt_SQLite3::fetch () {
 	return 0;
 }
 
-axStatus axDBStmt_SQLite3::prepare ( const char * sql ) {
+axStatus axDBStmt_SQLite3::create ( const char * sql ) {
 	axStatus st;
-	releaseStmt();
+	destroy();
 
 	st = sql_.set( sql );		if( !st ) return st;
 	if( db_->echoSQL() ) {
-		ax_log("--- CreateStmt SQL: ---\n: {?}\n", sql_ );
+		ax_log("--- CreateStmt SQL: ---\n{?}\n", sql_ );
 	}
 
 	const char* remainSQL = NULL;
 	int ret = sqlite3_prepare( *db_, sql, -1, &stmt_, &remainSQL );
 	if( db_->hasError(ret, sql) ) {
-		return axStatus_Std::DB_error;
+		return axStatus_Std::DB_error_prepare_stmtement;
 	}
 	
 	if( ax_strchrs( remainSQL, "\t\r\n " ) ) {
 		ax_log("cannot contain multiple commands into a prepared statement");
-		return axStatus_Std::DB_error;
+		return axStatus_Std::DB_error_prepare_stmtement;
 	}
 
 	return 0;

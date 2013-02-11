@@ -10,7 +10,3 @@ axTYPE_LIST( uint64_t )
 #if axTypeHas_long_long
 	axTYPE_LIST( unsigned long long )
 #endif
-
-#ifdef axOS_WIN
-	axTYPE_LIST(DWORD)
-#endif

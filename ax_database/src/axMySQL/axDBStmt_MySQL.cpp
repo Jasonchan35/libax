@@ -19,10 +19,10 @@ axDBStmt_MySQL::axDBStmt_MySQL( axDBConn_MySQL* db ) {
 }
 
 axDBStmt_MySQL::~axDBStmt_MySQL() {
-	release();
+	destroy();
 }
 
-void axDBStmt_MySQL::release() {
+void axDBStmt_MySQL::destroy() {
 	if( col_meta_ ) {
 		mysql_free_result( col_meta_ );
 		col_meta_ = NULL;
@@ -35,16 +35,16 @@ void axDBStmt_MySQL::release() {
 	}
 }
 
-axStatus axDBStmt_MySQL::prepare( const char * sql ) {
+axStatus axDBStmt_MySQL::create( const char * sql ) {
 	axStatus st;
-	release();
+	destroy();
 
-	st = sql_.set( sql );		if( !st ) return st;
+	st = sql_.set( sql );					if( !st ) return st;
 	if( db_->echoSQL() ) {
-		ax_log("--- CreateStmt SQL: ---\n: {?}\n", sql_ );
+		ax_log("--- CreateStmt SQL: ---\n{?}\n", sql_ );
 	}
 
-	stmt_ = mysql_stmt_init( *db_ );	if( !stmt_ ) return axStatus_Std::not_enough_memory;
+	stmt_ = mysql_stmt_init( *db_ );		if( !stmt_ ) return axStatus_Std::not_enough_memory;
 	
 	unsigned long len;
 	st = ax_safe_assign( len, ax_strlen( sql ) );
@@ -52,7 +52,7 @@ axStatus axDBStmt_MySQL::prepare( const char * sql ) {
 	int ret = mysql_stmt_prepare( stmt_, sql, len );
 	if( ret != 0 ) {
 		ax_log( "MySQL Stmt Error {?}: {?}\nSQL:{?}\n", mysql_stmt_errno(stmt_), mysql_stmt_error(stmt_), sql );
-		return axStatus_Std::DB_error;
+		return axStatus_Std::DB_error_prepare_stmtement;
 	}
 	
 	columns_ = 0;
@@ -140,7 +140,7 @@ axStatus axDBStmt_MySQL::exec_ParamList( const axDBParamList & list ) {
 				mysqlTime->second	= (int)dt.second;
 				mysqlTime->neg		= 0;
 				double int_part;
-				mysqlTime->second_part = (unsigned long)ax_modf( dt.second, &int_part ) * 1000000; //microsecond
+				mysqlTime->second_part = (unsigned long)( ax_modf( dt.second, &int_part ) * 1000000 ); //microsecond
 
 				b.buffer_type = MYSQL_TYPE_DATETIME;
 				b.buffer      = mysqlTime;

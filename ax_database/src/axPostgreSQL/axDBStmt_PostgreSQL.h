@@ -15,11 +15,12 @@ class axDBConn_PostgreSQL;
 
 class axDBStmt_PostgreSQL : public axDBStmt_Imp {
 public:
-	axDBStmt_PostgreSQL( axDBConn_PostgreSQL* db ) { db_.ref( db ); }
-	~axDBStmt_PostgreSQL();
-	void release();
+	axDBStmt_PostgreSQL( axDBConn_PostgreSQL* db );
+	virtual	~axDBStmt_PostgreSQL();
 	
-	virtual axStatus	prepare ( const char * sql );	
+	
+			axStatus	create		( const char * sql );	
+			void		destroy		();
 	virtual	axStatus	exec_ParamList	( const axDBParamList & list );	
 
 

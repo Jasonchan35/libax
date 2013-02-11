@@ -1,42 +1,29 @@
-//
-//  axDBStmt_SQLite3.h
-//  axDB_SQLite3
-//
-//  Created by Jason on 16/07/2011.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
-//
-
-#ifndef __axDBStmt_SQLite3_h__
-#define __axDBStmt_SQLite3_h__
+#ifndef __axDBStmt_ODBC_h__
+#define __axDBStmt_ODBC_h__
 
 #include <ax/ax_core.h>
 
-#if axOS_WIN
-	#include "../../external/sqlite3/sqlite3.h"
-#else
-	#include <sqlite3.h>
-#endif
+#include <sql.h>
+#include <sqlext.h>
 
+class axDBConn_ODBC;
 
-class axDBConn_SQLite3;
-
-class axDBStmt_SQLite3 : public axDBStmt_Imp {
+class axDBStmt_ODBC : public axDBStmt_Imp {
 public:
-	axDBStmt_SQLite3( axDBConn_SQLite3* db );
-	virtual ~axDBStmt_SQLite3();
+	axDBStmt_ODBC( axDBConn_ODBC* db );
+	virtual ~axDBStmt_ODBC();
 	
-						axStatus	create		( const char * sql );	
-						void		destroy		();
+						 axStatus	create		( const char * sql );	
+						 void		destroy		();
 
 				virtual	axStatus	exec_ParamList	( const axDBParamList & list );
 
-				virtual axSize		numColumns	() { return numColumns_; }
+				virtual axSize		numColumns	() { return columnInfo.size(); }
 				virtual int			columnType	( axSize col );
 				virtual const char* columnName	( axSize col );
 				
 				virtual	axStatus	fetch			();
 
-	template< class T > axStatus	getResultAtCol_int( axSize col, T & value );
 				virtual axStatus	getResultAtCol	( axSize col, int8_t			&value );
 				virtual axStatus	getResultAtCol	( axSize col, int16_t			&value );
 				virtual axStatus	getResultAtCol	( axSize col, int32_t			&value );
@@ -57,17 +44,38 @@ public:
 
 				virtual	const char*	sql	() { return sql_; }
 
-	axSharedPtr< axDBConn_SQLite3 >	db_;
+						bool		hasError	( RETCODE code );
+						void		logError	();
+
+	axSharedPtr< axDBConn_ODBC >	db_;
 	axSize		paramCount_;
 	
-	axArray< int, axDB_kArgListLocalBufSize >			tmpIntData;
-	axArray< axStringA, axDB_kArgListLocalBufSize >		tmpStrData;
+	axArray< SQLLEN,	axDB_kArgListLocalBufSize >	cbLen;
+	axArray< axStringA, axDB_kArgListLocalBufSize >	tmpStrData;
 	
+	struct ResultCol {
+		axStringA		name;
+		SQLSMALLINT		type;
+		SQLULEN			sizeInDB;
+		SQLSMALLINT		decimalDigits;
+		SQLSMALLINT		nullable;
+
+		axStatus	onTake( ResultCol & src ) {
+			axStatus st;
+			ax_take_macro( type );
+			ax_take_macro( name );
+			return 0;
+		}
+	};
+
+	axArray< ResultCol,		axDB_kArgListLocalBufSize >	columnInfo; 
+
+	void	releaseStmt();
 	
 	axTempStringA	sql_;
-	axSize			numColumns_;
-	sqlite3_stmt*	stmt_;	
+
+	SQLHSTMT		stmt_;	
 };
 
-#endif //__axDBStmt_SQLite3_h__
+#endif //__axDBStmt_ODBC_h__
 

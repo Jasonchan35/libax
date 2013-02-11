@@ -87,6 +87,7 @@ axStatus_enum( SharedLibrary_no_such_function )
 //------
 axStatus_enum( DB_error )
 axStatus_enum( DB_error_connect )
+axStatus_enum( DB_error_prepare_stmtement )
 axStatus_enum( DB_no_such_column )
 axStatus_enum( DB_invalid_param_count )
 axStatus_enum( DB_invalid_param_type )

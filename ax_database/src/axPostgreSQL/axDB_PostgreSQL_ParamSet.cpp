@@ -26,8 +26,8 @@ axStatus axDB_PostgreSQL_ParamSet::bind( axSize index, const axDBParam & param )
 	axStatus st;
 	switch( param.type ) {
 		case axDB_c_type_bool: {
-			uniData	[index].bool_ = param.v_bool ? 1 : 0;
-			pData   [index] = &uniData[index].bool_;
+			uniData	[index].bool_as_int8 = param.v_bool ? 1 : 0;
+			pData   [index] = &uniData[index].bool_as_int8;
 			lengths [index] = 1;
 			formats [index] = BINARY_FORMAT;
 		}break;
@@ -65,14 +65,14 @@ axStatus axDB_PostgreSQL_ParamSet::bind( axSize index, const axDBParam & param )
 			uniData[index].float_ = ax_host_to_be( param.v_float );
 			pData  [index] = & uniData[index].float_;
 			lengths[index] = sizeof( uniData[index].float_ );
-			formats [index] = BINARY_FORMAT;
+			formats[index] = BINARY_FORMAT;
 		}break;
 	
 		case axDB_c_type_double: {
 			uniData[index].double_ = ax_host_to_be( param.v_double );
 			pData  [index] = & uniData[index].double_;
 			lengths[index] = sizeof( uniData[index].double_ );
-			formats [index] = BINARY_FORMAT;
+			formats[index] = BINARY_FORMAT;
 		}break;
 	
 		case axDB_c_type_StringA: {
@@ -136,6 +136,9 @@ axStatus axDB_PostgreSQL_ParamSet::bindList( const axDBParamList & list ) {
 	
 	axStatus st;
 	axSize n = size();
+
+
+
 	for( axSize i=0; i<n; i++ ) {
 		st = bind( i, list[i] );	if( !st ) return st;	
 	}

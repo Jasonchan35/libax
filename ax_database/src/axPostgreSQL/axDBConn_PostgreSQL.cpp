@@ -11,8 +11,7 @@
 
 axStatus axPostgreSQL_connect ( axDBConn & conn, const char * dsn ) {
 	axStatus st;
-	axDBConn_PostgreSQL* p = new axDBConn_PostgreSQL;
-	if( !p ) return axStatus_Std::not_enough_memory;
+	axPtr< axDBConn_PostgreSQL > p(st);		if( !st ) return st;
 	conn._setImp( p );
 	return p->connect( dsn );
 }
@@ -45,7 +44,7 @@ axStatus axDBConn_PostgreSQL::createStmt( axDBStmt & stmt, const char * sql ) {
 	axDBStmt_PostgreSQL* p = new axDBStmt_PostgreSQL( this );
 	if( !p ) return axStatus_Std::not_enough_memory;	
 	stmt._setImp( p );
-	return p->prepare( sql );		
+	return p->create( sql );		
 }
 
 //virtual	
