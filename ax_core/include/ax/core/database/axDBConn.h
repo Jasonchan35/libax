@@ -10,13 +10,13 @@
 #define __axDBConn_h__
 
 #include "axDB_common.h"
+#include "axDBColumn.h"
 
 class axDBConn_Imp;
 class axDBResultSet;
 class axDBStmt;
-class axDBParam;
-class axDBParamList;
-
+class axDBInParam;
+class axDBInParamList;
 
 
 class axDBConn : public axNonCopyable {

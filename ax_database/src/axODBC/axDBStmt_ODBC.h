@@ -16,7 +16,7 @@ public:
 						 axStatus	create		( const char * sql );	
 						 void		destroy		();
 
-				virtual	axStatus	exec_ParamList	( const axDBParamList & list );
+				virtual	axStatus	exec_ParamList	( const axDBInParamList & list );
 
 				virtual axSize		numColumns	() { return columnInfo.size(); }
 				virtual int			columnType	( axSize col );

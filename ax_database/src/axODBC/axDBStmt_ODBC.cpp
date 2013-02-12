@@ -82,7 +82,7 @@ void axDBStmt_ODBC::logError() {
     }
 }
 
-axStatus	axDBStmt_ODBC::exec_ParamList	( const axDBParamList & list ) { 
+axStatus	axDBStmt_ODBC::exec_ParamList	( const axDBInParamList & list ) { 
 	axStatus st;
 	SQLRETURN	ret = SQL_ERROR;
 
@@ -93,7 +93,7 @@ axStatus	axDBStmt_ODBC::exec_ParamList	( const axDBParamList & list ) {
 	cbLen.setAll(0);
 
 	for( size_t i=0; i<list.size(); i++ ) {
-		const axDBParam & param = list[i];
+		const axDBInParam & param = list[i];
 		SQLLEN			&len	= cbLen[i];
 		SQLUSMALLINT	col		= (SQLUSMALLINT) i+1;
 

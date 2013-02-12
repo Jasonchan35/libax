@@ -22,7 +22,7 @@ axStatus axDB_PostgreSQL_ParamSet::resize( axSize n ) {
 	return 0;
 }
 
-axStatus axDB_PostgreSQL_ParamSet::bind( axSize index, const axDBParam & param ) {
+axStatus axDB_PostgreSQL_ParamSet::bind( axSize index, const axDBInParam & param ) {
 	axStatus st;
 	switch( param.type ) {
 		case axDB_c_type_bool: {
@@ -131,7 +131,7 @@ axStatus axDB_PostgreSQL_ParamSet::bind( axSize index, const axDBParam & param )
 	return 0;
 }
 
-axStatus axDB_PostgreSQL_ParamSet::bindList( const axDBParamList & list ) {
+axStatus axDB_PostgreSQL_ParamSet::bindList( const axDBInParamList & list ) {
 	if( list.size() < size() ) return axStatus_Std::DB_invalid_param_count;
 	
 	axStatus st;
@@ -163,7 +163,7 @@ Oid	axDB_PostgreSQL_ParamSet::c_type_to_Oid( int c ) {
 	return 0; //error
 }
 
-axStatus	axDB_PostgreSQL_ParamSet::setTypes	( const axDBParamList & list ) {
+axStatus	axDB_PostgreSQL_ParamSet::setTypes	( const axDBInParamList & list ) {
 	axStatus st;
 	st = resize( list.size() );	if( !st ) return st;
 	for( axSize i=0; i<list.size(); i++ ) {
@@ -176,7 +176,7 @@ axStatus	axDB_PostgreSQL_ParamSet::setTypes	( const axDBParamList & list ) {
 	return 0;
 }
 
-bool	axDB_PostgreSQL_ParamSet::isSameTypes( const axDBParamList & list ) {
+bool	axDB_PostgreSQL_ParamSet::isSameTypes( const axDBInParamList & list ) {
 	if( size() != list.size() ) return false;
 	for( axSize i=0; i<list.size(); i++ ) {
 		if( types[i] != c_type_to_Oid( list[i].type ) ) return false;

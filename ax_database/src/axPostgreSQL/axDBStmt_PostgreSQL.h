@@ -21,7 +21,7 @@ public:
 	
 			axStatus	create		( const char * sql );	
 			void		destroy		();
-	virtual	axStatus	exec_ParamList	( const axDBParamList & list );	
+	virtual	axStatus	exec_ParamList	( const axDBInParamList & list );	
 
 
 	virtual axSize		numColumns	() { return res_.colCount_; }
@@ -54,7 +54,7 @@ public:
 	virtual	const char*	sql	() { return sql_; }
 
 		
-	axStatus doPrepare			( const axDBParamList & list );
+	axStatus doPrepare			( const axDBInParamList & list );
 	static	axStatus convertSQL	( axIStringA &out, const char* inSQL );
 			
 	axSharedPtr< axDBConn_PostgreSQL >	db_;
