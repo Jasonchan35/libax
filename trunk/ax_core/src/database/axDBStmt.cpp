@@ -31,26 +31,26 @@ axStatus axDBStmt::create ( axDBConn &db, const char* sql ) {
 	return db._getImp()->createStmt( *this, sql);
 }
 
-axStatus axDBStmt::exec_ParamList( const axDBParamList & list ) {
+axStatus axDBStmt::exec_ParamList( const axDBInParamList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	axStatus st;
 	st = p_->exec_ParamList( list );	if( !st ) return st;
 	return 0;
 }
 
-axStatus axDBStmt::getRow_ValueList	( axDBValueList & list ) {
+axStatus axDBStmt::getRow_ValueList	( axDBOutParamList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->getRow_ValueList( list );
 }
 
-axStatus axDBStmt_Imp::getRow_ValueList( axDBValueList & list ) {
+axStatus axDBStmt_Imp::getRow_ValueList( axDBOutParamList & list ) {
 	axStatus st;
 	st = fetch();		if( !st ) return st;
 
 	if( numColumns() < list.size() ) return axStatus_Std::DB_invalid_param_count;
 	
 	for( axSize i=0; i<list.size(); i++ ) {
-		axDBValue & v = list[i];
+		axDBOutParam & v = list[i];
 		switch( v.type ) {
 			#define axDB_c_type_list( NAME, C_TYPE, C_ITYPE ) \
 				case axDB_c_type_##NAME: st = getResultAtCol( i, *(C_ITYPE*)v.data );	break; \

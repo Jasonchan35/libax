@@ -67,7 +67,7 @@ axStatus axDBStmt_MySQL::create( const char * sql ) {
 }
 
 //virtual	
-axStatus axDBStmt_MySQL::exec_ParamList( const axDBParamList & list ) {
+axStatus axDBStmt_MySQL::exec_ParamList( const axDBInParamList & list ) {
 	if( !stmt_ ) return axStatus_Std::not_initialized;
 
 	axStatus st;	
@@ -85,7 +85,7 @@ axStatus axDBStmt_MySQL::exec_ParamList( const axDBParamList & list ) {
 	st = tempLen_.resize( n );		if( !st ) return st;
 
 	for( axSize i=0; i<n; i++ ) {
-		const axDBParam & p = list[i];
+		const axDBInParam & p = list[i];
 		MYSQL_BIND & b = bind_[i];
 		axIStringA & tmpStr = tempStr_[i];
 

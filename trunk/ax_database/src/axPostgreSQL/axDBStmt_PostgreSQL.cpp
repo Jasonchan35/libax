@@ -185,7 +185,7 @@ axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, axTimeStamp	&value ) {
 }
 
 //virtual	
-axStatus axDBStmt_PostgreSQL::exec_ParamList ( const axDBParamList & list ) {
+axStatus axDBStmt_PostgreSQL::exec_ParamList ( const axDBInParamList & list ) {
 	axStatus st;
 
 	if( db_->echoSQL() ) {
@@ -214,7 +214,7 @@ axStatus axDBStmt_PostgreSQL::exec_ParamList ( const axDBParamList & list ) {
 
 }
 
-axStatus axDBStmt_PostgreSQL::doPrepare( const axDBParamList & list ) {
+axStatus axDBStmt_PostgreSQL::doPrepare( const axDBInParamList & list ) {
 	destroy();
 	
 	axStatus st;

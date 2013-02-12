@@ -11,6 +11,8 @@
 
 #include "axDB_common.h"
 #include "axDBConn.h"
+#include "axDBInParam.h"
+#include "axDBOutParam.h"
 
 class axDBConn;
 class axDBStmt_Imp;
@@ -30,12 +32,12 @@ public:
 		template<class T>	axStatus	create_Select	( axDBConn & db, const char* table,	const char* szWhere );
 
 		//	axStatus	exec			( ... )
-			axStatus	exec_ParamList	( const axDBParamList & list );
-			axExpandArgList0			( axStatus, exec,   const axDBParam_CB & , axDBParamList, exec_ParamList )
+			axStatus	exec_ParamList	( const axDBInParamList & list );
+			axExpandArgList0			( axStatus, exec,   const axDBInParam_CB & , axDBInParamList, exec_ParamList )
 			
 		//	axStatus	getRow			( ... )
-			axStatus	getRow_ValueList( axDBValueList & list );
-			axExpandArgList0			( axStatus, getRow, const axDBValue_CB & , axDBValueList, getRow_ValueList )
+			axStatus	getRow_ValueList( axDBOutParamList & list );
+			axExpandArgList0			( axStatus, getRow, const axDBOutParam_CB & , axDBOutParamList, getRow_ValueList )
 				
 			axSize		numColumns		();
 			int			columnType		( axSize col );
@@ -54,14 +56,14 @@ protected:
 class axDBStmt_Imp :  public axNonCopyable, public axSharedPte {
 public:
 	virtual ~axDBStmt_Imp() {}
-	virtual	axStatus	exec_ParamList	( const axDBParamList & list ) = 0;
+	virtual	axStatus	exec_ParamList	( const axDBInParamList & list ) = 0;
 	
 	virtual axSize		numColumns		() = 0;
 	
 	virtual int			columnType		( axSize col ) = 0;
 	virtual const char* columnName		( axSize col ) = 0;
 	
-	virtual	axStatus	getRow_ValueList	( axDBValueList & list );
+	virtual	axStatus	getRow_ValueList	( axDBOutParamList & list );
 
 	virtual	axStatus	fetch() = 0;
 

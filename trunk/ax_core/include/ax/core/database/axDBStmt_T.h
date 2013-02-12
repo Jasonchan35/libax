@@ -22,7 +22,7 @@ public:
 	}
 	axStatus	exec( const T & values ) {
 		axStatus st;
-		axDBParamList	list;
+		axDBInParamList	list;
 		st = list.build( values, pkeyIndex );			if( !st ) return st;
 		return stmt_.exec_ParamList( list );
 	}
@@ -53,7 +53,7 @@ public:
 	}
 	axStatus	exec( const T & values ) {
 		axStatus st;
-		axDBParamList	list;
+		axDBInParamList	list;
 		st = list.build( values, pkeyIndex );			if( !st ) return st;
 		//add param for "where pkey=?"
 		st = list.io( values.*PKeyMember, NULL );		if( !st ) return st;

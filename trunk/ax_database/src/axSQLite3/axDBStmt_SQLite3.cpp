@@ -49,7 +49,7 @@ int	axDBStmt_SQLite3 :: columnType( axSize col ) {
 	return axDB_c_type_null;
 }
 
-axStatus axDBStmt_SQLite3::exec_ParamList( const axDBParamList & list ) {
+axStatus axDBStmt_SQLite3::exec_ParamList( const axDBInParamList & list ) {
 	if( !stmt_ ) return axStatus_Std::DB_error;
 
 	if( db_->echoSQL() ) {
@@ -72,7 +72,7 @@ axStatus axDBStmt_SQLite3::exec_ParamList( const axDBParamList & list ) {
 	if( c > n ) return axStatus_Std::DB_invalid_param_count;
 			
 	for( int i=0; i<c; i++ ) {
-		const axDBParam &param = list[i];
+		const axDBInParam &param = list[i];
 		switch( param.type ) {
 		
 			case axDB_c_type_int8:		ret = sqlite3_bind_int   ( stmt_, i+1, param.v_int8  );	break;

@@ -310,11 +310,23 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\include\ax\core\database\axDBColumn.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\database\axDBConn.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\include\ax\core\database\axDBConn.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\ax\core\database\axDBInParam.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\ax\core\database\axDBOutParam.h"
 					>
 				</File>
 				<File
