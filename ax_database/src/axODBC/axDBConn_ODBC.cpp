@@ -51,6 +51,7 @@ axStatus	axDBConn_ODBC::getSQL_CreateTable	( axIStringA & outSQL, const char* ta
 		}
 
 		st = identifierString( colName, c.name );					if( !st ) return st;
+		st = outSQL.appendFormat("  {?}\t{?}", colName, DBTypeName(c.type) );		if( !st ) return st;
 
 		if( list.pkeyIndex() == i ) {
 			st = outSQL.append( " PRIMARY KEY" );					if( !st ) return st;
@@ -94,6 +95,7 @@ axStatus	axDBConn_ODBC::connect	( const wchar_t* dsn ) {
 
 	ret = SQLDriverConnect( dbc_, NULL, ax_const_cast(dsn), ax_strlen(dsn), NULL, 0, NULL, SQL_DRIVER_NOPROMPT );
 	if( hasError(ret) ) {
+		logError();
 		return axStatus_Std::DB_error_connect;
 	}
 	return 0;
@@ -105,6 +107,27 @@ bool axDBConn_ODBC::hasError ( RETCODE code, const char* sql ) {
 		case SQL_SUCCESS_WITH_INFO:	return false;
 	}
 	return true;
+}
+
+void axDBConn_ODBC::logError() {
+    SQLSMALLINT iRec = 0;
+    SQLINTEGER  iNativeError;
+	const size_t len = 2040;
+	WCHAR       wszMessage[len];
+    WCHAR       wszState[SQL_SQLSTATE_SIZE+1];
+
+	SQLRETURN ret;
+	for(;;)
+    {
+		ret = SQLGetDiagRec( SQL_HANDLE_ENV, env_, ++iRec, wszState, &iNativeError, wszMessage, len, NULL );
+		if( ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO ) break;
+	}
+
+	for(;;)
+    {
+		ret = SQLGetDiagRec( SQL_HANDLE_DBC, dbc_, ++iRec, wszState, &iNativeError, wszMessage, len, NULL );
+		if( ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO ) break;
+    }
 }
 
 const char*	axDBConn_ODBC::DBTypeName( int c_type ) {

@@ -16,6 +16,7 @@ public:
 	virtual	axStatus	getSQL_CreateTable	( axIStringA & outSQL, const char* table, const axDBColumnList & list );
 			
 			bool		hasError	( RETCODE code, const char* sql = NULL );
+			void		logError	();
 			
 	virtual	const char*	DBTypeName( int c_type );
 
