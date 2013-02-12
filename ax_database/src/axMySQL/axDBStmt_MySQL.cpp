@@ -67,7 +67,7 @@ axStatus axDBStmt_MySQL::create( const char * sql ) {
 }
 
 //virtual	
-axStatus axDBStmt_MySQL::exec_ParamList( const axDBInParamList & list ) {
+axStatus axDBStmt_MySQL::exec_ArgList( const axDBInParamList & list ) {
 	if( !stmt_ ) return axStatus_Std::not_initialized;
 
 	axStatus st;	

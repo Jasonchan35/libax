@@ -49,7 +49,7 @@ int	axDBStmt_SQLite3 :: columnType( axSize col ) {
 	return axDB_c_type_null;
 }
 
-axStatus axDBStmt_SQLite3::exec_ParamList( const axDBInParamList & list ) {
+axStatus axDBStmt_SQLite3::exec_ArgList( const axDBInParamList & list ) {
 	if( !stmt_ ) return axStatus_Std::DB_error;
 
 	if( db_->echoSQL() ) {

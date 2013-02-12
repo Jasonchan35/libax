@@ -25,10 +25,10 @@ axStatus ax_print_ArgList( const char*    fmt, const axStringFormat_ArgList &lis
 
 */
 //!macro - axStatus	ax_print( const char* fmt, ... );
-axExpandArgList1( inline axStatus, ax_print,	const char*,	const axStringFormat_Arg&, axStringFormat_ArgList, ax_print_ArgList )
+axExpandArgList1( inline axStatus, ax_print,	const char*,	const axStringFormat_Arg&, axStringFormat_ArgList )
 
 //!macro - axStatus	ax_print( const char* fmt, ... );
-axExpandArgList1( inline axStatus, ax_print,	const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList, ax_print_ArgList )
+axExpandArgList1( inline axStatus, ax_print,	const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList )
 
 axStatus ax_print_ArgList( const wchar_t* fmt, const axStringFormat_ArgList &list );
 axStatus ax_print_ArgList( const char*	  fmt, const axStringFormat_ArgList &list );

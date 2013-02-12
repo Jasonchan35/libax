@@ -65,8 +65,8 @@ public:
 
 	
 	//!macro - axStatus	format( const char* fmt, ... );
-	axExpandArgList1( axStatus, format,	const char*,	const axStringFormat_Arg&, axStringFormat_ArgList, format_ArgList )
-	axExpandArgList1( axStatus, format,	const wchar_t*,	const axStringFormat_Arg&, axStringFormat_ArgList, format_ArgList )
+	axExpandArgList1( axStatus, format,	const char*		/*fmt*/, const axStringFormat_Arg&, axStringFormat_ArgList )
+	axExpandArgList1( axStatus, format,	const wchar_t*	/*fmt*/, const axStringFormat_Arg&, axStringFormat_ArgList )
 	
 	axStringA_<64>		opt;
 private:

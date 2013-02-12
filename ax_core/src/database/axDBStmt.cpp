@@ -31,19 +31,19 @@ axStatus axDBStmt::create ( axDBConn &db, const char* sql ) {
 	return db._getImp()->createStmt( *this, sql);
 }
 
-axStatus axDBStmt::exec_ParamList( const axDBInParamList & list ) {
+axStatus axDBStmt::exec_ArgList( const axDBInParamList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	axStatus st;
-	st = p_->exec_ParamList( list );	if( !st ) return st;
+	st = p_->exec_ArgList( list );	if( !st ) return st;
 	return 0;
 }
 
-axStatus axDBStmt::getRow_ValueList	( axDBOutParamList & list ) {
+axStatus axDBStmt::getRow_ArgList	( axDBOutParamList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->getRow_ValueList( list );
+	return p_->getRow_ArgList( list );
 }
 
-axStatus axDBStmt_Imp::getRow_ValueList( axDBOutParamList & list ) {
+axStatus axDBStmt_Imp::getRow_ArgList( axDBOutParamList & list ) {
 	axStatus st;
 	st = fetch();		if( !st ) return st;
 

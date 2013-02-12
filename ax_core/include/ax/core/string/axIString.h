@@ -6,6 +6,7 @@
 #include "ax_utf8.h"
 #include "ax_c_str.h"
 #include "axStringFormat_Arg.h"
+#include "../common/axExpandArgList.h"
 
 class axSerializer;
 class axDeserializer;
@@ -127,11 +128,11 @@ public:
 	axStatus		format_ArgList			( const wchar_t* fmt, const axStringFormat_ArgList &list )		{ resize(0); return appendFormat_ArgList( fmt, list ); }
 	axStatus		appendFormat_ArgList	( const wchar_t* fmt, const axStringFormat_ArgList &list );
 
-	axExpandArgList1( axStatus, format,			const char*,	const axStringFormat_Arg&, axStringFormat_ArgList, format_ArgList )
-	axExpandArgList1( axStatus, format,			const wchar_t*,	const axStringFormat_Arg&, axStringFormat_ArgList, format_ArgList )
+	axExpandArgList1( axStatus, format,			const char*,	const axStringFormat_Arg&, axStringFormat_ArgList )
+	axExpandArgList1( axStatus, format,			const wchar_t*,	const axStringFormat_Arg&, axStringFormat_ArgList )
 
-	axExpandArgList1( axStatus, appendFormat,	const char*,	const axStringFormat_Arg&, axStringFormat_ArgList, appendFormat_ArgList )
-	axExpandArgList1( axStatus, appendFormat,	const wchar_t*,	const axStringFormat_Arg&, axStringFormat_ArgList, appendFormat_ArgList )
+	axExpandArgList1( axStatus, appendFormat,	const char*,	const axStringFormat_Arg&, axStringFormat_ArgList )
+	axExpandArgList1( axStatus, appendFormat,	const wchar_t*,	const axStringFormat_Arg&, axStringFormat_ArgList )
 
 	axStatus		toStringFormat			( axStringFormat &f ) const { return axStringFormat_out( f, c_str() ); }
 	
