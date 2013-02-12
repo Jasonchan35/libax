@@ -163,6 +163,7 @@
 		96D017F5160E4E6500A2682B /* axFilePath.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D017F4160E4E6500A2682B /* axFilePath.h */; };
 		96D09550160F852E00FDA718 /* axStatus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96D0954F160F852E00FDA718 /* axStatus.cpp */; };
 		EA1DC90D161DDC9200FFD681 /* axVec2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA1DC90C161DDC9200FFD681 /* axVec2.cpp */; };
+		EA1FB14E16CA23FD00C4853B /* axTimeStamp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA1FB14D16CA23FD00C4853B /* axTimeStamp.cpp */; };
 		EAC3A06516C8CB5B009F1667 /* axDateTime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAC3A06416C8CB5B009F1667 /* axDateTime.cpp */; };
 		EAD5E06316C6A11E007AB3D1 /* axDB_common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAD5E06216C6A11E007AB3D1 /* axDB_common.cpp */; };
 /* End PBXBuildFile section */
@@ -332,6 +333,7 @@
 		96D0954F160F852E00FDA718 /* axStatus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axStatus.cpp; sourceTree = "<group>"; };
 		EA15F6C81544053B00356C7C /* ax_core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_core.h; sourceTree = "<group>"; };
 		EA1DC90C161DDC9200FFD681 /* axVec2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axVec2.cpp; sourceTree = "<group>"; };
+		EA1FB14D16CA23FD00C4853B /* axTimeStamp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axTimeStamp.cpp; sourceTree = "<group>"; };
 		EA628606164167CA00532B3E /* axCubicBezierCurve.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axCubicBezierCurve.h; sourceTree = "<group>"; };
 		EA9F4E1D154414BC00C9459E /* ax_core build.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "ax_core build.xcconfig"; sourceTree = "<group>"; };
 		EA9F4E1E154414C100C9459E /* ax_core.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ax_core.xcconfig; sourceTree = "<group>"; };
@@ -747,6 +749,7 @@
 		EAC3A06316C8CB5B009F1667 /* time */ = {
 			isa = PBXGroup;
 			children = (
+				EA1FB14D16CA23FD00C4853B /* axTimeStamp.cpp */,
 				EAC3A06416C8CB5B009F1667 /* axDateTime.cpp */,
 			);
 			path = time;
@@ -1007,6 +1010,7 @@
 				EA1DC90D161DDC9200FFD681 /* axVec2.cpp in Sources */,
 				EAD5E06316C6A11E007AB3D1 /* axDB_common.cpp in Sources */,
 				EAC3A06516C8CB5B009F1667 /* axDateTime.cpp in Sources */,
+				EA1FB14E16CA23FD00C4853B /* axTimeStamp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
