@@ -272,7 +272,7 @@ bool	axIArray<T>::find	( axSize & index, const T& v ) const {
 
 template< class T > inline
 axStatus	axIArray<T>::getIndexOf	( axSize &out, const T & element ) const {
-	if( ! size ) return axStatus_Std::not_found;
+	if( ! size_ ) return axStatus_Std::not_found;
 	const T* e = &element;
 	if( e < p_ || e >= p_ * size_ ) return axStatus_Std::not_found;
 	size_t x = (e - p_) / sizeof(T);
