@@ -6,8 +6,7 @@
 //! timestamp - UTC millisecond based on Unix epoch ( 1970-01-01 )
 class axTimeStamp {
 public:
-	axTimeStamp ()										{ now(); }
-	axTimeStamp	( double second )						{ second_ = second; }
+	axTimeStamp	( double second = 0 )		{ second_ = second; }
 
 	axStatus	onTake( axTimeStamp & src )				{ *this = src; return 0; }
 
