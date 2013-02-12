@@ -33,11 +33,11 @@ public:
 							axStatus	create_Select	( axDBConn & db, const char* table,	const char* szWhere, const axDBColumnList & list );
 		template<class T>	axStatus	create_Select	( axDBConn & db, const char* table,	const char* szWhere );
 
-		//	axStatus	exec			( ... )
+		//	axStatus	exec			( params... )
 			axStatus	exec_ParamList	( const axDBInParamList & list );
 			axExpandArgList0			( axStatus, exec,   const axDBInParam_CB & , axDBInParamList, exec_ParamList )
 			
-		//	axStatus	getRow			( ... )
+		//	axStatus	getRow			( params... )
 			axStatus	getRow_ValueList( axDBOutParamList & list );
 			axExpandArgList0			( axStatus, getRow, const axDBOutParam_CB & , axDBOutParamList, getRow_ValueList )
 				

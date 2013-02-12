@@ -338,7 +338,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\ax\core\database\axDBStmt_T.h"
+					RelativePath="..\..\..\include\ax\core\database\axDBTableAccessor.h"
 					>
 				</File>
 			</Filter>
