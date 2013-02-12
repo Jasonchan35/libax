@@ -339,6 +339,7 @@
 		EA628606164167CA00532B3E /* axCubicBezierCurve.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axCubicBezierCurve.h; sourceTree = "<group>"; };
 		EA9F4E1D154414BC00C9459E /* ax_core build.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "ax_core build.xcconfig"; sourceTree = "<group>"; };
 		EA9F4E1E154414C100C9459E /* ax_core.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ax_core.xcconfig; sourceTree = "<group>"; };
+		EAB0B04F16CAAFC000F3B0B3 /* axExpandArgList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axExpandArgList.h; sourceTree = "<group>"; };
 		EAB48F681646CE8500ABDA74 /* axUnitCircle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axUnitCircle.h; sourceTree = "<group>"; };
 		EAB48F6C1646D02E00ABDA74 /* axRoundedRect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRoundedRect.h; sourceTree = "<group>"; };
 		EAB48F6D1646E70D00ABDA74 /* ax_linear_algebra.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_linear_algebra.h; sourceTree = "<group>"; };
@@ -495,6 +496,7 @@
 		9640E03E16009DA400F9D037 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				EAB0B04F16CAAFC000F3B0B3 /* axExpandArgList.h */,
 				9640E03F16009DA400F9D037 /* ax_byteorder.h */,
 				9640E04016009DA400F9D037 /* ax_common.h */,
 				9640E04116009DA400F9D037 /* ax_macro.h */,

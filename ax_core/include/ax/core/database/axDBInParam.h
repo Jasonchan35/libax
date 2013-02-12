@@ -103,7 +103,7 @@ inline axStatus axDBInParamList_io( axDBInParamList & list, const axIByteArray &
 inline axStatus axDBInParamList_io( axDBInParamList & list, const axByteArray  & v ) { axDBInParam p( axDB_c_type_ByteArray ); p.v_ByteArray =&v; return list.addParam(p); }
 
 inline axStatus axDBInParamList_io( axDBInParamList & list, axTimeStamp			 v ) { axDBInParam p( axDB_c_type_TimeStamp ); p.v_TimeStamp = v; return list.addParam(p); }
-inline axStatus axDBInParamList_io( axDBInParamList & list, const axDateTime   & v ) { axDBInParamList_io( list, v.toTimeStamp() );  }
+inline axStatus axDBInParamList_io( axDBInParamList & list, const axDateTime   & v ) { return axDBInParamList_io( list, v.toTimeStamp() );  }
 
 
 
@@ -135,7 +135,7 @@ axStatus	axDBInParam::toStringFormat( axStringFormat & f ) const {
 			axTYPE_LIST( int16 )
 			axTYPE_LIST( int32 )
 			axTYPE_LIST( int64 )
-		#undef axDB_c_type_list
+		#undef axTYPE_LIST
 	}
 	assert(false);
 	return f.out("Unknown");

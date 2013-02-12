@@ -9,6 +9,11 @@
 #include <ax/core/string/axStringFormat_out_Imp.h>
 #include <ax/core/string/ax_print.h>
 
+
+axExpandArgList1_Imp( axStatus, ax_print,	const char*,	const axStringFormat_Arg&, axStringFormat_ArgList )
+axExpandArgList1_Imp( axStatus, ax_print,	const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList )
+
+
 axStatus ax_print_ArgList( const wchar_t* fmt, const axStringFormat_ArgList &list ) {
 	axStatus st;
 #ifdef axOS_Android
