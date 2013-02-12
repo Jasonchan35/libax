@@ -1,12 +1,12 @@
-#ifndef __axDBStmt_T_h__
-#define __axDBStmt_T_h__
+#ifndef __axDBTableAccessor_h__
+#define __axDBTableAccessor_h__
 
 #include "axDBStmt.h"
 
 template<class T>
-class axDBStmt_T {
+class axDBTableAccessor_Stmt {
 public:
-	axDBStmt_T() 
+	axDBTableAccessor_Stmt() 
 		: pkeyIndex_(-1)
 		, pkeyAutoInc_(false)
 	{}
@@ -27,7 +27,7 @@ protected:
 };
 
 template<class T, class PKeyType, PKeyType T::*PKeyMember >
-class axDBStmt_Insert : public axDBStmt_T<T> {
+class axDBTableAccessor_InsertStmt : public axDBTableAccessor_Stmt<T> {
 public:
 	axStatus	create	( axDBConn & db, const char* table, const axDBColumnList & list ) {
 		pkeyIndex_		= list.pkeyIndex();
@@ -46,7 +46,7 @@ public:
 };
 
 template< class T, class PKeyType, PKeyType T::*PKeyMember >
-class axDBStmt_Update : public axDBStmt_T<T> {
+class axDBTableAccessor_UpdateStmt : public axDBTableAccessor_Stmt<T> {
 public:
 	axStatus	create	( axDBConn & db, const char* table, const axDBColumnList & list ) {
 		axStatus st;
@@ -76,7 +76,7 @@ private:
 
 
 template<class T, class PKeyType, PKeyType T::*PKeyMember  >
-class axDBStmt_Select : public axDBStmt_T<T> {
+class axDBTableAccessor_SelectStmt : public axDBTableAccessor_Stmt<T> {
 public:
 	axStatus	create	( axDBConn & db, const char* table, const axDBColumnList & list ) {
 		axStatus st;
@@ -103,22 +103,19 @@ private:
 
 
 template<class T >
-class axDBStmt_SelectAll : public axDBStmt_T<T> {
+class axDBTableAccessor_SelectMultipleStmt : public axDBTableAccessor_Stmt<T> {
 public:
-	axStatus	create	( axDBConn & db, const char* table, const axDBColumnList & list ) {
+	axStatus	create	( axDBConn & db, const char* table, const char* szWhere, const axDBColumnList & list ) {
 		axStatus st;
-		st = stmt_.create_Select( db, table, NULL, list );		if( !st ) return st;
+		st = stmt_.create_Select( db, table, szWhere, list );		if( !st ) return st;
 		return 0;
 	}
-	axStatus	exec() {
-		return stmt_.exec();
-	}
+	axStatus	exec_ParamList	( const axDBInParamList &params )	{ return stmt_.exec_ParamList( params ); }
+	axStatus	exec			()									{ return stmt_.exec(); }
 	
-	axStatus getRow( T & v ) { return stmt_.getRow( v );	}
-
-	axStatus execGetAllRow( axIArray<T> &v )	{
+	axStatus	getRow			( T & v )							{ return stmt_.getRow( v ); }
+	axStatus	getAllRows		( axIArray<T> &v )	{
 		axStatus st;
-		st = exec(); if( !st ) return st;
 		for(;;) {
 			st = v.incSize(1);	if( !st ) return st;
 			st = getRow( v.last() );
@@ -156,28 +153,49 @@ public:
 		st = list_.createByPKeyMember<T,PKeyType, PKeyMember>( pkeyAutoInc );		
 		if( !st ) return st;
 
-		st = stmtInsert.create		( db, table, list_ );		if( !st ) return st;
-		st = stmtUpdate.create		( db, table, list_ );		if( !st ) return st;
-		st = stmtSelect.create		( db, table, list_ );		if( !st ) return st;
-		st = stmtSelectAll.create	( db, table, list_ );		if( !st ) return st;
+		st = insertStmt.create		( db, table, list_ );			if( !st ) return st;
+		st = updateStmt.create		( db, table, list_ );			if( !st ) return st;
+		st = selectStmt.create		( db, table, list_ );			if( !st ) return st;
+		st = selectAllStmt.create	( db, table, NULL, list_ );		if( !st ) return st;
 		return 0;
 	}
 		
-	axStatus insert		( const T &v )					{ return stmtInsert.exec( v );	}
-	axStatus update		( const T &v )					{ return stmtUpdate.exec( v );	}
-	axStatus select		( T &v, const PKeyType& pkey )	{ return stmtSelect.exec( v, pkey ); }
-	axStatus selectAll	( axIArray<T> &v )				{ return stmtSelectAll.execGetAllRow( v ); }
+	axStatus insert		( const T &v )					{ return insertStmt.exec( v );	}
+	axStatus update		( const T &v )					{ return updateStmt.exec( v );	}
 
-	axDBStmt_SelectAll<T>		stmtSelectAll;
+	axStatus select		( T &v, const PKeyType& pkey )	{ return selectStmt.exec( v, pkey ); }
+
+	axStatus selectAll	( axIArray<T> &rows ) { 
+		axStatus st = selectAllStmt.exec();			if( !st ) return st;
+		return selectAllStmt.getAllRows( rows ); 
+	}
+
+//	axStatus selectWhere			( axIArray<T> &rows, const char* szWhere, params... );
+	axStatus selectWhere_ParamList	( axIArray<T> &rows, const char* szWhere, const axDBInParamList & params );
+	axExpandArgList2 ( axStatus,  selectWhere, axIArray<T> & /*rows*/, const char* /*szWhere*/, 
+						const axDBInParam_CB &, axDBInParamList, selectWhere_ParamList );
+
+	axDBTableAccessor_InsertStmt<T, PKeyType, PKeyMember>	insertStmt;
+	axDBTableAccessor_UpdateStmt<T, PKeyType, PKeyMember>	updateStmt;
+	axDBTableAccessor_SelectStmt<T, PKeyType, PKeyMember>	selectStmt;
+	axDBTableAccessor_SelectMultipleStmt<T>					selectAllStmt;
 	
 private:
 	axPtr<axDBConn> 	db_;
 	axStringA			table_;
 	axDBColumnList		list_;
-
-	axDBStmt_Insert<T, PKeyType, PKeyMember>	stmtInsert;
-	axDBStmt_Update<T, PKeyType, PKeyMember>	stmtUpdate;
-	axDBStmt_Select<T, PKeyType, PKeyMember>	stmtSelect;
 };
 
-#endif //__axDBStmt_T_h__
+
+template<class T, class PKeyType, PKeyType T::*PKeyMember>
+axStatus axDBTableAccessor<T, PKeyType, PKeyMember>::selectWhere_ParamList ( axIArray<T> &rows, const char* szWhere, const axDBInParamList & params ) {
+	axDBTableAccessor_SelectMultipleStmt	stmt;
+	axStatus st;
+	st = stmt.create( db, table, szWhere, list_ );		if( !st ) return st;
+	st = stmt.exec_ParamList( params );					if( !st ) return st;
+	st = stmt.getAllRows( rows );						if( !st ) return st;
+	return 0;
+}
+
+
+#endif //__axDBTableAccessor_h__

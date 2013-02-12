@@ -41,21 +41,21 @@ public:
 	virtual	~axIArray();
 //	void operator=	( const axIArray &src )	{ copy(src); }
 
-						bool		inBound		( axSize i ) const			{ return i < size_; }
+						bool		inBound			( axSize i ) const		{ return i < size_; }
 
-	axALWAYS_INLINE(	axStatus	resize		( axSize new_size, bool keep_data = true ) );					
-						axStatus	resizeToCapacity ()						{ return resize( capacity() ); }
+	axALWAYS_INLINE(	axStatus	resize			( axSize new_size, bool keep_data = true ) );					
+						axStatus	resizeToCapacity()						{ return resize( capacity() ); }
 
-	axALWAYS_INLINE(	axStatus	incSize		( axSize n,	bool keep_data = true ) );
-	axALWAYS_INLINE(	axStatus	decSize		( axSize n, bool keep_data = true ) );
+	axALWAYS_INLINE(	axStatus	incSize			( axSize n,	bool keep_data = true ) );
+	axALWAYS_INLINE(	axStatus	decSize			( axSize n, bool keep_data = true ) );
 
 						axStatus	resizeAndFill	( axSize new_size, 	const T& value );
 						axStatus	incSizeAndFill	( axSize n,			const T& value );
 
-	axALWAYS_INLINE(	axStatus	reserve		( axSize n ) );
-	axALWAYS_INLINE(	axStatus	reserveMore	( axSize n ) )				{ return reserve( size() + n ); }
+	axALWAYS_INLINE(	axStatus	reserve			( axSize n ) );
+	axALWAYS_INLINE(	axStatus	incReserve		( axSize n ) )			{ return reserve( size() + n ); }
 	
-	axALWAYS_INLINE(	axStatus	setCapacity	( axSize n ) );
+	axALWAYS_INLINE(	axStatus	setCapacity		( axSize n ) );
 						
 				virtual	void		setCapacityIncrement	( axSize n )	{}
 						void		setAutoCapacityIncrement()				{ setCapacityIncrement(0); }						
