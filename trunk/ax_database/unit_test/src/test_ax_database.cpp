@@ -13,11 +13,11 @@ const size_t numRows = 5;
 	myTEST_TYPE( int16,		int16_t,		int16_t ) \
 	myTEST_TYPE( int32,		int32_t,		int32_t ) \
 	myTEST_TYPE( int64,		int64_t,		int64_t ) \
-\
-	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
-	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
-	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
-	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
+//\
+//	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
+//	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
+//	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
+//	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
 //---------------
 
 
@@ -67,8 +67,6 @@ public:
 		v_StringW.set( L"This is WString" );
 
 		v_TimeStamp.now();
-
-		ax_log_var( v_TimeStamp );
 	}
 
 	axStatus	onTake( Row & src ) {
@@ -123,6 +121,9 @@ axStatus test_ax_database_common( axDBConn & db ) {
 	st = db.dropTableIfExists( table );					if( !st ) return st;
 	st = db.createTable<Row>( table, "id", true );		if( !st ) return st;
 
+	//st = db.dropTable( table );							if( !st ) return st;
+	//st = db.createTable<Row>( table, NULL, true );		if( !st ) return st;
+
 	axDBTableAccessor<Row>	tbl;
 	st = tbl.create( db, table );				if( !st ) return st;
 
@@ -145,8 +146,8 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		for( size_t i=0; i<numRows; i++ ) {
 			row.id = i+1;
 			row.v_bool = (i % 2 == 1);
-			st = tbl.update( row );					if( !st ) return st;
-			st = row.v_ByteArray.append(i);			if( !st ) return st;
+			st = tbl.update( row );							if( !st ) return st;
+			st = row.v_ByteArray.append( (uint8_t) i);		if( !st ) return st;
 		}
 		ax_log("update {?} records in {?}s", numRows, timer.get() );
 	}
@@ -183,23 +184,23 @@ axStatus test_SQLite3() {
 	return 0;
 }
 
-#include <ax/database/axMySQL.h>
-axStatus test_MySQL() {
-	axStatus st;
-	axDBConn	db;
-	st = axMySQL_connect ( db, "test", "test", "1234", "localhost" );	if( !st ) return st;
-	st = test_ax_database_common(db);			if( !st ) return st;
-	return 0;
-}
-
-#include <ax/database/axPostgreSQL.h>
-axStatus test_PostgreSQL() {
-	axStatus st;
-	axDBConn	db;
-	st = axPostgreSQL_connect ( db, "host=localhost port=5432 dbname=testdb user=test password=1234" );	if( !st ) return st;
-	st = test_ax_database_common(db);			if( !st ) return st;
-	return 0;
-}
+//#include <ax/database/axMySQL.h>
+//axStatus test_MySQL() {
+//	axStatus st;
+//	axDBConn	db;
+//	st = axMySQL_connect ( db, "test", "test", "1234", "localhost" );	if( !st ) return st;
+//	st = test_ax_database_common(db);			if( !st ) return st;
+//	return 0;
+//}
+//
+//#include <ax/database/axPostgreSQL.h>
+//axStatus test_PostgreSQL() {
+//	axStatus st;
+//	axDBConn	db;
+//	st = axPostgreSQL_connect ( db, "host=localhost port=5432 dbname=testdb user=test password=1234" );	if( !st ) return st;
+//	st = test_ax_database_common(db);			if( !st ) return st;
+//	return 0;
+//}
 
 #include <ax/database/axODBC.h>
 axStatus test_ODBC() {
@@ -213,9 +214,10 @@ axStatus test_ODBC() {
 axStatus test_ODBC_MSSQL() {
 	axStatus st;
 	axDBConn	db;
-//	st = axODBC_MSSQL_connect ( db, "DRIVER={SQL Server}; DATABASE=testdb; SERVER=192.168.1.56; UID=test; PWD=1234;");	if( !st ) return st;
-	st = axODBC_MSSQL_connect ( db, "DRIVER={SQL Server Native Client 10.0}; "
-									"DATABASE=testdb; SERVER=192.168.1.56; UID=test; PWD=1234;");	if( !st ) return st;
+	st = axODBC_MSSQL_connect ( db, "DSN={MSSQL_DSN}; UID=test; PWD=1234;");	if( !st ) return st;
+
+	//st = axODBC_MSSQL_connect ( db, "DRIVER={SQL Server Native Client 10.0}; "
+	//								"DATABASE=testdb; SERVER=192.168.1.56; UID=test; PWD=1234;");	if( !st ) return st;
 	st = test_ax_database_common(db);			if( !st ) return st;
 	return 0;
 }
@@ -224,7 +226,9 @@ axStatus test_ODBC_Oracle() {
 	axStatus st;
 	axDBConn	db;
 
-	st = axODBC_Oracle_connect ( db, "DRIVER={Oracle}; DATABASE=testdb; SERVER=192.168.1.56; UID=test; PWD=1234;" ); if( !st ) return st;
+//	st = axODBC_Oracle_connect ( db, "DSN=MyOracleDSN; UID=test; PWD=1234;" ); if( !st ) return st;
+	st = axODBC_Oracle_connect ( db, "DRIVER={Oracle in OraDb11g_home1}; UID=test; PWD=1234;" ); if( !st ) return st;
+//	st = axODBC_Oracle_connect ( db, "DSN={TonyOracle}; UID=testdb; PWD=1234;" ); if( !st ) return st;
 	st = test_ax_database_common(db);			if( !st ) return st;
 	return 0;
 }
@@ -236,8 +240,8 @@ axStatus test_ax_database() {
 //	axUTestCase( test_MySQL() );
 //	axUTestCase( test_PostgreSQL() );
 //	axUTestCase( test_ODBC() );
-	axUTestCase( test_ODBC_MSSQL() );
-//	axUTestCase( test_ODBC_Oracle() );
+//	axUTestCase( test_ODBC_MSSQL() );
+	axUTestCase( test_ODBC_Oracle() );
 
 	return 0;
 }
