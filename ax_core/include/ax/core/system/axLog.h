@@ -129,29 +129,30 @@ inline axStatus ax_log_ex_ArgList( const char* user_string, const wchar_t*   fmt
 inline axStatus ax_log_ex_ArgList( const axLog_Tag &tag, const char* user_string, const char*    fmt, const axStringFormat::ArgList &list ) { return axLog::instance->log_ArgList( tag, user_string, fmt, list ); }
 inline axStatus ax_log_ex_ArgList( const axLog_Tag &tag, const char* user_string, const wchar_t* fmt, const axStringFormat::ArgList &list ) { return axLog::instance->log_ArgList( tag, user_string, fmt, list ); }
 
+
 //=== StdTag ====
 // axStatus		ax_log		( const char*    fmt, ... );
-axLogExpandArgListStdTag	( inline axStatus, ax_log, const char*,	   const axStringFormat_Arg&, axStringFormat_ArgList )
+axLogExpandArgListStdTag1	(  axStatus, ax_log, const char*,	   const axStringFormat_Arg&, axStringFormat_ArgList )
 // axStatus		ax_log		( const wchar_t* fmt, ... );
-axLogExpandArgListStdTag	( inline axStatus, ax_log, const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList )
+axLogExpandArgListStdTag1	(  axStatus, ax_log, const wchar_t*,	const axStringFormat_Arg&, axStringFormat_ArgList )
 
 //=== StdTag with user_string ====
 //	axStatus	ax_log_ex	( const char* user_string, const char*    fmt, ... );
-axLogExpandArgListStdTag2	( inline axStatus, ax_log_ex, const char*, const char*,    const axStringFormat_Arg&, axStringFormat_ArgList )
+axLogExpandArgListStdTag2	(  axStatus, ax_log_ex, const char*, const char*,    const axStringFormat_Arg&, axStringFormat_ArgList )
 //	axStatus	ax_log_ex	( const char* user_string, const wchar_t* fmt, ... );
-axLogExpandArgListStdTag2	( inline axStatus, ax_log_ex, const char*, const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList )
+axLogExpandArgListStdTag2	(  axStatus, ax_log_ex, const char*, const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList )
 
 //=== log with tag =====
 //	axStatus	ax_log		( axLog_Tag &tag, const char*    fmt, ... );
-axLogExpandArgListUserTag	( inline axStatus, ax_log,	axLog_Tag&, const char*,	const axStringFormat_Arg&, axStringFormat_ArgList )
+axLogExpandArgListUserTag2	(  axStatus, ax_log,	axLog_Tag&, const char*,	const axStringFormat_Arg&, axStringFormat_ArgList )
 //	axStatus	ax_log		( axLog_Tag &tag, const wchar_t* fmt, ... );
-axLogExpandArgListUserTag	( inline axStatus, ax_log,	axLog_Tag&, const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList )
+axLogExpandArgListUserTag2	(  axStatus, ax_log,	axLog_Tag&, const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList )
 
 //=== log with tag and user_string =====
 //	axStatus	ax_log_ex	( axLog_Tag &tag, const char* user_string, const char*    fmt, ... );
-axLogExpandArgListUserTag2	( inline axStatus, ax_log_ex, axLog_Tag&, const char*, const char*,    const axStringFormat_Arg&, axStringFormat_ArgList )
+axLogExpandArgListUserTag3	(  axStatus, ax_log_ex, axLog_Tag&, const char*, const char*,    const axStringFormat_Arg&, axStringFormat_ArgList )
 //	axStatus	ax_log_ex	( axLog_Tag &tag, const char* user_string, const wchar_t* fmt, ... );
-axLogExpandArgListUserTag2	( inline axStatus, ax_log_ex, axLog_Tag&, const char*, const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList )
+axLogExpandArgListUserTag3	(  axStatus, ax_log_ex, axLog_Tag&, const char*, const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList )
 
 
 

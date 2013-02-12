@@ -9,8 +9,7 @@
 	for( T *(V)=(ARR).size()?&(ARR).last():NULL, *axEachEnd=(ARR).size()?(ARR).ptr():(ARR).ptr()+1; (V)>=axEachEnd; (V)-- )
 //-----
 
-#define axMakeName2( Name0, Name1 )			Name0##Name1
-#define axMakeName3( Name0, Name1, Name2 )	Name0##Name1##Name2
+#define axJOIN_WORD( w0, w1 )		w0##w1
 
 
 #endif //__ax_macro_h__

@@ -83,11 +83,8 @@ public:
 class axStringFormat_ArgList : public axLocalArray< axStringFormat_Arg, axStringFormat_ArgListMaxSize > {
 	typedef	axLocalArray< axStringFormat_Arg, axStringFormat_ArgListMaxSize >	B;
 public:
-	axStringFormat_ArgList&	operator<<( const axStringFormat_Arg &a ) { 
-		axStatus st;
-		
-		st = B::append( a );	assert( st );
-		return *this; 
+	axStatus addArg( const axStringFormat_Arg &a ) { 
+		return B::append( a );
 	}
 
 private:

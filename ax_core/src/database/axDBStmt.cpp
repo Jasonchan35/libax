@@ -31,12 +31,17 @@ axStatus axDBStmt::create ( axDBConn &db, const char* sql ) {
 	return db._getImp()->createStmt( *this, sql);
 }
 
+axExpandArgList0_Imp ( axStatus axDBStmt::, exec,   const axDBInParam_CB & , axDBInParamList )
+
 axStatus axDBStmt::exec_ArgList( const axDBInParamList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	axStatus st;
 	st = p_->exec_ArgList( list );	if( !st ) return st;
 	return 0;
 }
+
+
+axExpandArgList0_Imp ( axStatus axDBStmt::, getRow, const axDBOutParam_CB & , axDBOutParamList )
 
 axStatus axDBStmt::getRow_ArgList	( axDBOutParamList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;

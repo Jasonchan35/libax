@@ -4,13 +4,13 @@
 #include "axDB_common.h"
 
 class axDBInParamList;
-template<class T> void axDBInParamList_io( axDBInParamList & list, const T & v );
+template<class T> axStatus axDBInParamList_io( axDBInParamList & list, const T & v );
 
-typedef void (*axDBInParamList_io_func)( axDBInParamList &list, const void* data );
+typedef axStatus (*axDBInParamList_io_func)( axDBInParamList &list, const void* data );
 
 template<class T> inline
-void axDBInParamList_io_func_T( axDBInParamList & list, const void* data ) {
-	axDBInParamList_io( list, *(const T*) data );
+axStatus axDBInParamList_io_func_T( axDBInParamList & list, const void* data ) {
+	return axDBInParamList_io( list, *(const T*) data );
 }
 
 class axDBInParam_CB {
@@ -54,18 +54,17 @@ class axDBInParamList : public axArray< axDBInParam, axDB_kArgListLocalBufSize >
 public:
 	axDBInParamList() : skipPkeyAtIndex_(-1) {}
 
-	axDBInParamList&	operator << ( const axDBInParam_CB &p ) {
-		p.func( *this, p.data );
-		return *this;
+	axStatus addArg ( const axDBInParam_CB &p ) {
+		return p.func( *this, p.data );
 	}
 
-	axDBInParamList&	operator << ( const axDBInParam &p ) {
+	axStatus addParam ( const axDBInParam &p ) {
+		axStatus st;
 		if( skipPkeyAtIndex_ != curIndex ) {
-			axStatus st;
-			st = append( p );	assert(st);
+			st = append( p );	return st;
 		}
 		curIndex++;
-		return *this;
+		return 0;
 	}
 
 	template<class T>
@@ -77,40 +76,40 @@ public:
 
 	template<class T>
 	axStatus io( T &v, const char* name ) {
-		axDBInParamList_io( *this, v );	return 0;
+		return axDBInParamList_io( *this, v );
 	}
 
 	axSize	curIndex;
 	axSize	skipPkeyAtIndex_;
 };
 
-inline void axDBInParamList_io( axDBInParamList & list, bool				v ) { axDBInParam p( axDB_c_type_bool		);	p.v_bool	=v;	list<<(p); }
-inline void axDBInParamList_io( axDBInParamList & list, float				v ) { axDBInParam p( axDB_c_type_float	);	p.v_float	=v;	list<<(p); }
-inline void axDBInParamList_io( axDBInParamList & list, double				v ) { axDBInParam p( axDB_c_type_double	);	p.v_double	=v;	list<<(p); }
-inline void axDBInParamList_io( axDBInParamList & list, int8_t				v ) { axDBInParam p( axDB_c_type_int8		);	p.v_int8	=v;	list<<(p); }
-inline void axDBInParamList_io( axDBInParamList & list, int16_t				v ) { axDBInParam p( axDB_c_type_int16	);	p.v_int16	=v;	list<<(p); }
-inline void axDBInParamList_io( axDBInParamList & list, int32_t				v ) { axDBInParam p( axDB_c_type_int32	);	p.v_int32	=v;	list<<(p); }
-inline void axDBInParamList_io( axDBInParamList & list, int64_t				v ) { axDBInParam p( axDB_c_type_int64	);	p.v_int64	=v;	list<<(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, bool				v ) { axDBInParam p( axDB_c_type_bool		);	p.v_bool	=v;	return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, float				v ) { axDBInParam p( axDB_c_type_float		);	p.v_float	=v;	return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, double				v ) { axDBInParam p( axDB_c_type_double		);	p.v_double	=v;	return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, int8_t				v ) { axDBInParam p( axDB_c_type_int8		);	p.v_int8	=v;	return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, int16_t				v ) { axDBInParam p( axDB_c_type_int16		);	p.v_int16	=v;	return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, int32_t				v ) { axDBInParam p( axDB_c_type_int32		);	p.v_int32	=v;	return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, int64_t				v ) { axDBInParam p( axDB_c_type_int64		);	p.v_int64	=v;	return list.addParam(p); }
 
-inline void axDBInParamList_io( axDBInParamList & list, const char*			v ) { axDBInParam p( axDB_c_type_StringA );	p.v_strA	=v;	list<<(p); }
-inline void axDBInParamList_io( axDBInParamList & list, const axStringA  &	v ) { axDBInParam p( axDB_c_type_StringA );	p.v_strA	=v;	list<<(p); }
-inline void axDBInParamList_io( axDBInParamList & list, const axIStringA &	v ) { axDBInParam p( axDB_c_type_StringA );	p.v_strA	=v;	list<<(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, const char*			v ) { axDBInParam p( axDB_c_type_StringA	);	p.v_strA	=v;	return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, const axStringA  &	v ) { axDBInParam p( axDB_c_type_StringA	);	p.v_strA	=v;	return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, const axIStringA &	v ) { axDBInParam p( axDB_c_type_StringA	);	p.v_strA	=v;	return list.addParam(p); }
 
-inline void axDBInParamList_io( axDBInParamList & list, const wchar_t*		v ) { axDBInParam p( axDB_c_type_StringW );	p.v_strW	=v;	list<<(p); }
-inline void axDBInParamList_io( axDBInParamList & list, const axStringW  &	v ) { axDBInParam p( axDB_c_type_StringW );	p.v_strW	=v;	list<<(p); }
-inline void axDBInParamList_io( axDBInParamList & list, const axIStringW &	v ) { axDBInParam p( axDB_c_type_StringW );	p.v_strW	=v;	list<<(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, const wchar_t*		v ) { axDBInParam p( axDB_c_type_StringW	);	p.v_strW	=v;	return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, const axStringW  &	v ) { axDBInParam p( axDB_c_type_StringW	);	p.v_strW	=v;	return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, const axIStringW &	v ) { axDBInParam p( axDB_c_type_StringW	);	p.v_strW	=v;	return list.addParam(p); }
 
-inline void axDBInParamList_io( axDBInParamList & list, const axIByteArray & v ) { axDBInParam p( axDB_c_type_ByteArray ); p.v_ByteArray =&v; list<<(p); }
-inline void axDBInParamList_io( axDBInParamList & list, const axByteArray  & v ) { axDBInParam p( axDB_c_type_ByteArray ); p.v_ByteArray =&v; list<<(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, const axIByteArray & v ) { axDBInParam p( axDB_c_type_ByteArray ); p.v_ByteArray =&v; return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, const axByteArray  & v ) { axDBInParam p( axDB_c_type_ByteArray ); p.v_ByteArray =&v; return list.addParam(p); }
 
-inline void axDBInParamList_io( axDBInParamList & list, axTimeStamp			 v ) { axDBInParam p( axDB_c_type_TimeStamp ); p.v_TimeStamp = v; list<<(p); }
-inline void axDBInParamList_io( axDBInParamList & list, const axDateTime   & v ) { axDBInParamList_io( list, v.toTimeStamp() );  }
+inline axStatus axDBInParamList_io( axDBInParamList & list, axTimeStamp			 v ) { axDBInParam p( axDB_c_type_TimeStamp ); p.v_TimeStamp = v; return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, const axDateTime   & v ) { axDBInParamList_io( list, v.toTimeStamp() );  }
 
 
 
 template<class T> inline
-void axDBInParamList_io( axDBInParamList & list, const T & v ) {
-	ax_const_cast(v).serialize_io( list );
+axStatus axDBInParamList_io( axDBInParamList & list, const T & v ) {
+	return ax_const_cast(v).serialize_io( list );
 }
 
 inline

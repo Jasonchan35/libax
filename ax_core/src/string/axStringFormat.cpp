@@ -9,6 +9,9 @@
 #include <ax/core/string/axStringFormat.h>
 #include <ax/core/string/ax_str_to.h>
 
+axExpandArgList1_Imp( axStatus axStringFormat::, format,	const char*		/*fmt*/, const axStringFormat_Arg&, axStringFormat_ArgList )
+axExpandArgList1_Imp( axStatus axStringFormat::, format,	const wchar_t*	/*fmt*/, const axStringFormat_Arg&, axStringFormat_ArgList )
+
 axStringFormat::axStringFormat() {
 	strA_ = NULL;
 	strW_ = NULL;
