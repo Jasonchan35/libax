@@ -18,6 +18,7 @@ public:
 		ax_take_macro( type );
 		ax_take_macro( name );
         ax_take_macro( pkey );
+        ax_take_macro( pkey_auto_inc );
         ax_take_macro( data );
 		return 0; 
 	}
