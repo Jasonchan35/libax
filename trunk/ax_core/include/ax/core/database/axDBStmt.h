@@ -25,10 +25,12 @@ public:
 							axStatus	create			( axDBConn & db, const char* sql );
 
 							axStatus	create_Insert	( axDBConn & db, const char* table, const axDBColumnList & list );
-		template<class T>	axStatus	create_Insert	( axDBConn & db, const char* table, const char* pkey = NULL, bool pkey_auto_inc = false );
+		template<class T>	axStatus	create_Insert	( axDBConn & db, const char* table, const char* pkey=NULL, bool pkeyAutoInc=false );
 
 							axStatus	create_Update	( axDBConn & db, const char* table,	const char* szWhere, const axDBColumnList & list );
-		template<class T>	axStatus	create_Update	( axDBConn & db, const char* table,	const char* szWhere, const char* pkey = NULL, bool pkey_auto_inc = false );
+		template<class T>	axStatus	create_Update	( axDBConn & db, const char* table,	const char* szWhere, const char* pkey=NULL, bool pkeyAutoInc=false );
+
+							axStatus	create_Select	( axDBConn & db, const char* table,	const char* szWhere, const axDBColumnList & list );
 		template<class T>	axStatus	create_Select	( axDBConn & db, const char* table,	const char* szWhere );
 
 		//	axStatus	exec			( ... )
@@ -45,6 +47,7 @@ public:
 					
 				void	_setImp			( axDBStmt_Imp* p );
 		axDBStmt_Imp*	_getImp			()		{ return p_; }
+				
 			const char*	sql				();
 protected:
 	axSharedPtr< axDBStmt_Imp >	p_;
@@ -91,7 +94,7 @@ public:
 
 //=== insert ===
 template<class T> inline
-axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table, const char* pkey, bool pkey_auto_inc ) {
+axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table, const char* pkey, bool pkeyAutoInc ) {
     axStatus st;
 	axTempStringA	sql;
 	st = db.getSQL_Insert<T>( sql, table );	if( !st ) return st;
@@ -101,10 +104,10 @@ axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table, const char* 
 //=== update ==
 
 template<class T> inline
-axStatus	axDBStmt::create_Update( axDBConn & db, const char* table, const char* szWhere, const char* pkey, bool pkey_auto_inc ) {
+axStatus	axDBStmt::create_Update( axDBConn & db, const char* table, const char* szWhere, const char* pkey, bool pkeyAutoInc ) {
     axStatus st;
 	axTempStringA	sql;
-	st = db.getSQL_Update<T>( sql, table, szWhere, pkey, pkey_auto_inc );	if( !st ) return st;
+	st = db.getSQL_Update<T>( sql, table, szWhere, pkey, pkeyAutoInc );	if( !st ) return st;
 	return create( db, sql );
 }
 

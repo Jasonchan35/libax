@@ -69,7 +69,7 @@ public:
 	}
 
 	template<class T>
-	axStatus build( T &v, size_t skipPkeyAtIndex = -1 ) {
+	axStatus create( T &v, size_t skipPkeyAtIndex = -1 ) {
 		curIndex = 0;
 		skipPkeyAtIndex_ = skipPkeyAtIndex;
 		return io( v, NULL );

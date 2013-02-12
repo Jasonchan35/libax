@@ -50,21 +50,14 @@ axStatus	axDBConn_ODBC::getSQL_CreateTable	( axIStringA & outSQL, const char* ta
 			st = outSQL.append(",\n");
 		}
 
-		st = identifierString( colName, c.name );		if( !st ) return st;
+		st = identifierString( colName, c.name );					if( !st ) return st;
 
-		if( c.pkey_auto_inc ) {
-			if( c.type != axDB_c_type_int64 ) {
-				return axStatus_Std::DB_invalid_primary_key_type;
+		if( list.pkeyIndex() == i ) {
+			st = outSQL.append( " PRIMARY KEY" );					if( !st ) return st;
+			if( list.pkeyAutoInc() ) {
+				st = outSQL.append( " AUTOINCREMENT" );				if( !st ) return st; //different DB might be different
 			}
-			st = outSQL.appendFormat("  {?}\t{?}", colName, "BIGSERIAL" );				if( !st ) return st;
-		}else{
-			st = outSQL.appendFormat("  {?}\t{?}", colName, DBTypeName(c.type) );		if( !st ) return st;
 		}
-
-		if( c.pkey ) {
-			st = outSQL.append(" PRIMARY KEY");
-		}
-
 	}
 
 	st = outSQL.appendFormat( "\n);" );
@@ -115,6 +108,7 @@ bool axDBConn_ODBC::hasError ( RETCODE code, const char* sql ) {
 }
 
 const char*	axDBConn_ODBC::DBTypeName( int c_type ) {
+	// SQL99 Standard ?
 	switch( c_type ) {
 		case axDB_c_type_bool:		return "BOOLEAN";
 		case axDB_c_type_int8:		return "TINYINT";
