@@ -50,7 +50,7 @@ public:
 	int		day;		//!< 1~31
 	int		hour;		//!< 0~23
 	int		minute;		//!< 0~59
-	double	second;		//!< 0~59
+	double	second;		//!< 0~59.xxx
 
 	int		weekday;	//!< days since Sunday - [0,6]
 	int		yearday;	//!< days since January 1 - [0,365]
