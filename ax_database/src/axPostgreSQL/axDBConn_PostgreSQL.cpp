@@ -65,17 +65,24 @@ axStatus axDBConn_PostgreSQL::getSQL_CreateTable ( axIStringA & outSQL, const ch
 
 		st = identifierString( colName, c.name );		if( !st ) return st;
 
-		if( c.pkey_auto_inc ) {
-			if( c.type != axDB_c_type_int64 ) {
-				return axStatus_Std::DB_invalid_primary_key_type;
-			}
-			st = outSQL.appendFormat("  {?}\t{?}", colName, "BIGSERIAL" );				if( !st ) return st;
-		}else{
-			st = outSQL.appendFormat("  {?}\t{?}", colName, DBTypeName(c.type) );		if( !st ) return st;
-		}
+		if( list.pkeyIndex() == i ) {
+			if( list.pkeyAutoInc()  ) {
+				switch( c.type ) {
+					case axDB_c_type_int32: {
+						st = outSQL.appendFormat("  {?}\t{?}", colName, "SERIAL" );			if( !st ) return st;
+					}break;
 
-		if( c.pkey ) {
-			st = outSQL.append(" PRIMARY KEY");
+					case axDB_c_type_int64: {
+						st = outSQL.appendFormat("  {?}\t{?}", colName, "BIGSERIAL" );		if( !st ) return st;
+					}break;
+
+					default:
+						return axStatus_Std::DB_invalid_primary_key_type;
+				}
+			}else{
+				st = outSQL.appendFormat("  {?}\t{?}", colName, DBTypeName(c.type) );		if( !st ) return st;
+			}
+			st = outSQL.append(" PRIMARY KEY");		if( !st ) return st;
 		}
 
 	}

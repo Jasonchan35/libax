@@ -65,13 +65,13 @@ axStatus	axDBConn_MSSQL::getSQL_CreateTable	( axIStringA & outSQL, const char* t
 		st = identifierString( colName, c.name );					if( !st ) return st;
 		st = outSQL.appendFormat("  {?}\t{?}", colName, DBTypeName(c.type) );		if( !st ) return st;
 
-		if( c.pkey_auto_inc ) {
-			st = outSQL.append(" IDENTITY(1,1)" );					if( !st ) return st;
-		}
-		if( c.pkey ) {
+		if( list.pkeyIndex() == i ) {
+
+			if( list.pkeyAutoInc() ) {
+				st = outSQL.append(" IDENTITY(1,1)" );				if( !st ) return st;
+			}
 			st = outSQL.append(" PRIMARY KEY");						if( !st ) return st;
 		}
-
 	}
 
 	st = outSQL.appendFormat( "\n);" );

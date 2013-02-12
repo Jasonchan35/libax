@@ -8,8 +8,6 @@ class axDBColumn {
 public:
 	axDBColumn() 
 		: type(axDB_c_type_null)
-		, pkey(false)
-		, pkey_auto_inc(false)
 		, data(NULL)
 	{}
 	
@@ -17,21 +15,17 @@ public:
 		axStatus st;
 		ax_take_macro( type );
 		ax_take_macro( name );
-        ax_take_macro( pkey );
-        ax_take_macro( pkey_auto_inc );
         ax_take_macro( data );
 		return 0; 
 	}
 
 	axStatus	toStringFormat( axStringFormat &f ) const {
-		return f.format("{?} {?} {?} {?}", type, name, data, pkey ? "pkey" : "" );
+		return f.format("{?} {?} {?}", type, name, data );
 	}
 	
-	int					type;
-	axStringA_<64>		name;
-	bool				pkey;
-	bool				pkey_auto_inc;
-    void*               data;
+	int				type;
+	axStringA		name;
+	const void*		data;
 };
 
 class axDBColumnList;
@@ -41,35 +35,32 @@ class axDBColumnList : public axArray< axDBColumn, axDB_kArgListLocalBufSize > {
 	typedef	axArray< axDBColumn, axDB_kArgListLocalBufSize > B;
 public:
 	axDBColumnList() {
-		prefix = NULL;
+		_tmpPrefix		= NULL;
+		pkeyIndex_		= -1;
+		pkeyAutoInc_	= false;
+	}
+
+	template<class T, class PKeyType, PKeyType T::*PKeyMember >
+	axStatus	createByPKeyMember( bool pkeyAutoInc ) {
+		pkeyIndex_	 = -1;
+		pkeyAutoInc_ = pkeyAutoInc;
+
+		T	t;
+		axStatus st = io( t, NULL );			if( !st ) return st;
+		pkeyIndex_ = findColumnByData( &(t.*PKeyMember) );
+		return 0;
 	}
 
 	template<class T>
-	axStatus	build( const char* pkey, bool pkey_auto_inc ) {
+	axStatus	create( const char* pkey, bool pkeyAutoInc ) {
+		pkeyIndex_	 = -1;
+		pkeyAutoInc_ = pkeyAutoInc;
+
 		T	t;
-		axStatus st = io( t, NULL );		if( !st ) return st;
-		axDBColumn* c = findColumnByName( pkey );
-		if( c ) {
-			c->pkey = true;
-			if( pkey_auto_inc ) c->pkey_auto_inc = true;
-		}
+		axStatus st = io( t, NULL );			if( !st ) return st;
+		pkeyIndex_ = findColumnByName( pkey );
 		return 0;
 	}
-
-	template<class T, class PKey, PKey T::*PKeyMember, bool pkey_auto_inc >
-	axStatus	_build( axSize * outPKeyIndex ) {
-		T	t;
-		axStatus st = io( t, NULL );		if( !st ) return st;
-		PKey & p = t.*PKeyMember;
-
-		axDBColumn* c = findColumnByData( &p, outPKeyIndex );
-		if( c ) {
-			c->pkey = true;
-			c->pkey_auto_inc = pkey_auto_inc;
-		}
-		return 0;
-	}
-
 
 	template<class T>
 	axStatus	io	( T &value, const char* name ) {
@@ -82,21 +73,29 @@ public:
 		st = incSize(1);		if( !st ) return st;
 		axDBColumn & c = last();
 
-		if( prefix && prefix[0] ) {
-			st = c.name.format("{?}_{?}", prefix, name );
+		if( _tmpPrefix && _tmpPrefix[0] ) {
+			st = c.name.format("{?}_{?}", _tmpPrefix, name );
 		}else{
 			st = c.name.set( name );
 		}
 		c.type = axDBOutParamType(value);
-        c.data = &value;
+		c.data = &value;
 		return 0;
 	}
 
-	axStatus	toStringFormat		( axStringFormat &f ) const;
-    axDBColumn* findColumnByData	(		void * p, axSize * outIndex = NULL );
-    axDBColumn* findColumnByName	( const char * p, axSize * outIndex = NULL );
+			axStatus	toStringFormat		( axStringFormat &f ) const;
+			size_t		findColumnByName	( const char* name );
+			size_t		findColumnByData	( const void* data );
 
-	const char* prefix;
+	const	axDBColumn*	pkeyColumn			() const	{ return inBound( pkeyIndex_ ) ? &at(pkeyIndex_) : NULL; }
+			size_t		pkeyIndex			() const	{ return pkeyIndex_;	}
+			bool		pkeyAutoInc			() const	{ return pkeyAutoInc_;	}
+
+	const char* _tmpPrefix;
+
+private:
+	size_t		pkeyIndex_;
+	bool		pkeyAutoInc_;
 };
 
 #define axDB_c_type_list( NAME, C_TYPE, C_ITYPE ) \
@@ -127,15 +126,15 @@ inline axStatus axDBColumnList_io( axDBColumnList &s, axExternalByteArray	& valu
 template<class T> inline //for user-define structure
 axStatus	axDBColumnList_io( axDBColumnList &s, T & value, const char* name ) {
 	axStatus st;
-	axScopeValue<const char*>	old( s.prefix );
+	axScopeValue<const char*>	old( s._tmpPrefix );
 
 	axStringA_<64>	prefix;
-	if( s.prefix && s.prefix[0] ) {
-		st = prefix.format( "{?}_{?}", s.prefix, name );
+	if( s._tmpPrefix && s._tmpPrefix[0] ) {
+		st = prefix.format( "{?}_{?}", s._tmpPrefix, name );
 	}else{
 		st = prefix.set( name );
 	}
-	s.prefix = prefix.c_str();
+	s._tmpPrefix = prefix.c_str();
 
 	st = value.serialize_io( s );	if( !st ) return st;
 	return 0;
@@ -148,30 +147,25 @@ axStatus	axDBColumnList::toStringFormat( axStringFormat &f ) const {
 }
 
 inline
-axDBColumn* axDBColumnList::findColumnByData( void * p, axSize * outIndex ) {
-    for( axSize i=0; i<size(); i++ ) {
-        axDBColumn &c = at(i);
-		if( c.data == p ) {
-			if( outIndex ) *outIndex = i;
-			return &c;
-		}
+size_t axDBColumnList::findColumnByName ( const char* name ) {
+	if( !name ) return -1;
+
+    for( size_t i=0; i<size(); i++ ) {
+		if( at(i).name.equalsNoCase( name ) ) return i;
     }
-    return NULL;
+	return -1;
 }
 
 inline
-axDBColumn* axDBColumnList::findColumnByName( const char * p, axSize * outIndex ) {
-	if( !p ) return NULL;
+size_t	axDBColumnList::findColumnByData ( const void* data )  {
+	if( !data ) return -1;
 
-    for( axSize i=0; i<size(); i++ ) {
-        axDBColumn &c = at(i);
-		if( c.name.equals(p) ) {
-			if( outIndex ) *outIndex = i;
-			return &c;
-		}
+    for( size_t i=0; i<size(); i++ ) {
+		if( at(i).data == data ) return i;
     }
-    return NULL;
+	return -1;
 }
+
 
 
 

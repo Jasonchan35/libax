@@ -145,7 +145,9 @@ axStatus axDBConn_Imp::getSQL_Insert( axIStringA & outSQL, const char* table, co
 	for( size_t i=0; i<list.size(); i++ ) {
 		const axDBColumn & c = list[i];
 
-		if( c.pkey_auto_inc ) continue; //don't insert data to pkey_auto_inc column
+		if( list.pkeyAutoInc() && list.pkeyIndex() == i ) {
+			continue; //don't insert data to pkeyAutoInc column
+		}
 
 		if( col > 0 ) {
 			st = outSQL.append(",\n");					if( !st ) return st;
@@ -187,7 +189,10 @@ axStatus axDBConn_Imp::getSQL_Update( axIStringA & outSQL, const char* table, co
 	size_t col = 0;
 	for( size_t i=0; i<list.size(); i++ ) {
 		const axDBColumn & c = list[i];
-		if( c.pkey_auto_inc ) continue; //MSSQL cannot update pkey_auto_inc column
+		if( list.pkeyAutoInc() && list.pkeyIndex() == i ) {
+			continue; //MSSQL cannot update pkeyAutoInc column
+		}
+
 		if( col > 0 ) {
 			st = outSQL.append(",\n");						if( !st ) return st;
 		}

@@ -76,3 +76,10 @@ axStatus axDBStmt::create_Update	( axDBConn & db, const char* table, const char*
 	st = db.getSQL_Update( sql, table, szWhere, list );		if( !st ) return st;
 	return create( db, sql );
 }
+
+axStatus axDBStmt::create_Select	( axDBConn & db, const char* table, const char* szWhere, const axDBColumnList & list ) {
+	axStatus st;
+	axTempStringA	sql;
+	st = db.getSQL_Select( sql, table, szWhere, list );		if( !st ) return st;
+	return create( db, sql );
+}

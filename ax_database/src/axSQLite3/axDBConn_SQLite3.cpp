@@ -110,9 +110,9 @@ axStatus axDBConn_SQLite3::getSQL_CreateTable ( axIStringA & outSQL, const char*
 		st = identifierString( colName, c.name );		if( !st ) return st;
 		st = outSQL.appendFormat( "  {?}\t{?}", colName, DBTypeName(c.type) );		if( !st ) return st;
 
-		if( c.pkey ) {
+		if( list.pkeyIndex() == i ) {
 			st = outSQL.append( " PRIMARY KEY" );					if( !st ) return st;
-			if( c.pkey_auto_inc ) {
+			if( list.pkeyAutoInc() ) {
 				st = outSQL.append( " AUTOINCREMENT" );				if( !st ) return st;
 			}			
 		}
