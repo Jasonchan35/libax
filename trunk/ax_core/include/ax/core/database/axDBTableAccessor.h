@@ -41,7 +41,7 @@ public:
 		axStatus st;
 		axDBInParamList	list;
 		st = list.create( values, B::pkeyIndex_ );			if( !st ) return st;
-		return B::stmt_.exec_ParamList( list );
+		return B::stmt_.exec_ArgList( list );
 	}
 
 	const char*	sql		() { return B::stmt_.sql(); }
@@ -67,7 +67,7 @@ public:
 		st = list.create( values, B::pkeyIndex_ );		if( !st ) return st;
 		//add param for "where pkey=?"
 		st = list.io( values.*PKeyMember, NULL );		if( !st ) return st;
-		return B::stmt_.exec_ParamList( list );
+		return B::stmt_.exec_ArgList( list );
 	}
 
 	const char*	sql	() { return B::stmt_.sql(); }
@@ -169,9 +169,8 @@ public:
 	}
 
 //	axStatus selectWhere			( axIArray<T> &rows, const char* szWhere, params... );
-	axStatus selectWhere_ParamList	( axIArray<T> &rows, const char* szWhere, const axDBInParamList & params );
-	axExpandArgList2 ( axStatus,  selectWhere, axIArray<T> & /*rows*/, const char* /*szWhere*/, 
-						const axDBInParam_CB &, axDBInParamList, selectWhere_ParamList );
+	axStatus selectWhere_ArgList	( axIArray<T> &rows, const char* szWhere, const axDBInParamList & params );
+	axExpandArgList2 ( axStatus,  selectWhere, axIArray<T> & /*rows*/, const char* /*szWhere*/, const axDBInParam_CB &, axDBInParamList );
 
 	axDBTableAccessor_InsertStmt<T, PKeyType, PKeyMember>	insertStmt;
 	axDBTableAccessor_UpdateStmt<T, PKeyType, PKeyMember>	updateStmt;
@@ -186,7 +185,7 @@ private:
 
 
 template<class T, class PKeyType, PKeyType T::*PKeyMember>
-axStatus axDBTableAccessor<T, PKeyType, PKeyMember>::selectWhere_ParamList ( axIArray<T> &rows, const char* szWhere, const axDBInParamList & params ) {
+axStatus axDBTableAccessor<T, PKeyType, PKeyMember>::selectWhere_ArgList ( axIArray<T> &rows, const char* szWhere, const axDBInParamList & params ) {
 	axDBTableAccessor_SelectMultipleStmt<T>	stmt;
 	axStatus st;
 	st = stmt.create( *db_, table_, szWhere, list_ );	if( !st ) return st;

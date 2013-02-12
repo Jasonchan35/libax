@@ -83,7 +83,7 @@ axLog::~axLog() {
     destroy();
 }
 
-axStatus  axLog :: log_ArgList ( const axLog_Tag &tag, const char* fmt, const axStringFormat::ArgList &list, const char *user_string ) {
+axStatus  axLog :: log_ArgList ( const axLog_Tag &tag, const char *user_string, const char* fmt, const axStringFormat::ArgList &list ) {
 	axStatus st;
     Node* node = getNode();
 	node->tag_name = tag.name();
@@ -94,7 +94,7 @@ axStatus  axLog :: log_ArgList ( const axLog_Tag &tag, const char* fmt, const ax
 	return 0;
 }
 
-axStatus  axLog :: log_ArgList ( const axLog_Tag &tag, const wchar_t* fmt, const axStringFormat::ArgList &list , const char *user_string ) {
+axStatus  axLog :: log_ArgList ( const axLog_Tag &tag, const char *user_string, const wchar_t* fmt, const axStringFormat::ArgList &list ) {
 	axStatus st;
     Node* node = getNode();
 	node->tag_name = tag.name();

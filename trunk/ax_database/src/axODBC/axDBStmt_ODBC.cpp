@@ -82,7 +82,7 @@ void axDBStmt_ODBC::logError() {
     }
 }
 
-axStatus	axDBStmt_ODBC::exec_ParamList	( const axDBInParamList & list ) { 
+axStatus	axDBStmt_ODBC::exec_ArgList	( const axDBInParamList & list ) { 
 	axStatus st;
 	SQLRETURN	ret = SQL_ERROR;
 

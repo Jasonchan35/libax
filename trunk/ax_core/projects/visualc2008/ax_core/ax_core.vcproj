@@ -830,6 +830,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\include\ax\core\common\axExpandArgList.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\ax\core\common\axSingleton.h"
 					>
 				</File>

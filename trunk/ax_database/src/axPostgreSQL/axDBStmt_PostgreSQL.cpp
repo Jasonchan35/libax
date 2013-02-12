@@ -185,7 +185,7 @@ axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, axTimeStamp	&value ) {
 }
 
 //virtual	
-axStatus axDBStmt_PostgreSQL::exec_ParamList ( const axDBInParamList & list ) {
+axStatus axDBStmt_PostgreSQL::exec_ArgList ( const axDBInParamList & list ) {
 	axStatus st;
 
 	if( db_->echoSQL() ) {

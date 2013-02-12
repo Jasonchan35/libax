@@ -50,7 +50,7 @@ template<class T> axStatus	writeRawArray	( const axIArray<T>& o )		{ return writ
 				axStatus	format_ArgList	( const char* fmt, const axStringFormat_ArgList &list );	
 	
 				//! macro - axStatus	format( const char* fmt, ... );
-				axExpandArgList1( axStatus, format,	const char*,	const axStringFormat_Arg&, axStringFormat_ArgList, format_ArgList )
+				axExpandArgList1( axStatus, format,	const char*,	const axStringFormat_Arg&, axStringFormat_ArgList )
 	
 private:
 	FILE*	p_;

@@ -21,7 +21,7 @@ public:
 	
 			axStatus	create		( const char * sql );	
 			void		destroy		();
-	virtual	axStatus	exec_ParamList	( const axDBInParamList & list );	
+	virtual	axStatus	exec_ArgList( const axDBInParamList & list );	
 
 
 	virtual axSize		numColumns	() { return res_.colCount_; }
