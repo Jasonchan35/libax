@@ -24,6 +24,13 @@ template< class T > 	axStatus	axIString_<T> :: set( const wchar_t* sz ) {	resize
 template< class T > 	axStatus	axIString_<T> :: setWithLength( const char*    sz, axSize len ) { resize(0); return appendWithLength( sz, len ); }
 template< class T > 	axStatus	axIString_<T> :: setWithLength( const wchar_t* sz, axSize len ) { resize(0); return appendWithLength( sz, len ); }
 
+axExpandArgList1_Imp( template< class T > axStatus axIString_<T>::, format,			const char*,	const axStringFormat_Arg&, axStringFormat_ArgList )
+axExpandArgList1_Imp( template< class T > axStatus axIString_<T>::, format,			const wchar_t*,	const axStringFormat_Arg&, axStringFormat_ArgList )
+
+axExpandArgList1_Imp( template< class T > axStatus axIString_<T>::, appendFormat,	const char*,	const axStringFormat_Arg&, axStringFormat_ArgList )
+axExpandArgList1_Imp( template< class T > axStatus axIString_<T>::, appendFormat,	const wchar_t*,	const axStringFormat_Arg&, axStringFormat_ArgList )
+
+
 
 template< class T > 
 axStatus	axIString_<T> :: _insertWithLength( axSize pos, const T *src, axSize src_len ) {

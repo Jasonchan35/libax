@@ -110,7 +110,7 @@ public:
 		st = B::stmt_.create_Select( db, table, szWhere, list );		if( !st ) return st;
 		return 0;
 	}
-	axStatus	exec_ParamList	( const axDBInParamList &params )	{ return B::stmt_.exec_ParamList( params ); }
+	axStatus	exec_ArgList	( const axDBInParamList &params )	{ return B::stmt_.exec_ArgList( params ); }
 	axStatus	exec			()									{ return B::stmt_.exec(); }
 	
 	axStatus	getRow			( T & v )							{ return B::stmt_.getRow( v ); }
@@ -170,7 +170,7 @@ public:
 
 //	axStatus selectWhere			( axIArray<T> &rows, const char* szWhere, params... );
 	axStatus selectWhere_ArgList	( axIArray<T> &rows, const char* szWhere, const axDBInParamList & params );
-	axExpandArgList2 ( axStatus,  selectWhere, axIArray<T> & /*rows*/, const char* /*szWhere*/, const axDBInParam_CB &, axDBInParamList );
+	axExpandArgList2_Imp			( axStatus,  selectWhere, axIArray<T> & /*rows*/, const char* /*szWhere*/, const axDBInParam_CB &, axDBInParamList );
 
 	axDBTableAccessor_InsertStmt<T, PKeyType, PKeyMember>	insertStmt;
 	axDBTableAccessor_UpdateStmt<T, PKeyType, PKeyMember>	updateStmt;
@@ -189,7 +189,7 @@ axStatus axDBTableAccessor<T, PKeyType, PKeyMember>::selectWhere_ArgList ( axIAr
 	axDBTableAccessor_SelectMultipleStmt<T>	stmt;
 	axStatus st;
 	st = stmt.create( *db_, table_, szWhere, list_ );	if( !st ) return st;
-	st = stmt.exec_ParamList( params );					if( !st ) return st;
+	st = stmt.exec_ArgList( params );					if( !st ) return st;
 	st = stmt.getAllRows( rows );						if( !st ) return st;
 	return 0;
 }

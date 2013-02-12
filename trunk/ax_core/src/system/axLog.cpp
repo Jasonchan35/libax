@@ -7,6 +7,34 @@
 //
 
 #include <ax/core/system/axLog.h>
+#include <ax/core/common/axExpandArgList.h>
+
+//=== StdTag ====
+// axStatus		ax_log			( const char*    fmt, ... );
+axLogExpandArgListStdTag1_Imp	( axStatus, ax_log, const char*,	   const axStringFormat_Arg&, axStringFormat_ArgList )
+// axStatus		ax_log			( const wchar_t* fmt, ... );
+axLogExpandArgListStdTag1_Imp	( axStatus, ax_log, const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList )
+
+//=== StdTag with user_string ====
+//	axStatus	ax_log_ex		( const char* user_string, const char*    fmt, ... );
+axLogExpandArgListStdTag2_Imp	( axStatus, ax_log_ex, const char*, const char*,    const axStringFormat_Arg&, axStringFormat_ArgList )
+//	axStatus	ax_log_ex		( const char* user_string, const wchar_t* fmt, ... );
+axLogExpandArgListStdTag2_Imp	( axStatus, ax_log_ex, const char*, const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList )
+
+//=== log with tag =====
+//	axStatus	ax_log			( axLog_Tag &tag, const char*    fmt, ... );
+axLogExpandArgListUserTag2_Imp	( axStatus, ax_log,	axLog_Tag&, const char*,	const axStringFormat_Arg&, axStringFormat_ArgList )
+//	axStatus	ax_log			( axLog_Tag &tag, const wchar_t* fmt, ... );
+axLogExpandArgListUserTag2_Imp	( axStatus, ax_log,	axLog_Tag&, const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList )
+
+//=== log with tag and user_string =====
+//	axStatus	ax_log_ex		( axLog_Tag &tag, const char* user_string, const char*    fmt, ... );
+axLogExpandArgListUserTag3_Imp	( axStatus, ax_log_ex, axLog_Tag&, const char*, const char*,    const axStringFormat_Arg&, axStringFormat_ArgList )
+//	axStatus	ax_log_ex		( axLog_Tag &tag, const char* user_string, const wchar_t* fmt, ... );
+axLogExpandArgListUserTag3_Imp	( axStatus, ax_log_ex, axLog_Tag&, const char*, const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList )
+
+
+
 
 #if axOS_WIN
 
