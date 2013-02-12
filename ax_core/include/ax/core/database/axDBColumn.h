@@ -2,6 +2,7 @@
 #define __axDBColumn_h__
 
 #include "axDB_common.h"
+#include "axDBOutParam.h"
 
 
 class axDBColumn {
