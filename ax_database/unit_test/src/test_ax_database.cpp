@@ -13,11 +13,11 @@ const size_t numRows = 5;
 	myTEST_TYPE( int16,		int16_t,		int16_t ) \
 	myTEST_TYPE( int32,		int32_t,		int32_t ) \
 	myTEST_TYPE( int64,		int64_t,		int64_t ) \
-//\
-//	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
-//	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
-//	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
-//	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
+\
+	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
+	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
+	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
+	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
 //---------------
 
 
@@ -236,12 +236,12 @@ axStatus test_ODBC_Oracle() {
 axStatus test_ax_database() {
 	axStatus st;
 
-//	axUTestCase( test_SQLite3() );
+	axUTestCase( test_SQLite3() );
 //	axUTestCase( test_MySQL() );
 //	axUTestCase( test_PostgreSQL() );
 //	axUTestCase( test_ODBC() );
 //	axUTestCase( test_ODBC_MSSQL() );
-	axUTestCase( test_ODBC_Oracle() );
+//	axUTestCase( test_ODBC_Oracle() );
 
 	return 0;
 }
