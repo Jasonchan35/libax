@@ -116,13 +116,11 @@ axStatus test_ax_database_common( axDBConn & db ) {
 
 	db.setEchoSQL( true );
 
-	const char* table = "unitTestTable01";
+//	const char* table = "unit Test's \"Table\" 01";
+	const char* table = "unit Test's Table 01";
 
 	st = db.dropTableIfExists( table );					if( !st ) return st;
 	st = db.createTable<Row>( table, "id", true );		if( !st ) return st;
-
-	//st = db.dropTable( table );							if( !st ) return st;
-	//st = db.createTable<Row>( table, NULL, true );		if( !st ) return st;
 
 	axDBTableAccessor<Row>	tbl;
 	st = tbl.create( db, table );				if( !st ) return st;
@@ -236,12 +234,12 @@ axStatus test_ODBC_Oracle() {
 axStatus test_ax_database() {
 	axStatus st;
 
-	axUTestCase( test_SQLite3() );
+//	axUTestCase( test_SQLite3() );
 //	axUTestCase( test_MySQL() );
 //	axUTestCase( test_PostgreSQL() );
 //	axUTestCase( test_ODBC() );
 //	axUTestCase( test_ODBC_MSSQL() );
-//	axUTestCase( test_ODBC_Oracle() );
+	axUTestCase( test_ODBC_Oracle() );
 
 	return 0;
 }

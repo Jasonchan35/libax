@@ -48,11 +48,6 @@ axStatus	axDBConn_Imp::escapeString( axIStringA & out, const char* sz ) {
 	return out.format("'{?}'", tmp );
 }
 
-axStatus	axDBConn::identifierString( axIStringA & out, const char* sz ) {
-	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->identifierString( out, sz );
-}
-
 axStatus	axDBConn_Imp::identifierString( axIStringA & out, const char* sz ) {
 	axStatus st;
 	axTempStringA	tmp;
@@ -60,6 +55,12 @@ axStatus	axDBConn_Imp::identifierString( axIStringA & out, const char* sz ) {
 	st = tmp.replaceString("\"","\"\"");	if( !st ) return st;
 	return out.format("\"{?}\"", tmp );
 }
+
+axStatus	axDBConn::identifierString( axIStringA & out, const char* sz ) {
+	if( !p_ ) return axStatus_Std::not_initialized;
+	return p_->identifierString( out, sz );
+}
+
 
 //== create table ==
 axStatus axDBConn::createTable	( const char* table, const axDBColumnList & list ) {

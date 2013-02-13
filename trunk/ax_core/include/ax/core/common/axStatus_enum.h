@@ -89,11 +89,11 @@ axStatus_enum( DB_error )
 axStatus_enum( DB_error_connect )
 axStatus_enum( DB_error_prepare_stmtement )
 axStatus_enum( DB_no_such_column )
+axStatus_enum( DB_primary_key_not_found )
 axStatus_enum( DB_invalid_param_count )
 axStatus_enum( DB_invalid_param_type )
 axStatus_enum( DB_invalid_value_type )
-axStatus_enum( DB_id_column_type_error )
-axStatus_enum( DB_primary_key_not_found )
+axStatus_enum( DB_invalid_identifier )
 axStatus_enum( DB_invalid_primary_key_type )
 
 //-------------

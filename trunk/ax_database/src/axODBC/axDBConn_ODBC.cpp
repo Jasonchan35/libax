@@ -122,14 +122,12 @@ void axDBConn_ODBC::logError() {
     WCHAR       wszState[SQL_SQLSTATE_SIZE+1];
 
 	SQLRETURN ret;
-	for(;;)
-    {
+	for(;;) {
 		ret = SQLGetDiagRec( SQL_HANDLE_ENV, env_, ++iRec, wszState, &iNativeError, wszMessage, len, NULL );
 		if( ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO ) break;
 	}
 
-	for(;;)
-    {
+	for(;;) {
 		ret = SQLGetDiagRec( SQL_HANDLE_DBC, dbc_, ++iRec, wszState, &iNativeError, wszMessage, len, NULL );
 		if( ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO ) break;
     }
