@@ -118,7 +118,7 @@ axStatus axDBConn_SQLite3::getSQL_CreateTable ( axIStringA & outSQL, const char*
 		}
 	}
 
-	st = outSQL.appendFormat( "\n);" );
+	st = outSQL.appendFormat( "\n);" );		if( !st ) return st;
 	return 0;
 }
 

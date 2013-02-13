@@ -52,9 +52,7 @@ int	axDBStmt_SQLite3 :: columnType( axSize col ) {
 axStatus axDBStmt_SQLite3::exec_ArgList( const axDBInParamList & list ) {
 	if( !stmt_ ) return axStatus_Std::DB_error;
 
-	if( db_->echoSQL() ) {
-		ax_log("--- ExecSQL: ---\n{?}\n  with Params:{?}\n", sql_, list );
-	}
+	echoExecSQL( db_, list );
 
 	sqlite3_reset( stmt_ );
 	axStatus st;

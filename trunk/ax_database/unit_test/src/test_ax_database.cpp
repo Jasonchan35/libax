@@ -10,14 +10,14 @@ const size_t numRows = 5;
 	myTEST_TYPE( double,	double,			double ) \
 \
 	myTEST_TYPE( int8,		int8_t,			int8_t  ) \
-	myTEST_TYPE( int16,		int16_t,		int16_t ) \
-	myTEST_TYPE( int32,		int32_t,		int32_t ) \
-	myTEST_TYPE( int64,		int64_t,		int64_t ) \
-\
-	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
-	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
-	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
-	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
+//	myTEST_TYPE( int16,		int16_t,		int16_t ) \
+//	myTEST_TYPE( int32,		int32_t,		int32_t ) \
+//	myTEST_TYPE( int64,		int64_t,		int64_t ) \
+//\
+//	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
+//	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
+//	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
+//	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
 //---------------
 
 
@@ -117,7 +117,8 @@ axStatus test_ax_database_common( axDBConn & db ) {
 	db.setEchoSQL( true );
 
 //	const char* table = "unit Test's \"Table\" 01";
-	const char* table = "unit Test's Table 01";
+	const char* table = "Test's Table";
+//	const char* table = "TestTable";
 
 	st = db.dropTableIfExists( table );					if( !st ) return st;
 	st = db.createTable<Row>( table, "id", true );		if( !st ) return st;

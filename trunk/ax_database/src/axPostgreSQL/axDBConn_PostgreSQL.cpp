@@ -87,7 +87,7 @@ axStatus axDBConn_PostgreSQL::getSQL_CreateTable ( axIStringA & outSQL, const ch
 
 	}
 
-	st = outSQL.appendFormat( "\n);" );
+	st = outSQL.appendFormat( "\n);" );		if( !st ) return st;
 	return 0;
 }
 

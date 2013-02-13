@@ -188,9 +188,8 @@ axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, axTimeStamp	&value ) {
 axStatus axDBStmt_PostgreSQL::exec_ArgList ( const axDBInParamList & list ) {
 	axStatus st;
 
-	if( db_->echoSQL() ) {
-		ax_log("--- ExecSQL: ---\n{?}\n  with Params:{?}\n", sql_, list );
-	}
+	echoExecSQL( db_, list );
+
 
 	res_.colCount_ = 0;
 	res_.rowCount_ = 0;
