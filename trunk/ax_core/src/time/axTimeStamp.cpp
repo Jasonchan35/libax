@@ -1,7 +1,13 @@
 #include <ax/core/time/axTimeStamp.h>
-
+#include <ax/core/time/axDateTime.h>
 
 //-------------
+
+
+axStatus	axTimeStamp::toStringFormat( axStringFormat &f ) const{
+	return f.format( "{?}", axDateTime(*this) );
+}
+
 
 #if axOS_WIN
 

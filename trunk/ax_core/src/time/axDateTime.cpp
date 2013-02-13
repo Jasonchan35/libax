@@ -1,11 +1,5 @@
 #include <ax/core/time/axDateTime.h>
 
-axStatus	axTimeStamp::toStringFormat( axStringFormat &f ) const{
-	return f.format( "{?}", axDateTime(*this) );
-}
-
-//========
-
 axStatus	axDateTime::toStringFormat( axStringFormat &f ) const{
     // ISO 8601 Date time format
 	double int_part;
