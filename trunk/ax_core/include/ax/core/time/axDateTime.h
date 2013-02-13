@@ -45,18 +45,18 @@ public:
 	void		set_tm			( struct tm &src );
 	struct tm	to_tm			() const;
 
-	int		year;
-	int		month;		//!< 1~12
-	int		day;		//!< 1~31
-	int		hour;		//!< 0~23
-	int		minute;		//!< 0~59
-	double	second;		//!< 0~59.xxx
+	int16_t		year;
+	int16_t		month;		//!< 1~12
+	int16_t		day;		//!< 1~31
+	int16_t		hour;		//!< 0~23
+	int16_t		minute;		//!< 0~59
+	double		second;		//!< 0~59.xxx
 
-	int		weekday;	//!< days since Sunday - [0,6]
-	int		yearday;	//!< days since January 1 - [0,365]
-	int		daylightSavingsTime;
+	int16_t		weekday;	//!< days since Sunday - [0,6]
+	int16_t		yearday;	//!< days since January 1 - [0,365]
+	int16_t		daylightSavingsTime;
 
-	bool	UTC;
+	bool		UTC;
 };
 
  
