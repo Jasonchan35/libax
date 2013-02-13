@@ -99,6 +99,16 @@ axStatus	axIniParser::toStringFormat( axStringFormat &f ) const {
 	return 0;
 }
 
+
+axIniParser::Section*	axIniParser::findSection	( const char* section ) {
+	for( axSize i=0; i<sections.size(); i++ ) {
+		Section &s = sections[i];
+		if( ! s.name.equals(section) ) return &s;
+	}
+	return NULL;
+}
+
+
 axIniParser::Key* axIniParser::findKey  ( const char* section, const char* key ) {
 	for( axSize i=0; i<sections.size(); i++ ) {
 		Section &s = sections[i];

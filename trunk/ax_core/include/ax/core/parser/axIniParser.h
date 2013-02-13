@@ -34,6 +34,7 @@ public:
 	
 	void		clear	();
 	
+	Section*	findSection	( const char* section );
 	Key*		findKey	( const char* section, const char* key );
 	const char* value	( const char* section, const char* key );
 
