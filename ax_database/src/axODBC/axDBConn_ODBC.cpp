@@ -77,6 +77,8 @@ axStatus	axDBConn_ODBC::connect	( const char* dsn ) {
 axStatus	axDBConn_ODBC::connect	( const wchar_t* dsn ) {
 	close();
 
+	axStatus st;
+
 	SQLRETURN	ret = SQL_SUCCESS;
 	ret = SQLAllocHandle( SQL_HANDLE_ENV, SQL_NULL_HANDLE, &env_ );
 	if( hasError(ret) ) {
@@ -93,7 +95,10 @@ axStatus	axDBConn_ODBC::connect	( const wchar_t* dsn ) {
 		return axStatus_Std::DB_error_connect;
 	}
 
-	ret = SQLDriverConnect( dbc_, NULL, ax_const_cast(dsn), ax_strlen(dsn), NULL, 0, NULL, SQL_DRIVER_NOPROMPT );
+	SQLSMALLINT dsn_len;
+	st = ax_safe_assign( dsn_len, ax_strlen(dsn) );		if( !st ) return st;
+
+	ret = SQLDriverConnect( dbc_, NULL, ax_const_cast(dsn), dsn_len, NULL, 0, NULL, SQL_DRIVER_NOPROMPT );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_error_connect;

@@ -30,7 +30,7 @@ axStatus	axDBStmt_PostgreSQL::Result::status() {
 }
 
 int axDBStmt_PostgreSQL::columnType( axSize col ) {
-	Oid oid = PQftype( res_, col );
+	Oid oid = PQftype( res_, (int)col );
 	switch( oid ) {
 		case BOOLOID:		return axDB_c_type_bool;
 		case BYTEAOID:		return axDB_c_type_ByteArray;
@@ -55,7 +55,7 @@ int axDBStmt_PostgreSQL::columnType( axSize col ) {
 
 const char* axDBStmt_PostgreSQL::columnName	( axSize col ) {
 	if( ! res_ ) return NULL;
-	return PQfname( res_, col );
+	return PQfname( res_, (int)col );
 }
 
 template<class T> inline

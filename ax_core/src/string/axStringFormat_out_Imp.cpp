@@ -67,7 +67,7 @@ axStatus axStringFormat_out_char( axStringFormat &f, T value ) {
 }
 
 axStatus axStringFormat_out( axStringFormat &f, wchar_t	value ) { return axStringFormat_out_char( f, value ); }
-axStatus axStringFormat_out( axStringFormat &f, char		value ) { return axStringFormat_out_char( f, value ); }
+axStatus axStringFormat_out( axStringFormat &f, char	value ) { return axStringFormat_out_char( f, value ); }
 
 
 
