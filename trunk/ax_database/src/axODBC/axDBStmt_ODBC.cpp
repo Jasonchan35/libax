@@ -402,10 +402,10 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, axDateTime		&value ) {
 	}
 
 	value.year		= ts.year;
-	value.month		= ts.month;
-	value.day		= ts.day;
-	value.hour		= ts.hour;
-	value.minute	= ts.minute;
+	value.month		= (int8_t)ts.month;
+	value.day		= (int8_t)ts.day;
+	value.hour		= (int8_t)ts.hour;
+	value.minute	= (int8_t)ts.minute;
 	value.second	= ts.second + (double) ts.fraction / 1000000000.0f; ////nano-second
 	return 0; 
 }
