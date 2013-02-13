@@ -962,6 +962,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\string\axStringFormat_out_Imp.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\ax\core\string\axStringFormat_out_Imp.h"
 					>
 				</File>

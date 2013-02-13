@@ -95,7 +95,7 @@ private:
 	void operator=( const axNonCopyable &s ); //!< not allow by default
 };
 
-class axUnused  {
+class axUnused  { //for avoid compile warning about unused variable
 public:
 };
 
