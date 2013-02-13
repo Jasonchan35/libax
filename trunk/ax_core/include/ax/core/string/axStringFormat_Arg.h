@@ -9,7 +9,7 @@
 #ifndef ax_core_axStringFormat_Arg_h
 #define ax_core_axStringFormat_Arg_h
 
-#include "../data_structure/axLocalArray.h"
+#include "../data_structure/axArray.h"
 
 class axStringFormat;
 
@@ -80,8 +80,8 @@ public:
 	axStringFormat_Func	func;
 };
 
-class axStringFormat_ArgList : public axLocalArray< axStringFormat_Arg, axStringFormat_ArgListMaxSize > {
-	typedef	axLocalArray< axStringFormat_Arg, axStringFormat_ArgListMaxSize >	B;
+class axStringFormat_ArgList : public axArray< axStringFormat_Arg, axStringFormat_ArgListMaxSize > {
+	typedef	axArray< axStringFormat_Arg, axStringFormat_ArgListMaxSize >	B;
 public:
 	axStatus addArg( const axStringFormat_Arg &a ) { 
 		return B::append( a );
