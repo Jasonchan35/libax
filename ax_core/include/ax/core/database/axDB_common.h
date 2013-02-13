@@ -26,10 +26,6 @@ enum {
 const char* axDB_c_type_name( int type );
 
 const size_t	axDB_kArgListLocalBufSize = 32;
-const size_t	axDB_kRowIdType	= axDB_c_type_int64;
-
-
-
 
 #endif //__axDB_common_h__
 

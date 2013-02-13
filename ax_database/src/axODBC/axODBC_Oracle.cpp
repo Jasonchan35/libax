@@ -4,17 +4,52 @@ class axDBConn_Oracle : public axDBConn_ODBC {
 public:
 	virtual	axStatus	getSQL_CreateTable		( axIStringA & outSQL, const char* table, const axDBColumnList & list );
 	virtual axStatus	getSQL_DropTableIfExists( axIStringA & outSQL, const char* table );
-	virtual	const char*	DBTypeName				
-		( int c_type );
+	virtual	const char*	DBTypeName				( int c_type );
+
+	virtual	axStatus	identifierString		( axIStringA & out, const char* sz );
 };
 
 
+axStatus	axDBConn_Oracle::identifierString( axIStringA & out, const char* sz ) {
+	axStatus st;
+	axTempStringA	tmp;
+	st = tmp.set( sz );						if( !st ) return st;
+
+	axSize pos;
+	if( tmp.findChar( '\"', pos ) ) {
+		ax_log("Error table name cannot contains double quote(\") ");
+		// yes, stupid Oracle has no way to contains double qoute in table name;
+		return axStatus_Std::DB_invalid_identifier;	
+	}
+
+	return out.format("\"{?}\"", tmp );
+}
+
 axStatus	axDBConn_Oracle::getSQL_DropTableIfExists( axIStringA & outSQL, const char* table ) {
 	axStatus st;
-	axStringA	tableName;
-	st = identifierString( tableName, table );		if( !st ) return st;
 
-	st = outSQL.format("DROP TABLE {?};", tableName );
+	axStringA	tableName;
+	st = identifierString( tableName, table );				if( !st ) return st;
+
+	axStringA	tableEscapeStr;
+	st = escapeString( tableEscapeStr, table );				if( !st ) return st;
+
+	axTempStringA	sqlToRun;
+	st = sqlToRun.format("DROP TABLE {?}", tableName );		if( !st ) return st;
+
+	axTempStringA	e_sqlToRun;
+	st = escapeString( e_sqlToRun, sqlToRun );	if( !st ) return st;
+
+	st = outSQL.format(	"DECLARE\n"
+						"   C INT;\n"
+						"BEGIN\n"
+						"   SELECT COUNT(*) INTO C FROM USER_TABLES WHERE TABLE_NAME = {?};\n"
+						"   IF C = 1 THEN\n"
+						"      EXECUTE IMMEDIATE {?};\n"
+						"   END IF;\n"
+						"END;\n", 
+						tableEscapeStr,
+						e_sqlToRun );
 	if( !st ) return st;
 
 	return 0;
