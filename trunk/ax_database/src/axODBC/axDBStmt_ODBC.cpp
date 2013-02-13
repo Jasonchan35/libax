@@ -214,28 +214,29 @@ axStatus	axDBStmt_ODBC::exec_ArgList	( const axDBInParamList & list ) {
 
 	axTempStringW	wstr;
 	for( size_t i=0; i<columnInfo.size(); i++ ) {
-		ResultCol & col = columnInfo[i];
+		ResultCol & resultCol = columnInfo[i];
+		SQLUSMALLINT col = (SQLUSMALLINT)i+1;
 		SQLSMALLINT colNameLen;
 		//get the name length
-		ret = SQLDescribeCol( stmt_, i+1, NULL, 0, &colNameLen, NULL, NULL, NULL, NULL );
+		ret = SQLDescribeCol( stmt_, col, NULL, 0, &colNameLen, NULL, NULL, NULL, NULL );
 		if( hasError( ret ) ) {
 			logError();
 			return axStatus_Std::DB_error;
 		}
 
 		st = wstr.resize( colNameLen, false );		if( !st ) return st;
-		ret = SQLDescribeCol( stmt_, i+1, 
+		ret = SQLDescribeCol( stmt_, col, 
 								wstr._getInternalBufferPtr(), colNameLen, NULL, 
-								&col.type, 
-								&col.sizeInDB, 
-								&col.decimalDigits, 
-								&col.nullable );
+								&resultCol.type, 
+								&resultCol.sizeInDB, 
+								&resultCol.decimalDigits, 
+								&resultCol.nullable );
 		if( hasError( ret ) ) {
 			logError();
 			return axStatus_Std::DB_error;
 		}
 
-		st = col.name.set( wstr );		if( !st ) return st;
+		st = resultCol.name.set( wstr );		if( !st ) return st;
 	}
 
 	return 0; 
@@ -298,7 +299,7 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, int8_t			&value ) {
 	if( ! columnInfo.inBound(col) ) return axStatus_Std::DB_invalid_param_count;
 
 	SQLLEN cbLen;	
-	SQLRETURN ret = SQLGetData( stmt_, col+1, SQL_C_STINYINT, &value, 0, &cbLen );
+	SQLRETURN ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_STINYINT, &value, 0, &cbLen );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_invalid_param_type;
@@ -310,7 +311,7 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, int16_t			&value ) {
 	if( ! columnInfo.inBound(col) ) return axStatus_Std::DB_invalid_param_count;
 
 	SQLLEN cbLen;	
-	SQLRETURN ret = SQLGetData( stmt_, col+1, SQL_C_SSHORT, &value, 0, &cbLen );
+	SQLRETURN ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_SSHORT, &value, 0, &cbLen );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_invalid_param_type;
@@ -322,7 +323,7 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, int32_t			&value ) {
 	if( ! columnInfo.inBound(col) ) return axStatus_Std::DB_invalid_param_count;
 
 	SQLLEN cbLen;	
-	SQLRETURN ret = SQLGetData( stmt_, col+1, SQL_C_SLONG, &value, 0, &cbLen );
+	SQLRETURN ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_SLONG, &value, 0, &cbLen );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_invalid_param_type;
@@ -334,7 +335,7 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, int64_t			&value ) {
 	if( ! columnInfo.inBound(col) ) return axStatus_Std::DB_invalid_param_count;
 
 	SQLLEN cbLen;	
-	SQLRETURN ret = SQLGetData( stmt_, col+1, SQL_C_SBIGINT, &value, 0, &cbLen );
+	SQLRETURN ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_SBIGINT, &value, 0, &cbLen );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_invalid_param_type;
@@ -346,7 +347,7 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, float				&value ) {
 	if( ! columnInfo.inBound(col) ) return axStatus_Std::DB_invalid_param_count;
 
 	SQLLEN cbLen;	
-	SQLRETURN ret = SQLGetData( stmt_, col+1, SQL_C_FLOAT, &value, 0, &cbLen );
+	SQLRETURN ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_FLOAT, &value, 0, &cbLen );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_invalid_param_type;
@@ -358,7 +359,7 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, double			&value ) {
 	if( ! columnInfo.inBound(col) ) return axStatus_Std::DB_invalid_param_count;
 
 	SQLLEN cbLen;	
-	SQLRETURN ret = SQLGetData( stmt_, col+1, SQL_C_DOUBLE, &value, 0, &cbLen );
+	SQLRETURN ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_DOUBLE, &value, 0, &cbLen );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_invalid_param_type;
@@ -372,7 +373,7 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, bool				&value ) {
 	int8_t	tmp;
 
 	SQLLEN cbLen;	
-	SQLRETURN ret = SQLGetData( stmt_, col+1, SQL_C_TINYINT, &tmp, 0, &cbLen );
+	SQLRETURN ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_TINYINT, &tmp, 0, &cbLen );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_invalid_param_type;
@@ -395,7 +396,7 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, axDateTime		&value ) {
 	TIMESTAMP_STRUCT	ts;
 
 	SQLLEN cbLen;	
-	SQLRETURN ret = SQLGetData( stmt_, col+1, SQL_C_TYPE_TIMESTAMP, &ts, 0, &cbLen );
+	SQLRETURN ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_TYPE_TIMESTAMP, &ts, 0, &cbLen );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_invalid_param_type;
@@ -418,7 +419,7 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, axIStringA		&value ) {
 	SQLRETURN ret;
 
 	//get the data length first
-	ret = SQLGetData( stmt_, col+1, SQL_C_CHAR, &tmp, 0, &cbLen );
+	ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_CHAR, &tmp, 0, &cbLen );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_invalid_param_type;
@@ -432,7 +433,7 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, axIStringA		&value ) {
 	st = value.resize( cbLen, false );		if( !st ) return st;
 	if( cbLen == 0 ) return 0;
 
-	ret = SQLGetData( stmt_, col+1, SQL_C_CHAR, value._getInternalBufferPtr(), cbLen+1, &cbLen );
+	ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_CHAR, value._getInternalBufferPtr(), cbLen+1, &cbLen );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_invalid_param_type;
@@ -456,7 +457,7 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, axIByteArray		&value ) {
 	int t = columnInfo[col].type;
 
 	//get the data length first
-	ret = SQLGetData( stmt_, col+1, SQL_C_BINARY, &tmp, 0, &cbLen );
+	ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_BINARY, &tmp, 0, &cbLen );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_invalid_param_type;
@@ -470,7 +471,7 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, axIByteArray		&value ) {
 	st = value.resize( cbLen, false );		if( !st ) return st;
 	if( cbLen == 0 ) return 0;
 
-	ret = SQLGetData( stmt_, col+1, SQL_C_BINARY, value.ptr(), cbLen, &cbLen );
+	ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_BINARY, value.ptr(), cbLen, &cbLen );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_invalid_param_type;
