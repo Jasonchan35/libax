@@ -45,16 +45,23 @@ public:
 	void		set_tm			( struct tm &src );
 	struct tm	to_tm			() const;
 
-	int16_t		year;
-	int16_t		month;		//!< 1~12
-	int16_t		day;		//!< 1~31
-	int16_t		hour;		//!< 0~23
-	int16_t		minute;		//!< 0~59
-	double		second;		//!< 0~59.xxx
-
-	int16_t		weekday;	//!< days since Sunday - [0,6]
 	int16_t		yearday;	//!< days since January 1 - [0,365]
-	int16_t		daylightSavingsTime;
+	int8_t		weekday;	//!< days since Sunday - [0,6]
+
+	/*! From Linux man page
+		- The Daylight Saving Time flag (tm_isdst) 
+			is greater than zero if Daylight Saving Time is in effect, 
+			zero if Daylight Saving Time is not in effect, 
+			and less than zero if the information is not available.
+	*/
+	int8_t		daylightSavingsTime; 
+
+	int16_t		year;
+	int8_t		month;		//!< 1~12
+	int8_t		day;		//!< 1~31
+	int8_t		hour;		//!< 0~23
+	int8_t		minute;		//!< 0~59
+	double		second;		//!< 0~59.xxx
 
 	bool		UTC;
 };
