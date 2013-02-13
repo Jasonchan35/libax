@@ -71,10 +71,7 @@ axStatus axDBStmt_MySQL::exec_ArgList( const axDBInParamList & list ) {
 	if( !stmt_ ) return axStatus_Std::not_initialized;
 
 	axStatus st;	
-
-	if( db_->echoSQL() ) {
-		ax_log("--- ExecSQL: ---\n{?}\n  with Params:{?}\n", sql_, list );
-	}
+	echoExecSQL( db_, list );
 
 	axSize n =  mysql_stmt_param_count(stmt_);
 

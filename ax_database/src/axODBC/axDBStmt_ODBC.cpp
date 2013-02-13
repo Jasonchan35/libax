@@ -84,10 +84,7 @@ void axDBStmt_ODBC::logError() {
 
 axStatus	axDBStmt_ODBC::exec_ArgList	( const axDBInParamList & list ) { 
 	axStatus st;
-
-	if( db_->echoSQL() ) {
-		ax_log("--- ExecSQL: ---\n{?}\n  with Params:{?}\n", sql_, list );
-	}
+	echoExecSQL( db_, list );
 
 	SQLRETURN	ret = SQL_ERROR;
 

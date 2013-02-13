@@ -74,7 +74,7 @@ axStatus	axDBConn_MSSQL::getSQL_CreateTable	( axIStringA & outSQL, const char* t
 		}
 	}
 
-	st = outSQL.appendFormat( "\n);" );
+	st = outSQL.appendFormat( "\n);" );		if( !st ) return st;
 	return 0;
 
 }

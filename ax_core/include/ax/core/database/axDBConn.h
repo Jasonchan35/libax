@@ -44,20 +44,25 @@ public:
 						axStatus	dropTableIfExists		( const char* table );
 
 //Get SQL String
-						axStatus	getSQL_CreateTable		( axIStringA & outSQL, const char* table, const axDBColumnList & list );
-	template<class T>	axStatus	getSQL_CreateTable		( axIStringA & outSQL, const char* table, const char* pkey=NULL, bool pkeyAutoInc=false );
+						axStatus	getSQL_CreateTable			( axIStringA & outSQL, const char* table, const axDBColumnList & list );
+	template<class T>	axStatus	getSQL_CreateTable			( axIStringA & outSQL, const char* table, const char* pkey=NULL, bool pkeyAutoInc=false );
 
-						axStatus	getSQL_DropTable		( axIStringA & outSQL, const char* table );
-						axStatus	getSQL_DropTableIfExists( axIStringA & outSQL, const char* table );
+						axStatus	getSQL_CreateTable_Step2	( axIStringA & outSQL, const char* table, const axDBColumnList & list );
+						axStatus	getSQL_CreateTable_Step3	( axIStringA & outSQL, const char* table, const axDBColumnList & list );
 
-						axStatus	getSQL_Insert			( axIStringA & outSQL, const char* table, const axDBColumnList & list );
-	template<class T>	axStatus	getSQL_Insert			( axIStringA & outSQL, const char* table, const char* pkey=NULL, bool pkeyAutoInc=false );
+						axStatus	getSQL_DropTable			( axIStringA & outSQL, const char* table );
 
-						axStatus	getSQL_Update			( axIStringA & outSQL, const char* table, const char* szWhere, const axDBColumnList & list );
-	template<class T>	axStatus	getSQL_Update			( axIStringA & outSQL, const char* table, const char* szWhere, const char* pkey=NULL, bool pkeyAutoInc=false );
+						axStatus	getSQL_DropTableIfExists		( axIStringA & outSQL, const char* table );
+						axStatus	getSQL_DropTableIfExists_Step2	( axIStringA & outSQL, const char* table );
 
-						axStatus	getSQL_Select			( axIStringA & outSQL, const char* table, const char* szWhere, const axDBColumnList & list );
-	template<class T>	axStatus	getSQL_Select			( axIStringA & outSQL, const char* table, const char* szWhere );
+						axStatus	getSQL_Insert	( axIStringA & outSQL, const char* table, const axDBColumnList & list );
+	template<class T>	axStatus	getSQL_Insert	( axIStringA & outSQL, const char* table, const char* pkey=NULL, bool pkeyAutoInc=false );
+
+						axStatus	getSQL_Update	( axIStringA & outSQL, const char* table, const char* szWhere, const axDBColumnList & list );
+	template<class T>	axStatus	getSQL_Update	( axIStringA & outSQL, const char* table, const char* szWhere, const char* pkey=NULL, bool pkeyAutoInc=false );
+
+						axStatus	getSQL_Select	( axIStringA & outSQL, const char* table, const char* szWhere, const axDBColumnList & list );
+	template<class T>	axStatus	getSQL_Select	( axIStringA & outSQL, const char* table, const char* szWhere );
     
 	void			_setImp	( axDBConn_Imp* p );
 	axDBConn_Imp*	_getImp	()	{ return p_; }
@@ -79,20 +84,27 @@ public:
 			axStatus	setEchoSQL	( bool b )	{ echoSQL_ = b; return 0; }
 			bool		echoSQL		()			{ return echoSQL_; }
 
-	virtual	axStatus	escapeString			( axIStringA & out, const char* sz );
-	virtual	axStatus	identifierString		( axIStringA & out, const char* sz );
+	virtual	axStatus	escapeString				( axIStringA & out, const char* sz );
+	virtual	axStatus	identifierString			( axIStringA & out, const char* sz );
 
-	virtual	const char*	DBTypeName				( int c_type ) = 0;
+	virtual	const char*	DBTypeName					( int c_type ) = 0;
 
-	virtual axStatus	createStmt				( axDBStmt & stmt, const char * sql ) = 0;
+	virtual axStatus	createStmt					( axDBStmt & stmt, const char * sql ) = 0;
 
-	virtual	axStatus	getSQL_CreateTable		( axIStringA & outSQL, const char* table, const axDBColumnList & list ) = 0;
-	virtual axStatus	getSQL_DropTable		( axIStringA & outSQL, const char* table );
-	virtual axStatus	getSQL_DropTableIfExists( axIStringA & outSQL, const char* table );
+	virtual	axStatus	directExec_ArgList			( const char* sql, const axDBInParamList & list ) { assert(false); return axStatus_Std::not_implemented; }
 
-	virtual	axStatus	getSQL_Insert			( axIStringA & outSQL, const char* table, const axDBColumnList & list );
-	virtual	axStatus	getSQL_Update			( axIStringA & outSQL, const char* table, const char* szWhere,	const axDBColumnList & list );
-	virtual	axStatus	getSQL_Select			( axIStringA & outSQL, const char* table, const char* szWhere,	const axDBColumnList & list );
+	virtual	axStatus	getSQL_CreateTable				( axIStringA & outSQL, const char* table, const axDBColumnList & list ) = 0;
+	virtual	axStatus	getSQL_CreateTable_Step2		( axIStringA & outSQL, const char* table, const axDBColumnList & list );
+	virtual	axStatus	getSQL_CreateTable_Step3		( axIStringA & outSQL, const char* table, const axDBColumnList & list );
+
+	virtual axStatus	getSQL_DropTable				( axIStringA & outSQL, const char* table );
+
+	virtual axStatus	getSQL_DropTableIfExists		( axIStringA & outSQL, const char* table );
+	virtual axStatus	getSQL_DropTableIfExists_Step2	( axIStringA & outSQL, const char* table );
+
+	virtual	axStatus	getSQL_Insert				( axIStringA & outSQL, const char* table, const axDBColumnList & list );
+	virtual	axStatus	getSQL_Update				( axIStringA & outSQL, const char* table, const char* szWhere,	const axDBColumnList & list );
+	virtual	axStatus	getSQL_Select				( axIStringA & outSQL, const char* table, const char* szWhere,	const axDBColumnList & list );
 
 	bool	echoSQL_;
 };

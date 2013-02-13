@@ -40,6 +40,12 @@ axStatus axDBStmt::exec_ArgList( const axDBInParamList & list ) {
 	return 0;
 }
 
+void axDBStmt_Imp::echoExecSQL( axDBConn_Imp* db, const axDBInParamList & list ) {
+	if( db && db->echoSQL() ) {
+		ax_log("--- ExecSQL: ---\n{?}\n--- with Params:{?}\n---------------\n", sql(), list );
+	}
+}
+
 
 axExpandArgList0_Imp ( axStatus axDBStmt::, getRow, const axDBOutParam_CB & , axDBOutParamList )
 

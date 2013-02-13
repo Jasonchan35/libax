@@ -89,6 +89,8 @@ public:
 	virtual axStatus	getResultAtCol( axSize col, axDateTime		&value )= 0;
 
 	virtual const char*	sql() = 0;
+
+			void		echoExecSQL( axDBConn_Imp* db, const axDBInParamList & list );
 };
 
 
