@@ -59,13 +59,13 @@ T* _ax_strchrs( T* sz, T* chrs ) {
 	}
 	return NULL;
 }
-      char*    ax_strchrs(       char*    sz, const char*    chrs ) { return _ax_strchrs(sz,(char*   )chrs); }
-      wchar_t* ax_strchrs(       wchar_t* sz, const wchar_t* chrs ) { return _ax_strchrs(sz,(wchar_t*)chrs); }
-      axUChar* ax_strchrs(       axUChar* sz, const axUChar* chrs ) { return _ax_strchrs(sz,(axUChar*)chrs); }
+      char*    ax_strchr_list(       char*    sz, const char*    chrs ) { return _ax_strchrs(sz,(char*   )chrs); }
+      wchar_t* ax_strchr_list(       wchar_t* sz, const wchar_t* chrs ) { return _ax_strchrs(sz,(wchar_t*)chrs); }
+      axUChar* ax_strchr_list(       axUChar* sz, const axUChar* chrs ) { return _ax_strchrs(sz,(axUChar*)chrs); }
 
-const char*    ax_strchrs( const char*    sz, const char*    chrs ) { return _ax_strchrs(sz,chrs); }
-const wchar_t* ax_strchrs( const wchar_t* sz, const wchar_t* chrs ) { return _ax_strchrs(sz,chrs); }
-const axUChar* ax_strchrs( const axUChar* sz, const axUChar* chrs ) { return _ax_strchrs(sz,chrs); }
+const char*    ax_strchr_list( const char*    sz, const char*    chrs ) { return _ax_strchrs(sz,chrs); }
+const wchar_t* ax_strchr_list( const wchar_t* sz, const wchar_t* chrs ) { return _ax_strchrs(sz,chrs); }
+const axUChar* ax_strchr_list( const axUChar* sz, const axUChar* chrs ) { return _ax_strchrs(sz,chrs); }
 
 
 //! search char(s) in string from right side
