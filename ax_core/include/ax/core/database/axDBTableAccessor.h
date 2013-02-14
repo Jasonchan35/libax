@@ -15,7 +15,7 @@ protected:
 	axStatus  getWherePKey( axIStringA &out, axDBConn & db, const axDBColumnList & list ) {
 		axStatus		st;
 		const axDBColumn* col = list.pkeyColumn();
-		if( ! col ) return NULL;
+		if( ! col ) return axStatus_Std::DB_primary_key_not_found;
 		st = db.identifierString( out, col->name );		if( !st ) return st;
 		st = out.append( "=?" );						if( !st ) return st;
 		return 0;
