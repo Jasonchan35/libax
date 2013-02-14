@@ -8,8 +8,7 @@ public:
 	axDBConn_ODBC();
 	virtual ~axDBConn_ODBC();
 
-			axStatus	connect		( const wchar_t* dsn );
-			axStatus	connect		( const char*	 dsn );
+			axStatus	connect		( const char* database, const char* username, const char* password );
 			void		close		();
 
 	virtual axStatus	createStmt			( axDBStmt & stmt, const char * sql );

@@ -201,46 +201,46 @@ axStatus test_SQLite3() {
 //	return 0;
 //}
 
-#include <ax/database/axODBC.h>
-axStatus test_ODBC() {
-	axStatus st;
-	axDBConn	db;
-	st = axODBC_connect ( db, "DRIVER={PostgreSQL ANSI}; DATABASE=testdb; SERVER=localhost;  PORT=5432;UID=test; PWD=1234;" );	if( !st ) return st;
-	st = test_ax_database_common(db);			if( !st ) return st;
-	return 0;
-}
-
-axStatus test_ODBC_MSSQL() {
-	axStatus st;
-	axDBConn	db;
-	st = axODBC_MSSQL_connect ( db, "DSN={MSSQL_DSN}; UID=test; PWD=1234;");	if( !st ) return st;
-
-	//st = axODBC_MSSQL_connect ( db, "DRIVER={SQL Server Native Client 10.0}; "
-	//								"DATABASE=testdb; SERVER=192.168.1.56; UID=test; PWD=1234;");	if( !st ) return st;
-	st = test_ax_database_common(db);			if( !st ) return st;
-	return 0;
-}
-
-axStatus test_ODBC_Oracle() {
-	axStatus st;
-	axDBConn	db;
-
-//	st = axODBC_Oracle_connect ( db, "DSN=MyOracleDSN; UID=test; PWD=1234;" ); if( !st ) return st;
-	st = axODBC_Oracle_connect ( db, "DRIVER={Oracle in OraDb11g_home1}; UID=test; PWD=1234;" ); if( !st ) return st;
-//	st = axODBC_Oracle_connect ( db, "DSN={TonyOracle}; UID=testdb; PWD=1234;" ); if( !st ) return st;
-	st = test_ax_database_common(db);			if( !st ) return st;
-	return 0;
-}
+//#include <ax/database/axODBC.h>
+//axStatus test_ODBC() {
+//	axStatus st;
+//	axDBConn	db;
+//	st = axODBC_connect ( db, "DRIVER={PostgreSQL ANSI}; DATABASE=testdb; SERVER=localhost;  PORT=5432;UID=test; PWD=1234;" );	if( !st ) return st;
+//	st = test_ax_database_common(db);			if( !st ) return st;
+//	return 0;
+//}
+//
+//axStatus test_ODBC_MSSQL() {
+//	axStatus st;
+//	axDBConn	db;
+//	st = axODBC_MSSQL_connect ( db, "DSN={MSSQL_DSN}; UID=test; PWD=1234;");	if( !st ) return st;
+//
+//	//st = axODBC_MSSQL_connect ( db, "DRIVER={SQL Server Native Client 10.0}; "
+//	//								"DATABASE=testdb; SERVER=192.168.1.56; UID=test; PWD=1234;");	if( !st ) return st;
+//	st = test_ax_database_common(db);			if( !st ) return st;
+//	return 0;
+//}
+//
+//axStatus test_ODBC_Oracle() {
+//	axStatus st;
+//	axDBConn	db;
+//
+////	st = axODBC_Oracle_connect ( db, "DSN=MyOracleDSN; UID=test; PWD=1234;" ); if( !st ) return st;
+//	st = axODBC_Oracle_connect ( db, "DRIVER={Oracle in OraDb11g_home1}; UID=test; PWD=1234;" ); if( !st ) return st;
+////	st = axODBC_Oracle_connect ( db, "DSN={TonyOracle}; UID=testdb; PWD=1234;" ); if( !st ) return st;
+//	st = test_ax_database_common(db);			if( !st ) return st;
+//	return 0;
+//}
 
 axStatus test_ax_database() {
 	axStatus st;
 
-//	axUTestCase( test_SQLite3() );
+	axUTestCase( test_SQLite3() );
 //	axUTestCase( test_MySQL() );
 //	axUTestCase( test_PostgreSQL() );
 //	axUTestCase( test_ODBC() );
 //	axUTestCase( test_ODBC_MSSQL() );
-	axUTestCase( test_ODBC_Oracle() );
+//	axUTestCase( test_ODBC_Oracle() );
 
 	return 0;
 }

@@ -16,11 +16,11 @@ public:
 };
 
 
-axStatus	axODBC_Oracle_connect( axDBConn & db, const char* dsn ) {
+axStatus	axODBC_Oracle_connect( axDBConn & db, const char* server, const char* username, const char* password ) {
 	axDBConn_Oracle* p = new axDBConn_Oracle();
 	if( !p ) return axStatus_Std::not_enough_memory;
 	db._setImp(p);
-	return p->connect( dsn );
+	return p->connect( server, username, password );
 }
 
 axStatus	axDBConn_Oracle::identifierString( axIStringA & out, const char* sz ) {
@@ -116,7 +116,7 @@ axStatus	axDBConn_Oracle::getSQL_CreateTable	( axIStringA & outSQL, const char* 
 	for( size_t i=0; i<list.size(); i++ ) {
 		const axDBColumn & c = list[i];
 		if( i > 0 ) {
-			st = outSQL.append(",\n");
+			st = outSQL.append(",\n");			if( !st ) return st;
 		}
 
 		st = identifierString( colName, c.name );					if( !st ) return st;

@@ -1,10 +1,10 @@
 #include "axDBConn_ODBC.h"
 
-axStatus	axODBC_connect( axDBConn & db, const char* dsn ) {
+axStatus	axODBC_connect( axDBConn & db, const char* server, const char* username, const char* password ) {
 	axDBConn_ODBC* p = new axDBConn_ODBC();
 	if( !p ) return axStatus_Std::not_enough_memory;
 	db._setImp(p);
-	return p->connect( dsn );
+	return p->connect( server, username, password );
 }
 
 axDBConn_ODBC::axDBConn_ODBC() {
@@ -47,7 +47,7 @@ axStatus	axDBConn_ODBC::getSQL_CreateTable	( axIStringA & outSQL, const char* ta
 	for( size_t i=0; i<list.size(); i++ ) {
 		const axDBColumn & c = list[i];
 		if( i > 0 ) {
-			st = outSQL.append(",\n");
+			st = outSQL.append(",\n");			if( !st ) return st;
 		}
 
 		st = identifierString( colName, c.name );					if( !st ) return st;
@@ -66,15 +66,7 @@ axStatus	axDBConn_ODBC::getSQL_CreateTable	( axIStringA & outSQL, const char* ta
 
 }
 
-
-axStatus	axDBConn_ODBC::connect	( const char* dsn ) {
-	axStatus st;
-	axTempStringW	tmp;
-	st = tmp.set( dsn );		if( !st ) return st;
-	return connect( tmp );
-}
-
-axStatus	axDBConn_ODBC::connect	( const wchar_t* dsn ) {
+axStatus	axDBConn_ODBC::connect	( const char* server, const char* username, const char* password ) {
 	close();
 
 	axStatus st;
@@ -95,10 +87,13 @@ axStatus	axDBConn_ODBC::connect	( const wchar_t* dsn ) {
 		return axStatus_Std::DB_error_connect;
 	}
 
-	SQLSMALLINT dsn_len;
-	st = ax_safe_assign( dsn_len, ax_strlen(dsn) );		if( !st ) return st;
+	axStringW_<128>	w_server;		st = w_server.set  ( server );			if( !st ) return st;
+	axStringW_<128>	w_username;		st = w_username.set( username );		if( !st ) return st;
+	axStringW_<128>	w_password;		st = w_password.set( password );		if( !st ) return st;
 
-	ret = SQLDriverConnect( dbc_, NULL, ax_const_cast(dsn), dsn_len, NULL, 0, NULL, SQL_DRIVER_NOPROMPT );
+	ret = SQLConnect( dbc_, ax_const_cast(w_server.c_str()),	SQL_NTS,
+							ax_const_cast(w_username.c_str()),	SQL_NTS,
+							ax_const_cast(w_password.c_str()),	SQL_NTS );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_error_connect;

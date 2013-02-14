@@ -138,7 +138,7 @@ axStatus	axDBInParam::toStringFormat( axStringFormat & f ) const {
 		#undef axTYPE_LIST
 	}
 	assert(false);
-	return f.out("Unknown");
+	return 0;
 }
 
 #endif //__axDBInParam_h__
