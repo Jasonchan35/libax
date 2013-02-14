@@ -23,6 +23,13 @@ axStatus	axODBC_Oracle_connect( axDBConn & db, const char* server, const char* u
 	return p->connect( server, username, password );
 }
 
+axStatus	axODBC_Oracle_connectDSN( axDBConn & db, const char* dsn ) {
+	axDBConn_Oracle* p = new axDBConn_Oracle();
+	if( !p ) return axStatus_Std::not_enough_memory;
+	db._setImp(p);
+	return p->connectDSN( dsn );
+}
+
 axStatus	axDBConn_Oracle::identifierString( axIStringA & out, const char* sz ) {
 	axStatus st;
 	axTempStringA	tmp;
@@ -204,8 +211,6 @@ const char*	axDBConn_Oracle::DBTypeName( int c_type ) {
 
 		case axDB_c_type_ByteArray:	return "BLOB";
 		case axDB_c_type_TimeStamp:	return "TIMESTAMP";
-
-	//	case axDB_c_type_GUID:		return "uniqueidentifier";
 	}
 	assert( false );
 	return "Unknown";

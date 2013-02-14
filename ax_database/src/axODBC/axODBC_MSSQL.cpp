@@ -7,6 +7,19 @@ public:
 	virtual const char*		DBTypeName				( int c_type );
 };
 
+axStatus	axODBC_MSSQL_connect( axDBConn & db, const char* server, const char* username, const char* password ) {
+	axDBConn_MSSQL* p = new axDBConn_MSSQL();
+	if( !p ) return axStatus_Std::not_enough_memory;
+	db._setImp(p);
+	return p->connect( server, username, password );
+}
+axStatus	axODBC_MSSQL_connectDSN( axDBConn & db, const char* dsn ) {
+	axDBConn_MSSQL* p = new axDBConn_MSSQL();
+	if( !p ) return axStatus_Std::not_enough_memory;
+	db._setImp(p);
+	return p->connectDSN( dsn );
+}
+
 
 const char*	axDBConn_MSSQL::DBTypeName( int c_type ) {
 	switch( c_type ) {
@@ -79,9 +92,3 @@ axStatus	axDBConn_MSSQL::getSQL_CreateTable	( axIStringA & outSQL, const char* t
 
 }
 
-axStatus	axODBC_MSSQL_connect( axDBConn & db, const char* server, const char* username, const char* password ) {
-	axDBConn_MSSQL* p = new axDBConn_MSSQL();
-	if( !p ) return axStatus_Std::not_enough_memory;
-	db._setImp(p);
-	return p->connect( server, username, password );
-}

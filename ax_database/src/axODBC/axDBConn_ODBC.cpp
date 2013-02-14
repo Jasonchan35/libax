@@ -66,12 +66,12 @@ axStatus	axDBConn_ODBC::getSQL_CreateTable	( axIStringA & outSQL, const char* ta
 
 }
 
-axStatus	axDBConn_ODBC::connect	( const char* server, const char* username, const char* password ) {
+axStatus	axDBConn_ODBC::_preConnect() {
 	close();
 
 	axStatus st;
 
-	SQLRETURN	ret = SQL_SUCCESS;
+	SQLRETURN	ret;
 	ret = SQLAllocHandle( SQL_HANDLE_ENV, SQL_NULL_HANDLE, &env_ );
 	if( hasError(ret) ) {
 		return axStatus_Std::DB_error_connect;
@@ -87,13 +87,50 @@ axStatus	axDBConn_ODBC::connect	( const char* server, const char* username, cons
 		return axStatus_Std::DB_error_connect;
 	}
 
+	return 0;
+}
+
+axStatus	axDBConn_ODBC::connectDSN	( const char* dsn ) {
+	axStatus st;
+	axTempStringW	w_dsn;
+	st = w_dsn.set( dsn );		if( !st ) return st;
+	return connectDSN( w_dsn );
+}
+
+axStatus	axDBConn_ODBC::connectDSN	( const wchar_t* dsn ) {
+	axStatus st;
+	st = _preConnect();		if( !st ) return st;
+
+	SQLSMALLINT dsn_len;
+	st = ax_safe_assign( dsn_len, ax_strlen(dsn) );		if( !st ) return st;
+
+	SQLRETURN	ret;
+	ret = SQLDriverConnect( dbc_, NULL, ax_const_cast(dsn), dsn_len, NULL, 0, NULL, SQL_DRIVER_NOPROMPT );
+
+	if( hasError(ret) ) {
+		logError();
+		return axStatus_Std::DB_error_connect;
+	}
+	return 0;
+}
+
+axStatus	axDBConn_ODBC::connect	( const char* server, const char* username, const char* password ) {
+	axStatus st;
 	axStringW_<128>	w_server;		st = w_server.set  ( server );			if( !st ) return st;
 	axStringW_<128>	w_username;		st = w_username.set( username );		if( !st ) return st;
 	axStringW_<128>	w_password;		st = w_password.set( password );		if( !st ) return st;
 
-	ret = SQLConnect( dbc_, ax_const_cast(w_server.c_str()),	SQL_NTS,
-							ax_const_cast(w_username.c_str()),	SQL_NTS,
-							ax_const_cast(w_password.c_str()),	SQL_NTS );
+	return connect( w_server, w_username, w_password );
+}
+
+axStatus	axDBConn_ODBC::connect	( const wchar_t* server, const wchar_t* username, const wchar_t* password ) {
+	axStatus st;
+	st = _preConnect();		if( !st ) return st;
+
+	SQLRETURN	ret;
+	ret = SQLConnect( dbc_, ax_const_cast(server),		SQL_NTS,
+							ax_const_cast(username),	SQL_NTS,
+							ax_const_cast(password),	SQL_NTS );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_error_connect;
@@ -120,11 +157,13 @@ void axDBConn_ODBC::logError() {
 	for(;;) {
 		ret = SQLGetDiagRec( SQL_HANDLE_ENV, env_, ++iRec, wszState, &iNativeError, wszMessage, len, NULL );
 		if( ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO ) break;
+		ax_log("ODBC Error [{?}] [{?}]: {?}\nSQL:\n{?}\n", wszState, (int)iNativeError, wszMessage );
 	}
 
 	for(;;) {
 		ret = SQLGetDiagRec( SQL_HANDLE_DBC, dbc_, ++iRec, wszState, &iNativeError, wszMessage, len, NULL );
 		if( ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO ) break;
+		ax_log("ODBC Error [{?}] [{?}]: {?}\nSQL:\n{?}\n", wszState, (int)iNativeError, wszMessage );
     }
 }
 
