@@ -8,7 +8,12 @@ public:
 	axDBConn_ODBC();
 	virtual ~axDBConn_ODBC();
 
-			axStatus	connect		( const char* database, const char* username, const char* password );
+			axStatus	connectDSN	( const char*	 dsn );
+			axStatus	connectDSN	( const wchar_t* dsn );
+
+			axStatus	connect		( const char*    database, const char*    username, const char*    password );
+			axStatus	connect		( const wchar_t* database, const wchar_t* username, const wchar_t* password );
+
 			void		close		();
 
 	virtual axStatus	createStmt			( axDBStmt & stmt, const char * sql );
@@ -18,6 +23,8 @@ public:
 			void		logError	();
 			
 	virtual	const char*	DBTypeName( int c_type );
+
+	axStatus	_preConnect();
 
 	SQLHENV		env_;
 	SQLHDBC		dbc_;

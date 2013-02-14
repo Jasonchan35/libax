@@ -4,20 +4,24 @@
 
 const size_t numRows = 5;
 
+
+
 #define myTEST_TYPE_LIST \
 	myTEST_TYPE( bool,		bool,			bool   ) \
 	myTEST_TYPE( float,		float,			float  ) \
 	myTEST_TYPE( double,	double,			double ) \
 \
 	myTEST_TYPE( int8,		int8_t,			int8_t  ) \
-//	myTEST_TYPE( int16,		int16_t,		int16_t ) \
-//	myTEST_TYPE( int32,		int32_t,		int32_t ) \
-//	myTEST_TYPE( int64,		int64_t,		int64_t ) \
-//\
-//	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
-//	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
-//	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
-//	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
+	myTEST_TYPE( int16,		int16_t,		int16_t ) \
+	myTEST_TYPE( int32,		int32_t,		int32_t ) \
+	myTEST_TYPE( int64,		int64_t,		int64_t ) \
+\
+	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
+	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
+	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
+	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
+\
+	myTEST_TYPE( vec3f,		axVec3f,		axVec3f   ) \
 //---------------
 
 
@@ -39,6 +43,8 @@ public:
 
 	axByteArray		v_ByteArray;
 	axTimeStamp		v_TimeStamp;
+
+	axVec3f			v_vec3f;
 
 	Row() {
 		v_bool = false;
@@ -67,6 +73,8 @@ public:
 		v_StringW.set( L"This is WString" );
 
 		v_TimeStamp.now();
+
+		v_vec3f.set( 77,88,99 );
 	}
 
 	axStatus	onTake( Row & src ) {
@@ -201,7 +209,7 @@ axStatus test_SQLite3() {
 //	return 0;
 //}
 
-//#include <ax/database/axODBC.h>
+#include <ax/database/axODBC.h>
 //axStatus test_ODBC() {
 //	axStatus st;
 //	axDBConn	db;
@@ -209,38 +217,40 @@ axStatus test_SQLite3() {
 //	st = test_ax_database_common(db);			if( !st ) return st;
 //	return 0;
 //}
-//
-//axStatus test_ODBC_MSSQL() {
-//	axStatus st;
-//	axDBConn	db;
-//	st = axODBC_MSSQL_connect ( db, "DSN={MSSQL_DSN}; UID=test; PWD=1234;");	if( !st ) return st;
-//
-//	//st = axODBC_MSSQL_connect ( db, "DRIVER={SQL Server Native Client 10.0}; "
-//	//								"DATABASE=testdb; SERVER=192.168.1.56; UID=test; PWD=1234;");	if( !st ) return st;
-//	st = test_ax_database_common(db);			if( !st ) return st;
-//	return 0;
-//}
-//
-//axStatus test_ODBC_Oracle() {
-//	axStatus st;
-//	axDBConn	db;
-//
-////	st = axODBC_Oracle_connect ( db, "DSN=MyOracleDSN; UID=test; PWD=1234;" ); if( !st ) return st;
+
+axStatus test_ODBC_MSSQL() {
+	axStatus st;
+	axDBConn	db;
+	st = axODBC_MSSQL_connect ( db, "MSSQL_DSN", "test", "1234");		if( !st ) return st;
+
+	//st = axODBC_MSSQL_connect ( db, "DRIVER={SQL Server Native Client 10.0}; "
+	//								"DATABASE=testdb; SERVER=192.168.1.56; UID=test; PWD=1234;");	if( !st ) return st;
+	st = test_ax_database_common(db);			if( !st ) return st;
+	return 0;
+}
+
+axStatus test_ODBC_Oracle() {
+	axStatus st;
+	axDBConn	db;
+
+//	st = axODBC_Oracle_connect ( db, "DSN=MyOracleDSN", "test", "1234;" );	if( !st ) return st;
+
+	st = axODBC_Oracle_connectDSN ( db, "DSN=MyOracleDSN; UID=test; PWD=1234;" ); if( !st ) return st;
 //	st = axODBC_Oracle_connect ( db, "DRIVER={Oracle in OraDb11g_home1}; UID=test; PWD=1234;" ); if( !st ) return st;
-////	st = axODBC_Oracle_connect ( db, "DSN={TonyOracle}; UID=testdb; PWD=1234;" ); if( !st ) return st;
-//	st = test_ax_database_common(db);			if( !st ) return st;
-//	return 0;
-//}
+//	st = axODBC_Oracle_connect ( db, "DSN={TonyOracle}; UID=testdb; PWD=1234;" ); if( !st ) return st;
+	st = test_ax_database_common(db);			if( !st ) return st;
+	return 0;
+}
 
 axStatus test_ax_database() {
 	axStatus st;
 
-	axUTestCase( test_SQLite3() );
+//	axUTestCase( test_SQLite3() );
 //	axUTestCase( test_MySQL() );
 //	axUTestCase( test_PostgreSQL() );
 //	axUTestCase( test_ODBC() );
 //	axUTestCase( test_ODBC_MSSQL() );
-//	axUTestCase( test_ODBC_Oracle() );
+	axUTestCase( test_ODBC_Oracle() );
 
 	return 0;
 }
