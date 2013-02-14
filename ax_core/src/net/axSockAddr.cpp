@@ -1,5 +1,6 @@
 #include <ax/core/net/axSockAddr.h>
 #include <ax/core/net/axSocket.h>
+#include <ws2tcpip.h>
 
 axStatus axSockAddr::toStringFormat( axStringFormat &f ) {
 	char* p = p_.sa_data;
