@@ -122,7 +122,7 @@ public:
 axStatus test_ax_database_common( axDBConn & db ) {
 	axStatus st;
 
-	db.setEchoSQL( true );
+//	db.setEchoSQL( true );
 
 //	const char* table = "unit Test's \"Table\" 01";
 	const char* table = "Test's Table";
@@ -167,12 +167,11 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		st = tbl.selectAll( results );		if( !st ) return st;
 		ax_log("select {?} records in {?}s", results.size(), timer.get() );
 
+//		ax_log_var( results );
 		#if 0 // dump last only
 			if( results.size() ) {
 				ax_log_var( results.last() );
 			}
-		#else
-			ax_log_var( results );
 		#endif
 	}
 
@@ -190,7 +189,7 @@ axStatus test_SQLite3() {
 	st = test_ax_database_common(db);			if( !st ) return st;
 	return 0;
 }
-
+//
 //#include <ax/database/axMySQL.h>
 //axStatus test_MySQL() {
 //	axStatus st;
@@ -199,15 +198,15 @@ axStatus test_SQLite3() {
 //	st = test_ax_database_common(db);			if( !st ) return st;
 //	return 0;
 //}
-//
-//#include <ax/database/axPostgreSQL.h>
-//axStatus test_PostgreSQL() {
-//	axStatus st;
-//	axDBConn	db;
-//	st = axPostgreSQL_connect ( db, "host=localhost port=5432 dbname=testdb user=test password=1234" );	if( !st ) return st;
-//	st = test_ax_database_common(db);			if( !st ) return st;
-//	return 0;
-//}
+
+#include <ax/database/axPostgreSQL.h>
+axStatus test_PostgreSQL() {
+	axStatus st;
+	axDBConn	db;
+	st = axPostgreSQL_connect ( db, "host=localhost port=5432 dbname=testdb user=test password=1234" );	if( !st ) return st;
+	st = test_ax_database_common(db);			if( !st ) return st;
+	return 0;
+}
 
 #include <ax/database/axODBC.h>
 //axStatus test_ODBC() {
@@ -245,9 +244,9 @@ axStatus test_ODBC_Oracle() {
 axStatus test_ax_database() {
 	axStatus st;
 
-//	axUTestCase( test_SQLite3() );
+	axUTestCase( test_SQLite3() );
 //	axUTestCase( test_MySQL() );
-//	axUTestCase( test_PostgreSQL() );
+	axUTestCase( test_PostgreSQL() );
 //	axUTestCase( test_ODBC() );
 //	axUTestCase( test_ODBC_MSSQL() );
 	axUTestCase( test_ODBC_Oracle() );
