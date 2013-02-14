@@ -23,8 +23,8 @@ typedef axString_Array<wchar_t>		axStringW_Array;
 
 
 template< class S, class T > inline
-axStatus ax_json_serialize_io( S &s, axString_Array<T> &v ) {
-	return ax_json_serialize_io( s, (axIArray< axString_<T> >&) v );
+axStatus ax_json_serialize_value( S &s, axString_Array<T> &v ) {
+	return ax_json_serialize_value( s, (axIArray< axString_<T> >&) v );
 }
 
 
