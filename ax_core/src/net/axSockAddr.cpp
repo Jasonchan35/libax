@@ -1,6 +1,9 @@
 #include <ax/core/net/axSockAddr.h>
 #include <ax/core/net/axSocket.h>
-#include <ws2tcpip.h>
+
+#if axOS_WIN32 | axOS_WIN64
+	#include <ws2tcpip.h>
+#endif
 
 axStatus axSockAddr::toStringFormat( axStringFormat &f ) {
 	char* p = p_.sa_data;
@@ -43,23 +46,13 @@ axStatus axSockAddr::set( const char* hostname_and_port ) {
 
 axStatus axSockAddr::set( const char* hostname, uint16_t port ) {
 	axSocket::platformInit();
-	
-	/*
-	hostent *h = ::gethostbyname ( hostname );
-	if ( !h ) return -3;
-	
-	char* p = p_.sa_data;
-	p_.sa_family = AF_INET;
-	*reinterpret_cast<uint16_t*>(p)   = htons( port );
-	*reinterpret_cast<uint32_t*>(p+2) = *((uint32_t*) h->h_addr );
-	*/
 
-	struct addrinfo *result = NULL;
-	if( getaddrinfo( hostname, NULL, NULL, &result ) != 0 ) return -1;
+	struct addrinfo *info = NULL;
+	if( getaddrinfo( hostname, NULL, NULL, &info ) != 0 ) return -1;
 
 	p_.sa_family = AF_INET;
 	*(uint16_t*) (p_.sa_data)   = htons( port );
-	*(uint32_t*) (p_.sa_data+2) = *((uint32_t*) &result->ai_addr->sa_data[2] );
+	*(uint32_t*) (p_.sa_data+2) = *((uint32_t*) &info->ai_addr->sa_data[2] );
 
 	return 0;
 }
