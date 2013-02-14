@@ -3,7 +3,6 @@
 template< class T > axStatus axStringFormat_out_NumberT( axStringFormat &f, T value );
 
 //pointer
-inline
 axStatus axStringFormat_out( axStringFormat &f, const void* p ) {
 #ifdef axCPU_LP32
 	f.opt.set( "08X" );
