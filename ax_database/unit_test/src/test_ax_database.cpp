@@ -2,7 +2,7 @@
 
 #include <ax/ax_unit_test.h>
 
-const size_t numRows = 5;
+const size_t numRows = 5000;
 
 
 
@@ -14,7 +14,7 @@ const size_t numRows = 5;
 	myTEST_TYPE( int8,		int8_t,			int8_t  ) \
 	myTEST_TYPE( int16,		int16_t,		int16_t ) \
 	myTEST_TYPE( int32,		int32_t,		int32_t ) \
-/*	myTEST_TYPE( int64,		int64_t,		int64_t )*/ \
+	myTEST_TYPE( int64,		int64_t,		int64_t ) \
 \
 	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
 	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
@@ -63,7 +63,7 @@ public:
 		v_int8  = 8;
 		v_int16 = 16;
 		v_int32 = 32;
-		v_int64 = 64;
+		v_int64 = -12345689110064;
 
 		v_bool	 = true;
 
@@ -131,16 +131,13 @@ axStatus test_ax_database_common( axDBConn & db ) {
 //	const char* table = "Test's Table";
 	const char* table = "TestTable";
 
-/*
 	st = db.dropTableIfExists( table );								if( !st ) return st;
 	st = db.createTable<Row, TableID, &Row::id>( table, true );		if( !st ) return st;
-*/
-
 
 	axDBTableAccessor<Row, TableID, &Row::id>	tbl;
 	st = tbl.create( db, table );				if( !st ) return st;
 
-/*
+
 	{	ax_log("===== insert ======");
 		Row	row;
 		row.testValue();
@@ -165,7 +162,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		}
 		ax_log("update {?} records in {?}s", numRows, timer.get() );
 	}
-*/
+
 	{	ax_log("===== select all ======");
 		axArray< Row >	results;
 		results.reserve( numRows );
@@ -174,7 +171,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		st = tbl.selectAll( results );		if( !st ) return st;
 		ax_log("select {?} records in {?}s", results.size(), timer.get() );
 
-		ax_log_var( results );
+		//ax_log_var( results );
 		#if 0 // dump last only
 			if( results.size() ) {
 				ax_log_var( results.last() );
@@ -239,8 +236,8 @@ axStatus test_ODBC_Oracle() {
 	axStatus st;
 	axDBConn	db;
 
-	st = axODBC_Oracle_connect ( db, "MyOracleDSN", "test", "1234" );	if( !st ) return st;
-//	st = axODBC_Oracle_connect ( db, "TonyOracle", "test", "1234" );	if( !st ) return st;
+//	st = axODBC_Oracle_connect ( db, "MyOracleDSN", "test", "1234" );	if( !st ) return st;
+	st = axODBC_Oracle_connect ( db, "TonyOracle", "test", "1234" );	if( !st ) return st;
 
 //	st = axODBC_Oracle_connectDSN ( db, "DSN=MyOracleDSN; UID=test; PWD=1234;" ); if( !st ) return st;
 //	st = axODBC_Oracle_connect ( db, "DRIVER={Oracle in OraDb11g_home1}; UID=test; PWD=1234;" ); if( !st ) return st;
@@ -251,13 +248,14 @@ axStatus test_ODBC_Oracle() {
 
 axStatus test_ax_database() {
 	axStatus st;
-
 	axLog::instance->addFile( "test.log", false );
 
-	axUTestCase( test_SQLite3() );
+	ax_log("test {?} records\n", numRows );
+
+//	axUTestCase( test_SQLite3() );
 //	axUTestCase( test_MySQL() );
-	axUTestCase( test_PostgreSQL() );
-	axUTestCase( test_ODBC_MSSQL() );
+//	axUTestCase( test_PostgreSQL() );
+//	axUTestCase( test_ODBC_MSSQL() );
 	axUTestCase( test_ODBC_Oracle() );
 
 	return 0;
@@ -271,7 +269,7 @@ int main() {
 	axStopWatch	timer;
 
 	st = test_ax_database();
-    printf("==== END of PROGRAM  return %d %s ====\n", st.code(), st.c_str() );
+    printf("\n\n==== END of PROGRAM  return %d %s ====\n", st.code(), st.c_str() );
 
 #if axOS_Win
 	getchar();

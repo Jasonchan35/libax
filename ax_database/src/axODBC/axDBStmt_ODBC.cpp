@@ -82,6 +82,10 @@ void axDBStmt_ODBC::logError() {
     }
 }
 
+SQLRETURN axDBStmt_ODBC::_OnSQLBindParameter( SQLUSMALLINT col, const int64_t & value, axIStringW & tmpStr, SQLLEN & len ) {
+	return SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, SQL_C_SBIGINT,	SQL_BIGINT,		0, 0, ax_const_cast(&value), 0, &len );
+}
+
 axStatus	axDBStmt_ODBC::exec_ArgList	( const axDBInParamList & list ) { 
 	axStatus st;
 	echoExecSQL( db_, list );
@@ -113,9 +117,7 @@ axStatus	axDBStmt_ODBC::exec_ArgList	( const axDBInParamList & list ) {
 										SQL_C_SLONG,	SQL_INTEGER,	0, 0, ax_const_cast(&param.v_int32), 0, &len );
 			}break;
 			case axDB_c_type_int64: {
-				len = sizeof( int64_t );
-				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
-										SQL_C_SBIGINT,	SQL_BIGINT,		0, 0, ax_const_cast(&param.v_int64), 0, &len );
+				ret = _OnSQLBindParameter( col, param.v_int64, tmpStrData[i], len );
 			}break;
 
 			case axDB_c_type_bool: {
@@ -138,7 +140,6 @@ axStatus	axDBStmt_ODBC::exec_ArgList	( const axDBInParamList & list ) {
 			}break;
 
 			case axDB_c_type_StringW: {
-				st = tmpStrData[i].set( param.v_strW );		if( !st ) return st;
 				len = SQL_NTS;
 				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
 										SQL_C_WCHAR,	SQL_WVARCHAR,	0, 0, ax_const_cast(param.v_strW), 0, &len );

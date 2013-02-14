@@ -47,11 +47,15 @@ public:
 						bool		hasError	( RETCODE code );
 						void		logError	();
 
+		//for stupid oracle ODBC
+		virtual	SQLRETURN	_OnSQLBindParameter( SQLUSMALLINT col, const int64_t & value, axIStringW & tmpStr, SQLLEN & len );
+
+
 	axSharedPtr< axDBConn_ODBC >	db_;
 	axSize		paramCount_;
 	
-	axArray< SQLLEN,	axDB_kArgListLocalBufSize >	cbLen;
-	axArray< axStringW, axDB_kArgListLocalBufSize >	tmpStrData;
+	axArray< SQLLEN,		 axDB_kArgListLocalBufSize >	cbLen;
+	axArray< axStringW_<64>, axDB_kArgListLocalBufSize >	tmpStrData;
 	
 	struct ResultCol {
 		axStringA		name;

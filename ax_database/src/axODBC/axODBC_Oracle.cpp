@@ -3,6 +3,9 @@
 
 class axDBConn_Oracle : public axDBConn_ODBC {
 public:
+
+	virtual axStatus	createStmt						( axDBStmt & stmt, const char * sql );
+
 	virtual	axStatus	getSQL_CreateTable				( axIStringA & outSQL, const char* table, const axDBColumnList & list );
 	virtual	axStatus	getSQL_CreateTable_Step2		( axIStringA & outSQL, const char* table, const axDBColumnList & list );
 	virtual	axStatus	getSQL_CreateTable_Step3		( axIStringA & outSQL, const char* table, const axDBColumnList & list );
@@ -13,6 +16,17 @@ public:
 	virtual	const char*	DBTypeName						( int c_type );
 
 	virtual	axStatus	identifierString				( axIStringA & out, const char* sz );
+};
+
+
+class axDBStmt_Oracle : public axDBStmt_ODBC {
+	typedef axDBStmt_ODBC B;
+public:
+	axDBStmt_Oracle( axDBConn_Oracle* db ) : B(db) {}
+
+	virtual SQLRETURN _OnSQLBindParameter( SQLUSMALLINT col, const int64_t & value, axIStringW & tempStr, SQLLEN & len );
+
+	virtual axStatus	getResultAtCol	( axSize col, int64_t &value );
 };
 
 
@@ -28,6 +42,56 @@ axStatus	axODBC_Oracle_connectDSN( axDBConn & db, const char* dsn ) {
 	if( !p ) return axStatus_Std::not_enough_memory;
 	db._setImp(p);
 	return p->connectDSN( dsn );
+}
+
+
+SQLRETURN axDBStmt_Oracle::_OnSQLBindParameter( SQLUSMALLINT col, const int64_t & value, axIStringW & tmpStrData, SQLLEN & len ) {
+	axStatus st;
+
+	axTempStringA	tmp;
+	st = tmp.convert( value );			if( !st ) return SQL_ERROR;
+
+	len = tmp.size();
+	st = tmpStrData.resize( len+1 );	if( !st ) return SQL_ERROR;
+
+	//using as buffer
+	char* ptr = (char*)tmpStrData._getInternalBufferPtr();
+	memcpy( ptr, tmp.c_str(), len+1 );
+
+	return SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, SQL_C_CHAR,	SQL_VARCHAR, 0, 0, ptr, 0, &len );
+}
+
+axStatus	axDBStmt_Oracle::getResultAtCol	( axSize col, int64_t &value ) {
+	axStatus st;
+
+	value = 0;
+
+	char buf[64+4];
+	SQLLEN cbLen;
+	SQLRETURN ret;
+
+	ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_CHAR, buf, 64, &cbLen );
+	if( hasError(ret) ) {
+		logError();
+		return axStatus_Std::DB_invalid_param_type;
+	}
+
+	if( cbLen == SQL_NULL_DATA ) return 0;
+	if( cbLen <= 0 ) return axStatus_Std::DB_invalid_param_type;
+
+	buf[cbLen] = 0;
+
+	value = 0;
+	st = ax_str_to( buf, value );			if( !st ) return st;
+	return 0;
+}
+
+axStatus	axDBConn_Oracle::createStmt ( axDBStmt & stmt, const char * sql ) {
+	axStatus st;
+	axDBStmt_Oracle* p = new axDBStmt_Oracle( this );
+	if( !p ) return axStatus_Std::not_enough_memory;
+	stmt._setImp( p );
+	return p->create( sql );
 }
 
 axStatus	axDBConn_Oracle::identifierString( axIStringA & out, const char* sz ) {

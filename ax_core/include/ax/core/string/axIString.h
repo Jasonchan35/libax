@@ -37,6 +37,7 @@ public:
 	axStatus		appendConvert			( const V& value )						{ return appendFormat( "{?}", value ); }
 
 	axSize			size					() const;
+	axSize			byteSize				() const { return size() * sizeof(T); }
 
 	axStatus		resize					( axSize new_size, bool keep_data = true );
 	axStatus		reserve					( axSize new_size );
