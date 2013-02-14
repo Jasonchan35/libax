@@ -223,7 +223,7 @@ template< class T > axStatus axFileSystem::makeDirectoryT( const T* dir, bool re
 	
 	for( ;; ) {
 	
-		const T *e = ax_strchrs( s, sp );
+		const T *e = ax_strchr_list( s, sp );
 		if( !e ) { 
 			e = end;
 		}

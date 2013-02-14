@@ -52,13 +52,13 @@ size_t ax_strlen( const char*    s );
 size_t ax_strlen( const wchar_t* s );
 size_t ax_strlen( const axUChar* s );
 
-      char*    ax_strchrs(       char*    sz, const char*    chrs );
-      wchar_t* ax_strchrs(       wchar_t* sz, const wchar_t* chrs );
-      axUChar* ax_strchrs(       axUChar* sz, const axUChar* chrs );
+      char*    ax_strchr_list(       char*    sz, const char*    chrs );
+      wchar_t* ax_strchr_list(       wchar_t* sz, const wchar_t* chrs );
+      axUChar* ax_strchr_list(       axUChar* sz, const axUChar* chrs );
 
-const char*    ax_strchrs( const char*    sz, const char*    chrs );
-const wchar_t* ax_strchrs( const wchar_t* sz, const wchar_t* chrs );
-const axUChar* ax_strchrs( const axUChar* sz, const axUChar* chrs );
+const char*    ax_strchr_list( const char*    sz, const char*    chrs );
+const wchar_t* ax_strchr_list( const wchar_t* sz, const wchar_t* chrs );
+const axUChar* ax_strchr_list( const axUChar* sz, const axUChar* chrs );
 
       char*    ax_strrchrs(       char*    sz, const char*    chrs );
       wchar_t* ax_strrchrs(       wchar_t* sz, const wchar_t* chrs );

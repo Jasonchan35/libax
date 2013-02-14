@@ -343,7 +343,7 @@ axStatus	axIString_<T>::findAnyChar	( const T* char_list, axSize &outPos, axSize
 	const T* s = &buf_[start_from];
 	const T* e = &buf_.last();
 	for( ; s<e; s++ ) {
-		if( ax_strchrs( s, char_list ) == 0) {
+		if( ax_strchr_list( s, char_list ) == 0) {
 			outPos = s-buf_.ptr();
 			return 0;
 		}
