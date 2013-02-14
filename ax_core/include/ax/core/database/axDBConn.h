@@ -35,7 +35,10 @@ public:
 
 						axStatus	createTable				( const char* table, const axDBColumnList & list );
 	template<class T>	axStatus	createTable				( const char* table, const char* pkey=NULL, bool pkeyAutoInc=false );
-	
+
+	template<class T, class PKeyType, PKeyType T::*PKeyMember>	
+						axStatus	createTable				( const char* table, bool pkeyAutoInc=false );
+
 			//		TODO
 				//		axStatus	setTableAutoIncrement	( const char* table, int64_t   value );
 				//		axStatus	getTableAutoIncrement	( const char* table, int64_t & value );
@@ -116,6 +119,14 @@ axStatus	axDBConn::createTable	( const char* table, const char* pkey, bool pkeyA
 	axStatus st;
 	axDBColumnList	list;
 	st = list.create<T>( pkey, pkeyAutoInc );		if( !st ) return st;
+	return createTable( table, list );
+}
+
+template<class T, class PKeyType, PKeyType T::*PKeyMember>	
+axStatus	axDBConn::createTable	( const char* table, bool pkeyAutoInc ) {
+	axStatus st;
+	axDBColumnList	list;
+	st = list.createByPKeyMember<T, PKeyType, PKeyMember >( pkeyAutoInc );		if( !st ) return st;
 	return createTable( table, list );
 }
 

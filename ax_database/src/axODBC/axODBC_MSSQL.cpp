@@ -32,8 +32,8 @@ const char*	axDBConn_MSSQL::DBTypeName( int c_type ) {
 		case axDB_c_type_float:		return "REAL";  //REAL is 4 bytes in MSSQL
 		case axDB_c_type_double:	return "FLOAT"; //yes 'FLOAT' in MSSQL means full range float-point
 
-		case axDB_c_type_StringA:	return "VARCHAR(MAX)";
-		case axDB_c_type_StringW:	return "VARCHAR(MAX)";
+		case axDB_c_type_StringA:	return "NVARCHAR(MAX)";
+		case axDB_c_type_StringW:	return "NVARCHAR(MAX)";
 
 		case axDB_c_type_ByteArray:	return "VARBINARY(MAX)";
 		case axDB_c_type_TimeStamp:	return "DATETIME2(7)";

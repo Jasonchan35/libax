@@ -18,6 +18,7 @@ axDBConn_ODBC::~axDBConn_ODBC() {
 
 void axDBConn_ODBC::close() {
 	if( dbc_ ) {
+		SQLDisconnect( dbc_ );
 		SQLFreeHandle( SQL_HANDLE_DBC, dbc_ );
 		dbc_ = NULL;
 	}
@@ -154,12 +155,15 @@ void axDBConn_ODBC::logError() {
     WCHAR       wszState[SQL_SQLSTATE_SIZE+1];
 
 	SQLRETURN ret;
+
+	iRec = 0;
 	for(;;) {
 		ret = SQLGetDiagRec( SQL_HANDLE_ENV, env_, ++iRec, wszState, &iNativeError, wszMessage, len, NULL );
 		if( ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO ) break;
 		ax_log("ODBC Error [{?}] [{?}]: {?}\nSQL:\n{?}\n", wszState, (int)iNativeError, wszMessage );
 	}
 
+	iRec = 0;
 	for(;;) {
 		ret = SQLGetDiagRec( SQL_HANDLE_DBC, dbc_, ++iRec, wszState, &iNativeError, wszMessage, len, NULL );
 		if( ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO ) break;
