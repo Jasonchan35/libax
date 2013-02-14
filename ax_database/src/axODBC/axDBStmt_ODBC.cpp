@@ -415,6 +415,8 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, axDateTime		&value ) {
 
 
 axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, axIStringA		&value ) { 
+	if( ! columnInfo.inBound(col) ) return axStatus_Std::DB_invalid_param_count;
+
 	axStatus st;
 	char tmp;
 	SQLLEN cbLen;	
@@ -445,12 +447,16 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, axIStringA		&value ) {
 }
 
 axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, axIStringW		&value ) {
+	if( ! columnInfo.inBound(col) ) return axStatus_Std::DB_invalid_param_count;
+
 	axTempStringA	tmp;
 	axStatus st = getResultAtCol( col, tmp );		if( !st ) return st;
 	return value.set( tmp ); 
 }
 
 axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, axIByteArray		&value ) { 
+	if( ! columnInfo.inBound(col) ) return axStatus_Std::DB_invalid_param_count;
+
 	axStatus st;
 	char tmp;
 	SQLLEN cbLen;	
