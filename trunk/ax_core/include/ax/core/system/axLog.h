@@ -3,9 +3,9 @@
 
 #include "../data_structure/axPtr.h"
 #include "../string/ax_string.h"
-#include "..//time/axDateTime.h"
+#include "../time/axDateTime.h"
 #include "../thread/axThreadPool.h"
-
+#include "../file_system/axFile.h"
 
 
 class axLog_Tag : public axNonCopyable {
@@ -62,20 +62,18 @@ public:
 		virtual void out( axLog::Node* n ) { assert( false ); }
 	};
 
-	axStatus	addFile         ( const wchar_t* filename );
+	axStatus	addFile         ( const char* filename, bool append );
 	void        addHandler		( Handler* h );
 	void        removeHandler	( Handler* h );
 	
 protected:
 friend class Format_Log;
 
-/*
 	class FileHandler : public Handler {
 	public:
 		axFile	file;
 		virtual void out( axLog::Node* n );
 	};
-*/
 
 	typedef	axDList<Handler>	_HandlerList;
 
@@ -101,7 +99,6 @@ friend class Format_Log;
 private:
 	virtual void onThreadProc( axThread* thread );
 
-//	static	void _to_file_stream( Node* n, bool with_time );
 	static	void _to_file_stream( FILE* f, Node* n, bool with_time );
 	
 	enum {

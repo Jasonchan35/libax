@@ -51,7 +51,7 @@ public:
 	axSize		paramCount_;
 	
 	axArray< SQLLEN,	axDB_kArgListLocalBufSize >	cbLen;
-	axArray< axStringA, axDB_kArgListLocalBufSize >	tmpStrData;
+	axArray< axStringW, axDB_kArgListLocalBufSize >	tmpStrData;
 	
 	struct ResultCol {
 		axStringA		name;

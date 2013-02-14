@@ -13,8 +13,8 @@
 }\
 //-----
 
-#define axUTestDo( E )			{ printf("DO:   %s\n", #E); E; }
-#define axUTestCase( F )		{ printf("\n==== %s ====\n", #F); axStatus st = F; if( !st ) return st; }
+#define axUTestDo( E )			{ ax_log("DO:   {?}\n", #E); E; }
+#define axUTestCase( F )		{ ax_log("\n\n==== {?} ====\n", #F); axStatus st = F; if( !st ) return st; }
 
 
 #endif //__ax_unit_test_h__

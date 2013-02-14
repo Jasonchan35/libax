@@ -1,6 +1,9 @@
 #include <ax/core/file_system/axFile.h>
 #include <ax/core/system/axLog.h>
 
+axExpandArgList1_Imp( axStatus axFile::, writeFormat, const char*, const axStringFormat_Arg&, axStringFormat_ArgList )
+
+
 axFile::~axFile() {
 	close();
 }
@@ -59,7 +62,7 @@ axStatus axFile::writeString ( const char* sz ) {
 	return writeMem( sz, n );
 }
 
-axStatus axFile::formatWrite_ArgList ( const char* fmt, const axStringFormat::ArgList &list ) {
+axStatus axFile::writeFormat_ArgList ( const char* fmt, const axStringFormat::ArgList &list ) {
 	axTempStringA	tmp;
 	axStatus st;
 	st = tmp.format_ArgList( fmt, list );
@@ -87,6 +90,13 @@ void axFile::close() {
 		ret = 0; // just used the var to avoid the warrning
 	}
 }
+
+axStatus axFile::flush () {
+	int b = fsync( h_ );
+	if( b != 0 ) return axStatus_Std::File_error;
+	return 0;
+}
+
 
 axStatus	axFile::lastAccessTime 	( axTimeStamp & t ) {
 	if( ! isValid() ) { assert(false);	return axStatus_Std::not_initialized; }	
@@ -288,6 +298,12 @@ void axFile::close() {
 		assert( ret );
 		h_ = INVALID_HANDLE_VALUE;
 	}
+}
+
+axStatus axFile::flush () {
+	BOOL b = FlushFileBuffers( h_ );
+	if( ! b ) return axStatus_Std::File_error;
+	return 0;
 }
 
 axStatus	axFile::lastAccessTime 	( axTimeStamp & t ) {

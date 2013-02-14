@@ -63,11 +63,15 @@ void ax_log_errno( const char* msg ) {
 }
 #endif //axOS_UNIX
 
-/*
+
 void axLog::FileHandler::out( axLog::Node* n ) {
-    axLog::_to_file( file.file_ptr(), n, true );
+
+    // the ',' is csv seperator, so that the log file can open in spreadsheet
+	n->tmp.format( "{?}, {?}, {?}\n", n->time, n->tag_name, n->msg );        
+	file.writeString( n->tmp );
+	file.flush();
 }
-*/
+
 
 void axLog::_to_file_stream( FILE* f, Node* n, bool with_time ) {
     // the ',' is csv seperator, so that the log file can open in spreadsheet
@@ -227,30 +231,33 @@ const char* axLog::levelName( int lv ) {
 }
 */
 
-/*
-axStatus axLog::addFile( const wchar_t* filename ) {
+axStatus axLog::addFile( const char* filename, bool append ) {
     axStatus st;
     
     axAutoPtr<FileHandler> h;
 	
-    st = h.newObject();							if( !st ) return st;
-    st = h->file.open( filename, "a" );		if( !st ) return st;
+    st = h.newObject();										if( !st ) return st;
+
+	if( append ) {
+		st = h->file.openAppend( filename, true );			if( !st ) return st;
+	}else{
+		st = h->file.openWrite( filename, true, true );		if( !st ) return st;
+	}
     
     axFileSize	file_size = 0;
     h->file.getFileSize( file_size );
     
     if( file_size == 0 ) {
-        //write BOM ( uint8_t order mark ) for new file
-        //		st = h->put_line( "\xEF\xBB\xBF" );	if( !st ) return st;
+	//	write BOM ( uint8_t order mark ) for new file
+	//	st = h->file.writeString( "\xEF\xBB\xBF" );		if( !st ) return st;
         
-        //print header row
-        fputs( " Time            ,Level    , Message\n", h->file.file_ptr() );
+	//	print header row
+		st = h->file.writeFormat( " {?:-24}, {?:-8}, {?}\n", "Time", "Tag", "Message" );		if( !st ) return st;
     }
     
     addHandler( h.unref() );
     return 0;
 }
- */
 
 void axLog::addHandler ( Handler* h ) {
     HandlerList	ls( handler_list_, false );

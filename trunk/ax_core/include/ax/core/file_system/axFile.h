@@ -61,9 +61,9 @@ public:
 	
 	axStatus	writeString		( const char* sz );
 
-	axStatus	formatWrite_ArgList	( const char* fmt, const axStringFormat::ArgList &list );
+	axStatus	writeFormat_ArgList	( const char* fmt, const axStringFormat::ArgList &list );
 	//!macro - axStatus	ax_log( const char* fmt, ... );
-	axExpandArgList1( axStatus, formatWrite, const char*, const axStringFormat_Arg&, axStringFormat_ArgList )
+	axExpandArgList1( axStatus, writeFormat, const char*, const axStringFormat_Arg&, axStringFormat_ArgList )
 
 
 	axStatus	readLine		( axIStringA &buf, axSize buf_max_size );
@@ -72,6 +72,8 @@ public:
 	axStatus	readWholeFile	( axIStringW &out );
 	
 	axStatus	readWholeFile	( axIByteArray &out );	
+
+	axStatus	flush			();
 
 private:
 #if axOS_WIN
