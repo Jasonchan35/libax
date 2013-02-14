@@ -60,7 +60,7 @@ axStatus axDBConn_PostgreSQL::getSQL_CreateTable ( axIStringA & outSQL, const ch
 	for( size_t i=0; i<list.size(); i++ ) {
 		const axDBColumn & c = list[i];
 		if( i > 0 ) {
-			st = outSQL.append(",\n");
+			st = outSQL.append(",\n");		if( !st ) return st;
 		}
 
 		st = identifierString( colName, c.name );		if( !st ) return st;

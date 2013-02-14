@@ -67,18 +67,11 @@ bool axDBConn_SQLite3::hasError( int code, const char* sql ) {
 			return false;
 	}
 
-	if( p_ ) {
-		if( sql ) {
-			ax_log( "SQLite3 Error({?}): {?}\n SQL: {?}", code, sqlite3_errmsg( p_ ), sql );
-		}else{
-			ax_log( "SQLite3 Error({?}): {?}", code, sqlite3_errmsg( p_ ) );
-		}
+	const char* msg = p_ ? sqlite3_errmsg( p_ ) : "";
+	if( sql ) {
+		ax_log( "SQLite3 Error({?}): {?}\n SQL: {?}", code, msg, sql );
 	}else{
-		if( sql ) {
-			ax_log( "SQLite3 Error({?})", code  );
-		}else{
-			ax_log( "SQLite3 Error({?})\n  SQL: {?}", code, sql  );
-		}
+		ax_log( "SQLite3 Error({?}): {?}", code, msg );
 	}
 	return true;
 }
@@ -104,7 +97,7 @@ axStatus axDBConn_SQLite3::getSQL_CreateTable ( axIStringA & outSQL, const char*
 	for( size_t i=0; i<list.size(); i++ ) {
 		const axDBColumn & c = list[i];
 		if( i > 0 ) {
-			st = outSQL.append(",\n");
+			st = outSQL.append(",\n");		if( !st ) return st;
 		}
 
 		st = identifierString( colName, c.name );		if( !st ) return st;

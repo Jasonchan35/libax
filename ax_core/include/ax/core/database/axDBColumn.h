@@ -75,9 +75,9 @@ public:
 		axDBColumn & c = last();
 
 		if( _tmpPrefix && _tmpPrefix[0] ) {
-			st = c.name.format("{?}_{?}", _tmpPrefix, name );
+			st = c.name.format("{?}_{?}", _tmpPrefix, name );	if( !st ) return st;
 		}else{
-			st = c.name.set( name );
+			st = c.name.set( name );	if( !st ) return st;
 		}
 		c.type = axDBOutParamType(value);
 		c.data = &value;
