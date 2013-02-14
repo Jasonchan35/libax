@@ -11,13 +11,10 @@
 
 axStatus	ax_to_json_str	( axIStringA & str, const char* sz, bool withQuote ) {
 	axStatus st;
-	
-	axSize 	offset = 0;
 	str.resize(0);
-	axJsonWriter	s( str );
+
 	if( withQuote ) {
 		st = str.set("\"");		if( !st ) return st;
-		offset++;
 	}
 	
 	const char* p = sz;
