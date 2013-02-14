@@ -1,0 +1,54 @@
+ Time                    , Tag     , Message
+
+ 2013-02-15 01:56:16.333, log, 
+ 
+ 
+ 5000 records
+
+==== test_PostgreSQL() ====
+
+2013-02-15 01:56:16.548, log, ===== insert ======
+2013-02-15 01:56:19.916, log, insert 5000 records in 3.30707s
+2013-02-15 01:56:20.105, log, ===== update ======
+2013-02-15 01:56:24.582, log, update 5000 records in 4.4441s
+2013-02-15 01:56:24.904, log, ===== select all ======
+2013-02-15 01:56:25.090, log, select 5000 records in 0.160347s
+2013-02-15 01:56:28.986, log, 
+
+==== test_ODBC_MSSQL() ====
+
+2013-02-15 01:56:29.226, log, ===== insert ======
+2013-02-15 01:56:35.266, log, insert 5000 records in 5.8941s
+2013-02-15 01:56:35.303, log, ===== update ======
+2013-02-15 01:56:43.293, log, update 5000 records in 7.97187s
+2013-02-15 01:56:43.321, log, ===== select all ======
+2013-02-15 01:56:44.229, log, select 5000 records in 0.885241s
+2013-02-15 01:56:46.950, log, 
+
+==== test_ODBC_Oracle() ====
+
+2013-02-15 01:56:47.524, log, ===== insert ======
+2013-02-15 01:57:03.350, log, insert 5000 records in 15.7962s
+2013-02-15 01:57:03.394, log, ===== update ======
+2013-02-15 01:57:25.506, log, update 5000 records in 22.0874s
+2013-02-15 01:57:25.584, log, ===== select all ======
+2013-02-15 01:57:29.753, log, select 5000 records in 4.15054s
+
+
+
+==== test_ODBC_Oracle() Tony Oracle on Linux ====
+
+log, ===== insert ======
+log, insert 5000 records in 32.2444s
+log, ===== update ======
+log, update 5000 records in 45.5559s
+log, ===== select all ======
+log, select 5000 records in 31.328s
+
+
+==== END of PROGRAM  return 0 OK ====
+
+
+
+
+
