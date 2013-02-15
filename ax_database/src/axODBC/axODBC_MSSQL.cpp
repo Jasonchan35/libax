@@ -2,7 +2,7 @@
 
 class axDBConn_MSSQL : public axDBConn_ODBC {
 public:
-	virtual	axStatus		getSQL_CreateTable		( axIStringA & outSQL, const char* table, const axDBColumnList & list );
+	virtual	axStatus		getSQL_CreateTable		( axIStringA & outSQL, const axDBColumnList & list, const char* table );
 	virtual axStatus		getSQL_DropTableIfExists( axIStringA & outSQL, const char* table );
 	virtual const char*		DBTypeName				( int c_type );
 };
@@ -60,7 +60,7 @@ axStatus	axDBConn_MSSQL::getSQL_DropTableIfExists( axIStringA & outSQL, const ch
 
 
 
-axStatus	axDBConn_MSSQL::getSQL_CreateTable	( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
+axStatus	axDBConn_MSSQL::getSQL_CreateTable	( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
 	axStatus st;
 	axTempStringA	tableName;
     

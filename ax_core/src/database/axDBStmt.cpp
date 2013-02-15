@@ -74,23 +74,23 @@ axStatus axDBStmt_Imp::getRow_ArgList( axDBOutParamList & list ) {
 	return 0;
 }
 
-axStatus axDBStmt::create_Insert	( axDBConn & db, const char* table, const axDBColumnList & list ) {
+axStatus axDBStmt::create_Insert	( axDBConn & db, const axDBColumnList & list, const char* table ) {
 	axStatus st;
 	axTempStringA	sql;
-	st = db.getSQL_Insert( sql, table, list );		if( !st ) return st;
+	st = db.getSQL_Insert( sql, list, table );		if( !st ) return st;
 	return create( db, sql );
 }
 
-axStatus axDBStmt::create_Update	( axDBConn & db, const char* table, const char* szWhere, const axDBColumnList & list ) {
+axStatus axDBStmt::create_Update	( axDBConn & db, const axDBColumnList & list, const char* table, const char* szWhere ) {
 	axStatus st;
 	axTempStringA	sql;
-	st = db.getSQL_Update( sql, table, szWhere, list );		if( !st ) return st;
+	st = db.getSQL_Update( sql, list, table, szWhere );		if( !st ) return st;
 	return create( db, sql );
 }
 
-axStatus axDBStmt::create_Select	( axDBConn & db, const char* table, const char* szWhere, const axDBColumnList & list ) {
+axStatus axDBStmt::create_Select	( axDBConn & db, const axDBColumnList & list, const char* table, const char* szWhere ) {
 	axStatus st;
 	axTempStringA	sql;
-	st = db.getSQL_Select( sql, table, szWhere, list );		if( !st ) return st;
+	st = db.getSQL_Select( sql, list, table, szWhere );		if( !st ) return st;
 	return create( db, sql );
 }

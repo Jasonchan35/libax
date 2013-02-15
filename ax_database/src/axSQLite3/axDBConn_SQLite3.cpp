@@ -85,7 +85,7 @@ axStatus axDBConn_SQLite3::createStmt( axDBStmt & stmt, const char* sql ) {
 }
 
 //virtual	
-axStatus axDBConn_SQLite3::getSQL_CreateTable ( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
+axStatus axDBConn_SQLite3::getSQL_CreateTable ( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
 	axStatus st;
 	axTempStringA	tableName;
     

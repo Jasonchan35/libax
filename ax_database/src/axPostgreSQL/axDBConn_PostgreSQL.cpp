@@ -48,7 +48,7 @@ axStatus axDBConn_PostgreSQL::createStmt( axDBStmt & stmt, const char * sql ) {
 }
 
 //virtual	
-axStatus axDBConn_PostgreSQL::getSQL_CreateTable ( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
+axStatus axDBConn_PostgreSQL::getSQL_CreateTable ( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
 	axStatus st;
 	axTempStringA	tableName;
     

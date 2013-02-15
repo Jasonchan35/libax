@@ -41,25 +41,19 @@ public:
 		pkeyAutoInc_	= false;
 	}
 
-	template<class T, class PKeyType, PKeyType T::*PKeyMember >
-	axStatus	createByPKeyMember( bool pkeyAutoInc ) {
+	template<class T>
+	axStatus	create() {
+		return create<T, void, NULL, false>();
+	}
+
+	template<class T, class PKeyType, PKeyType T::*PKeyMember, bool PKeyAutoInc >
+	axStatus	create() {
 		pkeyIndex_	 = -1;
-		pkeyAutoInc_ = pkeyAutoInc;
+		pkeyAutoInc_ = PKeyAutoInc;
 
 		T	t;
 		axStatus st = io( t, NULL );			if( !st ) return st;
 		pkeyIndex_ = findColumnByData( &(t.*PKeyMember) );
-		return 0;
-	}
-
-	template<class T>
-	axStatus	create( const char* pkey, bool pkeyAutoInc ) {
-		pkeyIndex_	 = -1;
-		pkeyAutoInc_ = pkeyAutoInc;
-
-		T	t;
-		axStatus st = io( t, NULL );			if( !st ) return st;
-		pkeyIndex_ = findColumnByName( pkey );
 		return 0;
 	}
 

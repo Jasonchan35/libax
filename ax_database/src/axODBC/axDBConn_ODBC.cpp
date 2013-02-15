@@ -36,7 +36,7 @@ axStatus	axDBConn_ODBC::createStmt ( axDBStmt & stmt, const char * sql ) {
 	return p->create( sql );
 }
 
-axStatus	axDBConn_ODBC::getSQL_CreateTable	( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
+axStatus	axDBConn_ODBC::getSQL_CreateTable	( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
 	axStatus st;
 	axTempStringA	tableName;
     
