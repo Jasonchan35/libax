@@ -40,6 +40,7 @@ public:
 						axStatus	getRow_ArgList	( axDBOutParamList & list );
 						axExpandArgList0			( axStatus, getRow, const axDBOutParam_CB & , axDBOutParamList )
 							
+						axSize		numParams		();
 						axSize		numColumns		();
 						int			columnType		( axSize col );
 						const char*	columnName		( axSize col );

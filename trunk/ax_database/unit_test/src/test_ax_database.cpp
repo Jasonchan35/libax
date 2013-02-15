@@ -123,7 +123,7 @@ public:
 axStatus test_ax_database_common( axDBConn & db ) {
 	axStatus st;
 
-//	db.setEchoSQL( true );
+	db.setEchoSQL( true );
 
 //	const char* table = "unit Test's \"Table\" 01";
 //	const char* table = "Test's Table";
@@ -172,7 +172,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		ax_log("select {?} records in {?}s", results.size(), timer.get() );
 
 		//ax_log_var( results );
-		#if 0 // dump last only
+		#if 1 // dump last only
 			if( results.size() ) {
 				ax_log_var( results.last() );
 			}

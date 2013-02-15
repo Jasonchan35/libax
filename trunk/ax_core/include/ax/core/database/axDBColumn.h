@@ -123,15 +123,15 @@ axStatus	axDBColumnList_io( axDBColumnList &s, T & value, const char* name ) {
 	axStatus st;
 	axScopeValue<const char*>	old( s._tmpPrefix );
 
-	axStringA_<64>	prefix;
-	if( s._tmpPrefix && s._tmpPrefix[0] ) {
-		st = prefix.format( "{?}_{?}", s._tmpPrefix, name );
-	}else{
-		st = prefix.set( name );
-	}
-	s._tmpPrefix = prefix.c_str();
+	axStringA_<128>	tmp;
 
-	st = value.serialize_io( s );	if( !st ) return st;
+	if( s._tmpPrefix && s._tmpPrefix[0] ) {
+		st = tmp.format( "{?}_{?}", s._tmpPrefix, name );		if( !st ) return st;
+		s._tmpPrefix = tmp.c_str(); //change the prefix
+	}else{
+		s._tmpPrefix = name;
+	}
+	st = value.serialize_io( s );		if( !st ) return st;
 	return 0;
 }
 
