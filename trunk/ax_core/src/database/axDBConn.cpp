@@ -62,21 +62,21 @@ axStatus	axDBConn::identifierString( axIStringA & out, const char* sz ) {
 }
 
 //== create table ==
-axStatus axDBConn::createTable	( const char* table, const axDBColumnList & list ) {
+axStatus axDBConn::createTable	( const axDBColumnList & list, const char* table ) {
 	axStatus		st;
 	axTempStringA	sql;
 	axDBStmt		stmt;
 
-	st = getSQL_CreateTable( sql, table, list );		if( !st ) return st;
+	st = getSQL_CreateTable( sql, list, table );		if( !st ) return st;
 	st = stmt.create( *this, sql );						if( !st ) return st;
 	st = stmt.exec();									if( !st ) return st;
 
-	st = getSQL_CreateTable_Step2( sql, table, list );	if( !st ) return st;
+	st = getSQL_CreateTable_Step2( sql, list, table );	if( !st ) return st;
 	if( sql.isEmpty() ) return 0;
 	st = stmt.create( *this, sql );						if( !st ) return st;
 	st = stmt.exec();									if( !st ) return st;
 
-	st = getSQL_CreateTable_Step3( sql, table, list );	if( !st ) return st;
+	st = getSQL_CreateTable_Step3( sql, list, table );	if( !st ) return st;
 	if( sql.isEmpty() ) return 0;
 	st = stmt.create( *this, sql );						if( !st ) return st;
 	st = stmt.exec();									if( !st ) return st;
@@ -84,25 +84,25 @@ axStatus axDBConn::createTable	( const char* table, const axDBColumnList & list 
 	return 0;
 }
 
-axStatus axDBConn::getSQL_CreateTable( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
+axStatus axDBConn::getSQL_CreateTable( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->getSQL_CreateTable( outSQL, table, list );
+	return p_->getSQL_CreateTable( outSQL, list, table );
 }
 
-axStatus axDBConn::getSQL_CreateTable_Step2( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
+axStatus axDBConn::getSQL_CreateTable_Step2( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->getSQL_CreateTable_Step2( outSQL, table, list );
+	return p_->getSQL_CreateTable_Step2( outSQL, list, table );
 }
-axStatus axDBConn_Imp::getSQL_CreateTable_Step2( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
+axStatus axDBConn_Imp::getSQL_CreateTable_Step2( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
 	outSQL.clear();
 	return 0;
 }
 
-axStatus axDBConn::getSQL_CreateTable_Step3( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
+axStatus axDBConn::getSQL_CreateTable_Step3( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->getSQL_CreateTable_Step3( outSQL, table, list );
+	return p_->getSQL_CreateTable_Step3( outSQL, list, table );
 }
-axStatus axDBConn_Imp::getSQL_CreateTable_Step3( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
+axStatus axDBConn_Imp::getSQL_CreateTable_Step3( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
 	outSQL.clear();
 	return 0;
 }
@@ -173,12 +173,12 @@ axStatus axDBConn_Imp::getSQL_DropTableIfExists_Step2(axIStringA &outSQL, const 
 
 
 //==== insert ===
-axStatus axDBConn::getSQL_Insert( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
+axStatus axDBConn::getSQL_Insert( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->getSQL_Insert( outSQL, table, list );
+	return p_->getSQL_Insert( outSQL, list, table );
 }
 
-axStatus axDBConn_Imp::getSQL_Insert( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
+axStatus axDBConn_Imp::getSQL_Insert( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
 	axStatus st;
 	axTempStringA	colName;
 
@@ -218,12 +218,12 @@ axStatus axDBConn_Imp::getSQL_Insert( axIStringA & outSQL, const char* table, co
 
 
 //=== update ===
-axStatus axDBConn::getSQL_Update( axIStringA & outSQL, const char* table, const char* szWhere, const axDBColumnList & list ) {
+axStatus axDBConn::getSQL_Update( axIStringA & outSQL, const axDBColumnList & list, const char* table, const char* szWhere ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->getSQL_Update( outSQL, table, szWhere, list );
+	return p_->getSQL_Update( outSQL, list, table, szWhere );
 }
 
-axStatus axDBConn_Imp::getSQL_Update( axIStringA & outSQL, const char* table, const char* szWhere, const axDBColumnList & list ) {
+axStatus axDBConn_Imp::getSQL_Update( axIStringA & outSQL, const axDBColumnList & list, const char* table, const char* szWhere ) {
 	axStatus st;
 	axTempStringA	colName;
 	axTempStringA	tableName;
@@ -252,12 +252,12 @@ axStatus axDBConn_Imp::getSQL_Update( axIStringA & outSQL, const char* table, co
 }
 
 //=== select ====
-axStatus axDBConn::getSQL_Select( axIStringA & outSQL, const char* table, const char* szWhere, const axDBColumnList & list ) {
+axStatus axDBConn::getSQL_Select( axIStringA & outSQL, const axDBColumnList & list, const char* table, const char* szWhere ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->getSQL_Select( outSQL, table, szWhere, list );
+	return p_->getSQL_Select( outSQL, list, table, szWhere );
 }
 
-axStatus axDBConn_Imp::getSQL_Select	( axIStringA & outSQL, const char* table, const char* szWhere, const axDBColumnList & list ) {
+axStatus axDBConn_Imp::getSQL_Select ( axIStringA & outSQL, const axDBColumnList & list, const char* table, const char* szWhere ) {
 	axStatus st;
 	axTempStringA	colName;
 	axTempStringA	tableName;

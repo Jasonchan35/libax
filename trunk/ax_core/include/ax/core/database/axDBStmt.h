@@ -22,33 +22,32 @@ class axDBStmt : public axNonCopyable {
 public:	
 	axDBStmt();
 	
-							axStatus	create			( axDBConn & db, const char* sql );
+						axStatus	create			( axDBConn & db, const char* sql );
 
-							axStatus	create_Insert	( axDBConn & db, const char* table, const axDBColumnList & list );
-		template<class T>	axStatus	create_Insert	( axDBConn & db, const char* table, const char* pkey=NULL, bool pkeyAutoInc=false );
+	template<class T>	axStatus	create_Insert	( axDBConn & db, const char* table );
+	template<class T>	axStatus	create_Update	( axDBConn & db, const char* table,	const char* szWhere );
+	template<class T>	axStatus	create_Select	( axDBConn & db, const char* table,	const char* szWhere );
 
-							axStatus	create_Update	( axDBConn & db, const char* table,	const char* szWhere, const axDBColumnList & list );
-		template<class T>	axStatus	create_Update	( axDBConn & db, const char* table,	const char* szWhere, const char* pkey=NULL, bool pkeyAutoInc=false );
+						axStatus	create_Insert	( axDBConn & db, const axDBColumnList & list, const char* table );
+						axStatus	create_Update	( axDBConn & db, const axDBColumnList & list, const char* table, const char* szWhere );
+						axStatus	create_Select	( axDBConn & db, const axDBColumnList & list, const char* table, const char* szWhere );
 
-							axStatus	create_Select	( axDBConn & db, const char* table,	const char* szWhere, const axDBColumnList & list );
-		template<class T>	axStatus	create_Select	( axDBConn & db, const char* table,	const char* szWhere );
-
-		//	axStatus	exec			( params... )
-			axStatus	exec_ArgList	( const axDBInParamList & list );
-			axExpandArgList0			( axStatus, exec,   const axDBInParam_CB & , axDBInParamList )
-			
-		//	axStatus	getRow			( params... )
-			axStatus	getRow_ArgList	( axDBOutParamList & list );
-			axExpandArgList0			( axStatus, getRow, const axDBOutParam_CB & , axDBOutParamList )
-				
-			axSize		numColumns		();
-			int			columnType		( axSize col );
-			const char*	columnName		( axSize col );
-					
-				void	_setImp			( axDBStmt_Imp* p );
-		axDBStmt_Imp*	_getImp			()		{ return p_; }
-				
-			const char*	sql				();
+					//	axStatus	exec			( params... )
+						axStatus	exec_ArgList	( const axDBInParamList & list );
+						axExpandArgList0			( axStatus, exec,   const axDBInParam_CB & , axDBInParamList )
+						
+					//	axStatus	getRow			( params... )
+						axStatus	getRow_ArgList	( axDBOutParamList & list );
+						axExpandArgList0			( axStatus, getRow, const axDBOutParam_CB & , axDBOutParamList )
+							
+						axSize		numColumns		();
+						int			columnType		( axSize col );
+						const char*	columnName		( axSize col );
+								
+							void	_setImp			( axDBStmt_Imp* p );
+					axDBStmt_Imp*	_getImp			()		{ return p_; }
+							
+						const char*	sql				();
 protected:
 	axSharedPtr< axDBStmt_Imp >	p_;
 };
@@ -96,20 +95,28 @@ public:
 
 //=== insert ===
 template<class T> inline
-axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table, const char* pkey, bool pkeyAutoInc ) {
+axStatus	axDBStmt::create_Insert( axDBConn & db, const char* table ) {
     axStatus st;
+
+	axDBColumnList	list;
+	st = list.create<T>();	if( !st ) return st;
+
 	axTempStringA	sql;
-	st = db.getSQL_Insert<T>( sql, table );	if( !st ) return st;
+	st = db.getSQL_Insert( sql, list, table );	if( !st ) return st;
 	return create( db, sql );
 }
 
 //=== update ==
 
 template<class T> inline
-axStatus	axDBStmt::create_Update( axDBConn & db, const char* table, const char* szWhere, const char* pkey, bool pkeyAutoInc ) {
+axStatus	axDBStmt::create_Update( axDBConn & db, const char* table, const char* szWhere ) {
     axStatus st;
+
+	axDBColumnList	list;
+	st = list.create<T>();	if( !st ) return st;
+
 	axTempStringA	sql;
-	st = db.getSQL_Update<T>( sql, table, szWhere, pkey, pkeyAutoInc );	if( !st ) return st;
+	st = db.getSQL_Update( sql, list, table, szWhere );		if( !st ) return st;
 	return create( db, sql );
 }
 
@@ -117,8 +124,12 @@ axStatus	axDBStmt::create_Update( axDBConn & db, const char* table, const char* 
 template<class T> inline
 axStatus	axDBStmt::create_Select( axDBConn & db, const char* table, const char* szWhere ) {
     axStatus st;
+
+	axDBColumnList	list;
+	st = list.create<T>();	if( !st ) return st;
+
 	axTempStringA	sql;
-	st = db.getSQL_Select<T>( sql, table, szWhere );	if( !st ) return st;
+	st = db.getSQL_Select( sql, list, table, szWhere );		if( !st ) return st;
 	return create( db, sql );
 }
 

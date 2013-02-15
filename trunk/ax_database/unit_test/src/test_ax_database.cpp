@@ -2,7 +2,7 @@
 
 #include <ax/ax_unit_test.h>
 
-const size_t numRows = 5000;
+const size_t numRows = 5;
 
 
 
@@ -71,9 +71,7 @@ public:
 		v_double = 123456789.1234;
 
 		v_StringA.set( "This is String" );
-
-		v_StringW.set("StringW cannot open UTF8_sample.txt");
-		axStatus st = axFileSystem::loadFile( v_StringW, "UTF8_sample.txt" ); if( !st ) assert(false);
+		v_StringW.set("StringW Test");
 
 		v_TimeStamp.now();
 
@@ -132,9 +130,11 @@ axStatus test_ax_database_common( axDBConn & db ) {
 	const char* table = "TestTable";
 
 	st = db.dropTableIfExists( table );								if( !st ) return st;
-	st = db.createTable<Row, TableID, &Row::id>( table, true );		if( !st ) return st;
-
 	axDBTableAccessor<Row, TableID, &Row::id>	tbl;
+
+	st = tbl.createTable( db, table );			if( !st ) return st;
+
+
 	st = tbl.create( db, table );				if( !st ) return st;
 
 
@@ -194,6 +194,7 @@ axStatus test_SQLite3() {
 	return 0;
 }
 
+#if 0 //=============== MySQL ====================
 #include <ax/database/axMySQL.h>
 axStatus test_MySQL() {
 	axStatus st;
@@ -211,7 +212,9 @@ axStatus test_PostgreSQL() {
 	st = test_ax_database_common(db);			if( !st ) return st;
 	return 0;
 }
+#endif
 
+#if 0 // =============== ODBC ====================
 #include <ax/database/axODBC.h>
 //axStatus test_ODBC() {
 //	axStatus st;
@@ -231,7 +234,6 @@ axStatus test_ODBC_MSSQL() {
 	st = test_ax_database_common(db);			if( !st ) return st;
 	return 0;
 }
-
 axStatus test_ODBC_Oracle() {
 	axStatus st;
 	axDBConn	db;
@@ -245,6 +247,7 @@ axStatus test_ODBC_Oracle() {
 	st = test_ax_database_common(db);			if( !st ) return st;
 	return 0;
 }
+#endif
 
 axStatus test_ax_database() {
 	axStatus st;
@@ -252,11 +255,11 @@ axStatus test_ax_database() {
 
 	ax_log("test {?} records\n", numRows );
 
-//	axUTestCase( test_SQLite3() );
+	axUTestCase( test_SQLite3() );
 //	axUTestCase( test_MySQL() );
 //	axUTestCase( test_PostgreSQL() );
 //	axUTestCase( test_ODBC_MSSQL() );
-	axUTestCase( test_ODBC_Oracle() );
+//	axUTestCase( test_ODBC_Oracle() );
 
 	return 0;
 }

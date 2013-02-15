@@ -26,7 +26,7 @@ protected:
 	bool		pkeyAutoInc_;
 };
 
-template<class T, class PKeyType, PKeyType T::*PKeyMember >
+template<class T, class PKeyType, PKeyType T::*PKeyMember, bool PKeyAutoInc >
 class axDBTableAccessor_InsertStmt : public axDBTableAccessor_Stmt<T> {
 typedef axDBTableAccessor_Stmt<T> B;
 
@@ -34,7 +34,7 @@ public:
 	axStatus	create	( axDBConn & db, const char* table, const axDBColumnList & list ) {
 		B::pkeyIndex_	= list.pkeyIndex();
 		B::pkeyAutoInc_	= list.pkeyAutoInc();
-		return B::stmt_.create_Insert( db, table, list );
+		return B::stmt_.create_Insert( db, list, table );
 	}
 
 	axStatus	exec	( const T & values ) {
@@ -47,7 +47,7 @@ public:
 	const char*	sql		() { return B::stmt_.sql(); }
 };
 
-template< class T, class PKeyType, PKeyType T::*PKeyMember >
+template< class T, class PKeyType, PKeyType T::*PKeyMember, bool PKeyAutoInc >
 class axDBTableAccessor_UpdateStmt : public axDBTableAccessor_Stmt<T> {
 	typedef axDBTableAccessor_Stmt<T> B;
 public:
@@ -58,7 +58,7 @@ public:
 
 		axStringA whereStr;
 		st = B::getWherePKey( whereStr, db, list );					if( !st ) return st;
-		st = B::stmt_.create_Update( db, table, whereStr, list );		if( !st ) return st;
+		st = B::stmt_.create_Update( db, list, table, whereStr );	if( !st ) return st;
 		return 0;
 	}
 	axStatus	exec( const T & values ) {
@@ -75,7 +75,7 @@ public:
 };
 
 
-template<class T, class PKeyType, PKeyType T::*PKeyMember  >
+template<class T, class PKeyType, PKeyType T::*PKeyMember, bool PKeyAutoInc >
 class axDBTableAccessor_SelectStmt : public axDBTableAccessor_Stmt<T> {
 typedef axDBTableAccessor_Stmt<T> B;
 public:
@@ -86,7 +86,7 @@ public:
 
 		axStringA whereStr;
 		st = B::getWherePKey( whereStr, db, list );					if( !st ) return st;
-		st = B::stmt_.create_Select( db, table, whereStr, list );		if( !st ) return st;
+		st = B::stmt_.create_Select( db, list, table, whereStr );		if( !st ) return st;
 		return 0;
 	}
 	axStatus	exec( T & values, const PKeyType &pkey ) {
@@ -107,7 +107,7 @@ class axDBTableAccessor_SelectMultipleStmt : public axDBTableAccessor_Stmt<T> {
 public:
 	axStatus	create	( axDBConn & db, const char* table, const char* szWhere, const axDBColumnList & list ) {
 		axStatus st;
-		st = B::stmt_.create_Select( db, table, szWhere, list );		if( !st ) return st;
+		st = B::stmt_.create_Select( db, list, table, szWhere );		if( !st ) return st;
 		return 0;
 	}
 	axStatus	exec_ArgList	( const axDBInParamList &params )	{ return B::stmt_.exec_ArgList( params ); }
@@ -131,7 +131,7 @@ public:
 
 
 
-template<class T, class PKeyType=int64_t, PKeyType T::*PKeyMember=&T::id>
+template<class T, class PKeyType=int64_t, PKeyType T::*PKeyMember=&T::id, bool PKeyAutoInc=true>
 class axDBTableAccessor {
 public:
 	/*
@@ -142,14 +142,21 @@ public:
 		insert : get last id
 	 
 	*/
+	static
+	axStatus createTable( axDBConn & db, const char* table ) {
+		axStatus st;
+		axDBColumnList	list;
+		st = list.create<T, PKeyType, PKeyMember, PKeyAutoInc>();	if( !st ) return st;
+		st = db.createTable( list, table );							if( !st ) return st;
+		return 0;
+	}
 
-	axStatus create( axDBConn & db, const char* table, bool pkeyAutoInc=true ) {
+	axStatus create( axDBConn & db, const char* table ) {
 		axStatus st;
 		db_ = &db;
-		st = table_.set( table );								if( !st ) return st;
+		st = table_.set( table );									if( !st ) return st;
 
-		st = list_.createByPKeyMember<T,PKeyType, PKeyMember>( pkeyAutoInc );		
-		if( !st ) return st;
+		st = list_.create<T,PKeyType, PKeyMember, PKeyAutoInc>();	if( !st ) return st;
 
 		st = insertStmt.create		( db, table, list_ );			if( !st ) return st;
 		st = updateStmt.create		( db, table, list_ );			if( !st ) return st;
@@ -172,10 +179,10 @@ public:
 	axStatus selectWhere_ArgList	( axIArray<T> &rows, const char* szWhere, const axDBInParamList & params );
 	axExpandArgList2_Imp			( axStatus,  selectWhere, axIArray<T> & /*rows*/, const char* /*szWhere*/, const axDBInParam_CB &, axDBInParamList );
 
-	axDBTableAccessor_InsertStmt<T, PKeyType, PKeyMember>	insertStmt;
-	axDBTableAccessor_UpdateStmt<T, PKeyType, PKeyMember>	updateStmt;
-	axDBTableAccessor_SelectStmt<T, PKeyType, PKeyMember>	selectStmt;
-	axDBTableAccessor_SelectMultipleStmt<T>					selectAllStmt;
+	axDBTableAccessor_InsertStmt<T, PKeyType, PKeyMember, PKeyAutoInc>	insertStmt;
+	axDBTableAccessor_UpdateStmt<T, PKeyType, PKeyMember, PKeyAutoInc>	updateStmt;
+	axDBTableAccessor_SelectStmt<T, PKeyType, PKeyMember, PKeyAutoInc>	selectStmt;
+	axDBTableAccessor_SelectMultipleStmt<T>								selectAllStmt;
 	
 private:
 	axPtr<axDBConn> 	db_;
@@ -184,11 +191,11 @@ private:
 };
 
 
-template<class T, class PKeyType, PKeyType T::*PKeyMember>
-axStatus axDBTableAccessor<T, PKeyType, PKeyMember>::selectWhere_ArgList ( axIArray<T> &rows, const char* szWhere, const axDBInParamList & params ) {
+template<class T, class PKeyType, PKeyType T::*PKeyMember, bool PKeyAutoInc>
+axStatus axDBTableAccessor<T, PKeyType, PKeyMember,PKeyAutoInc>::selectWhere_ArgList ( axIArray<T> &rows, const char* szWhere, const axDBInParamList & params ) {
 	axDBTableAccessor_SelectMultipleStmt<T>	stmt;
 	axStatus st;
-	st = stmt.create( *db_, table_, szWhere, list_ );	if( !st ) return st;
+	st = stmt.create( *db_, list_, table_, szWhere );	if( !st ) return st;
 	st = stmt.exec_ArgList( params );					if( !st ) return st;
 	st = stmt.getAllRows( rows );						if( !st ) return st;
 	return 0;

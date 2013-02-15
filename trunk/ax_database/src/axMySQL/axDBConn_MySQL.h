@@ -20,7 +20,7 @@ public:
 	void		close	();
 
 	virtual axStatus	createStmt			( axDBStmt & stmt, const char * sql );
-	virtual	axStatus	getSQL_CreateTable	( axIStringA & outSQL, const char* table, const axDBColumnList & list );
+	virtual	axStatus	getSQL_CreateTable	( axIStringA & outSQL, const axDBColumnList & list, const char* table );
 
 	virtual	axStatus	identifierString	( axIStringA & out, const char* sz );
 		
