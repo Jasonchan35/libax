@@ -81,9 +81,8 @@ void axDBStmt_ODBC::logError() {
 		if( ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO ) break;
 
 		// Hide data truncated..
-		if( wcsncmp(wszState, L"01004", 5) ) {
-			ax_log("ODBC Error [{?}] [{?}]: {?}\nSQL:\n{?}\n", wszState, (int)iNativeError, wszMessage, sql_ );
-		}
+		if( ! wcsncmp(wszState, L"01004", 5) ) continue;
+		ax_log("ODBC Error [{?}] [{?}]: {?}\nSQL:\n{?}\n", wszState, (int)iNativeError, wszMessage, sql_ );
     }
 }
 
@@ -506,8 +505,7 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, axIByteArray		&value ) {
 	}
 
 	if( cbLen == 0 || cbLen == SQL_NULL_DATA )  {
-		value.resize(0);
-		return 0;
+		return 0; // BLOB size = 0 or NULL
 	}
 
 	if( cbLen < 0 ) {

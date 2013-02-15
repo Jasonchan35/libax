@@ -152,9 +152,14 @@ axStatus axDBStmt_SQLite3::create ( const char * sql ) {
 		return axStatus_Std::DB_error_prepare_stmtement;
 	}
 	
-	if( ax_strchr_list( remainSQL, "\t\r\n " ) ) {
-		ax_log("cannot contain multiple commands into a prepared statement");
-		return axStatus_Std::DB_error_prepare_stmtement;
+	if( remainSQL ) {
+		const char* ch = remainSQL;
+		for( ; *ch; ch++ ) {
+			if( ax_strchr( "\t\r\n ", *ch ) != 0 ) continue;
+
+			ax_log( "SQLite3 cannot contain multiple commands in single prepared statement\n ---SQL: ---\n{?}\n", sql_ );
+			return axStatus_Std::DB_error_prepare_stmtement;
+		}
 	}
 
 	return 0;
