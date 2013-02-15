@@ -190,6 +190,8 @@ axStatus axDBStmt_PostgreSQL::exec_ArgList ( const axDBInParamList & list ) {
 
 	echoExecSQL( db_, list );
 
+	if( list.size() != numParams() ) return axStatus_Std::DB_invalid_param_count;
+
 
 	res_.colCount_ = 0;
 	res_.rowCount_ = 0;
@@ -230,7 +232,6 @@ axStatus axDBStmt_PostgreSQL::doPrepare( const axDBInParamList & list ) {
 		return axStatus_Std::DB_error_prepare_stmtement;
 	}
 
-
 	//require PostgreSQL 8.2 
 //	rs.set( PQdescribePrepared ( *db_, stmtName_ ) );
 //	st = rs.status();	if( !st ) return st;
@@ -267,9 +268,15 @@ void axDBStmt_PostgreSQL::destroy() {
 	st = rs.status();	if( !st ) { assert(false); return; }
 }
 			  
+axSize axDBStmt_PostgreSQL::numParams() {
+	return numParams_;
+}
+
 axStatus axDBStmt_PostgreSQL::convertSQL( axIStringA &out, const char* inSQL ) {
 	out.clear();
 	axStatus st;
+
+	numParams_ = 0;
 		
 	if( ! inSQL ) return axStatus_Std::invalid_parameter;
 	//find '{' and '}'
@@ -340,7 +347,9 @@ axStatus axDBStmt_PostgreSQL::convertSQL( axIStringA &out, const char* inSQL ) {
 					
 					cur_index++;
 					out.appendFormat( "${?}", cur_index );
-					s = NULL;					
+					s = NULL;		
+
+					numParams_++;
 				}break;
 			}
 		}

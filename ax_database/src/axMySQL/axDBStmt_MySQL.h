@@ -26,6 +26,8 @@ public:
 
 	virtual	axStatus	exec_ArgList( const axDBInParamList & list );
 
+	virtual	axSize		numParams	();
+
 	virtual axSize		numColumns	()	{ return numColumns_; }
 	virtual int			columnType	( axSize col );
 	virtual const char* columnName	( axSize col );
