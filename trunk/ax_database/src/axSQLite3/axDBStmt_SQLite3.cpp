@@ -167,6 +167,8 @@ axStatus axDBStmt_SQLite3::create ( const char * sql ) {
 
 template< class T >
 axStatus axDBStmt_SQLite3::getResultAtCol_int( axSize col, T & value ) {
+	value = 0;
+	
 	if( !stmt_ ) return axStatus_Std::not_initialized;
 	if( col >= numColumns_ ) return axStatus_Std::DB_no_such_column;
 	int c = (int) col;
@@ -192,7 +194,8 @@ axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, int16_t & value ) {  retu
 axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, int32_t & value ) {  return getResultAtCol_int( col, value ); }
 axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, int64_t & value ) {  return getResultAtCol_int( col, value ); }
 
-axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, float		&value ) { 
+axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, float		&value ) {
+	value = 0;
 	if( !stmt_ ) return axStatus_Std::not_initialized;
 	if( col >= numColumns_ ) return axStatus_Std::DB_no_such_column;
 	int c = (int) col;
@@ -210,7 +213,8 @@ axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, float		&value ) {
 	return axStatus_Std::DB_invalid_value_type;
 }
 
-axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, double		&value ) { 
+axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, double		&value ) {
+	value = 0;
 	if( !stmt_ ) return axStatus_Std::not_initialized;
 	if( col >= numColumns_ ) return axStatus_Std::DB_no_such_column;
 	int c = (int) col;
@@ -229,6 +233,8 @@ axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, double		&value ) {
 }
 
 axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, bool		&value ) {
+	value = false;
+	
 	axStatus st;
 	int v;
 	st = getResultAtCol_int( col, v );	if( !st ) return st;
@@ -236,7 +242,9 @@ axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, bool		&value ) {
 	return 0;
 }
 
-axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, axIStringA    &value ) { 
+axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, axIStringA    &value ) {
+	value.resize(0);
+	
 	if( !stmt_ ) return axStatus_Std::not_initialized;
 	if( col >= numColumns_ ) return axStatus_Std::DB_no_such_column;
 	int c = (int) col;
@@ -244,7 +252,9 @@ axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, axIStringA    &value ) {
 	return value.set( (const char*)sqlite3_column_text( stmt_, c ) ); 
 }
 
-axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, axIStringW    &value ) { 
+axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, axIStringW    &value ) {
+	value.resize(0);
+	
 	if( !stmt_ ) return axStatus_Std::not_initialized;
 	if( col >= numColumns_ ) return axStatus_Std::DB_no_such_column;
 	int c = (int) col;
@@ -253,6 +263,8 @@ axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, axIStringW    &value ) {
 }
 
 axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, axIByteArray	&value ) {
+	value.resize(0);
+	
 	if( !stmt_ ) return axStatus_Std::not_initialized;
 	if( col >= numColumns_ ) return axStatus_Std::DB_no_such_column;
 	int c = (int) col;
@@ -275,6 +287,7 @@ axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, axIByteArray	&value ) {
 }
 
 axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, axDateTime	&value ) {
+	value.reset();
 	if( !stmt_ ) return axStatus_Std::not_initialized;
 	if( col >= numColumns_ ) return axStatus_Std::DB_no_such_column;
 
@@ -291,6 +304,7 @@ axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, axDateTime	&value ) {
 }
 
 axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, axTimeStamp	&value ) {
+	value = 0;
 	axDateTime dt;
 	axStatus st = getResultAtCol( col, dt );	if( !st ) return st;
 	value = dt.toTimeStamp();
