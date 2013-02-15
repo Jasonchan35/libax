@@ -35,6 +35,8 @@ axExpandArgList0_Imp ( axStatus axDBStmt::, exec,   const axDBInParam_CB & , axD
 
 axStatus axDBStmt::exec_ArgList( const axDBInParamList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
+	if( list.size() != p_->numParams() ) return axStatus_Std::DB_invalid_param_count;
+
 	axStatus st;
 	st = p_->exec_ArgList( list );	if( !st ) return st;
 	return 0;

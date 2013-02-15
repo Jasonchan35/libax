@@ -36,15 +36,20 @@ axStatus	axDBStmt_ODBC::create ( const char * sql ) {
 		return axStatus_Std::DB_error_prepare_stmtement;
 	}
 
+	return 0;
+}
+
+axSize axDBStmt_ODBC::numParams() {
+	if( !stmt_ ) return 0;
+
 	SQLSMALLINT	paramCount = 0;
+	SQLRETURN	ret;
 	ret = SQLNumParams( stmt_, &paramCount );
 	if( hasError( ret ) ) {
 		logError();
 		return axStatus_Std::DB_error_prepare_stmtement;
 	}
-
-	paramCount_ = paramCount;
-	return 0;
+	return (size_t) paramCount;
 }
 
 void axDBStmt_ODBC::destroy() {
@@ -92,7 +97,7 @@ axStatus	axDBStmt_ODBC::exec_ArgList	( const axDBInParamList & list ) {
 
 	SQLRETURN	ret = SQL_ERROR;
 
-	if( list.size() < paramCount_ )	return axStatus_Std::DB_invalid_param_count;
+	if( list.size() != numParams() )	return axStatus_Std::DB_invalid_param_count;
 
 	st = tmpStrData.resize	( list.size() );			if( !st ) return st;
 	st = cbLen.resize		( list.size() );			if( !st ) return st;

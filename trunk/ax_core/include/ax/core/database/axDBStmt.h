@@ -60,8 +60,9 @@ public:
 	virtual ~axDBStmt_Imp() {}
 	virtual	axStatus	exec_ArgList	( const axDBInParamList & list ) = 0;
 	
-	virtual axSize		numColumns		() = 0;
-	
+	virtual	axSize		numParams		() = 0;
+
+	virtual axSize		numColumns		() = 0;	
 	virtual int			columnType		( axSize col ) = 0;
 	virtual const char* columnName		( axSize col ) = 0;
 	

@@ -66,6 +66,11 @@ axStatus axDBStmt_MySQL::create( const char * sql ) {
 	return 0;
 }
 
+axSize	axDBStmt_MySQL::numParams () {
+	if( !stmt_ ) return 0;
+	return mysql_stmt_param_count(stmt_);
+}
+
 //virtual	
 axStatus axDBStmt_MySQL::exec_ArgList( const axDBInParamList & list ) {
 	if( !stmt_ ) return axStatus_Std::not_initialized;
@@ -73,9 +78,8 @@ axStatus axDBStmt_MySQL::exec_ArgList( const axDBInParamList & list ) {
 	axStatus st;	
 	echoExecSQL( db_, list );
 
-	axSize n =  mysql_stmt_param_count(stmt_);
-
-	if( list.size() < n ) return axStatus_Std::DB_invalid_param_count;
+	if( list.size() != numParams() ) return axStatus_Std::DB_invalid_param_count;
+	size_t n = numParams();
 
 	st = bind_.resize( n );			if( !st ) return st;
 	st = tempStr_.resize( n );		if( !st ) return st;

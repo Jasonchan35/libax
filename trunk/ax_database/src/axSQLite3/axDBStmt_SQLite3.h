@@ -29,6 +29,7 @@ public:
 						void		destroy		();
 
 				virtual	axStatus	exec_ArgList( const axDBInParamList & list );
+				virtual axSize		numParams	();
 
 				virtual axSize		numColumns	() { return numColumns_; }
 				virtual int			columnType	( axSize col );
@@ -58,7 +59,6 @@ public:
 				virtual	const char*	sql	() { return sql_; }
 
 	axSharedPtr< axDBConn_SQLite3 >	db_;
-	axSize		paramCount_;
 	
 	axArray< int, axDB_kArgListLocalBufSize >			tmpIntData;
 	axArray< axStringA, axDB_kArgListLocalBufSize >		tmpStrData;

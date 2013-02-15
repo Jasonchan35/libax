@@ -23,6 +23,7 @@ public:
 			void		destroy		();
 	virtual	axStatus	exec_ArgList( const axDBInParamList & list );	
 
+	virtual axSize		numParams	();
 
 	virtual axSize		numColumns	() { return res_.colCount_; }
 	virtual const char* columnName	( axSize col );
@@ -54,14 +55,15 @@ public:
 	virtual	const char*	sql	() { return sql_; }
 
 		
-	axStatus doPrepare			( const axDBInParamList & list );
-	static	axStatus convertSQL	( axIStringA &out, const char* inSQL );
+	axStatus doPrepare		( const axDBInParamList & list );
+	axStatus convertSQL		( axIStringA &out, const char* inSQL );
 			
 	axSharedPtr< axDBConn_PostgreSQL >	db_;
 
 	axTempStringA		sql_;
 	axStringA_<32>		stmtName_;
-		
+	
+	axSize				numParams_;
 	axDB_PostgreSQL_ParamSet	paramSet_;
 	
 		

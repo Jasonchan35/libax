@@ -17,6 +17,7 @@ public:
 						 void		destroy		();
 
 				virtual	axStatus	exec_ArgList( const axDBInParamList & list );
+				virtual axSize		numParams	();
 
 				virtual axSize		numColumns	() { return columnInfo.size(); }
 				virtual int			columnType	( axSize col );
@@ -52,7 +53,6 @@ public:
 
 
 	axSharedPtr< axDBConn_ODBC >	db_;
-	axSize		paramCount_;
 	
 	axArray< SQLLEN,		 axDB_kArgListLocalBufSize >	cbLen;
 	axArray< axStringW_<64>, axDB_kArgListLocalBufSize >	tmpStrData;
