@@ -2,8 +2,8 @@
 
 class axDBConn_MSSQL : public axDBConn_ODBC {
 public:
-	virtual	axStatus		getSQL_CreateTable		( axIStringA & outSQL, const axDBColumnList & list, const char* table );
-	virtual axStatus		getSQL_DropTableIfExists( axIStringA & outSQL, const char* table );
+	virtual	axStatus		getSQL_CreateTable		( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table );
+	virtual axStatus		getSQL_DropTableIfExists( axStringA_Array & outSQLArray, const char* table );
 	virtual const char*		DBTypeName				( int c_type );
 };
 
@@ -44,9 +44,13 @@ const char*	axDBConn_MSSQL::DBTypeName( int c_type ) {
 	return "Unknown";
 }
 
-axStatus	axDBConn_MSSQL::getSQL_DropTableIfExists( axIStringA & outSQL, const char* table ) {
+axStatus	axDBConn_MSSQL::getSQL_DropTableIfExists( axStringA_Array & outSQLArray, const char* table ) {
 	axStatus st;
 	axStringA	tableName;
+
+	st = outSQLArray.resize(1);		if( !st ) return st;
+	axIStringA & outSQL = outSQLArray[0];
+
 	st = identifierString( tableName, table );		if( !st ) return st;
 
 	axStringA	tableEscapeStr;
@@ -60,9 +64,12 @@ axStatus	axDBConn_MSSQL::getSQL_DropTableIfExists( axIStringA & outSQL, const ch
 
 
 
-axStatus	axDBConn_MSSQL::getSQL_CreateTable	( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
+axStatus	axDBConn_MSSQL::getSQL_CreateTable	( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table ) {
 	axStatus st;
 	axTempStringA	tableName;
+
+	st = outSQLArray.resize(1);		if( !st ) return st;
+	axIStringA & outSQL = outSQLArray[0];
     
 	st = identifierString( tableName, table );						if( !st ) return st;
 	st = outSQL.format("CREATE TABLE {?} (\n", tableName );			if( !st ) return st;

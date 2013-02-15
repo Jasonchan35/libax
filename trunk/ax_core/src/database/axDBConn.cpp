@@ -64,113 +64,88 @@ axStatus	axDBConn::identifierString( axIStringA & out, const char* sz ) {
 //== create table ==
 axStatus axDBConn::createTable	( const axDBColumnList & list, const char* table ) {
 	axStatus		st;
-	axTempStringA	sql;
-	axDBStmt		stmt;
+	axStringA_Array	sql;
 
-	st = getSQL_CreateTable( sql, list, table );		if( !st ) return st;
-	st = stmt.create( *this, sql );						if( !st ) return st;
-	st = stmt.exec();									if( !st ) return st;
+	st = getSQL_CreateTable( sql, list, table );	if( !st ) return st;
 
-	st = getSQL_CreateTable_Step2( sql, list, table );	if( !st ) return st;
-	if( sql.isEmpty() ) return 0;
-	st = stmt.create( *this, sql );						if( !st ) return st;
-	st = stmt.exec();									if( !st ) return st;
-
-	st = getSQL_CreateTable_Step3( sql, list, table );	if( !st ) return st;
-	if( sql.isEmpty() ) return 0;
-	st = stmt.create( *this, sql );						if( !st ) return st;
-	st = stmt.exec();									if( !st ) return st;
+	for( size_t i=0; i<sql.size(); i++ ) {
+		axDBStmt stmt;
+		st = stmt.create( *this, sql[i] );			if( !st ) return st;
+		st = stmt.exec();							if( !st ) return st;
+	}
 
 	return 0;
 }
 
-axStatus axDBConn::getSQL_CreateTable( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
+axStatus axDBConn::getSQL_CreateTable( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->getSQL_CreateTable( outSQL, list, table );
+	return p_->getSQL_CreateTable( outSQLArray, list, table );
 }
-
-axStatus axDBConn::getSQL_CreateTable_Step2( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
-	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->getSQL_CreateTable_Step2( outSQL, list, table );
-}
-axStatus axDBConn_Imp::getSQL_CreateTable_Step2( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
-	outSQL.clear();
-	return 0;
-}
-
-axStatus axDBConn::getSQL_CreateTable_Step3( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
-	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->getSQL_CreateTable_Step3( outSQL, list, table );
-}
-axStatus axDBConn_Imp::getSQL_CreateTable_Step3( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
-	outSQL.clear();
-	return 0;
-}
-
 
 //== drop table ==
 axStatus axDBConn::dropTable ( const char* table ) {
 	axStatus		st;
-	axTempStringA	sql;
-	axDBStmt		stmt;
-	st = getSQL_DropTable( sql, table );			if( !st ) return st;
-	st = stmt.create( *this, sql );					if( !st ) return st;
-	st = stmt.exec();								if( !st ) return st;
+	axStringA_Array	sql;
+
+	st = getSQL_DropTable( sql, table );		if( !st ) return st;
+
+	for( size_t i=0; i<sql.size(); i++ ) {
+		axDBStmt stmt;
+		st = stmt.create( *this, sql[i] );			if( !st ) return st;
+		st = stmt.exec();							if( !st ) return st;
+	}
+
 	return 0;
 }
 
-axStatus axDBConn::getSQL_DropTable( axIStringA & outSQL, const char* table ) {
+axStatus axDBConn::getSQL_DropTable( axStringA_Array & outSQLArray, const char* table ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->getSQL_DropTable( outSQL, table );
+	return p_->getSQL_DropTable( outSQLArray, table );
 }
 
-axStatus axDBConn_Imp::getSQL_DropTable( axIStringA & outSQL, const char* table ) {
+axStatus axDBConn_Imp::getSQL_DropTable( axStringA_Array & outSQLArray, const char* table ) {
 	axStatus	st;
+
+	st = outSQLArray.resize(1);		if( !st ) return st;
+
+	axIStringA & outSQL = outSQLArray[0];
+
 	axTempStringA	tableName;
-	st = identifierString( tableName, table );		if( !st ) return st;
-	st = outSQL.format("DROP TABLE {?};", tableName);
+	st = identifierString( tableName, table );			if( !st ) return st;
+	st = outSQL.format("DROP TABLE {?};", tableName);	if( !st ) return st;
 	return 0;
 }
 
 // === drop table if exists
 axStatus axDBConn::dropTableIfExists		( const char* table ) {
 	axStatus		st;
-	axTempStringA	sql;
-	axDBStmt		stmt;
-	st = getSQL_DropTableIfExists( sql, table );		if( !st ) return st;
-	st = stmt.create( *this, sql );						if( !st ) return st;
-	st = stmt.exec();									if( !st ) return st;
+	axStringA_Array	sql;
+	st = getSQL_DropTableIfExists( sql, table );	if( !st ) return st;
 
-	st = getSQL_DropTableIfExists_Step2( sql, table );	if( !st ) return st;
-	if( sql.isEmpty() ) return 0;
-	st = stmt.create( *this, sql );						if( !st ) return st;
-	st = stmt.exec();									if( !st ) return st;
+	for( size_t i=0; i<sql.size(); i++ ) {
+		axDBStmt stmt;
+		st = stmt.create( *this, sql[i] );			if( !st ) return st;
+		st = stmt.exec();							if( !st ) return st;
+	}
 
 	return 0;
 }
 
-axStatus axDBConn::getSQL_DropTableIfExists( axIStringA & outSQL, const char* table ) {
+axStatus axDBConn::getSQL_DropTableIfExists( axStringA_Array & outSQLArray, const char* table ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->getSQL_DropTableIfExists( outSQL, table );
+	return p_->getSQL_DropTableIfExists( outSQLArray, table );
 }
-axStatus axDBConn_Imp::getSQL_DropTableIfExists(axIStringA &outSQL, const char *table) {
+axStatus axDBConn_Imp::getSQL_DropTableIfExists(axStringA_Array &outSQLArray, const char *table) {
 	axStatus st;
 	axTempStringA	tableName;
-	st = identifierString( tableName, table );		if( !st ) return st;
-	st = outSQL.format("DROP TABLE IF EXISTS {?};", tableName);
+
+	st = outSQLArray.resize(1);		if( !st ) return st;
+	axIStringA & outSQL = outSQLArray[0];
+
+	st = identifierString( tableName, table );							if( !st ) return st;
+	st = outSQL.format("DROP TABLE IF EXISTS {?};", tableName);		if( !st ) return st;
 	return 0;
 }
-
-
-axStatus axDBConn::getSQL_DropTableIfExists_Step2( axIStringA & outSQL, const char* table ) {
-	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->getSQL_DropTableIfExists_Step2( outSQL, table );
-}
-axStatus axDBConn_Imp::getSQL_DropTableIfExists_Step2(axIStringA &outSQL, const char *table) {
-	outSQL.clear();
-	return 0;
-}
-
 
 //==== insert ===
 axStatus axDBConn::getSQL_Insert( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {

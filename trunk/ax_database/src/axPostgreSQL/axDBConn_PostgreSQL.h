@@ -17,7 +17,7 @@ public:
 	~axDBConn_PostgreSQL();
 
 	virtual axStatus	createStmt			( axDBStmt & stmt, const char * sql );
-	virtual	axStatus	getSQL_CreateTable	( axIStringA & outSQL, const axDBColumnList & list, const char* table );
+	virtual	axStatus	getSQL_CreateTable	( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table );
 	
 	axStatus	connect	( const char * dsn );
 	void		close	();

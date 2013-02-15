@@ -10,7 +10,7 @@
 
 
 template< class T >
-axStatus	axString_Array<T>::append( const T *sz ) {
+axStatus	axString_Array<T>::addString( const T *sz ) {
 	axStatus st;
 	st = B::incSize( 1 ); if( !st ) return st;
 	st = B::last().set( sz ); if( !st ) return st;

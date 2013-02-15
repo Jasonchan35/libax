@@ -122,8 +122,8 @@ axStatus	axDBInParam::toStringFormat( axStringFormat & f ) const {
 
 		case axDB_c_type_TimeStamp:		return f.format("{?}", axTimeStamp( v_TimeStamp ) );
 
-		case axDB_c_type_StringA:		return f.format("[{?}]", v_strA );
-		case axDB_c_type_StringW:		return f.format("[{?}]", v_strW  );
+		case axDB_c_type_StringA:		return f.format("'{?}'", v_strA );
+		case axDB_c_type_StringW:		return f.format("'{?}'", v_strW  );
 
 		#define axTYPE_LIST( NAME ) \
 			case axDB_c_type_##NAME: return f.format("{?}", v_##NAME ); \
