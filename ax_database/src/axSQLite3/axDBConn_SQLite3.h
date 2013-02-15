@@ -17,7 +17,7 @@ public:
 	virtual ~axDBConn_SQLite3();
 
 	virtual axStatus	createStmt			( axDBStmt & stmt, const char * sql );
-	virtual	axStatus	getSQL_CreateTable	( axIStringA & outSQL, const axDBColumnList & list, const char* table );
+	virtual	axStatus	getSQL_CreateTable	( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table );
 
 			axStatus	openFile	( const char* filename );
 			axStatus	openMemory	();

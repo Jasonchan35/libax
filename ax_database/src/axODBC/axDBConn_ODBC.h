@@ -17,7 +17,7 @@ public:
 			void		close		();
 
 	virtual axStatus	createStmt			( axDBStmt & stmt, const char * sql );
-	virtual	axStatus	getSQL_CreateTable	( axIStringA & outSQL, const axDBColumnList & list, const char* table );
+	virtual	axStatus	getSQL_CreateTable	( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table );
 			
 			bool		hasError	( RETCODE code, const char* sql = NULL );
 			void		logError	();

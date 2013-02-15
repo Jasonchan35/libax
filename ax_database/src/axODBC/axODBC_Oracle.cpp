@@ -6,12 +6,8 @@ public:
 
 	virtual axStatus	createStmt						( axDBStmt & stmt, const char * sql );
 
-	virtual	axStatus	getSQL_CreateTable				( axIStringA & outSQL, const char* table, const axDBColumnList & list );
-	virtual	axStatus	getSQL_CreateTable_Step2		( axIStringA & outSQL, const char* table, const axDBColumnList & list );
-	virtual	axStatus	getSQL_CreateTable_Step3		( axIStringA & outSQL, const char* table, const axDBColumnList & list );
-
-	virtual axStatus	getSQL_DropTableIfExists		( axIStringA & outSQL, const char* table );
-	virtual axStatus	getSQL_DropTableIfExists_Step2	( axIStringA & outSQL, const char* table );
+	virtual	axStatus	getSQL_CreateTable				( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table );
+	virtual axStatus	getSQL_DropTableIfExists		( axStringA_Array & outSQLArray, const char* table );
 
 	virtual	const char*	DBTypeName						( int c_type );
 
@@ -109,153 +105,153 @@ axStatus	axDBConn_Oracle::identifierString( axIStringA & out, const char* sz ) {
 	return out.format("\"{?}\"", tmp );
 }
 
-axStatus	axDBConn_Oracle::getSQL_DropTableIfExists( axIStringA & outSQL, const char* table ) {
+axStatus	axDBConn_Oracle::getSQL_DropTableIfExists( axStringA_Array & outSQLArray, const char* table ) {
 	axStatus st;
 
-	axStringA	tableName;
-	st = identifierString( tableName, table );				if( !st ) return st;
+	{//drop table
+		st = outSQLArray.resize(1);		if( !st ) return st;
+		axIStringA & outSQL = outSQLArray[0];
 
-	axStringA	tableEscapeStr;
-	st = escapeString( tableEscapeStr, table );				if( !st ) return st;
+		axStringA	tableName;
+		st = identifierString( tableName, table );				if( !st ) return st;
 
-	axTempStringA	sqlToRun;
-	st = sqlToRun.format("DROP TABLE {?}", tableName );		if( !st ) return st;
+		axStringA	tableEscapeStr;
+		st = escapeString( tableEscapeStr, table );				if( !st ) return st;
 
-	axTempStringA	e_sqlToRun;
-	st = escapeString( e_sqlToRun, sqlToRun );	if( !st ) return st;
+		axTempStringA	sqlToRun;
+		st = sqlToRun.format("DROP TABLE {?}", tableName );		if( !st ) return st;
 
-	st = outSQL.format(	"DECLARE\n"
-						"   C INT;\n"
-						"BEGIN\n"
-						"   SELECT COUNT(*) INTO C FROM USER_TABLES WHERE TABLE_NAME = {?};\n"
-						"   IF C = 1 THEN\n"
-						"      EXECUTE IMMEDIATE {?};\n"
-						"   END IF;\n"
-						"END;\n", 
-						tableEscapeStr,
-						e_sqlToRun );
-	if( !st ) return st;
+		axTempStringA	e_sqlToRun;
+		st = escapeString( e_sqlToRun, sqlToRun );	if( !st ) return st;
 
+		st = outSQL.format(	"DECLARE\n"
+							"   C INT;\n"
+							"BEGIN\n"
+							"   SELECT COUNT(*) INTO C FROM USER_TABLES WHERE TABLE_NAME = {?};\n"
+							"   IF C = 1 THEN\n"
+							"      EXECUTE IMMEDIATE {?};\n"
+							"   END IF;\n"
+							"END;\n", 
+							tableEscapeStr,
+							e_sqlToRun );
+		if( !st ) return st;
+	}
+
+	{ //drop sequence
+		st = outSQLArray.resize(2);		if( !st ) return st;
+		axIStringA & outSQL = outSQLArray[1];
+		axStringA	tmp;
+		axStringA	seqName;
+		axStringA	seqEscapeName;
+
+		st = tmp.format("seq_{?}", table );							if( !st ) return st;
+
+		st = escapeString	 ( seqEscapeName, tmp );				if( !st ) return st;
+		st = identifierString( seqName, tmp );						if( !st ) return st;
+
+
+		axTempStringA	sqlToRun;
+		st = sqlToRun.format("DROP SEQUENCE {?}", seqName );		if( !st ) return st;
+
+		axTempStringA	e_sqlToRun;
+		st = escapeString( e_sqlToRun, sqlToRun );	if( !st ) return st;
+
+		st = outSQL.format(	"DECLARE\n"
+							"   C INT;\n"
+							"BEGIN\n"
+							"   SELECT COUNT(*) INTO C FROM USER_SEQUENCES WHERE SEQUENCE_NAME = {?};\n"
+							"   IF C = 1 THEN\n"
+							"      EXECUTE IMMEDIATE {?};\n"
+							"   END IF;\n"
+							"END;\n", 
+							seqEscapeName,
+							e_sqlToRun );
+		if( !st ) return st;
+	}
 	return 0;
 }
 
 
-axStatus	axDBConn_Oracle::getSQL_DropTableIfExists_Step2( axIStringA & outSQL, const char* table ) {
+axStatus	axDBConn_Oracle::getSQL_CreateTable	( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table ) {
 	axStatus st;
 
-	axStringA	tmp;
-	axStringA	seqName;
-	axStringA	seqEscapeName;
+	{
+		st = outSQLArray.resize(1);		if( !st ) return st;
+		axIStringA & outSQL = outSQLArray[0];
+		axStringA	tableName;    
+		axStringA	colName;
 
-	st = tmp.format("seq_{?}", table );							if( !st ) return st;
+		st = identifierString( tableName, table );						if( !st ) return st;
+		st = outSQL.format("CREATE TABLE {?} (\n", tableName );			if( !st ) return st;
 
-	st = escapeString	 ( seqEscapeName, tmp );				if( !st ) return st;
-	st = identifierString( seqName, tmp );						if( !st ) return st;
+		for( size_t i=0; i<list.size(); i++ ) {
+			const axDBColumn & c = list[i];
+			if( i > 0 ) {
+				st = outSQL.append(",\n");			if( !st ) return st;
+			}
 
+			st = identifierString( colName, c.name );					if( !st ) return st;
+			st = outSQL.appendFormat("  {?}\t{?}", colName, DBTypeName(c.type) );		if( !st ) return st;
 
-	axTempStringA	sqlToRun;
-	st = sqlToRun.format("DROP SEQUENCE {?}", seqName );		if( !st ) return st;
-
-	axTempStringA	e_sqlToRun;
-	st = escapeString( e_sqlToRun, sqlToRun );	if( !st ) return st;
-
-	st = outSQL.format(	"DECLARE\n"
-						"   C INT;\n"
-						"BEGIN\n"
-						"   SELECT COUNT(*) INTO C FROM USER_SEQUENCES WHERE SEQUENCE_NAME = {?};\n"
-						"   IF C = 1 THEN\n"
-						"      EXECUTE IMMEDIATE {?};\n"
-						"   END IF;\n"
-						"END;\n", 
-						seqEscapeName,
-						e_sqlToRun );
-	if( !st ) return st;
-
-	return 0;
-}
-
-
-axStatus	axDBConn_Oracle::getSQL_CreateTable	( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
-	axStatus st;
-
-	axStringA	tableName;    
-	axStringA	colName;
-
-	st = identifierString( tableName, table );						if( !st ) return st;
-	st = outSQL.format("CREATE TABLE {?} (\n", tableName );			if( !st ) return st;
-
-	for( size_t i=0; i<list.size(); i++ ) {
-		const axDBColumn & c = list[i];
-		if( i > 0 ) {
-			st = outSQL.append(",\n");			if( !st ) return st;
-		}
-
-		st = identifierString( colName, c.name );					if( !st ) return st;
-		st = outSQL.appendFormat("  {?}\t{?}", colName, DBTypeName(c.type) );		if( !st ) return st;
-
-		if( list.pkeyIndex() == i ) {
-			st = outSQL.append( " PRIMARY KEY" );					if( !st ) return st;
-			if( list.pkeyAutoInc() ) {
-				//st = outSQL.append( " AUTO_INCREMENT" );			if( !st ) return st;
+			if( list.pkeyIndex() == i ) {
+				st = outSQL.append( " PRIMARY KEY" );					if( !st ) return st;
+				if( list.pkeyAutoInc() ) {
+					//st = outSQL.append( " AUTO_INCREMENT" );			if( !st ) return st;
+				}
 			}
 		}
+		st = outSQL.appendFormat( "\n);" );			if( !st ) return st;
 	}
-	st = outSQL.appendFormat( "\n);" );			if( !st ) return st;
-	return 0;
-}
-
-axStatus	axDBConn_Oracle::getSQL_CreateTable_Step2 ( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
-	axStatus st;
-
-	outSQL.clear();
 
 	const axDBColumn *pkeyCol = list.pkeyColumn();
 	if( ! pkeyCol || ! list.pkeyAutoInc() ) return 0;
 
-	axStringA	tmp;
-	axStringA	seqName;
+	{ //CREATE SEQUENCE 
+		st = outSQLArray.resize(2);		if( !st ) return st;
+		axIStringA & outSQL = outSQLArray[1];
 
-	st = tmp.format("seq_{?}", table );								if( !st ) return st;
-	st = identifierString( seqName, tmp );							if( !st ) return st;
+		const axDBColumn *pkeyCol = list.pkeyColumn();
+		if( ! pkeyCol || ! list.pkeyAutoInc() ) return 0;
 
-	st = outSQL.appendFormat( "CREATE SEQUENCE {?};", seqName );	if( !st ) return st;
+		axStringA	tmp;
+		axStringA	seqName;
 
-	return 0;
-};
+		st = tmp.format("seq_{?}", table );								if( !st ) return st;
+		st = identifierString( seqName, tmp );							if( !st ) return st;
 
-axStatus	axDBConn_Oracle::getSQL_CreateTable_Step3	( axIStringA & outSQL, const char* table, const axDBColumnList & list ) {
-	axStatus st;
+		st = outSQL.appendFormat( "CREATE SEQUENCE {?};", seqName );	if( !st ) return st;
+	}
 
-	outSQL.clear();
+	{// CREATE TRIGGER
+		st = outSQLArray.resize(3);		if( !st ) return st;
+		axIStringA & outSQL = outSQLArray[2];
 
-	const axDBColumn *pkeyCol = list.pkeyColumn();
-	if( ! pkeyCol || ! list.pkeyAutoInc() ) return 0;
+		axStringA	tmp;
+		axStringA	tableName;    
+		axStringA	pkeyColName;
+		axStringA	seqName;
+		axStringA	triggerName;
 
-	axStringA	tmp;
-	axStringA	tableName;    
-	axStringA	pkeyColName;
-	axStringA	seqName;
-	axStringA	triggerName;
+		st = identifierString( tableName, table );						if( !st ) return st;
+		st = identifierString( pkeyColName, pkeyCol->name );			if( !st ) return st;
 
-	st = identifierString( tableName, table );						if( !st ) return st;
-	st = identifierString( pkeyColName, pkeyCol->name );			if( !st ) return st;
+		st = tmp.format("seq_{?}", table );								if( !st ) return st;
+		st = identifierString( seqName, tmp );							if( !st ) return st;
 
-	st = tmp.format("seq_{?}", table );								if( !st ) return st;
-	st = identifierString( seqName, tmp );							if( !st ) return st;
+		st = tmp.format("trg_{?}", table );								if( !st ) return st;
+		st = identifierString( triggerName, tmp );						if( !st ) return st;
 
-	st = tmp.format("trg_{?}", table );								if( !st ) return st;
-	st = identifierString( triggerName, tmp );						if( !st ) return st;
-
-	st = outSQL.appendFormat(	"CREATE TRIGGER {?}\n"
-								"  BEFORE INSERT on {?}\n"
-								"  FOR EACH ROW\n"
-								"BEGIN\n"
-								"  SELECT {?}.nextval\n"
-								"    into :new.{?}\n"
-								"    from dual;\n"
-								"END;",
-								triggerName, tableName, seqName, pkeyColName );
-	if( !st ) return st;
+		st = outSQL.appendFormat(	"CREATE TRIGGER {?}\n"
+									"  BEFORE INSERT on {?}\n"
+									"  FOR EACH ROW\n"
+									"BEGIN\n"
+									"  SELECT {?}.nextval\n"
+									"    into :new.{?}\n"
+									"    from dual;\n"
+									"END;",
+									triggerName, tableName, seqName, pkeyColName );
+		if( !st ) return st;
+	}
 	return 0;
 }
 

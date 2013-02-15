@@ -48,9 +48,13 @@ axStatus axDBConn_PostgreSQL::createStmt( axDBStmt & stmt, const char * sql ) {
 }
 
 //virtual	
-axStatus axDBConn_PostgreSQL::getSQL_CreateTable ( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
+axStatus axDBConn_PostgreSQL::getSQL_CreateTable ( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table ) {
 	axStatus st;
 	axTempStringA	tableName;
+
+	st = outSQLArray.resize(1);			if( !st ) return st;
+
+	axIStringA & outSQL = outSQLArray[0];
     
 	st = identifierString( tableName, table );						if( !st ) return st;
 	st = outSQL.format("CREATE TABLE {?} (\n", tableName );			if( !st ) return st;

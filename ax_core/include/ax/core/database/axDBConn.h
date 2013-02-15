@@ -11,6 +11,7 @@
 
 #include "axDB_common.h"
 #include "axDBColumn.h"
+#include "../string/axString_Array.h"
 
 class axDBConn_Imp;
 class axDBResultSet;
@@ -43,14 +44,9 @@ public:
 						axStatus	dropTableIfExists		( const char* table );
 
 //Get SQL String
-						axStatus	getSQL_CreateTable			( axIStringA & outSQL, const axDBColumnList & list, const char* table );
-						axStatus	getSQL_CreateTable_Step2	( axIStringA & outSQL, const axDBColumnList & list, const char* table );
-						axStatus	getSQL_CreateTable_Step3	( axIStringA & outSQL, const axDBColumnList & list, const char* table );
-
-						axStatus	getSQL_DropTable			( axIStringA & outSQL, const char* table );
-
-						axStatus	getSQL_DropTableIfExists		( axIStringA & outSQL, const char* table );
-						axStatus	getSQL_DropTableIfExists_Step2	( axIStringA & outSQL, const char* table );
+						axStatus	getSQL_CreateTable			( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table );
+						axStatus	getSQL_DropTable			( axStringA_Array & outSQLArray, const char* table );
+						axStatus	getSQL_DropTableIfExists	( axStringA_Array & outSQLArray, const char* table );
 
 						axStatus	getSQL_Insert	( axIStringA & outSQL, const axDBColumnList & list, const char* table );
 						axStatus	getSQL_Update	( axIStringA & outSQL, const axDBColumnList & list, const char* table, const char* szWhere );
@@ -85,14 +81,9 @@ public:
 
 	virtual	axStatus	directExec_ArgList			( const char* sql, const axDBInParamList & list ) { assert(false); return axStatus_Std::not_implemented; }
 
-	virtual	axStatus	getSQL_CreateTable				( axIStringA & outSQL, const axDBColumnList & list, const char* table ) = 0;
-	virtual	axStatus	getSQL_CreateTable_Step2		( axIStringA & outSQL, const axDBColumnList & list, const char* table );
-	virtual	axStatus	getSQL_CreateTable_Step3		( axIStringA & outSQL, const axDBColumnList & list, const char* table );
-
-	virtual axStatus	getSQL_DropTable				( axIStringA & outSQL, const char* table );
-
-	virtual axStatus	getSQL_DropTableIfExists		( axIStringA & outSQL, const char* table );
-	virtual axStatus	getSQL_DropTableIfExists_Step2	( axIStringA & outSQL, const char* table );
+	virtual	axStatus	getSQL_CreateTable				( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table ) = 0;
+	virtual axStatus	getSQL_DropTable				( axStringA_Array & outSQLArray, const char* table );
+	virtual axStatus	getSQL_DropTableIfExists		( axStringA_Array & outSQLArray, const char* table );
 
 	virtual	axStatus	getSQL_Insert					( axIStringA & outSQL, const axDBColumnList & list, const char* table );
 	virtual	axStatus	getSQL_Update					( axIStringA & outSQL, const axDBColumnList & list, const char* table, const char* szWhere );

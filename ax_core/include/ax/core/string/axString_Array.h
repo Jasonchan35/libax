@@ -13,7 +13,7 @@ public:
 	axStatus	sortNoCase		( bool ascending = true );
 	bool		containsNoCase	( const T *sz ) const;
 	
-	axStatus	append			( const T *sz );
+	axStatus	addString		( const T *sz );
 	axStatus	tokenize 		( const T* sz, const T* seperators = String::defaultSeperators(), const T* trim = NULL );
 
 };
