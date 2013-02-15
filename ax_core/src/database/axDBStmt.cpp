@@ -22,6 +22,7 @@ const char*	axDBStmt::sql() {
 	return p_->sql();
 }
 
+axSize		axDBStmt::numParams		()				{ return p_ ? p_->numParams () : axSize(0); }
 axSize		axDBStmt::numColumns	()				{ return p_ ? p_->numColumns() : axSize(0); }
 int			axDBStmt::columnType	( axSize col )	{ return p_ ? p_->columnType(col) : axDB_c_type_null; }
 const char*	axDBStmt::columnName	( axSize col )	{ return p_ ? p_->columnName(col) : NULL; }
@@ -35,7 +36,6 @@ axExpandArgList0_Imp ( axStatus axDBStmt::, exec,   const axDBInParam_CB & , axD
 
 axStatus axDBStmt::exec_ArgList( const axDBInParamList & list ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	if( list.size() != p_->numParams() ) return axStatus_Std::DB_invalid_param_count;
 
 	axStatus st;
 	st = p_->exec_ArgList( list );	if( !st ) return st;
