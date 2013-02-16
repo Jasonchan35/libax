@@ -165,7 +165,7 @@ template<class T> inline	axStatus	ax_take( const T* &a, const T* &b )	{ a=b; ret
 
 #ifdef axCOMPILER_VC
 	#pragma warning( push )
-	#pragma warning( disable : 4244 )
+	#pragma warning( disable : 4244 ) //warning C4244: 'argument' : conversion from 'const axFileSize' to 'size_t', possible loss of data
 #endif
 
 #ifdef axCOMPILER_CLANG
@@ -186,24 +186,6 @@ template<class DST, class SRC> axStatus	ax_safe_assign( DST &dst, const SRC &src
 	#include "axTypeList_float.h"
 #undef axTYPE_LIST
 
-template<class DST, class SRC> inline
-axStatus	ax_safe_add( DST &dst, const SRC & src ) {
-	DST tmp = dst + src;
-	if( ax_less_than0( src ) ) {
-		if( tmp >= dst ) {
-			assert(false);
-			return axStatus_Std::non_safe_assign;
-		}
-	}else{
-		if( tmp <= dst ) {
-			assert(false);
-			return axStatus_Std::non_safe_assign;
-		}
-	}
-	dst = tmp; //done
-	return 0;
-}
-
 template<class DST, class SRC> inline 
 axStatus	ax_safe_assign( DST &dst, const SRC &src ) {
 	DST tmp = (DST) src;
@@ -211,7 +193,6 @@ axStatus	ax_safe_assign( DST &dst, const SRC &src ) {
 	//unsigned <<= signed
 	if( axTypeOf<DST>::isUnsigned && ! axTypeOf<SRC>::isUnsigned ) {
 		if( ax_less_than0( src ) ) {
-			assert(false);
 			return axStatus_Std::non_safe_assign;
 		}
 	}
@@ -219,14 +200,12 @@ axStatus	ax_safe_assign( DST &dst, const SRC &src ) {
 	// signed <<= unsigned
 	if( ! axTypeOf<DST>::isUnsigned && axTypeOf<SRC>::isUnsigned ) {
 		if( ax_less_than0( tmp ) ) {
-			assert(false);
 			return axStatus_Std::non_safe_assign;	
 		}
 	}
 
 	//avoid overflow
 	if( src != (SRC) tmp ) {
-		assert(false);
 		return axStatus_Std::non_safe_assign;
 	}
 	
@@ -234,15 +213,67 @@ axStatus	ax_safe_assign( DST &dst, const SRC &src ) {
 	return 0;
 }
 
-	
 #ifdef axCOMPILER_CLANG	
 	#pragma clang diagnostic pop	
 #endif
 
-
 #ifdef axCOMPILER_VC
 	#pragma warning( pop )
 #endif
+
+template<class T> inline
+axStatus	ax_safe_abs( T &dst ) {
+	T t = ax_abs(dst);
+	if( t < 0 ) return axStatus_Std::non_safe_abs;
+	dst = t;
+	return 0;
+}
+
+template<class DST, class SRC> inline 
+axStatus	ax_safe_add( DST &dst, const SRC & input_src ) {
+	DST src;
+	if( ! ax_safe_assign( src, input_src ) ) return axStatus_Std::non_safe_add;
+
+	DST tmp = dst + src;
+	if( ax_less_than0( src ) ) {
+		if( tmp > dst ) {
+//			ax_log("ax_safe_add Error: {?} + {?} = {?}", dst, src, tmp );
+			return axStatus_Std::non_safe_add;
+		}
+	}else{
+		if( tmp < dst ) {
+//			ax_log("ax_safe_add Error: {?} + {?} = {?}", dst, src, tmp );
+			return axStatus_Std::non_safe_add;
+		}
+	}
+	dst += src; //done
+	return 0;
+}
+
+
+template<class DST, class SRC> inline 
+axStatus	ax_safe_sub( DST &dst, const SRC & input_src ) {
+	return ax_safe_add( dst, -input_src );
+}
+
+
+template<class DST, class SRC> inline 
+axStatus	ax_safe_mul( DST &dst, const SRC & input_src ) {
+	DST src;
+	if( ! ax_safe_assign( src, input_src ) ) return axStatus_Std::non_safe_mul;
+
+	DST tmp = dst * src;
+	if( dst != 0 && (tmp/dst) != src ) {
+//		ax_log("ax_safe_mul Error: {?} * {?} = {?}", dst, src, (DST)(dst*src) );
+		return axStatus_Std::non_safe_mul;
+	}
+
+	dst *= src;
+	return 0;
+}
+
+
+
 
 //@}
 

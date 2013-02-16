@@ -7,14 +7,15 @@
 	if( E ) { \
 		/*printf("PASS: %s\n", #E);*/ \
 	}else{ \
-	ax_log("FAIL: {?}\n   {?}:{?}\n", #E, __FILE__, __LINE__ ); \
+		ax_log("FAIL: {?}\n   {?}:{?}\n", #E, __FILE__, __LINE__ ); \
 		assert(false); \
 	} \
 }\
-//-----
+
+//---
 
 #define axUTestDo( E )			{ ax_log("DO:   {?}\n", #E); E; }
-#define axUTestCase( F )		{ ax_log("\n\n==== {?} ====\n", #F); axStatus st = F; if( !st ) return st; }
+#define axUTestCase( F )		{ ax_log("==== {?} ====", #F); axStatus st = F; if( !st ) return st; }
 
 
 #endif //__ax_unit_test_h__
