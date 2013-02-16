@@ -41,32 +41,30 @@ template<class T>	bool  ax_less_than0( T value );
 
 //--- uint ---
 
-class axTypeOf_uint {
-public:
-	static	const	bool	isPOD		= true;
-	static	const	bool	rawSerializable = true;
-	static	const	int		precision	= 0;
-	static	const	bool	isInterger	= true;
-	static	const	bool	isUnsigned	= true;
-};
 #define	axTYPE_LIST(T)	\
-	template<> class axTypeOf<T > : public axTypeOf_uint {}; \
+	template<> class axTypeOf<T > { \
+	public: \
+		static	const	bool	isPOD			= true; \
+		static	const	bool	rawSerializable = true; \
+		static	const	int		precision		= 0; \
+		static	const	bool	isInterger		= true; \
+		static	const	bool	isUnsigned		= true; \
+	}; \
 	inline	axStatus	ax_take( T &a, T &b )		{ a=b; return 0; } \
 	inline	bool		ax_less_than0( T value )	{ return false; } \
 //-------
 	#include "axTypeList_uint.h"
 #undef		axTYPE_LIST
 
-class axTypeOf_int {
-public:
-	static	const	bool	isPOD		= true;
-	static	const	bool	rawSerializable = true;
-	static	const	int		precision	= 0;
-	static	const	bool	isInterger	= true;
-	static	const	bool	isUnsigned	= false;
-};
 #define	axTYPE_LIST(T)	\
-	template<> class axTypeOf<T > : public axTypeOf_int {}; \
+	template<> class axTypeOf<T > { \
+	public: \
+		static	const	bool	isPOD			= true; \
+		static	const	bool	rawSerializable = true; \
+		static	const	int		precision		= 0; \
+		static	const	bool	isInterger		= true; \
+		static	const	bool	isUnsigned		= false; \
+	}; \
 	inline	axStatus	ax_take( T &a, T &b )					{ a=b; return 0; } \
 	inline	bool		ax_less_than0( T value )				{ return value < 0; } \
 //-------
@@ -80,7 +78,6 @@ public:
 //--- float ---
 template<>
 class axTypeOf<float> {
-	typedef	float	T;
 public:
 	static	const	bool	isPOD		= true;
 	static	const	bool	rawSerializable = true;
@@ -91,7 +88,6 @@ public:
 
 template<>
 class axTypeOf<double> {
-	typedef	float	T;
 public:
 	static	const	bool	isPOD		= true;
 	static	const	bool	rawSerializable = true;
@@ -106,9 +102,6 @@ public:
 //-------
 	#include "axTypeList_float.h"
 #undef		axTYPE_LIST
-
-
-
 
 
 // -- value min/max ----
@@ -188,38 +181,49 @@ template<class DST, class SRC> axStatus	ax_safe_assign( DST &dst, const SRC &src
 #define	axTYPE_LIST(T)	\
 	template<> inline axStatus ax_safe_assign( T &dst, const T &src ) { dst = src; return 0; }	
 //-----
-	axTYPE_LIST( int8_t  )
-	axTYPE_LIST( int16_t )
-	axTYPE_LIST( int32_t )
-	axTYPE_LIST( int64_t )
-	axTYPE_LIST( uint8_t  )
-	axTYPE_LIST( uint16_t )
-	axTYPE_LIST( uint32_t )
-	axTYPE_LIST( uint64_t )
-	axTYPE_LIST( float  )
-	axTYPE_LIST( double )
+	#include "axTypeList_int.h"
+	#include "axTypeList_uint.h"
+	#include "axTypeList_float.h"
 #undef axTYPE_LIST
+
+template<class DST, class SRC> inline
+axStatus	ax_safe_add( DST &dst, const SRC & src ) {
+	DST tmp = dst + src;
+	if( ax_less_than0( src ) ) {
+		if( tmp >= dst ) {
+			assert(false);
+			return axStatus_Std::non_safe_assign;
+		}
+	}else{
+		if( tmp <= dst ) {
+			assert(false);
+			return axStatus_Std::non_safe_assign;
+		}
+	}
+	dst = tmp; //done
+	return 0;
+}
 
 template<class DST, class SRC> inline 
 axStatus	ax_safe_assign( DST &dst, const SRC &src ) {
 	DST tmp = (DST) src;
-	if( axTypeOf<DST>::isUnsigned ) {
-		if( ! axTypeOf<SRC>::isUnsigned ) {
-			//unsigned <<= signed
-			if( ax_less_than0( src ) ) {
-				assert(false);
-				return axStatus_Std::non_safe_assign;
-			}
-		}
-	}else{
-		// signed <<= unsigned
-		if( axTypeOf<SRC>::isUnsigned ) {
-			if( ax_less_than0( tmp ) ) {
-				assert(false);
-				return axStatus_Std::non_safe_assign;	
-			}
+
+	//unsigned <<= signed
+	if( axTypeOf<DST>::isUnsigned && ! axTypeOf<SRC>::isUnsigned ) {
+		if( ax_less_than0( src ) ) {
+			assert(false);
+			return axStatus_Std::non_safe_assign;
 		}
 	}
+	
+	// signed <<= unsigned
+	if( ! axTypeOf<DST>::isUnsigned && axTypeOf<SRC>::isUnsigned ) {
+		if( ax_less_than0( tmp ) ) {
+			assert(false);
+			return axStatus_Std::non_safe_assign;	
+		}
+	}
+
 	//avoid overflow
 	if( src != (SRC) tmp ) {
 		assert(false);
