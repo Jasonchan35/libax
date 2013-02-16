@@ -130,7 +130,7 @@ public:
 axStatus test_ax_database_common( axDBConn & db ) {
 	axStatus st;
 
-	db.setEchoSQL( true );
+//	db.setEchoSQL( true );
 
 //	const char* table = "unit Test's \"Table\" 01";
 //	const char* table = "Test's Table";
@@ -201,7 +201,7 @@ axStatus test_SQLite3() {
 	return 0;
 }
 
-#if 0 //=============== MySQL ====================
+#if 1 //=============== MySQL ====================
 #include <ax/database/axMySQL.h>
 axStatus test_MySQL() {
 	axStatus st;
@@ -210,7 +210,9 @@ axStatus test_MySQL() {
 	st = test_ax_database_common(db);			if( !st ) return st;
 	return 0;
 }
+#endif
 
+#if 1 //=============== PostgreSQL ==============
 #include <ax/database/axPostgreSQL.h>
 axStatus test_PostgreSQL() {
 	axStatus st;
@@ -263,8 +265,8 @@ axStatus test_ax_database() {
 	ax_log("test {?} records\n", numRows );
 
 	axUTestCase( test_SQLite3() );
-//	axUTestCase( test_MySQL() );
-//	axUTestCase( test_PostgreSQL() );
+	axUTestCase( test_MySQL() );
+	axUTestCase( test_PostgreSQL() );
 //	axUTestCase( test_ODBC_MSSQL() );
 //	axUTestCase( test_ODBC_Oracle() );
 
