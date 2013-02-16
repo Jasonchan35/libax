@@ -9,6 +9,14 @@
 #include <ax/core/system/axLog.h>
 #include <ax/core/common/axExpandArgList.h>
 
+axStatus ax_log_hex( axLog_Tag &tag, const void* ptr, size_t byteSize, const char* msg ) {
+	axStringA_<8192>	tmp;
+	axStatus st;
+	st = ax_convert_dump_hex_string( tmp, ptr, byteSize );		if( !st ) return st;
+
+	return ax_log( tag, "{?}----------- dump hex byteSize={?} ------------\n{?}", msg, byteSize, tmp );
+}
+
 //=== StdTag ====
 // axStatus		ax_log			( const char*    fmt, ... );
 axLogExpandArgListStdTag1_Imp	( axStatus, ax_log, const char*,	   const axStringFormat_Arg&, axStringFormat_ArgList )

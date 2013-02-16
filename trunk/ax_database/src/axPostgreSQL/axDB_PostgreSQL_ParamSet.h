@@ -20,6 +20,10 @@ public:
 	axStatus	bind		( axSize index, const axDBInParam & param );
 	axStatus	bindList	( const axDBInParamList & list );
 
+	template<class T>
+	axStatus	_bind_number( axSize index, T & db_value );
+
+
 	axStatus	_bindValue	( axSize index, axTimeStamp ts );
 
 	axStatus	setTypes	( const axDBInParamList & list );
@@ -27,9 +31,9 @@ public:
 		
 	static	Oid	c_type_to_Oid( int c );
 	
-	struct UnionType {
+	struct UnionType { // PostgreSQL supported native type
 		union {
-			int8_t		bool_as_int8;	//1:true, 0:false in pgSQL
+			int8_t		int8;	//in bool  1:true, 0:false in pgSQL
 			int16_t		int16_;
 			int32_t		int32_;
 			int64_t		int64_;

@@ -100,12 +100,19 @@ axStatus axDBStmt_MySQL::exec_ArgList( const axDBInParamList & list ) {
 				b.buffer_type = MYSQL_TYPE_TINY;
 				b.buffer      = buf;
 			}break;
+
+			case axDB_c_type_float:		{ b.buffer_type = MYSQL_TYPE_FLOAT;		b.buffer = (void*)&p.v_float;	}break;
+			case axDB_c_type_double:	{ b.buffer_type = MYSQL_TYPE_DOUBLE;	b.buffer = (void*)&p.v_double;	}break;
+
 			case axDB_c_type_int8:		{ b.buffer_type = MYSQL_TYPE_TINY;		b.buffer = (void*)&p.v_int8;	}break;
 			case axDB_c_type_int16:		{ b.buffer_type = MYSQL_TYPE_SHORT;		b.buffer = (void*)&p.v_int16;	}break;
 			case axDB_c_type_int32:		{ b.buffer_type = MYSQL_TYPE_LONG;		b.buffer = (void*)&p.v_int32;	}break;
 			case axDB_c_type_int64:		{ b.buffer_type = MYSQL_TYPE_LONGLONG;	b.buffer = (void*)&p.v_int64;	}break;
-			case axDB_c_type_float:		{ b.buffer_type = MYSQL_TYPE_FLOAT;		b.buffer = (void*)&p.v_float;	}break;
-			case axDB_c_type_double:	{ b.buffer_type = MYSQL_TYPE_DOUBLE;	b.buffer = (void*)&p.v_double;	}break;
+
+			case axDB_c_type_uint8:		{ b.buffer_type = MYSQL_TYPE_TINY;		b.is_unsigned=true; b.buffer = (void*)&p.v_uint8;	}break;
+			case axDB_c_type_uint16:	{ b.buffer_type = MYSQL_TYPE_SHORT;		b.is_unsigned=true; b.buffer = (void*)&p.v_uint16;	}break;
+			case axDB_c_type_uint32:	{ b.buffer_type = MYSQL_TYPE_LONG;		b.is_unsigned=true; b.buffer = (void*)&p.v_uint32;	}break;
+			case axDB_c_type_uint64:	{ b.buffer_type = MYSQL_TYPE_LONGLONG;	b.is_unsigned=true; b.buffer = (void*)&p.v_uint64;	}break;
 
 			case axDB_c_type_ByteArray: {
 				b.buffer_type	= MYSQL_TYPE_BLOB;
@@ -200,83 +207,33 @@ axStatus axDBStmt_MySQL::getResultAtCol( axSize col, bool & value ) {
 	return 0;
 }	
 
-axStatus axDBStmt_MySQL::getResultAtCol( axSize col, int8_t & value ) {
+template<class T> inline
+axStatus axDBStmt_MySQL::_getResultAtCol_number( axSize col, T & value, enum enum_field_types buffer_type, my_bool is_unsigned ) {
 	if( col >= numColumns_ ) return axStatus_Std::DB_no_such_column;
 	axStatus st;
 	MYSQL_BIND  b;
 	memset( &b, 0, sizeof(b) );	
-	b.buffer_type = MYSQL_TYPE_TINY;
+	b.buffer_type = buffer_type;
+	b.is_unsigned = is_unsigned;
 	b.buffer      = &value;
 	if( 0 != mysql_stmt_fetch_column( stmt_, &b, (unsigned)col, 0 ) ) {
 		return axStatus_Std::DB_invalid_param_type;
 	}
 	return 0;
-}	
+}
+
+axStatus axDBStmt_MySQL::getResultAtCol( axSize col, int8_t   & value ) { return _getResultAtCol_number( col, value, MYSQL_TYPE_TINY,		false ); }	
+axStatus axDBStmt_MySQL::getResultAtCol( axSize col, int16_t  & value ) { return _getResultAtCol_number( col, value, MYSQL_TYPE_SHORT,		false ); }	
+axStatus axDBStmt_MySQL::getResultAtCol( axSize col, int32_t  & value ) { return _getResultAtCol_number( col, value, MYSQL_TYPE_LONG,		false ); }	
+axStatus axDBStmt_MySQL::getResultAtCol( axSize col, int64_t  & value ) { return _getResultAtCol_number( col, value, MYSQL_TYPE_LONGLONG,	false ); }	
 	
-axStatus axDBStmt_MySQL::getResultAtCol( axSize col, int16_t & value ) {
-	if( col >= numColumns_ ) return axStatus_Std::DB_no_such_column;
-	axStatus st;
-	MYSQL_BIND  b;
-	memset( &b, 0, sizeof(b) );	
-	b.buffer_type = MYSQL_TYPE_SHORT;
-	b.buffer      = &value;
-	if( 0 != mysql_stmt_fetch_column( stmt_, &b, (unsigned)col, 0 ) ) {
-		return axStatus_Std::DB_invalid_param_type;
-	}
-	return 0;
-}	
-		
-axStatus axDBStmt_MySQL::getResultAtCol( axSize col, int32_t & value ) {
-	if( col >= numColumns_ ) return axStatus_Std::DB_no_such_column;
-	axStatus st;
-	MYSQL_BIND  b;
-	memset( &b, 0, sizeof(b) );	
-	b.buffer_type = MYSQL_TYPE_LONG;
-	b.buffer      = &value;
-	if( 0 != mysql_stmt_fetch_column( stmt_, &b, (unsigned)col, 0 ) ) {
-		return axStatus_Std::DB_invalid_param_type;
-	}
-	return 0;
-}	
+axStatus axDBStmt_MySQL::getResultAtCol( axSize col, uint8_t  & value ) { return _getResultAtCol_number( col, value, MYSQL_TYPE_TINY,		true ); }	
+axStatus axDBStmt_MySQL::getResultAtCol( axSize col, uint16_t & value ) { return _getResultAtCol_number( col, value, MYSQL_TYPE_SHORT,		true ); }	
+axStatus axDBStmt_MySQL::getResultAtCol( axSize col, uint32_t & value ) { return _getResultAtCol_number( col, value, MYSQL_TYPE_LONG,		true ); }	
+axStatus axDBStmt_MySQL::getResultAtCol( axSize col, uint64_t & value ) { return _getResultAtCol_number( col, value, MYSQL_TYPE_LONGLONG,	true ); }	
 
-axStatus axDBStmt_MySQL::getResultAtCol( axSize col, int64_t & value ) {
-	if( col >= numColumns_ ) return axStatus_Std::DB_no_such_column;
-	axStatus st;
-	MYSQL_BIND  b;
-	memset( &b, 0, sizeof(b) );	
-	b.buffer_type = MYSQL_TYPE_LONGLONG;
-	b.buffer      = &value;
-	if( 0 != mysql_stmt_fetch_column( stmt_, &b, (unsigned)col, 0 ) ) {
-		return axStatus_Std::DB_invalid_param_type;
-	}
-	return 0;
-}			
-
-axStatus axDBStmt_MySQL::getResultAtCol( axSize col, float & value ) {
-	if( col >= numColumns_ ) return axStatus_Std::DB_no_such_column;
-	axStatus st;
-	MYSQL_BIND  b;
-	memset( &b, 0, sizeof(b) );	
-	b.buffer_type = MYSQL_TYPE_FLOAT;
-	b.buffer      = &value;
-	if( 0 != mysql_stmt_fetch_column( stmt_, &b, (unsigned)col, 0 ) ) {
-		return axStatus_Std::DB_invalid_param_type;
-	}
-	return 0;
-}	
-
-axStatus axDBStmt_MySQL::getResultAtCol( axSize col, double & value ) {
-	if( col >= numColumns_ ) return axStatus_Std::DB_no_such_column;
-	axStatus st;
-	MYSQL_BIND  b;
-	memset( &b, 0, sizeof(b) );	
-	b.buffer_type = MYSQL_TYPE_DOUBLE;
-	b.buffer      = &value;
-	if( 0 != mysql_stmt_fetch_column( stmt_, &b, (unsigned)col, 0 ) ) {
-		return axStatus_Std::DB_invalid_param_type;
-	}
-	return 0;
-}	
+axStatus axDBStmt_MySQL::getResultAtCol( axSize col, float    & value ) { return _getResultAtCol_number( col, value, MYSQL_TYPE_FLOAT,		false ); }	
+axStatus axDBStmt_MySQL::getResultAtCol( axSize col, double   & value ) { return _getResultAtCol_number( col, value, MYSQL_TYPE_DOUBLE,		false ); }	
 
 axStatus axDBStmt_MySQL::getResultAtCol( axSize col, axTimeStamp & value ) {
 	axDateTime	tmp;

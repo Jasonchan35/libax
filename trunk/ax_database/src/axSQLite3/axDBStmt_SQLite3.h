@@ -37,11 +37,16 @@ public:
 				
 				virtual	axStatus	fetch			();
 
-	template< class T > axStatus	getResultAtCol_int( axSize col, T & value );
+	template< class T > axStatus	_getResultAtCol_int( axSize col, T & value );
 				virtual axStatus	getResultAtCol	( axSize col, int8_t			&value );
 				virtual axStatus	getResultAtCol	( axSize col, int16_t			&value );
 				virtual axStatus	getResultAtCol	( axSize col, int32_t			&value );
 				virtual axStatus	getResultAtCol	( axSize col, int64_t			&value );
+
+				virtual axStatus	getResultAtCol	( axSize col, uint8_t			&value );
+				virtual axStatus	getResultAtCol	( axSize col, uint16_t			&value );
+				virtual axStatus	getResultAtCol	( axSize col, uint32_t			&value );
+				virtual axStatus	getResultAtCol	( axSize col, uint64_t			&value );
 
 				virtual axStatus	getResultAtCol	( axSize col, float				&value );
 				virtual axStatus	getResultAtCol	( axSize col, double			&value );

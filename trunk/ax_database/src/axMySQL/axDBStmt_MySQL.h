@@ -34,15 +34,23 @@ public:
 
 	virtual	axStatus	fetch();
 
-	virtual axStatus	getResultAtCol( axSize col, int8_t		&value );
-	virtual axStatus	getResultAtCol( axSize col, int16_t		&value );
-	virtual axStatus	getResultAtCol( axSize col, int32_t		&value );
-	virtual axStatus	getResultAtCol( axSize col, int64_t		&value );
+	template<class T>
+			axStatus	_getResultAtCol_number( axSize col, T &value, enum enum_field_types buffer_type, my_bool is_unsigned );
 
-	virtual axStatus	getResultAtCol( axSize col, float		&value );
-	virtual axStatus	getResultAtCol( axSize col, double		&value );
+	virtual axStatus	getResultAtCol( axSize col, int8_t			&value );
+	virtual axStatus	getResultAtCol( axSize col, int16_t			&value );
+	virtual axStatus	getResultAtCol( axSize col, int32_t			&value );
+	virtual axStatus	getResultAtCol( axSize col, int64_t			&value );
 
-	virtual axStatus	getResultAtCol( axSize col, bool		&value );
+	virtual axStatus	getResultAtCol( axSize col, uint8_t			&value );
+	virtual axStatus	getResultAtCol( axSize col, uint16_t		&value );
+	virtual axStatus	getResultAtCol( axSize col, uint32_t		&value );
+	virtual axStatus	getResultAtCol( axSize col, uint64_t		&value );
+
+	virtual axStatus	getResultAtCol( axSize col, float			&value );
+	virtual axStatus	getResultAtCol( axSize col, double			&value );
+
+	virtual axStatus	getResultAtCol( axSize col, bool			&value );
 
 	virtual axStatus	getResultAtCol( axSize col, axIStringA		&value );
 	virtual axStatus	getResultAtCol( axSize col, axIStringW		&value );

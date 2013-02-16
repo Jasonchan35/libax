@@ -77,12 +77,24 @@ axStatus axDBStmt_SQLite3::exec_ArgList( const axDBInParamList & list ) {
 	for( int i=0; i<c; i++ ) {
 		const axDBInParam &param = list[i];
 		switch( param.type ) {
-		
 			case axDB_c_type_int8:		ret = sqlite3_bind_int   ( stmt_, i+1, param.v_int8  );	break;
 			case axDB_c_type_int16: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.v_int16 );	break;
 			case axDB_c_type_int32: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.v_int32 );	break;
 			case axDB_c_type_int64: 	ret = sqlite3_bind_int64 ( stmt_, i+1, param.v_int64 );	break;
-			
+
+			case axDB_c_type_uint8:		ret = sqlite3_bind_int   ( stmt_, i+1, param.v_uint8  );	break;
+			case axDB_c_type_uint16: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.v_uint16 );	break;
+
+			case axDB_c_type_uint32: 	{
+				int64_t	tmp = param.v_uint32;
+				ret = sqlite3_bind_int64   ( stmt_, i+1, tmp );
+			}break;
+			case axDB_c_type_uint64: {
+				int64_t tmp;
+				st = ax_safe_assign( tmp, param.v_uint64 );		if( !st ) return st;
+				ret = sqlite3_bind_int64 ( stmt_, i+1, tmp );	
+			}break;
+
 			case axDB_c_type_bool: {
 				tmpIntData[i] = param.v_bool ? 1 : 0;
 				ret = sqlite3_bind_int( stmt_, i+1, tmpIntData[i] );
@@ -166,7 +178,7 @@ axStatus axDBStmt_SQLite3::create ( const char * sql ) {
 }
 
 template< class T >
-axStatus axDBStmt_SQLite3::getResultAtCol_int( axSize col, T & value ) {
+axStatus axDBStmt_SQLite3::_getResultAtCol_int( axSize col, T & value ) {
 	value = 0;
 	
 	if( !stmt_ ) return axStatus_Std::not_initialized;
@@ -189,10 +201,15 @@ axStatus axDBStmt_SQLite3::getResultAtCol_int( axSize col, T & value ) {
 	return axStatus_Std::DB_invalid_value_type;
 }
 
-axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, int8_t  & value ) {  return getResultAtCol_int( col, value ); }
-axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, int16_t & value ) {  return getResultAtCol_int( col, value ); }
-axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, int32_t & value ) {  return getResultAtCol_int( col, value ); }
-axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, int64_t & value ) {  return getResultAtCol_int( col, value ); }
+axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, int8_t  & value ) {  return _getResultAtCol_int( col, value ); }
+axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, int16_t & value ) {  return _getResultAtCol_int( col, value ); }
+axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, int32_t & value ) {  return _getResultAtCol_int( col, value ); }
+axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, int64_t & value ) {  return _getResultAtCol_int( col, value ); }
+
+axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, uint8_t  & value ) {  return _getResultAtCol_int( col, value ); }
+axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, uint16_t & value ) {  return _getResultAtCol_int( col, value ); }
+axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, uint32_t & value ) {  return _getResultAtCol_int( col, value ); }
+axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, uint64_t & value ) {  return _getResultAtCol_int( col, value ); }
 
 axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, float		&value ) {
 	value = 0;
@@ -237,7 +254,7 @@ axStatus	axDBStmt_SQLite3::getResultAtCol( axSize col, bool		&value ) {
 	
 	axStatus st;
 	int v;
-	st = getResultAtCol_int( col, v );	if( !st ) return st;
+	st = _getResultAtCol_int( col, v );	if( !st ) return st;
 	value = (v != 0);
 	return 0;
 }
