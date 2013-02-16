@@ -9,12 +9,17 @@ axStatus_enum( should_not_be_here )
 axStatus_enum( not_initialized )
 axStatus_enum( pointer_is_null )
 axStatus_enum( not_available )
-axStatus_enum( non_safe_assign )
 axStatus_enum( cannot_be_itself )
 axStatus_enum( will_cause_recursion )
 axStatus_enum( timed_out )
 axStatus_enum( data_corrupted )
 axStatus_enum( opengl_unsupported_extension )
+
+//-------------
+axStatus_enum( non_safe_assign )
+axStatus_enum( non_safe_add )
+axStatus_enum( non_safe_mul )
+axStatus_enum( non_safe_abs )
 
 //-------------
 axStatus_enum( serialize_out_of_bound )
