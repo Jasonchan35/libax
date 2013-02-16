@@ -7,7 +7,7 @@
 	if( E ) { \
 		/*printf("PASS: %s\n", #E);*/ \
 	}else{ \
-		printf("FAIL: %s\n   %s:%u\n", #E, __FILE__, __LINE__ ); \
+	ax_log("FAIL: {?}\n   {?}:{?}\n", #E, __FILE__, __LINE__ ); \
 		assert(false); \
 	} \
 }\
