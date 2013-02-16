@@ -100,12 +100,17 @@ axStatus axDBConn_PostgreSQL::getSQL_CreateTable ( axStringA_Array & outSQLArray
 
 const char*	axDBConn_PostgreSQL::DBTypeName( int c_type ) {
 	switch( c_type ) {
-		case axDB_c_type_bool:		return "BOOLEAN";
 		case axDB_c_type_int8:		return "SMALLINT";
 		case axDB_c_type_int16:		return "SMALLINT";
 		case axDB_c_type_int32:		return "INTEGER";
 		case axDB_c_type_int64:		return "BIGINT";
 
+		case axDB_c_type_uint8:		return "SMALLINT";
+		case axDB_c_type_uint16:	return "INTEGER";
+		case axDB_c_type_uint32:	return "BIGINT";
+		case axDB_c_type_uint64:	return "BIGINT";
+
+		case axDB_c_type_bool:		return "BOOLEAN";
 		case axDB_c_type_float:		return "REAL";
 		case axDB_c_type_double:	return "DOUBLE PRECISION";
 

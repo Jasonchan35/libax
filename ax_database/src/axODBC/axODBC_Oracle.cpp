@@ -20,9 +20,14 @@ class axDBStmt_Oracle : public axDBStmt_ODBC {
 public:
 	axDBStmt_Oracle( axDBConn_Oracle* db ) : B(db) {}
 
-	virtual SQLRETURN _OnSQLBindParameter( SQLUSMALLINT col, const int64_t & value, axIStringW & tempStr, SQLLEN & len );
+	virtual SQLRETURN _OnSQLBindParameter( SQLUSMALLINT col, const int64_t  & value, axIStringW & tempStr, SQLLEN & len );
+	virtual SQLRETURN _OnSQLBindParameter( SQLUSMALLINT col, const uint64_t & value, axIStringW & tempStr, SQLLEN & len );
 
-	virtual axStatus	getResultAtCol	( axSize col, int64_t &value );
+	template<class T>
+	axStatus	_getResultAtColByString	( axSize col, T &value );
+
+	virtual axStatus	getResultAtCol	( axSize col, int64_t  &value );
+	virtual axStatus	getResultAtCol	( axSize col, uint64_t &value );
 };
 
 
@@ -40,27 +45,19 @@ axStatus	axODBC_Oracle_connectDSN( axDBConn & db, const char* dsn ) {
 	return p->connectDSN( dsn );
 }
 
-
 SQLRETURN axDBStmt_Oracle::_OnSQLBindParameter( SQLUSMALLINT col, const int64_t & value, axIStringW & tmpStrData, SQLLEN & len ) {
-	axStatus st;
-
-	axTempStringA	tmp;
-	st = tmp.convert( value );			if( !st ) return SQL_ERROR;
-
-	len = tmp.size();
-	st = tmpStrData.resize( len+1 );	if( !st ) return SQL_ERROR;
-
-	//using as buffer
-	char* ptr = (char*)tmpStrData._getInternalBufferPtr();
-	memcpy( ptr, tmp.c_str(), len+1 );
-
-	return SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, SQL_C_CHAR,	SQL_VARCHAR, 0, 0, ptr, 0, &len );
+	return _OnBindParamByString( col, value, tmpStrData, len );
 }
 
-axStatus	axDBStmt_Oracle::getResultAtCol	( axSize col, int64_t &value ) {
-	axStatus st;
+SQLRETURN axDBStmt_Oracle::_OnSQLBindParameter( SQLUSMALLINT col, const uint64_t & value, axIStringW & tmpStrData, SQLLEN & len ) {
+	return _OnBindParamByString( col, value, tmpStrData, len );
+}
 
+template<class T> inline
+axStatus	axDBStmt_Oracle::_getResultAtColByString( axSize col, T &value ) {
 	value = 0;
+
+	axStatus st;
 
 	char buf[64+4];
 	SQLLEN cbLen;
@@ -81,6 +78,10 @@ axStatus	axDBStmt_Oracle::getResultAtCol	( axSize col, int64_t &value ) {
 	st = ax_str_to( buf, value );			if( !st ) return st;
 	return 0;
 }
+axStatus	axDBStmt_Oracle::getResultAtCol( axSize col, int64_t  & value ) { return _getResultAtColByString( col, value ); }
+axStatus	axDBStmt_Oracle::getResultAtCol( axSize col, uint64_t & value ) { return _getResultAtColByString( col, value ); }
+
+
 
 axStatus	axDBConn_Oracle::createStmt ( axDBStmt & stmt, const char * sql ) {
 	axStatus st;
@@ -257,17 +258,22 @@ axStatus	axDBConn_Oracle::getSQL_CreateTable	( axStringA_Array & outSQLArray, co
 
 const char*	axDBConn_Oracle::DBTypeName( int c_type ) {
 	switch( c_type ) {
-		case axDB_c_type_bool:		return "NUMBER(1,0)";
 		case axDB_c_type_int8:		return "NUMBER(3,0)";
 		case axDB_c_type_int16:		return "NUMBER(5,0)";
 		case axDB_c_type_int32:		return "NUMBER(10,0)";
 		case axDB_c_type_int64:		return "NUMBER(20,0)";
 
+		case axDB_c_type_uint8:		return "NUMBER(3,0)";
+		case axDB_c_type_uint16:	return "NUMBER(5,0)";
+		case axDB_c_type_uint32:	return "NUMBER(10,0)";
+		case axDB_c_type_uint64:	return "NUMBER(20,0)";
+
+		case axDB_c_type_bool:		return "NUMBER(1,0)";
 		case axDB_c_type_float:		return "BINARY_FLOAT";
 		case axDB_c_type_double:	return "BINARY_DOUBLE";
 
-		case axDB_c_type_StringA:	return "NVARCHAR2(4000)";
-		case axDB_c_type_StringW:	return "NVARCHAR2(4000)";
+		case axDB_c_type_StringA:	return "NCLOB";
+		case axDB_c_type_StringW:	return "NCLOB";
 
 		case axDB_c_type_ByteArray:	return "BLOB";
 		case axDB_c_type_TimeStamp:	return "TIMESTAMP";

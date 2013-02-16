@@ -31,11 +31,17 @@ public:
 	{}
 
 	union {
-		bool				v_bool;
 		int8_t				v_int8;
 		int16_t				v_int16;
 		int32_t				v_int32;
 		int64_t				v_int64;
+
+		uint8_t				v_uint8;
+		uint16_t			v_uint16;
+		uint32_t			v_uint32;
+		uint64_t			v_uint64;
+
+		bool				v_bool;
 		float				v_float;
 		double				v_double;
 		const char*			v_strA;
@@ -86,10 +92,16 @@ public:
 inline axStatus axDBInParamList_io( axDBInParamList & list, bool				v ) { axDBInParam p( axDB_c_type_bool		);	p.v_bool	=v;	return list.addParam(p); }
 inline axStatus axDBInParamList_io( axDBInParamList & list, float				v ) { axDBInParam p( axDB_c_type_float		);	p.v_float	=v;	return list.addParam(p); }
 inline axStatus axDBInParamList_io( axDBInParamList & list, double				v ) { axDBInParam p( axDB_c_type_double		);	p.v_double	=v;	return list.addParam(p); }
+
 inline axStatus axDBInParamList_io( axDBInParamList & list, int8_t				v ) { axDBInParam p( axDB_c_type_int8		);	p.v_int8	=v;	return list.addParam(p); }
 inline axStatus axDBInParamList_io( axDBInParamList & list, int16_t				v ) { axDBInParam p( axDB_c_type_int16		);	p.v_int16	=v;	return list.addParam(p); }
 inline axStatus axDBInParamList_io( axDBInParamList & list, int32_t				v ) { axDBInParam p( axDB_c_type_int32		);	p.v_int32	=v;	return list.addParam(p); }
 inline axStatus axDBInParamList_io( axDBInParamList & list, int64_t				v ) { axDBInParam p( axDB_c_type_int64		);	p.v_int64	=v;	return list.addParam(p); }
+
+inline axStatus axDBInParamList_io( axDBInParamList & list, uint8_t				v ) { axDBInParam p( axDB_c_type_uint8		);	p.v_uint8	=v;	return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, uint16_t			v ) { axDBInParam p( axDB_c_type_uint16		);	p.v_uint16	=v;	return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, uint32_t			v ) { axDBInParam p( axDB_c_type_uint32		);	p.v_uint32	=v;	return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, uint64_t			v ) { axDBInParam p( axDB_c_type_uint64		);	p.v_uint64	=v;	return list.addParam(p); }
 
 inline axStatus axDBInParamList_io( axDBInParamList & list, const char*			v ) { axDBInParam p( axDB_c_type_StringA	);	p.v_strA	=v;	return list.addParam(p); }
 inline axStatus axDBInParamList_io( axDBInParamList & list, const axStringA  &	v ) { axDBInParam p( axDB_c_type_StringA	);	p.v_strA	=v;	return list.addParam(p); }

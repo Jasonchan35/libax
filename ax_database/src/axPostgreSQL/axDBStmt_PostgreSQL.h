@@ -36,6 +36,11 @@ public:
 	virtual axStatus	getResultAtCol	( axSize col, int32_t	&value );
 	virtual axStatus	getResultAtCol	( axSize col, int64_t	&value );
 
+	virtual axStatus	getResultAtCol	( axSize col, uint8_t	&value );
+	virtual axStatus	getResultAtCol	( axSize col, uint16_t	&value );
+	virtual axStatus	getResultAtCol	( axSize col, uint32_t	&value );
+	virtual axStatus	getResultAtCol	( axSize col, uint64_t	&value );
+
 	virtual axStatus	getResultAtCol	( axSize col, float		&value );
 	virtual axStatus	getResultAtCol	( axSize col, double	&value );
 
@@ -50,7 +55,7 @@ public:
 	virtual axStatus	getResultAtCol	( axSize col, axDateTime	&value );
 
 	template<class T>
-			axStatus	getValue_number	( axSize col, T & value, Oid oid );
+			axStatus	getValue_number	( axSize col, T & value );
 
 	virtual	const char*	sql	() { return sql_; }
 

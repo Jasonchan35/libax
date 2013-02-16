@@ -23,12 +23,17 @@ axStatus	axODBC_MSSQL_connectDSN( axDBConn & db, const char* dsn ) {
 
 const char*	axDBConn_MSSQL::DBTypeName( int c_type ) {
 	switch( c_type ) {
-		case axDB_c_type_bool:		return "TINYINT";
-		case axDB_c_type_int8:		return "TINYINT";
+		case axDB_c_type_int8:		return "SMALLINT"; // TINYINT is unisgned in MS SQL, so using SMALLINT
 		case axDB_c_type_int16:		return "SMALLINT";
 		case axDB_c_type_int32:		return "INT";
 		case axDB_c_type_int64:		return "BIGINT";
 
+		case axDB_c_type_uint8:		return "TINYINT"; // yes TINYINT is 0~255 in MS SQL
+		case axDB_c_type_uint16:	return "INT";
+		case axDB_c_type_uint32:	return "BIGINT";
+		case axDB_c_type_uint64:	return "DECIMAL(20,0)";
+
+		case axDB_c_type_bool:		return "TINYINT";
 		case axDB_c_type_float:		return "REAL";  //REAL is 4 bytes in MSSQL
 		case axDB_c_type_double:	return "FLOAT"; //yes 'FLOAT' in MSSQL means full range float-point
 

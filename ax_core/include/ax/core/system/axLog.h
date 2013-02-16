@@ -114,6 +114,22 @@ public:
 	axLog_StdTag() : axLog_Tag("log") {}
 };
 
+axStatus ax_log_hex( axLog_Tag &tag, const void* ptr, size_t byteSize, const char* msg = NULL );
+
+inline
+axStatus ax_log_hex( const void* ptr, size_t byteSize, const char* msg = NULL ) { 
+	return ax_log_hex( *axLog_StdTag::instance, ptr, byteSize, msg ); 
+}
+
+template<class T> inline
+axStatus ax_log_hex( axLog_Tag &tag, const T & obj, const char* msg = NULL ) { 
+	return ax_log_hex( tag, &obj, sizeof(obj), msg ); 
+}
+
+template<class T> inline
+axStatus ax_log_hex( const T & obj, const char* msg = NULL ) { return ax_log_hex( &obj, sizeof(obj), msg ); }
+
+
 inline axStatus ax_log_ArgList( const char*		 fmt, const axStringFormat::ArgList &list ) { return axLog::instance->log_ArgList( *axLog_StdTag::instance, NULL, fmt, list ); }
 inline axStatus ax_log_ArgList( const wchar_t*	 fmt, const axStringFormat::ArgList &list ) { return axLog::instance->log_ArgList( *axLog_StdTag::instance, NULL, fmt, list); }
 

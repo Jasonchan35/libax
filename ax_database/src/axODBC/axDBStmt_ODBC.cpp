@@ -90,6 +90,10 @@ SQLRETURN axDBStmt_ODBC::_OnSQLBindParameter( SQLUSMALLINT col, const int64_t & 
 	return SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, SQL_C_SBIGINT,	SQL_BIGINT,		0, 0, ax_const_cast(&value), 0, &len );
 }
 
+SQLRETURN axDBStmt_ODBC::_OnSQLBindParameter( SQLUSMALLINT col, const uint64_t & value, axIStringW & tmpStr, SQLLEN & len ) {
+	return _OnBindParamByString( col, value, tmpStr, len );
+}
+
 axStatus	axDBStmt_ODBC::exec_ArgList	( const axDBInParamList & list ) { 
 	axStatus st;
 	echoExecSQL( db_, list );
@@ -110,11 +114,11 @@ axStatus	axDBStmt_ODBC::exec_ArgList	( const axDBInParamList & list ) {
 		switch( param.type ) {
 			case axDB_c_type_int8: {
 				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
-										SQL_C_STINYINT, SQL_TINYINT,	0, 0, ax_const_cast(&param.v_int8), 0, &len );
+										SQL_C_STINYINT, SQL_INTEGER,	0, 0, ax_const_cast(&param.v_int8), 0, &len );
 			}break;
 			case axDB_c_type_int16: {
 				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
-										SQL_C_SSHORT,	SQL_SMALLINT,	0, 0, ax_const_cast(&param.v_int16), 0, &len );
+										SQL_C_SSHORT,	SQL_INTEGER,	0, 0, ax_const_cast(&param.v_int16), 0, &len );
 			}break;
 			case axDB_c_type_int32: {
 				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
@@ -122,6 +126,22 @@ axStatus	axDBStmt_ODBC::exec_ArgList	( const axDBInParamList & list ) {
 			}break;
 			case axDB_c_type_int64: {
 				ret = _OnSQLBindParameter( col, param.v_int64, tmpStrData[i], len );
+			}break;
+
+			case axDB_c_type_uint8: {
+				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
+										SQL_C_UTINYINT, SQL_INTEGER,	0, 0, ax_const_cast(&param.v_uint8), 0, &len );
+			}break;
+			case axDB_c_type_uint16: {
+				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
+										SQL_C_USHORT,	SQL_INTEGER,	0, 0, ax_const_cast(&param.v_uint16), 0, &len );
+			}break;
+			case axDB_c_type_uint32: {
+				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
+										SQL_C_ULONG,	SQL_BIGINT,		0, 0, ax_const_cast(&param.v_uint32), 0, &len );
+			}break;
+			case axDB_c_type_uint64: {
+				ret = _OnSQLBindParameter( col, param.v_uint64, tmpStrData[i], len );
 			}break;
 
 			case axDB_c_type_bool: {
@@ -307,13 +327,14 @@ axStatus	axDBStmt_ODBC::fetch () {
 	return 0; 
 }
 
-axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, int8_t			&value ) { 
-	if( ! columnInfo.inBound(col) ) return axStatus_Std::DB_invalid_param_count;
-
+template<class T> inline
+axStatus	axDBStmt_ODBC::_getResultAtCol_number ( axSize col, T &value, SQLSMALLINT C_Type ) {
 	value = 0;
 
-	SQLLEN cbLen;	
-	SQLRETURN ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_STINYINT, &value, 0, &cbLen );
+	if( ! columnInfo.inBound(col) ) return axStatus_Std::DB_invalid_param_count;
+
+	SQLLEN cbLen = 0;	
+	SQLRETURN ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, C_Type, &value, 0, &cbLen );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_invalid_param_type;
@@ -321,97 +342,33 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, int8_t			&value ) {
 	return 0; 
 }
 
-axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, int16_t			&value ) { 
+axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, int8_t	&value ) {  return _getResultAtCol_number( col, value, SQL_C_STINYINT ); }
+axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, int16_t	&value ) {  return _getResultAtCol_number( col, value, SQL_C_SSHORT ); }
+axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, int32_t	&value ) {  return _getResultAtCol_number( col, value, SQL_C_SLONG ); }
+axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, int64_t	&value ) {  return _getResultAtCol_number( col, value, SQL_C_SBIGINT ); }
+
+axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, uint8_t	&value ) {  return _getResultAtCol_number( col, value, SQL_C_UTINYINT ); }
+axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, uint16_t	&value ) {  return _getResultAtCol_number( col, value, SQL_C_USHORT ); }
+axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, uint32_t	&value ) {  return _getResultAtCol_number( col, value, SQL_C_ULONG ); }
+axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, uint64_t	&value ) {  return _getResultAtCol_number( col, value, SQL_C_UBIGINT ); }
+
+axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, float		&value ) {  return _getResultAtCol_number( col, value, SQL_C_FLOAT ); }
+axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, double	&value ) {  return _getResultAtCol_number( col, value, SQL_C_DOUBLE ); }
+
+axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, bool		&value ) { 
+	value = false;
+	axStatus st;
 	if( ! columnInfo.inBound(col) ) return axStatus_Std::DB_invalid_param_count;
-
-	value = 0;
-
-	SQLLEN cbLen;	
-	SQLRETURN ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_SSHORT, &value, 0, &cbLen );
-	if( hasError(ret) ) {
-		logError();
-		return axStatus_Std::DB_invalid_param_type;
-	}
-	return 0; 
-}
-
-axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, int32_t			&value ) { 
-	if( ! columnInfo.inBound(col) ) return axStatus_Std::DB_invalid_param_count;
-
-	value = 0;
-
-	SQLLEN cbLen;	
-	SQLRETURN ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_SLONG, &value, 0, &cbLen );
-	if( hasError(ret) ) {
-		logError();
-		return axStatus_Std::DB_invalid_param_type;
-	}
-	return 0; 
-}
-
-axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, int64_t			&value ) { 
-	if( ! columnInfo.inBound(col) ) return axStatus_Std::DB_invalid_param_count;
-
-	value = 0;
-
-	SQLLEN cbLen;	
-	SQLRETURN ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_SBIGINT, &value, 0, &cbLen );
-	if( hasError(ret) ) {
-		logError();
-		return axStatus_Std::DB_invalid_param_type;
-	}
-	return 0; 
-}
-
-axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, float				&value ) { 
-	if( ! columnInfo.inBound(col) ) return axStatus_Std::DB_invalid_param_count;
-
-	value = 0;
-
-	SQLLEN cbLen;	
-	SQLRETURN ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_FLOAT, &value, 0, &cbLen );
-	if( hasError(ret) ) {
-		logError();
-		return axStatus_Std::DB_invalid_param_type;
-	}
-	return 0; 
-}
-
-axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, double			&value ) { 
-	if( ! columnInfo.inBound(col) ) return axStatus_Std::DB_invalid_param_count;
-
-	value = 0;
-
-	SQLLEN cbLen;	
-	SQLRETURN ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_DOUBLE, &value, 0, &cbLen );
-	if( hasError(ret) ) {
-		logError();
-		return axStatus_Std::DB_invalid_param_type;
-	}
-	return 0; 
-}
-
-axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, bool				&value ) { 
-	if( ! columnInfo.inBound(col) ) return axStatus_Std::DB_invalid_param_count;
-
 	int8_t	tmp = 0;
-
-	SQLLEN cbLen;	
-	SQLRETURN ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_TINYINT, &tmp, 0, &cbLen );
-	if( hasError(ret) ) {
-		logError();
-		return axStatus_Std::DB_invalid_param_type;
-	}
-
+	st = getResultAtCol( col, tmp );		if( !st ) return st;
 	value = tmp ? true : false;
 	return 0; 
 }
 
 axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, axTimeStamp		&value ) { 
-	axDateTime	tmp;
-
 	value = 0;
 
+	axDateTime	tmp;
 	axStatus st = getResultAtCol( col, tmp );		if( !st ) return st;
 	value = tmp.toTimeStamp();
 	return 0;

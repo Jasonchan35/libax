@@ -89,12 +89,17 @@ axStatus axDBConn_MySQL::getSQL_CreateTable ( axStringA_Array & outSQLArray, con
 
 const char*	axDBConn_MySQL::DBTypeName( int c_type ) {
 	switch( c_type ) {
-		case axDB_c_type_bool:			return "TINYINT";
 		case axDB_c_type_int8:			return "TINYINT";
 		case axDB_c_type_int16:			return "SMALLINT";
 		case axDB_c_type_int32:			return "INT";
 		case axDB_c_type_int64:			return "BIGINT";
 
+		case axDB_c_type_uint8:			return "TINYINT UNSIGNED";
+		case axDB_c_type_uint16:		return "SMALLINT UNSIGNED";
+		case axDB_c_type_uint32:		return "INT UNSIGNED";
+		case axDB_c_type_uint64:		return "BIGINT UNSIGNED";
+
+		case axDB_c_type_bool:			return "TINYINT";
 		case axDB_c_type_float:			return "FLOAT";
 		case axDB_c_type_double:		return "DOUBLE";
 

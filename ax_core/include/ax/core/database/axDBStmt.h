@@ -76,6 +76,11 @@ public:
 	virtual axStatus	getResultAtCol( axSize col, int32_t			&value )= 0;
 	virtual axStatus	getResultAtCol( axSize col, int64_t			&value )= 0;
 
+	virtual axStatus	getResultAtCol( axSize col, uint8_t			&value )= 0;
+	virtual axStatus	getResultAtCol( axSize col, uint16_t		&value )= 0;
+	virtual axStatus	getResultAtCol( axSize col, uint32_t		&value )= 0;
+	virtual axStatus	getResultAtCol( axSize col, uint64_t		&value )= 0;
+
 	virtual axStatus	getResultAtCol( axSize col, float			&value )= 0;
 	virtual axStatus	getResultAtCol( axSize col, double			&value )= 0;
 

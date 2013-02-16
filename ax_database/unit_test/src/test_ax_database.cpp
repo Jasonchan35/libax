@@ -16,10 +16,15 @@ const size_t numRows = 5;
 	myTEST_TYPE( int32,		int32_t,		int32_t ) \
 	myTEST_TYPE( int64,		int64_t,		int64_t ) \
 \
-	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
-	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
+	myTEST_TYPE( uint8,		uint8_t,		uint8_t  ) \
+	myTEST_TYPE( uint16,	uint16_t,		uint16_t ) \
+	myTEST_TYPE( uint32,	uint32_t,		uint32_t ) \
+	myTEST_TYPE( uint64,	uint64_t,		uint64_t ) \
+\
 	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
 	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
+	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
+	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
 \
 	myTEST_TYPE( vec3f,		axVec3f,		axVec3f   ) \
 //---------------
@@ -39,6 +44,11 @@ public:
 	int32_t			v_int32;
 	int64_t			v_int64;
 
+	uint8_t			v_uint8;
+	uint16_t		v_uint16;
+	uint32_t		v_uint32;
+	uint64_t		v_uint64;
+
 	axStringA		v_StringA;
 	axStringW		v_StringW;
 
@@ -53,6 +63,10 @@ public:
 		v_int16 = 0;
 		v_int32 = 0;
 		v_int64 = 0;
+		v_uint8 = 0;
+		v_uint16 = 0;
+		v_uint32 = 0;
+		v_uint64 = 0;
 		v_float = 0;
 		v_double = 0;
 	}
@@ -60,10 +74,16 @@ public:
 	void testValue() {
 		id = -1;
 
-		v_int8  = 8;
-		v_int16 = 16;
-		v_int32 = 32;
+		v_int8  = -18;
+		v_int16 = -116;
+		v_int32 = -10032;
 		v_int64 = -12345689110064;
+
+		v_uint8  = 130;
+		v_uint16 = 40002;
+		v_uint32 = 3147483647;
+//		v_uint64 = 11223372036854775807;
+		v_uint64 = 12345689110064;
 
 		v_bool	 = true;
 
@@ -136,14 +156,13 @@ axStatus test_ax_database_common( axDBConn & db ) {
 //	const char* table = "Test's Table";
 	const char* table = "TestTable";
 
-	st = db.dropTableIfExists( table );								if( !st ) return st;
 	axDBTableAccessor<Row, TableID, &Row::id>	tbl;
 
+	st = db.dropTableIfExists( table );			if( !st ) return st;
 	st = tbl.createTable( db, table );			if( !st ) return st;
 
 
 	st = tbl.create( db, table );				if( !st ) return st;
-
 
 	{	ax_log("===== insert ======");
 		Row	row;
@@ -164,8 +183,12 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		for( size_t i=0; i<numRows; i++ ) {
 			row.id = (TableID)i+1;
 			row.v_bool = (i % 2 == 1);
+
 			st = tbl.update( row );							if( !st ) return st;
-			st = row.v_ByteArray.append( (uint8_t) i);		if( !st ) return st;
+
+			for( size_t j=0; j<10; j++ ) {
+				st = row.v_ByteArray.append( (uint8_t) i);		if( !st ) return st;
+			}
 		}
 		ax_log("update {?} records in {?}s", numRows, timer.get() );
 	}
@@ -178,8 +201,8 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		st = tbl.selectAll( results );		if( !st ) return st;
 		ax_log("select {?} records in {?}s", results.size(), timer.get() );
 
-		//ax_log_var( results );
-		#if 1 // dump last only
+		ax_log_var( results );
+		#if 0 // dump last only
 			if( results.size() ) {
 				ax_log_var( results.last() );
 			}
@@ -218,12 +241,13 @@ axStatus test_PostgreSQL() {
 	axStatus st;
 	axDBConn	db;
 	st = axPostgreSQL_connect ( db, "host=localhost port=5432 dbname=testdb user=test password=1234" );	if( !st ) return st;
+//	st = axPostgreSQL_connect ( db, "host=192.168.1.47 port=5432 dbname=testdb user=test password=1234" );	if( !st ) return st;
 	st = test_ax_database_common(db);			if( !st ) return st;
 	return 0;
 }
 #endif
 
-#if 0 // =============== ODBC ====================
+#if 1 // =============== ODBC ====================
 #include <ax/database/axODBC.h>
 //axStatus test_ODBC() {
 //	axStatus st;
@@ -236,10 +260,15 @@ axStatus test_PostgreSQL() {
 axStatus test_ODBC_MSSQL() {
 	axStatus st;
 	axDBConn	db;
-	st = axODBC_MSSQL_connect ( db, "MSSQL_DSN", "test", "1234");		if( !st ) return st;
+//	st = axODBC_MSSQL_connect ( db, "MSSQL_DSN", "test", "1234");		if( !st ) return st;
 
-	//st = axODBC_MSSQL_connect ( db, "DRIVER={SQL Server Native Client 10.0}; "
-	//								"DATABASE=testdb; SERVER=192.168.1.56; UID=test; PWD=1234;");	if( !st ) return st;
+	st = axODBC_MSSQL_connectDSN ( db,	"DRIVER={SQL Server Native Client 10.0};"
+										"DATABASE=testdb;"
+										"SERVER=192.168.1.49;"
+										"UID=test;"
+										"PWD=1234;");	
+	if( !st ) return st;
+
 	st = test_ax_database_common(db);			if( !st ) return st;
 	return 0;
 }
@@ -264,8 +293,8 @@ axStatus test_ax_database() {
 
 	ax_log("test {?} records\n", numRows );
 
-	axUTestCase( test_SQLite3() );
-	axUTestCase( test_MySQL() );
+//	axUTestCase( test_SQLite3() );
+//	axUTestCase( test_MySQL() );
 	axUTestCase( test_PostgreSQL() );
 //	axUTestCase( test_ODBC_MSSQL() );
 //	axUTestCase( test_ODBC_Oracle() );

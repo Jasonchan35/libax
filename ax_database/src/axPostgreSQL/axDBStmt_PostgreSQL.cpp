@@ -59,32 +59,68 @@ const char* axDBStmt_PostgreSQL::columnName	( axSize col ) {
 }
 
 template<class T> inline
-axStatus	axDBStmt_PostgreSQL::getValue_number( axSize col, T &value, Oid oid ) {
+axStatus	axDBStmt_PostgreSQL::getValue_number( axSize col, T &value ) {
+	value = 0;
 	if( !res_ ) return axStatus_Std::not_initialized;
+
+	axStatus st;
+
 	int c = (int) col;
 	int r = (int) res_.curRow_;
 	
-	if( PQftype( res_, c ) != oid ) return axStatus_Std::DB_invalid_value_type;
-	T* p = (T*)PQgetvalue( res_, r, c );
-	if( !p ) { value = 0; return 0; } //is null
-	value = ax_be_to_host( *p );
+	switch( PQftype( res_, c ) ) {
+		case INT2OID: {
+			int16_t* tmp = (int16_t*)PQgetvalue( res_, r, c );
+			if( !tmp ) return 0; //is null
+			st = ax_safe_assign( value, ax_be_to_host(*tmp) );		if( !st ) return st;
+		}break;
+
+		case INT4OID: {
+			int32_t* tmp = (int32_t*)PQgetvalue( res_, r, c );
+			if( !tmp ) return 0; //is null
+			st = ax_safe_assign( value, ax_be_to_host(*tmp) );		if( !st ) return st;
+		}break;
+
+		case INT8OID: {
+			int64_t* tmp = (int64_t*)PQgetvalue( res_, r, c );
+			if( !tmp ) return 0; //is null
+			st = ax_safe_assign( value, ax_be_to_host(*tmp) );		if( !st ) return st;
+		}break;
+
+		case FLOAT4OID: {
+			float* tmp = (float*)PQgetvalue( res_, r, c );
+			if( !tmp ) return 0; //is null
+			st = ax_safe_assign( value, ax_be_to_host(*tmp) );		if( !st ) return st;
+		}break;
+
+		case FLOAT8OID: {
+			double* tmp = (double*)PQgetvalue( res_, r, c );
+			if( !tmp ) return 0; //is null
+			st = ax_safe_assign( value, ax_be_to_host(*tmp) );		if( !st ) return st;
+		}break;
+
+		default: {
+			assert( false );
+			return axStatus_Std::DB_invalid_param_type;
+		}break;
+	}
+
 	return 1;
 }
 
-axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, int8_t &	value ) { 
-	int16_t tmp;
-	axStatus st;
-	st = getValue_number( col, tmp, INT2OID );	if( !st ) return st;
-	st = ax_safe_assign( value, tmp );			if( !st ) return st;
-	return 0;
-}
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, int8_t  &	value ) { return getValue_number( col, value ); }
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, int16_t &	value ) { return getValue_number( col, value ); }
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, int32_t &	value ) { return getValue_number( col, value ); }
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, int64_t &	value ) { return getValue_number( col, value ); }
 
-axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, int16_t &	value ) { return getValue_number( col, value, INT2OID ); }
-axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, int32_t &	value ) { return getValue_number( col, value, INT4OID ); }
-axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, int64_t &	value ) { return getValue_number( col, value, INT8OID ); }
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, uint8_t  &	value ) { return getValue_number( col, value ); }
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, uint16_t &	value ) { return getValue_number( col, value ); }
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, uint32_t &	value ) { return getValue_number( col, value ); }
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, uint64_t &	value ) { return getValue_number( col, value ); }
 
-axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, float   &	value ) { return getValue_number( col, value, FLOAT4OID ); }
-axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, double  &	value ) { return getValue_number( col, value, FLOAT8OID ); }
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, float   &	value ) { return getValue_number( col, value ); }
+axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, double  &	value ) { return getValue_number( col, value ); }
+
 
 axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, bool    &	value ) {
 	if( !res_) return axStatus_Std::not_initialized;
@@ -131,7 +167,7 @@ axStatus	axDBStmt_PostgreSQL::getResultAtCol( axSize col, axIByteArray	&value ) 
 	if( !res_) return axStatus_Std::not_initialized;
 	int c = (int) col;
 	int r = (int) res_.curRow_;
-	
+
 	Oid oid = PQftype( res_, c );
 	if( oid != BYTEAOID ) return -1;
 	char* p = PQgetvalue( res_, r, c );

@@ -33,14 +33,16 @@ axExpandArgList1( axStatus, ax_print,	const wchar_t*, const axStringFormat_Arg&,
 axStatus ax_print_ArgList( const wchar_t* fmt, const axStringFormat_ArgList &list );
 axStatus ax_print_ArgList( const char*	  fmt, const axStringFormat_ArgList &list );
 
-		void ax_dump_hex_mem( const void* buf, axSize len, FILE *stream = stdout );
-inline 	void ax_dump_hex_mem( const axIByteArray & buf ) { ax_dump_hex_mem( buf.ptr(), buf.byteSize() ); }
+		void ax_dump_hex( const void* buf, axSize len, FILE *ax_dump_hex = stdout );
+inline 	void ax_dump_hex( const axIByteArray & buf ) { ax_dump_hex( buf.ptr(), buf.byteSize() ); }
 
-template< class T > inline
-void ax_dump_hex_raw( const T& o, FILE *s = stdout ) { ax_dump_hex_mem( &o, sizeof(o), s ); }
+template<class T> inline
+void ax_dump_hex( const T &obj ) { ax_dump_hex( &obj, sizeof(obj) ); }
 
-inline void		ax_dump_hex_string( const char*    sz, FILE* file = stdout ) { ax_dump_hex_mem( sz, ax_strlen(sz), file ); }
-inline void		ax_dump_hex_string( const wchar_t* sz, FILE* file = stdout ) { ax_dump_hex_mem( sz, ax_strlen(sz)*sizeof(wchar_t), file ); }
+inline void		ax_dump_string_hex( const char*    sz, FILE* file = stdout ) { ax_dump_hex( sz, ax_strlen(sz), file ); }
+inline void		ax_dump_string_hex( const wchar_t* sz, FILE* file = stdout ) { ax_dump_hex( sz, ax_strlen(sz)*sizeof(wchar_t), file ); }
+
+axStatus	ax_convert_dump_hex_string( axIStringA & out, const void* ptr, axSize len );
 
 
 //@}

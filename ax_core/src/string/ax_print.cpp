@@ -42,11 +42,12 @@ axStatus ax_print_ArgList( const char* fmt, const axStringFormat_ArgList &list )
 	return 0;
 }
 
-void ax_dump_hex_mem( const void* buf, axSize len, FILE *stream ) {
-    axSize i;
-    const uint8_t *c = (const uint8_t*)buf;
+axStatus	ax_convert_dump_hex_string( axIStringA & out, const void* ptr, axSize len ) {
+	axStatus st;
+	st = out.reserve( len * 5 );		if( !st ) return st;
 
-    ax_print("----------- dump hex len={?} ------------", len );
+    axSize i;
+    const uint8_t *c = (const uint8_t*)ptr;
 
     char	line[ 512 ];
     size_t	k;
@@ -86,10 +87,25 @@ void ax_dump_hex_mem( const void* buf, axSize len, FILE *stream ) {
 			}
         }
 		line[k] = 0;
-		fwrite( line, 1, k, stream );
+
+		st = out.appendWithLength( line, k );		if( !st ) return st;
+
         c += n;
         len -= n;
     }
+
+	return 0;
+}
+
+void ax_dump_hex_mem( const void* buf, axSize len, FILE *stream ) {
+
+	axStringA_<8192>	str;
+	axStatus st;
+	st = ax_convert_dump_hex_string( str, buf, len );		assert(st);
+
+    ax_print("----------- dump hex len={?} ------------", len );
+
+	fputs( str, stream );
 	fputs( "\n\n", stream );
 	fflush( stream );
 }

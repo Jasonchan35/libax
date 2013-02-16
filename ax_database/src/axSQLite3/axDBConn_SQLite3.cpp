@@ -125,6 +125,10 @@ const char*	axDBConn_SQLite3::DBTypeName( int c_type ) {
 		case axDB_c_type_int16:
 		case axDB_c_type_int32:
 		case axDB_c_type_int64:
+		case axDB_c_type_uint8:
+		case axDB_c_type_uint16:
+		case axDB_c_type_uint32:
+		case axDB_c_type_uint64:
 					return "INTEGER"; //in SQLite, AUTO INCREMENT must primary key and INTEGER (even INT/SMALLINT are the same but it is not working)
 
 		case axDB_c_type_float:		return "FLOAT";
