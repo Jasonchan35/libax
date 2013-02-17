@@ -96,3 +96,10 @@ axStatus axDBStmt::create_Select	( axDBConn & db, const axDBColumnList & list, c
 	st = db.getSQL_Select( sql, list, table, szWhere );		if( !st ) return st;
 	return create( db, sql );
 }
+
+axStatus axDBStmt::create_LastInsertId( axDBConn & db,  const axDBColumnList & list, const char* table ) {
+	axStatus st;
+	axTempStringA	sql;
+	st = db.getSQL_LastInsertId( sql, list, table );		if( !st ) return st;
+	return create( db, sql );
+}

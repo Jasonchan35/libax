@@ -18,14 +18,16 @@ public:
 
 	virtual axStatus	createStmt			( axDBStmt & stmt, const char * sql );
 	virtual	axStatus	getSQL_CreateTable	( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table );
-	
+	virtual axStatus	getSQL_LastInsertId	( axIStringA & outSQL, const axDBColumnList & list, const char* table );
+
 	axStatus	connect	( const char * dsn );
 	void		close	();
 
 	const char*	DBTypeName( int c_type );
 
-
 	operator PGconn*() { return p_; }
+
+	axDBStmt_PostgreSQL::Result*	lastExecResult_;
 
     PGconn* p_;
 };

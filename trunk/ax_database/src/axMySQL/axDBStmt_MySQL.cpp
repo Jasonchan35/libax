@@ -30,6 +30,11 @@ void axDBStmt_MySQL::destroy() {
 		numColumns_ = 0;
 	}
 	if( stmt_ ) {
+		if( db_->lastExecStmt_ == stmt_ ) {
+			mysql_stmt_free_result( stmt_ );
+			db_->lastExecStmt_ = NULL;
+		}
+
 		mysql_stmt_close( stmt_ );
 		stmt_ = NULL;
 	}
@@ -77,6 +82,11 @@ axStatus axDBStmt_MySQL::exec_ArgList( const axDBInParamList & list ) {
 
 	axStatus st;	
 	echoExecSQL( db_, list );
+
+	if( db_->lastExecStmt_ ) {
+		mysql_stmt_free_result( db_->lastExecStmt_ );
+	}
+	db_->lastExecStmt_ = stmt_;
 
 	if( list.size() != numParams() ) return axStatus_Std::DB_invalid_param_count;
 	size_t n = numParams();

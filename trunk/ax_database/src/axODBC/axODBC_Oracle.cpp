@@ -4,14 +4,16 @@
 class axDBConn_Oracle : public axDBConn_ODBC {
 public:
 
-	virtual axStatus	createStmt						( axDBStmt & stmt, const char * sql );
+	virtual axStatus	createStmt				( axDBStmt & stmt, const char * sql );
 
-	virtual	axStatus	getSQL_CreateTable				( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table );
-	virtual axStatus	getSQL_DropTableIfExists		( axStringA_Array & outSQLArray, const char* table );
+	virtual	axStatus	getSQL_CreateTable		( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table );
+	virtual axStatus	getSQL_DropTableIfExists( axStringA_Array & outSQLArray, const char* table );
 
-	virtual	const char*	DBTypeName						( int c_type );
+	virtual axStatus	getSQL_LastInsertId		( axIStringA & outSQL, const axDBColumnList & list, const char* table );
 
-	virtual	axStatus	identifierString				( axIStringA & out, const char* sz );
+	virtual	const char*	DBTypeName				( int c_type );
+
+	virtual	axStatus	identifierString		( axIStringA & out, const char* sz );
 };
 
 
@@ -44,6 +46,7 @@ axStatus	axODBC_Oracle_connectDSN( axDBConn & db, const char* dsn ) {
 	db._setImp(p);
 	return p->connectDSN( dsn );
 }
+
 
 SQLRETURN axDBStmt_Oracle::_OnSQLBindParameter( SQLUSMALLINT col, const int64_t & value, axIStringW & tmpStrData, SQLLEN & len ) {
 	return _OnBindParamByString( col, value, tmpStrData, len );
@@ -82,6 +85,21 @@ axStatus	axDBStmt_Oracle::getResultAtCol( axSize col, int64_t  & value ) { retur
 axStatus	axDBStmt_Oracle::getResultAtCol( axSize col, uint64_t & value ) { return _getResultAtColByString( col, value ); }
 
 
+//virtual 
+axStatus axDBConn_Oracle::getSQL_LastInsertId	( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
+	axStatus	st;
+	axStringA	seqName;
+	axStringA	tmp;
+
+	st = tmp.format("seq_{?}", table );			if( !st ) return st;
+
+	st = identifierString( seqName, tmp );		if( !st ) return st;
+
+	st = outSQL.format("SELECT {?}.currval FROM DUAL;", seqName );
+	if( !st ) return st;
+
+	return 0;
+}
 
 axStatus	axDBConn_Oracle::createStmt ( axDBStmt & stmt, const char * sql ) {
 	axStatus st;

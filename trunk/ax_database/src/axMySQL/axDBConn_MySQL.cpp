@@ -17,6 +17,7 @@ axStatus axMySQL_connect ( axDBConn & conn, const char* dbname, const char* user
 }
 
 axDBConn_MySQL::axDBConn_MySQL() {
+	lastExecStmt_ = NULL;
 }
 
 axDBConn_MySQL::~axDBConn_MySQL() {
@@ -45,13 +46,20 @@ axStatus	axDBConn_MySQL::identifierString( axIStringA & out, const char* sz ) {
 	return out.format("`{?}`", tmp );
 }
 
+
+//virtual 
+axStatus axDBConn_MySQL::getSQL_LastInsertId	( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
+	axStatus	st;
+	st = outSQL.format("SELECT LAST_INSERT_ID();" );		if( !st ) return st;
+	return 0;
+}
+
 axStatus axDBConn_MySQL::createStmt	( axDBStmt & stmt, const char * sql ) {
 	axDBStmt_MySQL* p = new axDBStmt_MySQL( this );
 	if( !p ) return axStatus_Std::not_enough_memory;	
 	stmt._setImp( p );
 	return p->create( sql );		
 }
-
 
 //virtual	
 axStatus axDBConn_MySQL::getSQL_CreateTable ( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table ) {

@@ -77,6 +77,16 @@ bool axDBConn_SQLite3::hasError( int code, const char* sql ) {
 }
 
 //virtual 
+axStatus axDBConn_SQLite3::getSQL_LastInsertId	( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
+	axStatus	st;
+	axStringA	tableName;
+	st = identifierString( tableName, table );		if( !st ) return st;
+
+	st = outSQL.format("SELECT ID FROM {?} WHERE _ROWID_ = LAST_INSERT_ROWID();", tableName );		if( !st ) return st;
+	return 0;
+}
+
+//virtual 
 axStatus axDBConn_SQLite3::createStmt( axDBStmt & stmt, const char* sql ) {
 	axDBStmt_SQLite3* p = new axDBStmt_SQLite3( this );
 	if( !p ) return axStatus_Std::not_enough_memory;	

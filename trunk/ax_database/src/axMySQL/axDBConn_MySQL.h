@@ -22,11 +22,15 @@ public:
 	virtual axStatus	createStmt			( axDBStmt & stmt, const char * sql );
 	virtual	axStatus	getSQL_CreateTable	( axStringA_Array & outSQL, const axDBColumnList & list, const char* table );
 
+	virtual axStatus	getSQL_LastInsertId	( axIStringA & outSQL, const axDBColumnList & list, const char* table );
+
 	virtual	axStatus	identifierString	( axIStringA & out, const char* sz );
 		
 	operator MYSQL* () { return &p_; }
 	
 	const char*	DBTypeName( int c_type );
+
+	MYSQL_STMT *lastExecStmt_;
 
 	MYSQL	p_;
 };

@@ -9,12 +9,27 @@
 #include "axDBConn_PostgreSQL.h"
 #include "axDBStmt_PostgreSQL.h"
 
-axStatus	axDBStmt_PostgreSQL::fetch() {
-	if( ! res_ ) return 0;
-	res_.curRow_++;
-	if( res_.curRow_ >= res_.rowCount_ ) return axStatus::kEOF;
-	return 0;
+
+axDBStmt_PostgreSQL::Result::Result()	{ 
+	stmt_ = NULL; 
+	p_=NULL; 
+	curRow_=-1; 
+	colCount_=0; 
+	rowCount_=0; 
 }
+
+
+void	axDBStmt_PostgreSQL::Result::release()	{ 
+	if( p_ ) { 
+		PQclear( p_ ); 
+		stmt_ = NULL; 
+		p_ = NULL; 
+		curRow_ = -1;
+		colCount_ = 0;
+		rowCount_ = 0;
+	} 
+}
+
 
 axStatus	axDBStmt_PostgreSQL::Result::status() {
 	if( ! p_ ) return axStatus_Std::not_initialized;
@@ -27,6 +42,14 @@ axStatus	axDBStmt_PostgreSQL::Result::status() {
 			return axStatus_Std::DB_error;
 		}
 	}
+}
+
+//========
+axStatus	axDBStmt_PostgreSQL::fetch() {
+	if( ! res_ ) return 0;
+	res_.curRow_++;
+	if( res_.curRow_ >= res_.rowCount_ ) return axStatus::kEOF;
+	return 0;
 }
 
 int axDBStmt_PostgreSQL::columnType( axSize col ) {
@@ -226,6 +249,12 @@ axStatus axDBStmt_PostgreSQL::exec_ArgList ( const axDBInParamList & list ) {
 
 	echoExecSQL( db_, list );
 
+	if( db_->lastExecResult_ ) {
+		db_->lastExecResult_->release();
+	}
+	db_->lastExecResult_ = NULL;
+
+
 	if( list.size() != numParams() ) return axStatus_Std::DB_invalid_param_count;
 
 
@@ -244,7 +273,10 @@ axStatus axDBStmt_PostgreSQL::exec_ArgList ( const axDBInParamList & list ) {
 									paramSet_.lengths.ptr(), 
 									paramSet_.formats.ptr(), BINARY_FORMAT ) );
 							
+	db_->lastExecResult_ = &res_;
 	st = res_.status();		if( !st ) return st;
+
+
 	res_.colCount_ = PQnfields( res_ );
 	res_.rowCount_ = PQntuples( res_ );
 	return 0;
@@ -294,6 +326,12 @@ axDBStmt_PostgreSQL::~axDBStmt_PostgreSQL() {
 			
 void axDBStmt_PostgreSQL::destroy() {
 	if( stmtName_.isEmpty() ) return;
+
+	if( db_->lastExecResult_ == &res_ ) {
+		db_->lastExecResult_ = NULL;
+		res_.release();
+	}
+
 	axStatus st;
 	axTempStringA	sql;
 	st = sql.format( "DEALLOCATE \"{?}\" ", stmtName_ );

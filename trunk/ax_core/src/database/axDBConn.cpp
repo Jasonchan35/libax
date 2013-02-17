@@ -9,6 +9,16 @@
 #include <ax/core/database/axDBStmt.h>
 #include <ax/core/system/axLog.h>
 
+axScope_DBTran::axScope_DBTran( axStatus & st, axDBConn & db ) {
+	axDBConn_Imp *imp = db._getImp();
+	if( !imp ) {
+		st = axStatus_Std::not_initialized;
+		return;
+	}
+
+	st = imp->createTransaction( *this );	if( !st ) return;
+}
+
 axDBConn::axDBConn() {
 }
 
@@ -145,6 +155,11 @@ axStatus axDBConn_Imp::getSQL_DropTableIfExists(axStringA_Array &outSQLArray, co
 	st = identifierString( tableName, table );							if( !st ) return st;
 	st = outSQL.format("DROP TABLE IF EXISTS {?};", tableName);		if( !st ) return st;
 	return 0;
+}
+
+axStatus  axDBConn::getSQL_LastInsertId	( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
+	if( !p_ ) return axStatus_Std::not_initialized;
+	return p_->getSQL_LastInsertId( outSQL, list, table );
 }
 
 //==== insert ===

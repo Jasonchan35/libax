@@ -32,6 +32,8 @@ public:
 						axStatus	create_Update	( axDBConn & db, const axDBColumnList & list, const char* table, const char* szWhere );
 						axStatus	create_Select	( axDBConn & db, const axDBColumnList & list, const char* table, const char* szWhere );
 
+						axStatus	create_LastInsertId( axDBConn & db,  const axDBColumnList & list, const char* table );
+
 					//	axStatus	exec			( params... )
 						axStatus	exec_ArgList	( const axDBInParamList & list );
 						axExpandArgList0			( axStatus, exec,   const axDBInParam_CB & , axDBInParamList )
