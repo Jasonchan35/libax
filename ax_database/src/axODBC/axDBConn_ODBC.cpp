@@ -7,9 +7,19 @@ axStatus	axODBC_connect( axDBConn & db, const char* server, const char* username
 	return p->connect( server, username, password );
 }
 
+
+axStatus axDBConn_ODBC::createTransaction ( axScope_DBTran & tran ) {
+	axScope_DBTran_ODBC* p = new axScope_DBTran_ODBC( this );
+	if( !p ) return axStatus_Std::not_enough_memory;
+	tran._setImp( p );
+
+	return 0;
+}
+
 axDBConn_ODBC::axDBConn_ODBC() {
 	env_ = NULL;
 	dbc_ = NULL;
+	lastExecStmt_ = NULL;
 }
 
 axDBConn_ODBC::~axDBConn_ODBC() {

@@ -74,13 +74,13 @@ public:
 		
 	class Result : public axNonCopyable {
 	public:
-		Result()			{ stmt_ = NULL; p_=NULL; curRow_=-1; colCount_=0; rowCount_=0; }
+		Result();
 		virtual ~Result()	{ release(); }
 		
 				axStatus	status();
 		
 				void		set		( axDBStmt_PostgreSQL* stmt, PGresult* p )	{ release(); stmt_=stmt; p_ = p; }	
-				void		release	()											{ if( p_ ) { PQclear( p_ ); stmt_ = NULL; p_ = NULL; } }
+				void		release	();
 				
 		virtual axSize		rowCount() { return (axSize) rowCount_; }
 		virtual axSize		colCount() { return (axSize) colCount_; }

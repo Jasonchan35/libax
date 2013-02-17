@@ -17,6 +17,7 @@ axStatus axPostgreSQL_connect ( axDBConn & conn, const char * dsn ) {
 }
 
 axDBConn_PostgreSQL::axDBConn_PostgreSQL() {
+	lastExecResult_ = NULL;
 	p_ = NULL;
 }
 
@@ -46,6 +47,14 @@ axStatus axDBConn_PostgreSQL::createStmt( axDBStmt & stmt, const char * sql ) {
 	stmt._setImp( p );
 	return p->create( sql );		
 }
+
+//virtual 
+axStatus axDBConn_PostgreSQL::getSQL_LastInsertId	( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
+	axStatus	st;
+	st = outSQL.format("SELECT LASTVAL();" );		if( !st ) return st;
+	return 0;
+}
+
 
 //virtual	
 axStatus axDBConn_PostgreSQL::getSQL_CreateTable ( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table ) {

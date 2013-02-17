@@ -4,6 +4,7 @@ class axDBConn_MSSQL : public axDBConn_ODBC {
 public:
 	virtual	axStatus		getSQL_CreateTable		( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table );
 	virtual axStatus		getSQL_DropTableIfExists( axStringA_Array & outSQLArray, const char* table );
+	virtual axStatus		getSQL_LastInsertId		( axIStringA & outSQL, const axDBColumnList & list, const char* table );
 	virtual const char*		DBTypeName				( int c_type );
 };
 
@@ -18,6 +19,15 @@ axStatus	axODBC_MSSQL_connectDSN( axDBConn & db, const char* dsn ) {
 	if( !p ) return axStatus_Std::not_enough_memory;
 	db._setImp(p);
 	return p->connectDSN( dsn );
+}
+
+
+//virtual 
+axStatus axDBConn_MSSQL::getSQL_LastInsertId	( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
+	axStatus	st;
+	st = outSQL.format("SELECT @@IDENTITY;" );			if( !st ) return st;
+//	st = outSQL.format("SELECT SCOPE_IDENTITY();" );	if( !st ) return st;
+	return 0;
 }
 
 

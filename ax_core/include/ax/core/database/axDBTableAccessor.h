@@ -32,19 +32,42 @@ typedef axDBTableAccessor_Stmt<T> B;
 
 public:
 	axStatus	create	( axDBConn & db, const char* table, const axDBColumnList & list ) {
+		axStatus st;
+
 		B::pkeyIndex_	= list.pkeyIndex();
 		B::pkeyAutoInc_	= list.pkeyAutoInc();
+
+		if( B::pkeyAutoInc_ ) {
+			const axDBColumn * p = list.pkeyColumn();
+			if( !p ) return axStatus_Std::DB_error;
+			st = pkeyName_.set( p->name );		if( !st ) return st;
+
+			st = lastInsertIdStmt_.create_LastInsertId( db, list, table );	if( !st ) return st;
+		}
+
 		return B::stmt_.create_Insert( db, list, table );
 	}
 
-	axStatus	exec	( const T & values ) {
+	axStatus	exec	( T & values ) {
+
 		axStatus st;
 		axDBInParamList	list;
-		st = list.create( values, B::pkeyIndex_ );			if( !st ) return st;
-		return B::stmt_.exec_ArgList( list );
+		st = list.create( values, B::pkeyIndex_ );		if( !st ) return st;
+		st = B::stmt_.exec_ArgList( list );				if( !st ) return st;
+
+		if( B::pkeyIndex_ >= 0 && B::pkeyAutoInc_ ) {
+			st = lastInsertIdStmt_.exec();							if( !st ) return st;
+			st = lastInsertIdStmt_.getRow( values.*PKeyMember );	if( !st ) return st;
+		}
+
+		return 0;
 	}
 
 	const char*	sql		() { return B::stmt_.sql(); }
+private:
+	axDBStmt	lastInsertIdStmt_;
+
+	axStringA	pkeyName_;
 };
 
 template< class T, class PKeyType, PKeyType T::*PKeyMember, bool PKeyAutoInc >
@@ -165,7 +188,7 @@ public:
 		return 0;
 	}
 		
-	axStatus insert		( const T &v )					{ return insertStmt.exec( v );	}
+	axStatus insert		(	    T &v )					{ return insertStmt.exec( v );	}
 	axStatus update		( const T &v )					{ return updateStmt.exec( v );	}
 
 	axStatus select		( T &v, const PKeyType& pkey )	{ return selectStmt.exec( v, pkey ); }

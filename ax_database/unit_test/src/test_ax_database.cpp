@@ -29,7 +29,7 @@ const size_t numRows = 5;
 	myTEST_TYPE( vec3f,		axVec3f,		axVec3f   ) \
 //---------------
 
-typedef int32_t		TableID;
+typedef int64_t		TableID;
 
 class Row {
 public:
@@ -90,15 +90,21 @@ public:
 		v_float  = 123.456f;
 		v_double = 123456789.1234;
 
-		v_StringA.set( "This is String" );
-		
-		const uint8_t utf8[] = { 	0x53, 0x51, 0x4C, 0x20, 0xE5, 0x85, 0xA8, 0xE5, 0x90, 0x8D, 0xE6, 0x98, 0xAF, 0xE7, 0xB5, 0x90,
-									0xE6, 0xA7, 0x8B, 0xE5, 0x8C, 0x96, 0xE6, 0x9F, 0xA5, 0xE8, 0xA9, 0xA2, 0xE8, 0xAA, 0x9E, 0xE8,
-									0xA8, 0x80, 0x2C, 0x20, 0x53, 0x51, 0x4C, 0x20, 0xE3, 0x82, 0xB7, 0xE3, 0x83, 0xBC, 0xE3, 0x82,
-									0xAF, 0xE3, 0x82, 0xA7, 0xE3, 0x83, 0xAB, 0x2C, 0x20, 0xE3, 0x82, 0xA8, 0xE3, 0x82, 0xB9, 0xE3,
-									0x82, 0xAD, 0xE3, 0x83, 0xA5, 0xE3, 0x83, 0xBC, 0xE3, 0x82, 0xA8, 0xE3, 0x83, 0xAB,
-									0x00 };
-		v_StringW.set( (const char*)utf8 );
+		{
+			const uint8_t utf8[]= {		0x53, 0x51, 0x4C, 0x20, 0xE3, 0x82, 0xB7, 0xE3, 0x83, 0xBC, 0xE3, 0x82,
+										0xAF, 0xE3, 0x82, 0xA7, 0xE3, 0x83, 0xAB, 0x2C, 0x20, 0xE3, 0x82, 0xA8, 0xE3, 0x82, 0xB9, 0xE3,
+										0x82, 0xAD, 0xE3, 0x83, 0xA5, 0xE3, 0x83, 0xBC, 0xE3, 0x82, 0xA8, 0xE3, 0x83, 0xAB,
+										0x00 };
+			v_StringA.set( (const char*)utf8 );
+		}
+
+		{
+			const uint8_t utf8[] = { 	0x53, 0x51, 0x4C, 0x20, 0xE5, 0x85, 0xA8, 0xE5, 0x90, 0x8D, 0xE6, 0x98, 0xAF, 0xE7, 0xB5, 0x90,
+										0xE6, 0xA7, 0x8B, 0xE5, 0x8C, 0x96, 0xE6, 0x9F, 0xA5, 0xE8, 0xA9, 0xA2, 0xE8, 0xAA, 0x9E, 0xE8,
+										0xA8, 0x80, 0x2C, 0x20, 0x00 };
+
+			v_StringW.set( (const char*)utf8 );
+		}
 
 		v_TimeStamp.now();
 
@@ -156,7 +162,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 //	const char* table = "Test's Table";
 	const char* table = "TestTable";
 
-	axDBTableAccessor<Row, TableID, &Row::id>	tbl;
+	axDBTableAccessor<Row, TableID, &Row::id, true>		tbl;
 
 	st = db.dropTableIfExists( table );			if( !st ) return st;
 	st = tbl.createTable( db, table );			if( !st ) return st;
@@ -171,10 +177,12 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		axStopWatch	timer;
 		for( size_t i=0; i<numRows; i++ ) {
 			st = tbl.insert( row );				if( !st ) return st;
+			ax_log_var( row.id );
 		}
 		ax_log("insert {?} records in {?}s", numRows, timer.get() );
 	}
 
+	/*
 	{	ax_log("===== update ======");
 		Row	row;
 		row.testValue();
@@ -192,6 +200,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		}
 		ax_log("update {?} records in {?}s", numRows, timer.get() );
 	}
+	*/
 
 	{	ax_log("===== select all ======");
 		axArray< Row >	results;
@@ -201,13 +210,14 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		st = tbl.selectAll( results );		if( !st ) return st;
 		ax_log("select {?} records in {?}s", results.size(), timer.get() );
 
-		ax_log_var( results );
+		//ax_log_var( results );
 		#if 0 // dump last only
 			if( results.size() ) {
 				ax_log_var( results.last() );
 			}
 		#endif
 	}
+	
 
 	return 0;
 }
@@ -276,8 +286,8 @@ axStatus test_ODBC_Oracle() {
 	axStatus st;
 	axDBConn	db;
 
-//	st = axODBC_Oracle_connect ( db, "MyOracleDSN", "test", "1234" );	if( !st ) return st;
-	st = axODBC_Oracle_connect ( db, "TonyOracle", "test", "1234" );	if( !st ) return st;
+	st = axODBC_Oracle_connect ( db, "MyOracleDSN", "test", "1234" );	if( !st ) return st;
+//	st = axODBC_Oracle_connect ( db, "TonyOracle", "test", "1234" );	if( !st ) return st;
 
 //	st = axODBC_Oracle_connectDSN ( db, "DSN=MyOracleDSN; UID=test; PWD=1234;" ); if( !st ) return st;
 //	st = axODBC_Oracle_connect ( db, "DRIVER={Oracle in OraDb11g_home1}; UID=test; PWD=1234;" ); if( !st ) return st;
@@ -293,11 +303,11 @@ axStatus test_ax_database() {
 
 	ax_log("test {?} records\n", numRows );
 
-//	axUTestCase( test_SQLite3() );
-//	axUTestCase( test_MySQL() );
+	axUTestCase( test_SQLite3() );
+	axUTestCase( test_MySQL() );
 	axUTestCase( test_PostgreSQL() );
-//	axUTestCase( test_ODBC_MSSQL() );
-//	axUTestCase( test_ODBC_Oracle() );
+	axUTestCase( test_ODBC_MSSQL() );
+	axUTestCase( test_ODBC_Oracle() );
 
 	return 0;
 }

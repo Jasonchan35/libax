@@ -54,6 +54,11 @@ axSize axDBStmt_ODBC::numParams() {
 
 void axDBStmt_ODBC::destroy() {
 	if( stmt_ ) {
+		if( db_->lastExecStmt_ == stmt_ ) {
+			SQLCloseCursor( db_->lastExecStmt_ );
+			db_->lastExecStmt_ = NULL;
+		}
+
 		SQLFreeHandle( SQL_HANDLE_STMT, stmt_ );
 		stmt_ = NULL;
 	}	
@@ -98,8 +103,13 @@ axStatus	axDBStmt_ODBC::exec_ArgList	( const axDBInParamList & list ) {
 	axStatus st;
 	echoExecSQL( db_, list );
 
-	SQLRETURN	ret = SQL_ERROR;
+	if( db_->lastExecStmt_ ) {
+		SQLCloseCursor( db_->lastExecStmt_ );
+	}
+	db_->lastExecStmt_ = stmt_;
 
+
+	SQLRETURN	ret = SQL_ERROR;
 	if( list.size() != numParams() )	return axStatus_Std::DB_invalid_param_count;
 
 	st = tmpStrData.resize	( list.size() );			if( !st ) return st;
@@ -318,7 +328,10 @@ const char* axDBStmt_ODBC::columnName	( axSize col ) {
 axStatus	axDBStmt_ODBC::fetch () { 
 	SQLRETURN ret = SQLFetch( stmt_ );
 
-	if( ret == SQL_NO_DATA ) return axStatus::kEOF;
+	if( ret == SQL_NO_DATA ) {
+		SQLCloseCursor( stmt_ );
+		return axStatus::kEOF;
+	}
 
 	if( hasError(ret) ) {
 		logError();
@@ -415,15 +428,17 @@ axStatus	axDBStmt_ODBC::getResultAtCol	( axSize col, axIStringW 	&value ) {
 		return axStatus_Std::DB_invalid_param_type;
 	}
 
+	if( cbLen == 0 || cbLen == SQL_NULL_DATA ) return 0;
 	if( cbLen < 0 ) {
 		assert(false);
 		return axStatus_Std::DB_invalid_param_count;
 	}
 
-	st = value.resize( cbLen, false );		if( !st ) return st;
-	if( cbLen == 0 ) return 0;
+	size_t n = cbLen / sizeof(wchar_t);
 
-	ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_WCHAR, value._getInternalBufferPtr(), cbLen+1, &cbLen );
+	st = value.resize( n, false );		if( !st ) return st;
+
+	ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_WCHAR, value._getInternalBufferPtr(), (n+1)*sizeof(wchar_t), &cbLen );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_invalid_param_type;
