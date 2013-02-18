@@ -12,13 +12,14 @@
 #include "axDB_common.h"
 #include "axDBColumn.h"
 #include "../string/axString_Array.h"
+#include "../system/axLog.h"
 
 class axDBConn_Imp;
 class axDBResultSet;
 class axDBStmt;
 class axDBInParam;
 class axDBInParamList;
-
+class axDBScopeTran;
 
 class axDBConn : public axNonCopyable {
 public:	
@@ -35,10 +36,6 @@ public:
 						axStatus	identifierString		( axIStringA & out, const char* sz );
 
 						axStatus	createTable				( const axDBColumnList & list, const char* table );
-
-						axStatus	beginTran				();
-						axStatus	rollbackTran			();
-						axStatus	commitTran				();
 
 			//		TODO
 				//		axStatus	setTableAutoIncrement	( const char* table, int64_t   value );
@@ -60,10 +57,36 @@ public:
 
 	void			_setImp	( axDBConn_Imp* p );
 	axDBConn_Imp*	_getImp	()	{ return p_; }
+
+friend class axDBScopeTran;
+protected:
+						axStatus	beginTran				();
+						axStatus	rollBackTran			();
+						axStatus	commitTran				();
+
+						axStatus	savePoint				( const char* name );
+						axStatus	releaseSavePoint		( const char* name );
+						axStatus	rollBackToSavePoint		( const char* name );
+
+						axPtr<axDBScopeTran>	tran_;
 private:
-
-
 	axSharedPtr< axDBConn_Imp >	p_;
+};
+
+class axDBScopeTran {
+public:
+	axDBScopeTran	( axStatus & st, axDBConn & db );
+	~axDBScopeTran	();
+
+	axStatus	commit();
+
+private:
+	bool		commited_;
+	axSize		nested_;
+	axStringA	savePointName_;
+
+	axPtr<axDBScopeTran>	last_;
+	axPtr<axDBConn>			db_;
 };
 
 //!
@@ -75,9 +98,13 @@ public:
 			axStatus	setEchoSQL	( bool b )	{ echoSQL_ = b; return 0; }
 			bool		echoSQL		()			{ return echoSQL_; }
 
-	virtual axStatus	beginTran	() { return 0; }
-	virtual axStatus	rollbackTran() { return 0; }
-	virtual axStatus	commitTran	() { return 0; }
+	virtual axStatus	beginTran	() { ax_log("beginTran"); return 0; }
+	virtual axStatus	rollBackTran() { ax_log("rollBackTran"); return 0; }
+	virtual axStatus	commitTran	() { ax_log("commitTran"); return 0; }
+
+	virtual	axStatus	savePoint				( const char* name ) { ax_log("savePoint {?}", name ); return 0; }
+	virtual axStatus	rollBackToSavePoint		( const char* name ) { ax_log("rollBackToSavePoint {?}", name );  return 0; }
+	virtual axStatus	releaseSavePoint		( const char* name ) { ax_log("releaseSavePoint    {?}", name );  return 0; }
 
 	virtual	axStatus	escapeString				( axIStringA & out, const char* sz );
 	virtual	axStatus	identifierString			( axIStringA & out, const char* sz );
@@ -101,28 +128,5 @@ public:
 	bool	echoSQL_;
 };
 
-class axDBTrans {
-public:
-	axDBTrans( axStatus & st, axDBConn & db ) {
-		db_ = & db;
-		db_->beginTran();
-	}
-
-	~axDBTrans() {
-		rollback();
-	}
-
-	axStatus rollback() {
-		return db_->rollbackTran();
-	}
-
-
-	axStatus commit() {
-		return db_->commitTran();
-	}
-
-private:
-	axPtr<axDBConn>	db_;
-};
 
 #endif //__axDBConn_h__

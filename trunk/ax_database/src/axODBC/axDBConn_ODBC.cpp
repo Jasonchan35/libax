@@ -39,17 +39,15 @@ axStatus	axDBConn_ODBC::beginTran	() {
 	return 0; 
 }
 
-axStatus	axDBConn_ODBC::rollbackTran	() {
+axStatus	axDBConn_ODBC::rollBackTran	() {
 	SQLRETURN ret;
 	ret = SQLEndTran( SQL_HANDLE_DBC , dbc_, SQL_ROLLBACK );
 	if( hasError(ret) ) {
 		logError();
 		return axStatus_Std::DB_error_connect;
 	}
-	
 	return 0; 
 }
-
 
 axStatus	axDBConn_ODBC::commitTran	() { 		
 	SQLRETURN ret;
