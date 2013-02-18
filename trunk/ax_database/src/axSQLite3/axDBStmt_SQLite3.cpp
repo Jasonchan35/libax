@@ -77,18 +77,14 @@ axStatus axDBStmt_SQLite3::exec_ArgList( const axDBInParamList & list ) {
 	for( int i=0; i<c; i++ ) {
 		const axDBInParam &param = list[i];
 		switch( param.type ) {
-			case axDB_c_type_int8:		ret = sqlite3_bind_int   ( stmt_, i+1, param.v_int8  );	break;
-			case axDB_c_type_int16: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.v_int16 );	break;
-			case axDB_c_type_int32: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.v_int32 );	break;
+			case axDB_c_type_int8:		ret = sqlite3_bind_int64 ( stmt_, i+1, param.v_int8  );	break;
+			case axDB_c_type_int16: 	ret = sqlite3_bind_int64 ( stmt_, i+1, param.v_int16 );	break;
+			case axDB_c_type_int32: 	ret = sqlite3_bind_int64 ( stmt_, i+1, param.v_int32 );	break;
 			case axDB_c_type_int64: 	ret = sqlite3_bind_int64 ( stmt_, i+1, param.v_int64 );	break;
 
-			case axDB_c_type_uint8:		ret = sqlite3_bind_int   ( stmt_, i+1, param.v_uint8  );	break;
-			case axDB_c_type_uint16: 	ret = sqlite3_bind_int   ( stmt_, i+1, param.v_uint16 );	break;
-
-			case axDB_c_type_uint32: 	{
-				int64_t	tmp = param.v_uint32;
-				ret = sqlite3_bind_int64   ( stmt_, i+1, tmp );
-			}break;
+			case axDB_c_type_uint8:		ret = sqlite3_bind_int64 ( stmt_, i+1, param.v_uint8  ); break;
+			case axDB_c_type_uint16: 	ret = sqlite3_bind_int64 ( stmt_, i+1, param.v_uint16 ); break;
+			case axDB_c_type_uint32: 	ret = sqlite3_bind_int64 ( stmt_, i+1, param.v_uint32 ); break;
 			case axDB_c_type_uint64: {
 				int64_t tmp;
 				st = ax_safe_assign( tmp, param.v_uint64 );		if( !st ) return st;

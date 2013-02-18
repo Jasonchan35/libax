@@ -177,7 +177,8 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		axStopWatch	timer;
 		for( size_t i=0; i<numRows; i++ ) {
 			st = tbl.insert( row );				if( !st ) return st;
-			ax_log_var( row.id );
+			ax_log( "insert sucess with id = {?}", row.id );
+			axUTestCheck( row.id == i+1 );
 		}
 		ax_log("insert {?} records in {?}s", numRows, timer.get() );
 	}
@@ -234,7 +235,7 @@ axStatus test_SQLite3() {
 	return 0;
 }
 
-#if 1 //=============== MySQL ====================
+#if 0 //=============== MySQL ====================
 #include <ax/database/axMySQL.h>
 axStatus test_MySQL() {
 	axStatus st;
@@ -245,7 +246,7 @@ axStatus test_MySQL() {
 }
 #endif
 
-#if 1 //=============== PostgreSQL ==============
+#if 0 //=============== PostgreSQL ==============
 #include <ax/database/axPostgreSQL.h>
 axStatus test_PostgreSQL() {
 	axStatus st;
@@ -304,10 +305,10 @@ axStatus test_ax_database() {
 	ax_log("test {?} records\n", numRows );
 
 	axUTestCase( test_SQLite3() );
-	axUTestCase( test_MySQL() );
-	axUTestCase( test_PostgreSQL() );
-	axUTestCase( test_ODBC_MSSQL() );
-	axUTestCase( test_ODBC_Oracle() );
+//	axUTestCase( test_MySQL() );
+//	axUTestCase( test_PostgreSQL() );
+//	axUTestCase( test_ODBC_MSSQL() );
+//	axUTestCase( test_ODBC_Oracle() );
 
 	return 0;
 }

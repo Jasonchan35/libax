@@ -56,12 +56,10 @@ private:
 
 typedef	axString_<char>				axStringA;
 typedef	axString_<wchar_t>			axStringW;
-typedef	axString_<axUChar>			axStringU;
 
 const size_t axTempString_localBufSize = 128;
 typedef axString_<char,		axTempString_localBufSize>		axTempStringA;
 typedef axString_<wchar_t,	axTempString_localBufSize>		axTempStringW;
-typedef axString_<axUChar,	axTempString_localBufSize>		axTempStringU;
 
 //@}
 

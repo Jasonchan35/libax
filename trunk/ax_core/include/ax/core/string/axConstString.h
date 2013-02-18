@@ -28,7 +28,6 @@ private:
 
 typedef axConstString_<char>	axConstStringA;
 typedef axConstString_<wchar_t>	axConstStringW;
-typedef axConstString_<axUChar>	axConstStringU;
 
 //@}
 
