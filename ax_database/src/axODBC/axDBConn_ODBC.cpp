@@ -7,15 +7,6 @@ axStatus	axODBC_connect( axDBConn & db, const char* server, const char* username
 	return p->connect( server, username, password );
 }
 
-
-axStatus axDBConn_ODBC::createTransaction ( axScope_DBTran & tran ) {
-	axScope_DBTran_ODBC* p = new axScope_DBTran_ODBC( this );
-	if( !p ) return axStatus_Std::not_enough_memory;
-	tran._setImp( p );
-
-	return 0;
-}
-
 axDBConn_ODBC::axDBConn_ODBC() {
 	env_ = NULL;
 	dbc_ = NULL;
@@ -37,6 +28,39 @@ void axDBConn_ODBC::close() {
 		env_ = NULL;
 	}
 }
+
+axStatus	axDBConn_ODBC::beginTran	() { 		
+	SQLRETURN ret;
+	ret = SQLSetConnectAttr( dbc_, SQL_ATTR_AUTOCOMMIT, SQL_AUTOCOMMIT_OFF , 0 );
+	if( hasError(ret) ) {
+		logError();
+		return axStatus_Std::DB_error_connect;
+	}
+	return 0; 
+}
+
+axStatus	axDBConn_ODBC::rollbackTran	() {
+	SQLRETURN ret;
+	ret = SQLEndTran( SQL_HANDLE_DBC , dbc_, SQL_ROLLBACK );
+	if( hasError(ret) ) {
+		logError();
+		return axStatus_Std::DB_error_connect;
+	}
+	
+	return 0; 
+}
+
+
+axStatus	axDBConn_ODBC::commitTran	() { 		
+	SQLRETURN ret;
+	ret = SQLEndTran( SQL_HANDLE_DBC , dbc_, SQL_COMMIT );
+	if( hasError(ret) ) {
+		logError();
+		return axStatus_Std::DB_error_connect;
+	}
+	return 0; 
+}
+
 
 axStatus	axDBConn_ODBC::createStmt ( axDBStmt & stmt, const char * sql ) {
 	axStatus st;
@@ -88,16 +112,19 @@ axStatus	axDBConn_ODBC::_preConnect() {
 	SQLRETURN	ret;
 	ret = SQLAllocHandle( SQL_HANDLE_ENV, SQL_NULL_HANDLE, &env_ );
 	if( hasError(ret) ) {
+		logError();
 		return axStatus_Std::DB_error_connect;
 	}
 	
 	ret = SQLSetEnvAttr( env_, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3, 0 );
 	if( hasError(ret) ) {
+		logError();
 		return axStatus_Std::DB_error_connect;
 	}
 
 	ret = SQLAllocHandle( SQL_HANDLE_DBC, env_, &dbc_ );
 	if( hasError(ret) ) {
+		logError();
 		return axStatus_Std::DB_error_connect;
 	}
 

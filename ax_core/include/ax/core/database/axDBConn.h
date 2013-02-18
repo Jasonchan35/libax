@@ -36,6 +36,10 @@ public:
 
 						axStatus	createTable				( const axDBColumnList & list, const char* table );
 
+						axStatus	beginTran				();
+						axStatus	rollbackTran			();
+						axStatus	commitTran				();
+
 			//		TODO
 				//		axStatus	setTableAutoIncrement	( const char* table, int64_t   value );
 				//		axStatus	getTableAutoIncrement	( const char* table, int64_t & value );
@@ -62,29 +66,6 @@ private:
 	axSharedPtr< axDBConn_Imp >	p_;
 };
 
-
-class axScope_DBTran_Imp {
-public:
-
-
-};
-
-//Transaction
-class axScope_DBTran {
-	typedef axScope_DBTran_Imp Imp;
-public:
-	axScope_DBTran( axStatus & st, axDBConn & db );
-
-	void _setImp( Imp* p ) { p_.ref(p); }
-	Imp* _getImp() { return p_; }
-private:
-	axAutoPtr<axScope_DBTran_Imp> p_;
-};
-
-
-
-
-
 //!
 class axDBConn_Imp : public axNonCopyable, public axSharedPte {
 public:
@@ -94,12 +75,14 @@ public:
 			axStatus	setEchoSQL	( bool b )	{ echoSQL_ = b; return 0; }
 			bool		echoSQL		()			{ return echoSQL_; }
 
+	virtual axStatus	beginTran	() { return 0; }
+	virtual axStatus	rollbackTran() { return 0; }
+	virtual axStatus	commitTran	() { return 0; }
+
 	virtual	axStatus	escapeString				( axIStringA & out, const char* sz );
 	virtual	axStatus	identifierString			( axIStringA & out, const char* sz );
 
 	virtual	const char*	DBTypeName					( int c_type ) = 0;
-
-	virtual axStatus	createTransaction			( axScope_DBTran & tran ) { return 0; }
 
 	virtual axStatus	createStmt					( axDBStmt & stmt, const char * sql ) = 0;
 
@@ -118,5 +101,28 @@ public:
 	bool	echoSQL_;
 };
 
+class axDBTrans {
+public:
+	axDBTrans( axStatus & st, axDBConn & db ) {
+		db_ = & db;
+		db_->beginTran();
+	}
+
+	~axDBTrans() {
+		rollback();
+	}
+
+	axStatus rollback() {
+		return db_->rollbackTran();
+	}
+
+
+	axStatus commit() {
+		return db_->commitTran();
+	}
+
+private:
+	axPtr<axDBConn>	db_;
+};
 
 #endif //__axDBConn_h__
