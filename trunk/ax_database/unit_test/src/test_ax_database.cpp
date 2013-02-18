@@ -183,25 +183,32 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		ax_log("insert {?} records in {?}s", numRows, timer.get() );
 	}
 
-	/*
 	{	ax_log("===== update ======");
 		Row	row;
 		row.testValue();
 
+		axDBTrans	tran( st, db );		if( !st ) return st;
+
 		axStopWatch	timer;
 		for( size_t i=0; i<numRows; i++ ) {
+			axDBTrans	tran( st, db );		if( !st ) return st;
+
 			row.id = (TableID)i+1;
 			row.v_bool = (i % 2 == 1);
+			row.v_double = 20000;
 
 			st = tbl.update( row );							if( !st ) return st;
 
 			for( size_t j=0; j<10; j++ ) {
 				st = row.v_ByteArray.append( (uint8_t) i);		if( !st ) return st;
 			}
+
+			tran.commit();
 		}
+
+		tran.commit();
 		ax_log("update {?} records in {?}s", numRows, timer.get() );
 	}
-	*/
 
 	{	ax_log("===== select all ======");
 		axArray< Row >	results;
@@ -211,7 +218,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		st = tbl.selectAll( results );		if( !st ) return st;
 		ax_log("select {?} records in {?}s", results.size(), timer.get() );
 
-		//ax_log_var( results );
+		ax_log_var( results );
 		#if 0 // dump last only
 			if( results.size() ) {
 				ax_log_var( results.last() );
@@ -304,10 +311,10 @@ axStatus test_ax_database() {
 
 	ax_log("test {?} records\n", numRows );
 
-	axUTestCase( test_SQLite3() );
+//	axUTestCase( test_SQLite3() );
 //	axUTestCase( test_MySQL() );
 //	axUTestCase( test_PostgreSQL() );
-//	axUTestCase( test_ODBC_MSSQL() );
+	axUTestCase( test_ODBC_MSSQL() );
 //	axUTestCase( test_ODBC_Oracle() );
 
 	return 0;

@@ -9,16 +9,6 @@
 #include <ax/core/database/axDBStmt.h>
 #include <ax/core/system/axLog.h>
 
-axScope_DBTran::axScope_DBTran( axStatus & st, axDBConn & db ) {
-	axDBConn_Imp *imp = db._getImp();
-	if( !imp ) {
-		st = axStatus_Std::not_initialized;
-		return;
-	}
-
-	st = imp->createTransaction( *this );	if( !st ) return;
-}
-
 axDBConn::axDBConn() {
 }
 
@@ -70,6 +60,22 @@ axStatus	axDBConn::identifierString( axIStringA & out, const char* sz ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->identifierString( out, sz );
 }
+
+axStatus	axDBConn::beginTran	() {
+	if( !p_ ) return axStatus_Std::not_initialized;
+	return p_->beginTran();
+}
+
+axStatus	axDBConn::rollbackTran	() {
+	if( !p_ ) return axStatus_Std::not_initialized;
+	return p_->rollbackTran();
+}
+
+axStatus	axDBConn::commitTran	() {
+	if( !p_ ) return axStatus_Std::not_initialized;
+	return p_->commitTran();
+}
+
 
 //== create table ==
 axStatus axDBConn::createTable	( const axDBColumnList & list, const char* table ) {
