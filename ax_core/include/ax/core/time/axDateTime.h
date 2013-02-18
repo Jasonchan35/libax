@@ -18,7 +18,7 @@ public:
 	};
 
 	axDateTime();
-	axDateTime( const axTimeStamp &ts, bool UTC = false );
+	explicit axDateTime( const axTimeStamp &ts, bool UTC = false );
 
 	axStatus	onTake ( axDateTime & src )	{ *this = src; return 0; }
 

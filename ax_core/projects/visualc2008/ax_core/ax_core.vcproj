@@ -910,6 +910,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\string\ax_utf8.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\ax\core\string\ax_utf8.h"
 					>
 				</File>

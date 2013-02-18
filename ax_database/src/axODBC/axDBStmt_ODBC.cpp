@@ -157,8 +157,10 @@ axStatus	axDBStmt_ODBC::exec_ArgList	( const axDBInParamList & list ) {
 
 			case axDB_c_type_bool: {
 				//using tmpStrData as int8 for bool
-				st = tmpStrData[i].resize(1);		if( !st ) return st;
-				int8_t* tmp = (int8_t*)tmpStrData[i]._getInternalBufferPtr();
+				axIStringW & tmpStr = tmpStrData[i];
+
+				st = tmpStr.resize(1);		if( !st ) return st;
+				int8_t* tmp = (int8_t*)tmpStr._getInternalBufferPtr();
 				*tmp = param.v_bool ? 1 : 0;
 				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
 										SQL_C_STINYINT,	SQL_TINYINT,	0, 0, tmp, 0, &len );
@@ -189,13 +191,15 @@ axStatus	axDBStmt_ODBC::exec_ArgList	( const axDBInParamList & list ) {
 			}break;
 
 			case axDB_c_type_blob: {
+				axIStringW & tmpStr = tmpStrData[i];
+
 				const axIByteArray*	data = param.v_ByteArray;
 				len = data->byteSize();
 				const uint8_t* ptr = data->ptr();
 				if( len == 0 ) {
-					st = tmpStrData[i].resize(32);		if( !st ) return st;
+					st = tmpStr.resize(32);		if( !st ) return st;
 					// ptr cannot be NULL anyway even len = 0, so just give it a dummy pointer
-					ptr = (uint8_t*)tmpStrData[i].c_str(); 
+					ptr = (uint8_t*)tmpStr.c_str(); 
 				}
 				ret = SQLBindParameter( stmt_, col, SQL_PARAM_INPUT, 
 										SQL_C_BINARY,	SQL_VARBINARY,	0, 0, ax_const_cast(ptr), 0, &len );
@@ -203,9 +207,10 @@ axStatus	axDBStmt_ODBC::exec_ArgList	( const axDBInParamList & list ) {
 
 			case axDB_c_type_datetime: {
 				//using tmpStrData as buffer
+				axIStringW & tmpStr = tmpStrData[i];
 
-				st = tmpStrData[i].resize( sizeof( TIMESTAMP_STRUCT ) );		if( !st ) return st;
-				SQL_TIMESTAMP_STRUCT *ts = (TIMESTAMP_STRUCT*) tmpStrData[i]._getInternalBufferPtr();
+				st = tmpStr.resize( sizeof( TIMESTAMP_STRUCT ) );		if( !st ) return st;
+				SQL_TIMESTAMP_STRUCT *ts = (TIMESTAMP_STRUCT*) tmpStr._getInternalBufferPtr();
 
 				axDateTime	dt( param.v_TimeStamp );
 

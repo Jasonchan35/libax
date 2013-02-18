@@ -23,7 +23,6 @@ private:
 
 typedef	axExternalString_<char>		axExternalStringA;
 typedef	axExternalString_<wchar_t>	axExternalStringW;
-typedef	axExternalString_<axUChar>	axExternalStringU;
 
 //@}
 
