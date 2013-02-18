@@ -56,7 +56,7 @@ int axDBStmt_PostgreSQL::columnType( axSize col ) {
 	Oid oid = PQftype( res_, (int)col );
 	switch( oid ) {
 		case BOOLOID:		return axDB_c_type_bool;
-		case BYTEAOID:		return axDB_c_type_ByteArray;
+		case BYTEAOID:		return axDB_c_type_blob;
 		case CHAROID:		return axDB_c_type_StringA;
 		case INT8OID:		return axDB_c_type_int64;
 		case INT2OID:		return axDB_c_type_int16;
@@ -66,11 +66,11 @@ int axDBStmt_PostgreSQL::columnType( axSize col ) {
 		case FLOAT8OID:		return axDB_c_type_double;
 		case BPCHAROID:		return axDB_c_type_StringA;
 		case VARCHAROID:	return axDB_c_type_StringA;
-		case DATEOID:		return axDB_c_type_TimeStamp;
-		case TIMEOID:		return axDB_c_type_TimeStamp;
-		case TIMESTAMPOID:	return axDB_c_type_TimeStamp;
-		case TIMESTAMPTZOID:return axDB_c_type_TimeStamp;
-		case TIMETZOID:		return axDB_c_type_TimeStamp;
+		case DATEOID:		return axDB_c_type_datetime;
+		case TIMEOID:		return axDB_c_type_datetime;
+		case TIMESTAMPOID:	return axDB_c_type_datetime;
+		case TIMESTAMPTZOID:return axDB_c_type_datetime;
+		case TIMETZOID:		return axDB_c_type_datetime;
 	}
 
 	return axDB_c_type_null;

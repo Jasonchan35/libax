@@ -16,6 +16,6 @@ axDB_c_type_list( uint64,		uint64_t,		uint64_t )
 axDB_c_type_list( StringA,		axStringA,		axIStringA   )
 axDB_c_type_list( StringW,		axStringW,		axIStringW   )
 
-axDB_c_type_list( ByteArray,	axByteArray,	axIByteArray )
-axDB_c_type_list( TimeStamp,	axTimeStamp,	axTimeStamp	 )
+axDB_c_type_list( blob,			axByteArray,	axIByteArray )
+axDB_c_type_list( datetime,		axTimeStamp,	axTimeStamp	 )
 

@@ -111,10 +111,10 @@ inline axStatus axDBInParamList_io( axDBInParamList & list, const wchar_t*		v ) 
 inline axStatus axDBInParamList_io( axDBInParamList & list, const axStringW  &	v ) { axDBInParam p( axDB_c_type_StringW	);	p.v_strW	=v;	return list.addParam(p); }
 inline axStatus axDBInParamList_io( axDBInParamList & list, const axIStringW &	v ) { axDBInParam p( axDB_c_type_StringW	);	p.v_strW	=v;	return list.addParam(p); }
 
-inline axStatus axDBInParamList_io( axDBInParamList & list, const axIByteArray & v ) { axDBInParam p( axDB_c_type_ByteArray ); p.v_ByteArray =&v; return list.addParam(p); }
-inline axStatus axDBInParamList_io( axDBInParamList & list, const axByteArray  & v ) { axDBInParam p( axDB_c_type_ByteArray ); p.v_ByteArray =&v; return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, const axIByteArray & v ) { axDBInParam p( axDB_c_type_blob ); p.v_ByteArray =&v; return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, const axByteArray  & v ) { axDBInParam p( axDB_c_type_blob ); p.v_ByteArray =&v; return list.addParam(p); }
 
-inline axStatus axDBInParamList_io( axDBInParamList & list, axTimeStamp			 v ) { axDBInParam p( axDB_c_type_TimeStamp ); p.v_TimeStamp = v; return list.addParam(p); }
+inline axStatus axDBInParamList_io( axDBInParamList & list, axTimeStamp			 v ) { axDBInParam p( axDB_c_type_datetime ); p.v_TimeStamp = v; return list.addParam(p); }
 inline axStatus axDBInParamList_io( axDBInParamList & list, const axDateTime   & v ) { return axDBInParamList_io( list, v.toTimeStamp() );  }
 
 
@@ -130,9 +130,9 @@ axStatus	axDBInParam::toStringFormat( axStringFormat & f ) const {
 
 	switch( type ) {
 		case axDB_c_type_null:			return 0;
-		case axDB_c_type_ByteArray:		return f.format("size={?}", v_ByteArray->size() );
+		case axDB_c_type_blob:			return f.format("size={?}", v_ByteArray->size() );
 
-		case axDB_c_type_TimeStamp:		return f.format("{?}", axTimeStamp( v_TimeStamp ) );
+		case axDB_c_type_datetime:		return f.format("{?}", axTimeStamp( v_TimeStamp ) );
 
 		case axDB_c_type_StringA:		return f.format("'{?}'", v_strA );
 		case axDB_c_type_StringW:		return f.format("'{?}'", v_strW  );

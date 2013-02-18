@@ -118,14 +118,14 @@ axStatus axDB_PostgreSQL_ParamSet::bind( axSize index, const axDBInParam & param
 			formats [index] = 0; //BINARY_FORMAT;			
 		}break;
 			
-		case axDB_c_type_ByteArray: {
+		case axDB_c_type_blob: {
 			const axIByteArray* a = param.v_ByteArray;
 			pData  [index] = a->ptr();
 			st = ax_safe_assign( lengths[index], a->size() );	if( !st ) return st;
 			formats[index] = BINARY_FORMAT;			
 		}break;
 
-		case axDB_c_type_TimeStamp: {
+		case axDB_c_type_datetime: {
 			double v = param.v_TimeStamp - date_1970_to_2000 + axDateTime::getTimeZone();
 			#if USE_INTEGER_DATETIMES
 				int64_t	i64 = (int64_t) ( v * 1000000 );
@@ -184,8 +184,8 @@ Oid	axDB_PostgreSQL_ParamSet::c_type_to_Oid( int c ) {
 
 		case axDB_c_type_StringA:		return VARCHAROID;
 		case axDB_c_type_StringW:		return VARCHAROID;
-		case axDB_c_type_ByteArray:		return BYTEAOID;
-		case axDB_c_type_TimeStamp:		return TIMESTAMPOID;
+		case axDB_c_type_blob:		return BYTEAOID;
+		case axDB_c_type_datetime:		return TIMESTAMPOID;
 	}
 	assert( false );
 	return 0; //error

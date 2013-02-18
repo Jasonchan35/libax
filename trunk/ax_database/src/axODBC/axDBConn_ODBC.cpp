@@ -112,6 +112,8 @@ axStatus	axDBConn_ODBC::connectDSN	( const char* dsn ) {
 }
 
 axStatus	axDBConn_ODBC::connectDSN	( const wchar_t* dsn ) {
+	if( ! dsn   ) return axStatus_Std::DB_error_connect;
+
 	axStatus st;
 	st = _preConnect();		if( !st ) return st;
 
@@ -138,6 +140,10 @@ axStatus	axDBConn_ODBC::connect	( const char* server, const char* username, cons
 }
 
 axStatus	axDBConn_ODBC::connect	( const wchar_t* server, const wchar_t* username, const wchar_t* password ) {
+	if( ! server   ) return axStatus_Std::DB_error_connect;
+	if( ! username ) return axStatus_Std::DB_error_connect;
+	if( ! password ) return axStatus_Std::DB_error_connect;
+
 	axStatus st;
 	st = _preConnect();		if( !st ) return st;
 
@@ -193,14 +199,19 @@ const char*	axDBConn_ODBC::DBTypeName( int c_type ) {
 		case axDB_c_type_int32:		return "INTEGER";
 		case axDB_c_type_int64:		return "BIGINT";
 
+		case axDB_c_type_uint8:		return "TINYINT UNSIGNED";
+		case axDB_c_type_uint16:	return "SMALLINT UNSIGNED";
+		case axDB_c_type_uint32:	return "INTEGER UNSIGNED";
+		case axDB_c_type_uint64:	return "BIGINT UNSIGNED";
+
 		case axDB_c_type_float:		return "REAL";
 		case axDB_c_type_double:	return "DOUBLE PRECISION";
 
 		case axDB_c_type_StringA:	return "VARCHAR";
 		case axDB_c_type_StringW:	return "VARCHAR";
 
-		case axDB_c_type_ByteArray:	return "BINARY VARYING";
-		case axDB_c_type_TimeStamp:	return "DATETIME";
+		case axDB_c_type_blob:	return "BINARY VARYING";
+		case axDB_c_type_datetime:	return "DATETIME";
 
 	//	case axDB_c_type_GUID:		return "uniqueidentifier";
 	}

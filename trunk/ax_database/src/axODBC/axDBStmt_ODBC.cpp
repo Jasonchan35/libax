@@ -79,6 +79,7 @@ void axDBStmt_ODBC::logError() {
 	WCHAR       wszMessage[len];
     WCHAR       wszState[SQL_SQLSTATE_SIZE+1];
 
+	ax_log( "--- Error SQL: --- \n{?}\n", sql_ );
 	SQLRETURN ret;
 	for(;;)
     {
@@ -87,7 +88,7 @@ void axDBStmt_ODBC::logError() {
 
 		// Hide data truncated..
 		if( ! wcsncmp(wszState, L"01004", 5) ) continue;
-		ax_log("ODBC Error [{?}] [{?}]: {?}\nSQL:\n{?}\n", wszState, (int)iNativeError, wszMessage, sql_ );
+		ax_log("ODBC Error [{?}] [{?}]: {?}", wszState, (int)iNativeError, wszMessage );
     }
 }
 
@@ -187,7 +188,7 @@ axStatus	axDBStmt_ODBC::exec_ArgList	( const axDBInParamList & list ) {
 										SQL_C_WCHAR,	SQL_WVARCHAR,	0, 0, ax_const_cast(sz), 0, &len );
 			}break;
 
-			case axDB_c_type_ByteArray: {
+			case axDB_c_type_blob: {
 				const axIByteArray*	data = param.v_ByteArray;
 				len = data->byteSize();
 				const uint8_t* ptr = data->ptr();
@@ -200,7 +201,7 @@ axStatus	axDBStmt_ODBC::exec_ArgList	( const axDBInParamList & list ) {
 										SQL_C_BINARY,	SQL_VARBINARY,	0, 0, ax_const_cast(ptr), 0, &len );
 			}break;
 
-			case axDB_c_type_TimeStamp: {
+			case axDB_c_type_datetime: {
 				//using tmpStrData as buffer
 
 				st = tmpStrData[i].resize( sizeof( TIMESTAMP_STRUCT ) );		if( !st ) return st;
@@ -309,13 +310,13 @@ int	axDBStmt_ODBC::columnType	( axSize col ) {
 		case SQL_WVARCHAR:			return axDB_c_type_StringW;
 		case SQL_WLONGVARCHAR:		return axDB_c_type_StringW;
 	//== ByteArray ==
-		case SQL_BINARY:			return axDB_c_type_ByteArray;
-		case SQL_VARBINARY:			return axDB_c_type_ByteArray;
-		case SQL_LONGVARBINARY:		return axDB_c_type_ByteArray;
+		case SQL_BINARY:			return axDB_c_type_blob;
+		case SQL_VARBINARY:			return axDB_c_type_blob;
+		case SQL_LONGVARBINARY:		return axDB_c_type_blob;
 	//==
-		case SQL_TYPE_DATE:			return axDB_c_type_TimeStamp;
-		case SQL_TYPE_TIME:			return axDB_c_type_TimeStamp;
-		case SQL_TYPE_TIMESTAMP:	return axDB_c_type_TimeStamp;
+		case SQL_TYPE_DATE:			return axDB_c_type_datetime;
+		case SQL_TYPE_TIME:			return axDB_c_type_datetime;
+		case SQL_TYPE_TIMESTAMP:	return axDB_c_type_datetime;
 	}
 	return axDB_c_type_null;
 }

@@ -145,8 +145,8 @@ const char*	axDBConn_SQLite3::DBTypeName( int c_type ) {
 		case axDB_c_type_double:	return "DOUBLE";
 		case axDB_c_type_StringA:	return "TEXT";
 		case axDB_c_type_StringW:	return "TEXT";
-		case axDB_c_type_ByteArray:	return "BLOB";
-		case axDB_c_type_TimeStamp:	return "DATETIME";
+		case axDB_c_type_blob:	return "BLOB";
+		case axDB_c_type_datetime:	return "DATETIME";
 	}
 	assert( false );
 	return "Unknown";

@@ -293,8 +293,8 @@ const char*	axDBConn_Oracle::DBTypeName( int c_type ) {
 		case axDB_c_type_StringA:	return "NCLOB";
 		case axDB_c_type_StringW:	return "NCLOB";
 
-		case axDB_c_type_ByteArray:	return "BLOB";
-		case axDB_c_type_TimeStamp:	return "TIMESTAMP";
+		case axDB_c_type_blob:	return "BLOB";
+		case axDB_c_type_datetime:	return "TIMESTAMP";
 	}
 	assert( false );
 	return "Unknown";
