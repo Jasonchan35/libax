@@ -44,7 +44,7 @@ int	axDBStmt_SQLite3 :: columnType( axSize col ) {
 		case SQLITE_INTEGER: return axDB_c_type_int64;
 		case SQLITE_FLOAT:	 return axDB_c_type_double;
 		case SQLITE3_TEXT:	 return axDB_c_type_StringA;
-		case SQLITE_BLOB:	 return axDB_c_type_ByteArray;
+		case SQLITE_BLOB:	 return axDB_c_type_blob;
 	}
 	return axDB_c_type_null;
 }
@@ -109,13 +109,13 @@ axStatus axDBStmt_SQLite3::exec_ArgList( const axDBInParamList & list ) {
 				ret = sqlite3_bind_text( stmt_, i+1, tmpStrData[i], -1, NULL );
 			}break;
 			
-			case axDB_c_type_TimeStamp: {
+			case axDB_c_type_datetime: {
 				axDateTime	dt( param.v_TimeStamp );
 				st = tmpStrData[i].convert( dt );	if( !st ) return st;
 				ret = sqlite3_bind_text( stmt_, i+1, tmpStrData[i], -1, NULL );
 			}break;
 			
-			case axDB_c_type_ByteArray: {
+			case axDB_c_type_blob: {
 				const axIByteArray* data = param.v_ByteArray;
 				int n;
 				st = ax_safe_assign( n, data->byteSize() );		if( !st ) return st;

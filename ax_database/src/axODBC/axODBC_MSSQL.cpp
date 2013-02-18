@@ -50,8 +50,8 @@ const char*	axDBConn_MSSQL::DBTypeName( int c_type ) {
 		case axDB_c_type_StringA:	return "NVARCHAR(MAX)";
 		case axDB_c_type_StringW:	return "NVARCHAR(MAX)";
 
-		case axDB_c_type_ByteArray:	return "VARBINARY(MAX)";
-		case axDB_c_type_TimeStamp:	return "DATETIME2(7)";
+		case axDB_c_type_blob:	return "VARBINARY(MAX)";
+		case axDB_c_type_datetime:	return "DATETIME2(7)";
 
 	//	case axDB_c_type_GUID:		return "uniqueidentifier";
 	}

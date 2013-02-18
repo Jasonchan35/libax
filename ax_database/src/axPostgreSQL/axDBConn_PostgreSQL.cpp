@@ -126,8 +126,8 @@ const char*	axDBConn_PostgreSQL::DBTypeName( int c_type ) {
 		case axDB_c_type_StringA:	return "VARCHAR";
 		case axDB_c_type_StringW:	return "VARCHAR";
 
-		case axDB_c_type_ByteArray:	return "BYTEA";
-		case axDB_c_type_TimeStamp:	return "TIMESTAMP"; //support ( from 4713 BC to 294276 AD )	Resolution( 1 microsecond / 14 digits )
+		case axDB_c_type_blob:	return "BYTEA";
+		case axDB_c_type_datetime:	return "TIMESTAMP"; //support ( from 4713 BC to 294276 AD )	Resolution( 1 microsecond / 14 digits )
 	}
 	assert( false );
 	return "Unknown";
