@@ -147,6 +147,10 @@ axStatus	axDBInParam::toStringFormat( axStringFormat & f ) const {
 			axTYPE_LIST( int16 )
 			axTYPE_LIST( int32 )
 			axTYPE_LIST( int64 )
+			axTYPE_LIST( uint8 )
+			axTYPE_LIST( uint16 )
+			axTYPE_LIST( uint32 )
+			axTYPE_LIST( uint64 )
 		#undef axTYPE_LIST
 	}
 	assert(false);

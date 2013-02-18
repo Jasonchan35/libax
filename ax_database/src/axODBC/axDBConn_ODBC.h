@@ -17,7 +17,7 @@ public:
 			void		close		();
 
 	virtual axStatus	beginTran	();
-	virtual axStatus	rollbackTran();
+	virtual axStatus	rollBackTran();
 	virtual axStatus	commitTran	();
 
 

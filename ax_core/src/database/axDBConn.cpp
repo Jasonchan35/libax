@@ -9,6 +9,57 @@
 #include <ax/core/database/axDBStmt.h>
 #include <ax/core/system/axLog.h>
 
+axDBScopeTran::axDBScopeTran( axStatus & st, axDBConn & db ) {
+	commited_ = false;
+
+	if( db.tran_ ) {
+		nested_ = db.tran_->nested_ + 1;
+	}
+
+	if( nested_ > 0 ) {
+		savePointName_.format("save{?}", nested_ );
+		st = db.savePoint( savePointName_ );	if( !st ) return;
+	}else{
+		st = db.beginTran();					if( !st ) return;
+	}
+
+//success beginTran / savePoint
+	db_ = &db;
+	last_ = db_->tran_;
+	db.tran_ = this;
+
+	ax_log(" axDBScopeTran {?} {?} -> {?}", nested_, (void*) last_, (void*) db_->tran_ );
+}
+
+axDBScopeTran::~axDBScopeTran() {
+	ax_log( "~axDBScopeTran {?} {?} -> {?}\n", nested_, (void*) db_->tran_, (void*) last_ );
+	if( ! db_ ) return;
+
+	if( ! commited_ ) {
+		if( nested_ > 0 ) {
+			db_->rollBackToSavePoint( savePointName_ );
+		}else{
+			db_->rollBackTran();
+		}
+	}
+	db_->tran_ = last_;
+}
+
+axStatus axDBScopeTran::commit() {
+	if( !db_ ) return axStatus_Std::DB_error;
+	if( commited_ ) {
+		assert( false ); //double commit
+		return axStatus_Std::DB_error;
+	}
+	commited_ = true;
+
+	if( nested_ > 0 ) {
+		return db_->releaseSavePoint( savePointName_ );
+	}else{
+		return db_->commitTran();
+	}
+}
+
 axDBConn::axDBConn() {
 }
 
@@ -66,14 +117,29 @@ axStatus	axDBConn::beginTran	() {
 	return p_->beginTran();
 }
 
-axStatus	axDBConn::rollbackTran	() {
+axStatus	axDBConn::rollBackTran	() {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->rollbackTran();
+	return p_->rollBackTran();
 }
 
 axStatus	axDBConn::commitTran	() {
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->commitTran();
+}
+
+axStatus	axDBConn::savePoint	( const char* name ) {
+	if( !p_ ) return axStatus_Std::not_initialized;
+	return p_->savePoint( name );
+}
+
+axStatus	axDBConn::rollBackToSavePoint	( const char* name ) {
+	if( !p_ ) return axStatus_Std::not_initialized;
+	return p_->rollBackToSavePoint( name );
+}
+
+axStatus	axDBConn::releaseSavePoint	( const char* name ) {
+	if( !p_ ) return axStatus_Std::not_initialized;
+	return p_->releaseSavePoint( name );
 }
 
 

@@ -2,9 +2,7 @@
 
 #include <ax/ax_unit_test.h>
 
-const size_t numRows = 5;
-
-
+const size_t numRows = 4;
 
 #define myTEST_TYPE_LIST \
 	myTEST_TYPE( bool,		bool,			bool   ) \
@@ -187,11 +185,11 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		Row	row;
 		row.testValue();
 
-		axDBTrans	tran( st, db );		if( !st ) return st;
+		axDBScopeTran	rootTran( st, db );		if( !st ) return st;
 
 		axStopWatch	timer;
 		for( size_t i=0; i<numRows; i++ ) {
-			axDBTrans	tran( st, db );		if( !st ) return st;
+			axDBScopeTran	tran( st, db );		if( !st ) return st;
 
 			row.id = (TableID)i+1;
 			row.v_bool = (i % 2 == 1);
@@ -203,10 +201,12 @@ axStatus test_ax_database_common( axDBConn & db ) {
 				st = row.v_ByteArray.append( (uint8_t) i);		if( !st ) return st;
 			}
 
-			tran.commit();
+			if( row.v_bool ) {
+				tran.commit(); //try to commit some and rollback some
+			}
 		}
 
-		tran.commit();
+		rootTran.commit();
 		ax_log("update {?} records in {?}s", numRows, timer.get() );
 	}
 
@@ -218,17 +218,16 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		st = tbl.selectAll( results );		if( !st ) return st;
 		ax_log("select {?} records in {?}s", results.size(), timer.get() );
 
-		ax_log_var( results );
+	//	ax_log_var( results );
 		#if 0 // dump last only
 			if( results.size() ) {
 				ax_log_var( results.last() );
 			}
 		#endif
 	}
-	
-
 	return 0;
 }
+
 
 #include <ax/database/axSQLite3.h>
 axStatus test_SQLite3() {
@@ -311,10 +310,10 @@ axStatus test_ax_database() {
 
 	ax_log("test {?} records\n", numRows );
 
-//	axUTestCase( test_SQLite3() );
+	axUTestCase( test_SQLite3() );
 //	axUTestCase( test_MySQL() );
 //	axUTestCase( test_PostgreSQL() );
-	axUTestCase( test_ODBC_MSSQL() );
+//	axUTestCase( test_ODBC_MSSQL() );
 //	axUTestCase( test_ODBC_Oracle() );
 
 	return 0;
