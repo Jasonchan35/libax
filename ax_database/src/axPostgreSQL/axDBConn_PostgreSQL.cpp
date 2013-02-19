@@ -134,6 +134,12 @@ const char*	axDBConn_PostgreSQL::DBTypeName( int c_type ) {
 }
 
 axStatus	axDBConn_PostgreSQL::_directExec( const char* sql ) {
+
+	if( lastExecResult_ ) {
+		lastExecResult_->release();
+		lastExecResult_ = NULL;
+	}
+
 	if( echoSQL_ ) {
 		ax_log("--- ExecSQL: ---\n{?}\n", sql );
 	}

@@ -39,6 +39,11 @@ axStatus	axDBConn_ODBC::_directExec( const char* sql ) {
 		ax_log("--- ExecSQL: ---\n{?}\n", sql );
 	}	
 
+	if( lastExecStmt_ ) {
+		SQLCloseCursor( lastExecStmt_ );
+		lastExecStmt_ = NULL;
+	}
+
 	SQLRETURN ret;
 	ret = SQLExecDirectA( directExecStmt_, (SQLCHAR*)sql, SQL_NTS );
 	if( hasError(ret) ) {
