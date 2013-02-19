@@ -7,12 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EAB125F216D3B60F008E40D2 /* libaxPostgreSQL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB125F016D3B5CD008E40D2 /* libaxPostgreSQL.a */; };
 		EAC3A05F16C8CA90009F1667 /* test_ax_database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAC3A05E16C8CA90009F1667 /* test_ax_database.cpp */; };
 		EAD5E07116C6A6E8007AB3D1 /* libax_core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAD5E07016C6A6CC007AB3D1 /* libax_core.a */; };
 		EAD5E07216C6A6E8007AB3D1 /* libaxSQLite3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAD5E06916C6A6BB007AB3D1 /* libaxSQLite3.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		EAB125EF16D3B5CD008E40D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EAB125E916D3B5CD008E40D2 /* axPostgreSQL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EAB125D316D3B365008E40D2;
+			remoteInfo = axPostgreSQL;
+		};
 		EAD5E06816C6A6BB007AB3D1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EAD5E06416C6A6BB007AB3D1 /* axSQLite3.xcodeproj */;
@@ -44,6 +52,7 @@
 /* Begin PBXFileReference section */
 		EA37CEC816C69B49004CFE52 /* ax_database_unit_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ax_database_unit_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA8FCDD216C69BD30040D4B9 /* ax_database_unit_test.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ax_database_unit_test.xcconfig; sourceTree = SOURCE_ROOT; };
+		EAB125E916D3B5CD008E40D2 /* axPostgreSQL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = axPostgreSQL.xcodeproj; path = ../../../../projects/Xcode/OSX/axPostgreSQL.xcodeproj; sourceTree = "<group>"; };
 		EAC3A05E16C8CA90009F1667 /* test_ax_database.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_ax_database.cpp; path = ../../../src/test_ax_database.cpp; sourceTree = "<group>"; };
 		EAD5E06416C6A6BB007AB3D1 /* axSQLite3.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = axSQLite3.xcodeproj; path = ../../../../projects/Xcode/OSX/axSQLite3.xcodeproj; sourceTree = "<group>"; };
 		EAD5E06A16C6A6CC007AB3D1 /* ax_core.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ax_core.xcodeproj; path = ../../../../../ax_core/projects/Xcode/OSX/ax_core.xcodeproj; sourceTree = "<group>"; };
@@ -54,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAB125F216D3B60F008E40D2 /* libaxPostgreSQL.a in Frameworks */,
 				EAD5E07116C6A6E8007AB3D1 /* libax_core.a in Frameworks */,
 				EAD5E07216C6A6E8007AB3D1 /* libaxSQLite3.a in Frameworks */,
 			);
@@ -65,6 +75,7 @@
 		EA37CEBF16C69B49004CFE52 = {
 			isa = PBXGroup;
 			children = (
+				EAB125E916D3B5CD008E40D2 /* axPostgreSQL.xcodeproj */,
 				EAD5E06A16C6A6CC007AB3D1 /* ax_core.xcodeproj */,
 				EAD5E06416C6A6BB007AB3D1 /* axSQLite3.xcodeproj */,
 				EAC3A05E16C8CA90009F1667 /* test_ax_database.cpp */,
@@ -77,6 +88,14 @@
 			isa = PBXGroup;
 			children = (
 				EA37CEC816C69B49004CFE52 /* ax_database_unit_test */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EAB125EA16D3B5CD008E40D2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EAB125F016D3B5CD008E40D2 /* libaxPostgreSQL.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -142,6 +161,10 @@
 					ProjectRef = EAD5E06A16C6A6CC007AB3D1 /* ax_core.xcodeproj */;
 				},
 				{
+					ProductGroup = EAB125EA16D3B5CD008E40D2 /* Products */;
+					ProjectRef = EAB125E916D3B5CD008E40D2 /* axPostgreSQL.xcodeproj */;
+				},
+				{
 					ProductGroup = EAD5E06516C6A6BB007AB3D1 /* Products */;
 					ProjectRef = EAD5E06416C6A6BB007AB3D1 /* axSQLite3.xcodeproj */;
 				},
@@ -154,6 +177,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		EAB125F016D3B5CD008E40D2 /* libaxPostgreSQL.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libaxPostgreSQL.a;
+			remoteRef = EAB125EF16D3B5CD008E40D2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		EAD5E06916C6A6BB007AB3D1 /* libaxSQLite3.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;

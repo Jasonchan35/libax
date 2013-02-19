@@ -1,0 +1,6 @@
+// ======== MacOSX ============
+
+axPostgreSQL_CFLAGS = -I$(ax_database_path)/include
+axPostgreSQL_LDFLAGS = -L$(ax_database_path)/lib/$(axPLATFORM)/$(CONFIGURATION) -L$(ax_database_path)/lib/$(axPLATFORM) -laxPostgreSQL -lpq 
+
+
