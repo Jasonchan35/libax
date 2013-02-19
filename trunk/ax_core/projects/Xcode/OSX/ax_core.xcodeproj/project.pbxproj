@@ -162,6 +162,7 @@
 		EA5D4ADA16CD26CB006D8B83 /* axString_Array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA5D4AD216CD26CB006D8B83 /* axString_Array.cpp */; };
 		EA5D4ADB16CD26CB006D8B83 /* axStringFormat_out_Imp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA5D4AD316CD26CB006D8B83 /* axStringFormat_out_Imp.cpp */; };
 		EA5D4ADC16CD26CB006D8B83 /* axStringFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA5D4AD416CD26CB006D8B83 /* axStringFormat.cpp */; };
+		EAB125F816D3B733008E40D2 /* ax_utf8.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAB125F616D3B726008E40D2 /* ax_utf8.cpp */; };
 		EAC3A06516C8CB5B009F1667 /* axDateTime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAC3A06416C8CB5B009F1667 /* axDateTime.cpp */; };
 		EAD5E06316C6A11E007AB3D1 /* axDB_common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAD5E06216C6A11E007AB3D1 /* axDB_common.cpp */; };
 /* End PBXBuildFile section */
@@ -342,6 +343,7 @@
 		EA9F4E1D154414BC00C9459E /* ax_core build.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "ax_core build.xcconfig"; sourceTree = "<group>"; };
 		EA9F4E1E154414C100C9459E /* ax_core.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ax_core.xcconfig; sourceTree = "<group>"; };
 		EAB0B04F16CAAFC000F3B0B3 /* axExpandArgList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axExpandArgList.h; sourceTree = "<group>"; };
+		EAB125F616D3B726008E40D2 /* ax_utf8.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_utf8.cpp; sourceTree = "<group>"; };
 		EAB48F681646CE8500ABDA74 /* axUnitCircle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axUnitCircle.h; sourceTree = "<group>"; };
 		EAB48F6C1646D02E00ABDA74 /* axRoundedRect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRoundedRect.h; sourceTree = "<group>"; };
 		EAB48F6D1646E70D00ABDA74 /* ax_linear_algebra.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_linear_algebra.h; sourceTree = "<group>"; };
@@ -715,6 +717,7 @@
 		9640E1321600A9A100F9D037 /* string */ = {
 			isa = PBXGroup;
 			children = (
+				EAB125F616D3B726008E40D2 /* ax_utf8.cpp */,
 				EA5D4ACD16CD26CB006D8B83 /* ax_c_str.cpp */,
 				EA5D4ACE16CD26CB006D8B83 /* ax_print.cpp */,
 				EA5D4ACF16CD26CB006D8B83 /* ax_str_encode.cpp */,
@@ -1017,6 +1020,7 @@
 				EA5D4ADA16CD26CB006D8B83 /* axString_Array.cpp in Sources */,
 				EA5D4ADB16CD26CB006D8B83 /* axStringFormat_out_Imp.cpp in Sources */,
 				EA5D4ADC16CD26CB006D8B83 /* axStringFormat.cpp in Sources */,
+				EAB125F816D3B733008E40D2 /* ax_utf8.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
