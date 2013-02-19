@@ -1,0 +1,241 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		EA0A0DD816D3CDFB00A31454 /* axDB_MySQL_common.h in Headers */ = {isa = PBXBuildFile; fileRef = EA0A0DD316D3CDFB00A31454 /* axDB_MySQL_common.h */; };
+		EA0A0DD916D3CDFB00A31454 /* axDBConn_MySQL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA0A0DD416D3CDFB00A31454 /* axDBConn_MySQL.cpp */; };
+		EA0A0DDA16D3CDFB00A31454 /* axDBConn_MySQL.h in Headers */ = {isa = PBXBuildFile; fileRef = EA0A0DD516D3CDFB00A31454 /* axDBConn_MySQL.h */; };
+		EA0A0DDB16D3CDFB00A31454 /* axDBStmt_MySQL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA0A0DD616D3CDFB00A31454 /* axDBStmt_MySQL.cpp */; };
+		EA0A0DDC16D3CDFB00A31454 /* axDBStmt_MySQL.h in Headers */ = {isa = PBXBuildFile; fileRef = EA0A0DD716D3CDFB00A31454 /* axDBStmt_MySQL.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		EA0A0DD016D3CDDE00A31454 /* axMySQL_build.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = axMySQL_build.xcconfig; sourceTree = "<group>"; };
+		EA0A0DD116D3CDDE00A31454 /* axMySQL.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = axMySQL.xcconfig; sourceTree = "<group>"; };
+		EA0A0DD316D3CDFB00A31454 /* axDB_MySQL_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axDB_MySQL_common.h; sourceTree = "<group>"; };
+		EA0A0DD416D3CDFB00A31454 /* axDBConn_MySQL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDBConn_MySQL.cpp; sourceTree = "<group>"; };
+		EA0A0DD516D3CDFB00A31454 /* axDBConn_MySQL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axDBConn_MySQL.h; sourceTree = "<group>"; };
+		EA0A0DD616D3CDFB00A31454 /* axDBStmt_MySQL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDBStmt_MySQL.cpp; sourceTree = "<group>"; };
+		EA0A0DD716D3CDFB00A31454 /* axDBStmt_MySQL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axDBStmt_MySQL.h; sourceTree = "<group>"; };
+		EAB1260616D3CD8E008E40D2 /* libaxMySQL.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libaxMySQL.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EAB1260316D3CD8E008E40D2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		EA0A0DD216D3CDFB00A31454 /* axMySQL */ = {
+			isa = PBXGroup;
+			children = (
+				EA0A0DD316D3CDFB00A31454 /* axDB_MySQL_common.h */,
+				EA0A0DD416D3CDFB00A31454 /* axDBConn_MySQL.cpp */,
+				EA0A0DD516D3CDFB00A31454 /* axDBConn_MySQL.h */,
+				EA0A0DD616D3CDFB00A31454 /* axDBStmt_MySQL.cpp */,
+				EA0A0DD716D3CDFB00A31454 /* axDBStmt_MySQL.h */,
+			);
+			name = axMySQL;
+			path = ../../../src/axMySQL;
+			sourceTree = "<group>";
+		};
+		EAB125FD16D3CD8E008E40D2 = {
+			isa = PBXGroup;
+			children = (
+				EA0A0DD216D3CDFB00A31454 /* axMySQL */,
+				EA0A0DD016D3CDDE00A31454 /* axMySQL_build.xcconfig */,
+				EA0A0DD116D3CDDE00A31454 /* axMySQL.xcconfig */,
+				EAB1260716D3CD8E008E40D2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EAB1260716D3CD8E008E40D2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EAB1260616D3CD8E008E40D2 /* libaxMySQL.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		EAB1260416D3CD8E008E40D2 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA0A0DD816D3CDFB00A31454 /* axDB_MySQL_common.h in Headers */,
+				EA0A0DDA16D3CDFB00A31454 /* axDBConn_MySQL.h in Headers */,
+				EA0A0DDC16D3CDFB00A31454 /* axDBStmt_MySQL.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		EAB1260516D3CD8E008E40D2 /* axMySQL */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EAB1260A16D3CD8E008E40D2 /* Build configuration list for PBXNativeTarget "axMySQL" */;
+			buildPhases = (
+				EAB1260216D3CD8E008E40D2 /* Sources */,
+				EAB1260316D3CD8E008E40D2 /* Frameworks */,
+				EAB1260416D3CD8E008E40D2 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = axMySQL;
+			productName = axMySQL;
+			productReference = EAB1260616D3CD8E008E40D2 /* libaxMySQL.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EAB125FE16D3CD8E008E40D2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = Tony;
+			};
+			buildConfigurationList = EAB1260116D3CD8E008E40D2 /* Build configuration list for PBXProject "axMySQL" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = EAB125FD16D3CD8E008E40D2;
+			productRefGroup = EAB1260716D3CD8E008E40D2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EAB1260516D3CD8E008E40D2 /* axMySQL */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		EAB1260216D3CD8E008E40D2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA0A0DD916D3CDFB00A31454 /* axDBConn_MySQL.cpp in Sources */,
+				EA0A0DDB16D3CDFB00A31454 /* axDBStmt_MySQL.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		EAB1260816D3CD8E008E40D2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA0A0DD016D3CDDE00A31454 /* axMySQL_build.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		EAB1260916D3CD8E008E40D2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA0A0DD016D3CDDE00A31454 /* axMySQL_build.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		EAB1260B16D3CD8E008E40D2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		EAB1260C16D3CD8E008E40D2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		EAB1260116D3CD8E008E40D2 /* Build configuration list for PBXProject "axMySQL" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EAB1260816D3CD8E008E40D2 /* Debug */,
+				EAB1260916D3CD8E008E40D2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EAB1260A16D3CD8E008E40D2 /* Build configuration list for PBXNativeTarget "axMySQL" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EAB1260B16D3CD8E008E40D2 /* Debug */,
+				EAB1260C16D3CD8E008E40D2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EAB125FE16D3CD8E008E40D2 /* Project object */;
+}
