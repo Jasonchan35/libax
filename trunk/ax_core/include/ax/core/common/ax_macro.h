@@ -11,5 +11,8 @@
 
 #define axJOIN_WORD( w0, w1 )		w0##w1
 
+//TODO
+//#define ax_release_assert(_Expression) { if( !(_Expression) ) _ax_assert(#_Expression, __FILE__, __LINE__ ); }
+
 
 #endif //__ax_macro_h__

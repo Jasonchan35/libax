@@ -28,12 +28,12 @@ axDBScopeTran::axDBScopeTran( axStatus & st, axDBConn & db ) {
 	last_ = db_->tran_;
 	db.tran_ = this;
 
-	ax_log(" axDBScopeTran {?} {?} -> {?}", nested_, (void*) last_, (void*) db_->tran_ );
+//	ax_log(" axDBScopeTran {?} {?} -> {?}", nested_, (void*) last_, (void*) db_->tran_ );
 }
 
 axDBScopeTran::~axDBScopeTran() {
-	ax_log( "~axDBScopeTran {?} {?} -> {?}\n", nested_, (void*) db_->tran_, (void*) last_ );
 	if( ! db_ ) return;
+//	ax_log( "~axDBScopeTran {?} {?} -> {?}\n", nested_, (void*) db_->tran_, (void*) last_ );
 
 	if( ! commited_ ) {
 		if( nested_ > 0 ) {

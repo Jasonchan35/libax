@@ -59,6 +59,19 @@ axDBConn_SQLite3::~axDBConn_SQLite3() {
 	}
 }
 
+axStatus	axDBConn_SQLite3::_directExec( const char* sql ) {
+	if( echoSQL_ ) {
+		ax_log("--- ExecSQL: ---\n{?}\n", sql );
+	}
+
+	if( !p_ ) return axStatus_Std::not_initialized;
+	int ret = sqlite3_exec( p_, sql, NULL, NULL, NULL );
+	if( hasError(ret, sql) ) {
+		return axStatus_Std::DB_error;
+	}
+	return 0;
+}
+
 bool axDBConn_SQLite3::hasError( int code, const char* sql ) {
 	switch( code ) {
 		case SQLITE_OK:
@@ -85,6 +98,40 @@ axStatus axDBConn_SQLite3::getSQL_LastInsertId	( axIStringA & outSQL, const axDB
 	st = outSQL.format("SELECT ID FROM {?} WHERE _ROWID_ = LAST_INSERT_ROWID();", tableName );		if( !st ) return st;
 	return 0;
 }
+
+
+axStatus	axDBConn_SQLite3::beginTran			() { return _directExec( "BEGIN TRANSACTION;" ); }
+
+axStatus	axDBConn_SQLite3::rollBackTran		() { return _directExec( "ROLLBACK TRANSACTION;" ); }
+axStatus	axDBConn_SQLite3::commitTran		() { return _directExec( "COMMIT TRANSACTION;" ); }
+
+axStatus	axDBConn_SQLite3::savePoint				( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );			if( !st ) return st;
+	st = tmp.format("SAVEPOINT {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
+}
+
+axStatus	axDBConn_SQLite3::rollBackToSavePoint	( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );						if( !st ) return st;
+	st = tmp.format("ROLLBACK TO SAVEPOINT {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
+}
+axStatus	axDBConn_SQLite3::releaseSavePoint		( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );					if( !st ) return st;
+	st = tmp.format("RELEASE SAVEPOINT {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
+}
+
+
 
 //virtual 
 axStatus axDBConn_SQLite3::createStmt( axDBStmt & stmt, const char* sql ) {

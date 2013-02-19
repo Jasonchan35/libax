@@ -16,11 +16,6 @@ public:
 
 			void		close		();
 
-	virtual axStatus	beginTran	();
-	virtual axStatus	rollBackTran();
-	virtual axStatus	commitTran	();
-
-
 	virtual axStatus	createStmt			( axDBStmt & stmt, const char * sql );
 	virtual	axStatus	getSQL_CreateTable	( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table );
 	
@@ -31,7 +26,21 @@ public:
 			
 	virtual	const char*	DBTypeName( int c_type );
 
+	axStatus	_directExec( const char* sql );
+
+	virtual axStatus	beginTran			();
+	virtual axStatus	rollBackTran		();
+	virtual axStatus	commitTran			();
+
+	virtual	axStatus	savePoint			( const char* name );
+	virtual axStatus	rollBackToSavePoint	( const char* name );
+	virtual axStatus	releaseSavePoint	( const char* name );
+
+
+	SQLHSTMT	directExecStmt_;
+
 	axStatus	_preConnect();
+	axStatus	_postConnect();
 
 	SQLHSTMT	lastExecStmt_;
 

@@ -62,6 +62,8 @@ public:
 
 	virtual	const char*	sql	() { return sql_; }
 
+			void		logError( const char* sql );
+
 	axSharedPtr< axDBConn_MySQL >	db_;
 	axTempStringA		sql_;
 	MYSQL_STMT* stmt_;

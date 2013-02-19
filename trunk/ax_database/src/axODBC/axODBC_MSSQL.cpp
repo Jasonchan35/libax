@@ -6,6 +6,11 @@ public:
 	virtual axStatus		getSQL_DropTableIfExists( axStringA_Array & outSQLArray, const char* table );
 	virtual axStatus		getSQL_LastInsertId		( axIStringA & outSQL, const axDBColumnList & list, const char* table );
 	virtual const char*		DBTypeName				( int c_type );
+
+	virtual	axStatus	savePoint			( const char* name );
+	virtual axStatus	rollBackToSavePoint	( const char* name );
+	virtual axStatus	releaseSavePoint	( const char* name );
+
 };
 
 axStatus	axODBC_MSSQL_connect( axDBConn & db, const char* server, const char* username, const char* password ) {
@@ -19,6 +24,33 @@ axStatus	axODBC_MSSQL_connectDSN( axDBConn & db, const char* dsn ) {
 	if( !p ) return axStatus_Std::not_enough_memory;
 	db._setImp(p);
 	return p->connectDSN( dsn );
+}
+
+axStatus	axDBConn_MSSQL::savePoint		( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );			if( !st ) return st;
+	st = tmp.format("SAVE TRANSACTION {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
+}
+
+axStatus	axDBConn_MSSQL::rollBackToSavePoint	( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );						if( !st ) return st;
+	st = tmp.format("ROLLBACK TRANSACTION  {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
+}
+
+axStatus	axDBConn_MSSQL::releaseSavePoint		( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );					if( !st ) return st;
+	st = tmp.format("COMMIT TRANSACTION {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
 }
 
 

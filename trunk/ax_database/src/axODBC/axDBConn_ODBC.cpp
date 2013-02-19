@@ -11,6 +11,7 @@ axDBConn_ODBC::axDBConn_ODBC() {
 	env_ = NULL;
 	dbc_ = NULL;
 	lastExecStmt_ = NULL;
+	directExecStmt_ = NULL;
 }
 
 axDBConn_ODBC::~axDBConn_ODBC() {
@@ -18,6 +19,10 @@ axDBConn_ODBC::~axDBConn_ODBC() {
 }
 
 void axDBConn_ODBC::close() {
+	if( directExecStmt_ ) {
+		SQLFreeHandle( SQL_HANDLE_STMT, directExecStmt_ );
+		directExecStmt_ = NULL;
+	}
 	if( dbc_ ) {
 		SQLDisconnect( dbc_ );
 		SQLFreeHandle( SQL_HANDLE_DBC, dbc_ );
@@ -28,6 +33,48 @@ void axDBConn_ODBC::close() {
 		env_ = NULL;
 	}
 }
+
+axStatus	axDBConn_ODBC::_directExec( const char* sql ) {
+	if( echoSQL_ ) {
+		ax_log("--- ExecSQL: ---\n{?}\n", sql );
+	}	
+
+	SQLRETURN ret;
+	ret = SQLExecDirectA( directExecStmt_, (SQLCHAR*)sql, SQL_NTS );
+	if( hasError(ret) ) {
+		logError();
+		return axStatus_Std::DB_error_connect;
+	}
+	return 0;
+}
+
+axStatus	axDBConn_ODBC::savePoint		( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );			if( !st ) return st;
+	st = tmp.format("SAVEPOINT {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
+}
+
+axStatus	axDBConn_ODBC::rollBackToSavePoint	( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );						if( !st ) return st;
+	st = tmp.format("ROLLBACK TO SAVEPOINT {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
+}
+
+axStatus	axDBConn_ODBC::releaseSavePoint		( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );					if( !st ) return st;
+	st = tmp.format("RELEASE SAVEPOINT {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
+}
+
 
 axStatus	axDBConn_ODBC::beginTran	() { 		
 	SQLRETURN ret;
@@ -129,6 +176,16 @@ axStatus	axDBConn_ODBC::_preConnect() {
 	return 0;
 }
 
+axStatus axDBConn_ODBC::_postConnect() {
+	SQLRETURN ret;
+	ret = SQLAllocHandle( SQL_HANDLE_STMT, dbc_, & directExecStmt_ ); 
+	if( hasError( ret ) ) {
+		logError();
+		return axStatus_Std::DB_error_connect;
+	}
+	return 0;
+}
+
 axStatus	axDBConn_ODBC::connectDSN	( const char* dsn ) {
 	axStatus st;
 	axTempStringW	w_dsn;
@@ -152,7 +209,8 @@ axStatus	axDBConn_ODBC::connectDSN	( const wchar_t* dsn ) {
 		logError();
 		return axStatus_Std::DB_error_connect;
 	}
-	return 0;
+
+	return _postConnect();
 }
 
 axStatus	axDBConn_ODBC::connect	( const char* server, const char* username, const char* password ) {
@@ -180,7 +238,8 @@ axStatus	axDBConn_ODBC::connect	( const wchar_t* server, const wchar_t* username
 		logError();
 		return axStatus_Std::DB_error_connect;
 	}
-	return 0;
+
+	return _postConnect();
 }
 
 bool axDBConn_ODBC::hasError ( RETCODE code, const char* sql ) {

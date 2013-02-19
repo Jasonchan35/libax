@@ -14,6 +14,7 @@ public:
 	virtual	const char*	DBTypeName				( int c_type );
 
 	virtual	axStatus	identifierString		( axIStringA & out, const char* sz );
+
 };
 
 
@@ -46,7 +47,6 @@ axStatus	axODBC_Oracle_connectDSN( axDBConn & db, const char* dsn ) {
 	db._setImp(p);
 	return p->connectDSN( dsn );
 }
-
 
 SQLRETURN axDBStmt_Oracle::_OnSQLBindParameter( SQLUSMALLINT col, const int64_t & value, axIStringW & tmpStrData, SQLLEN & len ) {
 	return _OnBindParamByString( col, value, tmpStrData, len );

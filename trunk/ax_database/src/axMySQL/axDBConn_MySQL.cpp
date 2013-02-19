@@ -123,3 +123,62 @@ const char*	axDBConn_MySQL::DBTypeName( int c_type ) {
 	assert( false );
 	return "Unknown";
 }
+
+axStatus	axDBConn_MySQL::_directExec( const char* sql ) {
+	if( echoSQL_ ) {
+		ax_log("--- ExecSQL: ---\n{?}\n", sql );
+	}
+
+	if( 0 != mysql_query( &p_, sql ) ) {
+		logError();
+		return axStatus_Std::DB_error;
+	}
+	return 0;
+}
+
+void axDBConn_MySQL::logError() {
+	ax_log( "MySQL Conn Error {?}: {?}", mysql_errno(&p_), mysql_error(&p_) );
+}
+
+axStatus	axDBConn_MySQL::beginTran			() { 
+	if( lastExecStmt_ ) {
+		mysql_stmt_free_result( lastExecStmt_ );
+	}
+	lastExecStmt_ = NULL;
+
+	return _directExec( "START TRANSACTION;");
+}
+
+axStatus	axDBConn_MySQL::rollBackTran		() { 
+	return _directExec( "ROLLBACK;");
+}
+
+axStatus	axDBConn_MySQL::commitTran			() { 
+	return _directExec( "COMMIT;");
+}
+
+axStatus	axDBConn_MySQL::savePoint				( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );			if( !st ) return st;
+	st = tmp.format("SAVEPOINT {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
+}
+
+axStatus	axDBConn_MySQL::rollBackToSavePoint	( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );						if( !st ) return st;
+	st = tmp.format("ROLLBACK TO SAVEPOINT {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
+}
+axStatus	axDBConn_MySQL::releaseSavePoint		( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );					if( !st ) return st;
+	st = tmp.format("RELEASE SAVEPOINT {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
+}
