@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EA0A0DEA16D3CF3700A31454 /* libaxMySQL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA0A0DE716D3CEB000A31454 /* libaxMySQL.a */; };
 		EAB125F216D3B60F008E40D2 /* libaxPostgreSQL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB125F016D3B5CD008E40D2 /* libaxPostgreSQL.a */; };
 		EAC3A05F16C8CA90009F1667 /* test_ax_database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAC3A05E16C8CA90009F1667 /* test_ax_database.cpp */; };
 		EAD5E07116C6A6E8007AB3D1 /* libax_core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAD5E07016C6A6CC007AB3D1 /* libax_core.a */; };
@@ -14,6 +15,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		EA0A0DE616D3CEB000A31454 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA0A0DE016D3CEAF00A31454 /* axMySQL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EAB1260616D3CD8E008E40D2;
+			remoteInfo = axMySQL;
+		};
 		EAB125EF16D3B5CD008E40D2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EAB125E916D3B5CD008E40D2 /* axPostgreSQL.xcodeproj */;
@@ -50,6 +58,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		EA0A0DE016D3CEAF00A31454 /* axMySQL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = axMySQL.xcodeproj; path = ../../../../projects/Xcode/OSX/axMySQL.xcodeproj; sourceTree = "<group>"; };
 		EA37CEC816C69B49004CFE52 /* ax_database_unit_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ax_database_unit_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA8FCDD216C69BD30040D4B9 /* ax_database_unit_test.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ax_database_unit_test.xcconfig; sourceTree = SOURCE_ROOT; };
 		EAB125E916D3B5CD008E40D2 /* axPostgreSQL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = axPostgreSQL.xcodeproj; path = ../../../../projects/Xcode/OSX/axPostgreSQL.xcodeproj; sourceTree = "<group>"; };
@@ -63,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA0A0DEA16D3CF3700A31454 /* libaxMySQL.a in Frameworks */,
 				EAB125F216D3B60F008E40D2 /* libaxPostgreSQL.a in Frameworks */,
 				EAD5E07116C6A6E8007AB3D1 /* libax_core.a in Frameworks */,
 				EAD5E07216C6A6E8007AB3D1 /* libaxSQLite3.a in Frameworks */,
@@ -72,9 +82,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EA0A0DE116D3CEAF00A31454 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EA0A0DE716D3CEB000A31454 /* libaxMySQL.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		EA37CEBF16C69B49004CFE52 = {
 			isa = PBXGroup;
 			children = (
+				EA0A0DE016D3CEAF00A31454 /* axMySQL.xcodeproj */,
 				EAB125E916D3B5CD008E40D2 /* axPostgreSQL.xcodeproj */,
 				EAD5E06A16C6A6CC007AB3D1 /* ax_core.xcodeproj */,
 				EAD5E06416C6A6BB007AB3D1 /* axSQLite3.xcodeproj */,
@@ -161,6 +180,10 @@
 					ProjectRef = EAD5E06A16C6A6CC007AB3D1 /* ax_core.xcodeproj */;
 				},
 				{
+					ProductGroup = EA0A0DE116D3CEAF00A31454 /* Products */;
+					ProjectRef = EA0A0DE016D3CEAF00A31454 /* axMySQL.xcodeproj */;
+				},
+				{
 					ProductGroup = EAB125EA16D3B5CD008E40D2 /* Products */;
 					ProjectRef = EAB125E916D3B5CD008E40D2 /* axPostgreSQL.xcodeproj */;
 				},
@@ -177,6 +200,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		EA0A0DE716D3CEB000A31454 /* libaxMySQL.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libaxMySQL.a;
+			remoteRef = EA0A0DE616D3CEB000A31454 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		EAB125F016D3B5CD008E40D2 /* libaxPostgreSQL.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;

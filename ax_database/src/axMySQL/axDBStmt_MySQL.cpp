@@ -189,7 +189,7 @@ int			axDBStmt_MySQL::columnType	( axSize col ) {
 	if( col >= numColumns_ ) return axDB_c_type_null;
 	
 	MYSQL_FIELD* f = &columns_[col];
-	switch( f->type ) {
+	switch( f->type ) { 
 		case MYSQL_TYPE_TINY:		return axDB_c_type_int8;
 		case MYSQL_TYPE_SHORT:		return axDB_c_type_int16;
 		case MYSQL_TYPE_LONG:		return axDB_c_type_int32;
