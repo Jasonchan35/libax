@@ -26,6 +26,17 @@ public:
 			
 			bool		hasError	( int code, const char* sql = NULL );
 			
+	virtual axStatus	beginTran			();
+	virtual axStatus	rollBackTran		();
+	virtual axStatus	commitTran			();
+
+	virtual	axStatus	savePoint			( const char* name );
+	virtual axStatus	rollBackToSavePoint	( const char* name );
+	virtual axStatus	releaseSavePoint	( const char* name );
+
+	axStatus	_directExec( const char* sql );
+
+
 	operator sqlite3* () { return p_; }
 			
 

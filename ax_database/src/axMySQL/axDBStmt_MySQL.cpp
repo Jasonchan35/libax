@@ -56,7 +56,7 @@ axStatus axDBStmt_MySQL::create( const char * sql ) {
 	
 	int ret = mysql_stmt_prepare( stmt_, sql, len );
 	if( ret != 0 ) {
-		ax_log( "MySQL Stmt Error {?}: {?}\nSQL:{?}\n", mysql_stmt_errno(stmt_), mysql_stmt_error(stmt_), sql );
+		logError( sql );
 		return axStatus_Std::DB_error_prepare_stmtement;
 	}
 	
@@ -173,13 +173,16 @@ axStatus axDBStmt_MySQL::exec_ArgList( const axDBInParamList & list ) {
 	mysql_stmt_bind_param( stmt_, bind_.ptr() );
 	int ret = mysql_stmt_execute(stmt_);
 	if( ret != 0 ) {
-		ax_log( "MySQL Stmt Error {?}: {?}\nSQL:{?}\n", mysql_stmt_errno(stmt_), mysql_stmt_error(stmt_), sql_ );
+		logError( sql_ );
 		return axStatus_Std::DB_error;
 	}
 		
 	return 0;
 }
 
+void axDBStmt_MySQL::logError( const char* sql  ) {
+	ax_log( "MySQL Stmt Error {?}: {?}\nSQL:{?}\n", mysql_stmt_errno(stmt_), mysql_stmt_error(stmt_), sql );
+}
 
 
 int			axDBStmt_MySQL::columnType	( axSize col ) {
@@ -351,7 +354,7 @@ axStatus axDBStmt_MySQL::fetch() {
 	}
 
 	if( ret != 0 ) {
-		ax_log( "MySQL Stmt Error {?}: {?}\nSQL:{?}\n", mysql_stmt_errno(stmt_), mysql_stmt_error(stmt_), sql_ );
+		logError( sql_ );
 		return axStatus_Std::DB_error;		
 	}	
 	return 0;

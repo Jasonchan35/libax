@@ -132,3 +132,46 @@ const char*	axDBConn_PostgreSQL::DBTypeName( int c_type ) {
 	assert( false );
 	return "Unknown";
 }
+
+axStatus	axDBConn_PostgreSQL::_directExec( const char* sql ) {
+	if( echoSQL_ ) {
+		ax_log("--- ExecSQL: ---\n{?}\n", sql );
+	}
+	 PGresult *res =  PQexec( p_, sql );
+	 if( ! res ) return axStatus_Std::not_enough_memory;
+
+	 PQclear( res );
+	 return 0;
+}
+
+
+axStatus	axDBConn_PostgreSQL::beginTran		() { return _directExec( "BEGIN TRANSACTION;" ); }
+
+axStatus	axDBConn_PostgreSQL::rollBackTran	() { return _directExec( "ROLLBACK TRANSACTION;" ); }
+axStatus	axDBConn_PostgreSQL::commitTran		() { return _directExec( "COMMIT TRANSACTION;" ); }
+
+axStatus	axDBConn_PostgreSQL::savePoint		( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );			if( !st ) return st;
+	st = tmp.format("SAVEPOINT {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
+}
+
+axStatus	axDBConn_PostgreSQL::rollBackToSavePoint	( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );						if( !st ) return st;
+	st = tmp.format("ROLLBACK TO SAVEPOINT {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
+}
+axStatus	axDBConn_PostgreSQL::releaseSavePoint		( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );					if( !st ) return st;
+	st = tmp.format("RELEASE SAVEPOINT {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
+}

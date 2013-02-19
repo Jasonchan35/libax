@@ -25,7 +25,6 @@
 #define axTHREAD_LOCAL	__declspec( thread )
 #define axL(_String) L ## _String
 
-
 //cpu
 #ifdef _M_X64
 	#define axCPU_x86_64      1

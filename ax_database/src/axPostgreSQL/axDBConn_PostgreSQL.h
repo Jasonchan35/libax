@@ -23,6 +23,16 @@ public:
 	axStatus	connect	( const char * dsn );
 	void		close	();
 
+	virtual axStatus	beginTran			();
+	virtual axStatus	rollBackTran		();
+	virtual axStatus	commitTran			();
+
+	virtual	axStatus	savePoint			( const char* name );
+	virtual axStatus	rollBackToSavePoint	( const char* name );
+	virtual axStatus	releaseSavePoint	( const char* name );
+
+	axStatus	_directExec( const char* sql );
+
 	const char*	DBTypeName( int c_type );
 
 	operator PGconn*() { return p_; }

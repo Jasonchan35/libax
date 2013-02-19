@@ -55,7 +55,7 @@ public:
 		st = list.create( values, B::pkeyIndex_ );		if( !st ) return st;
 		st = B::stmt_.exec_ArgList( list );				if( !st ) return st;
 
-		if( B::pkeyIndex_ >= 0 && B::pkeyAutoInc_ ) {
+		if( B::pkeyAutoInc_ ) {
 			st = lastInsertIdStmt_.exec();							if( !st ) return st;
 			st = lastInsertIdStmt_.getRow( values.*PKeyMember );	if( !st ) return st;
 		}
