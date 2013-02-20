@@ -42,6 +42,7 @@ public:
 
 	const char*	DBTypeName( int c_type );
 
+	sqlite3_stmt* lastExecStmt_;
 	sqlite3* p_;
 };
 
