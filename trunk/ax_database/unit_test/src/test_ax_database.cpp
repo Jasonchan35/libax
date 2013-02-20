@@ -2,7 +2,7 @@
 
 #include <ax/ax_unit_test.h>
 
-const size_t numRows = 30;
+const size_t numRows = 100;
 
 #define myTEST_TYPE_LIST \
 	myTEST_TYPE( bool,		bool,			bool   ) \
@@ -267,7 +267,8 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		#endif
 	}
 
-	/*{ //mulitple statement test
+	/*
+	{ //mulitple statement test
 		axDBStmt	stmt;
 
 		axStringA	sql;
@@ -288,6 +289,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		axUTestCheck( row.v_int32 == 9988 ); 
 	}
 	*/
+	
 
 
 	return 0;
@@ -381,10 +383,10 @@ axStatus test_ax_database() {
 
 	ax_log("test {?} records\n", numRows );
 
-//	axUTestCase( test_SQLite3() );
+	axUTestCase( test_SQLite3() );
 	axUTestCase( test_MySQL() );
 	axUTestCase( test_PostgreSQL() );
-//	axUTestCase( test_ODBC_MSSQL() );
+	axUTestCase( test_ODBC_MSSQL() );
 	axUTestCase( test_ODBC_Oracle() );
 
 	return 0;
