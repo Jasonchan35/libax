@@ -175,7 +175,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		axStopWatch	timer;
 		for( size_t i=0; i<numRows; i++ ) {
 			st = tbl.insert( row );				if( !st ) return st;
-//			ax_log( "insert sucess with id = {?}", row.id );
+//			ax_log( "insert success with id = {?}", row.id );
 			axUTestCheck( row.id == i+1 );
 		}
 		ax_log("insert {?} records in {?}s", numRows, timer.get() );
@@ -185,11 +185,11 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		Row	row;
 		row.testValue();
 
-		axDBScopeTran	rootTran( st, db );		if( !st ) return st;
+		axDBScopeTran	tran( st, db );		if( !st ) return st;
 
 		axStopWatch	timer;
 		for( size_t i=0; i<numRows; i++ ) {
-			axDBScopeTran	tran( st, db );		if( !st ) return st;
+			axDBScopeTran	nestedTran( st, db );		if( !st ) return st;
 
 			row.id = (TableID)i+1;
 			row.v_bool = (i % 2 == 1);
@@ -202,13 +202,42 @@ axStatus test_ax_database_common( axDBConn & db ) {
 			}
 
 			if( i % 3 == 0 ) {
-				tran.commit(); //try to commit some and rollback some
+				nestedTran.commit(); //try to commit some and rollback some
 			}
 		}
 
-		rootTran.commit();
+		tran.commit();
 		ax_log("update {?} records in {?}s", numRows, timer.get() );
 	}
+
+	{	ax_log("===== update but rollback======");
+		Row	row;
+		row.testValue();
+
+		axDBScopeTran	tran( st, db );		if( !st ) return st;
+
+		axStopWatch	timer;
+		for( size_t i=0; i<numRows/2; i++ ) {
+			axDBScopeTran	nestedTran( st, db );		if( !st ) return st;
+
+			row.id = (TableID)i+1;
+			row.v_double = 30000; //test rollback, so it shouldn't be commit with this value
+
+			st = tbl.update( row );							if( !st ) return st;
+
+			for( size_t j=0; j<10; j++ ) {
+				st = row.v_ByteArray.append( (uint8_t) i);		if( !st ) return st;
+			}
+
+			if( i % 3 == 0 ) {
+				nestedTran.commit(); //try to commit some and rollback some
+			}
+		}
+
+		//tran.commit(); //we want rollback
+		ax_log("update {?} records in {?}s", numRows, timer.get() );
+	}
+
 
 	{	ax_log("===== select all ======");
 		axArray< Row >	results;
@@ -217,6 +246,18 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		axStopWatch	timer;
 		st = tbl.selectAll( results );		if( !st ) return st;
 		ax_log("select {?} records in {?}s", results.size(), timer.get() );
+
+
+		axUTestCheck( results.size() == numRows );
+
+		for( size_t i=0; i<results.size(); i++ ) {
+			Row & r = results[i];
+			if( i % 3 == 0 ) {
+				axUTestCheck( r.v_double == 20000 );
+			}else{
+				axUTestCheck( r.v_double == 123456789.1234 );
+			}
+		}
 
 	//	ax_log_var( results );
 		#if 0 // dump last only
@@ -241,7 +282,7 @@ axStatus test_SQLite3() {
 	return 0;
 }
 
-#if 1 //=============== MySQL ====================
+#if 0 //=============== MySQL ====================
 #include <ax/database/axMySQL.h>
 axStatus test_MySQL() {
 	axStatus st;
@@ -252,7 +293,7 @@ axStatus test_MySQL() {
 }
 #endif
 
-#if 1 //=============== PostgreSQL ==============
+#if 0 //=============== PostgreSQL ==============
 #include <ax/database/axPostgreSQL.h>
 axStatus test_PostgreSQL() {
 	axStatus st;
@@ -279,11 +320,17 @@ axStatus test_ODBC_MSSQL() {
 	axDBConn	db;
 //	st = axODBC_MSSQL_connect ( db, "MSSQL_DSN", "test", "1234");		if( !st ) return st;
 
-	st = axODBC_MSSQL_connectDSN ( db,	"DRIVER={SQL Server Native Client 10.0};"
-										"DATABASE=testdb;"
-										"SERVER=192.168.1.49;"
-										"UID=test;"
-										"PWD=1234;");	
+	//st = axODBC_MSSQL_connectDSN ( db,	"DRIVER={SQL Server Native Client 10.0};"
+	//									"DATABASE=testdb;"
+	//									"SERVER=192.168.1.49;"
+	//									"UID=test;"
+	//									"PWD=1234;");	
+
+	st = axODBC_MSSQL_connectDSN ( db,	"DRIVER={SQL Server Native Client 10.0}; "
+										"SERVER=10.20.20.200\\MSSQL_DATABASE_3,1432; "
+										"DATABASE=UnitTest; "
+										"UID=atlas;"
+										"PWD=atlas;" );	
 	if( !st ) return st;
 
 	st = test_ax_database_common(db);			if( !st ) return st;
@@ -310,11 +357,11 @@ axStatus test_ax_database() {
 
 	ax_log("test {?} records\n", numRows );
 
-//	axUTestCase( test_SQLite3() );
+	axUTestCase( test_SQLite3() );
 //	axUTestCase( test_MySQL() );
-	axUTestCase( test_PostgreSQL() );
+//	axUTestCase( test_PostgreSQL() );
 //	axUTestCase( test_ODBC_MSSQL() );
-	axUTestCase( test_ODBC_Oracle() );
+//	axUTestCase( test_ODBC_Oracle() );
 
 	return 0;
 }

@@ -45,12 +45,8 @@ axStatus	axDBConn_MSSQL::rollBackToSavePoint	( const char* name ) {
 }
 
 axStatus	axDBConn_MSSQL::releaseSavePoint		( const char* name ) { 
-	axStatus st;
-	axTempStringA	tmp;
-	axStringA_<64>	spName;
-	st = identifierString( spName, name );					if( !st ) return st;
-	st = tmp.format("COMMIT TRANSACTION {?};", spName);		if( !st ) return st;
-	return _directExec( tmp );
+	//do nothing, MSSQL has no way to release save point, so just leave the save point until the end of transaction
+	return 0;
 }
 
 

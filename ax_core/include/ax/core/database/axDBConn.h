@@ -69,6 +69,8 @@ protected:
 						axStatus	rollBackToSavePoint		( const char* name );
 
 						axPtr<axDBScopeTran>	tran_;
+						axSize					tranId_;
+
 private:
 	axSharedPtr< axDBConn_Imp >	p_;
 };
