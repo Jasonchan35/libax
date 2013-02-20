@@ -50,10 +50,15 @@ axStatus axDBConn_SQLite3::openMemory() {
 
 axDBConn_SQLite3::axDBConn_SQLite3() {
 	p_ = NULL;
+	lastExecStmt_ = NULL;
 }
 
 axDBConn_SQLite3::~axDBConn_SQLite3() {
 	if( p_ ) {
+		if( lastExecStmt_ ) {
+			sqlite3_reset( lastExecStmt_);
+			lastExecStmt_ = NULL;
+		}
 		sqlite3_close( p_ );
 		p_ = NULL;
 	}
@@ -62,6 +67,11 @@ axDBConn_SQLite3::~axDBConn_SQLite3() {
 axStatus	axDBConn_SQLite3::_directExec( const char* sql ) {
 	if( echoSQL_ ) {
 		ax_log("--- ExecSQL: ---\n{?}\n", sql );
+	}
+
+	if( lastExecStmt_ ) {
+		sqlite3_reset( lastExecStmt_ );
+		lastExecStmt_ = NULL;
 	}
 
 	if( !p_ ) return axStatus_Std::not_initialized;

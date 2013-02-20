@@ -20,6 +20,11 @@ axDBStmt_SQLite3::~axDBStmt_SQLite3() {
 
 void axDBStmt_SQLite3::destroy() {
 	if( stmt_ ) {
+		if( db_->lastExecStmt_ == stmt_ ) {
+			sqlite3_reset( db_->lastExecStmt_ );
+			db_->lastExecStmt_ = NULL;
+		}
+
 		sqlite3_finalize( stmt_ );
 		stmt_ = NULL;
 		sql_.clear();
@@ -58,6 +63,11 @@ axStatus axDBStmt_SQLite3::exec_ArgList( const axDBInParamList & list ) {
 	if( !stmt_ ) return axStatus_Std::DB_error;
 
 	echoExecSQL( db_, list );
+
+	if( db_->lastExecStmt_ ) {
+		sqlite3_reset( db_->lastExecStmt_ );
+	}
+	db_->lastExecStmt_ = stmt_;
 
 	sqlite3_reset( stmt_ );
 	axStatus st;

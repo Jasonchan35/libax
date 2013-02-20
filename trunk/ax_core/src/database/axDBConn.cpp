@@ -114,7 +114,7 @@ axStatus	axDBConn::identifierString( axIStringA & out, const char* sz ) {
 }
 
 axStatus	axDBConn::beginTran	() {
-	tranId_ = 1;
+	tranId_ = 0;
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->beginTran();
 }
