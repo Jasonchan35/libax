@@ -17,7 +17,8 @@ axDBScopeTran::axDBScopeTran( axStatus & st, axDBConn & db ) {
 	}
 
 	if( nested_ > 0 ) {
-		savePointName_.format("save{?}", nested_ );
+		db.tranId_++;
+		savePointName_.format("save{?}", db.tranId_ );
 		st = db.savePoint( savePointName_ );	if( !st ) return;
 	}else{
 		st = db.beginTran();					if( !st ) return;
@@ -113,6 +114,7 @@ axStatus	axDBConn::identifierString( axIStringA & out, const char* sz ) {
 }
 
 axStatus	axDBConn::beginTran	() {
+	tranId_ = 1;
 	if( !p_ ) return axStatus_Std::not_initialized;
 	return p_->beginTran();
 }
