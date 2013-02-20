@@ -51,7 +51,7 @@ public:
 
 						axStatus	getSQL_Insert				( axIStringA & outSQL, const axDBColumnList & list, const char* table );
 						axStatus	getSQL_Update				( axIStringA & outSQL, const axDBColumnList & list, const char* table, const char* szWhere );
-						axStatus	getSQL_Select				( axIStringA & outSQL, const axDBColumnList & list, const char* table, const char* szWhere );
+						axStatus	getSQL_Select				( axIStringA & outSQL, const axDBColumnList & list, const char* table, const char* szWhere, const char* szOrder );
     
 						axStatus	getSQL_LastInsertId			( axIStringA & outSQL, const axDBColumnList & list, const char* table );
 
@@ -123,7 +123,7 @@ public:
 
 	virtual	axStatus	getSQL_Insert				( axIStringA & outSQL, const axDBColumnList & list, const char* table );
 	virtual	axStatus	getSQL_Update				( axIStringA & outSQL, const axDBColumnList & list, const char* table, const char* szWhere );
-	virtual	axStatus	getSQL_Select				( axIStringA & outSQL, const axDBColumnList & list, const char* table, const char* szWhere );
+	virtual	axStatus	getSQL_Select				( axIStringA & outSQL, const axDBColumnList & list, const char* table, const char* szWhere, const char* szOrder );
 
 	virtual axStatus	getSQL_LastInsertId			( axIStringA & outSQL, const axDBColumnList & list, const char* table ) = 0;
 

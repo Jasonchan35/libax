@@ -30,7 +30,7 @@ public:
 
 						axStatus	create_Insert	( axDBConn & db, const axDBColumnList & list, const char* table );
 						axStatus	create_Update	( axDBConn & db, const axDBColumnList & list, const char* table, const char* szWhere );
-						axStatus	create_Select	( axDBConn & db, const axDBColumnList & list, const char* table, const char* szWhere );
+						axStatus	create_Select	( axDBConn & db, const axDBColumnList & list, const char* table, const char* szWhere, const char* szOrder );
 
 						axStatus	create_LastInsertId( axDBConn & db,  const axDBColumnList & list, const char* table );
 
