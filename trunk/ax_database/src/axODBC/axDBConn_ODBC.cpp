@@ -48,7 +48,7 @@ axStatus	axDBConn_ODBC::_directExec( const char* sql ) {
 	ret = SQLExecDirectA( directExecStmt_, (SQLCHAR*)sql, SQL_NTS );
 	if( hasError(ret) ) {
 		logError();
-		return axStatus_Std::DB_error_connect;
+		return axStatus_Std::DB_error;
 	}
 	return 0;
 }
@@ -83,10 +83,11 @@ axStatus	axDBConn_ODBC::releaseSavePoint		( const char* name ) {
 
 axStatus	axDBConn_ODBC::beginTran	() { 		
 	SQLRETURN ret;
-	ret = SQLSetConnectAttr( dbc_, SQL_ATTR_AUTOCOMMIT, SQL_AUTOCOMMIT_OFF , 0 );
+	SQLUINTEGER mode = SQL_AUTOCOMMIT_OFF;
+	ret = SQLSetConnectAttr( dbc_, SQL_ATTR_AUTOCOMMIT, &mode, 0 );
 	if( hasError(ret) ) {
 		logError();
-		return axStatus_Std::DB_error_connect;
+		return axStatus_Std::DB_error_transaction;
 	}
 	return 0; 
 }
@@ -96,7 +97,13 @@ axStatus	axDBConn_ODBC::rollBackTran	() {
 	ret = SQLEndTran( SQL_HANDLE_DBC , dbc_, SQL_ROLLBACK );
 	if( hasError(ret) ) {
 		logError();
-		return axStatus_Std::DB_error_connect;
+		return axStatus_Std::DB_error_transaction;
+	}
+	SQLUINTEGER mode = SQL_AUTOCOMMIT_ON;
+	ret = SQLSetConnectAttr( dbc_, SQL_ATTR_AUTOCOMMIT, &mode, 0 );
+	if( hasError(ret) ) {
+		logError();
+		return axStatus_Std::DB_error_transaction;
 	}
 	return 0; 
 }
@@ -106,7 +113,13 @@ axStatus	axDBConn_ODBC::commitTran	() {
 	ret = SQLEndTran( SQL_HANDLE_DBC , dbc_, SQL_COMMIT );
 	if( hasError(ret) ) {
 		logError();
-		return axStatus_Std::DB_error_connect;
+		return axStatus_Std::DB_error_transaction;
+	}
+	SQLUINTEGER mode = SQL_AUTOCOMMIT_ON;
+	ret = SQLSetConnectAttr( dbc_, SQL_ATTR_AUTOCOMMIT, &mode, 0 );
+	if( hasError(ret) ) {
+		logError();
+		return axStatus_Std::DB_error_transaction;
 	}
 	return 0; 
 }

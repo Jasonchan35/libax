@@ -67,6 +67,9 @@ public:
 	axALWAYS_INLINE( 			T&	operator[]	( axSize i ) )				{ return at(i); }
 	axALWAYS_INLINE( 	const	T&	operator[]	( axSize i ) const )		{ return at(i); }
 
+	axALWAYS_INLINE(			T&	unsafe_at	( axSize i ) )				{ assert( inBound(i) ); return p_[i]; }
+	axALWAYS_INLINE(	const	T&	unsafe_at	( axSize i ) const )		{ assert( inBound(i) ); return p_[i]; }
+
 	axALWAYS_INLINE(			T&	last		( axSize i = 0 ) )			{ return at( size_-i-1 ); }
 	axALWAYS_INLINE(	const	T&	last		( axSize i = 0 ) const )	{ return at( size_-i-1 ); }
 

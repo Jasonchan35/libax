@@ -100,6 +100,7 @@ axStatus_enum( DB_invalid_param_type )
 axStatus_enum( DB_invalid_value_type )
 axStatus_enum( DB_invalid_identifier )
 axStatus_enum( DB_invalid_primary_key_type )
+axStatus_enum( DB_error_transaction )
 
 //-------------
 
