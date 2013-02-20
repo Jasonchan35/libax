@@ -271,7 +271,10 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		axDBStmt	stmt;
 
 		axStringA	sql;
-		st = sql.format("select 123; update {?} set v_int32=9988 where id=1", table );		if( !st ) return st;
+		st = sql.format("select 123;"
+						"update {?} set v_int32=9988 where id=1;"
+						"select 456;", 
+						table );		if( !st ) return st;
 
 		st = stmt.create( db, sql );	if( !st ) return st;
 		st = stmt.exec();				if( !st ) return st;
