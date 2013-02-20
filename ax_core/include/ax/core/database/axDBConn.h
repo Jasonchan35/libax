@@ -98,13 +98,13 @@ public:
 			axStatus	setEchoSQL	( bool b )	{ echoSQL_ = b; return 0; }
 			bool		echoSQL		()			{ return echoSQL_; }
 
-	virtual axStatus	beginTran	() { ax_log("beginTran"); return 0; }
-	virtual axStatus	rollBackTran() { ax_log("rollBackTran"); return 0; }
-	virtual axStatus	commitTran	() { ax_log("commitTran"); return 0; }
+	virtual axStatus	beginTran	() = 0;
+	virtual axStatus	rollBackTran() = 0;
+	virtual axStatus	commitTran	() = 0;
 
-	virtual	axStatus	savePoint				( const char* name ) { ax_log("savePoint {?}", name ); return 0; }
-	virtual axStatus	rollBackToSavePoint		( const char* name ) { ax_log("rollBackToSavePoint {?}", name );  return 0; }
-	virtual axStatus	releaseSavePoint		( const char* name ) { ax_log("releaseSavePoint    {?}", name );  return 0; }
+	virtual	axStatus	savePoint				( const char* name ) = 0;
+	virtual axStatus	rollBackToSavePoint		( const char* name ) = 0;
+	virtual axStatus	releaseSavePoint		( const char* name ) = 0;
 
 	virtual	axStatus	escapeString				( axIStringA & out, const char* sz );
 	virtual	axStatus	identifierString			( axIStringA & out, const char* sz );
