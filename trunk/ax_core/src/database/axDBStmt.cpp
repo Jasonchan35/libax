@@ -90,10 +90,10 @@ axStatus axDBStmt::create_Update	( axDBConn & db, const axDBColumnList & list, c
 	return create( db, sql );
 }
 
-axStatus axDBStmt::create_Select	( axDBConn & db, const axDBColumnList & list, const char* table, const char* szWhere ) {
+axStatus axDBStmt::create_Select	( axDBConn & db, const axDBColumnList & list, const char* table, const char* szWhere, const char* szOrder ) {
 	axStatus st;
 	axTempStringA	sql;
-	st = db.getSQL_Select( sql, list, table, szWhere );		if( !st ) return st;
+	st = db.getSQL_Select( sql, list, table, szWhere, szOrder );		if( !st ) return st;
 	return create( db, sql );
 }
 

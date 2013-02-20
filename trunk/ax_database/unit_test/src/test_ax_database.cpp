@@ -2,7 +2,7 @@
 
 #include <ax/ax_unit_test.h>
 
-const size_t numRows = 10;
+const size_t numRows = 30;
 
 #define myTEST_TYPE_LIST \
 	myTEST_TYPE( bool,		bool,			bool   ) \
@@ -267,7 +267,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		#endif
 	}
 
-	{ //mulitple statement test
+	/*{ //mulitple statement test
 		axDBStmt	stmt;
 
 		axStringA	sql;
@@ -287,6 +287,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		st = tbl.select( row, 1 );		if( !st ) return st;
 		axUTestCheck( row.v_int32 == 9988 ); 
 	}
+	*/
 
 
 	return 0;
@@ -305,7 +306,7 @@ axStatus test_SQLite3() {
 	return 0;
 }
 
-#if 0 //=============== MySQL ====================
+#if 1 //=============== MySQL ====================
 #include <ax/database/axMySQL.h>
 axStatus test_MySQL() {
 	axStatus st;
@@ -316,7 +317,7 @@ axStatus test_MySQL() {
 }
 #endif
 
-#if 0 //=============== PostgreSQL ==============
+#if 1 //=============== PostgreSQL ==============
 #include <ax/database/axPostgreSQL.h>
 axStatus test_PostgreSQL() {
 	axStatus st;
@@ -381,10 +382,10 @@ axStatus test_ax_database() {
 	ax_log("test {?} records\n", numRows );
 
 //	axUTestCase( test_SQLite3() );
-//	axUTestCase( test_MySQL() );
-//	axUTestCase( test_PostgreSQL() );
-	axUTestCase( test_ODBC_MSSQL() );
-//	axUTestCase( test_ODBC_Oracle() );
+	axUTestCase( test_MySQL() );
+	axUTestCase( test_PostgreSQL() );
+//	axUTestCase( test_ODBC_MSSQL() );
+	axUTestCase( test_ODBC_Oracle() );
 
 	return 0;
 }

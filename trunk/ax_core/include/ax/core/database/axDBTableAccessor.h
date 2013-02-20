@@ -12,7 +12,7 @@ public:
 	{}
 
 protected:
-	axStatus  getWherePKey( axIStringA &out, axDBConn & db, const axDBColumnList & list ) {
+	axStatus  getWherePKey( axIStringA &out, const axDBColumnList & list, axDBConn & db ) {
 		axStatus		st;
 		const axDBColumn* col = list.pkeyColumn();
 		if( ! col ) return axStatus_Std::DB_primary_key_not_found;
@@ -31,7 +31,7 @@ class axDBTableAccessor_InsertStmt : public axDBTableAccessor_Stmt<T> {
 typedef axDBTableAccessor_Stmt<T> B;
 
 public:
-	axStatus	create	( axDBConn & db, const char* table, const axDBColumnList & list ) {
+	axStatus	create	( axDBConn & db, const axDBColumnList & list, const char* table ) {
 		axStatus st;
 
 		B::pkeyIndex_	= list.pkeyIndex();
@@ -74,13 +74,13 @@ template< class T, class PKeyType, PKeyType T::*PKeyMember, bool PKeyAutoInc >
 class axDBTableAccessor_UpdateStmt : public axDBTableAccessor_Stmt<T> {
 	typedef axDBTableAccessor_Stmt<T> B;
 public:
-	axStatus	create	( axDBConn & db, const char* table, const axDBColumnList & list ) {
+	axStatus	create	( axDBConn & db, const axDBColumnList & list, const char* table ) {
 		axStatus st;
 		B::pkeyIndex_	= list.pkeyIndex();
 		B::pkeyAutoInc_	= list.pkeyAutoInc();
 
 		axStringA whereStr;
-		st = B::getWherePKey( whereStr, db, list );					if( !st ) return st;
+		st = B::getWherePKey( whereStr, list, db );					if( !st ) return st;
 		st = B::stmt_.create_Update( db, list, table, whereStr );	if( !st ) return st;
 		return 0;
 	}
@@ -102,14 +102,14 @@ template<class T, class PKeyType, PKeyType T::*PKeyMember, bool PKeyAutoInc >
 class axDBTableAccessor_SelectStmt : public axDBTableAccessor_Stmt<T> {
 typedef axDBTableAccessor_Stmt<T> B;
 public:
-	axStatus	create	( axDBConn & db, const char* table, const axDBColumnList & list ) {
+	axStatus	create	( axDBConn & db, const axDBColumnList & list, const char* table ) {
 		axStatus st;
 		B::pkeyIndex_	= list.pkeyIndex();
 		B::pkeyAutoInc_	= list.pkeyAutoInc();
 
 		axStringA whereStr;
-		st = B::getWherePKey( whereStr, db, list );					if( !st ) return st;
-		st = B::stmt_.create_Select( db, list, table, whereStr );		if( !st ) return st;
+		st = B::getWherePKey( whereStr, list, db );							if( !st ) return st;
+		st = B::stmt_.create_Select( db, list, table, whereStr, NULL );		if( !st ) return st;
 		return 0;
 	}
 	axStatus	exec( T & values, const PKeyType &pkey ) {
@@ -128,9 +128,9 @@ template<class T >
 class axDBTableAccessor_SelectMultipleStmt : public axDBTableAccessor_Stmt<T> {
 	typedef axDBTableAccessor_Stmt<T> B;
 public:
-	axStatus	create	( axDBConn & db, const char* table, const char* szWhere, const axDBColumnList & list ) {
+	axStatus	create	( axDBConn & db, const axDBColumnList & list, const char* table, const char* szWhere, const char* szOrder ) {
 		axStatus st;
-		st = B::stmt_.create_Select( db, list, table, szWhere );		if( !st ) return st;
+		st = B::stmt_.create_Select( db, list, table, szWhere, szOrder );		if( !st ) return st;
 		return 0;
 	}
 	axStatus	exec_ArgList	( const axDBInParamList &params )	{ return B::stmt_.exec_ArgList( params ); }
@@ -181,10 +181,23 @@ public:
 
 		st = list_.create<T,PKeyType, PKeyMember, PKeyAutoInc>();	if( !st ) return st;
 
-		st = insertStmt.create		( db, table, list_ );			if( !st ) return st;
-		st = updateStmt.create		( db, table, list_ );			if( !st ) return st;
-		st = selectStmt.create		( db, table, list_ );			if( !st ) return st;
-		st = selectAllStmt.create	( db, table, NULL, list_ );		if( !st ) return st;
+		st = insertStmt.create		( db, list_, table );			if( !st ) return st;
+		st = updateStmt.create		( db, list_, table );			if( !st ) return st;
+		st = selectStmt.create		( db, list_, table );			if( !st ) return st;
+
+		const axDBColumn * pkey = list_.pkeyColumn();
+		if( ! pkey ) {
+			st = selectAllStmt.create	( db, list_, table, NULL, NULL );		if( !st ) return st;
+		}else{
+			axStringA	strOrder;
+			axStringA	pkeyColName;
+
+			st = db.identifierString( pkeyColName, pkey->name );				if( !st ) return st;
+			st = strOrder.format("{?} ASC", pkeyColName );						if( !st ) return st;
+
+			st = selectAllStmt.create	( db, list_, table, NULL, strOrder );	if( !st ) return st;
+		}
+		
 		return 0;
 	}
 		

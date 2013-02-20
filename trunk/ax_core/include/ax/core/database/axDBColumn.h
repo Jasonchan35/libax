@@ -10,6 +10,7 @@ public:
 	axDBColumn() 
 		: type(axDB_c_type_null)
 		, data(NULL)
+		, order(order_null)
 	{}
 	
 	axStatus	onTake( axDBColumn &src ) { 
@@ -23,10 +24,19 @@ public:
 	axStatus	toStringFormat( axStringFormat &f ) const {
 		return f.format("{?} {?} {?}", type, name, data );
 	}
+
+	enum {
+		order_null,
+		order_asc,	//ascending
+		order_desc,	//descending,
+	};
+
+	bool	hasOrder() const { return order != order_null; }
 	
 	int				type;
 	axStringA		name;
 	const void*		data;
+	int				order;
 };
 
 class axDBColumnList;

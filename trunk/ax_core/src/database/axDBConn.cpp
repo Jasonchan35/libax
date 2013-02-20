@@ -316,12 +316,12 @@ axStatus axDBConn_Imp::getSQL_Update( axIStringA & outSQL, const axDBColumnList 
 }
 
 //=== select ====
-axStatus axDBConn::getSQL_Select( axIStringA & outSQL, const axDBColumnList & list, const char* table, const char* szWhere ) {
+axStatus axDBConn::getSQL_Select( axIStringA & outSQL, const axDBColumnList & list, const char* table, const char* szWhere, const char* szOrder ) {
 	if( !p_ ) return axStatus_Std::not_initialized;
-	return p_->getSQL_Select( outSQL, list, table, szWhere );
+	return p_->getSQL_Select( outSQL, list, table, szWhere, szOrder );
 }
 
-axStatus axDBConn_Imp::getSQL_Select ( axIStringA & outSQL, const axDBColumnList & list, const char* table, const char* szWhere ) {
+axStatus axDBConn_Imp::getSQL_Select ( axIStringA & outSQL, const axDBColumnList & list, const char* table, const char* szWhere, const char* szOrder ) {
 	axStatus st;
 	axTempStringA	colName;
 	axTempStringA	tableName;
@@ -329,8 +329,12 @@ axStatus axDBConn_Imp::getSQL_Select ( axIStringA & outSQL, const axDBColumnList
 
 	st = outSQL.format("SELECT\n" );
 
+	bool hasOrder = false;
+
 	for( size_t i=0; i<list.size(); i++ ) {
 		const axDBColumn & c = list[i];
+
+		if( c.hasOrder() ) hasOrder = true;
 		if( i > 0 ) {
 			st = outSQL.append(",\n");                          if( !st ) return st;
 		}
@@ -345,6 +349,10 @@ axStatus axDBConn_Imp::getSQL_Select ( axIStringA & outSQL, const axDBColumnList
         st = outSQL.appendFormat( "\n  WHERE {?}", szWhere );   if( !st ) return st;
     }
         
+	if( szOrder ) {
+		st = outSQL.appendFormat("\n  ORDER BY {?}", szOrder );	if( !st ) return st;
+	}
+
     st = outSQL.append( ";" );                                  if( !st ) return st;
     
 	return 0;
