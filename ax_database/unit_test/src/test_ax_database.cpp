@@ -266,6 +266,26 @@ axStatus test_ax_database_common( axDBConn & db ) {
 			}
 		#endif
 	}
+
+	{ //mulitple statement test
+		axDBStmt	stmt;
+
+		axStringA	sql;
+		st = sql.format("select 123; update {?} set v_int32=9988 where id=1", table );		if( !st ) return st;
+
+		st = stmt.create( db, sql );	if( !st ) return st;
+		st = stmt.exec();				if( !st ) return st;
+
+		int v;
+		st = stmt.getRow( v );			if( !st ) return st;
+		axUTestCheck( v == 123 ); 
+
+		Row row;
+		st = tbl.select( row, 1 );		if( !st ) return st;
+		axUTestCheck( row.v_int32 == 9988 ); 
+	}
+
+
 	return 0;
 }
 
@@ -357,10 +377,10 @@ axStatus test_ax_database() {
 
 	ax_log("test {?} records\n", numRows );
 
-	axUTestCase( test_SQLite3() );
+//	axUTestCase( test_SQLite3() );
 //	axUTestCase( test_MySQL() );
 //	axUTestCase( test_PostgreSQL() );
-//	axUTestCase( test_ODBC_MSSQL() );
+	axUTestCase( test_ODBC_MSSQL() );
 //	axUTestCase( test_ODBC_Oracle() );
 
 	return 0;
