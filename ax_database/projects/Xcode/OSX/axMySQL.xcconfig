@@ -1,6 +1,6 @@
 // ======== MacOSX ============
 
 axMySQL_CFLAGS = -I$(ax_database_path)/include
-axMySQL_LDFLAGS = -L$(ax_database_path)/lib/$(axPLATFORM)/$(CONFIGURATION) -L$(ax_database_path)/lib/$(axPLATFORM) -laxMySQL -lmysqlclient
+axMySQL_LDFLAGS = -L$(ax_database_path)/lib/$(axPLATFORM)/$(CONFIGURATION) -L$(ax_database_path)/lib/$(axPLATFORM) -laxMySQL -L$(ax_database_path)/lib/$(axPLATFORM)/mysql_dylib -lmysql
 
 

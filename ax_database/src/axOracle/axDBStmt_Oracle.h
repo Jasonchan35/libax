@@ -11,7 +11,7 @@
 	#endif
 	
 #elif axOS_MacOSX
-	#include "../../external/oracle/MacOSX/oci.h"
+	#include "../../external/oracle/OSX/oci.h"
 #else
 	#error
 

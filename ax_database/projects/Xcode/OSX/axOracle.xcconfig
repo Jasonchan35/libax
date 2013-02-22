@@ -1,0 +1,6 @@
+// ======== MacOSX ============
+
+axOracle_CFLAGS = -I$(ax_database_path)/include  -I$(ax_database_path)/external/oracle/OSX/
+axOracle_LDFLAGS = -L$(ax_database_path)/lib/$(axPLATFORM)/$(CONFIGURATION) -L$(ax_database_path)/lib/$(axPLATFORM) -laxOracle -L$(ax_database_path)/lib/$(axPLATFORM)/oracle_dylib -lclntsh
+
+

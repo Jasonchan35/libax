@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EA06AA5216D7DFD5006E8476 /* libaxOracle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA06AA4F16D7DFCB006E8476 /* libaxOracle.a */; };
+		EA06AA5916D7E18C006E8476 /* libnnz11.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = EA06AA5516D7E18C006E8476 /* libnnz11.dylib */; };
+		EA06AA5A16D7E18C006E8476 /* libociei.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = EA06AA5616D7E18C006E8476 /* libociei.dylib */; };
+		EA06AA6C16D7E319006E8476 /* libclntsh.dylib.11.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = EA06AA6B16D7E319006E8476 /* libclntsh.dylib.11.1 */; };
+		EA06AA6E16D7E33F006E8476 /* libmysql.16.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = EA06AA6D16D7E33F006E8476 /* libmysql.16.dylib */; };
 		EA0A0DEA16D3CF3700A31454 /* libaxMySQL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA0A0DE716D3CEB000A31454 /* libaxMySQL.a */; };
 		EAB125F216D3B60F008E40D2 /* libaxPostgreSQL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB125F016D3B5CD008E40D2 /* libaxPostgreSQL.a */; };
 		EAC3A05F16C8CA90009F1667 /* test_ax_database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAC3A05E16C8CA90009F1667 /* test_ax_database.cpp */; };
@@ -15,6 +20,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		EA06AA4E16D7DFCB006E8476 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA06AA4716D7DFCA006E8476 /* axOracle.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EAC62BC616D7D51300D57012;
+			remoteInfo = axOracle;
+		};
 		EA0A0DE616D3CEB000A31454 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EA0A0DE016D3CEAF00A31454 /* axMySQL.xcodeproj */;
@@ -48,16 +60,25 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		EA37CEC616C69B49004CFE52 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 10;
 			files = (
+				EA06AA6E16D7E33F006E8476 /* libmysql.16.dylib in CopyFiles */,
+				EA06AA6C16D7E319006E8476 /* libclntsh.dylib.11.1 in CopyFiles */,
+				EA06AA5916D7E18C006E8476 /* libnnz11.dylib in CopyFiles */,
+				EA06AA5A16D7E18C006E8476 /* libociei.dylib in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		EA06AA4716D7DFCA006E8476 /* axOracle.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = axOracle.xcodeproj; path = ../../../../projects/Xcode/OSX/axOracle.xcodeproj; sourceTree = "<group>"; };
+		EA06AA5516D7E18C006E8476 /* libnnz11.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libnnz11.dylib; path = ../../../../lib/OSX/oracle_dylib/libnnz11.dylib; sourceTree = "<group>"; };
+		EA06AA5616D7E18C006E8476 /* libociei.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.bundle"; name = libociei.dylib; path = ../../../../lib/OSX/oracle_dylib/libociei.dylib; sourceTree = "<group>"; };
+		EA06AA6B16D7E319006E8476 /* libclntsh.dylib.11.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; name = libclntsh.dylib.11.1; path = ../../../../lib/OSX/oracle_dylib/libclntsh.dylib.11.1; sourceTree = "<group>"; };
+		EA06AA6D16D7E33F006E8476 /* libmysql.16.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libmysql.16.dylib; path = ../../../../lib/OSX/mysql_dylib/libmysql.16.dylib; sourceTree = "<group>"; };
 		EA0A0DE016D3CEAF00A31454 /* axMySQL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = axMySQL.xcodeproj; path = ../../../../projects/Xcode/OSX/axMySQL.xcodeproj; sourceTree = "<group>"; };
 		EA37CEC816C69B49004CFE52 /* ax_database_unit_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ax_database_unit_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA8FCDD216C69BD30040D4B9 /* ax_database_unit_test.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ax_database_unit_test.xcconfig; sourceTree = SOURCE_ROOT; };
@@ -72,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA06AA5216D7DFD5006E8476 /* libaxOracle.a in Frameworks */,
 				EA0A0DEA16D3CF3700A31454 /* libaxMySQL.a in Frameworks */,
 				EAB125F216D3B60F008E40D2 /* libaxPostgreSQL.a in Frameworks */,
 				EAD5E07116C6A6E8007AB3D1 /* libax_core.a in Frameworks */,
@@ -82,6 +104,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EA06AA4816D7DFCA006E8476 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EA06AA4F16D7DFCB006E8476 /* libaxOracle.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EA06AA5B16D7E1A7006E8476 /* oracle_dylib */ = {
+			isa = PBXGroup;
+			children = (
+				EA06AA6B16D7E319006E8476 /* libclntsh.dylib.11.1 */,
+				EA06AA5516D7E18C006E8476 /* libnnz11.dylib */,
+				EA06AA5616D7E18C006E8476 /* libociei.dylib */,
+			);
+			name = oracle_dylib;
+			sourceTree = "<group>";
+		};
+		EA06AA5C16D7E1B9006E8476 /* mysql_dylib */ = {
+			isa = PBXGroup;
+			children = (
+				EA06AA6D16D7E33F006E8476 /* libmysql.16.dylib */,
+			);
+			name = mysql_dylib;
+			sourceTree = "<group>";
+		};
 		EA0A0DE116D3CEAF00A31454 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -93,6 +141,9 @@
 		EA37CEBF16C69B49004CFE52 = {
 			isa = PBXGroup;
 			children = (
+				EA06AA5C16D7E1B9006E8476 /* mysql_dylib */,
+				EA06AA5B16D7E1A7006E8476 /* oracle_dylib */,
+				EA06AA4716D7DFCA006E8476 /* axOracle.xcodeproj */,
 				EA0A0DE016D3CEAF00A31454 /* axMySQL.xcodeproj */,
 				EAB125E916D3B5CD008E40D2 /* axPostgreSQL.xcodeproj */,
 				EAD5E06A16C6A6CC007AB3D1 /* ax_core.xcodeproj */,
@@ -184,6 +235,10 @@
 					ProjectRef = EA0A0DE016D3CEAF00A31454 /* axMySQL.xcodeproj */;
 				},
 				{
+					ProductGroup = EA06AA4816D7DFCA006E8476 /* Products */;
+					ProjectRef = EA06AA4716D7DFCA006E8476 /* axOracle.xcodeproj */;
+				},
+				{
 					ProductGroup = EAB125EA16D3B5CD008E40D2 /* Products */;
 					ProjectRef = EAB125E916D3B5CD008E40D2 /* axPostgreSQL.xcodeproj */;
 				},
@@ -200,6 +255,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		EA06AA4F16D7DFCB006E8476 /* libaxOracle.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libaxOracle.a;
+			remoteRef = EA06AA4E16D7DFCB006E8476 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		EA0A0DE716D3CEB000A31454 /* libaxMySQL.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
