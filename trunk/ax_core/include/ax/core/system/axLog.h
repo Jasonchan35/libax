@@ -117,17 +117,27 @@ public:
 axStatus ax_log_hex( axLog_Tag &tag, const void* ptr, size_t byteSize, const char* msg = NULL );
 
 inline
-axStatus ax_log_hex( const void* ptr, size_t byteSize, const char* msg = NULL ) { 
-	return ax_log_hex( *axLog_StdTag::instance, ptr, byteSize, msg ); 
+axStatus ax_log_hex(  const void* ptr, size_t byteSize, const char* msg = NULL ) {
+	return ax_log_hex( *axLog_StdTag::instance, ptr, byteSize, msg );
 }
 
 template<class T> inline
-axStatus ax_log_hex( axLog_Tag &tag, const T & obj, const char* msg = NULL ) { 
-	return ax_log_hex( tag, &obj, sizeof(obj), msg ); 
+axStatus ax_log_hex( axLog_Tag &tag, const axIArray<T> & arr, const char* msg = NULL ) { 
+	return ax_log_hex( tag, arr.ptr(), arr.byteSize(), msg ); 
 }
 
 template<class T> inline
-axStatus ax_log_hex( const T & obj, const char* msg = NULL ) { return ax_log_hex( &obj, sizeof(obj), msg ); }
+axStatus ax_log_hex( const axIArray<T> & arr, const char* msg = NULL ) { 
+	return ax_log_hex( *axLog_StdTag::instance, arr, msg ); 
+}
+
+template<class T> inline
+axStatus ax_log_hex( axLog_Tag &tag, const T* obj, const char* msg = NULL ) { 
+	return ax_log_hex( tag, obj, sizeof(T), msg ); 
+}
+
+template<class T> inline
+axStatus ax_log_hex( const T* obj, const char* msg = NULL ) { return ax_log_hex( obj, sizeof(T), msg ); }
 
 
 inline axStatus ax_log_ArgList( const char*		 fmt, const axStringFormat::ArgList &list ) { return axLog::instance->log_ArgList( *axLog_StdTag::instance, NULL, fmt, list ); }

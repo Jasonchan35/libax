@@ -2,13 +2,9 @@
 
 #include <ax/ax_unit_test.h>
 
-const size_t numRows = 100;
+const size_t numRows = 2;
 
 #define myTEST_TYPE_LIST \
-	myTEST_TYPE( bool,		bool,			bool   ) \
-	myTEST_TYPE( float,		float,			float  ) \
-	myTEST_TYPE( double,	double,			double ) \
-\
 	myTEST_TYPE( int8,		int8_t,			int8_t  ) \
 	myTEST_TYPE( int16,		int16_t,		int16_t ) \
 	myTEST_TYPE( int32,		int32_t,		int32_t ) \
@@ -19,12 +15,16 @@ const size_t numRows = 100;
 	myTEST_TYPE( uint32,	uint32_t,		uint32_t ) \
 	myTEST_TYPE( uint64,	uint64_t,		uint64_t ) \
 \
+	myTEST_TYPE( bool,		bool,			bool   ) \
+	myTEST_TYPE( float,		float,			float  ) \
+	myTEST_TYPE( double,	double,			double ) \
+\
 	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
 	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
-	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
-	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
-\
-	myTEST_TYPE( vec3f,		axVec3f,		axVec3f   ) \
+//	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
+//	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
+//\
+//	myTEST_TYPE( vec3f,		axVec3f,		axVec3f   ) \
 //---------------
 
 typedef int64_t		TableID;
@@ -154,7 +154,7 @@ public:
 axStatus test_ax_database_common( axDBConn & db ) {
 	axStatus st;
 
-//	db.setEchoSQL( true );
+	db.setEchoSQL( true );
 
 //	const char* table = "unit Test's \"Table\" 01";
 //	const char* table = "Test's Table";
@@ -346,17 +346,17 @@ axStatus test_ODBC_MSSQL() {
 	axDBConn	db;
 //	st = axODBC_MSSQL_connect ( db, "MSSQL_DSN", "test", "1234");		if( !st ) return st;
 
-	//st = axODBC_MSSQL_connectDSN ( db,	"DRIVER={SQL Server Native Client 10.0};"
-	//									"DATABASE=testdb;"
-	//									"SERVER=192.168.1.49;"
-	//									"UID=test;"
-	//									"PWD=1234;");	
+	st = axODBC_MSSQL_connectDSN ( db,	"DRIVER={SQL Server Native Client 10.0};"
+										"DATABASE=testdb;"
+										"SERVER=192.168.1.49;"
+										"UID=test;"
+										"PWD=1234;");	
 
-	st = axODBC_MSSQL_connectDSN ( db,	"DRIVER={SQL Server Native Client 10.0}; "
-										"SERVER=10.20.20.200\\MSSQL_DATABASE_3,1432; "
-										"DATABASE=UnitTest; "
-										"UID=atlas;"
-										"PWD=atlas;" );	
+	//st = axODBC_MSSQL_connectDSN ( db,	"DRIVER={SQL Server Native Client 10.0}; "
+	//									"SERVER=10.20.20.200\\MSSQL_DATABASE_3,1432; "
+	//									"DATABASE=UnitTest; "
+	//									"UID=atlas;"
+	//									"PWD=atlas;" );	
 	if( !st ) return st;
 
 	st = test_ax_database_common(db);			if( !st ) return st;
@@ -377,17 +377,31 @@ axStatus test_ODBC_Oracle() {
 }
 #endif
 
+#if 1 //=============== Oracle OCI ====================
+#include <ax/database/axOracle.h>
+axStatus test_Oracle() {
+	axStatus st;
+	axDBConn	db;
+
+	st = axOracle_connect ( db, "localhost", 1521, "orcl", "test", "1234" );		if( !st ) return st;
+	st = test_ax_database_common(db);											if( !st ) return st;
+	return 0;
+}
+#endif
+
 axStatus test_ax_database() {
 	axStatus st;
 	axLog::instance->addFile( "test.log", false );
 
 	ax_log("test {?} records\n", numRows );
 
-	axUTestCase( test_SQLite3() );
-	axUTestCase( test_MySQL() );
-	axUTestCase( test_PostgreSQL() );
-	axUTestCase( test_ODBC_MSSQL() );
-	axUTestCase( test_ODBC_Oracle() );
+	//axUTestCase( test_SQLite3() );
+	//axUTestCase( test_MySQL() );
+	//axUTestCase( test_PostgreSQL() );
+	//axUTestCase( test_ODBC_MSSQL() );
+	//axUTestCase( test_ODBC_Oracle() );
+
+	axUTestCase( test_Oracle() );
 
 	return 0;
 }

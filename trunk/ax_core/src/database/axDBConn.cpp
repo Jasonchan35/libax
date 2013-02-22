@@ -276,7 +276,7 @@ axStatus axDBConn_Imp::getSQL_Insert( axIStringA & outSQL, const axDBColumnList 
 		st = outSQL.append( "?" );						if( !st ) return st;
 	}
 
-	st = outSQL.append(" );");							if( !st ) return st;
+	st = outSQL.append(" )");							if( !st ) return st;
 	return 0;
 }
 
@@ -311,7 +311,7 @@ axStatus axDBConn_Imp::getSQL_Update( axIStringA & outSQL, const axDBColumnList 
 		col++;
 	}
 
-	st = outSQL.appendFormat("\n  WHERE {?};", szWhere );	if( !st ) return st;
+	st = outSQL.appendFormat("\n  WHERE {?}", szWhere );	if( !st ) return st;
 	return 0;
 }
 
@@ -352,8 +352,6 @@ axStatus axDBConn_Imp::getSQL_Select ( axIStringA & outSQL, const axDBColumnList
 	if( szOrder ) {
 		st = outSQL.appendFormat("\n  ORDER BY {?}", szOrder );	if( !st ) return st;
 	}
-
-    st = outSQL.append( ";" );                                  if( !st ) return st;
     
 	return 0;
 }

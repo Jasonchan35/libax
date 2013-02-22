@@ -15,7 +15,15 @@
 //---
 
 #define axUTestDo( E )			{ ax_log("DO:   {?}\n", #E); E; }
-#define axUTestCase( F )		{ ax_log("==== {?} ====", #F); axStatus st = F; /*if( !st ) return st;*/ }
+#define axUTestCase( F )		{ \
+	ax_log("==== {?} ====", #F); \
+	axStatus st = F; \
+	if( !st ) { \
+		ax_log("==== ERROR Case {?} : return {?} ====", #F, st ); \
+		/*return st;*/ \
+	} \
+} \
+//------
 
 
 #endif //__ax_unit_test_h__

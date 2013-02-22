@@ -27,7 +27,7 @@
 	#include <libpq-fe.h>
 //	#include <ecpg_config.h>
 #else
-
+	#error
 #endif
 
 

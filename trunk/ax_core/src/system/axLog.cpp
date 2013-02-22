@@ -14,7 +14,7 @@ axStatus ax_log_hex( axLog_Tag &tag, const void* ptr, size_t byteSize, const cha
 	axStatus st;
 	st = ax_convert_dump_hex_string( tmp, ptr, byteSize );		if( !st ) return st;
 
-	return ax_log( tag, "{?}----------- dump hex byteSize={?} ------------\n{?}", msg, byteSize, tmp );
+	return ax_log( tag, "{?}----------- dump hex byteSize={?} ------------{?}", msg, byteSize, tmp );
 }
 
 //=== StdTag ====
