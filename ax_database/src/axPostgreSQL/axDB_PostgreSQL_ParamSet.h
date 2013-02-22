@@ -43,7 +43,7 @@ public:
 		axStatus	onTake( UnionType &src ) { *this = src; return 0; }
 	};
 		
-	enum { BUF_SIZE = 32 };
+	enum { BUF_SIZE = axDB_kArgListLocalBufSize };
 
 	axArray< Oid,			BUF_SIZE >		types;
 	axArray< int,			BUF_SIZE >		lengths;

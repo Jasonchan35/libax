@@ -8,6 +8,8 @@
 //! \ingroup base_string
 //@{
 
+axStatus	ax_to_utf16_array( axIArray< axUTF16 > & out, const char*	 sz );
+axStatus	ax_to_utf16_array( axIArray< axUTF16 > & out, const wchar_t* sz );
 
 inline	axStatus ax_str_to( const char*		sz, axIStringA &v )	{ return v.set(sz); }
 inline	axStatus ax_str_to( const char*		sz, axIStringW &v )	{ return v.set(sz); }

@@ -8,6 +8,31 @@
 
 #include <ax/core/string/ax_str_to.h>
 
+axStatus	ax_to_utf16_array( axIArray< axUTF16 > & out, const char*	  sz ) {
+	axStatus st;
+	axTempStringW	w;
+	st = w.set( sz );		if( !st ) return st;
+	return ax_to_utf16_array( out, w );
+}
+
+axStatus	ax_to_utf16_array( axIArray< axUTF16 > & out, const wchar_t* sz ) {
+	axStatus st;
+	size_t n = ax_strlen( sz )+1;
+	st = out.resize( n, false );		if( !st ) return st;
+
+	const wchar_t* src = sz;
+		  axUTF16* dst = out.ptr();	
+
+	for( size_t i=0; i<n; i++ ) {
+		*dst = *src;
+		dst++;
+		src++;
+	}
+	out[n] = 0;
+	return 0;
+}
+
+
 //==================  ax_str_to char ============================
 axStatus ax_str_to( const char* sz, bool &v ) {
 	if( ax_strcasecmp( sz, "true" ) == 0 ) {

@@ -27,6 +27,7 @@ axStatus_enum( serialize_utf8_error )
 
 //-----------
 axStatus_enum( String_utf8_error )
+axStatus_enum( String_UChar_error )
 axStatus_enum( error_decodeURI )
 //-----------
 axStatus_enum( Array_error )

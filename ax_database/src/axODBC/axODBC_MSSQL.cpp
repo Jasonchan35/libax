@@ -1,6 +1,6 @@
 #include "axDBConn_ODBC.h"
 
-class axDBConn_MSSQL : public axDBConn_ODBC {
+class axDBConn_ODBC_MSSQL : public axDBConn_ODBC {
 public:
 	virtual	axStatus		getSQL_CreateTable		( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table );
 	virtual axStatus		getSQL_DropTableIfExists( axStringA_Array & outSQLArray, const char* table );
@@ -14,19 +14,19 @@ public:
 };
 
 axStatus	axODBC_MSSQL_connect( axDBConn & db, const char* server, const char* username, const char* password ) {
-	axDBConn_MSSQL* p = new axDBConn_MSSQL();
+	axDBConn_ODBC_MSSQL* p = new axDBConn_ODBC_MSSQL();
 	if( !p ) return axStatus_Std::not_enough_memory;
 	db._setImp(p);
 	return p->connect( server, username, password );
 }
 axStatus	axODBC_MSSQL_connectDSN( axDBConn & db, const char* dsn ) {
-	axDBConn_MSSQL* p = new axDBConn_MSSQL();
+	axDBConn_ODBC_MSSQL* p = new axDBConn_ODBC_MSSQL();
 	if( !p ) return axStatus_Std::not_enough_memory;
 	db._setImp(p);
 	return p->connectDSN( dsn );
 }
 
-axStatus	axDBConn_MSSQL::savePoint		( const char* name ) { 
+axStatus	axDBConn_ODBC_MSSQL::savePoint		( const char* name ) { 
 	axStatus st;
 	axTempStringA	tmp;
 	axStringA_<64>	spName;
@@ -35,7 +35,7 @@ axStatus	axDBConn_MSSQL::savePoint		( const char* name ) {
 	return _directExec( tmp );
 }
 
-axStatus	axDBConn_MSSQL::rollBackToSavePoint	( const char* name ) { 
+axStatus	axDBConn_ODBC_MSSQL::rollBackToSavePoint	( const char* name ) { 
 	axStatus st;
 	axTempStringA	tmp;
 	axStringA_<64>	spName;
@@ -44,14 +44,14 @@ axStatus	axDBConn_MSSQL::rollBackToSavePoint	( const char* name ) {
 	return _directExec( tmp );
 }
 
-axStatus	axDBConn_MSSQL::releaseSavePoint		( const char* name ) { 
+axStatus	axDBConn_ODBC_MSSQL::releaseSavePoint		( const char* name ) { 
 	//do nothing, MSSQL has no way to release save point, so just leave the save point until the end of transaction
 	return 0;
 }
 
 
 //virtual 
-axStatus axDBConn_MSSQL::getSQL_LastInsertId	( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
+axStatus axDBConn_ODBC_MSSQL::getSQL_LastInsertId	( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
 	axStatus	st;
 	st = outSQL.format("SELECT @@IDENTITY;" );			if( !st ) return st;
 //	st = outSQL.format("SELECT SCOPE_IDENTITY();" );	if( !st ) return st;
@@ -59,7 +59,7 @@ axStatus axDBConn_MSSQL::getSQL_LastInsertId	( axIStringA & outSQL, const axDBCo
 }
 
 
-const char*	axDBConn_MSSQL::DBTypeName( int c_type ) {
+const char*	axDBConn_ODBC_MSSQL::DBTypeName( int c_type ) {
 	switch( c_type ) {
 		case axDB_c_type_int8:		return "SMALLINT"; // TINYINT is unisgned in MS SQL, so using SMALLINT
 		case axDB_c_type_int16:		return "SMALLINT";
@@ -87,7 +87,7 @@ const char*	axDBConn_MSSQL::DBTypeName( int c_type ) {
 	return "Unknown";
 }
 
-axStatus	axDBConn_MSSQL::getSQL_DropTableIfExists( axStringA_Array & outSQLArray, const char* table ) {
+axStatus	axDBConn_ODBC_MSSQL::getSQL_DropTableIfExists( axStringA_Array & outSQLArray, const char* table ) {
 	axStatus st;
 	axStringA	tableName;
 
@@ -107,7 +107,7 @@ axStatus	axDBConn_MSSQL::getSQL_DropTableIfExists( axStringA_Array & outSQLArray
 
 
 
-axStatus	axDBConn_MSSQL::getSQL_CreateTable	( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table ) {
+axStatus	axDBConn_ODBC_MSSQL::getSQL_CreateTable	( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table ) {
 	axStatus st;
 	axTempStringA	tableName;
 

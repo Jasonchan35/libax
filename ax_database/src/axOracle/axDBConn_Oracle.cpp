@@ -1,92 +1,163 @@
-#include "axDBConn_ODBC.h"
+#include "axDBConn_Oracle.h"
 
-
-class axDBConn_ODBC_Oracle : public axDBConn_ODBC {
-public:
-
-	virtual axStatus	createStmt				( axDBStmt & stmt, const char * sql );
-
-	virtual	axStatus	getSQL_CreateTable		( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table );
-	virtual axStatus	getSQL_DropTableIfExists( axStringA_Array & outSQLArray, const char* table );
-
-	virtual axStatus	getSQL_LastInsertId		( axIStringA & outSQL, const axDBColumnList & list, const char* table );
-
-	virtual	const char*	DBTypeName				( int c_type );
-
-	virtual	axStatus	identifierString		( axIStringA & out, const char* sz );
-
-};
-
-
-class axDBStmt_ODBC_Oracle : public axDBStmt_ODBC {
-	typedef axDBStmt_ODBC B;
-public:
-	axDBStmt_ODBC_Oracle( axDBConn_ODBC_Oracle* db ) : B(db) {}
-
-	virtual SQLRETURN _OnSQLBindParameter( SQLUSMALLINT col, const int64_t  & value, axIStringW & tempStr, SQLLEN & len );
-	virtual SQLRETURN _OnSQLBindParameter( SQLUSMALLINT col, const uint64_t & value, axIStringW & tempStr, SQLLEN & len );
-
-	template<class T>
-	axStatus	_getResultAtColByString	( axSize col, T &value );
-
-	virtual axStatus	getResultAtCol	( axSize col, int64_t  &value );
-	virtual axStatus	getResultAtCol	( axSize col, uint64_t &value );
-};
-
-
-axStatus	axODBC_Oracle_connect( axDBConn & db, const char* server, const char* username, const char* password ) {
-	axDBConn_ODBC_Oracle* p = new axDBConn_ODBC_Oracle();
-	if( !p ) return axStatus_Std::not_enough_memory;
-	db._setImp(p);
-	return p->connect( server, username, password );
-}
-
-axStatus	axODBC_Oracle_connectDSN( axDBConn & db, const char* dsn ) {
-	axDBConn_ODBC_Oracle* p = new axDBConn_ODBC_Oracle();
-	if( !p ) return axStatus_Std::not_enough_memory;
-	db._setImp(p);
-	return p->connectDSN( dsn );
-}
-
-SQLRETURN axDBStmt_ODBC_Oracle::_OnSQLBindParameter( SQLUSMALLINT col, const int64_t & value, axIStringW & tmpStrData, SQLLEN & len ) {
-	return _OnBindParamByString( col, value, tmpStrData, len );
-}
-
-SQLRETURN axDBStmt_ODBC_Oracle::_OnSQLBindParameter( SQLUSMALLINT col, const uint64_t & value, axIStringW & tmpStrData, SQLLEN & len ) {
-	return _OnBindParamByString( col, value, tmpStrData, len );
-}
-
-template<class T> inline
-axStatus	axDBStmt_ODBC_Oracle::_getResultAtColByString( axSize col, T &value ) {
-	value = 0;
-
+axStatus axOracle_connect ( axDBConn & conn, const char* hostname, int port, const char* sid, const char * username, const char* password ) {
 	axStatus st;
+	axPtr< axDBConn_Oracle > p(st);	if( !st ) return st;
+	conn._setImp( p );
+	return p->connect( hostname, port, sid, username, password );	
+}
 
-	char buf[64+4];
-	SQLLEN cbLen;
-	SQLRETURN ret;
+axDBConn_Oracle::axDBConn_Oracle() {
+	envhp	= NULL;
+	errhp	= NULL;
+	svchp	= NULL;
+}
 
-	ret = SQLGetData( stmt_, (SQLUSMALLINT)col+1, SQL_C_CHAR, buf, 64, &cbLen );
-	if( hasError(ret) ) {
-		logError();
-		return axStatus_Std::DB_invalid_param_type;
+axDBConn_Oracle::~axDBConn_Oracle() {
+	close();
+}
+
+void axDBConn_Oracle::close() {
+	if( svchp ) {
+		OCIHandleFree( svchp, OCI_HTYPE_SVCCTX );
+		svchp = NULL;
 	}
 
-	if( cbLen == SQL_NULL_DATA ) return 0;
-	if( cbLen <= 0 ) return axStatus_Std::DB_invalid_param_type;
+	if( errhp ) {
+		OCIHandleFree( errhp, OCI_HTYPE_ERROR  );
+		errhp = NULL;
+	}
 
-	buf[cbLen] = 0;
+	if( envhp ) {
+		OCIHandleFree( envhp, OCI_HTYPE_ENV );
+		envhp = NULL;
+	}
+}
 
-	value = 0;
-	st = ax_str_to( buf, value );			if( !st ) return st;
+axStatus axDBConn_Oracle::connect( const char* hostname, int port, const char* sid, const char* username, const char* password ) {
+	close();
+
+	axStatus st;
+	sword ret;
+
+	ret = OCIEnvCreate( &envhp, OCI_DEFAULT | OCI_UTF16, NULL, NULL, NULL, NULL, 0, NULL );
+	if( hasError(ret,NULL) ) return axStatus_Std::DB_error_connect;
+
+	ret = OCIHandleAlloc( envhp, (void**)&errhp,	OCI_HTYPE_ERROR,  0, 0 );
+	if( hasError(ret,NULL) ) return axStatus_Std::DB_error_connect;
+
+
+//service context
+	ret = OCIHandleAlloc( envhp, (void**)&svchp,	OCI_HTYPE_SVCCTX, 0, 0 );
+	if( hasError(ret,NULL) ) return axStatus_Std::DB_error_connect;
+
+
+	axTempStringA	dblink;
+	st = dblink.format("(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=\"{?}\")(PORT=\"{?}\"))(CONNECT_DATA=(SID=\"{?}\")))", 
+						hostname, port, sid );
+	if( !st ) return st;
+
+	ax_log_var( dblink );
+
+	axByteArray_<128>	w_username;
+	axByteArray_<128>	w_password;
+	axByteArray_<128>	w_dblink;
+
+	st = toUTextArray( w_username, username );		if( !st ) return st;
+	st = toUTextArray( w_password, password );		if( !st ) return st;
+	st = toUTextArray( w_dblink,   dblink );		if( !st ) return st;
+
+	ax_log_hex( w_password.ptr(), w_password.byteSize() );
+	ax_log_hex( dblink, ax_strlen(dblink) );
+
+	ret = OCILogon( envhp, errhp, &svchp, 
+					(OraText*)w_username.ptr(), w_username.byteSize() - sizeof(utext), 
+					(OraText*)w_password.ptr(), w_password.byteSize() - sizeof(utext) ,
+					(OraText*)w_dblink.ptr(),   w_dblink.byteSize()   - sizeof(utext) );
+
+	if( hasError(ret,NULL) ) return axStatus_Std::DB_error_connect;
+
+
+//=====
+
+
 	return 0;
 }
-axStatus	axDBStmt_ODBC_Oracle::getResultAtCol( axSize col, int64_t  & value ) { return _getResultAtColByString( col, value ); }
-axStatus	axDBStmt_ODBC_Oracle::getResultAtCol( axSize col, uint64_t & value ) { return _getResultAtColByString( col, value ); }
 
+bool axDBConn_Oracle::hasError( sword status, const char* sql ) {
+
+	axByteArray_<2048>	buf;
+	axStringW_<2048+32> strW;
+
+	buf.resizeToCapacity();
+
+	switch (status) {
+		case OCI_SUCCESS:				return false;
+		case OCI_SUCCESS_WITH_INFO:		return false;
+	}
+
+	for( ub4 i=1; ; i++ ) {
+		sb4 errcode = 0;
+		sword ret = OCIErrorGet( errhp, i, NULL, &errcode, buf.ptr(), buf.byteSize(), OCI_HTYPE_ERROR );
+		if( ret != OCI_SUCCESS && ret != OCI_SUCCESS_WITH_INFO ) break;
+
+		fromUTextArray( strW, buf );
+		ax_log("Oracle Error {?}: {?}", errcode, strW );
+	}
+
+	return true;
+}
+
+axStatus	axDBConn_Oracle::_directExec( const char* sql ) {
+	assert(false);
+	return 0;
+}
+
+axStatus	axDBConn_Oracle::beginTran() {
+	assert(false);
+	return 0;
+}
+
+axStatus	axDBConn_Oracle::rollBackTran() {
+	assert(false);
+	return 0;
+}
+
+axStatus	axDBConn_Oracle::commitTran() {
+	assert(false);
+	return 0;
+}
+
+
+axStatus	axDBConn_Oracle::savePoint		( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );			if( !st ) return st;
+	st = tmp.format("SAVEPOINT {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
+}
+
+axStatus	axDBConn_Oracle::rollBackToSavePoint	( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );						if( !st ) return st;
+	st = tmp.format("ROLLBACK TO SAVEPOINT {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
+}
+
+axStatus	axDBConn_Oracle::releaseSavePoint		( const char* name ) { 
+	axStatus st;
+	axTempStringA	tmp;
+	axStringA_<64>	spName;
+	st = identifierString( spName, name );					if( !st ) return st;
+	st = tmp.format("RELEASE SAVEPOINT {?};", spName);		if( !st ) return st;
+	return _directExec( tmp );
+}
 
 //virtual 
-axStatus axDBConn_ODBC_Oracle::getSQL_LastInsertId	( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
+axStatus axDBConn_Oracle::getSQL_LastInsertId	( axIStringA & outSQL, const axDBColumnList & list, const char* table ) {
 	axStatus	st;
 	axStringA	seqName;
 	axStringA	tmp;
@@ -101,15 +172,15 @@ axStatus axDBConn_ODBC_Oracle::getSQL_LastInsertId	( axIStringA & outSQL, const 
 	return 0;
 }
 
-axStatus	axDBConn_ODBC_Oracle::createStmt ( axDBStmt & stmt, const char * sql ) {
+axStatus	axDBConn_Oracle::createStmt ( axDBStmt & stmt, const char * sql ) {
 	axStatus st;
-	axDBStmt_ODBC_Oracle* p = new axDBStmt_ODBC_Oracle( this );
+	axDBStmt_Oracle* p = new axDBStmt_Oracle( this );
 	if( !p ) return axStatus_Std::not_enough_memory;
 	stmt._setImp( p );
 	return p->create( sql );
 }
 
-axStatus	axDBConn_ODBC_Oracle::identifierString( axIStringA & out, const char* sz ) {
+axStatus	axDBConn_Oracle::identifierString( axIStringA & out, const char* sz ) {
 	axStatus st;
 	axTempStringA	tmp;
 	st = tmp.set( sz );						if( !st ) return st;
@@ -124,7 +195,7 @@ axStatus	axDBConn_ODBC_Oracle::identifierString( axIStringA & out, const char* s
 	return out.format("\"{?}\"", tmp );
 }
 
-axStatus	axDBConn_ODBC_Oracle::getSQL_DropTableIfExists( axStringA_Array & outSQLArray, const char* table ) {
+axStatus	axDBConn_Oracle::getSQL_DropTableIfExists( axStringA_Array & outSQLArray, const char* table ) {
 	axStatus st;
 
 	{//drop table
@@ -191,7 +262,7 @@ axStatus	axDBConn_ODBC_Oracle::getSQL_DropTableIfExists( axStringA_Array & outSQ
 }
 
 
-axStatus	axDBConn_ODBC_Oracle::getSQL_CreateTable	( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table ) {
+axStatus	axDBConn_Oracle::getSQL_CreateTable	( axStringA_Array & outSQLArray, const axDBColumnList & list, const char* table ) {
 	axStatus st;
 
 	{
@@ -219,7 +290,7 @@ axStatus	axDBConn_ODBC_Oracle::getSQL_CreateTable	( axStringA_Array & outSQLArra
 				}
 			}
 		}
-		st = outSQL.appendFormat( "\n);" );			if( !st ) return st;
+		st = outSQL.appendFormat( "\n)" );			if( !st ) return st;
 	}
 
 	const axDBColumn *pkeyCol = list.pkeyColumn();
@@ -238,7 +309,7 @@ axStatus	axDBConn_ODBC_Oracle::getSQL_CreateTable	( axStringA_Array & outSQLArra
 		st = tmp.format("seq_{?}", table );								if( !st ) return st;
 		st = identifierString( seqName, tmp );							if( !st ) return st;
 
-		st = outSQL.appendFormat( "CREATE SEQUENCE {?};", seqName );	if( !st ) return st;
+		st = outSQL.appendFormat( "CREATE SEQUENCE {?}", seqName );	if( !st ) return st;
 	}
 
 	{// CREATE TRIGGER
@@ -274,7 +345,7 @@ axStatus	axDBConn_ODBC_Oracle::getSQL_CreateTable	( axStringA_Array & outSQLArra
 	return 0;
 }
 
-const char*	axDBConn_ODBC_Oracle::DBTypeName( int c_type ) {
+const char*	axDBConn_Oracle::DBTypeName( int c_type ) {
 	switch( c_type ) {
 		case axDB_c_type_int8:		return "NUMBER(3,0)";
 		case axDB_c_type_int16:		return "NUMBER(5,0)";

@@ -7,7 +7,7 @@
 //! \ingroup base_string
 //@{
 
-//typedef	uint16_t	axUChar;
+typedef	uint16_t	axUTF16;
 
 inline const char * ax_HEX_chars() { return "0123456789ABCDEF"; }
 inline const char * ax_hex_chars() { return "0123456789abcdef"; }
