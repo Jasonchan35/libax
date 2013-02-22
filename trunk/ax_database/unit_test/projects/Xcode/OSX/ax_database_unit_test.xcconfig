@@ -6,9 +6,10 @@ ax_database_path = ../../../../../ax_database
 #include          "../../../../../ax_database/projects/Xcode/OSX/axSQLite3.xcconfig"
 #include          "../../../../../ax_database/projects/Xcode/OSX/axPostgreSQL.xcconfig"
 #include          "../../../../../ax_database/projects/Xcode/OSX/axMySQL.xcconfig"
+#include          "../../../../../ax_database/projects/Xcode/OSX/axOracle.xcconfig"
 
-OTHER_CFLAGS  = $(OTHER_CFLAGS)  $(axPostgreSQL_CFLAGS)  $(axMySQL_CFLAGS)  $(axSQLite3_CFLAGS)  $(ax_core_CFLAGS)
-OTHER_LDFLAGS = $(OTHER_LDFLAGS) $(axPostgreSQL_LDFLAGS) $(axMySQL_LDFLAGS) $(axSQLite3_LDFLAGS) $(ax_core_LDFLAGS) -lsqlite3
+OTHER_CFLAGS  = $(OTHER_CFLAGS)  $(axOracle_CFLAGS)  $(axPostgreSQL_CFLAGS)  $(axMySQL_CFLAGS)  $(axSQLite3_CFLAGS)  $(ax_core_CFLAGS)
+OTHER_LDFLAGS = $(OTHER_LDFLAGS) $(axOracle_LDFLAGS) $(axPostgreSQL_LDFLAGS) $(axMySQL_LDFLAGS) $(axSQLite3_LDFLAGS) $(ax_core_LDFLAGS) -lsqlite3
 
 //GCC_PRECOMPILE_PREFIX_HEADER = YES
 //GCC_PREFIX_HEADER = ../../../src/pch/pch.h

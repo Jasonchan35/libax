@@ -1,0 +1,233 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		EAC62BD416D7D55800D57012 /* axDBConn_Oracle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAC62BD016D7D55500D57012 /* axDBConn_Oracle.cpp */; };
+		EAC62BD516D7D55A00D57012 /* axDBStmt_Oracle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAC62BD216D7D55500D57012 /* axDBStmt_Oracle.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		EAC62BC616D7D51300D57012 /* libaxOracle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libaxOracle.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		EAC62BCD16D7D53E00D57012 /* axOracle_build.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = axOracle_build.xcconfig; sourceTree = "<group>"; };
+		EAC62BCE16D7D53E00D57012 /* axOracle.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = axOracle.xcconfig; sourceTree = "<group>"; };
+		EAC62BD016D7D55500D57012 /* axDBConn_Oracle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = axDBConn_Oracle.cpp; sourceTree = "<group>"; };
+		EAC62BD116D7D55500D57012 /* axDBConn_Oracle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDBConn_Oracle.h; sourceTree = "<group>"; };
+		EAC62BD216D7D55500D57012 /* axDBStmt_Oracle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = axDBStmt_Oracle.cpp; sourceTree = "<group>"; };
+		EAC62BD316D7D55500D57012 /* axDBStmt_Oracle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDBStmt_Oracle.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EAC62BC316D7D51300D57012 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		EAC62BBD16D7D51300D57012 = {
+			isa = PBXGroup;
+			children = (
+				EAC62BCF16D7D55500D57012 /* axOracle */,
+				EAC62BCD16D7D53E00D57012 /* axOracle_build.xcconfig */,
+				EAC62BCE16D7D53E00D57012 /* axOracle.xcconfig */,
+				EAC62BC716D7D51300D57012 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EAC62BC716D7D51300D57012 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EAC62BC616D7D51300D57012 /* libaxOracle.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EAC62BCF16D7D55500D57012 /* axOracle */ = {
+			isa = PBXGroup;
+			children = (
+				EAC62BD016D7D55500D57012 /* axDBConn_Oracle.cpp */,
+				EAC62BD116D7D55500D57012 /* axDBConn_Oracle.h */,
+				EAC62BD216D7D55500D57012 /* axDBStmt_Oracle.cpp */,
+				EAC62BD316D7D55500D57012 /* axDBStmt_Oracle.h */,
+			);
+			name = axOracle;
+			path = ../../../src/axOracle;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		EAC62BC416D7D51300D57012 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		EAC62BC516D7D51300D57012 /* axOracle */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EAC62BCA16D7D51300D57012 /* Build configuration list for PBXNativeTarget "axOracle" */;
+			buildPhases = (
+				EAC62BC216D7D51300D57012 /* Sources */,
+				EAC62BC316D7D51300D57012 /* Frameworks */,
+				EAC62BC416D7D51300D57012 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = axOracle;
+			productName = axOracle;
+			productReference = EAC62BC616D7D51300D57012 /* libaxOracle.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EAC62BBE16D7D51300D57012 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = awenix;
+			};
+			buildConfigurationList = EAC62BC116D7D51300D57012 /* Build configuration list for PBXProject "axOracle" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = EAC62BBD16D7D51300D57012;
+			productRefGroup = EAC62BC716D7D51300D57012 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EAC62BC516D7D51300D57012 /* axOracle */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		EAC62BC216D7D51300D57012 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EAC62BD416D7D55800D57012 /* axDBConn_Oracle.cpp in Sources */,
+				EAC62BD516D7D55A00D57012 /* axDBStmt_Oracle.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		EAC62BC816D7D51300D57012 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EAC62BCD16D7D53E00D57012 /* axOracle_build.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx10.7;
+			};
+			name = Debug;
+		};
+		EAC62BC916D7D51300D57012 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EAC62BCD16D7D53E00D57012 /* axOracle_build.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx10.7;
+			};
+			name = Release;
+		};
+		EAC62BCB16D7D51300D57012 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		EAC62BCC16D7D51300D57012 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		EAC62BC116D7D51300D57012 /* Build configuration list for PBXProject "axOracle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EAC62BC816D7D51300D57012 /* Debug */,
+				EAC62BC916D7D51300D57012 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EAC62BCA16D7D51300D57012 /* Build configuration list for PBXNativeTarget "axOracle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EAC62BCB16D7D51300D57012 /* Debug */,
+				EAC62BCC16D7D51300D57012 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EAC62BBE16D7D51300D57012 /* Project object */;
+}
