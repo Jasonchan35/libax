@@ -33,9 +33,14 @@ public:
 
 	const char*	DBTypeName( int c_type );
 
+	OCIStmt*		lastExecStmt_;
+
 	OCIEnv*			envhp;
 	OCIError*		errhp;
 	OCISvcCtx*		svchp;
+	OCITrans*		trans;
+
+	bool	inTrans_;
 };
 
 

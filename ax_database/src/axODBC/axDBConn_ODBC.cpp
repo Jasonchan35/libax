@@ -277,14 +277,14 @@ void axDBConn_ODBC::logError() {
 	for(;;) {
 		ret = SQLGetDiagRec( SQL_HANDLE_ENV, env_, ++iRec, wszState, &iNativeError, wszMessage, len, NULL );
 		if( ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO ) break;
-		ax_log("ODBC Error [{?}] [{?}]: {?}\nSQL:\n{?}\n", wszState, (int)iNativeError, wszMessage );
+		ax_log("ODBC Error [{?}] [{?}]: {?}", wszState, (int)iNativeError, wszMessage );
 	}
 
 	iRec = 0;
 	for(;;) {
 		ret = SQLGetDiagRec( SQL_HANDLE_DBC, dbc_, ++iRec, wszState, &iNativeError, wszMessage, len, NULL );
 		if( ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO ) break;
-		ax_log("ODBC Error [{?}] [{?}]: {?}\nSQL:\n{?}\n", wszState, (int)iNativeError, wszMessage );
+		ax_log("ODBC Error [{?}] [{?}]: {?}", wszState, (int)iNativeError, wszMessage );
     }
 }
 
