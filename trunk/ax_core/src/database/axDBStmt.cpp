@@ -60,7 +60,7 @@ axStatus axDBStmt_Imp::getRow_ArgList( axDBOutParamList & list ) {
 	axStatus st;
 	st = fetch();		if( !st ) return st;
 
-	if( numColumns() < list.size() ) return axStatus_Std::DB_invalid_param_count;
+	if( numColumns() != list.size() ) return axStatus_Std::DB_invalid_param_count;
 	
 	for( axSize i=0; i<list.size(); i++ ) {
 		axDBOutParam & v = list[i];

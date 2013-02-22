@@ -11,6 +11,8 @@ axDBConn_Oracle::axDBConn_Oracle() {
 	envhp	= NULL;
 	errhp	= NULL;
 	svchp	= NULL;
+	trans	= NULL;
+	inTrans_ = false;
 }
 
 axDBConn_Oracle::~axDBConn_Oracle() {
@@ -18,6 +20,12 @@ axDBConn_Oracle::~axDBConn_Oracle() {
 }
 
 void axDBConn_Oracle::close() {
+	assert( inTrans_ == false );
+	if( trans ) {
+		OCIHandleFree( trans, OCI_HTYPE_TRANS );
+		trans = NULL;
+	}
+
 	if( svchp ) {
 		OCIHandleFree( svchp, OCI_HTYPE_SVCCTX );
 		svchp = NULL;
@@ -52,12 +60,10 @@ axStatus axDBConn_Oracle::connect( const char* hostname, int port, const char* s
 	if( hasError(ret,NULL) ) return axStatus_Std::DB_error_connect;
 
 
-	axTempStringA	dblink;
+	axTempStringW	dblink;
 	st = dblink.format("(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=\"{?}\")(PORT=\"{?}\"))(CONNECT_DATA=(SID=\"{?}\")))", 
 						hostname, port, sid );
 	if( !st ) return st;
-
-	ax_log_var( dblink );
 
 	axByteArray_<128>	w_username;
 	axByteArray_<128>	w_password;
@@ -67,9 +73,6 @@ axStatus axDBConn_Oracle::connect( const char* hostname, int port, const char* s
 	st = toUTextArray( w_password, password );		if( !st ) return st;
 	st = toUTextArray( w_dblink,   dblink );		if( !st ) return st;
 
-	ax_log_hex( w_password.ptr(), w_password.byteSize() );
-	ax_log_hex( dblink, ax_strlen(dblink) );
-
 	ret = OCILogon( envhp, errhp, &svchp, 
 					(OraText*)w_username.ptr(), w_username.byteSize() - sizeof(utext), 
 					(OraText*)w_password.ptr(), w_password.byteSize() - sizeof(utext) ,
@@ -77,6 +80,11 @@ axStatus axDBConn_Oracle::connect( const char* hostname, int port, const char* s
 
 	if( hasError(ret,NULL) ) return axStatus_Std::DB_error_connect;
 
+	ret = OCIHandleAlloc( envhp, (void**)&trans,  OCI_HTYPE_TRANS, 0, 0);
+	if( hasError(ret,NULL) ) return axStatus_Std::DB_error_connect;
+
+	ret = OCIAttrSet( svchp, OCI_HTYPE_SVCCTX, trans, 0, OCI_ATTR_TRANS, errhp );
+	if( hasError(ret,NULL) ) return axStatus_Std::DB_error_connect;
 
 //=====
 
@@ -102,29 +110,53 @@ bool axDBConn_Oracle::hasError( sword status, const char* sql ) {
 		if( ret != OCI_SUCCESS && ret != OCI_SUCCESS_WITH_INFO ) break;
 
 		fromUTextArray( strW, buf );
-		ax_log("Oracle Error {?}: {?}", errcode, strW );
+		if( sql ) {
+			ax_log("Oracle Error {?}: {?}\nSQL:\n{?}\n", errcode, strW, sql );
+		}else{
+			ax_log("Oracle Error {?}: {?}", errcode, strW );
+		}
 	}
 
 	return true;
 }
 
 axStatus	axDBConn_Oracle::_directExec( const char* sql ) {
-	assert(false);
+	axStatus st;
+	axDBStmt_Oracle	stmt(this);
+	st = stmt.create( sql );			if( !st ) return st;
+
+	axDBInParamList list;
+	st = stmt.exec_ArgList(list);		if( !st ) return st;
+
 	return 0;
 }
 
 axStatus	axDBConn_Oracle::beginTran() {
-	assert(false);
+	assert( inTrans_ == false );
+
+	uword timeout = 30 * 60; //30 min
+	sword ret = OCITransStart( svchp, errhp, timeout, OCI_TRANS_NEW ); 
+	if( hasError(ret,NULL) ) return axStatus_Std::DB_error;
+
+	inTrans_ = true;
 	return 0;
 }
 
 axStatus	axDBConn_Oracle::rollBackTran() {
-	assert(false);
+	assert( inTrans_ );
+	sword ret = OCITransRollback( svchp, errhp, OCI_DEFAULT );
+	if( hasError(ret,NULL) ) return axStatus_Std::DB_error;
+
+	inTrans_ = false;
 	return 0;
 }
 
 axStatus	axDBConn_Oracle::commitTran() {
-	assert(false);
+	assert( inTrans_ );
+	sword ret = OCITransCommit( svchp, errhp, OCI_DEFAULT  );
+	if( hasError(ret,NULL) ) return axStatus_Std::DB_error;
+
+	inTrans_ = false;
 	return 0;
 }
 
@@ -134,7 +166,7 @@ axStatus	axDBConn_Oracle::savePoint		( const char* name ) {
 	axTempStringA	tmp;
 	axStringA_<64>	spName;
 	st = identifierString( spName, name );			if( !st ) return st;
-	st = tmp.format("SAVEPOINT {?};", spName);		if( !st ) return st;
+	st = tmp.format("SAVEPOINT {?}", spName);		if( !st ) return st;
 	return _directExec( tmp );
 }
 
@@ -143,16 +175,18 @@ axStatus	axDBConn_Oracle::rollBackToSavePoint	( const char* name ) {
 	axTempStringA	tmp;
 	axStringA_<64>	spName;
 	st = identifierString( spName, name );						if( !st ) return st;
-	st = tmp.format("ROLLBACK TO SAVEPOINT {?};", spName);		if( !st ) return st;
+	st = tmp.format("ROLLBACK TO SAVEPOINT {?}", spName);		if( !st ) return st;
 	return _directExec( tmp );
 }
 
 axStatus	axDBConn_Oracle::releaseSavePoint		( const char* name ) { 
+	return 0;
+
 	axStatus st;
 	axTempStringA	tmp;
 	axStringA_<64>	spName;
 	st = identifierString( spName, name );					if( !st ) return st;
-	st = tmp.format("RELEASE SAVEPOINT {?};", spName);		if( !st ) return st;
+	st = tmp.format("RELEASE SAVEPOINT {?}", spName);		if( !st ) return st;
 	return _directExec( tmp );
 }
 
@@ -166,7 +200,7 @@ axStatus axDBConn_Oracle::getSQL_LastInsertId	( axIStringA & outSQL, const axDBC
 
 	st = identifierString( seqName, tmp );		if( !st ) return st;
 
-	st = outSQL.format("SELECT {?}.currval FROM DUAL;", seqName );
+	st = outSQL.format("SELECT {?}.currval FROM DUAL", seqName );
 	if( !st ) return st;
 
 	return 0;

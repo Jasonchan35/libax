@@ -2,7 +2,7 @@
 
 #include <ax/ax_unit_test.h>
 
-const size_t numRows = 2;
+const size_t numRows = 10;
 
 #define myTEST_TYPE_LIST \
 	myTEST_TYPE( int8,		int8_t,			int8_t  ) \
@@ -18,9 +18,9 @@ const size_t numRows = 2;
 	myTEST_TYPE( bool,		bool,			bool   ) \
 	myTEST_TYPE( float,		float,			float  ) \
 	myTEST_TYPE( double,	double,			double ) \
-\
-	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
-	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
+//\
+//	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
+//	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
 //	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
 //	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
 //\
@@ -56,6 +56,8 @@ public:
 	axVec3f			v_vec3f;
 
 	Row() {
+		id = -100;
+
 		v_bool = false;
 		v_int8 = 0;
 		v_int16 = 0;
@@ -154,7 +156,7 @@ public:
 axStatus test_ax_database_common( axDBConn & db ) {
 	axStatus st;
 
-	db.setEchoSQL( true );
+//	db.setEchoSQL( true );
 
 //	const char* table = "unit Test's \"Table\" 01";
 //	const char* table = "Test's Table";
@@ -162,10 +164,11 @@ axStatus test_ax_database_common( axDBConn & db ) {
 
 	axDBTableAccessor<Row, TableID, &Row::id, true>		tbl;
 
+//re-create table
 	st = db.dropTableIfExists( table );			if( !st ) return st;
 	st = tbl.createTable( db, table );			if( !st ) return st;
 
-
+//create table accessor
 	st = tbl.create( db, table );				if( !st ) return st;
 
 	{	ax_log("===== insert ======");
@@ -175,7 +178,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		axStopWatch	timer;
 		for( size_t i=0; i<numRows; i++ ) {
 			st = tbl.insert( row );				if( !st ) return st;
-//			ax_log( "insert success with id = {?}", row.id );
+			ax_log( "insert success with id = {?}", row.id );
 			axUTestCheck( row.id == i+1 );
 		}
 		ax_log("insert {?} records in {?}s", numRows, timer.get() );
@@ -238,7 +241,6 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		ax_log("update {?} records in {?}s", numRows, timer.get() );
 	}
 
-
 	{	ax_log("===== select all ======");
 		axArray< Row >	results;
 		results.reserve( numRows );
@@ -248,6 +250,14 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		ax_log("select {?} records in {?}s", results.size(), timer.get() );
 
 
+		ax_log_var( results );
+		#if 0 // dump last only
+			if( results.size() ) {
+				ax_log_var( results.last() );
+			}
+		#endif
+
+		//== validate ==
 		axUTestCheck( results.size() == numRows );
 
 		for( size_t i=0; i<results.size(); i++ ) {
@@ -259,12 +269,6 @@ axStatus test_ax_database_common( axDBConn & db ) {
 			}
 		}
 
-	//	ax_log_var( results );
-		#if 0 // dump last only
-			if( results.size() ) {
-				ax_log_var( results.last() );
-			}
-		#endif
 	}
 
 	/*
@@ -400,7 +404,6 @@ axStatus test_ax_database() {
 	//axUTestCase( test_PostgreSQL() );
 	//axUTestCase( test_ODBC_MSSQL() );
 	//axUTestCase( test_ODBC_Oracle() );
-
 	axUTestCase( test_Oracle() );
 
 	return 0;
