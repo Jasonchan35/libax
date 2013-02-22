@@ -26,7 +26,7 @@ public:
 
 	template<class T>	axStatus	create_Insert	( axDBConn & db, const char* table );
 	template<class T>	axStatus	create_Update	( axDBConn & db, const char* table,	const char* szWhere );
-	template<class T>	axStatus	create_Select	( axDBConn & db, const char* table,	const char* szWhere );
+	template<class T>	axStatus	create_Select	( axDBConn & db, const char* table,	const char* szWhere, const char* szOrder );
 
 						axStatus	create_Insert	( axDBConn & db, const axDBColumnList & list, const char* table );
 						axStatus	create_Update	( axDBConn & db, const axDBColumnList & list, const char* table, const char* szWhere );
@@ -131,14 +131,14 @@ axStatus	axDBStmt::create_Update( axDBConn & db, const char* table, const char* 
 
 //=== select ===
 template<class T> inline
-axStatus	axDBStmt::create_Select( axDBConn & db, const char* table, const char* szWhere ) {
+axStatus	axDBStmt::create_Select( axDBConn & db, const char* table, const char* szWhere, const char* szOrder ) {
     axStatus st;
 
 	axDBColumnList	list;
 	st = list.create<T>();	if( !st ) return st;
 
 	axTempStringA	sql;
-	st = db.getSQL_Select( sql, list, table, szWhere );		if( !st ) return st;
+	st = db.getSQL_Select( sql, list, table, szWhere, szOrder );		if( !st ) return st;
 	return create( db, sql );
 }
 
