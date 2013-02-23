@@ -3,6 +3,7 @@
 #include <ax/ax_unit_test.h>
 
 const size_t numRows = 3;
+const size_t byteArrayTestSize = 10;
 
 #define myTEST_TYPE_LIST \
 	myTEST_TYPE( int8,		int8_t,			int8_t  ) \
@@ -23,10 +24,13 @@ const size_t numRows = 3;
 	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
 	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
 	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
-	myTEST_TYPE( transaction,	int32_t,	int32_t   ) \
-//	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
+	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
 \
+	myTEST_TYPE( transaction,	int32_t,	int32_t   ) \
 //---------------
+
+axTimeStamp test_timestamp;
+
 
 typedef int64_t		TableID;
 
@@ -71,7 +75,7 @@ public:
 		v_uint64 = 0;
 		v_float = 0;
 		v_double = 0;
-		v_transaction = 1260;
+		v_transaction = 10000;
 	}
 
 	void testValue() {
@@ -109,7 +113,7 @@ public:
 			v_StringW.set( (const char*)utf8 );
 		}
 
-		v_TimeStamp.now();
+		v_TimeStamp = test_timestamp;
 
 		v_vec3f.set( 77,88,99 );
 	}
@@ -159,6 +163,8 @@ public:
 axStatus test_ax_database_common( axDBConn & db ) {
 	axStatus st;
 
+	test_timestamp.now();
+
 //	db.setEchoSQL( true );
 
 //	const char* table = "unit Test's \"Table\" 01";
@@ -180,6 +186,13 @@ axStatus test_ax_database_common( axDBConn & db ) {
 
 		axStopWatch	timer;
 		for( size_t i=0; i<numRows; i++ ) {
+
+			row.v_bool = (i % 2 == 0);
+			row.v_ByteArray.resize(0);
+			for( size_t j=0; j<i*byteArrayTestSize; j++ ) {
+				st = row.v_ByteArray.append( (uint8_t) j );		if( !st ) return st;
+			}
+
 			st = tbl.insert( row );				if( !st ) return st;
 			ax_log( "insert success with id = {?}", row.id );
 			axUTestCheck( row.id == i+1 );
@@ -187,7 +200,55 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		ax_log("insert {?} records in {?}s", numRows, timer.get() );
 	}
 
-	{	ax_log("===== update ======");
+	{	ax_log("===== select all ======");
+		axArray< Row >	results;
+		results.reserve( numRows );
+
+		axStopWatch	timer;
+		st = tbl.selectAll( results );		if( !st ) return st;
+		ax_log("select {?} records in {?}s", results.size(), timer.get() );
+
+		ax_log_var( results );
+
+		//== validate ==
+		Row	test_row;
+		test_row.testValue();
+		axUTestCheck( results.size() == numRows );
+
+		for( size_t i=0; i<results.size(); i++ ) {
+			Row & row = results[i];
+
+			axUTestCheck( row.v_bool  == (i % 2 == 0 ? true : false) );
+
+			axUTestCheck( row.v_int8   == test_row.v_int8 );
+			axUTestCheck( row.v_int16  == test_row.v_int16 );
+			axUTestCheck( row.v_int32  == test_row.v_int32 );
+			axUTestCheck( row.v_int64  == test_row.v_int64 );
+
+			axUTestCheck( row.v_uint8  == test_row.v_uint8 );
+			axUTestCheck( row.v_uint16 == test_row.v_uint16 );
+			axUTestCheck( row.v_uint32 == test_row.v_uint32 );
+			axUTestCheck( row.v_uint64 == test_row.v_uint64 );
+
+			axUTestCheck( row.v_float  == test_row.v_float );
+			axUTestCheck( row.v_double == test_row.v_double );
+
+			double delta_timestamp = ax_abs( test_timestamp - row.v_TimeStamp );
+			//ax_log_var( delta_timestamp );
+			axUTestCheck( delta_timestamp < 0.001 );
+
+			axUTestCheck( row.v_StringA.equals( test_row.v_StringA ) );
+			axUTestCheck( row.v_StringW.equals( test_row.v_StringW ) );
+
+			axUTestCheck( row.v_ByteArray.size() == i*byteArrayTestSize );
+			for( size_t j=0; j<i*byteArrayTestSize; j++ ) {
+				axUTestCheck( row.v_ByteArray[j] == (uint8_t) j );
+			}
+
+		}
+	}
+
+	{	ax_log("===== update and transaction test ======");
 		Row	row;
 		row.testValue();
 
@@ -198,14 +259,9 @@ axStatus test_ax_database_common( axDBConn & db ) {
 			axDBScopeTran	nestedTran( st, db );		if( !st ) return st;
 
 			row.id = (TableID)i+1;
-			row.v_bool = (i % 2 == 1);
 			row.v_transaction = 20000;
 
 			st = tbl.update( row );							if( !st ) return st;
-
-			for( size_t j=0; j<10; j++ ) {
-				st = row.v_ByteArray.append( (uint8_t) i);		if( !st ) return st;
-			}
 
 			if( i % 3 == 0 ) {
 				nestedTran.commit(); //try to commit some and rollback some
@@ -240,6 +296,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		ax_log("update {?} records in {?}s", numRows, timer.get() );
 	}
 
+
 	{	ax_log("===== select all ======");
 		axArray< Row >	results;
 		results.reserve( numRows );
@@ -248,13 +305,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		st = tbl.selectAll( results );		if( !st ) return st;
 		ax_log("select {?} records in {?}s", results.size(), timer.get() );
 
-
 		ax_log_var( results );
-		#if 0 // dump last only
-			if( results.size() ) {
-				ax_log_var( results.last() );
-			}
-		#endif
 
 		//== validate ==
 		Row	test_row;
@@ -262,28 +313,12 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		axUTestCheck( results.size() == numRows );
 
 		for( size_t i=0; i<results.size(); i++ ) {
-			Row & r = results[i];
+			Row & row = results[i];
 			if( i % 3 == 0 ) {
-				axUTestCheck( r.v_transaction == 20000 );
+				axUTestCheck( row.v_transaction == 20000 );
 			}else{
-				axUTestCheck( r.v_transaction == 1260 );
+				axUTestCheck( row.v_transaction == 10000 );
 			}
-
-			axUTestCheck( test_row.v_int8  == r.v_int8 );
-			axUTestCheck( test_row.v_int16 == r.v_int16 );
-			axUTestCheck( test_row.v_int32 == r.v_int32 );
-			axUTestCheck( test_row.v_int64 == r.v_int64 );
-
-			axUTestCheck( test_row.v_uint8  == r.v_uint8 );
-			axUTestCheck( test_row.v_uint16 == r.v_uint16 );
-			axUTestCheck( test_row.v_uint32 == r.v_uint32 );
-			axUTestCheck( test_row.v_uint64 == r.v_uint64 );
-
-			axUTestCheck( test_row.v_float == r.v_float );
-			axUTestCheck( test_row.v_double == r.v_double );
-
-			axUTestCheck( test_row.v_StringA.equals( r.v_StringA ) );
-			axUTestCheck( test_row.v_StringW.equals( r.v_StringW ) );
 		}
 	}
 
@@ -415,12 +450,12 @@ axStatus test_ax_database() {
 
 	ax_log("test {?} records\n", numRows );
 
-	//axUTestCase( test_SQLite3() );
+	axUTestCase( test_SQLite3() );
 	//axUTestCase( test_MySQL() );
 	//axUTestCase( test_PostgreSQL() );
 	//axUTestCase( test_ODBC_MSSQL() );
 	//axUTestCase( test_ODBC_Oracle() );
-	axUTestCase( test_Oracle() );
+//	axUTestCase( test_Oracle() );
 
 	return 0;
 }
