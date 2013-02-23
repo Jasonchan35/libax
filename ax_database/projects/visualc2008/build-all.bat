@@ -18,5 +18,11 @@ MSBuild	%S% /p:Configuration=Release /p:Platform=x64
 MSBuild	%S% /p:Configuration=Debug /p:Platform=Win32 
 MSBuild	%S% /p:Configuration=Debug /p:Platform=x64 
 
+set S=axOracle.vcproj
+MSBuild	%S% /p:Configuration=Release /p:Platform=Win32 
+MSBuild	%S% /p:Configuration=Release /p:Platform=x64 
+MSBuild	%S% /p:Configuration=Debug /p:Platform=Win32 
+MSBuild	%S% /p:Configuration=Debug /p:Platform=x64 
+
 pause
 

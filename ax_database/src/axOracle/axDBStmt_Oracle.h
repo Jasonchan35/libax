@@ -41,6 +41,8 @@ public:
 				virtual int			columnType	( axSize col );
 				virtual const char* columnName	( axSize col );
 				
+				virtual axStatus	getRow_ArgList	( axDBOutParamList & list );
+
 				virtual	axStatus	fetch			();
 
 	template< class T > axStatus	_getResultAtCol_int ( axSize col, T & value );
@@ -94,13 +96,24 @@ public:
 
 		}
 
-		ub2				dbType;
-		axStringA_<64>	name;
+		ub2					dbType;
+		axStringA_<64>		name;
 
 	//row value for fetch
-		OCINumber		number;
+
+
+		int8_t				bool_as_int32;
+
+		enum { utf16_buf_chunk_size = 2048 }; //!< must be even number for utf16
+		axByteArray_<128>	utf16_buf; //for string and also blob
+		ub4					utf16_buf_last_len;
+		ub4					utf16_buf_ret_len;
+
+		ub2					oci_rcode;
+		void*				oci_indicator;
 
 		bool is_number : 1;
+		bool is_string : 1;
 
 		axStatus onTake( ColumnInfo &src ) {
 			axStatus st;
@@ -110,13 +123,12 @@ public:
 		}
 	};
 
-	axSize	curRow_;
-
 	axArray< ColumnInfo >	columnInfos; 
 
 	axTempStringA	sql_;
 	axSize			numParams_;
 	OCIStmt*		stmt_;
+	ub2				stmt_type_;
 };
 
 

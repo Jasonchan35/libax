@@ -2,7 +2,7 @@
 
 #include <ax/ax_unit_test.h>
 
-const size_t numRows = 10;
+const size_t numRows = 3;
 
 #define myTEST_TYPE_LIST \
 	myTEST_TYPE( int8,		int8_t,			int8_t  ) \
@@ -19,12 +19,13 @@ const size_t numRows = 10;
 	myTEST_TYPE( float,		float,			float  ) \
 	myTEST_TYPE( double,	double,			double ) \
 	myTEST_TYPE( vec3f,		axVec3f,		axVec3f   ) \
-//\
-//	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
-//	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
+\
+	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
+	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
+	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
+	myTEST_TYPE( transaction,	int32_t,	int32_t   ) \
 //	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
-//	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
-//\
+\
 //---------------
 
 typedef int64_t		TableID;
@@ -54,6 +55,7 @@ public:
 	axTimeStamp		v_TimeStamp;
 
 	axVec3f			v_vec3f;
+	int32_t			v_transaction;
 
 	Row() {
 		id = -100;
@@ -69,6 +71,7 @@ public:
 		v_uint64 = 0;
 		v_float = 0;
 		v_double = 0;
+		v_transaction = 1260;
 	}
 
 	void testValue() {
@@ -82,7 +85,7 @@ public:
 		v_uint8  = 130;
 		v_uint16 = 40002;
 		v_uint32 = 3147483647;
-//		v_uint64 = 11223372036854775807;
+//		v_uint64 = 11223372036854775807; //some DB can't support this ( SQLite3 )
 		v_uint64 = 12345689110064;
 
 		v_bool	 = true;
@@ -196,7 +199,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 
 			row.id = (TableID)i+1;
 			row.v_bool = (i % 2 == 1);
-			row.v_double = 20000;
+			row.v_transaction = 20000;
 
 			st = tbl.update( row );							if( !st ) return st;
 
@@ -220,17 +223,13 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		axDBScopeTran	tran( st, db );		if( !st ) return st;
 
 		axStopWatch	timer;
-		for( size_t i=0; i<numRows/2; i++ ) {
+		for( size_t i=0; i<numRows; i++ ) {
 			axDBScopeTran	nestedTran( st, db );		if( !st ) return st;
 
 			row.id = (TableID)i+1;
-			row.v_double = 30000; //test rollback, so it shouldn't be commit with this value
+			row.v_transaction = 30000; //test rollback, so it shouldn't be commit with this value
 
 			st = tbl.update( row );							if( !st ) return st;
-
-			for( size_t j=0; j<10; j++ ) {
-				st = row.v_ByteArray.append( (uint8_t) i);		if( !st ) return st;
-			}
 
 			if( i % 3 == 0 ) {
 				nestedTran.commit(); //try to commit some and rollback some
@@ -258,17 +257,34 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		#endif
 
 		//== validate ==
+		Row	test_row;
+		test_row.testValue();
 		axUTestCheck( results.size() == numRows );
 
 		for( size_t i=0; i<results.size(); i++ ) {
 			Row & r = results[i];
 			if( i % 3 == 0 ) {
-				axUTestCheck( r.v_double == 20000 );
+				axUTestCheck( r.v_transaction == 20000 );
 			}else{
-				axUTestCheck( r.v_double == 123456789.1234 );
+				axUTestCheck( r.v_transaction == 1260 );
 			}
-		}
 
+			axUTestCheck( test_row.v_int8  == r.v_int8 );
+			axUTestCheck( test_row.v_int16 == r.v_int16 );
+			axUTestCheck( test_row.v_int32 == r.v_int32 );
+			axUTestCheck( test_row.v_int64 == r.v_int64 );
+
+			axUTestCheck( test_row.v_uint8  == r.v_uint8 );
+			axUTestCheck( test_row.v_uint16 == r.v_uint16 );
+			axUTestCheck( test_row.v_uint32 == r.v_uint32 );
+			axUTestCheck( test_row.v_uint64 == r.v_uint64 );
+
+			axUTestCheck( test_row.v_float == r.v_float );
+			axUTestCheck( test_row.v_double == r.v_double );
+
+			axUTestCheck( test_row.v_StringA.equals( r.v_StringA ) );
+			axUTestCheck( test_row.v_StringW.equals( r.v_StringW ) );
+		}
 	}
 
 	/*

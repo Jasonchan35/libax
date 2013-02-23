@@ -114,32 +114,17 @@ public:
 	axLog_StdTag() : axLog_Tag("log") {}
 };
 
-axStatus ax_log_hex( axLog_Tag &tag, const void* ptr, size_t byteSize, const char* msg = NULL );
+						 axStatus ax_log_hex( axLog_Tag &tag, const void* ptr, size_t byteSize );
+template<class T> inline axStatus ax_log_hex( axLog_Tag &tag, const T*    obj )				{ return ax_log_hex( tag, obj, sizeof(T) );  }
+template<class T> inline axStatus ax_log_hex( axLog_Tag &tag, const axIArray<T>		& arr ) { return ax_log_hex( tag, arr.ptr(), arr.byteSize() );  }
+template<class T> inline axStatus ax_log_hex( axLog_Tag &tag, const axIString_<T>	& str ) { return ax_log_hex( tag, str.c_str(), str.byteSize() ); }
 
-inline
-axStatus ax_log_hex(  const void* ptr, size_t byteSize, const char* msg = NULL ) {
-	return ax_log_hex( *axLog_StdTag::instance, ptr, byteSize, msg );
-}
+				  inline axStatus ax_log_hex( const void* ptr, size_t byteSize )			{ return ax_log_hex( *axLog_StdTag::instance, ptr, byteSize ); }
+template<class T> inline axStatus ax_log_hex( const T* obj )								{ return ax_log_hex( obj, sizeof(T) ); }
+template<class T> inline axStatus ax_log_hex( const axIArray<T>		& arr )					{ return ax_log_hex( *axLog_StdTag::instance, arr ); }
+template<class T> inline axStatus ax_log_hex( const axIString_<T>	& str )					{ return ax_log_hex( *axLog_StdTag::instance, str ); }
 
-template<class T> inline
-axStatus ax_log_hex( axLog_Tag &tag, const axIArray<T> & arr, const char* msg = NULL ) { 
-	return ax_log_hex( tag, arr.ptr(), arr.byteSize(), msg ); 
-}
-
-template<class T> inline
-axStatus ax_log_hex( const axIArray<T> & arr, const char* msg = NULL ) { 
-	return ax_log_hex( *axLog_StdTag::instance, arr, msg ); 
-}
-
-template<class T> inline
-axStatus ax_log_hex( axLog_Tag &tag, const T* obj, const char* msg = NULL ) { 
-	return ax_log_hex( tag, obj, sizeof(T), msg ); 
-}
-
-template<class T> inline
-axStatus ax_log_hex( const T* obj, const char* msg = NULL ) { return ax_log_hex( obj, sizeof(T), msg ); }
-
-
+//===============
 inline axStatus ax_log_ArgList( const char*		 fmt, const axStringFormat::ArgList &list ) { return axLog::instance->log_ArgList( *axLog_StdTag::instance, NULL, fmt, list ); }
 inline axStatus ax_log_ArgList( const wchar_t*	 fmt, const axStringFormat::ArgList &list ) { return axLog::instance->log_ArgList( *axLog_StdTag::instance, NULL, fmt, list); }
 
