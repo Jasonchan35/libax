@@ -259,6 +259,16 @@ axStatus	axDBStmt_Oracle::getRow_ArgList	( axDBOutParamList & list ) {
 				if( hasError(ret,sql_) ) return axStatus_Std::DB_error;
 			}break;
 
+		//======= DateTime ====
+			case axDB_c_type_datetime: {
+				st = info.utf16_buf.resize( sizeof( OCIDate ) );		if( !st ) return st;
+				OCIDate* dst = (OCIDate*) info.utf16_buf.ptr();
+
+				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, dst, sizeof(OCIDate), 
+										SQLT_ODT, 0, 0, 0, OCI_DEFAULT );
+				if( hasError(ret,sql_) ) return axStatus_Std::DB_error;
+			}break;
+
 		//======= unknown =======
 			default: 
 				assert(false);
@@ -294,6 +304,23 @@ axStatus	axDBStmt_Oracle::getRow_ArgList	( axDBOutParamList & list ) {
 			case axDB_c_type_blob: {
 				st = info.utf16_buf.decSize( info.utf16_buf_last_len - info.utf16_buf_ret_len );		if( !st ) return st;
 				st = ((axIByteArray*)out.data)->copy( info.utf16_buf );									if( !st ) return st;
+			}break;
+
+			case axDB_c_type_datetime:{
+				if( info.utf16_buf.size() != sizeof( OCIDate ) ) {
+					assert(false);
+					return axStatus_Std::DB_error;
+				}
+				OCIDate* src = (OCIDate*) info.utf16_buf.ptr();
+
+				axDateTime dt;
+				ub1 sec;
+				OCIDateGetDate( src, &dt.year, &dt.month,  &dt.day );
+				OCIDateGetTime( src, &dt.hour, &dt.minute, &sec );
+				dt.second = sec;
+
+				*((axTimeStamp*)out.data) = dt.toTimeStamp();
+
 			}break;
 		}
 	}
@@ -414,10 +441,53 @@ axStatus axDBStmt_Oracle::exec_ArgList( const axDBInParamList & list ) {
 		//===== blob ====
 			case axDB_c_type_blob: {
 				const axIByteArray* arr = param.v_ByteArray;
-				ax_log_hex( *arr );
 				ret = OCIBindByPos( stmt_, &bindp, db_->errhp, col, ax_const_cast(arr->ptr()), arr->byteSize(), SQLT_BIN, 
 									NULL, NULL, NULL, NULL, NULL, OCI_DEFAULT ); 
 				if( hasError(ret,sql_) ) return axStatus_Std::DB_invalid_param_type;
+			}break;
+		//===== datetime ===
+			case axDB_c_type_datetime: {
+
+				st = tmpData.resize( sizeof(OCIDate) );		if( !st ) return st;
+				OCIDate* dst = (OCIDate*) tmpData.ptr();
+
+				axDateTime	src( param.v_TimeStamp );
+				OCIDateSetDate( dst, src.year, src.month,  src.day );
+				OCIDateSetTime( dst, src.hour, src.minute, (ub1)src.second );
+
+				ret = OCIBindByPos( stmt_, &bindp, db_->errhp, col, dst, sizeof(OCIDate), SQLT_ODT, 
+									NULL, NULL, NULL, NULL, NULL, OCI_DEFAULT ); 
+				if( hasError(ret,sql_) ) return axStatus_Std::DB_invalid_param_type;
+
+/*
+				OCIDateTime*	dst;
+				ret = OCIDescriptorAlloc( db_->envhp, (dvoid **)&dst, OCI_DTYPE_TIMESTAMP , 0, 0 );
+				if( hasError(ret,sql_) ) return axStatus_Std::DB_invalid_param_type;
+
+				axTempStringA	tmp;
+				tmp.convert( axDateTime( param.v_TimeStamp ) );
+
+				axByteArray	utf16;
+				toUTextArray( utf16, "2000-10-10 10:10:10.555" );
+
+				axByteArray	fmt;
+				toUTextArray( fmt, "YYYY-MM-DD HH24:MI:SS.FFF" );
+
+				ax_log_hex( fmt );
+				ax_log_hex( utf16 );
+				ax_log_var( tmp );
+
+				ret = OCIDateTimeFromText( db_->envhp, db_->errhp, 
+							(OraText*)utf16.ptr(),	utf16.byteSize(), 
+							(OraText*)fmt.ptr(), 	fmt.byteSize(), 
+							0, 0, dst );
+
+				if( hasError(ret,sql_) ) return axStatus_Std::DB_invalid_param_type;
+
+				ret = OCIBindByPos( stmt_, &bindp, db_->errhp, col, dst, 0, SQLT_TIMESTAMP, 
+									NULL, NULL, NULL, NULL, NULL, OCI_DEFAULT ); 
+				if( hasError(ret,sql_) ) return axStatus_Std::DB_invalid_param_type;
+				*/
 			}break;
 
 			default:

@@ -235,7 +235,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 
 			double delta_timestamp = ax_abs( test_timestamp - row.v_TimeStamp );
 			//ax_log_var( delta_timestamp );
-			axUTestCheck( delta_timestamp < 0.001 );
+//			axUTestCheck( delta_timestamp < 0.001 );
 
 			axUTestCheck( row.v_StringA.equals( test_row.v_StringA ) );
 			axUTestCheck( row.v_StringW.equals( test_row.v_StringW ) );
@@ -450,12 +450,12 @@ axStatus test_ax_database() {
 
 	ax_log("test {?} records\n", numRows );
 
-	axUTestCase( test_SQLite3() );
+	//axUTestCase( test_SQLite3() );
 	//axUTestCase( test_MySQL() );
 	//axUTestCase( test_PostgreSQL() );
 	//axUTestCase( test_ODBC_MSSQL() );
 	//axUTestCase( test_ODBC_Oracle() );
-//	axUTestCase( test_Oracle() );
+	axUTestCase( test_Oracle() );
 
 	return 0;
 }
