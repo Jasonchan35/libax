@@ -121,7 +121,7 @@ inline axStatus axDBInParamList_io( axDBInParamList & list, const axDateTime   &
 
 template<class T> inline
 axStatus axDBInParamList_io( axDBInParamList & list, const T & v ) {
-	return ax_const_cast(v).serialize_io( list );
+	return ax_const_cast(v).db_io( list );
 }
 
 inline
