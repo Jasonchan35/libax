@@ -112,6 +112,7 @@ public:
 						axStatus	serialize_io	( axDeserializer &s ) { return serialize_io_bin(s); }
 
 	template<class S>	axStatus	serialize_io	( S &s );
+	template<class S>	axStatus	db_io			( S &s ) { return serialize_io(s); }
 						
 						axStatus	toStringFormat	( axStringFormat &f ) const;
 						axStatus	onTake			( axVec3<T> &b )			{ *this = b; return 0; }
@@ -198,9 +199,9 @@ axStatus axVec3<T>::serialize_io_bin( S &s ) {
 		return s.io_raw( this, sizeof(x)*kElementCount );
 	#else
 		axStatus st;
-		st = s.io( x );	if( !st ) return st;
-		st = s.io( y );	if( !st ) return st;
-		st = s.io( z );	if( !st ) return st;
+		ax_io(x);
+		ax_io(y);
+		ax_io(z);
 		return 0;
 	#endif
 }

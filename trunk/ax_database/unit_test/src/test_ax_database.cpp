@@ -18,13 +18,13 @@ const size_t numRows = 10;
 	myTEST_TYPE( bool,		bool,			bool   ) \
 	myTEST_TYPE( float,		float,			float  ) \
 	myTEST_TYPE( double,	double,			double ) \
+	myTEST_TYPE( vec3f,		axVec3f,		axVec3f   ) \
 //\
 //	myTEST_TYPE( StringA,	axStringA,		axIStringA   ) \
 //	myTEST_TYPE( StringW,	axStringW,		axIStringW   ) \
 //	myTEST_TYPE( TimeStamp,	axTimeStamp,	axTimeStamp	 ) \
 //	myTEST_TYPE( ByteArray,	axByteArray,	axIByteArray ) \
 //\
-//	myTEST_TYPE( vec3f,		axVec3f,		axVec3f   ) \
 //---------------
 
 typedef int64_t		TableID;
@@ -139,7 +139,7 @@ public:
 	}
 
 	template<class S>
-	axStatus serialize_io( S & s ) {
+	axStatus db_io( S & s ) {
 		axStatus st;
 		ax_io( id );
 

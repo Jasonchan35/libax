@@ -76,7 +76,7 @@ inline axStatus axDBOutParamList_io( axDBOutParamList & list, axByteArray & v ) 
 
 template<class T> inline //for user-define class
 axStatus axDBOutParamList_io( axDBOutParamList & list, T & v ) {
-	return ax_const_cast(v).serialize_io( list );
+	return ax_const_cast(v).db_io( list );
 }
 
 

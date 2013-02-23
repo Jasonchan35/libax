@@ -141,7 +141,7 @@ axStatus	axDBColumnList_io( axDBColumnList &s, T & value, const char* name ) {
 	}else{
 		s._tmpPrefix = name;
 	}
-	st = value.serialize_io( s );		if( !st ) return st;
+	st = value.db_io( s );		if( !st ) return st;
 	return 0;
 }
 
