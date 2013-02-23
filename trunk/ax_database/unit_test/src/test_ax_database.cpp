@@ -2,8 +2,10 @@
 
 #include <ax/ax_unit_test.h>
 
-const size_t numRows = 3;
-const size_t byteArrayTestSize = 10;
+const size_t numRows = 10;
+const size_t byteArrayTestSize = 100;
+const bool   echoSQL = false;
+const bool   dump_result = false;
 
 #define myTEST_TYPE_LIST \
 	myTEST_TYPE( int8,		int8_t,			int8_t  ) \
@@ -165,7 +167,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 
 	test_timestamp.now();
 
-//	db.setEchoSQL( true );
+	db.setEchoSQL( echoSQL );
 
 //	const char* table = "unit Test's \"Table\" 01";
 //	const char* table = "Test's Table";
@@ -194,7 +196,9 @@ axStatus test_ax_database_common( axDBConn & db ) {
 			}
 
 			st = tbl.insert( row );				if( !st ) return st;
-			ax_log( "insert success with id = {?}", row.id );
+			if( dump_result ) {
+				ax_log( "insert success with id = {?}", row.id );
+			}
 			axUTestCheck( row.id == i+1 );
 		}
 		ax_log("insert {?} records in {?}s", numRows, timer.get() );
@@ -208,7 +212,9 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		st = tbl.selectAll( results );		if( !st ) return st;
 		ax_log("select {?} records in {?}s", results.size(), timer.get() );
 
-		ax_log_var( results );
+		if( dump_result ) {
+			ax_log_var( results );
+		}
 
 		//== validate ==
 		Row	test_row;
@@ -235,7 +241,7 @@ axStatus test_ax_database_common( axDBConn & db ) {
 
 			double delta_timestamp = ax_abs( test_timestamp - row.v_TimeStamp );
 			//ax_log_var( delta_timestamp );
-//			axUTestCheck( delta_timestamp < 0.001 );
+			axUTestCheck( delta_timestamp < 1 );
 
 			axUTestCheck( row.v_StringA.equals( test_row.v_StringA ) );
 			axUTestCheck( row.v_StringW.equals( test_row.v_StringW ) );
@@ -305,7 +311,9 @@ axStatus test_ax_database_common( axDBConn & db ) {
 		st = tbl.selectAll( results );		if( !st ) return st;
 		ax_log("select {?} records in {?}s", results.size(), timer.get() );
 
-		ax_log_var( results );
+		if( dump_result ) {
+			ax_log_var( results );
+		}
 
 		//== validate ==
 		Row	test_row;
@@ -450,10 +458,10 @@ axStatus test_ax_database() {
 
 	ax_log("test {?} records\n", numRows );
 
-	//axUTestCase( test_SQLite3() );
-	//axUTestCase( test_MySQL() );
-	//axUTestCase( test_PostgreSQL() );
-	//axUTestCase( test_ODBC_MSSQL() );
+	axUTestCase( test_SQLite3() );
+	axUTestCase( test_MySQL() );
+	axUTestCase( test_PostgreSQL() );
+	axUTestCase( test_ODBC_MSSQL() );
 	//axUTestCase( test_ODBC_Oracle() );
 	axUTestCase( test_Oracle() );
 

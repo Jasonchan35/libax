@@ -16,7 +16,7 @@
 
 #define axUTestDo( E )			{ ax_log("DO:   {?}\n", #E); E; }
 #define axUTestCase( F )		{ \
-	ax_log("==== {?} ====", #F); \
+	ax_log("\n======== {?} ===================================", #F); \
 	axStatus st = F; \
 	if( !st ) { \
 		ax_log("==== ERROR Case {?} : return {?} ====", #F, st ); \
