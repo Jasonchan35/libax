@@ -74,9 +74,9 @@ axStatus axDBConn_Oracle::connect( const char* hostname, int port, const char* s
 	st = toUTextArray( w_dblink,   dblink );		if( !st ) return st;
 
 	ret = OCILogon( envhp, errhp, &svchp, 
-					(OraText*)w_username.ptr(), w_username.byteSize() - sizeof(utext), 
-					(OraText*)w_password.ptr(), w_password.byteSize() - sizeof(utext) ,
-					(OraText*)w_dblink.ptr(),   w_dblink.byteSize()   - sizeof(utext) );
+					(OraText*)w_username.ptr(), (ub4)(w_username.byteSize() - sizeof(utext)), 
+					(OraText*)w_password.ptr(), (ub4)(w_password.byteSize() - sizeof(utext)) ,
+					(OraText*)w_dblink.ptr(),   (ub4)(w_dblink.byteSize()   - sizeof(utext)) );
 
 	if( hasError(ret,NULL) ) return axStatus_Std::DB_error_connect;
 
@@ -106,7 +106,7 @@ bool axDBConn_Oracle::hasError( sword status, const char* sql ) {
 
 	for( ub4 i=1; ; i++ ) {
 		sb4 errcode = 0;
-		sword ret = OCIErrorGet( errhp, i, NULL, &errcode, buf.ptr(), buf.byteSize(), OCI_HTYPE_ERROR );
+		sword ret = OCIErrorGet( errhp, i, NULL, &errcode, buf.ptr(), (ub4)buf.byteSize(), OCI_HTYPE_ERROR );
 		if( ret != OCI_SUCCESS && ret != OCI_SUCCESS_WITH_INFO ) break;
 
 		fromUTextArray( strW, buf );

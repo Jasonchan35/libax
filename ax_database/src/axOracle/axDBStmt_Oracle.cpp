@@ -68,10 +68,7 @@ sword FetchDefineCallback(	dvoid		*octxp,
 {
 	axDBStmt_Oracle::ColumnInfo* info = (axDBStmt_Oracle::ColumnInfo*)octxp;
 
-	ax_log("CLOB_CB {?} {?} {?}", iter, *piecep, octxp );
-
 	axStatus st;
-
 	switch( *piecep ) {
 		case OCI_FIRST_PIECE: {
 			size_t n = info->utf16_buf.capacity();
@@ -83,7 +80,7 @@ sword FetchDefineCallback(	dvoid		*octxp,
 			*piecep = OCI_NEXT_PIECE;
 
 			*bufpp	= info->utf16_buf.ptr();
-			info->utf16_buf_ret_len  = info->utf16_buf.byteSize();
+			info->utf16_buf_ret_len  = (ub4)info->utf16_buf.byteSize();
 		}break;
 
 		case OCI_NEXT_PIECE: {
@@ -95,7 +92,7 @@ sword FetchDefineCallback(	dvoid		*octxp,
 			*bufpp	= &info->utf16_buf[n];
 			info->utf16_buf_ret_len = info->utf16_buf_chunk_size;
 
-			ax_log_var( info->utf16_buf_ret_len );
+			//ax_log_var( info->utf16_buf_ret_len );
 
 		}break;
 
@@ -105,7 +102,7 @@ sword FetchDefineCallback(	dvoid		*octxp,
 	}
 
 	info->utf16_buf_last_len = info->utf16_buf_ret_len;
-	ax_log_var( info->utf16_buf_last_len );
+//	ax_log_var( info->utf16_buf_last_len );
 	
 	*alenpp = &info->utf16_buf_ret_len;
 
@@ -159,7 +156,7 @@ axStatus axDBStmt_Oracle::create( const char* sql ) {
 
 	st = toUTextArray( buf, sql_ );		if( !st ) return st;
 
-	ret = OCIStmtPrepare2( db_->svchp, &stmt_, db_->errhp, buf.ptr(), buf.byteSize(), NULL, 0, OCI_NTV_SYNTAX, OCI_DEFAULT );
+	ret = OCIStmtPrepare2( db_->svchp, &stmt_, db_->errhp, buf.ptr(), (ub4)buf.byteSize(), NULL, 0, OCI_NTV_SYNTAX, OCI_DEFAULT );
 	if( hasError(ret,sql_) ) return axStatus_Std::DB_error;
 
 	columnInfos.resize(0);
@@ -182,7 +179,7 @@ axStatus	axDBStmt_Oracle::getRow_ArgList	( axDBOutParamList & list ) {
 	for( size_t i=0; i<list.size(); i++ ) {
 		axDBOutParam & out = list[i];
 		ColumnInfo & info  = columnInfos[i];
-		ub4 col = i+1;
+		ub4 col = (ub4)i+1;
 		OCIDefine *defnp;
 
 		switch( out.type ) {
@@ -276,7 +273,6 @@ axStatus	axDBStmt_Oracle::getRow_ArgList	( axDBOutParamList & list ) {
 		}
 	}
 
-	ax_log( "====fetch===");
 	ret = OCIStmtFetch2( stmt_, db_->errhp, 1, OCI_FETCH_NEXT, 0, OCI_DEFAULT );
 	if( ret == OCI_NO_DATA ) return axStatus::kEOF;
 	if( hasError(ret,sql_) ) return axStatus_Std::DB_error;
@@ -284,7 +280,7 @@ axStatus	axDBStmt_Oracle::getRow_ArgList	( axDBOutParamList & list ) {
 	for( size_t i=0; i<list.size(); i++ ) {
 		axDBOutParam & out = list[i];
 		ColumnInfo & info  = columnInfos[i];
-		ub4 col = i+1;
+		ub4 col = (ub4)i+1;
 
 		switch( out.type ) {
 			case axDB_c_type_bool: {
@@ -360,7 +356,7 @@ axStatus axDBStmt_Oracle::exec_ArgList( const axDBInParamList & list ) {
 	OCIBind*	bindp = NULL;
 
 	for( size_t i=0; i<list.size(); i++ ) {
-		ub4 col = i+1;
+		ub4 col = (ub4)i+1;
 		const axDBInParam &param = list[i];
 		TmpData			&tmpData = tmpDataArray[i];
 
@@ -417,7 +413,7 @@ axStatus axDBStmt_Oracle::exec_ArgList( const axDBInParamList & list ) {
 		//===== string ====
 			case axDB_c_type_StringA: {
 				st = toUTextArray( tmpData, param.v_strA );		if( !st ) return st;
-				ret = OCIBindByPos( stmt_, &bindp, db_->errhp, col, tmpData.ptr(), tmpData.byteSize(), SQLT_STR, 
+				ret = OCIBindByPos( stmt_, &bindp, db_->errhp, col, tmpData.ptr(), (ub4)tmpData.byteSize(), SQLT_STR, 
 									 NULL, NULL, NULL, NULL, NULL, OCI_DEFAULT ); 
 
 			// set UTF16
@@ -428,7 +424,7 @@ axStatus axDBStmt_Oracle::exec_ArgList( const axDBInParamList & list ) {
 
 			case axDB_c_type_StringW: {
 				st = toUTextArray( tmpData, param.v_strW );		if( !st ) return st;
-				ret = OCIBindByPos( stmt_, &bindp, db_->errhp, col, tmpData.ptr(), tmpData.byteSize(), SQLT_STR, 
+				ret = OCIBindByPos( stmt_, &bindp, db_->errhp, col, tmpData.ptr(), (ub4)tmpData.byteSize(), SQLT_STR, 
 									NULL, NULL, NULL, NULL, NULL, OCI_DEFAULT ); 
 				if( hasError(ret,sql_) ) return axStatus_Std::DB_invalid_param_type;
 
@@ -441,7 +437,7 @@ axStatus axDBStmt_Oracle::exec_ArgList( const axDBInParamList & list ) {
 		//===== blob ====
 			case axDB_c_type_blob: {
 				const axIByteArray* arr = param.v_ByteArray;
-				ret = OCIBindByPos( stmt_, &bindp, db_->errhp, col, ax_const_cast(arr->ptr()), arr->byteSize(), SQLT_BIN, 
+				ret = OCIBindByPos( stmt_, &bindp, db_->errhp, col, ax_const_cast(arr->ptr()), (ub4)arr->byteSize(), SQLT_BIN, 
 									NULL, NULL, NULL, NULL, NULL, OCI_DEFAULT ); 
 				if( hasError(ret,sql_) ) return axStatus_Std::DB_invalid_param_type;
 			}break;
