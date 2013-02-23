@@ -42,7 +42,18 @@ public:
 	{}
 	axStatus	onTake( axDBOutParam &src ) { *this=src; return 0; }
 	
+	#define axDB_c_type_list( NAME, C_TYPE, C_ITYPE ) \
+		C_ITYPE* as_##NAME() { \
+			assert( type == axDB_c_type_##NAME ); \
+			return (C_ITYPE*)data; \
+		} \
+	//----
+		#include "axDB_c_type_list.h"
+	#undef axDB_c_type_list
+
 	int		type;
+
+private:
 	void*	data;
 };
 

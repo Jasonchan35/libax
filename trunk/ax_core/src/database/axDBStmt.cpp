@@ -66,7 +66,7 @@ axStatus axDBStmt_Imp::getRow_ArgList( axDBOutParamList & list ) {
 		axDBOutParam & v = list[i];
 		switch( v.type ) {
 			#define axDB_c_type_list( NAME, C_TYPE, C_ITYPE ) \
-				case axDB_c_type_##NAME: st = getResultAtCol( i, *(C_ITYPE*)v.data );	break; \
+				case axDB_c_type_##NAME: st = getResultAtCol( i, *v.as_##NAME() );	break; \
 			//-----
 				#include <ax/core/database/axDB_c_type_list.h>
 			#undef axDB_c_type_list
