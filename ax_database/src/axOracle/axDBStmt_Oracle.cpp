@@ -188,45 +188,45 @@ axStatus	axDBStmt_Oracle::getRow_ArgList	( axDBOutParamList & list ) {
 		switch( out.type ) {
 		//==== int ====
 			case axDB_c_type_int8: {
-				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.data, sizeof(int8_t), SQLT_INT, 0, 0, 0, OCI_DEFAULT );
+				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.as_int8(), sizeof(int8_t), SQLT_INT, 0, 0, 0, OCI_DEFAULT );
 				if( hasError(ret,sql_) ) return axStatus_Std::DB_error;
 			}break;
 			case axDB_c_type_int16: {
-				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.data, sizeof(int16_t), SQLT_INT, 0, 0, 0, OCI_DEFAULT );
+				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.as_int16(), sizeof(int16_t), SQLT_INT, 0, 0, 0, OCI_DEFAULT );
 				if( hasError(ret,sql_) ) return axStatus_Std::DB_error;
 			}break;
 			case axDB_c_type_int32: {
-				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.data, sizeof(int32_t), SQLT_INT, 0, 0, 0, OCI_DEFAULT );
+				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.as_int32(), sizeof(int32_t), SQLT_INT, 0, 0, 0, OCI_DEFAULT );
 				if( hasError(ret,sql_) ) return axStatus_Std::DB_error;
 			}break;
 			case axDB_c_type_int64: {
-				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.data, sizeof(int64_t), SQLT_INT, 0, 0, 0, OCI_DEFAULT );
+				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.as_int64(), sizeof(int64_t), SQLT_INT, 0, 0, 0, OCI_DEFAULT );
 				if( hasError(ret,sql_) ) return axStatus_Std::DB_error;
 			}break;
 		//===== uint8 ====
 			case axDB_c_type_uint8: {
-				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.data, sizeof(int8_t), SQLT_UIN, 0, 0, 0, OCI_DEFAULT );
+				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.as_uint8(), sizeof(int8_t), SQLT_UIN, 0, 0, 0, OCI_DEFAULT );
 				if( hasError(ret,sql_) ) return axStatus_Std::DB_error;
 			}break;
 			case axDB_c_type_uint16: {
-				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.data, sizeof(int16_t), SQLT_UIN, 0, 0, 0, OCI_DEFAULT );
+				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.as_uint16(), sizeof(int16_t), SQLT_UIN, 0, 0, 0, OCI_DEFAULT );
 				if( hasError(ret,sql_) ) return axStatus_Std::DB_error;
 			}break;
 			case axDB_c_type_uint32: {
-				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.data, sizeof(int32_t), SQLT_UIN, 0, 0, 0, OCI_DEFAULT );
+				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.as_uint32(), sizeof(int32_t), SQLT_UIN, 0, 0, 0, OCI_DEFAULT );
 				if( hasError(ret,sql_) ) return axStatus_Std::DB_error;
 			}break;
 			case axDB_c_type_uint64: {
-				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.data, sizeof(int64_t), SQLT_UIN, 0, 0, 0, OCI_DEFAULT );
+				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.as_uint64(), sizeof(int64_t), SQLT_UIN, 0, 0, 0, OCI_DEFAULT );
 				if( hasError(ret,sql_) ) return axStatus_Std::DB_error;
 			}break;
 		//==== real ===
 			case axDB_c_type_float: {
-				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.data, sizeof(float), SQLT_BFLOAT, 0, 0, 0, OCI_DEFAULT );
+				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.as_float(), sizeof(float), SQLT_BFLOAT, 0, 0, 0, OCI_DEFAULT );
 				if( hasError(ret,sql_) ) return axStatus_Std::DB_error;
 			}break;
 			case axDB_c_type_double: {
-				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.data, sizeof(double), SQLT_BDOUBLE, 0, 0, 0, OCI_DEFAULT );
+				ret = OCIDefineByPos( stmt_, &defnp, db_->errhp, col, out.as_double(), sizeof(double), SQLT_BDOUBLE, 0, 0, 0, OCI_DEFAULT );
 				if( hasError(ret,sql_) ) return axStatus_Std::DB_error;
 			}break;
 		//==== bool ===
@@ -288,22 +288,22 @@ axStatus	axDBStmt_Oracle::getRow_ArgList	( axDBOutParamList & list ) {
 
 		switch( out.type ) {
 			case axDB_c_type_bool: {
-				*(bool*)out.data = info.bool_as_int32 ? true : false;
+				*out.as_bool() = info.bool_as_int32 ? true : false;
 			}break;
 
 			case axDB_c_type_StringA: {
 				st = info.utf16_buf.decSize( info.utf16_buf_last_len - info.utf16_buf_ret_len );		if( !st ) return st;
-				st = fromUTextArray( *(axIStringA*)out.data, info.utf16_buf );							if( !st ) return st;
+				st = fromUTextArray( *out.as_StringA(), info.utf16_buf );							if( !st ) return st;
 			}break;
 
 			case axDB_c_type_StringW: {
 				st = info.utf16_buf.decSize( info.utf16_buf_last_len - info.utf16_buf_ret_len );		if( !st ) return st;
-				st = fromUTextArray( *(axIStringW*)out.data, info.utf16_buf );							if( !st ) return st;
+				st = fromUTextArray( *out.as_StringW(), info.utf16_buf );							if( !st ) return st;
 			}break;
 
 			case axDB_c_type_blob: {
 				st = info.utf16_buf.decSize( info.utf16_buf_last_len - info.utf16_buf_ret_len );		if( !st ) return st;
-				st = ((axIByteArray*)out.data)->copy( info.utf16_buf );									if( !st ) return st;
+				st = out.as_blob()->copy( info.utf16_buf );									if( !st ) return st;
 			}break;
 
 			case axDB_c_type_datetime:{
@@ -319,7 +319,7 @@ axStatus	axDBStmt_Oracle::getRow_ArgList	( axDBOutParamList & list ) {
 				OCIDateGetTime( src, &dt.hour, &dt.minute, &sec );
 				dt.second = sec;
 
-				*((axTimeStamp*)out.data) = dt.toTimeStamp();
+				*out.as_datetime() = dt.toTimeStamp();
 
 			}break;
 		}
