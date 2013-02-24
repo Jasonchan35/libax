@@ -147,6 +147,7 @@ axStatus_enum( DB_error_transaction )
 
 axStatus_offset( __DateTime__, 1500 )
 axStatus_enum( DateTime_invalid_format )
+axStatus_enum( DateTime_set_error )
 
 axStatus_offset( __CSVParser__, 1600 )
 axStatus_enum( CSVParser_get_cell_error )

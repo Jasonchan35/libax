@@ -117,9 +117,9 @@ axStatus axDateTime::set ( const axTimeStamp &ts, bool _UTC ) {
 	time_t t = ts.to_time_t();
 	struct tm tmp;
 	if( UTC ) {
-		if( gmtime_s	( &tmp, &t ) != 0 ) return -1;
+		if( gmtime_s	( &tmp, &t ) != 0 ) return axStatus_Std::DateTime_set_error;
 	}else{
-		if( localtime_s	( &tmp, &t ) != 0 ) return -1;
+		if( localtime_s	( &tmp, &t ) != 0 ) return axStatus_Std::DateTime_set_error;
 	}
 	
 	set_tm( tmp );
@@ -175,9 +175,9 @@ axStatus axDateTime::set(  const axTimeStamp &ts, bool _UTC  ) {
 	time_t t = ts.to_time_t();
 	
 	if( _UTC ) {
-	    if( gmtime_r   ( &t, &_tm ) == NULL ) return -1;
+	    if( gmtime_r   ( &t, &_tm ) == NULL ) return axStatus_Std::DateTime_set_error;
 	}else{
-	    if( localtime_r( &t, &_tm ) == NULL ) return -1;
+	    if( localtime_r( &t, &_tm ) == NULL ) return axStatus_Std::DateTime_set_error;
 	}
 
 	set_tm( _tm );
