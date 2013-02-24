@@ -71,7 +71,8 @@ const char*	axStatus_Std::c_str( int code ) {
 			#include "axStatus_enum.h"
 		#undef axStatus_enum
 		#undef axStatus_offset
-		default: return NULL;
+		
+		default: assert(false); return "Unknown";
 	}
 }
 

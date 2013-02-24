@@ -449,7 +449,7 @@ axStatus test_Oracle() {
 	axDBConn	db;
 
 	st = axOracle_connect ( db, "localhost", 1521, "orcl", "test", "1234" );		if( !st ) return st;
-	st = test_ax_database_common(db);											if( !st ) return st;
+	st = test_ax_database_common(db);												if( !st ) return st;
 	return 0;
 }
 #endif
@@ -460,7 +460,7 @@ axStatus test_ax_database() {
 	axLog::instance->addFile( "test.log", false );
 	ax_log("test {?} records\n", numRows );
 
-	axUTestCase( test_SQLite3() );
+//	axUTestCase( test_SQLite3() );
 //	axUTestCase( test_MySQL() );
 //	axUTestCase( test_PostgreSQL() );
 //	axUTestCase( test_ODBC_MSSQL() );

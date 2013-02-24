@@ -64,7 +64,7 @@ public:
 	const	char*	c_str() const; //!< error code in C string (end with zero)
 		
 	enum { 
-		kUndefine	= -9999,
+		kUndefine	= -9999999,
 		kEOF,
 	};
 
@@ -78,8 +78,8 @@ private:
 class axStatus_Std : public axStatus_Module {
 public:
 	enum {
-		_start = -1999,
-		#define axStatus_offset(n,offset) n = offset,
+		_start = -19999,
+		#define axStatus_offset(n,offset) n = _start + offset,
 		#define axStatus_enum(n) 		 n,
 			#include "axStatus_enum.h"
 		#undef axStatus_enum
