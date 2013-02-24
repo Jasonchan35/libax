@@ -168,7 +168,7 @@ axStatus axJsonWriter::newline() {
 	axStatus st;
 	st = str_->append( "\n" );			if( !st ) return st;
 	
-	if( indent_.size() > 0 ) {	
+	if( indent_.size() > 0 ) {
 		for( axSize i=0; i<depth_; i++ ) {
 			st = str_->append(indent_);		if( !st ) return st;
 		}

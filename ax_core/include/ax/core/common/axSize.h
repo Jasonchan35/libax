@@ -40,10 +40,10 @@ public:
 	axALWAYS_INLINE(	operator size_t() const )	{ return value_; }
 
 	axSize	operator++(int)					{ return ++value_; }
-	axSize	operator--(int)					{ return ++value_; }
+	axSize	operator--(int)					{ return --value_; }
 
 	axSize	operator++()					{ return value_++; }
-	axSize	operator--()					{ return value_++; }
+	axSize	operator--()					{ return value_--; }
 
 	void	operator+=( axSize v )			{ value_+=v; }
 	void	operator-=( axSize v )			{ value_-=v; }

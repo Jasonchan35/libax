@@ -1,8 +1,8 @@
 #ifndef	__ax_test_json_serializer_h__
 #define __ax_test_json_serializer_h__
 
-#include <ax/ax_base.h>
 #include <ax/ax_core.h>
+#include <ax/ax_unit_test.h>
 
 
 class TestClassSimple2 {
@@ -18,7 +18,7 @@ public:
 	}
 
 	template< class S >
-	axStatus onStringSerialize( S &s ) {
+	axStatus serialize_io( S &s ) {
 		axStatus st;
 		st = s.io( t, "t" );		if( !st ) return st;
 		st = s.io( a, "a" );		if( !st ) return st;
@@ -50,7 +50,7 @@ public:
 
 
 	template< class S >
-	axStatus onStringSerialize( S &s ) {
+	axStatus serialize_io( S &s ) {
 		axStatus st;
 		st = s.io( s1, "s1" );		if( !st ) return st;
 		st = s.io( s2, "s2" );		if( !st ) return st;
@@ -77,7 +77,7 @@ public:
 
 
 
-class TestDNode: public axDListNode< TestDNode > {
+class TestDNode: public axDListNode< TestDNode, true > {
 public:
 
 	int a,b;
@@ -92,7 +92,7 @@ public:
 	}
 
 	template< class S >
-	axStatus onStringSerialize( S &s ) {
+	axStatus serialize_io( S &s ) {
 		axStatus st;
 		st = s.io( a, "a" );		if( !st ) return st;
 		st = s.io( b, "b" );		if( !st ) return st;	
@@ -159,15 +159,15 @@ public:
 	axStatus	setValue() {
 		axStatus st;
 		b = true;
-		i8  = axTypeOf<int8_t>::valueMax(); 
-		i16 = axTypeOf<int16_t>::valueMax(); 
-		i32 = axTypeOf<int32_t>::valueMax(); 
-		i64 = axTypeOf<int64_t>::valueMax(); 
+		i8  = ax_type_max<int8_t>();
+		i16 = ax_type_max<int16_t>(); 
+		i32 = ax_type_max<int32_t>(); 
+		i64 = ax_type_max<int64_t>(); 
 
-		u8  = axTypeOf<uint8_t>::valueMax(); 
-		u16 = axTypeOf<uint16_t>::valueMax(); 
-		u32 = axTypeOf<uint32_t>::valueMax(); 
-		u64 = axTypeOf<uint64_t>::valueMax(); 
+		u8  = ax_type_max<uint8_t>(); 
+		u16 = ax_type_max<uint16_t>(); 
+		u32 = ax_type_max<uint32_t>(); 
+		u64 = ax_type_max<uint64_t>(); 
 
 
 		f = 68056468.0032256f;
@@ -244,7 +244,7 @@ public:
 
 
 	template< class S >
-	axStatus onStringSerialize( S &s ) {
+	axStatus serialize_io( S &s ) {
 		axStatus st;
 
 		st = s.io( b, "b" );		if( !st ) return st;
