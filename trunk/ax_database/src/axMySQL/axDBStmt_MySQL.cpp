@@ -203,8 +203,8 @@ int			axDBStmt_MySQL::columnType	( axSize col ) {
 		case MYSQL_TYPE_VAR_STRING:	return axDB_c_type_StringA;
 		case MYSQL_TYPE_STRING:		return axDB_c_type_StringA;
 		case MYSQL_TYPE_BLOB:		return axDB_c_type_blob;
+		default: assert(false);		return axDB_c_type_null;
 	}
-	return axDB_c_type_null;
 }
 
 const char* axDBStmt_MySQL::columnName	( axSize col ) {

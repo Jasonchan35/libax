@@ -84,6 +84,7 @@ public:
 			#include "axStatus_enum.h"
 		#undef axStatus_enum
 		#undef axStatus_offset
+		_end = -10000
 	};
 	virtual	const char*	c_str( int code );
 	
