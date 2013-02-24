@@ -14,7 +14,7 @@ axStatus axDateTime::setByString ( const char* sz ) {
 	double s;
 
 	int ret = sscanf( sz, "%d-%d-%d %d:%d:%lf", &Y, &M, &D, &h, &m, &s );
-	if( ret != 6 ) return -1;
+	if( ret != 6 ) return axStatus_Std::DateTime_invalid_format;
 
 	setDateTime( Y,M,D, h,m,s );
 	return 0;
@@ -76,7 +76,8 @@ struct tm axDateTime::to_tm() const {
 	o.tm_hour	= hour;
 	o.tm_min	= minute;
 	o.tm_sec	= (int)second;
-
+	o.tm_isdst	= daylightSavingsTime;
+	
 	mktime( &o ); // update tm_wday, tm_yday
 	return o;
 }
@@ -89,7 +90,10 @@ void axDateTime::setDate ( int year, int month, int day ) {
 
 	 // convert to tm for update weekday, yearday
 	struct tm t = to_tm();
-	set_tm( t );
+	
+	this->weekday = t.tm_wday;
+	this->yearday = t.tm_yday;
+	daylightSavingsTime = t.tm_isdst;
 }
 
 
@@ -101,8 +105,8 @@ void axDateTime::setTime ( int hour, int min, double sec ) {
 
 
 void axDateTime::setDateTime( int year, int month, int day, int hour, int min, double sec ) {
-	setDate( year, month, day );
 	setTime( hour, min,   sec );
+	setDate( year, month, day );
 }
 
 #if	axCOMPILER_VC
@@ -214,7 +218,7 @@ axTimeStamp axDateTime::toTimeStamp() const {
 	}else{
 		d = (double)timelocal( const_cast<tm*>(&_tm));
 	}
-	
+
 	double int_part;
 	d += ax_modf( second, &int_part );
 	return d;

@@ -36,7 +36,7 @@ public:
 class axStatus_ModuleList : public axSingleton< axStatus_ModuleList > {
 public:
 	enum{
-		kModuleInterval = 1000,
+		kModuleInterval = 10000,
 		kModuleMax = 256,
 	};
 	axStatus_ModuleList();
@@ -79,18 +79,14 @@ class axStatus_Std : public axStatus_Module {
 public:
 	enum {
 		_start = -1999,
-		#define axStatus_enum(n) n,
+		#define axStatus_offset(n,offset) n = offset,
+		#define axStatus_enum(n) 		 n,
 			#include "axStatus_enum.h"
 		#undef axStatus_enum
+		#undef axStatus_offset
 	};
-	virtual	const char*	c_str( int code ) {
-		switch( code ) {
-			#define axStatus_enum(n)   case n: return #n;
-				#include "axStatus_enum.h"
-			#undef axStatus_enum
-			default: return NULL;
-		}
-	}
+	virtual	const char*	c_str( int code );
+	
 	axStatus_Std() : axStatus_Module(_start) {}
 	static	axStatus_Std inst;
 };

@@ -167,10 +167,10 @@ axStatus _ax_decodeURI( axIString_<T> &dst, const T* src ) {
 			case (T)'%': {
 				st = dst.appendWithLength( s, p-s );	if( !st ) return st;
 
-				p++; ret = ax_hex_to_int( *p );			if( ret < 0 ) return axStatus_Std::error_decodeURI;
+				p++; ret = ax_hex_to_int( *p );			if( ret < 0 ) return axStatus_Std::String_error_decode_URI;
 				char hex = ret << 4;
 
-				p++; ret = ax_hex_to_int( *p );			if( ret < 0 ) return axStatus_Std::error_decodeURI;
+				p++; ret = ax_hex_to_int( *p );			if( ret < 0 ) return axStatus_Std::String_error_decode_URI;
 				hex |= ret;
 
 				st = dst.append( hex );					if( !st ) return st;

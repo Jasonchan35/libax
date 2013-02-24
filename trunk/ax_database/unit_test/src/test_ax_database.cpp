@@ -240,7 +240,9 @@ axStatus test_ax_database_common( axDBConn & db ) {
 			axUTestCheck( row.v_double == test_row.v_double );
 
 			double delta_timestamp = ax_abs( test_timestamp - row.v_TimeStamp );
-			//ax_log_var( delta_timestamp );
+			ax_log_var( axDateTime(test_timestamp) );
+			ax_log_var( axDateTime(row.v_TimeStamp) );
+			ax_log_var( delta_timestamp );
 			axUTestCheck( delta_timestamp < 1 );
 
 			axUTestCheck( row.v_StringA.equals( test_row.v_StringA ) );
@@ -394,7 +396,7 @@ axStatus test_PostgreSQL() {
 }
 #endif
 
-#if 1 // =============== ODBC ====================
+#if 0 // =============== ODBC ====================
 #include <ax/database/axODBC.h>
 //axStatus test_ODBC() {
 //	axStatus st;
@@ -454,14 +456,14 @@ axStatus test_Oracle() {
 
 axStatus test_ax_database() {
 	axStatus st;
+	
 	axLog::instance->addFile( "test.log", false );
-
 	ax_log("test {?} records\n", numRows );
 
 	axUTestCase( test_SQLite3() );
-	axUTestCase( test_MySQL() );
-	axUTestCase( test_PostgreSQL() );
-	axUTestCase( test_ODBC_MSSQL() );
+//	axUTestCase( test_MySQL() );
+//	axUTestCase( test_PostgreSQL() );
+//	axUTestCase( test_ODBC_MSSQL() );
 	//axUTestCase( test_ODBC_Oracle() );
 	axUTestCase( test_Oracle() );
 

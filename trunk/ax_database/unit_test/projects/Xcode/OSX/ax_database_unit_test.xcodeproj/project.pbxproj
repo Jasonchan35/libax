@@ -141,12 +141,12 @@
 		EA37CEBF16C69B49004CFE52 = {
 			isa = PBXGroup;
 			children = (
+				EAD5E06A16C6A6CC007AB3D1 /* ax_core.xcodeproj */,
 				EA06AA5C16D7E1B9006E8476 /* mysql_dylib */,
 				EA06AA5B16D7E1A7006E8476 /* oracle_dylib */,
 				EA06AA4716D7DFCA006E8476 /* axOracle.xcodeproj */,
 				EA0A0DE016D3CEAF00A31454 /* axMySQL.xcodeproj */,
 				EAB125E916D3B5CD008E40D2 /* axPostgreSQL.xcodeproj */,
-				EAD5E06A16C6A6CC007AB3D1 /* ax_core.xcodeproj */,
 				EAD5E06416C6A6BB007AB3D1 /* axSQLite3.xcodeproj */,
 				EAC3A05E16C8CA90009F1667 /* test_ax_database.cpp */,
 				EA8FCDD216C69BD30040D4B9 /* ax_database_unit_test.xcconfig */,
