@@ -232,7 +232,7 @@ public:
 		}		
 		
 //		ax_log("polling {?}", polling );
-		p = qMain.takeHead(waitMilliseconds);
+		p = qMain.timedTakeHead(waitMilliseconds);
 		if( !p ) return 0;
 		
 		switch( p->type ) {
@@ -796,7 +796,7 @@ public:
 		}
 
 //		ax_log("polling {?}", polling );
-		p = qMain.takeHead( waitMilliseconds );
+		p = qMain.timedTakeHead( waitMilliseconds );
 		if( p ) {
 			switch( p->type ) {
 			//-- stdin
