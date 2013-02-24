@@ -17,9 +17,8 @@ axStatus_enum( timed_out )
 axStatus_enum( data_corrupted )
 axStatus_enum( opengl_unsupported_extension )
 axStatus_enum( hex_format_error )
-axStatus_enum( str_to_format_error )
-axStatus_enum( utf8_to_wchar_format_error )
-axStatus_enum( wchar_to_utf8_format_error )
+
+
 //-------------
 axStatus_offset( __non_safe_assign__, 100 )
 axStatus_enum( non_safe_assign )
@@ -36,6 +35,9 @@ axStatus_enum( serialize_utf8_error )
 axStatus_offset( __String__, 300 )
 axStatus_enum( String_utf8_error )
 axStatus_enum( String_error_decode_URI )
+axStatus_enum( str_to_format_error )
+axStatus_enum( utf8_to_wchar_format_error )
+axStatus_enum( wchar_to_utf8_format_error )
 
 //-----------
 axStatus_offset( __Array__, 400 )
@@ -146,7 +148,9 @@ axStatus_enum( DB_error_transaction )
 axStatus_offset( __DateTime__, 1500 )
 axStatus_enum( DateTime_invalid_format )
 
-
-
+axStatus_offset( __CSVParser__, 1600 )
+axStatus_enum( CSVParser_get_cell_error )
+axStatus_enum( CSVParser_cannot_open )
+axStatus_enum( CSVParser_readline_error )
 
 
