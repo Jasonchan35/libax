@@ -97,6 +97,12 @@ public:
 	axVec2		normalize	() const						{ T r = magSq(); return r ? (*this/ax_sqrt(r)) : *this; }
 	void		normalizeIt	()								{ *this = normalize(); }	
 
+	T			closetPointAtLineSegment	( const axVec2<T> &line0, const axVec2<T> &line1 ) const;
+
+	axVec2<T>	closetPointAtLine			( const axVec2<T> &line0, const axVec2<T> &line1, T & out_segment ) const;
+	axVec2<T>	closetPointAtLine			( const axVec2<T> &line0, const axVec2<T> &line1 ) const 	{ T s; return closetPointAtLine( line0, line1, s ); }
+	
+
 	axVec2		dir			( const axVec2 &v ) const		{ return (*this - v).normalize(); }
 	
 	template<class D>	axVec2<D>	to_Vec2 () const { return axVec2<D>( (D)x, (D)y ); }
@@ -219,7 +225,8 @@ template< class T > inline axStatus ax_json_serialize_value( axJsonParser &s, ax
 	axVec_FUNC( ax_max )
 #undef axVec_FUNC
     
-template<class T> inline axVec2<T> ax_clamp ( const axVec2<T> &v, const axVec2<T> a,  const axVec2<T> b ) {
+template<class T> inline
+axVec2<T> ax_clamp ( const axVec2<T> &v, const axVec2<T> a,  const axVec2<T> b ) {
 	return axVec2<T>( ax_clamp( v.x, a.x, b.x ), 
                           ax_clamp( v.y, a.y, b.y ) );
 }

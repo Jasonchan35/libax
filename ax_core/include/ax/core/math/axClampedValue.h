@@ -14,7 +14,7 @@ class axClampedValue { //copyable
 public:
 	axClampedValue( T value=0, T lower=0, T upper=0 ) : value_(value), lower_(lower), upper_(upper) {}
 
-	void	setValue	( T v )		{ v = ax_clamp( v, lower_, upper_ ); }
+	void	setValue	( T v )		{ value_ = ax_clamp( v, lower_, upper_ ); }
 	void	setLower	( T v )		{ lower_ = v; setValue(value_); }
 	void	setUpper	( T v )		{ upper_ = v; setValue(value_); }
 

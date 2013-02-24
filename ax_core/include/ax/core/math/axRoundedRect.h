@@ -11,19 +11,19 @@
 
 #include "axUnitCircle.h"
 
-template< size_t N >
-class axRoundedRect2f {
+template< class T, size_t N >
+class axRoundedRect2 {
 public:
 
-	axRoundedRect2f() { };
+	axRoundedRect2() { };
 	
-	axRoundedRect2f( float w, float h, float round ) {
+	axRoundedRect2( T w, T h, T round ) {
 		set( w, h, round );
 	}
 	
 	
-	void set( float w, float h, float round ) {
-		static axUnitCircle2f< N > _unitCircle;
+	void set( T w, T h, T round ) {
+		static axUnitCircle2< T, N > _unitCircle;
 		vtx.resizeToCapacity();
 					
 		size_t s  = N/4;
@@ -31,17 +31,15 @@ public:
 		size_t s3 = s*3;
 		
 		for( size_t i=0; i<s; i++ ) {
-			vtx[i   ] = _unitCircle.vtx[i   ] * round + axVec2f( w, h )	- round;						//Right bottom
-			vtx[i+s ] = _unitCircle.vtx[i+s ] * round + axVec2f( w, 0 ) + axVec2f( -round,  round );	//Right top
-			vtx[i+s2] = _unitCircle.vtx[i+s2] * round					+ round;						//Left top
-			vtx[i+s3] = _unitCircle.vtx[i+s3] * round + axVec2f( 0, h )	+ axVec2f(  round, -round );	//Left bottom
+			vtx[i   ] = _unitCircle.vtx[i   ] * round + axVec2<T>( w, h ) - round;							//Right bottom
+			vtx[i+s ] = _unitCircle.vtx[i+s ] * round + axVec2<T>( w, 0 ) + axVec2<T>( -round,  round );	//Right top
+			vtx[i+s2] = _unitCircle.vtx[i+s2] * round					  + round;							//Left top
+			vtx[i+s3] = _unitCircle.vtx[i+s3] * round + axVec2<T>( 0, h ) + axVec2<T>(  round, -round );	//Left bottom
 		}	
 	}
 	
-	
-	axArray< axVec2f, N > vtx;
+	axArray< axVec2<T>, N > vtx;
 };
-
 
 
 #endif // __axRoundedRect_h__
