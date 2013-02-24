@@ -320,6 +320,8 @@
 		96D017F2160E4DA100A2682B /* axFilePath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axFilePath.cpp; sourceTree = "<group>"; };
 		96D017F4160E4E6500A2682B /* axFilePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axFilePath.h; sourceTree = "<group>"; };
 		96D0954F160F852E00FDA718 /* axStatus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axStatus.cpp; sourceTree = "<group>"; };
+		96E99BDF16DA6BE1004E7C2F /* axClampedValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axClampedValue.h; sourceTree = "<group>"; };
+		96E99BE116DA6FBD004E7C2F /* axLimitedValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axLimitedValue.h; sourceTree = "<group>"; };
 		EA15F6C81544053B00356C7C /* ax_core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_core.h; sourceTree = "<group>"; };
 		EA1DC90C161DDC9200FFD681 /* axVec2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axVec2.cpp; sourceTree = "<group>"; };
 		EA1FB14D16CA23FD00C4853B /* axTimeStamp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axTimeStamp.cpp; sourceTree = "<group>"; };
@@ -595,6 +597,8 @@
 				EAB48F681646CE8500ABDA74 /* axUnitCircle.h */,
 				EAB48F6C1646D02E00ABDA74 /* axRoundedRect.h */,
 				EAB48F6D1646E70D00ABDA74 /* ax_linear_algebra.h */,
+				96E99BDF16DA6BE1004E7C2F /* axClampedValue.h */,
+				96E99BE116DA6FBD004E7C2F /* axLimitedValue.h */,
 			);
 			path = math;
 			sourceTree = "<group>";
