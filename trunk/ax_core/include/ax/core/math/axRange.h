@@ -24,7 +24,7 @@ public:
 	T	count;
 	
 	axStatus	toStringFormat( axStringFormat &f ) const {
-		return f.format("start={?} count={?}", start, count );
+		return f.format("[{?}:{?}]", start, end() );
 	}
 };
 
