@@ -57,6 +57,7 @@ private:
 	double		second_;
 };
 
+inline axTimeStamp	ax_now() { axTimeStamp t; t.now(); return t; }
 
 
 #endif //__axTimeStamp_h__
