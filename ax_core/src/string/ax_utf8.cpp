@@ -21,12 +21,12 @@
 	}
 
 	assert(false);
-	return -1;
+	return axStatus_Std::utf8_to_wchar_format_error;
 }
 
  int ax_wchar_to_utf8( char *utf8, axSize utf8_len, wchar_t wc ) {
 	if( wc <= 0x7F ) {
-		if( utf8_len < 1 ) return -1;
+		if( utf8_len < 1 ) return axStatus_Std::wchar_to_utf8_format_error;
 		utf8[0] = (char)wc;
 		return 1;
 	}

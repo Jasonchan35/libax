@@ -57,13 +57,13 @@ axStatus	axAndroid::_create( JNIEnv* env, jobject activity ) {
  	jobject res_path = jni->CallObjectMethod( jni_Activity, jni_Activity_getPackageResourcePath );
  	if( ! res_path ) {
  		ax_log("axApp.getPackageResourcePath() error");
- 		return -1;
+ 		return axStatus_Std::Java_Android_create_error;
  	}
 	
  	st = getJString( resourcePath_, res_path );
  	if( !st ) {
 		ax_log("axApp.getPackageResourcePath() error 2");
- 		return -1;
+ 		return axStatus_Std::android_create_error;
  	}
  	ax_log( "resourcePath_={?}", resourcePath_ );
  	return 0;
@@ -85,7 +85,7 @@ jstring	axAndroid::toJString	( const wchar_t* sz ) {
 
 axStatus axAndroid::getJString ( axIStringA &out, jstring str ) {
 	const char* utf = jni->GetStringUTFChars( str, NULL );
-	if( !utf ) return -1;
+	if( !utf ) return axStatus_Std::android_getJString_error;
 	axStatus st = out.set( utf );
 	jni->ReleaseStringUTFChars( str, utf );
 	return st;
@@ -93,7 +93,7 @@ axStatus axAndroid::getJString ( axIStringA &out, jstring str ) {
 
 axStatus axAndroid::getJString ( axIStringW &out, jstring str ) {
 	const char* utf = jni->GetStringUTFChars( str, NULL );
-	if( !utf ) return -1;
+	if( !utf ) return axStatus_Std::android_getJString_error;
 	axStatus st = out.set( utf );
 	jni->ReleaseStringUTFChars( str, utf );
 	return st;
