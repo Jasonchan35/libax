@@ -144,7 +144,7 @@ axStatus ax_str_to( const wchar_t* sz, uint64_t   &v ) {
 axStatus ax_str_to( const wchar_t* sz, int8_t    &v ) {
 	int32_t tmp;
 	if( 1 != swscanf( sz, L"%d", &tmp ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return ax_safe_assign( v, tmp );
 }
 
@@ -208,7 +208,7 @@ uint32_t ax_string_hash( const wchar_t *sz ) {
  
 axStatus ax_hex_str_to ( axSize &out, const char *v ) {
 	out = 0 ;
-	if( !*v ) return -1;
+	if( !*v ) return axStatus_Std::pointer_is_null;
 
 	size_t o = 0;
 	int ret;

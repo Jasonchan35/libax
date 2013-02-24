@@ -2,7 +2,7 @@
 
 #include <ax/ax_unit_test.h>
 
-const size_t numRows = 10;
+const size_t numRows = 1000;
 const size_t byteArrayTestSize = 100;
 const bool   echoSQL = false;
 const bool   dump_result = false;

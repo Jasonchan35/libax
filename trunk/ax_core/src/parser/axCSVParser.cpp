@@ -50,7 +50,7 @@ axStatus	axCSVParserBase::readLine_() {
 
 axStatus axCSVParserBase::getCell_( axIStringA &cell ) {
 	axStatus st;
-	if( ! *r_ ) return -1;
+	if( ! *r_ ) return axStatus_Std::CSVParser_get_cell_error;
 
 	bool	in_quote = false;
 	
@@ -101,7 +101,7 @@ axStatus axCSVParserBase::getCell_( axIStringA &cell ) {
 			else if( *p == '\r' ) { //handle Windows Line Feed "\r\n"
 				if( p[1] != '\n' ) {
 					assert( false );
-					return -1;
+					return axStatus_Std::CSVParser_get_cell_error;
 				}
 				st = cell.appendWithLength( r_, p-r_ );		if( !st ) return st;
 				p++;
@@ -147,7 +147,7 @@ axStatus axCSVFileParser::open( const char* filename ) {
 //===== axCSVByteArrayParser
 
 axStatus axCSVStringAParser::open( const char* str ) { 
-	if( !str ) return -1;
+	if( !str ) return axStatus_Std::CSVParser_cannot_open;
 	p_ = str;
 	return 0; 
 }
@@ -160,7 +160,7 @@ axStatus axCSVStringAParser::onReadLine( axStringA &buf ) {
 	e = ax_strchr( p_, '\r' );
 	if( !e ) e = ax_strchr( p_, '\n' );
 	if( !e ) { e = p_ + ax_strlen(p_); }
-	if( !e ) return -1;
+	if( !e ) return axStatus_Std::CSVParser_readline_error;
 	
 	for( ; *e ; e++ ) {
 		bool is_break=false;
