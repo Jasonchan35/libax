@@ -460,12 +460,12 @@ axStatus test_ax_database() {
 	axLog::instance->addFile( "test.log", false );
 	ax_log("test {?} records\n", numRows );
 
-//	axUTestCase( test_SQLite3() );
+	axUTestCase( test_SQLite3() );
 //	axUTestCase( test_MySQL() );
 //	axUTestCase( test_PostgreSQL() );
 //	axUTestCase( test_ODBC_MSSQL() );
 	//axUTestCase( test_ODBC_Oracle() );
-	axUTestCase( test_Oracle() );
+//	axUTestCase( test_Oracle() );
 
 	return 0;
 }
