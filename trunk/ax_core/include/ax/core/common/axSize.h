@@ -39,11 +39,11 @@ public:
 
 	axALWAYS_INLINE(	operator size_t() const )	{ return value_; }
 
-	axSize	operator++(int)					{ axSize o=value_; value_++; return o; }
-	axSize	operator--(int)					{ axSize o=value_; value_--; return o; }
+	axSize	operator++(int)					{ return ++value_; }
+	axSize	operator--(int)					{ return ++value_; }
 
-	axSize	operator++()					{ value_++; return *this; }
-	axSize	operator--()					{ value_--; return *this; }
+	axSize	operator++()					{ return value_++; }
+	axSize	operator--()					{ return value_++; }
 
 	void	operator+=( axSize v )			{ value_+=v; }
 	void	operator-=( axSize v )			{ value_-=v; }
