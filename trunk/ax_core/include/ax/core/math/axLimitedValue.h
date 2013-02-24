@@ -14,7 +14,7 @@ class axLimitedValue { //copyable
 public:
 	axLimitedValue( T value=0, T max=0 ) : value_(value), max_(max) {}
 
-	void	setValue	( T v )		{ v = ax_min( v, max_ ); }
+	void	setValue	( T v )		{ value_ = ax_clamp( v, (T)0, max_ ); }
 	void	setMax		( T v )		{ max_ = v; setValue(value_); }
 
 	operator	T		() const	{ return value_; }
