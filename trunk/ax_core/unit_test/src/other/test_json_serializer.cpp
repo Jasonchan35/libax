@@ -12,23 +12,22 @@ axStatus test_json_simple() {
 
 	axTempStringA json_str;
 
-	axApp::getCurrentDir( json_str );
+	axApp	app;
+
+	app.getCurrentDir( json_str );
 	ax_log( "axApp::getCurrentDir( {?} )", json_str );
 	json_str.clear();
 
 	{
-		axJSONSerializer se( json_str ) ;
-		st = se.io( c ); if( !st ) return st;
-
+		st = ax_to_json( json_str, c, false );
+		axUTestCheck(st)
 		ax_log("-->\n{?}" ,json_str );
 	}
 
 	{
-
-		axJSONDeserializer se( json_str ) ;
-		st = se.io( c ); if( !st ) return st;
-
+		st = ax_from_json( json_str, c, false );
 		ax_log("-->\ns1 {?}\ns2 {?}" , c.s1, c.s2 );
+		axUTestCheck(st);
 	}
 
 	return 0;
@@ -44,7 +43,7 @@ axStatus test_json_class_read() {
 	
 	TestClass c;
 	c.setValue2();
-	axJSONDeserializer ds( str ) ;
+	axJsonParser ds( str ) ;
 	st = ds.io( c, "myclass" ); if( !st ) return st;
 
 	ax_log("{?}", c );
@@ -60,7 +59,7 @@ axStatus test_json_class_write() {
 	TestClass c;
 	c.setValue();
 
-	axJSONSerializer se( str ) ;
+	axJsonWriter se( str ) ;
 	st = se.io( c, "myclass" ); if( !st ) return st;
 
 	ax_log("str -->\n{?}" ,str );
@@ -88,14 +87,14 @@ axStatus test() {
 	}
 
 	{
-		axJSONSerializer se( str ) ;
-		st = se.io( arr );		if( !st ) return st;	
+		axJsonWriter se( str ) ;
+		st = se.io( arr, NULL );		if( !st ) return st;
 		ax_log("str -->\n{?}" ,str );
 	}
 
 	{
-		axJSONDeserializer se( str ) ;
-		st = se.io( arr2 );		if( !st ) return st;	
+		axJsonParser se( str ) ;
+		st = se.io( arr2, NULL );		if( !st ) return st;
 		ax_log("arr2 -->\n{?}" ,arr2 );
 	}
 	return 0;
@@ -108,13 +107,9 @@ int main() {
 	axScope_NSAutoreleasePool	pool;
 #endif //axOS_MacOSX
 
-	axStatus a = axStatus_Std::not_enough_memory;
-	ax_log("{?}", a);
-	
-
 	//========================================
 
-	//st = test_json_simple();
+	axUTestCase( test_json_simple() );
 	//st = test_json_class_write();
 	//st = test_json_class_read();
 	//st = test();
