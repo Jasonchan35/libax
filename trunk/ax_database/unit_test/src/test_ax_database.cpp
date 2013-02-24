@@ -240,9 +240,9 @@ axStatus test_ax_database_common( axDBConn & db ) {
 			axUTestCheck( row.v_double == test_row.v_double );
 
 			double delta_timestamp = ax_abs( test_timestamp - row.v_TimeStamp );
-			ax_log_var( axDateTime(test_timestamp) );
-			ax_log_var( axDateTime(row.v_TimeStamp) );
-			ax_log_var( delta_timestamp );
+//			ax_log_var( axDateTime(test_timestamp) );
+//			ax_log_var( axDateTime(row.v_TimeStamp) );
+//			ax_log_var( delta_timestamp );
 			axUTestCheck( delta_timestamp < 1 );
 
 			axUTestCheck( row.v_StringA.equals( test_row.v_StringA ) );
@@ -448,7 +448,7 @@ axStatus test_Oracle() {
 	axStatus st;
 	axDBConn	db;
 
-	st = axOracle_connect ( db, "localhost", 1521, "orcl", "test", "1234" );		if( !st ) return st;
+	st = axOracle_connect ( db, "oracle", 1521, "orcl", "test", "1234" );		if( !st ) return st;
 	st = test_ax_database_common(db);												if( !st ) return st;
 	return 0;
 }
