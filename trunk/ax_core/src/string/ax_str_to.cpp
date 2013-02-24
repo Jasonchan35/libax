@@ -42,70 +42,70 @@ axStatus ax_str_to( const char* sz, bool &v ) {
 		v = false;
 		return 0;
 	}
-	return -1;
+	return axStatus_Std::str_to_format_error;
 }
 
 axStatus ax_str_to( const char* sz, uint8_t    &v ) {
 	uint32_t tmp;
 	if( 1 != sscanf( sz, "%u", &tmp ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return ax_safe_assign( v, tmp );
 }
 
 axStatus ax_str_to( const char* sz, uint16_t    &v ) {
 	uint32_t tmp;
 	if( 1 != sscanf( sz, "%u", &tmp ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return ax_safe_assign( v, tmp );
 }
 
 axStatus ax_str_to( const char* sz, uint32_t   &v ) {
 	if( 1 != sscanf( sz, "%u", &v ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return 0;
 }
 
 axStatus ax_str_to( const char* sz, uint64_t   &v ) {
 	if( 1 != sscanf( sz, "%llu", (long long unsigned*)&v ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return 0;
 }
 
 axStatus ax_str_to( const char* sz, int8_t    &v ) {
 	int32_t tmp;
 	if( 1 != sscanf( sz, "%d", &tmp ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return ax_safe_assign( v, tmp );
 }
 
 axStatus ax_str_to( const char* sz, int16_t    &v ) {
 	int32_t tmp;
 	if( 1 != sscanf( sz, "%d", &tmp ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return ax_safe_assign( v, tmp );
 }
 
 axStatus ax_str_to( const char* sz, int32_t   &v ) {
 	if( 1 != sscanf( sz, "%d", &v ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return 0;
 }
 
 axStatus ax_str_to( const char* sz, int64_t   &v ) {
 	if( 1 != sscanf( sz, "%lld", (long long int *)&v ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return 0;
 }
 
 axStatus ax_str_to( const char* sz, float  &v ) {
 	if( 1 != sscanf( sz, "%f", &v ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return 0;
 }
 
 axStatus ax_str_to( const char* sz, double &v ) {
 	if( 1 != sscanf( sz, "%lf", &v ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return 0;
 }
 
@@ -118,26 +118,26 @@ axStatus ax_str_to( const char* sz, axSize &v ) {
 axStatus ax_str_to( const wchar_t* sz, uint8_t    &v ) {
 	uint32_t tmp;
 	if( 1 != swscanf( sz, L"%u", &tmp ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return ax_safe_assign( v, tmp );
 }
 
 axStatus ax_str_to( const wchar_t* sz, uint16_t    &v ) {
 	uint32_t tmp;
 	if( 1 != swscanf( sz, L"%u", &tmp ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return ax_safe_assign( v, tmp );
 }
 
 axStatus ax_str_to( const wchar_t* sz, uint32_t   &v ) {
 	if( 1 != swscanf( sz, L"%u", &v ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return 0;
 }
 
 axStatus ax_str_to( const wchar_t* sz, uint64_t   &v ) {
 	if( 1 != swscanf( sz, L"%llu", &v ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return 0;
 }
 
@@ -151,31 +151,31 @@ axStatus ax_str_to( const wchar_t* sz, int8_t    &v ) {
 axStatus ax_str_to( const wchar_t* sz, int16_t    &v ) {
 	int32_t tmp;
 	if( 1 != swscanf( sz, L"%d", &tmp ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return ax_safe_assign( v, tmp );
 }
 
 axStatus ax_str_to( const wchar_t* sz, int32_t   &v ) {
 	if( 1 != swscanf( sz, L"%d", &v ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return 0;
 }
 
 axStatus ax_str_to( const wchar_t* sz, int64_t   &v ) {
 	if( 1 != swscanf( sz, L"%lld", &v ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return 0;
 }
 
 axStatus ax_str_to( const wchar_t* sz, float  &v ) {
 	if( 1 != swscanf( sz, L"%f", &v ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return 0;
 }
 
 axStatus ax_str_to( const wchar_t* sz, double &v ) {
 	if( 1 != swscanf( sz, L"%lf", &v ) )
-		return -1;
+		return axStatus_Std::str_to_format_error;
 	return 0;
 }
 

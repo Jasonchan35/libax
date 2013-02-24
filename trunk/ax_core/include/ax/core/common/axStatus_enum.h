@@ -16,7 +16,10 @@ axStatus_enum( will_cause_recursion )
 axStatus_enum( timed_out )
 axStatus_enum( data_corrupted )
 axStatus_enum( opengl_unsupported_extension )
-
+axStatus_enum( hex_format_error )
+axStatus_enum( str_to_format_error )
+axStatus_enum( utf8_to_wchar_format_error )
+axStatus_enum( wchar_to_utf8_format_error )
 //-------------
 axStatus_offset( __non_safe_assign__, 100 )
 axStatus_enum( non_safe_assign )
@@ -104,6 +107,7 @@ axStatus_enum( OpenGL_texture_unsupport_format )
 axStatus_offset( __Java__, 1200 )
 axStatus_enum( Java_JNI_not_init )
 axStatus_enum( Java_JNI_not_found )
+axStatus_enum( Java_Android_create_error )
 
 //-------------
 
@@ -141,6 +145,8 @@ axStatus_enum( DB_error_transaction )
 
 axStatus_offset( __DateTime__, 1500 )
 axStatus_enum( DateTime_invalid_format )
+
+
 
 
 
