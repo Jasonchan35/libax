@@ -18,6 +18,9 @@ public:
 
 	operator double		() const						{ return second_; }
 
+			double &	as_double()						{ return second_; }
+	const 	double &	as_double()	const				{ return second_; }
+
 	void	operator += ( double s )					{ second_ += s; }
 	void	operator -= ( double s )					{ second_ -= s; }
 

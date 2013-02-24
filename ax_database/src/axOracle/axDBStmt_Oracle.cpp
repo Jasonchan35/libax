@@ -280,7 +280,7 @@ axStatus	axDBStmt_Oracle::getRow_ArgList	( axDBOutParamList & list ) {
 	for( size_t i=0; i<list.size(); i++ ) {
 		axDBOutParam & out = list[i];
 		ColumnInfo & info  = columnInfos[i];
-		ub4 col = (ub4)i+1;
+	//	ub4 col = (ub4)i+1;
 
 		switch( out.type ) {
 			case axDB_c_type_bool: {
@@ -289,17 +289,17 @@ axStatus	axDBStmt_Oracle::getRow_ArgList	( axDBOutParamList & list ) {
 
 			case axDB_c_type_StringA: {
 				st = info.utf16_buf.decSize( info.utf16_buf_last_len - info.utf16_buf_ret_len );		if( !st ) return st;
-				st = fromUTextArray( *out.as_StringA(), info.utf16_buf );							if( !st ) return st;
+				st = fromUTextArray( *out.as_StringA(), info.utf16_buf );								if( !st ) return st;
 			}break;
 
 			case axDB_c_type_StringW: {
 				st = info.utf16_buf.decSize( info.utf16_buf_last_len - info.utf16_buf_ret_len );		if( !st ) return st;
-				st = fromUTextArray( *out.as_StringW(), info.utf16_buf );							if( !st ) return st;
+				st = fromUTextArray( *out.as_StringW(), info.utf16_buf );								if( !st ) return st;
 			}break;
 
 			case axDB_c_type_blob: {
 				st = info.utf16_buf.decSize( info.utf16_buf_last_len - info.utf16_buf_ret_len );		if( !st ) return st;
-				st = out.as_blob()->copy( info.utf16_buf );									if( !st ) return st;
+				st = out.as_blob()->copy( info.utf16_buf );												if( !st ) return st;
 			}break;
 
 			case axDB_c_type_datetime:{

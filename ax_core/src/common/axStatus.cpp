@@ -61,3 +61,17 @@ void axStatus_ModuleList::registerModule( axStatus_Module* mod, int moduleStart 
 		module[m] = mod;
 	}
 }
+
+//=================
+//virtual
+const char*	axStatus_Std::c_str( int code ) {
+	switch( code ) {
+		#define axStatus_offset(n,offset) 	case n: return #n;
+		#define axStatus_enum(n)   			case n: return #n;
+			#include "axStatus_enum.h"
+		#undef axStatus_enum
+		#undef axStatus_offset
+		default: return NULL;
+	}
+}
+

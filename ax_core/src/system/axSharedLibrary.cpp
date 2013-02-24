@@ -24,18 +24,22 @@ axStatus	axSharedLibrary::load( const char* filename ) {
 
     handle_ = LoadLibraryA(filename);
     if( ! handle_ ) {
-            printf( "unable to load %s\n", filename );
-            return axStatus_Std::not_found;
+		printf( "unable to load %s\n", filename );
+		return axStatus_Std::System_shared_lib_load_error;
     }
 
     return 0;
 }
 
 axStatus	axSharedLibrary::_getProc( void* &proc, const char* proc_name ) {
-	if( ! handle_ ) { proc=NULL; return axStatus_Std::SharedLibrary_not_loaded; }
+	proc = NULL;
+	if( ! handle_ ) {
+		return axStatus_Std::System_shared_lib_not_loaded;
+	}
+	
     proc = GetProcAddress( handle_, proc_name );
 	if( ! proc ) {
-		 return axStatus_Std::SharedLibrary_no_such_function;
+		 return axStatus_Std::System_shared_lib_function_not_found;
 	}
     return 1;
 }
@@ -66,17 +70,21 @@ axStatus	axSharedLibrary::load( const char* filename ) {
     handle_ = dlopen( filename, RTLD_LAZY );
     if( ! handle_ ) {
 		ax_log( "unable to load shared library {?} error: {?} ", filename, dlerror() );
-        return axStatus_Std::SharedLibrary_file_not_found;
+        return axStatus_Std::System_shared_lib_load_error;
     }
     return 0;
 }
 
 axStatus	axSharedLibrary::_getProc( void* &proc, const char* proc_name ) {
     proc = NULL;
-    if( ! handle_ ) return -1;
+    if( ! handle_ ) {
+		return axStatus_Std::System_shared_lib_not_loaded;
+	}
 
     proc = dlsym( handle_, proc_name );
-	if( ! proc ) return -1;
+	if( ! proc ) {
+		return axStatus_Std::System_shared_lib_function_not_found;
+	}
     return 1;
 }
 

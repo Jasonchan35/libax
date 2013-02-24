@@ -16,6 +16,8 @@ public:
 	axStatus	addString		( const T *sz );
 	axStatus	tokenize 		( const T* sz, const T* seperators = String::defaultSeperators(), const T* trim = NULL );
 
+			B&	asInterface		() 			{ return (B&)*this; }
+	const 	B&	asInterface		() const	{ return (B&)*this; }
 };
 
 typedef axString_Array<char>		axStringA_Array;
@@ -24,7 +26,7 @@ typedef axString_Array<wchar_t>		axStringW_Array;
 
 template< class S, class T > inline
 axStatus ax_json_serialize_value( S &s, axString_Array<T> &v ) {
-	return ax_json_serialize_value( s, (axIArray< axString_<T> >&) v );
+	return ax_json_serialize_value( s, v.asInterface() );
 }
 
 
