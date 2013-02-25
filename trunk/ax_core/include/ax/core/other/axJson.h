@@ -208,13 +208,17 @@ public:
 	axStatus	endObject() ;
 
 	axStatus	beginObjectValue();
-	axStatus	endObjectValue();	
+	axStatus	endObjectValue();
+	
+	bool		isObjectEnded();
 
 	axStatus	beginArray( const char* name );
 	axStatus	endArray() ;
 	
 	axStatus	beginArrayValue();
 	axStatus	endArrayValue() ;
+	
+	bool		isArrayEnded();
 
 	axStatus	nextElement();
 	
@@ -395,14 +399,11 @@ axStatus ax_json_serialize_value( axJsonParser &s, axIArray<T> &v ) {
 	axStatus st;
 	v.resize(0);
 	st = s.beginArrayValue();				if( !st ) return st;
-	if( ! s.checkToken("]") ) {
-		for(;;) {
-			st = v.incSize( 1 );			if( !st ) return st;
-			st = s.io_value( v.last() );	if( !st ) return st;
-			
-			if( s.checkToken("]") ) break;
-			st = s.nextElement();			if( !st ) return st;
-		}	
+	while( ! s.isArrayEnded() ) {
+		st = v.incSize( 1 );				if( !st ) return st;
+		st = s.io_value( v.last() );		if( !st ) return st;
+		
+		st = s.nextElement();				if( !st ) return st;
 	}
 	st = s.endArrayValue();					if( !st ) return st;
 	return 0;

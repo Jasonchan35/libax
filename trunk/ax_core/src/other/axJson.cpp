@@ -354,6 +354,10 @@ axStatus axJsonParser::getMemberName( axIStringA & out ) {
 
 axStatus axJsonParser::nextElement() {
 	axStatus st;
+	
+	if( checkToken("]") ) return 0;
+	if( checkToken("}") ) return 0;
+	
 	st = checkToken(",");			if( !st ) return st;
 	st = nextToken();				if( !st ) return st;
 	return 0;
@@ -436,6 +440,10 @@ axStatus axJsonParser::endObjectValue() {
 	return 0;
 }
 
+bool axJsonParser::isObjectEnded() {
+	return checkToken("}");
+}
+
 void axJsonParser::_logIgnoreMember( const char* name ) {
 	ax_log("Json({?}:{?})  ignore member [{?}]", lineNo(), charNo(), name );
 }
@@ -465,4 +473,8 @@ axStatus axJsonParser::endArrayValue() {
 	st = checkToken("]");		if( !st ) return st;
 	st = nextToken();			if( !st ) return st;
 	return 0;
+}
+
+bool axJsonParser::isArrayEnded() {
+	return checkToken("]");
 }
