@@ -45,7 +45,12 @@ inline axStatus  axStringFormat_out( axStringFormat &f, void* p ) {
 }
 
 template<class T> inline
-axStatus axStringFormat_out( axStringFormat &f, const T& value ) { return value.toStringFormat( f ); }
+axStatus axStringFormat_out( axStringFormat &f, const T& value ) {
+	return value.toStringFormat( f );
+	//when compiler error here:
+	//- class T missing toStringFormat() function
+	//- or if you want ot print pointer, try to cast it to void* please
+}
 //---------
 
 axStatus axStringFormat_out( axStringFormat &f, axStatus value );
