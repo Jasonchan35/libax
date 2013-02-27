@@ -210,11 +210,9 @@ axStatus	axFileSystem::removeDirectory 	( const wchar_t*    dir, bool recursive 
 }
 
 template< class T > axStatus axFileSystem::makeDirectoryT( const T* dir, bool recursive ) {
-
 	axStatus st;
-	
 	if( !recursive ) return _makeDirectory( dir );
-	
+
 	const T *s = dir;	
 	T sp[3]; sp[0] = '/'; sp[1]= '\\'; sp[2]=0;
 	const T *end = dir + ax_strlen( dir );
@@ -222,16 +220,13 @@ template< class T > axStatus axFileSystem::makeDirectoryT( const T* dir, bool re
 	axTempStringA token, path;
 	
 	for( ;; ) {
-	
 		const T *e = ax_strchr_list( s, sp );
 		if( !e ) { 
 			e = end;
 		}
-		
+
 		axSize len = e-s;
-				
 		if( len > 0 ) {
-		
 			st = token.setWithLength( s, len ); if( !st ) return st;		
 			
 			if( s != dir ) { //skip the 1st 1
@@ -245,17 +240,10 @@ template< class T > axStatus axFileSystem::makeDirectoryT( const T* dir, bool re
 				
 		if( e >= end ) break;
 		s = e+1;
-	
+
 	}
-
-
 	return 0;
-
-
 }
-
-
-
 
 axStatus	axFileSystem::makeDirectory( const char* dir, bool recursive ) {
 	return makeDirectoryT( dir, recursive );
