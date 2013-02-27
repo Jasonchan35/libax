@@ -67,15 +67,15 @@ public:
 	
 private: 
 
-	template< class T > static axStatus makeDirectoryT( const T* dir, bool recursive );
+	template< class T > static	axStatus 	makeDirectoryT	( const T* dir, bool recursive );
+						static	axStatus	_makeDirectory	( const char*		dir );
+						static	axStatus	_makeDirectory	( const wchar_t*    dir );	
 
-	static	axStatus	_makeDirectory	( const char*		dir );
-	static	axStatus	_makeDirectory	( const wchar_t*    dir );	
-
-	template< class T > static axStatus removeDirectoryT( const T* dir, bool recursive );
+	template< class T > static	axStatus 	removeDirectoryT	( const T* dir, bool recursive );
+						static	axStatus	_removeDirectory 	( const char*		dir );
+						static	axStatus	_removeDirectory 	( const wchar_t*    dir );
 	
-	static	axStatus	_removeDirectory 	( const char*		dir );
-	static	axStatus	_removeDirectory 	( const wchar_t*    dir );
+	
 };
 
 //@}
