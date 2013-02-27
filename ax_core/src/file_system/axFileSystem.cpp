@@ -214,7 +214,7 @@ template< class T > axStatus axFileSystem::makeDirectoryT( const T* dir, bool re
 	if( !recursive ) return _makeDirectory( dir );
 
 	const T *s = dir;	
-	T sp[3]; sp[0] = '/'; sp[1]= '\\'; sp[2]=0;
+	const T sp[] = { '/','\\',0 };
 	const T *end = dir + ax_strlen( dir );
 
 	axTempStringA token, path;
