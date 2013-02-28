@@ -68,7 +68,7 @@ const char*	axStatus_Std::c_str( int code ) {
 	switch( code ) {
 		#define axStatus_offset(n,offset) 	case n: return #n;
 		#define axStatus_enum(n)   			case n: return #n;
-			#include "axStatus_enum.h"
+			#include <ax/core/common/axStatus_enum.h>
 		#undef axStatus_enum
 		#undef axStatus_offset
 		
