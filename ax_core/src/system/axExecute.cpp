@@ -736,7 +736,7 @@ public:
 		if ( ! bSuccess ) {
 		  //ErrorExit(TEXT("CreateProcess"));
 			ax_log_win32_error("CreateProcess");
-			return axStatus_Std::Execute_error;
+			return axStatus_Std::System_execute_error;
 		}
 		CloseHandle( piProcInfo.hThread );
 		childProcess = piProcInfo.hProcess;

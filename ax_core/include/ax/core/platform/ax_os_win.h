@@ -19,6 +19,7 @@
 
 #include <winsock2.h> //winsock2 must include before windows.h to avoid winsock1 define
 #include <windows.h>
+#include <Mmsystem.h>
 #include <time.h>
 #include <conio.h>
 #include <shellapi.h>
