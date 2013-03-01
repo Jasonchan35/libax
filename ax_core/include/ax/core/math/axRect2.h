@@ -36,6 +36,8 @@ public:
 	const axVec2<T>& pos	() const		{ return *(axVec2<T>*)&x; }
 	const axVec2<T>& size	() const		{ return *(axVec2<T>*)&w; }
 
+	
+	void		set			( const axVec2<T> &pos, const axVec2<T> &size )		{ setPos( pos); setSize( size ); } 
 	void		setPos		( const T xx, const T yy )		{ x=xx; y=yy; }
 	void		setPos		( const axVec2<T> &v )			{ setPos( v.x, v.y ); }
 
@@ -97,7 +99,7 @@ public:
 	axRect2<T>	operator -  ( const axMargin2<T> &m ) const	{ return axRect2<T>( pos() + m.topLeft(), size() - m.both() ); };
 	
 	bool		isOverlap	( const axRect2<T> &r ) const;
-	bool		intersectOf	( axRect2<T> &a, axRect2<T> &b ) const;
+	bool		intersectOf	( const axRect2<T> &a, const axRect2<T> &b );
 
 
 	template<class S>	axStatus	serialize_io	( S &se );
@@ -211,7 +213,7 @@ inline bool axRect2<T>::isOverlap( const axRect2<T> &r ) const {
 }
 
 template <class T>
-inline bool axRect2<T>::intersectOf( axRect2<T> &a, axRect2<T> &b ) const {
+inline bool axRect2<T>::intersectOf( const axRect2<T> &a, const axRect2<T> &b ) {
 	if ( !a.isOverlap(b) ) {
 		setAll(0); return false;
 	}
