@@ -26,12 +26,7 @@
 	and also provide c_str() for error message display \n
 */
 
-class axStatus_Module {
-public:
-	axStatus_Module( int start );
-	virtual ~axStatus_Module() {}
-	virtual	const char*	c_str( int code ) = 0;	
-};
+class axStatus_Module;
 
 class axStatus_ModuleList : public axSingleton< axStatus_ModuleList > {
 public:
@@ -41,13 +36,23 @@ public:
 	};
 	axStatus_ModuleList();
 
-	const char* c_str( int code );
+	const char* c_str( int code ) const;
 
-	int		moduleIdByCode( int code );
+	int		moduleIdByCode( int code ) const;
 	void	registerModule( axStatus_Module* mod, int moduleStart );
 
 private:
 	axStatus_Module*	module[ kModuleMax ];
+};
+
+
+class axStatus_Module {
+public:
+	enum { kModuleInterval = axStatus_ModuleList::kModuleInterval };
+
+	axStatus_Module( int start );
+	virtual ~axStatus_Module() {}
+	virtual	const char*	c_str( int code ) const = 0;
 };
 
 class axStatus {
@@ -84,9 +89,9 @@ public:
 			#include "axStatus_enum.h"
 		#undef axStatus_enum
 		#undef axStatus_offset
-		_end = -10000
+		_end = _start - kModuleInterval
 	};
-	virtual	const char*	c_str( int code );
+	virtual	const char*	c_str( int code ) const;
 	
 	axStatus_Std() : axStatus_Module(_start) {}
 	static	axStatus_Std inst;
