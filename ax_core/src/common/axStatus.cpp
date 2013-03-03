@@ -35,7 +35,7 @@ axStatus_ModuleList::axStatus_ModuleList() {
 //	memset( module, 0, sizeof(axStatus_Module) * kModuleMax );
 }
 
-const char* axStatus_ModuleList::c_str( int code ) {
+const char* axStatus_ModuleList::c_str( int code ) const {
 	int m = moduleIdByCode( code );
 	if( m < 0 || m >= kModuleMax ) {
 		assert( false );
@@ -45,7 +45,7 @@ const char* axStatus_ModuleList::c_str( int code ) {
 	return code >= 0 ? "OK" : "Error";
 }
 
-int axStatus_ModuleList::moduleIdByCode( int code ) { 
+int axStatus_ModuleList::moduleIdByCode( int code ) const {
 	return -code / kModuleInterval; 
 }
 
@@ -64,7 +64,7 @@ void axStatus_ModuleList::registerModule( axStatus_Module* mod, int moduleStart 
 
 //=================
 //virtual
-const char*	axStatus_Std::c_str( int code ) {
+const char*	axStatus_Std::c_str( int code ) const {
 	switch( code ) {
 		#define axStatus_offset(n,offset) 	case n: return #n;
 		#define axStatus_enum(n)   			case n: return #n;
