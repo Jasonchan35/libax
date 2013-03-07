@@ -44,7 +44,7 @@ inline	int  ax_align_pow2	( int v )	{ v--; v |= v >> 1; v |= v >> 2; v |= v >> 4
 inline	bool ax_is_pow2		( int v )	{ return !(v & (v - 1)) && v ; }
 
 // Not a Number
-//template<class T>	T ax_NaN();
+//template<class T>	T ax_nan();
 //template<>	inline double	ax_nan<double>() { return std::quiet_NaN<double>; }
 //template<>	inline float	ax_nan<float> () { return std::quiet_NaN<float>; }
 
@@ -53,13 +53,9 @@ inline	bool ax_is_pow2		( int v )	{ return !(v & (v - 1)) && v ; }
 //template<>	inline float	ax_isnan<float> () { return std::nan<float>(); }
 
 // Infinity
-//template <class T> bool		ax_inf();
-//template<>	inline double	ax_inf<double>() { return std::numeric_limits<T>::infinity(); }
-//template<>	inline float	ax_inf<float> () { return std::numeric_limits<T>::infinity(); }
-//
-//template <class T> bool		ax_isinf();
-//template<>	inline double	ax_isinf<double>() { return std::numeric_limits<T>::has_infinity() && value == ax_infinite(); }
-//template<>	inline float	ax_isinf<float> () { return std::numeric_limits<T>::has_infinity() && value == ax_infinite(); }
+
+template <class T> T	ax_inf	()			{ return std::numeric_limits<T>::infinity(); }
+template <class T> T	ax_isinf( T value )	{ return std::numeric_limits<T>::has_infinity && value == ax_inf<T>(); }
 
 
 template<class T>	T		ax_epsilon();

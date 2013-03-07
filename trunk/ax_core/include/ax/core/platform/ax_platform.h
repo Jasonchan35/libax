@@ -93,12 +93,13 @@
 #include <string.h>
 #include <wchar.h>
 #include <float.h>
-#include <limits.h>
 #include <assert.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <errno.h>
 #include <math.h>
+//#include <limits.h>
+#include <limits>
 
 //C++ define
 #include <cstddef>

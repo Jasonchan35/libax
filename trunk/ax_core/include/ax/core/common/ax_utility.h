@@ -2,7 +2,7 @@
 #ifndef __ax_utility_h__
 #define __ax_utility_h__
 
-#include "ax_math_template.h"
+#include "../math/ax_math_template.h"
 #include "axSize.h"
 
 //! \ingroup base_common
