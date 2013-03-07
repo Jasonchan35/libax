@@ -410,6 +410,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\include\ax\core\math\ax_math_template.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\ax\core\math\axBBox3.h"
 					>
 				</File>
@@ -819,10 +823,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\ax\core\common\ax_macro.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\common\ax_math_template.h"
 					>
 				</File>
 				<File
