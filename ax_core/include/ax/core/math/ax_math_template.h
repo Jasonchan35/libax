@@ -2,7 +2,7 @@
 #ifndef __ax_math_template_h__
 #define __ax_math_template_h__
 
-#include "axSize.h"
+#include "../common/axSize.h"
 
 //! \ingroup base_common
 //@{
@@ -15,7 +15,7 @@ template<class T> inline T ax_sign( T a )					{ if( a == 0 ) return 0; return ax
 #define	axTYPE_LIST(T)\
 	inline T	ax_abs( T  a ) { return a; }
 //-----
-	#include "axTypeList_uint.h"
+	#include "../common/axTypeList_uint.h"
 #undef axTYPE_LIST
 
 template<class T>	inline T		ax_abs			( T a )					{ return a>0 ? a : -a ; } 

@@ -45,7 +45,6 @@
 		9640E0BB16009DA400F9D037 /* ax_byteorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E03F16009DA400F9D037 /* ax_byteorder.h */; };
 		9640E0BC16009DA400F9D037 /* ax_common.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E04016009DA400F9D037 /* ax_common.h */; };
 		9640E0BD16009DA400F9D037 /* ax_macro.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E04116009DA400F9D037 /* ax_macro.h */; };
-		9640E0BE16009DA400F9D037 /* ax_math_template.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E04216009DA400F9D037 /* ax_math_template.h */; };
 		9640E0BF16009DA400F9D037 /* ax_utility.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E04316009DA400F9D037 /* ax_utility.h */; };
 		9640E0C116009DA400F9D037 /* axSingleton.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E04516009DA400F9D037 /* axSingleton.h */; };
 		9640E0C216009DA400F9D037 /* axSize.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E04616009DA400F9D037 /* axSize.h */; };
@@ -208,7 +207,6 @@
 		9640E03F16009DA400F9D037 /* ax_byteorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ax_byteorder.h; sourceTree = "<group>"; };
 		9640E04016009DA400F9D037 /* ax_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ax_common.h; sourceTree = "<group>"; };
 		9640E04116009DA400F9D037 /* ax_macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ax_macro.h; sourceTree = "<group>"; };
-		9640E04216009DA400F9D037 /* ax_math_template.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ax_math_template.h; sourceTree = "<group>"; };
 		9640E04316009DA400F9D037 /* ax_utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ax_utility.h; sourceTree = "<group>"; };
 		9640E04516009DA400F9D037 /* axSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axSingleton.h; sourceTree = "<group>"; };
 		9640E04616009DA400F9D037 /* axSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axSize.h; sourceTree = "<group>"; };
@@ -335,6 +333,7 @@
 		EA1FB15616CA5A0F00C4853B /* axDBOutParam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDBOutParam.h; sourceTree = "<group>"; };
 		EA1FB15716CA5A0F00C4853B /* axDBStmt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDBStmt.h; sourceTree = "<group>"; };
 		EA1FB15816CA5A0F00C4853B /* axDBTableAccessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDBTableAccessor.h; sourceTree = "<group>"; };
+		EA4E390216E8DFD700B250F8 /* ax_math_template.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_math_template.h; sourceTree = "<group>"; };
 		EA5D4ACD16CD26CB006D8B83 /* ax_c_str.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_c_str.cpp; sourceTree = "<group>"; };
 		EA5D4ACE16CD26CB006D8B83 /* ax_print.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_print.cpp; sourceTree = "<group>"; };
 		EA5D4ACF16CD26CB006D8B83 /* ax_str_encode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_str_encode.cpp; sourceTree = "<group>"; };
@@ -509,7 +508,6 @@
 				9640E03F16009DA400F9D037 /* ax_byteorder.h */,
 				9640E04016009DA400F9D037 /* ax_common.h */,
 				9640E04116009DA400F9D037 /* ax_macro.h */,
-				9640E04216009DA400F9D037 /* ax_math_template.h */,
 				9640E04316009DA400F9D037 /* ax_utility.h */,
 				9640E04516009DA400F9D037 /* axSingleton.h */,
 				9640E04616009DA400F9D037 /* axSize.h */,
@@ -579,6 +577,7 @@
 		9640E06816009DA400F9D037 /* math */ = {
 			isa = PBXGroup;
 			children = (
+				EA4E390216E8DFD700B250F8 /* ax_math_template.h */,
 				9640E06916009DA400F9D037 /* all_math.h */,
 				9640E06A16009DA400F9D037 /* ax_math_angle.h */,
 				9640E06B16009DA400F9D037 /* axBBox3.h */,
@@ -803,7 +802,6 @@
 				9640E0BB16009DA400F9D037 /* ax_byteorder.h in Headers */,
 				9640E0BC16009DA400F9D037 /* ax_common.h in Headers */,
 				9640E0BD16009DA400F9D037 /* ax_macro.h in Headers */,
-				9640E0BE16009DA400F9D037 /* ax_math_template.h in Headers */,
 				9640E0BF16009DA400F9D037 /* ax_utility.h in Headers */,
 				9640E0C116009DA400F9D037 /* axSingleton.h in Headers */,
 				9640E0C216009DA400F9D037 /* axSize.h in Headers */,
