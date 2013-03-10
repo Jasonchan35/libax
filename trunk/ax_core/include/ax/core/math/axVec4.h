@@ -82,7 +82,15 @@ public:
 	template<class D>	axVec4<D>	to_Vec4	() const { return axVec4<D>( (D)x, (D)y, (D)z, (D)w ); }
 
 						axVec3<T>	to_Vec3	() const;
-	template<class S>	axStatus	serialize_io	( S &se );
+				
+	template<class S>	axStatus	serialize_io_bin( S &s );
+						axStatus	serialize_io	( axSerializer	 &s ) { return serialize_io_bin(s); }
+						axStatus	serialize_io	( axDeserializer &s ) { return serialize_io_bin(s); }
+
+	template<class S>	axStatus	serialize_io	( S &s );
+	template<class S>	axStatus	db_io			( S &s ) { return serialize_io(s); }
+		
+	
 						axStatus	toStringFormat	( axStringFormat &f ) const;
 						axStatus	onTake( axVec4<T> &b )				{ *this = b; return 0; }
 };
@@ -162,18 +170,25 @@ axStatus axVec4<T> :: toStringFormat( axStringFormat &f ) const {
 
 template<class T>
 template<class S> inline
-axStatus axVec4<T>::serialize_io( S &s ) {
+axStatus axVec4<T>::serialize_io_bin( S &s ) {
 	#if axBYTE_ORDER == axSERIALIZE_BYTE_ORDER
 		return s.io_raw( this, sizeof(x) * kElementCount );
 	#else	
-		axStatus st;
-		st = s.io( x );	if( !st ) return st;
-		st = s.io( y );	if( !st ) return st;
-		st = s.io( z );	if( !st ) return st;
-		st = s.io( w );	if( !st ) return st;
-		return 0;
+		return serialize_io(s);
 	#endif
 }
+
+template<class T>
+template<class S> inline
+axStatus axVec4<T>::serialize_io( S &s ) {
+	axStatus st;
+	ax_io(x);
+	ax_io(y);
+	ax_io(z);
+	ax_io(w);
+	return 0;
+}
+
 
 template< class T > inline axStatus ax_json_serialize_value( axJsonWriter &s, axVec4<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 4 ); }
 template< class T > inline axStatus ax_json_serialize_value( axJsonParser &s, axVec4<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 4 ); }

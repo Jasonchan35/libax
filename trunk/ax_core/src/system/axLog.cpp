@@ -126,7 +126,7 @@ axStatus  axLog :: log_ArgList ( const axLog_Tag &tag, const char *user_string, 
 	axStatus st;
     Node* node = getNode();
 	node->tag_name = tag.name();
-    node->time.now();
+    node->time.setToNow();
     st = node->msg.format_ArgList( fmt, list ); if( !st ) return st;
 	st = node->user_string.set( user_string ); if( !st ) return st;
     queue( node );
@@ -137,7 +137,7 @@ axStatus  axLog :: log_ArgList ( const axLog_Tag &tag, const char *user_string, 
 	axStatus st;
     Node* node = getNode();
 	node->tag_name = tag.name();
-    node->time.now();
+    node->time.setToNow();
 	st = node->msg.format_ArgList( fmt, list ); if( !st ) return st;
 	st = node->user_string.set( user_string ); if( !st ) return st;
     queue( node );

@@ -109,7 +109,12 @@ public:
 	
 						axStatus	onTake	( axVec2<T> &b )				{ *this = b; return 0; }
 
-	template<class S>	axStatus	serialize_io	( S &se );
+	template<class S>	axStatus	serialize_io_bin( S &s );
+						axStatus	serialize_io	( axSerializer	 &s ) { return serialize_io_bin(s); }
+						axStatus	serialize_io	( axDeserializer &s ) { return serialize_io_bin(s); }
+
+	template<class S>	axStatus	serialize_io	( S &s );
+	template<class S>	axStatus	db_io			( S &s ) { return serialize_io(s); }
 	
 						axStatus	toStringFormat	( axStringFormat &f ) const;
 
@@ -172,15 +177,21 @@ inline axStatus axStringFormat_out  ( axStringFormat &f, const ::CGSize &value )
 
 template<class T>
 template<class S> inline 
-axStatus axVec2<T>::serialize_io( S &s ) {
+axStatus axVec2<T>::serialize_io_bin( S &s ) {
 	#if axBYTE_ORDER == axSERIALIZE_BYTE_ORDER
 		return s.io_raw( this, sizeof(x)*kElementCount );
 	#else
-		axStatus st;
-		st = s.io( x );	if( !st ) return st;
-		st = s.io( y );	if( !st ) return st;
-		return 0;
+		return serialize_io(s);
 	#endif
+}
+
+template<class T>
+template<class S> inline 
+axStatus axVec2<T>::serialize_io( S &s ) {
+	axStatus st;
+	ax_io(x);
+	ax_io(y);
+	return 0;
 }
 
 template< class T > inline axStatus ax_json_serialize_value( axJsonWriter &s, axVec2<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 2 ); }

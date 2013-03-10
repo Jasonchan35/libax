@@ -198,11 +198,7 @@ axStatus axVec3<T>::serialize_io_bin( S &s ) {
 	#if axBYTE_ORDER == axSERIALIZE_BYTE_ORDER
 		return s.io_raw( this, sizeof(x)*kElementCount );
 	#else
-		axStatus st;
-		ax_io(x);
-		ax_io(y);
-		ax_io(z);
-		return 0;
+		return serialize_io(s);
 	#endif
 }
 
