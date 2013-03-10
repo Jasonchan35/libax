@@ -1,108 +1,76 @@
-#include "test_json_serializer.h"
- 
+//#include "test_json_serializer.h"
+
+#include <ax/ax_core.h>
+#include <ax/ax_unit_test.h>
+
+class TestClass {
+public:
+	axStringA	test_strA;
+	axDateTime	test_dateTime;
+	int			test_int;
+	float		test_float;
+
+	axStatus	testData() {
+		test_strA.set("this is stringA");
+		test_dateTime.setToNow();
+		test_int = 12345;
+		test_float = 8.9123f;
+		return 0;
+	}
+
+	template<class S>
+	axStatus serialize_io( S & s ) {
+		axStatus st;
+		ax_io( test_strA );
+		ax_io( test_dateTime );
+		ax_io( test_int );
+		ax_io( test_float );
+		return 0;
+	}
+};
+
 
 axStatus test_json_simple() {
 	axStatus st;
 
-	TestClassSimple c;
-	c.s1.set( L"this is a man special char: \\\\ | \" | \b | \f | \n | \r | \t |\\u00a3|" );
-	c.s2.set( "I am a pen" );
+	TestClass data;
+	data.testData();
 
-	c.s2._getInternalBufferPtr()[0] = 0x1F;
+//	c.s2._getInternalBufferPtr()[0] = 0x1F;
 
 	axTempStringA json_str;
-
-	axApp	app;
-
-	app.getCurrentDir( json_str );
-	ax_log( "axApp::getCurrentDir( {?} )", json_str );
-	json_str.clear();
-
 	{
-		st = ax_to_json( json_str, c, false );
+		st = ax_to_json( json_str, data, false );
 		axUTestCheck(st)
-		ax_log("-->\n{?}" ,json_str );
+		ax_log("==== Json ====\n{?}\n===== end of Json ====\n" , json_str );
 	}
 
 	{
-		st = ax_from_json( json_str, c, false );
-		ax_log("-->\ns1 {?}\ns2 {?}" , c.s1, c.s2 );
+		TestClass	tmp;
+		st = ax_from_json( json_str, tmp, false );
 		axUTestCheck(st);
-	}
+		axUTestCheck( tmp.test_strA.equals( data.test_strA ) );
 
-	return 0;
-}
- 
+		ax_log_var( data.test_dateTime );
+		ax_log_var( data.test_dateTime.second );
 
-axStatus test_json_class_read() {
-	axStatus st;
-	axTempStringA str;
-	//st = axFileSystem::loadFile( str, "../../../test/base/other/myclass.json" ); if( !st ) return st;
-	st = axFileSystem::loadFile( str, "myclass.json" ); if( !st ) return st;
-
-	
-	TestClass c;
-	c.setValue2();
-	axJsonParser ds( str ) ;
-	st = ds.io( c, "myclass" ); if( !st ) return st;
-
-	ax_log("{?}", c );
-
-	return 0;
-}
-
-
-axStatus test_json_class_write() {
-    axStatus st;
-	
-	axTempStringA str;
-	TestClass c;
-	c.setValue();
-
-	axJsonWriter se( str ) ;
-	st = se.io( c, "myclass" ); if( !st ) return st;
-
-	ax_log("str -->\n{?}" ,str );
-
-	//st = axFileSystem::saveFile( str, "../../../test/base/other/myclass.json" ); if( !st ) return st;
-	st = axFileSystem::saveFile( str, "myclass.json" ); if( !st ) return st;
-
-
-
+		ax_log_var( tmp.test_dateTime );
+		ax_log_var( tmp.test_dateTime.second );
 		
-	return 0;
-}
-
-
-axStatus test() {
-	axStatus st;
-	axTempStringA str;
-	axArray<int> arr, arr2;
-
-	st = arr.resize( 10 ); if( !st ) return st;
-
-
-	for( int i=0; i<10; i++ ) {
-		arr[i] = i * 9;
+		ax_log("{?:f}", tmp.test_dateTime.toTimeStamp().second() );
+		ax_log_var( tmp.test_dateTime.toTimeStamp().second() );
+		
+		
+		axUTestCheck( tmp.test_dateTime.absDiff( data.test_dateTime ) <= 0.001f );
+		axUTestCheck( tmp.test_int 		== data.test_int );
+		axUTestCheck( tmp.test_float 	== data.test_float );
 	}
 
-	{
-		axJsonWriter se( str ) ;
-		st = se.io( arr, NULL );		if( !st ) return st;
-		ax_log("str -->\n{?}" ,str );
-	}
-
-	{
-		axJsonParser se( str ) ;
-		st = se.io( arr2, NULL );		if( !st ) return st;
-		ax_log("arr2 -->\n{?}" ,arr2 );
-	}
 	return 0;
 }
 
 int main() {
-    axStatus st;
-	
+
 #if axOS_MacOSX
 	axScope_NSAutoreleasePool	pool;
 #endif //axOS_MacOSX
@@ -116,7 +84,7 @@ int main() {
 
 	//========================================
 
-    ax_print("==== return {?} ====\n", st );
+    ax_print("==== end of program ====" );
 #if axCOMPILER_VC
 	getchar();
 #endif

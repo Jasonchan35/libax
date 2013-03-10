@@ -12,7 +12,7 @@ axStatus	axTimeStamp::toStringFormat( axStringFormat &f ) const{
 #if axOS_WIN
 
 
-void axTimeStamp::now() {
+void axTimeStamp::setToNow() {
 	FILETIME ft;
 	GetSystemTimeAsFileTime( &ft );
 	setFILETIME( ft );
@@ -40,7 +40,7 @@ FILETIME axTimeStamp::toFILETIME() const {
 
 #if axOS_UNIX
 
-void axTimeStamp::now() {
+void axTimeStamp::setToNow() {
 #if axOS_iOS || axOS_MacOSX
 	setNSDate( [NSDate date] );
 #else

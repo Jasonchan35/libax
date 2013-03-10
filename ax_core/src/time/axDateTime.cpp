@@ -1,10 +1,12 @@
 #include <ax/core/time/axDateTime.h>
+#include <ax/core/system/axLog.h>
 
 axStatus	axDateTime::toStringFormat( axStringFormat &f ) const{
     // ISO 8601 Date time format
-	double int_part;
-	double frac_part = ax_modf( second, &int_part );
-	return f.format( "{?:04}-{?:02}-{?:02} {?:02}:{?:02}:{?:02}.{?:03}", year, month, day, hour, minute, (int)int_part, (int)(frac_part*1000) );
+	double s;
+	double frac_part = ax_modf( second, &s );
+	int ms = (int)( (frac_part + 0.0005) * 1000);
+	return f.format( "{?:04}-{?:02}-{?:02} {?:02}:{?:02}:{?:02}.{?:03}", year, month, day, hour, minute, (int)s, ms );
 }
 
 
@@ -39,9 +41,9 @@ void axDateTime::reset(){
 }
 
 
-void axDateTime::now( bool _UTC ) {
+void axDateTime::setToNow( bool _UTC ) {
     axTimeStamp  ts;
-    ts.now();
+    ts.setToNow();
     set( ts, _UTC );
 }
 

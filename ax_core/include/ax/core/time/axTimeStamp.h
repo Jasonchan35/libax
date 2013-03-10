@@ -3,7 +3,7 @@
 
 #include "../string/axStringFormat.h"
 
-//! timestamp - UTC millisecond based on Unix epoch ( 1970-01-01 )
+//! timestamp - UTC second based on Unix epoch ( 1970-01-01 )
 class axTimeStamp {
 public:
 	axTimeStamp	( double second = 0 )		{ second_ = second; }
@@ -14,7 +14,7 @@ public:
 	void	addSecond	( double second )				{ second_ += second; }
 	double	second		() const						{ return second_; }
 
-	void	now			();
+	void	setToNow	();
 
 	operator double		() const						{ return second_; }
 
@@ -57,7 +57,7 @@ private:
 	double		second_;
 };
 
-inline axTimeStamp	ax_now() { axTimeStamp t; t.now(); return t; }
+inline axTimeStamp	ax_now() { axTimeStamp t; t.setToNow(); return t; }
 
 
 #endif //__axTimeStamp_h__

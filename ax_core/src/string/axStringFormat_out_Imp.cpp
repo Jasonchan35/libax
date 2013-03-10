@@ -175,23 +175,23 @@ template< class T> inline
 int axStringFormat_to_digi_floating( char* buf, const int max_digi, T value, 
 									 int base, char float_type, int precision, const char *table ) {
 	if( base != 10 ) return -100;
-
-	char	fmt[64 + 1];
-	fmt[64] = 0;
+	const int fmt_size = 128;
+	char	fmt[fmt_size + 1];
+	fmt[fmt_size] = 0;
 
 #ifdef axCOMPILER_VC
 	if( precision < 0 ) {
-		_snprintf( fmt, 64, "%%%c", float_type );
+		_snprintf( fmt, fmt_size, "%%%c", float_type );
 	}else{
-		_snprintf( fmt, 64, "%%.%d%c", precision, float_type );
+		_snprintf( fmt, fmt_size, "%%.%d%c", precision, float_type );
 	}
 	int ret = _snprintf( buf, max_digi, fmt, value );
 
 #else
 	if( precision < 0 ) {
-		snprintf( fmt, 64, "%%%c", float_type );
+		snprintf( fmt, fmt_size, "%%%c", float_type );
 	}else{
-		snprintf( fmt, 64, "%%.%d%c", precision, float_type );
+		snprintf( fmt, fmt_size, "%%.%d%c", precision, float_type );
 	}
 	int ret = snprintf( buf, max_digi, fmt, value );
 

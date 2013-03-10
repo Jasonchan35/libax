@@ -5,6 +5,22 @@
 #include <ax/core/other/ax_objc.h>
 #include <ax/core/string/axConstString.h>
 
+
+axStatus	axFileSystem::getProcessFileDir	( axIStringA	&path_to_exe ) {
+	axStatus st;
+	axTempStringA	tmp;
+	st = getProcessFilename( tmp );		if( !st ) return st;
+	return axFilePath::getDirName( path_to_exe, tmp ); 
+}
+
+axStatus	axFileSystem::getProcessFileDir	( axIStringW	&path_to_exe ) {
+	axStatus st;
+	axTempStringW	tmp;
+	st = getProcessFilename( tmp );		if( !st ) return st;
+	return axFilePath::getDirName( path_to_exe, tmp ); 
+}
+
+
 axStatus axFileSystem::loadFile( axIStringA &out, const wchar_t* filename ) {
 	axStatus st;
 	axFile	f;
@@ -270,6 +286,51 @@ axStatus	axFileSystem::isDirExists		( const wchar_t* dir ) {
 #endif
 #ifdef axOS_WIN
 
+
+axStatus	axFileSystem::setCurrentDir ( const wchar_t* path ) {
+	return ::_wchdir( path );
+}
+
+axStatus	axFileSystem::setCurrentDir ( const char* path ) {
+	axStatus st;
+	axTempStringW	tmp;
+	st = tmp.set( path );		if( !st ) return st;
+	return ::_wchdir( tmp );
+}
+
+axStatus	axFileSystem::getCurrentDir ( axIStringW	&out ) {
+    wchar_t tmp[ axkFilePathMax + 1 ];
+    DWORD n;
+	n = ::GetCurrentDirectory( axkFilePathMax, tmp );
+	if( n == 0 ) return -1;
+	tmp[n] = 0;
+	return out.set( tmp );
+}
+
+axStatus	axFileSystem::getCurrentDir ( axIStringA &out ) {
+	axStatus	st;
+	axTempStringW	tmp;
+	st = getCurrentDir( tmp );	if( !st ) return st;
+	return out.set( tmp );
+}
+
+axStatus	axFileSystem::getProcessFilename ( axIStringW &out ) {
+    wchar_t tmp[ axkFilePathMax + 1 ];
+    DWORD n;
+	n = ::GetModuleFileName( NULL, tmp, axkFilePathMax );
+	if( n==0 ) return -1;
+	tmp[n] = 0;
+	return out.set( tmp );
+}
+
+axStatus	axFileSystem::getProcessFilename ( axIStringA &out ) {
+	axStatus	st;
+	axTempStringW	tmp;
+	st = getProcessFilename( tmp );	if( !st ) return st;
+	return out.set( tmp );
+}
+
+
 axStatus axFileSystem::copyFile( const char* src, const char* dst ) {
 	axStatus st;
 	axTempStringW s_, d_;
@@ -390,6 +451,31 @@ axStatus	axFileSystem::touchDir ( const char* dir  ) {
 #endif
 
 
+axStatus	axFileSystem::getCurrentDir( axIStringA &out ) {
+	char  tmp[ axkFilePathMax + 1 ];
+	if( ! getcwd( tmp, axkFilePathMax ) ) return -1;
+	return out.set( tmp );
+}
+
+axStatus	axFileSystem::getCurrentDir( axIStringW &out ) {
+	axStatus	st;
+	axTempStringW	tmp;
+	st = getCurrentDir( tmp );	if( !st ) return st;
+	return out.set( tmp );
+}
+
+axStatus	axFileSystem::setCurrentDir( const char* dir ) {
+	return ::chdir( dir );
+}
+
+axStatus	axFileSystem::setCurrentDir( const wchar_t* dir ) {
+    axStatus    st;
+	axTempStringA	tmp;
+    st = tmp.set( dir );	if( !st ) return st;
+    st = ::chdir(tmp);		if( !st ) return st;
+    return 0;
+}
+
 axStatus axFileSystem::copyFile( const wchar_t* src, const wchar_t* dst ) {
 	axStatus st;
 	axTempStringA s_, d_;
@@ -491,7 +577,6 @@ axStatus	axFileSystem::deleteFile	( const wchar_t* file ) {
 	return ::remove( tmp );
 }
 
-#endif // axOS_UNIX
 
 
 #if 0
@@ -518,12 +603,39 @@ axStatus	axFileSystem::moveFileToTrash( const char* file ) {
 	return 0;
 }
 
+#endif //axOS_MacOSX
+
+
+#if 0
+#pragma mark ================= iOS & MacOSX ====================
+#endif
+
+#if axOS_iOS || axOS_MacOSX
+
 axStatus	axFileSystem::moveFileToTrash( const wchar_t* file ) {
 	axTempStringA tmp;
     axStatus st = tmp.set( file ); if( !st ) return st;
 	return moveFileToTrash( tmp );
 }
 
-#endif //axOS_MacOSX
+
+axStatus	axFileSystem::getProcessFilename	( axIStringA &out ) { 
+	NSProcessInfo* info = [NSProcessInfo processInfo];
+	NSArray* args = [info arguments];
+	if( [args count ] == 0 ) { out.clear(); assert(false); return -1; }
+	return out.set( [ (NSString*) [args objectAtIndex:0] UTF8String ] );
+}
+
+axStatus	axFileSystem::getProcessFilename	( axIStringW &out ) { 
+	axTempStringA		tmp;
+	axStatus st;
+	st = getProcessFilename( tmp );		if( !st ) return st;
+	return out.set( tmp );
+}
+
+#endif //axOS_iOS || axOS_MacOSX
+
+#endif // axOS_UNIX
+
 
 

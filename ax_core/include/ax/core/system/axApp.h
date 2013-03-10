@@ -17,20 +17,9 @@ public:
 	
 	axApp();
 	
-			axStatus	setAppName			( const char*	sz );
-	const	axStringA&	appName				();
+			axStatus	setAppName	( const char*	sz );
+	const	axStringA&	appName		();
 	
-	axStatus	setCurrentDir		( const char*	 path );
-	axStatus	setCurrentDir		( const wchar_t* path );
-	
-	axStatus	getCurrentDir		( axIStringA	&out );
-	axStatus	getCurrentDir		( axIStringW	&out );
-	
-	axStatus	getProcessFilename	( axIStringA	&path_to_exe );
-	axStatus	getProcessFilename	( axIStringW	&path_to_exe );
-
-	axStatus	getProcessFileDir	( axIStringA	&path_to_exe );
-	axStatus	getProcessFileDir	( axIStringW	&path_to_exe );
 
 	axStatus	getUserName			( axIStringA	&out );
 	axStatus	getUserName			( axIStringW	&out );

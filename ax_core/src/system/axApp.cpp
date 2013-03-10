@@ -70,69 +70,12 @@ axStatus	axApp::getUserAppDataFilename	( axIStringW	&out, const wchar_t* filenam
 	return 0;
 }	
 
-axStatus	axApp::getProcessFileDir	( axIStringA	&path_to_exe ) {
-	axStatus st;
-	axTempStringA	tmp;
-	st = getProcessFilename( tmp );		if( !st ) return st;
-	return axFilePath::getDirName( path_to_exe, tmp ); 
-}
-
-axStatus	axApp::getProcessFileDir	( axIStringW	&path_to_exe ) {
-	axStatus st;
-	axTempStringW	tmp;
-	st = getProcessFilename( tmp );		if( !st ) return st;
-	return axFilePath::getDirName( path_to_exe, tmp ); 
-}
-
 #if 0
 #pragma mark ================= Windows ====================
 #endif
 #if axOS_WIN
 
 #include <Shlobj.h>
-
-axStatus	axApp::setCurrentDir ( const wchar_t* path ) {
-	return ::_wchdir( path );
-}
-
-axStatus	axApp::setCurrentDir ( const char* path ) {
-	axStatus st;
-	axTempStringW	tmp;
-	st = tmp.set( path );		if( !st ) return st;
-	return ::_wchdir( tmp );
-}
-
-axStatus	axApp::getCurrentDir ( axIStringW	&out ) {
-    wchar_t tmp[ axkFilePathMax + 1 ];
-    DWORD n;
-	n = ::GetCurrentDirectory( axkFilePathMax, tmp );
-	if( n == 0 ) return -1;
-	tmp[n] = 0;
-	return out.set( tmp );
-}
-
-axStatus	axApp::getCurrentDir ( axIStringA &out ) {
-	axStatus	st;
-	axTempStringW	tmp;
-	st = getCurrentDir( tmp );	if( !st ) return st;
-	return out.set( tmp );
-}
-
-axStatus	axApp::getProcessFilename ( axIStringW &out ) {
-    wchar_t tmp[ axkFilePathMax + 1 ];
-    DWORD n;
-	n = ::GetModuleFileName( NULL, tmp, axkFilePathMax );
-	if( n==0 ) return -1;
-	tmp[n] = 0;
-	return out.set( tmp );
-}
-
-axStatus	axApp::getProcessFilename ( axIStringA &out ) {
-	axStatus	st;
-	axTempStringW	tmp;
-	st = getProcessFilename( tmp );	if( !st ) return st;
-	return out.set( tmp );
-}
 
 template<class T>
 static	axStatus	axApp_SHGetFolderPath( axIString_<T>& str, int CSIDL ) {
@@ -225,31 +168,6 @@ axStatus	axApp::showFileInFinder( const char *path ) {
 #if axOS_UNIX
 
 
-axStatus	axApp::getCurrentDir( axIStringA &out ) {
-	char  tmp[ axkFilePathMax + 1 ];
-	if( ! getcwd( tmp, axkFilePathMax ) ) return -1;
-	return out.set( tmp );
-}
-
-axStatus	axApp::getCurrentDir( axIStringW &out ) {
-	axStatus	st;
-	axTempStringW	tmp;
-	st = getCurrentDir( tmp );	if( !st ) return st;
-	return out.set( tmp );
-}
-
-axStatus	axApp::setCurrentDir( const char* dir ) {
-	return ::chdir( dir );
-}
-
-axStatus	axApp::setCurrentDir( const wchar_t* dir ) {
-    axStatus    st;
-	axTempStringA	tmp;
-    st = tmp.set( dir );	if( !st ) return st;
-    st = ::chdir(tmp);		if( !st ) return st;
-    return 0;
-}
-
 #if 0
 #pragma mark ================= iOS & MacOSX ====================
 #endif
@@ -329,8 +247,8 @@ axStatus	axApp::getUserHomeDir		( axIStringW &out )	{
 axStatus	axApp::getAppResourceDir	( axIStringA &out ) {
 	axStatus	st;
 	axTempStringA	tmp;
-	st = getProcessFileDir( tmp );				if( !st ) return st;
-	st = out.format( "{?}../Resources/Resources", tmp );	if( !st ) return st;
+	st = axFileSystem::getProcessFileDir( tmp );				if( !st ) return st;
+	st = out.format( "{?}../Resources/Resources", tmp );		if( !st ) return st;
 	return 0;
 }
 
@@ -342,19 +260,6 @@ axStatus	axApp::getAppResourceDir	( axIStringW &out ) {
 	return 0;
 }
 
-axStatus	axApp::getProcessFilename	( axIStringA &out ) { 
-	NSProcessInfo* info = [NSProcessInfo processInfo];
-	NSArray* args = [info arguments];
-	if( [args count ] == 0 ) { out.clear(); assert(false); return -1; }
-	return out.set( [ (NSString*) [args objectAtIndex:0] UTF8String ] );
-}
-
-axStatus	axApp::getProcessFilename	( axIStringW &out ) { 
-	axTempStringA		tmp;
-	axStatus st;
-	st = getProcessFilename( tmp );		if( !st ) return st;
-	return out.set( tmp );
-}
 
 #if 0
 #pragam mark ================= Android ====================

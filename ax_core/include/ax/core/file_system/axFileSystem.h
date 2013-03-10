@@ -43,26 +43,38 @@ public:
 	static	axStatus	fileLastWriteTime	( axTimeStamp & out, const char*	file );
 	static	axStatus	fileLastWriteTime	( axTimeStamp & out, const wchar_t* file );
 	
-	static	axStatus	touchFile		( const char*		file );
-	static	axStatus	touchDir		( const char*		dir  );
+	static	axStatus	touchFile			( const char*		file );
+	static	axStatus	touchDir			( const char*		dir  );
 
-	static	axStatus	removeDirectory	( const char*		dir, bool recursive = false );
-	static	axStatus	removeDirectory	( const wchar_t*    dir, bool recursive = false );	
+	static	axStatus	removeDirectory		( const char*		dir, bool recursive = false );
+	static	axStatus	removeDirectory		( const wchar_t*    dir, bool recursive = false );	
 	
-	static	axStatus	makeDirectory	( const char*		dir, bool recursive = true );
-	static	axStatus	makeDirectory	( const wchar_t*    dir, bool recursive = true );	
+	static	axStatus	makeDirectory		( const char*		dir, bool recursive = true );
+	static	axStatus	makeDirectory		( const wchar_t*    dir, bool recursive = true );	
 
-	static	axStatus	copyDirectory	( const char*		src, const char*		dst );
-	static	axStatus	copyDirectory	( const wchar_t*    src, const wchar_t*		dst );
+	static	axStatus	copyDirectory		( const char*		src, const char*		dst );
+	static	axStatus	copyDirectory		( const wchar_t*    src, const wchar_t*		dst );
 
-	static	axStatus	isFileExists	( const char*    file );
-	static	axStatus	isFileExists	( const wchar_t* file );
+	static	axStatus	isFileExists		( const char*    	file );
+	static	axStatus	isFileExists		( const wchar_t* 	file );
 	
-	static	axStatus	isDirExists		( const char* 	 file );
-	static	axStatus	isDirExists		( const wchar_t* file );
+	static	axStatus	isDirExists			( const char* 	 	file );
+	static	axStatus	isDirExists			( const wchar_t* 	file );
 
-	static	axStatus	copyFile( const wchar_t* src, const wchar_t* dst );
-	static	axStatus	copyFile( const char* src, const char* dst );
+	static	axStatus	copyFile			( const wchar_t* 	src, const wchar_t* dst );
+	static	axStatus	copyFile			( const char* 		src, const char* dst );
+
+	static	axStatus	setCurrentDir		( const char*	 	path );
+	static	axStatus	setCurrentDir		( const wchar_t* 	path );
+	
+	static	axStatus	getCurrentDir		( axIStringA	&out );
+	static	axStatus	getCurrentDir		( axIStringW	&out );
+	
+	static	axStatus	getProcessFilename	( axIStringA	&path_to_exe );
+	static	axStatus	getProcessFilename	( axIStringW	&path_to_exe );
+
+	static	axStatus	getProcessFileDir	( axIStringA	&path_to_exe );
+	static	axStatus	getProcessFileDir	( axIStringW	&path_to_exe );
 
 	
 private: 
