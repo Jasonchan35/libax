@@ -71,7 +71,8 @@ public:
 	axALWAYS_INLINE( 	T*			tail			() const )	{ return _tail_; }
 
 	axALWAYS_INLINE( 	T*			takeHead		()	)						{ T* h = _head_; if (h) h->removeFromList(); return h; }
-
+	axALWAYS_INLINE( 	T*			takeTail		()	)						{ T* h = _tail_; if (h) h->removeFromList(); return h; }
+	
 	axALWAYS_INLINE(	void		insert			( T* node )	)				{ append( node, _head_ ); }
 	axALWAYS_INLINE(	void		append			( T* node, T* before = NULL ) );
 	
