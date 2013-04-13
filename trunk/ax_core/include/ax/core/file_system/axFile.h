@@ -64,9 +64,6 @@ public:
 	axStatus	writeFormat_ArgList	( const char* fmt, const axStringFormat::ArgList &list );
 	//!macro - axStatus	ax_log( const char* fmt, ... );
 	axExpandArgList1( axStatus, writeFormat, const char*, const axStringFormat_Arg&, axStringFormat_ArgList )
-
-
-	axStatus	readLine		( axIStringA &buf, axSize buf_max_size );
 	
 	axStatus	readWholeFile	( axIStringA &out );
 	axStatus	readWholeFile	( axIStringW &out );
