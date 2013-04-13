@@ -264,12 +264,16 @@ bool	axIArray<T>::isAny	( const T& v ) const {
 
 template< class T > inline
 bool	axIArray<T>::find	( axSize & index, const T& v ) const {
-	for( size_t i=0; i<size_; i++ ) {
-		if( *p_ == v ) {
+
+	axSize i=0;
+	axForArray( const T, p, *this ) {
+		if( *p == v ) {
 			index = i;
 			return true;
 		}
-	}
+		i++;
+	} 
+	
 	return false;
 }
 
