@@ -70,6 +70,10 @@ public:
 	axStatus	shellOpenFile( const char *file );
 	axStatus	showFileInFinder( const char *path );
 		
+	bool		isCtrlKeyDown	();
+	bool		isAltKeyDown	();
+	bool		isShiftKeyDown	();
+		
 protected:
 	
 private:
