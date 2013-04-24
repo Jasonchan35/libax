@@ -159,6 +159,18 @@ axStatus	axApp::showFileInFinder( const char *path ) {
 
 }
 
+bool axGLApp::isAltKeyDown() {
+	return GetAsyncKeyState( VK_MENU ) != 0;
+}
+
+bool axGLApp::isCtrlKeyDown() {
+	return ( GetAsyncKeyState( VK_LCONTROL ) || GetAsyncKeyState( VK_RCONTROL ) );
+}
+
+bool axGLApp::isShiftKeyDown() {
+	return ( GetAsyncKeyState( VK_LSHIFT ) || GetAsyncKeyState( VK_RSHIFT ) );
+}
+
 #endif  //axOS_Win
 
 
@@ -185,6 +197,18 @@ axStatus	axApp::showFileInFinder( const char *path ) {
 	BOOL b  = [ [NSWorkspace sharedWorkspace] selectFile: ax_toNSString( path )  inFileViewerRootedAtPath:@""];
 	if( !b ) return -1;
 	return 0;
+}
+
+bool axApp::isAltKeyDown() {
+	return (kCGEventFlagMaskAlternate == (CGEventSourceFlagsState(kCGEventSourceStateCombinedSessionState) & NSDeviceIndependentModifierFlagsMask));
+}
+
+bool axApp::isCtrlKeyDown() {
+	return ( kCGEventFlagMaskControl == (CGEventSourceFlagsState(kCGEventSourceStateCombinedSessionState) & NSDeviceIndependentModifierFlagsMask));
+}
+
+bool axApp::isShiftKeyDown() {
+	return ( kCGEventFlagMaskShift   == (CGEventSourceFlagsState(kCGEventSourceStateCombinedSessionState) & NSDeviceIndependentModifierFlagsMask));
 }
 
 
