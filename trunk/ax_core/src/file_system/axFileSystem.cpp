@@ -5,6 +5,17 @@
 #include <ax/core/other/ax_objc.h>
 #include <ax/core/string/axConstString.h>
 
+axStatus	axFileSystem::setCurrentDirSameAsFile	( const char*		filename ) {
+	axStringA_<256> str;
+	axFilePath::getDirName( str, filename );
+	return setCurrentDir( str );
+}
+
+axStatus	axFileSystem::setCurrentDirSameAsFile	( const wchar_t*	filename ) {
+	axStringW_<256> str;
+	axFilePath::getDirName( str, filename );
+	return setCurrentDir( str );
+}
 
 axStatus	axFileSystem::getProcessFileDir	( axIStringA	&path_to_exe ) {
 	axStatus st;

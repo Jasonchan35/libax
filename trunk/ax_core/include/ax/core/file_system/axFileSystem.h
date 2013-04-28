@@ -67,6 +67,9 @@ public:
 	static	axStatus	setCurrentDir		( const char*	 	path );
 	static	axStatus	setCurrentDir		( const wchar_t* 	path );
 	
+	static	axStatus	setCurrentDirSameAsFile	( const char*		filename );
+	static	axStatus	setCurrentDirSameAsFile	( const wchar_t*	filename );
+	
 	static	axStatus	getCurrentDir		( axIStringA	&out );
 	static	axStatus	getCurrentDir		( axIStringW	&out );
 	
