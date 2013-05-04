@@ -18,7 +18,7 @@ public:
 	axTinyListNode();
 	~axTinyListNode()		{ removeFromList(); }
 
-	axALWAYS_INLINE(		 T*	prev()			)	{ return _prev_; }
+	axALWAYS_INLINE(		T*	prev()			)	{ return _prev_; }
 	axALWAYS_INLINE(		T*	next()			)   { return _next_; }
 
 	axALWAYS_INLINE( const	T*	prev() const	)	{ return _prev_; }
