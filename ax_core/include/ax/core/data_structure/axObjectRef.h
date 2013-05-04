@@ -14,7 +14,6 @@
 class axObjectRefBase : public axTinyListNode< axObjectRefBase, false > {
 public:
 	virtual ~axObjectRefBase() 	{}
-//	virtual void	onWillRemoveFromList() = 0;
 };
 
 class axObject_Data {
@@ -23,13 +22,13 @@ public:
 //	virtual	axStatus	onClone( void* & obj ) = 0;
 };
 
+//! This class is non-threadsafe
 template< class T >
 class axObjectRef : public axObjectRefBase {
 	typedef	axObjectRef<T> CLASS;
 public:
 	axObjectRef()						{}
 	axObjectRef( axStatus & st )		{ st = newObject(); }
-//	axObjectRef( axObjectRef<T> & src )	{ ref( src.ptr() ); }
 	
 	template<class S>
 	axObjectRef( axObjectRef<S> & src )	{ ref( src.ptr() ); }
@@ -89,7 +88,7 @@ template <class T> inline
 void	axObjectRef<T> :: unref	() { 
 	if( ! p_ ) return;
 	T* obj = p_;
-	p_->_ObjectRefList_.remove( this ); //p_ will be null in onWillRemoveFromList
+	p_->_ObjectRefList_.remove( this );
 	if( obj->_ObjectRefList_.head() == NULL ) { delete obj; }
 	p_ = NULL;
 }

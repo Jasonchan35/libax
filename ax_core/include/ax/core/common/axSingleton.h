@@ -29,18 +29,8 @@ public:
 	private:
 		T* get() const {
 			if( ! p ) { //might init by other EXE/DLL
-//				printf( "%s\n", axPRETTY_FUNC_NAME);
-				#if 1 // mutex here for thread-safe ?
-					static	axSpinLock	spinLock;
-					axScopeSpinLock	lock(spinLock);
-					if( !p ) { //double check after lock
-						static T t;
-						const_cast<T*&>(p) = &t;
-					}
-				#else
-					static T t;
-					const_cast<T*&>(p) = &t;
-				#endif
+				static T t;
+				ax_const_cast(p) = &t;
 			}
 			return p;
 		}
