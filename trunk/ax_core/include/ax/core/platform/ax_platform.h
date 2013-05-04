@@ -113,4 +113,16 @@
 
 #define axkFilePathMax	512
 
+class axNonCopyable {
+public:
+	axNonCopyable() {}
+private:
+	axNonCopyable ( const axNonCopyable &s ); //!< not allow by default
+	void operator=( const axNonCopyable &s ); //!< not allow by default
+};
+
+class axUnused  { //for avoid compile warning about unused variable
+public:
+};
+
 #endif // __ax_platform_h__

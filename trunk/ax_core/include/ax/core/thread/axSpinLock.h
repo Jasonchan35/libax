@@ -1,7 +1,6 @@
 #ifndef __axSpinLock_h__
 #define __axSpinLock_h__
 
-#include "../common/ax_common.h"
 #include "axMutex.h"
 
 //! \ingroup base_thread
