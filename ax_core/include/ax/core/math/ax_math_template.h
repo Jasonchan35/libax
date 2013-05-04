@@ -40,7 +40,7 @@ template<class T>	inline T		ax_clamp01		( T x )					{ return ax_clamp(x, (T)0, (
 template<class T>	inline void		ax_clamp_it		( T &x, T a, T b )		{ x = ax_clamp(x,a,b); }
 template<class T>	inline void		ax_clamp01_it	( T &x )				{ ax_clamp_it(x, (T)0, (T)1); }
 
-inline	int  ax_align_pow2	( int v )	{ v--; v |= v >> 1; v |= v >> 2; v |= v >> 4;	v |= v >> 8; v |= v >> 16; v++;	return v; }
+inline	int  ax_next_pow2	( int v )	{ v--; v |= v >> 1; v |= v >> 2; v |= v >> 4;	v |= v >> 8; v |= v >> 16; v++;	return v; }
 inline	bool ax_is_pow2		( int v )	{ return !(v & (v - 1)) && v ; }
 
 // Not a Number
