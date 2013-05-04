@@ -86,19 +86,6 @@ inline int ax_random( int start, int end ) {
 	
 }
 
-class axNonCopyable {
-public:
-	axNonCopyable() {}
-
-private:
-	axNonCopyable ( const axNonCopyable &s ); //!< not allow by default
-	void operator=( const axNonCopyable &s ); //!< not allow by default
-};
-
-class axUnused  { //for avoid compile warning about unused variable
-public:
-};
-
 template<class T>
 class axScopeValue : public axNonCopyable {
 public:

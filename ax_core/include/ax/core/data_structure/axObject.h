@@ -11,10 +11,12 @@
 
 #include "axSharedPtr.h"
 
+//TODO: obsolete this, please using axObjectRef instead
+
 template<class T>
 class axObject {
 public:
-	axObject	()							{}
+	axDEPRECATED( axObject	() )			{}
 	axObject	( axStatus &st )			{ st = p_.newObject(); }
 	axObject	( axObject &s )			{ p_.ref( s.ptr() );	}
 	~axObject()							{ p_.unref(); }

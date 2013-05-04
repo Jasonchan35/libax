@@ -50,9 +50,13 @@
 #include "core/database/axDBTableAccessor.h"
 
 #include "core/data_structure/axObject.h"
+#include "core/data_structure/axObjectRef.h"
 
 #include "core/other/axSerializer_Helper.h"
 #include "core/other/axJson.h"
+
+#include "ax_unit_test.h"
+
 
 
 #ifdef axCOMPILER_VC

@@ -48,7 +48,7 @@ public:
 
 	void	clear		();
 
-	axALWAYS_INLINE( 		T*	head		() )	{ return _head_; }
+	axALWAYS_INLINE( 		T*	head		() )			{ return _head_; }
 	axALWAYS_INLINE( const	T*	head		() const	)	{ return _head_; }
 
 

@@ -1,8 +1,7 @@
 #ifndef __axMutex_h__
 #define __axMutex_h__
 
-#include "../common/ax_common.h"
-
+#include "../platform/ax_platform.h"
 
 //! \addtogroup thread
 //@{

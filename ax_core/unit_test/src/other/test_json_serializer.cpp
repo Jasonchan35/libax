@@ -70,11 +70,7 @@ axStatus test_json_simple() {
 }
 
 int main() {
-
-#if axOS_MacOSX
 	axScope_NSAutoreleasePool	pool;
-#endif //axOS_MacOSX
-
 	//========================================
 
 	axUTestCase( test_json_simple() );
