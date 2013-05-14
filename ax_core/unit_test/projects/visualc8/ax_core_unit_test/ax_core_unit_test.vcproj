@@ -316,7 +316,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\src\common\test_axTypeOf.cpp"
+			RelativePath="..\..\..\src\time\test_time.cpp"
 			>
 		</File>
 	</Files>
