@@ -129,8 +129,8 @@ inline int16_t	ax_lerp( int16_t  a, int16_t  b, float  w ) { return _ax_int_lerp
 inline int32_t	ax_lerp( int32_t  a, int32_t  b, float  w ) { return _ax_int_lerp(a,b,w); }
 inline int64_t	ax_lerp( int64_t  a, int64_t  b, float  w ) { return _ax_int_lerp(a,b,w); }
 
-inline float	ax_lerp( float    a, float    b, float  w ) { return (a+w*(b-a)); }
-inline double	ax_lerp( double   a, double   b, double w ) { return (a+w*(b-a)); }
+inline float	ax_lerp( float    a, float    b, float  w ) { return (1-w)*a + w*b; }
+inline double	ax_lerp( double   a, double   b, double w ) { return (1-w)*a + w*b; }
 
 inline float	ax_step( float 	a, float  x ) 	{ return x>=a ? 1.0f : 0.0f; }
 inline double	ax_step( double a, double x ) 	{ return x>=a ? 1.0  : 0.0;  }
@@ -217,9 +217,6 @@ inline T ax_bezier( T p0, T p1, T p2, T p3, W w) {
 		  + p2 * 3  * iw  * w2
 		  + p3 * w2 * w;
 }
-
-
-
 
 
 //@}
