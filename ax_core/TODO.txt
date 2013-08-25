@@ -38,6 +38,7 @@
 	- axGLUIText : Auto font size
 	
 - axString (UTF-16)
+	- waiting for c++11 char16_t
 	- good for SQLite, JavaScript, MacOSX, iOS
 
 - mkdir full path
