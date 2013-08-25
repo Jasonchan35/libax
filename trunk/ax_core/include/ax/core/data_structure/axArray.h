@@ -16,7 +16,7 @@
 	- reserve memory by capacity increment when resize
 	- auto memory grow by 1.5x of orginal size ( when capacity increment = 0 )
 */
-template<class T, size_t LOCAL_BUF_SIZE = 0, size_t CAP_INC = 0 >
+template<class T, size_t LOCAL_BUF_SIZE = 0 >
 class axArray : public axIArray<T>, private axLocalBuf<T, LOCAL_BUF_SIZE > {
 	typedef axIArray<T>	B;
 	typedef	axLocalBuf<T, LOCAL_BUF_SIZE > BUF;
@@ -32,7 +32,7 @@ public:
 	template<class S>	axStatus	serialize_io	 ( S &s )	{ return B::serialize_io(s); }
 	template<class S>	axStatus	serialize_io_vary( S &s )	{ return B::serialize_io_vary(s); }
 
-	virtual	axSize		capacityIncrement		() const		{ return CAP_INC; }
+	virtual	axSize		capacityIncrement		() const		{ return capacityIncrement_; }
 	
 			bool		usingLocalBuffer() const { return (void*)B::ptr() == (void*)BUF::_localBufPtr(); }
 	
@@ -45,6 +45,7 @@ protected:
 
 private:
 	void	_ctor();
+	size_t	capacityIncrement_;
 };
 
 
@@ -55,8 +56,9 @@ axStatus	ax_copy( axArray<T,N> &dst, const axArray<T,N> &src ) {
 
 // -----------
 
-template<class T, size_t LOCAL_BUF_SIZE, size_t CAP_INC> inline
-void axArray< T, LOCAL_BUF_SIZE, CAP_INC >::_ctor() {
+template<class T, size_t LOCAL_BUF_SIZE > inline
+void axArray< T, LOCAL_BUF_SIZE >::_ctor() {
+	capacityIncrement_ = 0;
 	if( LOCAL_BUF_SIZE ) {
 		B::_init( BUF::_localBufPtr(), 0, LOCAL_BUF_SIZE );
 	}else{
@@ -64,8 +66,8 @@ void axArray< T, LOCAL_BUF_SIZE, CAP_INC >::_ctor() {
 	}
 }
 
-template<class T, size_t LOCAL_BUF_SIZE, size_t CAP_INC> inline
-axStatus	axArray< T, LOCAL_BUF_SIZE, CAP_INC >::onMalloc( axSize req_size, void* &newPtr, axSize &newCapacity ) {
+template<class T, size_t LOCAL_BUF_SIZE> inline
+axStatus	axArray< T, LOCAL_BUF_SIZE >::onMalloc( axSize req_size, void* &newPtr, axSize &newCapacity ) {
 	if( req_size <= LOCAL_BUF_SIZE ) {
 		newPtr = BUF::_localBufPtr();
 		newCapacity = LOCAL_BUF_SIZE;
@@ -87,8 +89,8 @@ axStatus	axArray< T, LOCAL_BUF_SIZE, CAP_INC >::onMalloc( axSize req_size, void*
 	return 0;
 }
 
-template<class T, size_t LOCAL_BUF_SIZE, size_t CAP_INC> inline
-void axArray< T, LOCAL_BUF_SIZE, CAP_INC >::onFree( void* p ) {
+template<class T, size_t LOCAL_BUF_SIZE> inline
+void axArray< T, LOCAL_BUF_SIZE >::onFree( void* p ) {
 	if( ! usingLocalBuffer() ) {
 		ax_free( p );
 	}
