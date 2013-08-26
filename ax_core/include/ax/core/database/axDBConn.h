@@ -72,7 +72,7 @@ protected:
 						axSize					tranId_;
 
 private:
-	axSharedPtr< axDBConn_Imp >	p_;
+	axSP< axDBConn_Imp >	p_;
 };
 
 class axDBScopeTran {

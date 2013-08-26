@@ -52,7 +52,7 @@ public:
 							
 						const char*	sql				();
 protected:
-	axSharedPtr< axDBStmt_Imp >	p_;
+	axSP< axDBStmt_Imp >	p_;
 };
 
 

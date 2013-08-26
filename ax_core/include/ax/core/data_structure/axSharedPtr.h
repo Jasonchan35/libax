@@ -4,14 +4,12 @@
 #include "../thread/axAtomicInt.h"
 #include "../other/axSerializer.h"
 #include "../other/axJson.h"
-#include "axWeakPtr.h"
+#include "axTinyList.h"
 
-template <class T>	class axSharedPtr;
-template <class T>	class axWeakPtr;
+template <class T>	class axSP;
+template <class T>	class axWP;
 
-class axWeakPte;
-
-class axWeakPtrBase : public axTinyListNode< axWeakPtrBase, false > {
+class axWP_Base : public axTinyListNode< axWP_Base, false > {
 public:
 };
 
@@ -39,24 +37,24 @@ public:
 		_weakPtrList_.clear();	
 	}
 
-	axTinyList< axWeakPtrBase >	_weakPtrList_;
+	axTinyList< axWP_Base >		_weakPtrList_;
 private:
 	axAtomicInt		sharedCount_;
 };
 
 //! share pointer to object
 template <class T>
-class axSharedPtr : axNonCopyable {
+class axSP : axNonCopyable {
 public:
 	typedef	T	Obj;
 
-	axSharedPtr	()							{ p_ = NULL; }
-	axSharedPtr	( axStatus &st )			{ p_ = NULL; st = newObject(); 	}	
-	axSharedPtr	( T* p )					{ p_ = NULL; ref( p );			}
-	axSharedPtr	( axSharedPtr<T> &s )		{ p_ = NULL; ref( s.ptr() );	}
-	axSharedPtr	( axWeakPtr<T>   &s )		{ p_ = NULL; ref( s );			}
+	axSP	()						{ p_ = NULL; }
+	axSP	( axStatus &st )		{ p_ = NULL; st = newObject(); 	}
+	axSP	( T* p )				{ p_ = NULL; ref( p );			}
+	axSP	( axSP<T> &s )			{ p_ = NULL; ref( s.ptr() );	}
+	axSP	( axWP<T>   &s )		{ p_ = NULL; ref( s );			}
 	
-	~axSharedPtr()							{ unref();	}
+	~axSP()							{ unref();	}
 	
 	axALWAYS_INLINE(	axStatus	newObject		() );
 						axStatus	newObjectIfNull	()		{ return p_ ? axStatus(0) : newObject(); }
@@ -66,15 +64,15 @@ public:
 //	axALWAYS_INLINE(	void		ref			( const T* p ) const );
 	
 	axALWAYS_INLINE(	void		ref			( T* p ) );
-	axALWAYS_INLINE(	void		ref			( axWeakPtr<T>& p ) );
+	axALWAYS_INLINE(	void		ref			( axWP<T>& p ) );
 	axALWAYS_INLINE(	void		unref		() );
 						int			sharedCount	()			{ return p_ ? p_->sharedCount() : 0; }
 
-	void operator= ( const axSharedPtr<T> &src )		{ ref( src.p_ ); }
-	void operator= ( const axWeakPtr<T>   &src )		{ ref( src ); }
+	void operator= ( const axSP<T> &src )		{ ref( src.p_ ); }
+	void operator= ( const axWP<T>   &src )		{ ref( src ); }
 
-	bool operator==( const axSharedPtr<T> &src ) const	{ return p_ == src.p_; }
-	bool operator!=( const axSharedPtr<T> &src ) const	{ return p_ != src.p_; }
+	bool operator==( const axSP<T> &src ) const	{ return p_ == src.p_; }
+	bool operator!=( const axSP<T> &src ) const	{ return p_ != src.p_; }
 
 		  T* ptr()				{ return  p_; }
 	const T* ptr() const		{ return  p_; }
@@ -88,7 +86,7 @@ public:
 	operator		T*()		{ return p_; }
 	operator const	T*() const	{ return p_; }
 	
-	axStatus 	onTake( axSharedPtr<T>& src )			{ ref( src ); src.unref(); return 0; }
+	axStatus 	onTake( axSP<T>& src )			{ ref( src ); src.unref(); return 0; }
 
 	axStatus	toStringFormat( axStringFormat &f ) const { return p_? f.format("{?}",*p_) : f.out("null"); }
 
@@ -102,31 +100,31 @@ private:
 
 
 template< class T >
-class axWeakPtr : axWeakPtrBase {
-	typedef axWeakPtrBase B;
+class axWP : axWP_Base {
+	typedef axWP_Base B;
 public:
 
-	axWeakPtr()						{ p_=NULL; }
-	axWeakPtr( axSharedPtr<T>& p )	{ p_=NULL; ref(p); }
-	virtual ~axWeakPtr()			{ unref(); }
+	axWP()						{ p_=NULL; }
+	axWP( axSP<T>& p )	{ p_=NULL; ref(p); }
+	virtual ~axWP()			{ unref(); }
 	
 	void	operator= ( T &src )	{ ref( src ); }
 	
-			void	ref		( axSharedPtr<T>& p );
+			void	ref		( axSP<T>& p );
 			void	unref	();
 	virtual void	onWillRemoveFromList() { p_=NULL; }
 		
-	axSharedPtr<T>	getShared() { return axSharedPtr<T>( *this ); }
+	axSP<T>	getShared() { return axSP<T>( *this ); }
 		
-	axStatus		onTake	( axWeakPtr<T> &src );
+	axStatus		onTake	( axWP<T> &src );
 
-friend class axSharedPtr<T>;
+friend class axSP<T>;
 protected:
 	T* p_;
 };
 
-template<class T> inline axStatus ax_copy( axWeakPtr<T> &a, const axWeakPtr<T> &b ) {
-	axSharedPtr<T>	p( a );
+template<class T> inline axStatus ax_copy( axWP<T> &a, const axWP<T> &b ) {
+	axSP<T>	p( a );
 	a.ref( p );
 	return 0;
 }
@@ -134,8 +132,8 @@ template<class T> inline axStatus ax_copy( axWeakPtr<T> &a, const axWeakPtr<T> &
 //------------
 
 template< class T > inline
-axStatus axWeakPtr<T>::onTake( axWeakPtr<T> &src ) {
-	axSharedPtr<T>	tmp( src );
+axStatus axWP<T>::onTake( axWP<T> &src ) {
+	axSP<T>	tmp( src );
 	ref( tmp );
 	src.unref();
 	return 0;
@@ -143,7 +141,7 @@ axStatus axWeakPtr<T>::onTake( axWeakPtr<T> &src ) {
 
 
 template< class T > inline
-void	axWeakPtr<T>::ref		( axSharedPtr<T>& p )	{
+void	axWP<T>::ref		( axSP<T>& p )	{
 	axScopeSpinLock	lock( _axSharedPte_weakList_spinlock_ );
 	if( p_ ) {
 		p_->_weakPtrList_.remove( this );
@@ -157,7 +155,7 @@ void	axWeakPtr<T>::ref		( axSharedPtr<T>& p )	{
 }
 
 template< class T >	inline	
-void	axWeakPtr<T>::unref	()	{
+void	axWP<T>::unref	()	{
 	axScopeSpinLock	lock( _axSharedPte_weakList_spinlock_ );
 	if( p_ ) {
 		p_->_weakPtrList_.remove( this );
@@ -168,14 +166,14 @@ void	axWeakPtr<T>::unref	()	{
 //-------------------------
 
 template <class T> inline
-axStatus axSharedPtr<T> :: newObject() {
+axStatus axSP<T> :: newObject() {
 	T* t = new T;	if( !t ) return axStatus_Std::not_enough_memory;
 	ref( t );
 	return 0;
 }
 
 template <class T> inline
-axStatus axSharedPtr<T> :: makeUnique () {
+axStatus axSP<T> :: makeUnique () {
 	axStatus st;
 	if( !p_ ) return 0;
 	if( p_->sharedCount() == 1 ) return 0; // this is the only one holding the object
@@ -187,7 +185,7 @@ axStatus axSharedPtr<T> :: makeUnique () {
 }
 
 template <class T> inline
-void axSharedPtr<T> :: ref( T* p ) {
+void axSP<T> :: ref( T* p ) {
 	if( p_ == p ) return;
 	unref();
 	p_ = p;
@@ -195,7 +193,7 @@ void axSharedPtr<T> :: ref( T* p ) {
 }
 
 template <class T> inline
-void axSharedPtr<T> :: ref( axWeakPtr<T>& p ) {
+void axSP<T> :: ref( axWP<T>& p ) {
 	axScopeSpinLock	lock( _axSharedPte_weakList_spinlock_ );
 	if( p_ == p.p_ ) return;
 	unref();
@@ -205,7 +203,7 @@ void axSharedPtr<T> :: ref( axWeakPtr<T>& p ) {
 
 
 template <class T> inline
-void axSharedPtr<T> :: unref() {
+void axSP<T> :: unref() {
 	if( p_ ) {
 		int c = p_->_decSharedCount();
 		if( c == 0 ) delete p_;
@@ -214,25 +212,25 @@ void axSharedPtr<T> :: unref() {
 }
 
 template <class T> inline
-axStatus axSharedPtr<T> :: serialize_io( axSerializer &s ) {
+axStatus axSP<T> :: serialize_io( axSerializer &s ) {
 	if( p_ ) return s.io( *p_ );
 	T dummy; return s.io( dummy );
 }
 
 template <class T> inline
-axStatus axSharedPtr<T> :: serialize_io( axDeserializer &s ) {
+axStatus axSP<T> :: serialize_io( axDeserializer &s ) {
 	axStatus st = newObject();	if( !st ) return st;
 	return s.io( *p_ );
 }
 
 template <class T> inline
-axStatus ax_json_serialize_value( axJsonWriter &s, axSharedPtr<T> &v ) {
+axStatus ax_json_serialize_value( axJsonWriter &s, axSP<T> &v ) {
 	if(v) return s.io_value( *v );
 	return s.nullValue();
 }
 
 template <class T> inline
-axStatus ax_json_serialize_value( axJsonParser &s, axSharedPtr<T> &v ) {
+axStatus ax_json_serialize_value( axJsonParser &s, axSP<T> &v ) {
 	axStatus st = v.newObject();	if( !st ) return st;
 	return s.io_value( *v );
 }
