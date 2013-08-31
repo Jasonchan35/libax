@@ -12,7 +12,7 @@
 #include "axSharedPtr.h"
 
 //TODO: obsolete this, please using axObjectRef instead
-/*
+
 template<class T>
 class axObject {
 public:
@@ -74,5 +74,5 @@ axStatus ax_json_serialize_value( axJsonParser &s, axObject<T> &v ) {
 	axStatus st = v.newObject();	if( !st ) return st;
 	return s.io_value( *v );
 }
-*/
+
 #endif
