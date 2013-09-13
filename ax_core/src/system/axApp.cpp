@@ -224,7 +224,7 @@ axStatus axApp_NSSearchPath( axIString_<T> &out, NSSearchPathDirectory d ) {
 	NSString *docu = [paths objectAtIndex:0];
 	if( docu == nil ) { out.clear(); return -2; }
 	st = out.set( [docu UTF8String] );	if( !st ) return st;	
-	axFileSystem::makeDirectory( out );
+	axFileSystem::makeDir( out );
 	
 	return 0;
 }

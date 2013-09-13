@@ -25,20 +25,20 @@ public:
 				axStatus	getPos			( axFileSize &n ) const;
 				axStatus	getFileSize		( axFileSize &n ) const;
 
-				axStatus	read			(       axIByteArray &o )		{ return readMem	( o.ptr(), o.size() ); }
-				axStatus	write			( const axIByteArray &o )		{ return writeMem	( o.ptr(), o.size() ); }
+				axStatus	read			(       axIByteArray &o )		{ return readBytes	( o.ptr(), o.size() ); }
+				axStatus	write			( const axIByteArray &o )		{ return writeBytes	( o.ptr(), o.size() ); }
 	
-				axStatus	readMem			(       void* buf, axSize byteSize );
-				axStatus	writeMem		( const void* buf, axSize byteSize );	
+				axStatus	readBytes		(       void* buf, axSize byteSize );
+				axStatus	writeBytes		( const void* buf, axSize byteSize );
 	
-template<class T> axStatus	readRaw			(       T& o )					{ return readMem	( &o, sizeof(o)); }
-template<class T> axStatus	writeRaw		( const T& o )					{ return writeMem	( &o, sizeof(o)); }
+template<class T> axStatus	readRaw			(       T& o )					{ return readBytes	( &o, sizeof(o)); }
+template<class T> axStatus	writeRaw		( const T& o )					{ return writeBytes	( &o, sizeof(o)); }
 	
-template<class T> axStatus	readRawArray	(       T* p, axSize count )	{ return readMem	( p, sizeof(T) * count ); }
-template<class T> axStatus	writeRawArray	( const T* p, axSize count )	{ return writeMem	( p, sizeof(T) * count ); }
+template<class T> axStatus	readRawArray	(       T* p, axSize count )	{ return readBytes	( p, sizeof(T) * count ); }
+template<class T> axStatus	writeRawArray	( const T* p, axSize count )	{ return writeBytes	( p, sizeof(T) * count ); }
 	
-template<class T> axStatus	readRawArray	(       axIArray<T>& o )		{ return readMem	( o.ptr(), sizeof(T) * o.size() ); }
-template<class T> axStatus	writeRawArray	( const axIArray<T>& o )		{ return writeMem	( o.ptr(), sizeof(T) * o.size() ); }
+template<class T> axStatus	readRawArray	(       axIArray<T>& o )		{ return readBytes	( o.ptr(), sizeof(T) * o.size() ); }
+template<class T> axStatus	writeRawArray	( const axIArray<T>& o )		{ return writeBytes	( o.ptr(), sizeof(T) * o.size() ); }
 	
 				axStatus	writeString		( const char* sz );
 	

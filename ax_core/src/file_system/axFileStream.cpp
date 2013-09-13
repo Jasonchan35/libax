@@ -127,7 +127,7 @@ axStatus axFileStream::writeString( const char* sz ) {
 }
 
 
-axStatus axFileStream::writeMem( const void* buf, axSize byteSize ) {
+axStatus axFileStream::writeBytes( const void* buf, axSize byteSize ) {
 	if( !p_ ) { assert(false); return axStatus_Std::not_initialized; }
 	
 	if( byteSize <= 0 ) return 0;
@@ -137,7 +137,7 @@ axStatus axFileStream::writeMem( const void* buf, axSize byteSize ) {
 }
 
 
-axStatus axFileStream::readMem	( void* buf, axSize byteSize ) {
+axStatus axFileStream::readBytes( void* buf, axSize byteSize ) {
 	if( !p_ ) { assert(false); return axStatus_Std::not_initialized; }
 	if( byteSize <= 0 ) return 0;
 	
