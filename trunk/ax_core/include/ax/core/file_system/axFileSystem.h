@@ -46,14 +46,14 @@ public:
 	static	axStatus	touchFile			( const char*		file );
 	static	axStatus	touchDir			( const char*		dir  );
 
-	static	axStatus	removeDirectory		( const char*		dir, bool recursive = false );
-	static	axStatus	removeDirectory		( const wchar_t*    dir, bool recursive = false );	
+	static	axStatus	removeDir			( const char*		dir, bool recursive = false );
+	static	axStatus	removeDir			( const wchar_t*    dir, bool recursive = false );
 	
-	static	axStatus	makeDirectory		( const char*		dir, bool recursive = true );
-	static	axStatus	makeDirectory		( const wchar_t*    dir, bool recursive = true );	
+	static	axStatus	makeDir				( const char*		dir, bool recursive = true );
+	static	axStatus	makeDir				( const wchar_t*    dir, bool recursive = true );
 
-	static	axStatus	copyDirectory		( const char*		src, const char*		dst );
-	static	axStatus	copyDirectory		( const wchar_t*    src, const wchar_t*		dst );
+	static	axStatus	copyDir				( const char*		src, const char*		dst );
+	static	axStatus	copyDir				( const wchar_t*    src, const wchar_t*		dst );
 
 	static	axStatus	isFileExists		( const char*    	file );
 	static	axStatus	isFileExists		( const wchar_t* 	file );
@@ -82,13 +82,13 @@ public:
 	
 private: 
 
-	template< class T > static	axStatus 	makeDirectoryT	( const T* dir, bool recursive );
-						static	axStatus	_makeDirectory	( const char*		dir );
-						static	axStatus	_makeDirectory	( const wchar_t*    dir );	
+	template< class T > static	axStatus 	makeDirT	( const T* dir, bool recursive );
+						static	axStatus	_makeDir	( const char*		dir );
+						static	axStatus	_makeDir	( const wchar_t*    dir );
 
-	template< class T > static	axStatus 	removeDirectoryT	( const T* dir, bool recursive );
-						static	axStatus	_removeDirectory 	( const char*		dir );
-						static	axStatus	_removeDirectory 	( const wchar_t*    dir );
+	template< class T > static	axStatus 	removeDirT	( const T* dir, bool recursive );
+						static	axStatus	_removeDir 	( const char*		dir );
+						static	axStatus	_removeDir 	( const wchar_t*    dir );
 	
 	
 };

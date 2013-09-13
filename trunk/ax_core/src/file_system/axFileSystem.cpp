@@ -164,7 +164,7 @@ axStatus	axFileSystem::touchFile ( const char* file ) {
 	return 0;
 }
 
-axStatus	axFileSystem::copyDirectory	( const char*		src, const char*		dst ) {
+axStatus	axFileSystem::copyDir	( const char*		src, const char*		dst ) {
 	axStatus st;
 
 	axDir::Entry e;
@@ -173,7 +173,7 @@ axStatus	axFileSystem::copyDirectory	( const char*		src, const char*		dst ) {
 	axDir dir;
 	st = dir.open( src ); if( !st ) return st;
 
-	_makeDirectory( dst );
+	_makeDir( dst );
 
 	while( dir.next( e ) ) { 		
 
@@ -181,7 +181,7 @@ axStatus	axFileSystem::copyDirectory	( const char*		src, const char*		dst ) {
 		st = dst_file.format("{?}/{?}", dst, e.filename );	if( !st ) return st;
 
 		if( e.isDir() ) {
-			st = copyDirectory( src_file, dst_file ); if( !st ) return st;
+			st = copyDir( src_file, dst_file ); if( !st ) return st;
 		}else {
 			st = copyFile( src_file, dst_file ); if( !st ) return st;
 		}
@@ -191,21 +191,21 @@ axStatus	axFileSystem::copyDirectory	( const char*		src, const char*		dst ) {
 	return 0;
 }
 
-axStatus	axFileSystem::copyDirectory	( const wchar_t*    src, const wchar_t*		dst ) {
+axStatus	axFileSystem::copyDir	( const wchar_t*    src, const wchar_t*		dst ) {
 	axStatus st;
 	axTempStringA src_, dst_;
 	st = src_.set( src );	if( !st ) return st;
 	st = dst_.set( dst );	if( !st ) return st;
-	return copyDirectory( src_, dst_ );
+	return copyDir( src_, dst_ );
 }
 
 
 
 template < class T >
-axStatus	axFileSystem::removeDirectoryT ( const T* src, bool recursive ) {
+axStatus	axFileSystem::removeDirT ( const T* src, bool recursive ) {
 
 	axStatus st;
-	if( !recursive ) return _removeDirectory( src );
+	if( !recursive ) return _removeDir( src );
 
 	axDir::Entry e;
 	axString_< T, 1024> path;
@@ -218,27 +218,27 @@ axStatus	axFileSystem::removeDirectoryT ( const T* src, bool recursive ) {
 		st = path.format( "{?}/{?}", src, e.filename );	if( !st ) return st;
 
 		if( e.isDir() ) {
-			st = removeDirectory( path, recursive );	if( !st ) return st;
+			st = removeDir( path, recursive );	if( !st ) return st;
 		}else {
 			st = deleteFile( path ); if( !st ) return st;
 		}
 	}
 
-	st = _removeDirectory( src );				if( !st ) return st;
+	st = _removeDir( src );				if( !st ) return st;
 
 	return 0;
 }
 
-axStatus	axFileSystem::removeDirectory 	( const char*		dir, bool recursive ) {
-	return removeDirectoryT( dir, recursive );
+axStatus	axFileSystem::removeDir 	( const char*		dir, bool recursive ) {
+	return removeDirT( dir, recursive );
 }
-axStatus	axFileSystem::removeDirectory 	( const wchar_t*    dir, bool recursive ) {
-	return removeDirectoryT( dir, recursive );
+axStatus	axFileSystem::removeDir 	( const wchar_t*    dir, bool recursive ) {
+	return removeDirT( dir, recursive );
 }
 
-template< class T > axStatus axFileSystem::makeDirectoryT( const T* dir, bool recursive ) {
+template< class T > axStatus axFileSystem::makeDirT( const T* dir, bool recursive ) {
 	axStatus st;
-	if( !recursive ) return _makeDirectory( dir );
+	if( !recursive ) return _makeDir( dir );
 
 	const T *s = dir;	
 	const T sp[] = { '/','\\',0 };
@@ -261,7 +261,7 @@ template< class T > axStatus axFileSystem::makeDirectoryT( const T* dir, bool re
 			}
 			
 			st = path.append( token ); if( !st ) return st;
-			st = axFileSystem::_makeDirectory( path );
+			st = axFileSystem::_makeDir( path );
 			//ax_log("p {?}", path );			
 		}
 				
@@ -272,12 +272,12 @@ template< class T > axStatus axFileSystem::makeDirectoryT( const T* dir, bool re
 	return 0;
 }
 
-axStatus	axFileSystem::makeDirectory( const char* dir, bool recursive ) {
-	return makeDirectoryT( dir, recursive );
+axStatus	axFileSystem::makeDir( const char* dir, bool recursive ) {
+	return makeDirT( dir, recursive );
 }
 
-axStatus	axFileSystem::makeDirectory( const wchar_t* dir, bool recursive ) {
-	return makeDirectoryT( dir, recursive );
+axStatus	axFileSystem::makeDir( const wchar_t* dir, bool recursive ) {
+	return makeDirT( dir, recursive );
 }
 
 axStatus	axFileSystem::isDirExists		( const char* 	 dir ) {
@@ -312,7 +312,7 @@ axStatus	axFileSystem::setCurrentDir ( const char* path ) {
 axStatus	axFileSystem::getCurrentDir ( axIStringW	&out ) {
     wchar_t tmp[ axkFilePathMax + 1 ];
     DWORD n;
-	n = ::GetCurrentDirectory( axkFilePathMax, tmp );
+	n = ::GetCurrentDir( axkFilePathMax, tmp );
 	if( n == 0 ) return -1;
 	tmp[n] = 0;
 	return out.set( tmp );
@@ -422,25 +422,25 @@ axStatus	axFileSystem::deleteFile	( const wchar_t* file ) {
 	return 0;
 }
 
-axStatus	axFileSystem::_removeDirectory	( const wchar_t*    dir ) { 
+axStatus	axFileSystem::_removeDir	( const wchar_t*    dir ) { 
 	return _wrmdir( dir ); 
 }
 
-axStatus	axFileSystem::_removeDirectory	( const char*		dir ) {
+axStatus	axFileSystem::_removeDir	( const char*		dir ) {
 	axStatus st;
 	axTempStringW	tmp;
 	st = tmp.set( dir );	if( !st ) return st;
-	return _removeDirectory( tmp );
+	return _removeDir( tmp );
 }
 
-axStatus	axFileSystem::_makeDirectory	( const char*		dir )  {
+axStatus	axFileSystem::_makeDir	( const char*		dir )  {
 	axStatus st;
 	axTempStringW	tmp;
 	st = tmp.set( dir );	if( !st ) return st;
-	return _makeDirectory( tmp );
+	return _makeDir( tmp );
 }
 
-axStatus	axFileSystem::_makeDirectory	( const wchar_t*    dir ) { 
+axStatus	axFileSystem::_makeDir	( const wchar_t*    dir ) { 
 	return _wmkdir( dir ); 
 }
 
@@ -545,21 +545,21 @@ axStatus axFileSystem::isFileExists ( const wchar_t* file ) {
 	return isFileExists( tmp );
 }
 
-axStatus	 axFileSystem::_makeDirectory	( const char *dir )	   { 
+axStatus	 axFileSystem::_makeDir	( const char *dir )	   { 
 	return ::mkdir( dir, 0755 ); 
 }
 
-axStatus	 axFileSystem::_makeDirectory	( const wchar_t *dir ) {
+axStatus	 axFileSystem::_makeDir	( const wchar_t *dir ) {
 	axTempStringA tmp;
     axStatus st = tmp.set( dir ); if( !st ) return st;
     return ::mkdir( tmp, 0755 );
 }
 
-axStatus	 axFileSystem::_removeDirectory ( const char *dirname )    { 
+axStatus	 axFileSystem::_removeDir ( const char *dirname )    { 
 	return ::rmdir(dirname); 
 }
 
-axStatus	 axFileSystem::_removeDirectory ( const wchar_t *dirname ) {
+axStatus	 axFileSystem::_removeDir ( const wchar_t *dirname ) {
 	axTempStringA tmp;
     axStatus st = tmp.set( dirname ); if( !st ) return st;
     return ::rmdir( tmp );
