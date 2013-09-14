@@ -312,7 +312,7 @@ axStatus	axFileSystem::setCurrentDir ( const char* path ) {
 axStatus	axFileSystem::getCurrentDir ( axIStringW	&out ) {
     wchar_t tmp[ axkFilePathMax + 1 ];
     DWORD n;
-	n = ::GetCurrentDir( axkFilePathMax, tmp );
+	n = ::GetCurrentDirectory( axkFilePathMax, tmp );
 	if( n == 0 ) return -1;
 	tmp[n] = 0;
 	return out.set( tmp );

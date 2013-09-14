@@ -19,7 +19,8 @@ public:
 	static bool		isAbsolute	( const char*    path );
 	static bool		isAbsolute	( const wchar_t* path );
 	
-	static axStatus	getAbsolute ( axIStringA &out, const char* path );
+	static axStatus	getAbsolute ( axIStringA &out, const char*		path );
+	static axStatus	getAbsolute ( axIStringW &out, const wchar_t*	path );
 };
 
 
