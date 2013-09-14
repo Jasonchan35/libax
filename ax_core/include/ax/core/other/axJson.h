@@ -58,6 +58,17 @@ inline axStatus ax_json_serialize_value( axJsonWriter &s, vector3 &value ) {
 class axJsonWriter;
 class axJsonParser;
 
+class axJson {
+	axJson(){}
+public:
+	template<class T> static	axStatus	encode 	( axIStringA &json, const T & v, bool condense = true, const char* indent = "\t" );
+	template<class T> static	axStatus	decode	( const char* json, T & v, bool memberMustInOrder );
+
+	template<class T> static 	axStatus	saveFile ( const char* filename, const T & v, bool condense = true, const char* indent = "\t" );
+	template<class T> static	axStatus	loadFile ( const char* filename, T & v, bool memberMustInOrder = false );
+};
+
+
 template<class S, class T> inline	
 axStatus ax_json_serialize_value( S &s, T& value );
 
@@ -175,7 +186,12 @@ public:
 		
 		st = nextToken();				if( !st ) return st;
 		
-		st = checkToken( ":" );			if( !st ) return st;
+		st = checkToken( ":" );
+		if( !st ) {
+			log("expect ':' after member name");
+			return st;
+		}
+		
 		st = nextToken();				if( !st ) return st;
 		
 		st = io_value( value );			if( !st ) return st;
@@ -191,11 +207,7 @@ public:
 	template<class T>	axStatus io_value( T& value ) {
 		axStatus st;
 		st = ax_json_serialize_value( *this, value );	
-		if( !st ) {
-			log("io_value");
-//			assert(false);
-			return st;
-		}
+		if( !st ) return st;
 		return 0;
 	}
 	
@@ -254,37 +266,6 @@ private:
 	bool	debugLog_ : 1;
 	
 };
-
-
-template<class T> inline
-axStatus	ax_to_json  ( axIStringA &json, const T & v, bool condense = true, const char* indent = " " ) {
-	axJsonWriter	s( json, condense, indent );
-	return s.io_value( ax_const_cast(v) );
-}
-
-template<class T> inline
-axStatus	ax_from_json( const char* json, T & v, bool memberMustInOrder ) {
-	axJsonParser	s( json, memberMustInOrder );
-	return s.io_value(v);
-}
-
-template<class T> inline
-axStatus	ax_to_json_file( const char* filename, const T & v, bool condense = true, const char* indent = " " ) {
-	axStatus st;
-	axTempStringA	json;
-	st = ax_to_json( json, v, condense, indent );		if( !st ) return st;
-	st = axFileSystem::saveFile( json, filename );		if( !st ) return st;
-	return 0;
-}
-
-template<class T> inline
-axStatus	ax_from_json_file( const char* filename, T & v, bool memberMustInOrder = false ) {
-	axStatus st;
-	axTempStringA	json;
-	st = axFileSystem::loadFile( json, filename );		if( !st ) return st;
-	st = ax_from_json( json, v, memberMustInOrder );	if( !st ) return st;
-	return 0;
-}
 
 //------------------
 
@@ -551,17 +532,22 @@ axStatus ax_json_serialize_object_value( axJsonParser &s, T &value ) {
 	for(;;) {
 		st = ax_json_serialize_object_members( s, value );
 		if( ! s.memberMustInOrder() ) {		
-			if( st.code() == axStatus_Std::JsonParser_internal_found ) {
+			if( st.code() != axStatus_Std::JsonParser_internal_found ) {
+				s.log("object member not found");
+				return st;
+			}else{
 				if( s.checkToken("}") ) break;
 				if( s.checkToken(",") ) {
 					st = s.nextToken();		if( !st ) return st;
 					continue;		
 				}
-				return axStatus_Std::JsonParser_format_error;
-			}
-		}		
+				s.log("expect ',' or '}'");
+				return axStatus_Std::JsonParser_expect_comma_or_close_brucket;
+			}			
+		}
 		
 		if( ! s.ignoreUnknownMemeber() ) {
+			s.log("memeber not found");
 			return axStatus_Std::JsonParser_member_not_found;
 		}
 		
@@ -577,5 +563,37 @@ axStatus ax_json_serialize_object_value( axJsonParser &s, T &value ) {
 	}
 	return 0;
 }
+
+
+template<class T> inline
+axStatus	axJson::encode ( axIStringA &json, const T & v, bool condense, const char* indent ) {
+	axJsonWriter	s( json, condense, indent );
+	return s.io_value( ax_const_cast(v) );
+}
+
+template<class T> inline
+axStatus	axJson::decode ( const char* json, T & v, bool memberMustInOrder ) {
+	axJsonParser	s( json, memberMustInOrder );
+	return s.io_value(v);
+}
+
+template<class T> inline
+axStatus		axJson::saveFile ( const char* filename, const T & v, bool condense, const char* indent ) {
+	axStatus st;
+	axTempStringA	json;
+	st = axJson::encode( json, v, condense, indent );	if( !st ) return st;
+	st = axFileSystem::saveFile( json, filename );		if( !st ) return st;
+	return 0;
+}
+
+template<class T> inline
+axStatus		axJson::loadFile ( const char* filename, T & v, bool memberMustInOrder ) {
+	axStatus st;
+	axTempStringA	json;
+	st = axFileSystem::loadFile( json, filename );		if( !st ) return st;
+	st = axJson::decode( json, v, memberMustInOrder );	if( !st ) return st;
+	return 0;
+}
+
 
 #endif //__axJsonWriter_h__

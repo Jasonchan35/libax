@@ -48,11 +48,12 @@ axStatus	axStringFormat::_processT( const T* fmt, const ArgList &list ) {
 			}break;
 
 			case '}': {
-				raw = c+1;
 				if( !s ) { //found '}' before '{'
-					st = put( c, 1 );	if( !st ) return st;
+					st = put( raw, c-raw+1 );	if( !st ) return st;
+					raw = c+1;
 					continue;
 				}
+				raw = c+1;
 				e=c;
 
 				int index = 0;

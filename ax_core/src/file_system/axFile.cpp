@@ -251,7 +251,7 @@ axStatus	axFile::_os_lock( int flags ) {
 		continue;
 
 	if (rc == -1) {
-		ax_log_errno("File::lock");
+		ax_log_unix_errno("File::lock");
 		return axStatus_Std::File_lock_error;
 	}
 	return 0;
