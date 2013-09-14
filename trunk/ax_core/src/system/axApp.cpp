@@ -127,7 +127,7 @@ axStatus	axApp::getTempDir			( axIStringW &out )	{
 axStatus	axApp::getAppResourceDir	( axIStringA &out ) {
 	axStatus	st;
 	axTempStringA	tmp;
-	st = getProcessFileDir( tmp );		if( !st ) return st;
+	st = axFileSystem::getProcessFileDir( tmp );		if( !st ) return st;
 	st = out.format( "{?}Resources", tmp ); if( !st ) return st;
 	return 0;
 }
@@ -159,15 +159,15 @@ axStatus	axApp::showFileInFinder( const char *path ) {
 
 }
 
-bool axGLApp::isAltKeyDown() {
+bool axApp::isAltKeyDown() {
 	return GetAsyncKeyState( VK_MENU ) != 0;
 }
 
-bool axGLApp::isCtrlKeyDown() {
+bool axApp::isCtrlKeyDown() {
 	return ( GetAsyncKeyState( VK_LCONTROL ) || GetAsyncKeyState( VK_RCONTROL ) );
 }
 
-bool axGLApp::isShiftKeyDown() {
+bool axApp::isShiftKeyDown() {
 	return ( GetAsyncKeyState( VK_LSHIFT ) || GetAsyncKeyState( VK_RSHIFT ) );
 }
 

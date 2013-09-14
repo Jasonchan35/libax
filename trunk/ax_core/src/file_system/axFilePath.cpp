@@ -105,7 +105,7 @@ bool		axFilePath::isAbsolute	( const wchar_t* path )  { return _isAbsolute(path)
 #endif
 #if axOS_WIN
 
-axStatus	axFilePath::getAbsolute ( axIStringA &out, const wchar_t* path ) {
+axStatus	axFilePath::getAbsolute ( axIStringW &out, const wchar_t* path ) {
 	wchar_t fullpath[MAX_PATH+1];
 
 	DWORD ret = ::GetFullPathName( path, MAX_PATH, fullpath, NULL );
@@ -115,6 +115,16 @@ axStatus	axFilePath::getAbsolute ( axIStringA &out, const wchar_t* path ) {
 	}
 	
 	return out.set( fullpath );
+}
+
+axStatus	axFilePath::getAbsolute ( axIStringA &out, const char* path ) {
+	axTempStringW	outTmp;
+	axTempStringW	pathTmp;
+	axStatus st;
+	st = pathTmp.set( path );				if( !st ) return st;
+	st = getAbsolute( outTmp, pathTmp );	if( !st ) return st;
+	st = out.set( outTmp );
+	return 0;
 }
 
 #endif //axOS_Win
