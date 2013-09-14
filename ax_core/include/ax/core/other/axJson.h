@@ -61,11 +61,11 @@ class axJsonParser;
 class axJson {
 	axJson(){}
 public:
-	template<class T> static	axStatus	encode 	( axIStringA &json, const T & v, bool condense = true, const char* indent = "\t" );
-	template<class T> static	axStatus	decode	( const char* json, T & v, bool memberMustInOrder );
+	template<class T> static	axStatus	encode 	( axIStringA &json, const T & v, bool condense=false, const char* indent="\t" );
+	template<class T> static	axStatus	decode	( const char* json, T & v, axIStringA* errorLog=NULL );
 
-	template<class T> static 	axStatus	saveFile ( const char* filename, const T & v, bool condense = true, const char* indent = "\t" );
-	template<class T> static	axStatus	loadFile ( const char* filename, T & v, bool memberMustInOrder = false );
+	template<class T> static 	axStatus	saveFile ( const char* filename, const T & v, bool condense = false, const char* indent="\t" );
+	template<class T> static	axStatus	loadFile ( const char* filename, T & v, axIStringA* errorLog=NULL );
 };
 
 
@@ -77,7 +77,6 @@ axStatus	ax_from_json_str	( axIStringA & str, const char* sz, bool withQuote );
 
 class axJsonWriterBase: public axSerializerBase {
 public:
-	enum { k_name_mismatch = 4445 };
 };
 
 class axJsonWriter : public axJsonWriterBase {
@@ -157,14 +156,12 @@ class axJsonParser : public axJsonWriterBase {
 	typedef axJsonWriterBase B;
 public:
 
-	axJsonParser( const char* json, bool memberMustInOrder = false );
+	axJsonParser( const char* json, axIStringA* errorLog );
 	
-	void	setIgnoreUnknownMemeber( bool b );
-	
-	template<class T>	axStatus parse( T& value, const char* name ) {	
+	template<class T>	axStatus parse( T& value, const char* name ) {
 		axStatus st;
 		st = io( value, name );
-		if( st.code() == axStatus_Std::JsonParser_internal_found ) {
+		if( st.code() == axStatus_Std::JsonParser_member_found ) {
 			st = 0;
 		}
 		
@@ -180,8 +177,7 @@ public:
 		if( ! name ) return axStatus_Std::JsonParser_format_error;
 		
 		if( ! checkStringToken(name) ) {
-			if( memberMustInOrder_ ) return axStatus_Std::JsonParser_format_error;
-			return k_name_mismatch;
+			return 1;
 		}
 		
 		st = nextToken();				if( !st ) return st;
@@ -196,12 +192,7 @@ public:
 		
 		st = io_value( value );			if( !st ) return st;
 		
-		if( memberMustInOrder_ ) {
-			if( checkToken("}") ) return 0;
-			st = nextElement();			if( !st ) return st;
-			return 0;
-		}
-		return axStatus_Std::JsonParser_internal_found;
+		return axStatus_Std::JsonParser_member_found;
 	}
 	
 	template<class T>	axStatus io_value( T& value ) {
@@ -244,27 +235,18 @@ public:
 	axSize		lineNo() { return lineNo_; }
 	axSize		charNo() { return r_ - lineStart_; }
 	
-	void		setDebugLog( bool b ) { debugLog_ = b; }
-	
-	axStatus	log		( const char* msg );
+	axStatus	log				( const char* msg );
+	axStatus	logIgnoreMember	( const char* memberName );
 	
 	axTempStringA		token;
 	bool				tokenIsString;
 	
-	bool	ignoreUnknownMemeber()	{ return ignoreUnknownMemeber_; }
-	bool	memberMustInOrder()		{ return memberMustInOrder_; }
-	
-	void	_logIgnoreMember( const char* name );
-			
-private:	
+private:
 	axSize			lineNo_;
 	const char*		start_;
 	const char*		r_;
 	const char*		lineStart_;
-	bool	ignoreUnknownMemeber_ : 1;
-	bool	memberMustInOrder_ : 1;	
-	bool	debugLog_ : 1;
-	
+	axIStringA*		errorLog_;
 };
 
 //------------------
@@ -531,30 +513,21 @@ axStatus ax_json_serialize_object_value( axJsonParser &s, T &value ) {
 	
 	for(;;) {
 		st = ax_json_serialize_object_members( s, value );
-		if( ! s.memberMustInOrder() ) {		
-			if( st.code() != axStatus_Std::JsonParser_internal_found ) {
-				s.log("object member not found");
-				return st;
-			}else{
-				if( s.checkToken("}") ) break;
-				if( s.checkToken(",") ) {
-					st = s.nextToken();		if( !st ) return st;
-					continue;		
-				}
-				s.log("expect ',' or '}'");
-				return axStatus_Std::JsonParser_expect_comma_or_close_brucket;
-			}			
-		}
-		
-		if( ! s.ignoreUnknownMemeber() ) {
-			s.log("memeber not found");
-			return axStatus_Std::JsonParser_member_not_found;
-		}
+		if( st.code() == axStatus_Std::JsonParser_member_found ) {
+			if( s.checkToken("}") ) break;
+			if( s.checkToken(",") ) {
+				st = s.nextToken();		if( !st ) return st;
+				continue;		
+			}
+			s.log("expect ',' or '}'");
+			return axStatus_Std::JsonParser_expect_comma_or_close_brucket;
+		}			
 		
 		if( s.checkToken("}") ) break;
 
 		st = s.getMemberName( tmp );	if( !st ) return st;
-		s._logIgnoreMember( tmp );
+		st = s.logIgnoreMember( tmp );	if( !st ) return st;
+		
 		st = s.skipValue();				if( !st ) return st;
 		
 		if( s.checkToken(",") ) {
@@ -572,8 +545,8 @@ axStatus	axJson::encode ( axIStringA &json, const T & v, bool condense, const ch
 }
 
 template<class T> inline
-axStatus	axJson::decode ( const char* json, T & v, bool memberMustInOrder ) {
-	axJsonParser	s( json, memberMustInOrder );
+axStatus	axJson::decode ( const char* json, T & v, axIStringA* errorLog ) {
+	axJsonParser	s( json, errorLog );
 	return s.io_value(v);
 }
 
@@ -587,11 +560,12 @@ axStatus		axJson::saveFile ( const char* filename, const T & v, bool condense, c
 }
 
 template<class T> inline
-axStatus		axJson::loadFile ( const char* filename, T & v, bool memberMustInOrder ) {
+axStatus		axJson::loadFile ( const char* filename, T & v, axIStringA* errorLog ) {
 	axStatus st;
 	axTempStringA	json;
 	st = axFileSystem::loadFile( json, filename );		if( !st ) return st;
-	st = axJson::decode( json, v, memberMustInOrder );	if( !st ) return st;
+	st = axJson::decode( json, v, errorLog );
+	if( !st ) return st;
 	return 0;
 }
 

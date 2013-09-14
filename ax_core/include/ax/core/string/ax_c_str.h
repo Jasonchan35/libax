@@ -49,17 +49,17 @@ size_t ax_strnlen( const wchar_t* s, size_t len );
 size_t ax_strlen( const char*    s );
 size_t ax_strlen( const wchar_t* s );
 
-      char*    ax_strchr_list(       char*    sz, const char*    chrs );
-      wchar_t* ax_strchr_list(       wchar_t* sz, const wchar_t* chrs );
+      char*    ax_strchr_list	(       char*    sz, const char*    chrs );
+      wchar_t* ax_strchr_list	(       wchar_t* sz, const wchar_t* chrs );
 
-const char*    ax_strchr_list( const char*    sz, const char*    chrs );
-const wchar_t* ax_strchr_list( const wchar_t* sz, const wchar_t* chrs );
+const char*    ax_strchr_list	( const char*    sz, const char*    chrs );
+const wchar_t* ax_strchr_list	( const wchar_t* sz, const wchar_t* chrs );
 
-      char*    ax_strrchrs(       char*    sz, const char*    chrs );
-      wchar_t* ax_strrchrs(       wchar_t* sz, const wchar_t* chrs );
+      char*    ax_strrchr_list	(       char*    sz, const char*    chrs );
+      wchar_t* ax_strrchr_list	(       wchar_t* sz, const wchar_t* chrs );
 
-const char*    ax_strrchrs( const char*    sz, const char*    chrs );
-const wchar_t* ax_strrchrs( const wchar_t* sz, const wchar_t* chrs );
+const char*    ax_strrchr_list	( const char*    sz, const char*    chrs );
+const wchar_t* ax_strrchr_list	( const wchar_t* sz, const wchar_t* chrs );
 
 int	 ax_strcasecmp ( const char*    s1, const char*    s2 );
 int	 ax_strcasecmp ( const wchar_t* s1, const wchar_t* s2 );
@@ -121,6 +121,9 @@ inline bool	ax_str_equals( const wchar_t* s1, const wchar_t* s2 ) { return 0 == 
 
 bool ax_str_has_prefix( const char*    sz, const char*    prefix );
 bool ax_str_has_prefix( const wchar_t* sz, const wchar_t* prefix );
+
+bool ax_str_has_suffix( const char*    sz, const char*    suffix );
+bool ax_str_has_suffix( const wchar_t* sz, const wchar_t* suffix );
 
 //@}
 

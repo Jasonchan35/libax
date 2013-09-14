@@ -44,7 +44,7 @@ axStatus	ax_to_json_str	( axIStringA & str, const char* sz, bool withQuote ) {
 
 axStatus	ax_from_json_str	( axIStringA & str, const char* json, bool withQuote ) {
 	axStatus st;	
-	axJsonParser	parse( json, true );
+	axJsonParser	parse( json, NULL );
 	parse.nextToken();
 	if( withQuote != parse.tokenIsString ) return axStatus_Std::JsonParser_bool_format_error;
 	return str.set( parse.token );
@@ -187,19 +187,13 @@ axStatus axJsonWriter::newline() {
 	
 
 //=======================
-axJsonParser::axJsonParser( const char* json, bool memberMustInOrder )	{
+axJsonParser::axJsonParser( const char* json, axIStringA* errorLog )	{
 	lineNo_ = 1;
 	start_ = json;
-	debugLog_ = false;
 	r_ = json;
 	lineStart_ = r_;
-	ignoreUnknownMemeber_ = true;
-	memberMustInOrder_ = memberMustInOrder;
+	errorLog_ = errorLog;
 	nextToken();
-}
-
-void axJsonParser::setIgnoreUnknownMemeber( bool b ) {
-	ignoreUnknownMemeber_ = b;
 }
 
 static int hex( char ch ) {
@@ -231,17 +225,28 @@ axStatus ax_json_serialize_value( axJsonParser &s, bool &v ) {
 }
 
 axStatus	axJsonParser::log ( const char* msg ) {
-	return ax_log("Json({?}:{?}) {?}\n  Token:[{?}] {?}", lineNo(), charNo(), msg, token, tokenIsString ? "isString":"" );
+	if( errorLog_ ) {
+		return errorLog_->appendFormat("Json({?}:{?}) {?}\n  Token:[{?}] {?}\n",
+										 lineNo(), charNo(), msg, token, tokenIsString ? "isString":"" );
+	}
+	return 0;
 }
+
+axStatus axJsonParser::logIgnoreMember( const char* name ) {
+	if( errorLog_ ) {
+		return errorLog_->appendFormat("Json({?}:{?})  ignore member [{?}]\n", lineNo(), charNo(), name );
+	}
+	return 0;
+}
+
+
 
 axStatus	axJsonParser::nextToken() {
 	axStatus st = _nextToken();
-	if( st ) {
-		if( debugLog_ ) {
-			log("");
-		}
-	}
-	return st;
+	if( !st ) return st;
+
+//	ax_log("Debug: Json({?}:{?}) Token:[{?}]", lineNo(), charNo(), token );
+	return 0;
 }
 
 axStatus	axJsonParser::_nextToken() {
@@ -439,16 +444,14 @@ axStatus axJsonParser::endObjectValue() {
 	axStatus st;
 	st = checkToken(",");
 	if( st ) {
-		if( ignoreUnknownMemeber() ) {
-			axTempStringA	tmp;
-			
-			for(;;) {
-				st = nextToken();			if( !st ) return st;
-				st = getMemberName( tmp );	if( !st ) return st;
-				_logIgnoreMember( tmp );
-				st = skipValue();			if( !st ) return st;
-				if( checkToken("}") ) break;
-			}
+		axTempStringA	tmp;
+		
+		for(;;) {
+			st = nextToken();				if( !st ) return st;
+			st = getMemberName( tmp );		if( !st ) return st;
+			st = logIgnoreMember( tmp );	if( !st ) return st;
+			st = skipValue();				if( !st ) return st;
+			if( checkToken("}") ) break;
 		}
 	}
 	
@@ -459,10 +462,6 @@ axStatus axJsonParser::endObjectValue() {
 
 bool axJsonParser::isObjectEnded() {
 	return checkToken("}");
-}
-
-void axJsonParser::_logIgnoreMember( const char* name ) {
-	ax_log("Json({?}:{?})  ignore member [{?}]", lineNo(), charNo(), name );
 }
 
 axStatus axJsonParser::beginArray( const char* name ) {

@@ -64,8 +64,11 @@ public:
 	bool			contains				( const T* sz ) const		{ return ax_strstr( c_str(), sz ) != NULL; }
 	bool			containsNoCase			( const T* sz ) const		{ return ax_strcasestr( c_str(), sz ) != NULL; }
 
-	axStatus		getFromPrefix			( const T* prefix, const T* full );
-	bool			hasPrefix				( const T* prefix ) const 	{ return ax_str_has_prefix( c_str(), prefix ); }
+	axStatus		getFromPrefix			( const T* full, const T* prefix );
+	bool			startsWith				( const T* prefix ) const 	{ return ax_str_has_prefix( c_str(), prefix ); }
+
+	axStatus		getFromSuffix			( const T* full, const T* suffix );
+	bool			endsWith				( const T* suffix ) const 	{ return ax_str_has_suffix( c_str(), suffix ); }
 
 			T		charAt					( size_t i ) const			{ return ( i >= size() ) ? 0 : buf_[i]; }
 			T		lastChar				( size_t i = 0 ) const		{ return ( i >= size() ) ? 0 : buf_.last(i+1); }
@@ -108,7 +111,9 @@ public:
 	
 	axStatus		findChar				(       T  ch,        axSize &outPos, axSize start_from     = 0 ) const;
 	axStatus		findCharFromEnd			(       T  ch,        axSize &outPos, axSize start_from_end = 0 ) const;
+
 	axStatus		findAnyChar				( const T* char_list, axSize &outPos, axSize start_from     = 0 ) const;
+	axStatus		findAnyCharFromEnd		( const T* char_list, axSize &outPos, axSize start_from     = 0 ) const;
 
 	axStatus		splitByIndex			( axSize index, axIString_<T> &part1, axIString_<T> &part2 ) const;
 	axStatus		splitByChar				( T ch,         axIString_<T> &part1, axIString_<T> &part2 ) const;
@@ -121,7 +126,7 @@ public:
 	axStatus		replaceChar				( T from, T to, axSize start_from = 0, axSize count = 0 );
 	axStatus		replaceCharEnd			( T from, T to, axSize start_from = 0, axSize count = 0 );
 
-	axStatus		replaceString			( const T* from, const T* to, axSize start_from = 0, axSize count = 0 );
+	axStatus		replaceString			( const T* from, const T* to, axSize start_from = 0, axSize count = ax_type_max<axSize>() );
 
 	axStatus		format_ArgList			( const char* fmt, const axStringFormat_ArgList &list )			{ resize(0); return appendFormat_ArgList( fmt, list ); }
 	axStatus		appendFormat_ArgList	( const char* fmt, const axStringFormat_ArgList &list );

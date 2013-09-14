@@ -8,14 +8,28 @@
 
 #include <ax/core/string/ax_c_str.h>
 
-template<class T>
-bool	_ax_str_has_prefix( const T* sz, const T* prefix ) {
+template<class T> inline
+bool	_ax_str_has_prefix( const T* full, const T* prefix ) {
 	size_t	prefix_len = ax_strlen( prefix );
-	return 0 == ax_strncmp( prefix, sz, prefix_len );
+	return 0 == ax_strncmp( prefix, full, prefix_len );
+}
+
+template<class T> inline
+bool	_ax_str_has_suffix( const T* full, const T* suffix ) {
+	size_t	suffix_len = ax_strlen( suffix );
+	size_t	full_len   = ax_strlen( full );
+
+	if( full_len < suffix_len ) return false;
+	size_t n = full_len - suffix_len;
+	const T* p = full + n;
+	return 0 == ax_strncmp( suffix, p, suffix_len );
 }
 
 bool ax_str_has_prefix( const char*    sz, const char*    prefix ) { return _ax_str_has_prefix(sz,prefix); }
 bool ax_str_has_prefix( const wchar_t* sz, const wchar_t* prefix ) { return _ax_str_has_prefix(sz,prefix); }
+
+bool ax_str_has_suffix( const char*    sz, const char*    suffix ) { return _ax_str_has_suffix(sz,suffix); }
+bool ax_str_has_suffix( const wchar_t* sz, const wchar_t* suffix ) { return _ax_str_has_suffix(sz,suffix); }
 
 template<class T> inline
 size_t _ax_strnlen( const T* s, size_t len ) {
@@ -48,46 +62,42 @@ size_t ax_strlen( const wchar_t* s ) { return _ax_strlen(s); }
 
 //! search char(s) in string
 template<class T> inline
-T* _ax_strchrs( T* sz, T* chrs ) {
-	const T *c;
-	for( ; *sz;	sz++ ) {
-		for( c=chrs; *c; c++ ) {
-			if( *sz == *c ) return sz;
+T* _ax_strchr_list( T* sz, T* chrs ) {
+	T* p = sz;
+	for( ; *p;	p++ ) {
+		for( T* c=chrs; *c; c++ ) {
+			if( *p == *c ) return p;
 		}
 	}
 	return NULL;
 }
-      char*    ax_strchr_list(       char*    sz, const char*    chrs ) { return _ax_strchrs(sz,(char*   )chrs); }
-      wchar_t* ax_strchr_list(       wchar_t* sz, const wchar_t* chrs ) { return _ax_strchrs(sz,(wchar_t*)chrs); }
+      char*    ax_strchr_list(       char*    sz, const char*    chrs ) { return _ax_strchr_list(sz,(char*   )chrs); }
+      wchar_t* ax_strchr_list(       wchar_t* sz, const wchar_t* chrs ) { return _ax_strchr_list(sz,(wchar_t*)chrs); }
 
-const char*    ax_strchr_list( const char*    sz, const char*    chrs ) { return _ax_strchrs(sz,chrs); }
-const wchar_t* ax_strchr_list( const wchar_t* sz, const wchar_t* chrs ) { return _ax_strchrs(sz,chrs); }
+const char*    ax_strchr_list( const char*    sz, const char*    chrs ) { return _ax_strchr_list(sz,chrs); }
+const wchar_t* ax_strchr_list( const wchar_t* sz, const wchar_t* chrs ) { return _ax_strchr_list(sz,chrs); }
 
 
 //! search char(s) in string from right side
 template<class T> inline
-T* _ax_strrchrs( T* sz, T* chrs ) {
+T* _ax_strrchr_list( T* sz, T* chrs ) {
 	if( !*sz ) return NULL;
-	T* start = sz;
-	for( ; *sz; sz++ ) {
-		//go to the end, so do nothing
-	}
-	sz--;
 
-	T *c;
-	for( ; sz >= start; sz-- ) {
-		for( c=chrs; *c; c++ ) {
-			if( *sz == *c ) return sz;
+	size_t len = ax_strlen( sz );
+	T* p = sz + len - 1;
+	for( ; p >= sz; p-- ) {
+		for( T* c=chrs; *c; c++ ) {
+			if( *p == *c ) return p;
 		}
 	}
 	return NULL;
 }
 
-      char*    ax_strrchrs(       char*    sz, const char*    chrs ) { return _ax_strrchrs(sz,(char*   )chrs); }
-      wchar_t* ax_strrchrs(       wchar_t* sz, const wchar_t* chrs ) { return _ax_strrchrs(sz,(wchar_t*)chrs); }
+      char*    ax_strrchr_list(       char*    sz, const char*    chrs ) { return _ax_strrchr_list(sz,(char*   )chrs); }
+      wchar_t* ax_strrchr_list(       wchar_t* sz, const wchar_t* chrs ) { return _ax_strrchr_list(sz,(wchar_t*)chrs); }
 
-const char*    ax_strrchrs( const char*    sz, const char*    chrs ) { return _ax_strrchrs(sz,chrs); }
-const wchar_t* ax_strrchrs( const wchar_t* sz, const wchar_t* chrs ) { return _ax_strrchrs(sz,chrs); }
+const char*    ax_strrchr_list( const char*    sz, const char*    chrs ) { return _ax_strrchr_list(sz,chrs); }
+const wchar_t* ax_strrchr_list( const wchar_t* sz, const wchar_t* chrs ) { return _ax_strrchr_list(sz,chrs); }
 
 
 template<class T> inline

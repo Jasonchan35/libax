@@ -2,7 +2,7 @@
 
 axStatus    test_time() {
 	axDateTime	dt;
-	dt.now();
+	dt.setToNow();
 
 	ax_log( "current time is {?}", dt );
 
@@ -11,7 +11,7 @@ axStatus    test_time() {
 
 axStatus	test_timestamp() {
 	axTimeStamp	ts;
-	ts.now();
+	ts.setToNow();
 
 	ts += 60;
 
@@ -24,7 +24,7 @@ axStatus	test_loop() {
 	axStopWatch	watch;
 	axTimeStamp	ts;
 	for( int i=0; i<100000; i++ ) {
-		ts.now();
+		ts.setToNow();
 		if( i % 1000 == 0 ) {
 			ax_log("{?} {?} time = {?}", i, watch.get(), ts );
 		}
