@@ -74,9 +74,9 @@ template<> inline  axSize ax_type_min<axSize>() { return 0; }
 
 template<> inline  axSize ax_type_max<axSize>() { 
 	#if axCPU_LP32
-		return 0xffffffffU;
+		return ax_type_max<uint32_t>();
 	#elif axCPU_LP64
-		return  0xffffffffffffffffULL;
+		return ax_type_max<uint64_t>();
 	#endif
 }
 

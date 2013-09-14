@@ -51,6 +51,28 @@ axStatus	axString_Array<T>::sortNoCase( bool ascending ) {
 }
 
 template< class T >
+axStatus	axString_Array<T> :: split ( const T* sz, const T* seperators ) {
+	axStatus st;
+	B::resize(0);
+	if( !sz ) return 0;
+
+	const T* p = sz;
+	const T* lastP = p;
+	for( ; *p; p++ ) {
+		if( ax_strchr( seperators, *p ) ) {
+			st = B::incSize(1);								if( !st ) return st;
+			st = B::last().setWithLength(lastP, p-lastP);	if( !st ) return st;
+			lastP = p+1;
+		}
+	}
+
+	st = B::incSize(1);		if( !st ) return st;
+	st = B::last().setWithLength(lastP, p-lastP);	if( !st ) return st;
+	
+	return 0;
+}
+
+template< class T >
 axStatus	axString_Array<T> :: tokenize ( const T* sz, const T* seperators, const T* trim ) {
 	axStatus st;
 	B::resize(0);

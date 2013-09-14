@@ -253,7 +253,7 @@ void axIString_<T> :: clear() {
 }
 
 template<class T>
-axStatus  axIString_<T>::getFromPrefix	( const T* prefix, const T* full ) {
+axStatus  axIString_<T>::getFromPrefix	( const T* full, const T* prefix ) {
 	size_t	prefix_len = ax_strlen( prefix );
 	size_t	full_len   = ax_strlen( full );
 
@@ -263,6 +263,19 @@ axStatus  axIString_<T>::getFromPrefix	( const T* prefix, const T* full ) {
 	return set( full + prefix_len );
 }
 
+template<class T>
+axStatus  axIString_<T>::getFromSuffix	( const T* full, const T* suffix ) {
+	size_t	suffix_len = ax_strlen( suffix );
+	size_t	full_len   = ax_strlen( full );
+
+	if( full_len < suffix_len ) return -1;
+
+	size_t n = full_len - suffix_len;
+	const T* p = full + n;
+
+	if( 0 != ax_strncmp( suffix, p, suffix_len ) ) return -1;	
+	return setWithLength( full, n );
+}
 
 template< class T >  bool axIString_<T> :: operator == ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) == 0; }
 template< class T >  bool axIString_<T> :: operator != ( const T* sz ) const { return ax_strcmp( this->c_str(), sz ) != 0; }
@@ -326,31 +339,38 @@ axStatus	axIString_<T> :: substring( axSize start, axSize count, axIString_<T> &
 template< class T > 
 axStatus	axIString_<T> :: findChar ( T ch, axSize &outPos, axSize start_from ) const {
 	if( start_from >= size() ) return axStatus_Std::invalid_parameter;
-	const T* s = &buf_[start_from];
-	const T* e = &buf_.last();
-	for( ; s<e; s++ ) {
-		if( *s == ch ) {
-			outPos = s-buf_.ptr();
-			return 0;
-		}
-	}
-	return axStatus_Std::not_found;
+	const T* ret = ax_strchr( &buf_[start_from], ch );
+	if( ret == NULL ) return axStatus_Std::not_found;
+	outPos = ret-buf_.ptr();
+	return 0;
 }
 
 template< class T > 
-axStatus	axIString_<T>::findAnyChar	( const T* char_list, axSize &outPos, axSize start_from ) const {
+axStatus	axIString_<T> :: findAnyChar ( const T* char_list, axSize &outPos, axSize start_from ) const {
 	if( start_from >= size() ) return axStatus_Std::invalid_parameter;
-	const T* s = &buf_[start_from];
-	const T* e = &buf_.last();
-	for( ; s<e; s++ ) {
-		if( ax_strchr_list( s, char_list ) == 0) {
-			outPos = s-buf_.ptr();
-			return 0;
+	const T* ret = ax_strchr_list( &buf_[start_from], char_list );
+	if( ret == NULL ) return axStatus_Std::not_found;
+	outPos = ret-buf_.ptr();
+	return 0;
+}
+
+template< class T > 
+axStatus	axIString_<T>::findAnyCharFromEnd	( const T* char_list, axSize &outPos, axSize start_from ) const {
+	if( start_from >= size() ) return axStatus_Std::invalid_parameter;
+
+	const T* p = &buf_[ size() - start_from - 1 ];
+	const T* sz = buf_.ptr();
+
+	for( ; p >= sz; p-- ) {
+		for( const T* c=char_list; *c; c++ ) {
+			if( *p == *c ) {
+				outPos = p - sz;
+				return 0;
+			}
 		}
 	}
 	return axStatus_Std::not_found;
 }
-
 
 
 template< class T > 

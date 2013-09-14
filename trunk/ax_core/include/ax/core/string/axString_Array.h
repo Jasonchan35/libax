@@ -5,9 +5,9 @@
 
 template< class T >
 class axString_Array : public axArray< axString_<T>, 16 > {
-	typedef axString_<T>	String;
 	typedef axArray< axString_<T>, 16 > B;
 public:
+	typedef axString_<T>	String;
 
 
 	axStatus	sortNoCase		( bool ascending = true );
@@ -15,6 +15,7 @@ public:
 	
 	axStatus	addString		( const T *sz );
 	axStatus	tokenize 		( const T* sz, const T* seperators = String::defaultSeperators(), const T* trim = NULL );
+	axStatus	split			( const T* sz, const T* seperators );
 
 			B&	asInterface		() 			{ return (B&)*this; }
 	const 	B&	asInterface		() const	{ return (B&)*this; }
