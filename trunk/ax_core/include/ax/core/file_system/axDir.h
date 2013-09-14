@@ -9,10 +9,11 @@ public:
 	~axDir	();
 
 	struct	Entry {
-		axStringA_<64>	filename;
+		axStringA	filename;
 		bool		isDir()		{ return dir_; }
 
 		axStatus	onTake( Entry &src );
+		
 	friend class axDir;
 	protected:
 		bool		dir_;

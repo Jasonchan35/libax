@@ -9,6 +9,7 @@
 //@{
 
 class axFileSystem : public axNonCopyable {
+	axFileSystem() {}
 public:
 	static	axStatus	loadFile		( axIStringA	&out, const wchar_t* filename );
 	static	axStatus	loadFile		( axIStringA	&out, const char*	 filename );

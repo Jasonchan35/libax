@@ -86,7 +86,6 @@ static bool	_isAbsolute( const T* path ) {
 #endif
 }
 
-
 axStatus	axFilePath::getBaseName	( axIStringA &out, const char*    path, bool with_ext ) { return _getBaseName(out,path,with_ext); }
 axStatus	axFilePath::getBaseName	( axIStringW &out, const wchar_t* path, bool with_ext ) { return _getBaseName(out,path,with_ext); }
 
@@ -98,4 +97,44 @@ axStatus	axFilePath::getFileExt	( axIStringW &out, const wchar_t* path )	{ retur
 
 bool		axFilePath::isAbsolute	( const char*    path )  { return _isAbsolute(path); }
 bool		axFilePath::isAbsolute	( const wchar_t* path )  { return _isAbsolute(path); }
+
+
+
+#if 0
+#pragma mark ================= Windows ====================
+#endif
+#if axOS_WIN
+
+axStatus	axFilePath::getAbsolute ( axIStringA &out, const wchar_t* path ) {
+	wchar_t fullpath[MAX_PATH+1];
+
+	DWORD ret = ::GetFullPathName( path, MAX_PATH, fullpath, NULL );
+	if( ret == 0 || ret >= MAX_PATH ) {
+		out.clear();
+		return -1;
+	}
+	
+	return out.set( fullpath );
+}
+
+#endif //axOS_Win
+
+
+#if 0
+#pragma mark ================= UNIX ====================
+#endif
+#if axOS_UNIX
+
+axStatus	axFilePath::getAbsolute ( axIStringA &out, const char* path ) {
+	char tmp[PATH_MAX+1];
+	if( realpath( path, tmp ) == nullptr ) {
+		out.clear();
+		return -1;
+	}
+	return out.set( tmp );
+}
+
+#endif //axOS_UNIX
+
+
 

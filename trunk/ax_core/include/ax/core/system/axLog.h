@@ -170,13 +170,23 @@ axLogExpandArgListUserTag3	(  axStatus, ax_log_ex, axLog_Tag&, const char*, cons
 #define ax_log_var4( v1, v2, v3, v4 )			ax_log( "VAR: {?} = [{?}], {?} = [{?}], {?} = [{?}], {?} = [{?}]",				#v1, v1, #v2, v2, #v3, v3, #v4, v4 )
 #define ax_log_var5( v1, v2, v3, v4, v5 )		ax_log( "VAR: {?} = [{?}], {?} = [{?}], {?} = [{?}], {?} = [{?}] {?} = [{?}]",	#v1, v1, #v2, v2, #v3, v3, #v4, v4, #v5, v5 )
 
-void ax_log_errno( const char* msg, int code );
-void ax_log_errno( const char* msg );
+void ax_log_unix_errno( const char* msg, int code );
+void ax_log_unix_errno( const char* msg );
 
 #if axOS_WIN
 	void	ax_log_win32_error( const char* msg, DWORD error_code );
 	void	ax_log_win32_error( const char* msg );
 #endif //axOS_WIN
+
+
+template<class T> inline
+axStatus	ax_log_json	( const char* msg, T& val ) {
+	axStatus st;
+	axStringA tmp;
+	st = axJson::encode( tmp, val, false );		if( !st ) return st;
+	return ax_log("{?}:{?}", msg, tmp );
+}
+
 
 #if _DEBUG
 	#define	DEBUG_ax_log				ax_log

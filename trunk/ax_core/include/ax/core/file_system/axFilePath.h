@@ -14,9 +14,12 @@ public:
 	static axStatus	getFileExt	( axIStringA &out, const char*	  path );
 	static axStatus	getFileExt	( axIStringW &out, const wchar_t* path );
 	
+	static axStatus	getParentDir( axIStringA &out, const char*	  path );
+	
 	static bool		isAbsolute	( const char*    path );
 	static bool		isAbsolute	( const wchar_t* path );
-
+	
+	static axStatus	getAbsolute ( axIStringA &out, const char* path );
 };
 
 

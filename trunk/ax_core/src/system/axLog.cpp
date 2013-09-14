@@ -61,12 +61,12 @@ void ax_log_win32_error( const char* msg ) {
 #endif //axOS_WIN
 
 #if axOS_UNIX
-void ax_log_errno( const char* msg, int code ) {
+void ax_log_unix_errno( const char* msg, int code ) {
 	ax_log( "{?} [errno {?}:{?}]", msg, code, strerror(code) );
 }
 
-void ax_log_errno( const char* msg ) {
-	ax_log_errno( msg, errno );
+void ax_log_unix_errno( const char* msg ) {
+	ax_log_unix_errno( msg, errno );
 }
 #endif //axOS_UNIX
 

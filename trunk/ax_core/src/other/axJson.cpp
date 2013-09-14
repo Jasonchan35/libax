@@ -130,7 +130,10 @@ axStatus axJsonWriter::beginArrayValue	() 	{ return begin_('['); }
 axStatus axJsonWriter::endArrayValue	() 	{ return end_('[',']'); }
 
 axStatus axJsonWriter::begin_( const char ch ) { 
-	if( ended_ ) return axStatus_Std::JsonParser_format_error;
+	if( ended_ ) {
+		assert(false);
+		return axStatus_Std::JsonParser_format_error;
+	}
 
 	axStatus st;
 	st = str_->append(ch);		if( !st ) return st;
@@ -140,12 +143,18 @@ axStatus axJsonWriter::begin_( const char ch ) {
 
 axStatus axJsonWriter::end_( const char begin, const char ch ) {
 	axStatus st;
-	if( depth_ == 0 )  		return axStatus_Std::JsonParser_format_error;
+	if( depth_ == 0 ) {
+		assert(false);
+		return axStatus_Std::JsonParser_format_error;
+	}
 	depth_--;
 
 	if( depth_ == 0 ) ended_ = true;
 	
-	if( str_->size() == 0 ) return axStatus_Std::JsonParser_format_error;
+	if( str_->size() == 0 ) {
+		assert(false);
+		return axStatus_Std::JsonParser_format_error;
+	}
 	
 	char e = str_->lastChar();
 	if( e == ',' ) {
@@ -222,13 +231,15 @@ axStatus ax_json_serialize_value( axJsonParser &s, bool &v ) {
 }
 
 axStatus	axJsonParser::log ( const char* msg ) {
-	return ax_log("Json({?}:{?}) {?}", lineNo(), charNo(), msg );
+	return ax_log("Json({?}:{?}) {?}\n  Token:[{?}] {?}", lineNo(), charNo(), msg, token, tokenIsString ? "isString":"" );
 }
 
 axStatus	axJsonParser::nextToken() {
 	axStatus st = _nextToken();
-	if( debugLog_ ) {
-		if( st ) ax_log( "json({?}:{?})  token = [{?}] {?}", lineNo_, charNo(), token, tokenIsString ? "isString":"" );
+	if( st ) {
+		if( debugLog_ ) {
+			log("");
+		}
 	}
 	return st;
 }
@@ -255,7 +266,10 @@ axStatus	axJsonParser::_nextToken() {
 			if( *r_ == '\\' ) {
 				r_++;
 				switch( *r_ ) {
-					case 0: return axStatus_Std::JsonParser_expected_close_quota;
+					case 0: {
+						log("expect '\"' ");
+						return axStatus_Std::JsonParser_expect_close_quota;
+					}break;
 				//------
 					case '\\': { st = token.append('\\'); if( !st ) return st; continue; }
 					case '\"': { st = token.append('\"'); if( !st ) return st; continue; }
@@ -280,6 +294,7 @@ axStatus	axJsonParser::_nextToken() {
 					}continue;
 				//--------	
 					default: { //unknown escape
+						log("unknown escape in string");
 						return axStatus_Std::JsonParser_unknown_escape_in_string;
 					}
 				}
@@ -314,7 +329,8 @@ axStatus	axJsonParser::_nextToken() {
 
 	if( tokenIsString ) {
 		assert(false);	// quota excepted for close string
-		return axStatus_Std::JsonParser_expected_close_quota;
+		log("expect '\"' ");
+		return axStatus_Std::JsonParser_expect_close_quota;
 	}
 	return 0;
 }
@@ -328,7 +344,7 @@ axStatus	axJsonParser::checkToken( const char* sz ) {
 
 axStatus	axJsonParser::checkStringToken( const char* sz ) {
 	axStatus st;
-	if( !tokenIsString )	return axStatus_Std::JsonParser_format_error;
+	if( !tokenIsString ) 	return axStatus_Std::JsonParser_format_error;
 	if( !token.equals(sz) )	return axStatus_Std::JsonParser_format_error;
 	return 0;
 }
@@ -395,6 +411,7 @@ axStatus axJsonParser::skipBlock( char open, char close ) {
 			lv--;
 		}
 	}
+	assert(false);
 	return axStatus_Std::JsonParser_format_error;
 }
 

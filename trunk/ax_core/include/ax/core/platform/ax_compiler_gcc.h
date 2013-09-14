@@ -24,7 +24,7 @@
 	#define axDLL_IMPORT
 #endif
 
-
+#define nullptr	NULL
 
 #define	axFUNC_NAME			__FUNCTION__
 #define axPRETTY_FUNC_NAME	__PRETTY_FUNCTION__
