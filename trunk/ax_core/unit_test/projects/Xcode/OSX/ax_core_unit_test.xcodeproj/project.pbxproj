@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		963560051734946300C6C9A0 /* test_axObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 963560031734946300C6C9A0 /* test_axObject.cpp */; };
+		964669A017E58FC900653B01 /* test_axLinkedPtrArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9646699F17E58FC900653B01 /* test_axLinkedPtrArray.cpp */; };
 		96515AE9164AA5D300F0519C /* libax_core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96515ACB164AA14D00F0519C /* libax_core.a */; };
 /* End PBXBuildFile section */
 
@@ -34,7 +34,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		963560031734946300C6C9A0 /* test_axObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_axObject.cpp; path = ../../../src/data_structure/test_axObject.cpp; sourceTree = "<group>"; };
+		9646699F17E58FC900653B01 /* test_axLinkedPtrArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_axLinkedPtrArray.cpp; path = ../../../src/data_structure/test_axLinkedPtrArray.cpp; sourceTree = "<group>"; };
 		96515AA7164AA0CC00F0519C /* ax_core_unit_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ax_core_unit_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		96515AC2164AA14D00F0519C /* ax_core.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ax_core.xcodeproj; path = ../../../../projects/Xcode/OSX/ax_core.xcodeproj; sourceTree = "<group>"; };
 		96515AD3164AA2BE00F0519C /* ax_core_unit_test.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ax_core_unit_test.xcconfig; sourceTree = "<group>"; };
@@ -55,7 +55,7 @@
 		96515A9C164AA0CC00F0519C = {
 			isa = PBXGroup;
 			children = (
-				963560031734946300C6C9A0 /* test_axObject.cpp */,
+				9646699F17E58FC900653B01 /* test_axLinkedPtrArray.cpp */,
 				96515AA8164AA0CC00F0519C /* Products */,
 				96515AD3164AA2BE00F0519C /* ax_core_unit_test.xcconfig */,
 				96515AC2164AA14D00F0519C /* ax_core.xcodeproj */,
@@ -145,7 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				963560051734946300C6C9A0 /* test_axObject.cpp in Sources */,
+				964669A017E58FC900653B01 /* test_axLinkedPtrArray.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

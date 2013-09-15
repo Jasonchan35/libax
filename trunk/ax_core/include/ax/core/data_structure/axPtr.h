@@ -23,8 +23,8 @@ public:
 			T& operator* ()			{ return *p_; }
 	const	T& operator* () const	{ return *p_; }
 	
-	operator		T*()			{ return p_; }
-	operator const	T*() const		{ return p_; }
+	operator		T*&()			{ return p_; }
+	operator const	T* () const		{ return p_; }
 	
 	axStatus	onTake( axPtr<T> &o )	{ p_ = o; return 0; }
 	
