@@ -75,12 +75,12 @@ axStatus ax_json_serialize_value( S &s, T& value );
 axStatus	ax_to_json_str		( axIStringA & str, const char* sz, bool withQuote );
 axStatus	ax_from_json_str	( axIStringA & str, const char* sz, bool withQuote );
 
-class axJsonWriterBase: public axSerializerBase {
+class axJsonSerializerBase: public axSerializerBase {
 public:
 };
 
-class axJsonWriter : public axJsonWriterBase {
-	typedef axJsonWriterBase B;
+class axJsonWriter : public axJsonSerializerBase {
+	typedef axJsonSerializerBase B;
 public:
 	template<class T>	axStatus io_vary( T& value, const char* name )	{ return io(value,name); }
 	template<class T>	axStatus io		( T& value, const char* name )	{
@@ -152,8 +152,8 @@ private:
 };
 
 
-class axJsonParser : public axJsonWriterBase {
-	typedef axJsonWriterBase B;
+class axJsonParser : public axJsonSerializerBase {
+	typedef axJsonSerializerBase B;
 public:
 
 	axJsonParser( const char* json, axIStringA* errorLog );

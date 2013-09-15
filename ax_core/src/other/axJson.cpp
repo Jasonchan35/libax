@@ -225,16 +225,29 @@ axStatus ax_json_serialize_value( axJsonParser &s, bool &v ) {
 }
 
 axStatus	axJsonParser::log ( const char* msg ) {
+	axStatus st;
+	axTempStringA	tmp;
+	st = tmp.format("Json({?}:{?}) {?}\n  Token:[{?}] {?}\n",
+					 lineNo(), charNo(), msg, token, tokenIsString ? "isString":"" );
+	if( !st ) return st;
 	if( errorLog_ ) {
-		return errorLog_->appendFormat("Json({?}:{?}) {?}\n  Token:[{?}] {?}\n",
-										 lineNo(), charNo(), msg, token, tokenIsString ? "isString":"" );
+		return errorLog_->append( tmp );
+	}else{
+		ax_log( tmp );
 	}
 	return 0;
 }
 
 axStatus axJsonParser::logIgnoreMember( const char* name ) {
+	axStatus st;
+	axTempStringA	tmp;
+	st = tmp.format("Json({?}:{?})  ignore member [{?}]\n", lineNo(), charNo(), name );
+	if( !st ) return st;
+	
 	if( errorLog_ ) {
-		return errorLog_->appendFormat("Json({?}:{?})  ignore member [{?}]\n", lineNo(), charNo(), name );
+		return errorLog_->append( tmp );
+	}else{
+		ax_log( tmp );
 	}
 	return 0;
 }

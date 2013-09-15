@@ -18,7 +18,6 @@ class axWeakPte;
 
 class axWeakPtrBase : public axTinyListNode< axWeakPtrBase, false > {
 public:
-	bool	ownedByList	()		{ return false; }
 	virtual ~axWeakPtrBase() 	{}
 	virtual void onWillRemoveFromList() {}
 };
@@ -83,3 +82,4 @@ void	axWeakPtr<T>::unref	()	{
 
  
 #endif
+

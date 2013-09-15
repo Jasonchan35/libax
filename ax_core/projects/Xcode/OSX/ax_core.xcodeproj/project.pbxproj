@@ -148,6 +148,8 @@
 		9640E12916009DA400F9D037 /* axStopWatch.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E0B916009DA400F9D037 /* axStopWatch.h */; };
 		9640E12A16009DA400F9D037 /* axTimeStamp.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E0BA16009DA400F9D037 /* axTimeStamp.h */; };
 		9640E12F1600A48000F9D037 /* axSerializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9640E12E1600A48000F9D037 /* axSerializer.cpp */; };
+		964669A617E594FF00653B01 /* axLinkedPtrArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 964669A417E594FF00653B01 /* axLinkedPtrArray.h */; };
+		964669A717E594FF00653B01 /* axLocalBuf.h in Headers */ = {isa = PBXBuildFile; fileRef = 964669A517E594FF00653B01 /* axLocalBuf.h */; };
 		966A56C515F3BEF300012DCA /* axJson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 966A56C415F3BEF300012DCA /* axJson.cpp */; };
 		96D017F3160E4DA100A2682B /* axFilePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96D017F2160E4DA100A2682B /* axFilePath.cpp */; };
 		96D017F5160E4E6500A2682B /* axFilePath.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D017F4160E4E6500A2682B /* axFilePath.h */; };
@@ -313,7 +315,8 @@
 		9640E0BA16009DA400F9D037 /* axTimeStamp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axTimeStamp.h; sourceTree = "<group>"; };
 		9640E12E1600A48000F9D037 /* axSerializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axSerializer.cpp; sourceTree = "<group>"; };
 		9640E1391600AD1E00F9D037 /* axStringFormat_Arg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axStringFormat_Arg.h; sourceTree = "<group>"; };
-		964B7B6D163C9BFD0087A3CD /* axObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axObject.h; sourceTree = "<group>"; };
+		964669A417E594FF00653B01 /* axLinkedPtrArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axLinkedPtrArray.h; sourceTree = "<group>"; };
+		964669A517E594FF00653B01 /* axLocalBuf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axLocalBuf.h; sourceTree = "<group>"; };
 		964CADB11649783100EADA03 /* ax_array.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ax_array.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9659F0F6164C0251005F86FC /* axRange.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRange.h; sourceTree = "<group>"; };
 		96672BA916518F1C007CB393 /* axHumanString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axHumanString.h; sourceTree = "<group>"; };
@@ -527,6 +530,8 @@
 		9640E04D16009DA400F9D037 /* data_structure */ = {
 			isa = PBXGroup;
 			children = (
+				964669A417E594FF00653B01 /* axLinkedPtrArray.h */,
+				964669A517E594FF00653B01 /* axLocalBuf.h */,
 				9640E04E16009DA400F9D037 /* axArray.h */,
 				9616E4D9161729D800AF9F80 /* axConnection.h */,
 				9640E05016009DA400F9D037 /* axArray_types.h */,
@@ -541,7 +546,6 @@
 				9640E05816009DA400F9D037 /* axLocalArray.h */,
 				9640E05916009DA400F9D037 /* axPtr.h */,
 				9640E05A16009DA400F9D037 /* axSharedPtr.h */,
-				964B7B6D163C9BFD0087A3CD /* axObject.h */,
 				9635600B1734AD2700C6C9A0 /* axObjectRef.h */,
 				9640E05B16009DA400F9D037 /* axTinyList.h */,
 				9640E05C16009DA400F9D037 /* axWeakPtr.h */,
@@ -909,6 +913,8 @@
 				9640E12916009DA400F9D037 /* axStopWatch.h in Headers */,
 				9640E12A16009DA400F9D037 /* axTimeStamp.h in Headers */,
 				96D017F5160E4E6500A2682B /* axFilePath.h in Headers */,
+				964669A617E594FF00653B01 /* axLinkedPtrArray.h in Headers */,
+				964669A717E594FF00653B01 /* axLocalBuf.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -49,7 +49,6 @@
 #include "core/database/axDBStmt.h"
 #include "core/database/axDBTableAccessor.h"
 
-#include "core/data_structure/axObject.h"
 #include "core/data_structure/axObjectRef.h"
 
 #include "core/other/axSerializer_Helper.h"

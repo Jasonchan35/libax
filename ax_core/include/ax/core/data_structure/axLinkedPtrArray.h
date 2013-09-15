@@ -36,7 +36,7 @@ public:
 	T*		operator[]	( size_t i )	{ return arr_[i]; }
 	size_t	size		()				{ return arr_.size(); }
 
-	void	add	( T &p ) {
+	void	append	( T &p ) {
 		if( p.ptrArr_ == this ) return; //already in list
 		p.removeFromPtrArray();
 		p.ptrArr_ = this;
