@@ -17,7 +17,7 @@ public:
 	};
 	int type;
 	
-	axByteArray_<k_buf_size>	buf;
+	axArray< uint8_t, k_buf_size>	buf;
 };
 
 

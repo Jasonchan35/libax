@@ -96,6 +96,7 @@ void axArray< T, LOCAL_BUF_SIZE >::onFree( void* p ) {
 	}
 }
 
+
 //@}
 
 #endif //__axArray_h__

@@ -11,6 +11,8 @@ void ax_delete( T* p ) { delete p; }
 template< class T > inline
 T* ax_new() { return new T; }
 
+class axSerializer;
+class axDeserializer;
 
 //! \ingroup base_data_structure
 //@{
@@ -46,10 +48,12 @@ public:
 
 	void		deleteObject()				{ if( p_ ) { ax_delete(p_); p_=NULL; } }
 	
+	axStatus	serialize_io( axSerializer 	 &s );
+	axStatus	serialize_io( axDeserializer &s );
+
 private:
 	T* p_;
 };
-
 
 //@}
 

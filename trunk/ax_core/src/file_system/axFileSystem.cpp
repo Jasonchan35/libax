@@ -7,13 +7,13 @@
 
 axStatus	axFileSystem::setCurrentDirSameAsFile	( const char*		filename ) {
 	axStringA_<256> str;
-	axFilePath::getDirName( str, filename );
+	axFilePath::dirName( str, filename );
 	return setCurrentDir( str );
 }
 
 axStatus	axFileSystem::setCurrentDirSameAsFile	( const wchar_t*	filename ) {
 	axStringW_<256> str;
-	axFilePath::getDirName( str, filename );
+	axFilePath::dirName( str, filename );
 	return setCurrentDir( str );
 }
 
@@ -21,14 +21,14 @@ axStatus	axFileSystem::getProcessFileDir	( axIStringA	&path_to_exe ) {
 	axStatus st;
 	axTempStringA	tmp;
 	st = getProcessFilename( tmp );		if( !st ) return st;
-	return axFilePath::getDirName( path_to_exe, tmp ); 
+	return axFilePath::dirName( path_to_exe, tmp );
 }
 
 axStatus	axFileSystem::getProcessFileDir	( axIStringW	&path_to_exe ) {
 	axStatus st;
 	axTempStringW	tmp;
 	st = getProcessFilename( tmp );		if( !st ) return st;
-	return axFilePath::getDirName( path_to_exe, tmp ); 
+	return axFilePath::dirName( path_to_exe, tmp );
 }
 
 
@@ -598,10 +598,10 @@ axStatus	axFileSystem::deleteFile	( const wchar_t* file ) {
 axStatus	axFileSystem::moveFileToTrash( const char* file ) {
 	axStatus st;
 	axTempStringA	dir;	
-	st = axFilePath::getDirName( dir, file );		if( !st ) return st;
+	st = axFilePath::dirName( dir, file );		if( !st ) return st;
 
 	axTempStringA	base;
-	st = axFilePath::getBaseName( base, file );		if( !st ) return st;
+	st = axFilePath::baseName( base, file );		if( !st ) return st;
 	NSString* _dir  = ax_toNSString( dir );
 	NSArray*  _files = [NSArray arrayWithObject: ax_toNSString( base ) ];
 	NSInteger  tag = 0;

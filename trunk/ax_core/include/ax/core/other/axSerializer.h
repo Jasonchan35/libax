@@ -528,6 +528,20 @@ axStatus	axDList<T>::serialize_io	( axDeserializer	&se ) {
 	return 0;
 }
 
+//------- axAutoPtr ------
+
+template <class T> inline
+axStatus axAutoPtr<T> :: serialize_io( axSerializer &s ) {
+	if( p_ ) return s.io( *p_ );
+	T dummy; return s.io( dummy );
+}
+
+template <class T> inline
+axStatus axAutoPtr<T> :: serialize_io( axDeserializer &s ) {
+	axStatus st = newObject();	if( !st ) return st;
+	return s.io( *p_ );
+}
+
 //------- io vary ---------
 
 axStatus ax_serialize_io_vary( axSerializer 	&s, uint32_t &v );

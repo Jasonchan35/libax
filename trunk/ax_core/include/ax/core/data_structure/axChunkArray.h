@@ -9,7 +9,7 @@
 //! Chunk Array
 //! - The memory address of element will always the same
 //! - cannot using as axIArray, because the memory is not in linear
-template<class T, size_t CHUNK_SIZE, size_t CHUNK_PTR_LOCAL_BUF=0>
+template<class T, size_t CHUNK_SIZE, size_t CHUNK_PTR_LOCAL_BUF=4>
 class axChunkArray {
 public:
 			axStatus	resize		( axSize newSize );
