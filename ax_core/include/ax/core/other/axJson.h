@@ -397,6 +397,20 @@ axStatus ax_json_serialize_value( S &s, axChunkArray<T,CS,LB> &v ) {
 	return ax_json_serialize_value( s, v.asInterface() );
 }
 
+//-------- axAutoPtr ------------
+
+template <class T> inline
+axStatus ax_json_serialize_value( axJsonWriter &s, axAutoPtr<T> &v ) {
+	if(v) return s.io_value( *v );
+	return s.nullValue();
+}
+
+template <class T> inline
+axStatus ax_json_serialize_value( axJsonParser &s, axAutoPtr<T> &v ) {
+	axStatus st = v.newObject();	if( !st ) return st;
+	return s.io_value( *v );
+}
+
 //---------- String ----------------
 
 

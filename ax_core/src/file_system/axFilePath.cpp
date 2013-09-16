@@ -10,13 +10,13 @@
 #include <ax/core/system/axLog.h>
 #include <ax/core/common/ax_macro.h>
 
-template<class T> const T* axFilePath_Seperators();
+template<class T> const T* axFilePath_seperators();
 
-template<> const char*		axFilePath_Seperators<char>	  () { return  "/\\"; }
-template<> const wchar_t*	axFilePath_Seperators<wchar_t>() { return L"/\\"; }
+template<> const char*		axFilePath_seperators<char>	  () { return  "/\\"; }
+template<> const wchar_t*	axFilePath_seperators<wchar_t>() { return L"/\\"; }
 
 template<class T> inline
-static axStatus	axFilePath_getFileExt( axIString_<T> &out, const T* path ) {
+static axStatus	axFilePath_fileExt( axIString_<T> &out, const T* path ) {
 	axStatus st;
 	const T* p = ax_strrchr(path,(T)'.');
 	if( !p ) {
@@ -28,11 +28,26 @@ static axStatus	axFilePath_getFileExt( axIString_<T> &out, const T* path ) {
 }
 
 template<class T> inline
-static axStatus	axFilePath_getBaseName( axIString_<T> &out, const T* path, bool with_ext ) {
+static axStatus	axFilePath_changeExt( axIString_<T> &out, const T* path, const T* newExt ) {
+	axStatus st;
+	const T* p = ax_strrchr(path,(T)'.');
+	if( !p ) {
+		st = out.set( path );		if( !st ) return st;
+	}else{
+		st = out.setWithLength( path, p-path+1 );	if( !st ) return st;
+	}
+	
+	st = out.append( newExt );		if( !st ) return st;
+	
+	return 0;
+}
+
+template<class T> inline
+static axStatus	axFilePath_baseName( axIString_<T> &out, const T* path, bool with_ext ) {
 	if( ! path ) { out.clear(); return 0; }
 	axStatus st;
 	
-	const T* p = ax_strrchr_list( path, axFilePath_Seperators<T>() );
+	const T* p = ax_strrchr_list( path, axFilePath_seperators<T>() );
 	if( !p ) {
 		p = path;
 	}else{
@@ -52,12 +67,12 @@ static axStatus	axFilePath_getBaseName( axIString_<T> &out, const T* path, bool 
 }
 
 template<class T> inline
-static axStatus	axFilePath_getDirName( axIString_<T> &out, const T* path ) {
+static axStatus	axFilePath_dirName( axIString_<T> &out, const T* path ) {
 	axStatus st;
 	out.resize(0);
 	if( ! path ) return 0;
 
-	const T* p = ax_strrchr_list( path, axFilePath_Seperators<T>() );
+	const T* p = ax_strrchr_list( path, axFilePath_seperators<T>() );
 	if( !p ) return 0;
 
 	st = out.setWithLength( path, p-path+1 );		if( !st ) return st;
@@ -75,7 +90,7 @@ static bool	axFilePath_isAbsolute( const T* path ) {
 #elif axOS_WIN
 	if( ax_isalpha(path[0]) && path[1] == ':' ) return true;
 	if( path[0] == '\\' ) return true;
-	if( path[0] == '/' ) return true;
+	if( path[0] == '/' ) return true;	
 	return false;
 
 #else
@@ -83,20 +98,24 @@ static bool	axFilePath_isAbsolute( const T* path ) {
 #endif
 }
 
-axStatus	axFilePath::getBaseName	( axIStringA &out, const char*    path, bool with_ext ) { return axFilePath_getBaseName(out,path,with_ext); }
-axStatus	axFilePath::getBaseName	( axIStringW &out, const wchar_t* path, bool with_ext ) { return axFilePath_getBaseName(out,path,with_ext); }
+axStatus	axFilePath::baseName	( axIStringA &out, const char*    path, bool with_ext ) { return axFilePath_baseName(out,path,with_ext); }
+axStatus	axFilePath::baseName	( axIStringW &out, const wchar_t* path, bool with_ext ) { return axFilePath_baseName(out,path,with_ext); }
 
-axStatus	axFilePath::getDirName	( axIStringA &out, const char*    path )	{ return axFilePath_getDirName(out,path); }
-axStatus	axFilePath::getDirName	( axIStringW &out, const wchar_t* path )	{ return axFilePath_getDirName(out,path); }
+axStatus	axFilePath::dirName	( axIStringA &out, const char*    path )	{ return axFilePath_dirName(out,path); }
+axStatus	axFilePath::dirName	( axIStringW &out, const wchar_t* path )	{ return axFilePath_dirName(out,path); }
 
-axStatus	axFilePath::getFileExt	( axIStringA &out, const char*	  path )	{ return axFilePath_getFileExt(out,path); }
-axStatus	axFilePath::getFileExt	( axIStringW &out, const wchar_t* path )	{ return axFilePath_getFileExt(out,path); }
+axStatus	axFilePath::fileExt	( axIStringA &out, const char*	  path )	{ return axFilePath_fileExt(out,path); }
+axStatus	axFilePath::fileExt	( axIStringW &out, const wchar_t* path )	{ return axFilePath_fileExt(out,path); }
+
+axStatus	axFilePath::changeExt	( axIStringA &out, const char* 	  path, const char*    newExt )	{ return axFilePath_changeExt(out,path,newExt); }
+axStatus	axFilePath::changeExt	( axIStringW &out, const wchar_t* path, const wchar_t* newExt )	{ return axFilePath_changeExt(out,path,newExt); }
+
 
 bool		axFilePath::isAbsolute	( const char*    path )  { return axFilePath_isAbsolute(path); }
 bool		axFilePath::isAbsolute	( const wchar_t* path )  { return axFilePath_isAbsolute(path); }
 
 template<class T> inline
-static axStatus	axFilePath_getNormalizePath( axIString_<T> &out, const T* path ) {
+static axStatus	axFilePath_normalize( axIString_<T> &out, const T* path ) {
 	out.resize(0);
 	if( path == NULL ) return 0;
 	size_t n = ax_strlen( path );
@@ -109,7 +128,7 @@ static axStatus	axFilePath_getNormalizePath( axIString_<T> &out, const T* path )
 	axString_Array<T>	folders;
 	axString_Array<T>	newPath;
 
-	const T* sp = axFilePath_Seperators<T>();
+	const T* sp = axFilePath_seperators<T>();
 	st = folders.split( path, sp );	if( !st ) return st;
 
 	axForArray( axIString_<T>, p, folders ) {
@@ -141,21 +160,21 @@ static axStatus	axFilePath_getNormalizePath( axIString_<T> &out, const T* path )
 	return 0;
 }
 
-axStatus axFilePath::getNormalizePath( axIStringA &out, const char*		path ) { return axFilePath_getNormalizePath( out, path ); }
-axStatus axFilePath::getNormalizePath( axIStringW &out, const wchar_t*	path ) { return axFilePath_getNormalizePath( out, path ); }
+axStatus axFilePath::normalize( axIStringA &out, const char*		path ) { return axFilePath_normalize( out, path ); }
+axStatus axFilePath::normalize( axIStringW &out, const wchar_t*	path ) { return axFilePath_normalize( out, path ); }
 
 template<class T> inline
-static axStatus	axFilePath_getParentDir( axIString_<T> &out, const T* path ) {
+static axStatus	axFilePath_parentDir( axIString_<T> &out, const T* path ) {
 	axStatus st;
 	axString_<T, 256>	tmp;
 
 	out.resize(0);
 
-	st = axFilePath_getNormalizePath( tmp, path );		if( !st ) return st;
+	st = axFilePath_normalize( tmp, path );		if( !st ) return st;
 	if( tmp.size() == 0 ) return -1;
 
 	T ch = tmp.lastChar(0);
-	const T* sp = axFilePath_Seperators<T>();
+	const T* sp = axFilePath_seperators<T>();
 
 	if( ax_strchr( sp, ch ) ) {
 		st = tmp.decSize(1);			if( !st ) return st;
@@ -167,15 +186,15 @@ static axStatus	axFilePath_getParentDir( axIString_<T> &out, const T* path ) {
 	return out.setWithLength( tmp, outPos+1 );
 }
 
-axStatus axFilePath::getParentDir( axIStringA &out, const char*		path ) { return axFilePath_getParentDir( out, path ); }
-axStatus axFilePath::getParentDir( axIStringW &out, const wchar_t*	path ) { return axFilePath_getParentDir( out, path ); }
+axStatus axFilePath::parentDir( axIStringA &out, const char*		path ) { return axFilePath_parentDir( out, path ); }
+axStatus axFilePath::parentDir( axIStringW &out, const wchar_t*	path ) { return axFilePath_parentDir( out, path ); }
 
 #if 0
 #pragma mark ================= Windows ====================
 #endif
 #if axOS_WIN
 
-axStatus	axFilePath::getFullPath ( axIStringW &out, const wchar_t* path ) {
+axStatus	axFilePath::fullPath ( axIStringW &out, const wchar_t* path ) {
 	wchar_t fullpath[MAX_PATH+1];
 
 	DWORD ret = ::GetFullPathName( path, MAX_PATH, fullpath, NULL );
@@ -187,12 +206,12 @@ axStatus	axFilePath::getFullPath ( axIStringW &out, const wchar_t* path ) {
 	return out.set( fullpath );
 }
 
-axStatus	axFilePath::getFullPath ( axIStringA &out, const char* path ) {
+axStatus	axFilePath::fullPath ( axIStringA &out, const char* path ) {
 	axTempStringW	outTmp;
 	axTempStringW	pathTmp;
 	axStatus st;
 	st = pathTmp.set( path );				if( !st ) return st;
-	st = getFullPath( outTmp, pathTmp );	if( !st ) return st;
+	st = fullPath( outTmp, pathTmp );	if( !st ) return st;
 	st = out.set( outTmp );
 	return 0;
 }
@@ -205,16 +224,16 @@ axStatus	axFilePath::getFullPath ( axIStringA &out, const char* path ) {
 #endif
 #if axOS_UNIX
 
-axStatus	axFilePath::getFullPath ( axIStringW &out, const wchar_t* path ) {
+axStatus	axFilePath::fullPath ( axIStringW &out, const wchar_t* path ) {
 	axTempStringA	tmpOut;
 	axTempStringA	tmpPath;
 	axStatus st;
 	st = tmpPath.set( path );				if( !st ) return st;
-	st = getFullPath( tmpOut, tmpPath );	if( !st ) return st;
+	st = fullPath( tmpOut, tmpPath );	if( !st ) return st;
 	return out.set( tmpOut );
 }
 
-axStatus	axFilePath::getFullPath ( axIStringA &out, const char* path ) {
+axStatus	axFilePath::fullPath ( axIStringA &out, const char* path ) {
 	char tmp[PATH_MAX+1];
 	if( realpath( path, tmp ) == NULL ) {
 		out.clear();

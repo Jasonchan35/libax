@@ -6,26 +6,29 @@
 class axFilePath : public axNonCopyable {
 	axFilePath() {}
 public:
-	static axStatus	getBaseName	( axIStringA &out, const char*    path, bool with_ext = true );
-	static axStatus	getBaseName	( axIStringW &out, const wchar_t* path, bool with_ext = true );
+	static axStatus	baseName	( axIStringA &out, const char*    path, bool with_ext = true );
+	static axStatus	baseName	( axIStringW &out, const wchar_t* path, bool with_ext = true );
 	
-	static axStatus	getDirName	( axIStringA &out, const char*    path );
-	static axStatus	getDirName	( axIStringW &out, const wchar_t* path );
+	static axStatus	dirName		( axIStringA &out, const char*    path );
+	static axStatus	dirName		( axIStringW &out, const wchar_t* path );
 
-	static axStatus	getFileExt	( axIStringA &out, const char*	  path );
-	static axStatus	getFileExt	( axIStringW &out, const wchar_t* path );
-	
-	static axStatus	getParentDir( axIStringA &out, const char*	  path );
-	static axStatus	getParentDir( axIStringW &out, const wchar_t* path );
-	
-	static axStatus	getNormalizePath	( axIStringA &out, const char*	  path );
-	static axStatus	getNormalizePath	( axIStringW &out, const wchar_t* path );
+	static axStatus	fileExt		( axIStringA &out, const char*	  path );
+	static axStatus	fileExt		( axIStringW &out, const wchar_t* path );
 
+	static axStatus	changeExt	( axIStringA &out, const char* 	  path, const char*    newExt );
+	static axStatus	changeExt	( axIStringW &out, const wchar_t* path, const wchar_t* newExt );
+	
+	static axStatus	parentDir	( axIStringA &out, const char*	  path );
+	static axStatus	parentDir	( axIStringW &out, const wchar_t* path );
+	
+	static axStatus	normalize	( axIStringA &out, const char*	  path );
+	static axStatus	normalize	( axIStringW &out, const wchar_t* path );
+	
 	static bool		isAbsolute	( const char*    path );
 	static bool		isAbsolute	( const wchar_t* path );
 	
-	static axStatus	getFullPath ( axIStringA &out, const char*		path );
-	static axStatus	getFullPath ( axIStringW &out, const wchar_t*	path );
+	static axStatus	fullPath 	( axIStringA &out, const char*		path );
+	static axStatus	fullPath 	( axIStringW &out, const wchar_t*	path );
 };
 
 
