@@ -10,7 +10,7 @@ public:
 
 	struct	Entry {
 		axStringA	name;
-		bool		isDir()		{ return dir_; }
+		bool		isDir()	const	{ return dir_; }
 
 		axStatus	onTake( Entry &src );
 		
