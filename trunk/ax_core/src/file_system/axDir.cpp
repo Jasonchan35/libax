@@ -2,8 +2,8 @@
 
 axStatus	axDir::Entry::onTake( Entry &src ) {
 	axStatus st;
-	st = filename.onTake( src.filename );	if( !st ) return st;
-	dir_ = src.dir_;
+	ax_take_macro( name )
+	ax_take_macro( dir_ )
 	return 0;
 }
 
@@ -131,7 +131,7 @@ axStatus axDir :: next( Entry & entry ) {
 		return axStatus::kEOF;
 	}
 
-	st = entry.filename.set( data_.cFileName );		if( !st ) return st;
+	st = entry.name.set( data_.cFileName );		if( !st ) return st;
 	entry.dir_ = (data_.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? true : false;
 
 	for(;;) {
@@ -192,7 +192,7 @@ axStatus axDir :: next( Entry &e ) {
 		if( ax_strcmp( result_->d_name, "."  ) == 0 ) continue;
 		if( ax_strcmp( result_->d_name, ".." ) == 0 ) continue;
 
-		st = e.filename.set( result_->d_name );	if( !st ) return st;
+		st = e.name.set( result_->d_name );	if( !st ) return st;
 		e.dir_ = ( result_->d_type & DT_DIR ) ? true : false;
 		break;
 	}

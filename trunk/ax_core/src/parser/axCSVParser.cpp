@@ -129,7 +129,7 @@ axStatus axCSVParserBase::getCell_( axIStringA &cell ) {
 //===== axCSVFileParser
 
 axStatus axCSVFileParser::open( const wchar_t* filename ) { 
-	return file_.open( filename, L"rb" ); 
+	return file_.openRead( filename );
 }
 
 //virtual		

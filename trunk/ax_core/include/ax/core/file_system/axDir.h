@@ -9,7 +9,7 @@ public:
 	~axDir	();
 
 	struct	Entry {
-		axStringA	filename;
+		axStringA	name;
 		bool		isDir()		{ return dir_; }
 
 		axStatus	onTake( Entry &src );

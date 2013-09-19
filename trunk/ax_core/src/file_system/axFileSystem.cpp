@@ -5,6 +5,54 @@
 #include <ax/core/other/ax_objc.h>
 #include <ax/core/string/axConstString.h>
 
+static axStatus axFileSystem_getFileAndDirList( axStringA_Array &outList, const char* path, bool includeSubDir, bool bFile, bool bDir ) {
+	axStatus st;
+	axDir	d;
+	st = d.open(path);		if( !st ) return st;
+	
+	axDir::Entry e;
+	axStringA	tmp;
+	
+	for(;;) {
+		st = d.next(e);
+		if( st.isEOF() ) return 0;
+		if( !st ) return st;
+		
+		st = tmp.format("{?}/{?}", path, e.name );			if( !st ) return st;
+
+		if( e.isDir() ) {
+			if( bDir ) {
+				st = outList.addString( tmp );		if( !st ) return st;
+			}
+			if( includeSubDir ) {
+				st = axFileSystem_getFileAndDirList( outList, tmp, includeSubDir, bFile, bDir );
+				if( !st ) return st;
+			}
+		}else{
+			if( bFile ) {
+				st = outList.addString( tmp );		if( !st ) return st;
+			}
+		}
+	}
+	return 0;
+}
+
+axStatus	axFileSystem::getFileList ( axStringA_Array &outList, const char* path, bool includeSubDir ) {
+	outList.resize(0);
+	return axFileSystem_getFileAndDirList( outList, path, includeSubDir, true, false );
+}
+
+axStatus	axFileSystem::getDirList ( axStringA_Array &outList, const char* path, bool includeSubDir ) {
+	outList.resize(0);
+	return axFileSystem_getFileAndDirList( outList, path, includeSubDir, false, true );
+}
+
+axStatus	axFileSystem::getFileAndDirList ( axStringA_Array &outList, const char* path, bool includeSubDir ) {
+	outList.resize(0);
+	return axFileSystem_getFileAndDirList( outList, path, includeSubDir, true, true );
+}
+
+
 axStatus	axFileSystem::setCurrentDirSameAsFile	( const char*		filename ) {
 	axStringA_<256> str;
 	axFilePath::dirName( str, filename );
@@ -177,11 +225,11 @@ axStatus	axFileSystem::copyDir	( const char*		src, const char*		dst ) {
 
 	while( dir.next( e ) ) { 		
 
-		st = src_file.format("{?}/{?}", src, e.filename );	if( !st ) return st;
-		st = dst_file.format("{?}/{?}", dst, e.filename );	if( !st ) return st;
+		st = src_file.format("{?}/{?}", src, e.name );	if( !st ) return st;
+		st = dst_file.format("{?}/{?}", dst, e.name );	if( !st ) return st;
 
 		if( e.isDir() ) {
-			st = copyDir( src_file, dst_file ); if( !st ) return st;
+			st = copyDir ( src_file, dst_file ); if( !st ) return st;
 		}else {
 			st = copyFile( src_file, dst_file ); if( !st ) return st;
 		}
@@ -215,7 +263,7 @@ axStatus	axFileSystem::removeDirT ( const T* src, bool recursive ) {
 
 	while( dir.next( e ) ) { 		
 
-		st = path.format( "{?}/{?}", src, e.filename );	if( !st ) return st;
+		st = path.format( "{?}/{?}", src, e.name );	if( !st ) return st;
 
 		if( e.isDir() ) {
 			st = removeDir( path, recursive );	if( !st ) return st;

@@ -52,8 +52,8 @@ public:
 
 	bool			isEmpty					() const { return buf_.size() == 0; }
 
-	int				cmp						( const T* sz ) const		{ return ax_strcmp( this->c_str(), sz ); }
-	int				cmpNoCase				( const T* sz ) const		{ return ax_strcasecmp( this->c_str(), sz ); }
+	int				cmp						( const T* sz ) const		{ return ax_strcmp( c_str(), sz ); }
+	int				cmpNoCase				( const T* sz ) const		{ return ax_strcasecmp( c_str(), sz ); }
 
 	bool			equals					( const T* sz ) const		{ return cmp(sz) == 0; }
 	bool			equalsNoCase			( const T* sz ) const		{ return cmpNoCase(sz) == 0; }
@@ -157,7 +157,7 @@ protected:
 	axStatus		_insertWithLength		( axSize pos, const T *src, axSize src_len );
 	
 private:
-	bool operator ==	( const T* sz ) const;	// please using equals()
+	bool operator ==	( const T* sz ) const;	// please using equals() to avoid  "abc" == str will compare the pointer rather than content
 	bool operator !=	( const T* sz ) const;	// please using equals()
 	bool operator <		( const T* sz ) const;	// please using cmp() < 0
 	bool operator >		( const T* sz ) const;	// please using cmp() > 0
