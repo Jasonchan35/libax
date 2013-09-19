@@ -21,11 +21,32 @@ void axFileStream::close() {
 	}
 }
 
-
 bool axFileStream::isValid() const {
     return p_ != NULL;
 }
 
+axStatus	axFileStream::openRead		( const char*    filename ) {
+	return openWithMode( filename, "rb" );
+}
+axStatus	axFileStream::openRead		( const wchar_t* filename ) {
+	return openWithMode( filename, L"rb" );
+}
+
+axStatus	axFileStream::openWrite		( const char*    filename, bool create_if_file_not_exists ) {
+	if( create_if_file_not_exists ) {
+		return openWithMode( filename, "wb" );
+	}else{
+		return openWithMode( filename, "r+b" );
+	}
+}
+
+axStatus	axFileStream::openWrite		( const wchar_t* filename, bool create_if_file_not_exists ) {
+	if( create_if_file_not_exists ) {
+		return openWithMode( filename, L"wb" );
+	}else{
+		return openWithMode( filename, L"r+b" );
+	}
+}
 
 axStatus axFileStream::readWholeFile ( axIStringA &out ) {
 	if( !p_ ) { assert(false); return axStatus_Std::not_initialized; }
@@ -164,7 +185,7 @@ axStatus axFileStream::readLine ( axIStringA &buf, axSize buf_max_size ) {
 }
 
 
-axStatus axFileStream::open( const wchar_t* filename, const wchar_t* mode ) {
+axStatus axFileStream::openWithMode( const wchar_t* filename, const wchar_t* mode ) {
 	close();
 	axStatus st;
 #ifdef _WIN32
@@ -180,7 +201,7 @@ axStatus axFileStream::open( const wchar_t* filename, const wchar_t* mode ) {
 }
 
 
-axStatus axFileStream::open( const char* filename, const char* mode ) {
+axStatus axFileStream::openWithMode( const char* filename, const char* mode ) {
 	close();
 	axStatus st;
 	

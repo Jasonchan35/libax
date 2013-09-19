@@ -13,8 +13,15 @@ public:
 	axFileStream();
 	~axFileStream();
 
-				axStatus	open			( const char*    filename, const char*	  mode =  "rb" );
-				axStatus	open			( const wchar_t* filename, const wchar_t* mode = L"rb" );
+				axStatus	openRead		( const char*    filename );
+				axStatus	openRead		( const wchar_t* filename );
+
+				axStatus	openWrite		( const char*    filename, bool create_if_file_not_exists );
+				axStatus	openWrite		( const wchar_t* filename, bool create_if_file_not_exists ); 
+
+				axStatus	openWithMode	( const char*    filename, const char*	  mode );
+				axStatus	openWithMode	( const wchar_t* filename, const wchar_t* mode );
+				
 				void		close			();
 
 				FILE*		asFILE			()	{ return p_; }

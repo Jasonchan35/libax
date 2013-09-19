@@ -3,7 +3,7 @@
 #define __axFileSystem_h__
 
 #include "axFile.h"
-
+#include "../string/axString_Array.h"
 
 //! \ingroup data_file_system
 //@{
@@ -80,6 +80,9 @@ public:
 	static	axStatus	getProcessFileDir	( axIStringA	&path_to_exe );
 	static	axStatus	getProcessFileDir	( axIStringW	&path_to_exe );
 
+	static	axStatus	getFileList			( axStringA_Array &outList, const char* path, bool includeSubDir );
+	static	axStatus	getDirList			( axStringA_Array &outList, const char* path, bool includeSubDir );
+	static	axStatus	getFileAndDirList	( axStringA_Array &outList, const char* path, bool includeSubDir );
 	
 private: 
 
