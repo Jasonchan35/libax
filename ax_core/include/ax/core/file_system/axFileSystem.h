@@ -53,8 +53,8 @@ public:
 	static	axStatus	makeDir				( const char*		dir, bool recursive = true );
 	static	axStatus	makeDir				( const wchar_t*    dir, bool recursive = true );
 
-	static	axStatus	copyDir				( const char*		src, const char*		dst );
-	static	axStatus	copyDir				( const wchar_t*    src, const wchar_t*		dst );
+	static	axStatus	copyDir				( const char*		src, const char*		dst, bool skipFileStartsWithDot );
+	static	axStatus	copyDir				( const wchar_t*    src, const wchar_t*		dst, bool skipFileStartsWithDot );
 
 	static	axStatus	isFileExists		( const char*    	file );
 	static	axStatus	isFileExists		( const wchar_t* 	file );

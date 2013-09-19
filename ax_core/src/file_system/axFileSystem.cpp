@@ -212,7 +212,7 @@ axStatus	axFileSystem::touchFile ( const char* file ) {
 	return 0;
 }
 
-axStatus	axFileSystem::copyDir	( const char*		src, const char*		dst ) {
+axStatus	axFileSystem::copyDir	( const char* src, const char* dst, bool skipFileStartsWithDot ) {
 	axStatus st;
 
 	axDir::Entry e;
@@ -223,13 +223,18 @@ axStatus	axFileSystem::copyDir	( const char*		src, const char*		dst ) {
 
 	_makeDir( dst );
 
-	while( dir.next( e ) ) { 		
+	while( dir.next( e ) ) {
+		if( skipFileStartsWithDot ) {
+			if( e.name.startsWith(".") ) continue;
+		}
+		if( e.name.equals(".")  ) continue;
+		if( e.name.equals("..") ) continue;
 
 		st = src_file.format("{?}/{?}", src, e.name );	if( !st ) return st;
 		st = dst_file.format("{?}/{?}", dst, e.name );	if( !st ) return st;
 
 		if( e.isDir() ) {
-			st = copyDir ( src_file, dst_file ); if( !st ) return st;
+			st = copyDir ( src_file, dst_file, skipFileStartsWithDot ); if( !st ) return st;
 		}else {
 			st = copyFile( src_file, dst_file ); if( !st ) return st;
 		}
@@ -239,12 +244,12 @@ axStatus	axFileSystem::copyDir	( const char*		src, const char*		dst ) {
 	return 0;
 }
 
-axStatus	axFileSystem::copyDir	( const wchar_t*    src, const wchar_t*		dst ) {
+axStatus	axFileSystem::copyDir	( const wchar_t*    src, const wchar_t*		dst, bool skipFileStartsWithDot ) {
 	axStatus st;
 	axTempStringA src_, dst_;
 	st = src_.set( src );	if( !st ) return st;
 	st = dst_.set( dst );	if( !st ) return st;
-	return copyDir( src_, dst_ );
+	return copyDir( src_, dst_, skipFileStartsWithDot );
 }
 
 
