@@ -4,7 +4,7 @@
 #include "../common/ax_common.h"
 #include "../time/axTimeStamp.h"
 
-class axFile {
+class axFile : public axNonCopyable {
 public:
 	axFile	();
 	~axFile	();
