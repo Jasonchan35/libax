@@ -47,8 +47,8 @@ public:
 	static	axStatus	touchFile			( const char*		file );
 	static	axStatus	touchDir			( const char*		dir  );
 
-	static	axStatus	removeDir			( const char*		dir, bool recursive = false );
-	static	axStatus	removeDir			( const wchar_t*    dir, bool recursive = false );
+	static	axStatus	removeDir			( const char*		dir, bool recursive );
+	static	axStatus	removeDir			( const wchar_t*    dir, bool recursive );
 	
 	static	axStatus	makeDir				( const char*		dir, bool recursive = true );
 	static	axStatus	makeDir				( const wchar_t*    dir, bool recursive = true );
@@ -63,7 +63,7 @@ public:
 	static	axStatus	isDirExists			( const wchar_t* 	file );
 
 	static	axStatus	copyFile			( const wchar_t* 	src, const wchar_t* dst );
-	static	axStatus	copyFile			( const char* 		src, const char* dst );
+	static	axStatus	copyFile			( const char* 		src, const char* 	dst );
 
 	static	axStatus	setCurrentDir		( const char*	 	path );
 	static	axStatus	setCurrentDir		( const wchar_t* 	path );
