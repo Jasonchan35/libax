@@ -140,25 +140,6 @@ axStatus	axApp::getAppResourceDir	( axIStringW &out ) {
 	return 0;
 }
 
-
-axStatus	axApp::shellOpenFile( const char *file ) {
-	axStatus st;
-	axTempStringW	cmd;
-	st = cmd.set( file );		if( !st ) return st;
-	ShellExecute( NULL, L"open", cmd, NULL, NULL, SW_SHOW );
-	return 0;
-}
-
-axStatus	axApp::showFileInFinder( const char *path ) {
-	axStatus st;
-
-	axTempStringW	cmd;
-	st = cmd.set( path );		if( !st ) return st;
-	ShellExecute( NULL, L"explore", cmd, NULL, NULL, SW_SHOW );
-	return 0;
-
-}
-
 bool axApp::isAltKeyDown() {
 	return GetAsyncKeyState( VK_MENU ) != 0;
 }
@@ -185,19 +166,6 @@ bool axApp::isShiftKeyDown() {
 #endif
 
 #if axOS_MacOSX 
-
-axStatus	axApp::shellOpenFile( const char *file ) {
-	BOOL b = [[NSWorkspace sharedWorkspace] openFile: ax_toNSString( file ) ];
-	if( !b ) return -1;
-	return 0;
-}
-
-axStatus	axApp::showFileInFinder( const char *path ) {
-	
-	BOOL b  = [ [NSWorkspace sharedWorkspace] selectFile: ax_toNSString( path )  inFileViewerRootedAtPath:@""];
-	if( !b ) return -1;
-	return 0;
-}
 
 bool axApp::isAltKeyDown() {
 	return (kCGEventFlagMaskAlternate == (CGEventSourceFlagsState(kCGEventSourceStateCombinedSessionState) & NSDeviceIndependentModifierFlagsMask));

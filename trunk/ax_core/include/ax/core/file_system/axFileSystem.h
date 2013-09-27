@@ -84,6 +84,10 @@ public:
 	static	axStatus	getDirList			( axStringA_Array &outList, const char* path, bool includeSubDir );
 	static	axStatus	getFileAndDirList	( axStringA_Array &outList, const char* path, bool includeSubDir );
 	
+	static	axStatus	shellOpenFile		( const char *file );
+	static	axStatus	showFileInFinder	( const char *path );
+		
+	
 private: 
 
 	template< class T > static	axStatus 	makeDirT	( const T* dir, bool recursive );
