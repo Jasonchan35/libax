@@ -14,8 +14,7 @@
 template<class T>
 class axRange {
 public:
-	axRange() : start(0), count(0) {}
-	axRange( T _start, T _count ) : start(_start), count(_count) {}
+	axRange( T _start=ax_type_min<T>(), T _count=ax_type_max<T>() ) : start(_start), count(_count) {}
 
 	T	last	() const	{ return start + count -1; }
 	T	end		() const	{ return start + count; }
