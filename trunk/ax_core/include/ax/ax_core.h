@@ -7,7 +7,7 @@
 
 #include "core/data_structure/axLocalBuf.h"
 #include "core/data_structure/axAutoPtr.h"
-#include "core/data_structure/axWeakPtr.h"
+#include "core/data_structure/axRef.h"
 #include "core/data_structure/axDList.h"
 #include "core/data_structure/axTinyList.h"
 #include "core/data_structure/axArray_types.h"
@@ -49,7 +49,7 @@
 #include "core/database/axDBStmt.h"
 #include "core/database/axDBTableAccessor.h"
 
-#include "core/data_structure/axObjectRef.h"
+#include "core/data_structure/axRef.h"
 
 #include "core/other/axSerializer_Helper.h"
 #include "core/other/axJson.h"
