@@ -9,28 +9,28 @@
 #ifndef ax_core_axTuple_h
 #define ax_core_axTuple_h
 
-template<class T0, class T1, class T2, class T3>
-class axTuple <T0,T1,T2,T3> {
+template<class A, class B, class C, class D>
+class axTuple <A,B,C,D> {
 public:
-	T0	v0;
-	T1	v1;
-	T2	v2;
-	T3	v3;
+	A	a;
+	B	b;
+	C	c;
+	D	d;
 };
 
-template<class T0, class T1, class T2>
-class axTuple <T0,T1,T2,void> {
+template<class A, class B, class C>
+class axTuple <A,B,C,void> {
 public:
-	T0	v0;
-	T1	v1;
-	T2	v2;
+	A	a;
+	B	b;
+	C	c;
 };
 
-template<class T0, class T1>
-class axTuple <T0,T1,void,void> {
+template<class A, class B>
+class axTuple <A,B,void,void> {
 public:
-	T0	v0;
-	T1	v1;
+	A	a;
+	B	b;
 };
 
 
