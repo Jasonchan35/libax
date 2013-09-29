@@ -2,6 +2,7 @@
 #define __axTinyList_h__
 
 #include "../common/ax_common.h"
+#include "../string/axStringFormat.h"
 
 class axStringFormat;
 class axSerializer;

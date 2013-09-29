@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9606292617F804FE0010B9D3 /* axObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 9606292517F804FE0010B9D3 /* axObject.h */; };
 		9632177B155EF2000061BE21 /* axDBConn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96321751155EF2000061BE21 /* axDBConn.cpp */; };
 		9632177C155EF2000061BE21 /* axDBStmt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96321752155EF2000061BE21 /* axDBStmt.cpp */; };
 		9632177D155EF2000061BE21 /* axDir.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96321754155EF2000061BE21 /* axDir.cpp */; };
@@ -171,6 +172,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9606292517F804FE0010B9D3 /* axObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axObject.h; sourceTree = "<group>"; };
 		9616E4D9161729D800AF9F80 /* axConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axConnection.h; sourceTree = "<group>"; };
 		96321751155EF2000061BE21 /* axDBConn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDBConn.cpp; sourceTree = "<group>"; };
 		96321752155EF2000061BE21 /* axDBStmt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDBStmt.cpp; sourceTree = "<group>"; };
@@ -318,7 +320,6 @@
 		964669A517E594FF00653B01 /* axLocalBuf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axLocalBuf.h; sourceTree = "<group>"; };
 		964CADB11649783100EADA03 /* ax_array.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ax_array.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9659F0F6164C0251005F86FC /* axRange.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRange.h; sourceTree = "<group>"; };
-		966290EC17F724320086268D /* axObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axObject.h; sourceTree = "<group>"; };
 		966290ED17F724F10086268D /* axObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axObject.cpp; sourceTree = "<group>"; };
 		96672BA916518F1C007CB393 /* axHumanString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axHumanString.h; sourceTree = "<group>"; };
 		96672BF91652E0C4007CB393 /* axTuple.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTuple.h; sourceTree = "<group>"; };
@@ -524,7 +525,6 @@
 				9640E04A16009DA400F9D037 /* axTypeList_int.h */,
 				9640E04B16009DA400F9D037 /* axTypeList_uint.h */,
 				9640E04C16009DA400F9D037 /* axTypeOf.h */,
-				966290EC17F724320086268D /* axObject.h */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -626,6 +626,7 @@
 		9640E07C16009DA400F9D037 /* other */ = {
 			isa = PBXGroup;
 			children = (
+				9606292517F804FE0010B9D3 /* axObject.h */,
 				9640E07D16009DA400F9D037 /* ax_objc.h */,
 				96672BF91652E0C4007CB393 /* axTuple.h */,
 				9640E07E16009DA400F9D037 /* axEventHook.h */,
@@ -916,6 +917,7 @@
 				96D017F5160E4E6500A2682B /* axFilePath.h in Headers */,
 				964669A617E594FF00653B01 /* axLinkedPtrArray.h in Headers */,
 				964669A717E594FF00653B01 /* axLocalBuf.h in Headers */,
+				9606292617F804FE0010B9D3 /* axObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
