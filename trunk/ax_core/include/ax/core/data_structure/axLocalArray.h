@@ -20,7 +20,7 @@ public:
 
 	virtual	~axLocalArray();
 
-			B & asInterface() { return (B&)*this; }
+			B & asInterface() 		{ return (B&)*this; }
 	const	B & asInterface() const	{ return (B&)*this; }
 
 private:

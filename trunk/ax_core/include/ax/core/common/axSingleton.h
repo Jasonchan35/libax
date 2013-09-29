@@ -15,32 +15,23 @@
 template<class T>
 class axSingleton {
 public:
+	static	T&			instance() { return instance_.get(); }
+
+private:
 	class Instance {
 	public:
-				T* operator->()			{ return  get(); }
-		const	T* operator->() const	{ return  get(); }
-		
-				T& operator* ()			{ return *get(); }
-		const	T& operator* () const	{ return *get(); }
-		
-		operator		T*()			{ return  get(); }
-		operator const	T*() const		{ return  get(); }
-
-	private:
-		T* get() const {
+		T& get() {
 			if( ! p ) { //might init by other EXE/DLL
 				static T t;
-				ax_const_cast(p) = &t;
+				p = &t;
 			}
-			return p;
+			return *p;
 		}
-
 		T* volatile p; // will be init to zero cause static, and also share between DLL/EXE so don't try to init to NULL here
 	};
-	static 	Instance 	instance;
-private:
+	static 	Instance 	instance_;
 };
 
-template<class T> typename axSingleton<T>::Instance axSingleton<T>::instance;
+template<class T> typename axSingleton<T>::Instance axSingleton<T>::instance_;
 
 #endif
