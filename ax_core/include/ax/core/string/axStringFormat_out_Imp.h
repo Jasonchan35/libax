@@ -5,6 +5,7 @@
 #include "../common/axTypeOf.h"
 #include "axStringFormat.h"
 #include "ax_str_to.h"
+#include "../data_structure/axPtr.h"
 
 //! \ingroup base_string
 //@{
@@ -28,6 +29,13 @@ axStatus axStringFormat_out( axStringFormat &f, char	value );
 #undef axTYPE_LIST
 
 axStatus axStringFormat_out( axStringFormat &f, bool value );
+
+template<class T> inline
+axStatus axStringFormat_out( axStringFormat &f, const axPtr<T> &p ) {
+	if( !p ) return f.out("null");
+	return f.out( *p );
+}
+
 
 //@}
 
