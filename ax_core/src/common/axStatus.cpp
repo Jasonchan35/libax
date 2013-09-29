@@ -17,7 +17,7 @@ const char* axStatus :: c_str() const {
 		case kEOF:		return "EOF";
 	}
 
-	const char* sz = axStatus_ModuleList::instance->c_str(code_);
+	const char* sz = axStatus_ModuleList::instance().c_str(code_);
 	if( sz ) return sz;
 	
 	return code_ >= 0 ? "OK" : "Error";
@@ -26,7 +26,7 @@ const char* axStatus :: c_str() const {
 //======================
 
 axStatus_Module::axStatus_Module( int start ) {
-	axStatus_ModuleList::instance->registerModule( this, start );
+	axStatus_ModuleList::instance().registerModule( this, start );
 }
 
 //======================

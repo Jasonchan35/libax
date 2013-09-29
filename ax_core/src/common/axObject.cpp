@@ -15,7 +15,7 @@ class axObject::Type : public axType, public axSingleton< axObject::Type > {
 };
 
 const	axType &	axObject::staticType	() {
-	return *Type::instance;
+	return Type::instance();
 }
 
 bool	axObject::isKindOf	( const axType & type ) const {

@@ -19,7 +19,7 @@ public:
 	virtual void	onWillRemoveFromList() {}
 };
 
-class axRefObject {
+class axReferencee {
 public:
 	axTinyList< axRefBase >	_refList_;
 //	virtual	axStatus	onClone( void* & obj ) = 0;

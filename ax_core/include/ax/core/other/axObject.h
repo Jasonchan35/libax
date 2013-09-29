@@ -41,7 +41,7 @@ public: \
 		if( &type == &( staticType() ) ) return true; \
 		return B::isKindOf(type); \
 	} \
-	static	const	axType &	staticType	() 		 { return *Type::instance; } \
+	static	const	axType &	staticType	() 		 { return Type::instance(); } \
 	virtual	const	axType &	type		() const { return staticType(); } \
 	\
 //-----------
