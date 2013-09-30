@@ -19,34 +19,37 @@ public:
 
 class A {
 public:
-	axRefList( B, inA )	b_list;
+	axRefList( B, inA, list );
 };
 
 A a;
 B b;
 
-a.b_list.append( & b.inA );
+a.list.append( & b.inA );
 
 
 */
 
-#define	 axRefNode( OBJ, T ) \
-	class axRefNode_##T : public axDListNode< axRefNode_##T, false > { \
+#define	 axRefNode( OBJ, NODE ) \
+	class NODE : public axDListNode< NODE, false > { \
 	public: \
-/*		friend class axJOIN_WORD3( axRefList_, OBJ, T ); */ \
-		operator OBJ&	() { return obj(); } \
-		OBJ&	obj		() { return ax_class_of( &OBJ::T, this ); } \
+/*		friend class axJOIN_WORD3( axRefList_, OBJ, NODE ); */ \
+		OBJ&	obj		() { return ax_class_of( &OBJ::axRefNode_##NODE, this ); } \
 	}; \
-	axRefNode_##T	T; \
+	NODE	axRefNode_##NODE; \
 //-----
 
-#define	axRefList( OBJ, T, ListName ) \
-	class axJOIN_WORD3( axRefList_, OBJ, _##T ) : public axDList< OBJ::axRefNode_##T > {\
-		typedef axDList< OBJ::axRefNode_##T > B; \
+#define	axRefList( OBJ, NODE, ListName ) \
+	class axJOIN_WORD( OBJ, NODE ) : public axDList< OBJ::NODE > {\
+		typedef axDList< OBJ::NODE > B; \
 	public: \
-		OBJ*	head() { return B::head() ? &( B::head()->obj() ) : NULL; } \
+		void	insert	( OBJ * obj ) { B::insert( &(obj->axRefNode_##NODE) ); } \
+		void	append	( OBJ * obj, OBJ * before = nullptr ) { \
+			B::append( &(obj->axRefNode_##NODE), before ? &(before->axRefNode_##NODE) : nullptr ); \
+		} \
 	}; \
-	axJOIN_WORD3( axRefList_, OBJ, _##T )	ListName; \
+	axJOIN_WORD( OBJ, NODE )	ListName; \
 //-----
+
 
 #endif
