@@ -770,19 +770,19 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\include\ax\core\data_structure\axRef.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\ax\core\data_structure\axRefList.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\ax\core\data_structure\axSharedPtr.h"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\include\ax\core\data_structure\axTinyList.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\data_structure\axTinyMap.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\ax\core\data_structure\axWeakPtr.h"
 					>
 				</File>
 			</Filter>
