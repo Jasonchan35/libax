@@ -7,13 +7,14 @@
 
 #include "core/data_structure/axLocalBuf.h"
 #include "core/data_structure/axAutoPtr.h"
-#include "core/data_structure/axRef.h"
 #include "core/data_structure/axDList.h"
 #include "core/data_structure/axTinyList.h"
 #include "core/data_structure/axArray_types.h"
 #include "core/data_structure/axHashTable.h"
 #include "core/data_structure/axChunkArray.h"
 #include "core/data_structure/axLinkedPtrArray.h"
+#include "core/data_structure/axRef.h"
+#include "core/data_structure/axRefList.h"
 
 #include "core/time/axDateTime.h"
 #include "core/time/axTimeStamp.h"
