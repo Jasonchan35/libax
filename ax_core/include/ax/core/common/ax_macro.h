@@ -9,7 +9,9 @@
 	for( T *(V)=(ARR).size()?&(ARR).last():NULL, *axEachEnd=(ARR).size()?(ARR).ptr():(ARR).ptr()+1; (V)>=axEachEnd; (V)-- )
 //-----
 
-#define axJOIN_WORD( w0, w1 )		w0##w1
+#define axJOIN_WORD(w0,w1)		w0##w1
+
+#define axJOIN_WORD3(w0,w1,w2)	w0 ## w1 ## w2
 
 //TODO
 //#define ax_release_assert(_Expression) { if( !(_Expression) ) _ax_assert(#_Expression, __FILE__, __LINE__ ); }
