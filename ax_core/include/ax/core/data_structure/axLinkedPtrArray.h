@@ -1,6 +1,6 @@
 #ifndef __axLinkedPtrArray_h__
 #define __axLinkedPtrArray_h__
-
+/*
 template<class T > class axLinkedPtrArray;
 
 template<class T>
@@ -65,5 +65,5 @@ public:
 private:
 	axArray<T*>	arr_;
 };
-
+*/
 #endif //__axLinkedPtrArray_h__
