@@ -331,6 +331,7 @@
 		96E99BDF16DA6BE1004E7C2F /* axClampedValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axClampedValue.h; sourceTree = "<group>"; };
 		96E99BE116DA6FBD004E7C2F /* axLimitedValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axLimitedValue.h; sourceTree = "<group>"; };
 		96E99BE616DA73F7004E7C2F /* ax_linear_algebra.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ax_linear_algebra.cpp; sourceTree = "<group>"; };
+		96F892D117FA12240052E553 /* axRefList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRefList.h; sourceTree = "<group>"; };
 		EA15F6C81544053B00356C7C /* ax_core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_core.h; sourceTree = "<group>"; };
 		EA1DC90C161DDC9200FFD681 /* axVec2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axVec2.cpp; sourceTree = "<group>"; };
 		EA1FB14D16CA23FD00C4853B /* axTimeStamp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axTimeStamp.cpp; sourceTree = "<group>"; };
@@ -533,23 +534,24 @@
 		9640E04D16009DA400F9D037 /* data_structure */ = {
 			isa = PBXGroup;
 			children = (
-				964669A417E594FF00653B01 /* axLinkedPtrArray.h */,
-				964669A517E594FF00653B01 /* axLocalBuf.h */,
+				964CADB11649783100EADA03 /* ax_array.h */,
 				9640E04E16009DA400F9D037 /* axArray.h */,
-				9616E4D9161729D800AF9F80 /* axConnection.h */,
 				9640E05016009DA400F9D037 /* axArray_types.h */,
 				9640E05116009DA400F9D037 /* axAutoPtr.h */,
 				9640E05216009DA400F9D037 /* axChunkArray.h */,
+				9616E4D9161729D800AF9F80 /* axConnection.h */,
 				9640E05316009DA400F9D037 /* axCopyOnWrite.h */,
 				9640E05416009DA400F9D037 /* axDList.h */,
 				9640E05516009DA400F9D037 /* axExternalArray.h */,
 				9640E05616009DA400F9D037 /* axHashTable.h */,
-				964CADB11649783100EADA03 /* ax_array.h */,
 				9640E05716009DA400F9D037 /* axIArray.h */,
+				964669A417E594FF00653B01 /* axLinkedPtrArray.h */,
 				9640E05816009DA400F9D037 /* axLocalArray.h */,
+				964669A517E594FF00653B01 /* axLocalBuf.h */,
 				9640E05916009DA400F9D037 /* axPtr.h */,
-				9640E05A16009DA400F9D037 /* axSharedPtr.h */,
 				9635600B1734AD2700C6C9A0 /* axRef.h */,
+				96F892D117FA12240052E553 /* axRefList.h */,
+				9640E05A16009DA400F9D037 /* axSharedPtr.h */,
 				9640E05B16009DA400F9D037 /* axTinyList.h */,
 			);
 			path = data_structure;
