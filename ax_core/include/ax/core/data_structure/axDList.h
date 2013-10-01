@@ -80,7 +80,9 @@ public:
 	axALWAYS_INLINE(	axStatus	appendByCopy	( const axDList<T> &src ) );
 	axALWAYS_INLINE(	axStatus	copy			( const axDList<T> &src ) ) { clear(); return appendByCopy( src ); }
 		
-	axALWAYS_INLINE(	void		remove			( T* node, bool call_onWillRemoveFromList = true ) );
+	axALWAYS_INLINE(	void		remove			( T* node ) );
+	axALWAYS_INLINE(	void		removeAll		() );
+	
 	axALWAYS_INLINE(	void		clear			() );
 	
 	axALWAYS_INLINE(	axStatus	serialize_io	( axSerializer		&se ) );
@@ -195,14 +197,14 @@ void axDList<T>::append( T *node, T *before ) {
 }
 
 template<class T> inline
-void axDList<T>::remove( T *node, bool call_onWillRemoveFromList ) {
+void axDList<T>::remove( T *node ) {
 	if( !node )	{ assert( false ); return; }
 	if( node->list() != this ) {
 		assert( false ); return;
 	}  // node is not belongs to this list !!
 
 	_size_--;
-	if( call_onWillRemoveFromList ) node->onWillRemoveFromList();
+	node->onWillRemoveFromList();
 
 	if( node->_prev_ )
 		node->_prev_->_next_ = node->_next_;
@@ -216,6 +218,13 @@ void axDList<T>::remove( T *node, bool call_onWillRemoveFromList ) {
 
 	node->_prev_ = node->_next_ = NULL;
 	node->_list_ = NULL;
+}
+
+template<class T> inline
+void axDList<T>::removeAll() {
+	while( _head_ ) {
+		remove( _head_ );
+	}
 }
 
 template<class T> inline
