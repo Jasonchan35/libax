@@ -146,13 +146,13 @@ axStatus	axStringFormat::repeat( char ch, axSize len )	{
 	if( len == 0 ) return 0;
 	axStatus st;
 	if( strA_ ) {
-		strA_->reserve( strA_->size() + len );
+		strA_->incReserve( len );
 		for( axSize i=0; i<len; i++ ) {
 			st = strA_->append( ch );		if( !st ) return st;
 		}
 	}
 	if( strW_ ) {
-		strW_->reserve( strW_->size() + len );
+		strW_->incReserve( len );
 		for( axSize i=0; i<len; i++ ) {
 			st = strW_->append( ch );		if( !st ) return st;
 		}
@@ -168,13 +168,13 @@ axStatus	axStringFormat::repeat( wchar_t ch, axSize len )	{
 		char utf8[4] ;
 		int utf8_len = ax_wchar_to_utf8( utf8, 4, ch );
 		utf8[ utf8_len ] = 0;
-		strA_->reserve( strA_->size() + utf8_len * len );
+		strA_->incReserve( utf8_len * len );
 		for( axSize i=0; i<len; i++ ) {
 			st = strA_->append( utf8 );		if( !st ) return st;
 		}
 	}
 	if( strW_ ) {
-		strW_->reserve( strW_->size() + len );
+		strW_->incReserve( len );
 		for( axSize i=0; i<len; i++ ) {
 			st = strW_->append( ch );		if( !st ) return st;
 		}

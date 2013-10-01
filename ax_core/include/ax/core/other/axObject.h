@@ -14,44 +14,63 @@
 class axType;
 
 class axObject : public axNonCopyable {
-public:
 	typedef	axObject		CLASS;
+public:
 
-	axObject();
-	virtual	~axObject();
+	virtual	~axObject() {}
 
 	template<class T> bool	cast	( 		T* &ptr );
 	template<class T> bool	cast	( const T* &ptr ) const;
 
-	class Type;
-	static	const	axType &	staticType	();
-	virtual	const	axType &	type		() const { return staticType(); }
-	virtual			bool		isKindOf	( const axType & type ) const;
+	class TypeImp;
+	static	axType	staticType	();
+	virtual	axType	type		() const;
+	virtual	bool	isKindOf	( const axType & type ) const;
 };
 
 #define axObjectDef(T,BASE) \
 	typedef BASE	B; \
 public: \
 	typedef	T		CLASS; \
-	class Type : public axType, public axSingleton< Type > { \
+	class TypeImp : public axTypeImp, public axSingleton< TypeImp > { \
 		static	const char* staticName	() 			{ return #T; } \
 		virtual	const char* name		() const	{ return staticName(); } \
 	}; \
 	virtual	bool	isKindOf ( const axType & type ) const { \
-		if( &type == &( staticType() ) ) return true; \
+		if( type == staticType() ) return true; \
 		return B::isKindOf(type); \
 	} \
-	static	const	axType &	staticType	() 		 { return Type::instance(); } \
-	virtual	const	axType &	type		() const { return staticType(); } \
+	static	axType 	staticType	() 		 { return axType( & TypeImp::instance() ); } \
+	virtual	axType	type		() const { return staticType(); } \
 	\
 //-----------
 
-
-class axType : public axObject {
+class axTypeImp : public axObject {
 public:
 	static	const char* staticName	() 			{ return "Undefined"; }
 	virtual	const char*	name		() const	{ return staticName(); }
 };
+
+
+class axType : public axObject {
+	axObjectDef( axType, axObject );
+public:
+	axType( const axType & src ) : p_(src.p_) {}
+	axType( const axTypeImp* p = nullptr ) : p_(p) {}
+
+	const char*	name	() const	{ return p_ ? p_->name() : "null"; }
+
+	operator	bool 	() const	{ return p_ != nullptr; }
+	
+	void operator= ( const axType & a ) { p_ = a.p_; }
+
+	bool operator==( const axType & a ) const	{ return p_ == a.p_; }
+	bool operator!=( const axType & a ) const	{ return p_ != a.p_; }
+
+private:
+	axPtr< const axTypeImp >	p_;
+};
+
 
 template<class T> inline
 bool axObject::cast ( T* &ptr ) {
@@ -68,6 +87,32 @@ template<class T> inline
 bool axObject::cast ( const T* &ptr ) const {
 	return cast( (T*&)ptr );
 }
+
+
+//-----------
+
+class axObject::TypeImp : public axTypeImp, public axSingleton< axObject::TypeImp > {
+	static	const char* staticName	() 			{ return "axObject"; }
+	virtual	const char* name		() const	{ return staticName(); }
+};
+
+inline
+axType axObject::staticType	() {
+	return axType(  & TypeImp::instance() );
+}
+
+inline
+axType	axObject::type	() const {
+	return staticType();
+}
+
+inline
+bool	axObject::isKindOf	( const axType & type ) const {
+	if( type == staticType() ) return true;
+	return false;
+}
+
+
 
 
 #endif

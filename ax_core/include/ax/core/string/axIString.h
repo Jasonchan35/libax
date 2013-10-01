@@ -41,6 +41,7 @@ public:
 
 	axStatus		resize					( axSize new_size, bool keep_data = true );
 	axStatus		reserve					( axSize new_size );
+	axStatus		incReserve				( axSize n ) 	{ return reserve( size() + n ); }
 
 	axStatus		incSize					( axSize n, bool keep_data = true )		{ return resize( size() + n, keep_data ); }
 	axStatus		decSize					( axSize n, bool keep_data = true )		{ return resize( size() - n, keep_data ); }
