@@ -51,7 +51,7 @@ public:
 	operator		T* 	()			{ return p_; }
 	operator const	T*	() const	{ return p_; }
 	
-	template<class S>	void	operator= 	( axRef<S> & src ) { ref( ax_const_cast( src.ptr() ) ); }
+	template<class S>	void	operator= 	( axRef<S> & src ) 	{ ref( src.ptr() ); }
 			
 	template<class S>	bool	operator==	( const axRef<S> & src ) const { return p_ == src.p_; }
 	template<class S>	bool	operator!=	( const axRef<S> & src ) const { return p_ != src.p_; }
