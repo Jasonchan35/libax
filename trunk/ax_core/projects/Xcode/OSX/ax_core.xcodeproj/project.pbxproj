@@ -150,7 +150,6 @@
 		9640E12F1600A48000F9D037 /* axSerializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9640E12E1600A48000F9D037 /* axSerializer.cpp */; };
 		964669A617E594FF00653B01 /* axLinkedPtrArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 964669A417E594FF00653B01 /* axLinkedPtrArray.h */; };
 		964669A717E594FF00653B01 /* axLocalBuf.h in Headers */ = {isa = PBXBuildFile; fileRef = 964669A517E594FF00653B01 /* axLocalBuf.h */; };
-		966290EF17F724F10086268D /* axObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 966290ED17F724F10086268D /* axObject.cpp */; };
 		966A56C515F3BEF300012DCA /* axJson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 966A56C415F3BEF300012DCA /* axJson.cpp */; };
 		96D017F3160E4DA100A2682B /* axFilePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96D017F2160E4DA100A2682B /* axFilePath.cpp */; };
 		96D017F5160E4E6500A2682B /* axFilePath.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D017F4160E4E6500A2682B /* axFilePath.h */; };
@@ -322,7 +321,6 @@
 		964CADB11649783100EADA03 /* ax_array.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ax_array.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9651A86D17FA2B480054AB66 /* axRefArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRefArray.h; sourceTree = "<group>"; };
 		9659F0F6164C0251005F86FC /* axRange.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRange.h; sourceTree = "<group>"; };
-		966290ED17F724F10086268D /* axObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axObject.cpp; sourceTree = "<group>"; };
 		96672BA916518F1C007CB393 /* axHumanString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axHumanString.h; sourceTree = "<group>"; };
 		96672BF91652E0C4007CB393 /* axTuple.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTuple.h; sourceTree = "<group>"; };
 		966A56C415F3BEF300012DCA /* axJson.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axJson.cpp; sourceTree = "<group>"; };
@@ -766,7 +764,6 @@
 			children = (
 				96D0954F160F852E00FDA718 /* axStatus.cpp */,
 				963560061734A3B600C6C9A0 /* axSingleton.cpp */,
-				966290ED17F724F10086268D /* axObject.cpp */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -1048,7 +1045,6 @@
 				EAB125F816D3B733008E40D2 /* ax_utf8.cpp in Sources */,
 				96E99BE816DA73F7004E7C2F /* ax_linear_algebra.cpp in Sources */,
 				963560081734A3B600C6C9A0 /* axSingleton.cpp in Sources */,
-				966290EF17F724F10086268D /* axObject.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
