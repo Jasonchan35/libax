@@ -2,6 +2,7 @@
 #define __axPtr_h__
 
 #include "../common/axStatus.h"
+#include "../common/axObject.h"
 
 //! \ingroup base_data_structure
 //@{
@@ -38,6 +39,13 @@ public:
 private:
 	T* p_;
 };
+
+template<class T> inline
+bool axObject::cast ( axPtr<T> &ptr ) const {
+	T* tmp = nullptr;
+	cast(tmp);
+	ptr.ref(tmp);
+}
 
 //@}
 

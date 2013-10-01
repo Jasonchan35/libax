@@ -9,8 +9,6 @@
 #ifndef ax_core_axSingleton_h
 #define ax_core_axSingleton_h
 
-#include "../thread/axSpinLock.h"
-
 //cross EXE/DLL singleton
 template<class T>
 class axSingleton {

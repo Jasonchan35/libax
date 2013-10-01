@@ -4,6 +4,7 @@
 
 #include "../common/ax_utility.h"
 #include "../common/axStatus.h"
+#include "../common/axObject.h"
 
 template< class T > inline
 void ax_delete( T* p ) { delete p; }
@@ -54,6 +55,13 @@ public:
 private:
 	T* p_;
 };
+
+template<class T> inline
+bool axObject::cast ( axAutoPtr<T> &ptr ) const {
+	T* tmp = nullptr;
+	cast(tmp);
+	ptr.ref(tmp);
+}
 
 //@}
 
