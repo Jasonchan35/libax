@@ -68,7 +68,8 @@ public:
 	axExpandArgList1( axStatus, format,	const char*		/*fmt*/, const axStringFormat_Arg&, axStringFormat_ArgList )
 	axExpandArgList1( axStatus, format,	const wchar_t*	/*fmt*/, const axStringFormat_Arg&, axStringFormat_ArgList )
 	
-	axStringA_<64>		opt;
+	axStringA_<64>	opt;
+	axSize			indent;
 private:
 	template<class T>
 	axStatus	_processT( const T*    fmt, const ArgList &list );
