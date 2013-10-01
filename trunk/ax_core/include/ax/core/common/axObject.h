@@ -9,9 +9,10 @@
 #ifndef ax_core_axType_h
 #define ax_core_axType_h
 
-#include "../data_structure/axRef.h"
-
 class axType;
+template<class T>	class axPtr;
+template<class T>	class axRef;
+template<class T>	class axAutoPtr;
 
 class axObject : public axNonCopyable {
 	typedef	axObject		CLASS;
@@ -21,6 +22,10 @@ public:
 
 	template<class T> bool	cast	( 		T* &ptr );
 	template<class T> bool	cast	( const T* &ptr ) const;
+
+	template<class T> bool	cast	( axPtr<T> & ptr ) const;
+	template<class T> bool	cast	( axRef<T> & ptr ) const;
+	template<class T> bool	cast	( axAutoPtr<T> & ptr ) const;
 
 	class TypeImp;
 	static	axType	staticType	();
@@ -51,7 +56,12 @@ public:
 	virtual	const char*	name		() const	{ return staticName(); }
 };
 
+/*!	TypeINfo
 
+The reason why not using C++ RTTI
+- no option to disable RTTI for specify class by security reason, e.g. network protocol package
+
+*/
 class axType : public axObject {
 	axObjectDef( axType, axObject );
 public:
@@ -68,17 +78,17 @@ public:
 	bool operator!=( const axType & a ) const	{ return p_ != a.p_; }
 
 private:
-	axPtr< const axTypeImp >	p_;
+	const axTypeImp*	p_;
 };
 
 
 template<class T> inline
 bool axObject::cast ( T* &ptr ) {
-	if( this != NULL && isKindOf( T::staticType() ) ) {
+	if( this != nullptr && isKindOf( T::staticType() ) ) {
 		ptr = (T*)this;
 		return true;
 	}else{
-		ptr = NULL;
+		ptr = nullptr;
 		return false;
 	}
 }

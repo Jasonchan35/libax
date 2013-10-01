@@ -74,6 +74,13 @@ private:
 	axPtr<T> p_;
 };
 
+template<class T> inline
+bool axObject::cast ( axRef<T> &ptr ) const {
+	T* tmp = nullptr;
+	cast(tmp);
+	ptr.ref(tmp);
+}
+
 template <class T> inline
 axStatus	axRef<T> :: newObject()	{
 	axStatus 	st;
