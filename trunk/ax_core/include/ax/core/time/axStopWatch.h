@@ -77,7 +77,7 @@ double axStopWatch::get() const {
 	if( pause_ ) {
 		return pauseAccumulate_;
 	}else{
-		updateTime_( ax_this->get_ );
+		updateTime_( ax_const_cast(this)->get_ );
 		return diff_( get_, start_ ) + pauseAccumulate_;
 	}
 }

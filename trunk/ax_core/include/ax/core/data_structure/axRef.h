@@ -76,9 +76,8 @@ private:
 
 template<class T> inline
 bool axObject::cast ( axRef<T> &ptr ) const {
-	T* tmp = nullptr;
-	cast(tmp);
-	ptr.ref(tmp);
+	ptr.ref( cast<T>() );
+	return ptr;
 }
 
 template <class T> inline
