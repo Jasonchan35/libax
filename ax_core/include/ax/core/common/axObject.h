@@ -9,6 +9,8 @@
 #ifndef ax_core_axType_h
 #define ax_core_axType_h
 
+#include "ax_utility.h"
+
 class axType;
 template<class T>	class axPtr;
 template<class T>	class axRef;
@@ -20,12 +22,15 @@ public:
 
 	virtual	~axObject() {}
 
-	template<class T> bool	cast	( 		T* &ptr );
-	template<class T> bool	cast	( const T* &ptr ) const;
+	template<class T> T*		cast	();
+	template<class T> const T*	cast	() const					{ return ax_const_cast(this)->cast<T>(); }
+	
+	template<class T> bool	cast	( 		T* 		& ptr )			{ ptr=cast<T>(); return ptr; }
+	template<class T> bool	cast	( const T* 		& ptr ) const	{ ptr=cast<T>(); return ptr; }
 
-	template<class T> bool	cast	( axPtr<T> & ptr ) const;
-	template<class T> bool	cast	( axRef<T> & ptr ) const;
-	template<class T> bool	cast	( axAutoPtr<T> & ptr ) const;
+	template<class T> bool	cast	( axPtr<T> 		& ptr ) const;
+	template<class T> bool	cast	( axRef<T> 		& ptr ) const;
+	template<class T> bool	cast	( axAutoPtr<T> 	& ptr ) const;
 
 	class TypeImp;
 	static	axType	staticType	();
@@ -83,19 +88,12 @@ private:
 
 
 template<class T> inline
-bool axObject::cast ( T* &ptr ) {
+T* axObject::cast () {
 	if( this != nullptr && isKindOf( T::staticType() ) ) {
-		ptr = (T*)this;
-		return true;
+		return (T*)this;
 	}else{
-		ptr = nullptr;
-		return false;
+		return nullptr;
 	}
-}
-
-template<class T> inline
-bool axObject::cast ( const T* &ptr ) const {
-	return cast( (T*&)ptr );
 }
 
 

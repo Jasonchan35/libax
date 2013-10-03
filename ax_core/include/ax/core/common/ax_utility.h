@@ -13,8 +13,6 @@
 template<class T> inline T* ax_const_cast( const T* v ) { return const_cast<T*>(v); }
 template<class T> inline T& ax_const_cast( const T& v ) { return const_cast<T&>(v); }
 
-#define	ax_this	ax_const_cast(this)
-
 #define ax_offsetof_macro(st, m) \
 	((size_t) ( (char *)&((st *)0)->*m - (char *)0 ))
 
