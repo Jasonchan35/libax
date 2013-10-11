@@ -45,6 +45,18 @@ inline axStatus  axStringFormat_out( axStringFormat &f, void* p ) {
 }
 
 template<class T> inline
+axStatus axStringFormat_out( axStringFormat &f, const T* value ) {
+	if( ! value ) return axStringFormat_out( f, nullptr );
+	return value->toStringFormat(f);
+}
+
+template<class T> inline
+axStatus axStringFormat_out( axStringFormat &f, T* value ) {
+	if( ! value ) return axStringFormat_out( f, nullptr );
+	return value->toStringFormat(f);
+}
+
+template<class T> inline
 axStatus axStringFormat_out( axStringFormat &f, const T& value ) {
 	return value.toStringFormat( f );
 	//when compiler error here:

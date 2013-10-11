@@ -4,12 +4,17 @@ template< class T > axStatus axStringFormat_out_NumberT( axStringFormat &f, T va
 
 //pointer
 axStatus axStringFormat_out( axStringFormat &f, const void* p ) {
+
 #ifdef axCPU_LP32
+	if( p == nullptr ) return f.format("{?:8}", "nullptr" );
 	f.opt.set( "08X" );
 	return axStringFormat_out_NumberT( f, (uint32_t)(uintptr_t)p );
+
 #elif axCPU_LP64
+	if( p == nullptr ) return f.format("{?:16}", "nullptr" );
 	f.opt.set( "016X" );
 	return axStringFormat_out_NumberT( f, (uint64_t)(uintptr_t)p );
+
 #else
 	#error
 #endif
