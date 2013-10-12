@@ -379,18 +379,18 @@
 		9632174E155EF2000061BE21 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				EAC3A06316C8CB5B009F1667 /* time */,
 				96D0954D160F852000FDA718 /* common */,
-				9640E1321600A9A100F9D037 /* string */,
-				966A56C315F3BEF300012DCA /* other */,
 				96321750155EF2000061BE21 /* database */,
 				96321753155EF2000061BE21 /* file_system */,
 				96321759155EF2000061BE21 /* math */,
 				96321764155EF2000061BE21 /* net */,
+				966A56C315F3BEF300012DCA /* other */,
 				96321767155EF2000061BE21 /* parser */,
 				9632176A155EF2000061BE21 /* pch */,
+				9640E1321600A9A100F9D037 /* string */,
 				9632176D155EF2000061BE21 /* system */,
 				96321776155EF2000061BE21 /* thread */,
+				EAC3A06316C8CB5B009F1667 /* time */,
 			);
 			name = src;
 			path = ../../../src;
