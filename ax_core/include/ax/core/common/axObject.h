@@ -32,9 +32,9 @@ public:
 	template<class T> bool	cast	( axRef<T> 		& ptr ) const;
 	template<class T> bool	cast	( axAutoPtr<T> 	& ptr ) const;
 
-	class TypeImp;
+	class _TypeImp;
 	static	axType	staticType	();
-	virtual	axType	type		() const;
+	virtual	axType	getType		() const;
 	virtual	bool	isKindOf	( const axType & type ) const;
 };
 
@@ -42,16 +42,17 @@ public:
 	typedef BASE	B; \
 public: \
 	typedef	T		CLASS; \
-	class TypeImp : public axTypeImp, public axSingleton< TypeImp > { \
+	class _TypeImp : public axTypeImp, public axSingleton< _TypeImp > { \
 		static	const char* staticName	() 			{ return #T; } \
 		virtual	const char* name		() const	{ return staticName(); } \
+		virtual axTypeImp*	baseType	() const	{ return B::staticType()._imp(); } \
 	}; \
 	virtual	bool	isKindOf ( const axType & type ) const { \
 		if( type == staticType() ) return true; \
 		return B::isKindOf(type); \
 	} \
-	static	axType 	staticType	() 		 { return axType( & TypeImp::instance() ); } \
-	virtual	axType	type		() const { return staticType(); } \
+	static	axType 	staticType	() 		 { return axType( & _TypeImp::instance() ); } \
+	virtual	axType	getType		() const { return staticType(); } \
 	\
 //-----------
 
@@ -59,9 +60,10 @@ class axTypeImp : public axObject {
 public:
 	static	const char* staticName	() 			{ return "Undefined"; }
 	virtual	const char*	name		() const	{ return staticName(); }
+	virtual	axTypeImp*	baseType	() const	{ return nullptr; }
 };
 
-/*!	TypeINfo
+/*!	TypeInfo
 
 The reason why not using C++ RTTI
 - no option to disable RTTI for specify class by security reason, e.g. network protocol package
@@ -71,19 +73,21 @@ class axType : public axObject {
 	axObjectDef( axType, axObject );
 public:
 	axType( const axType & src ) : p_(src.p_) {}
-	axType( const axTypeImp* p = nullptr ) : p_(p) {}
+	axType( axTypeImp* p = nullptr ) : p_(p) {}
 
-	const char*	name	() const	{ return p_ ? p_->name() : "null"; }
+	operator	bool 		() const	{ return p_ != nullptr; }
 
-	operator	bool 	() const	{ return p_ != nullptr; }
+	const char*	name		() const	{ return p_ ? p_->name() : "null"; }
+	axType		baseType	() const	{ return axType( p_ ? p_->baseType() : nullptr ); }
 	
 	void operator= ( const axType & a ) { p_ = a.p_; }
 
 	bool operator==( const axType & a ) const	{ return p_ == a.p_; }
 	bool operator!=( const axType & a ) const	{ return p_ != a.p_; }
 
+	axTypeImp*	_imp		() const	{ return p_; }
 private:
-	const axTypeImp*	p_;
+	axTypeImp*	p_;
 };
 
 
@@ -99,18 +103,18 @@ T* axObject::cast () {
 
 //-----------
 
-class axObject::TypeImp : public axTypeImp, public axSingleton< axObject::TypeImp > {
+class axObject::_TypeImp : public axTypeImp, public axSingleton< axObject::_TypeImp > {
 	static	const char* staticName	() 			{ return "axObject"; }
 	virtual	const char* name		() const	{ return staticName(); }
 };
 
 inline
 axType axObject::staticType	() {
-	return axType(  & TypeImp::instance() );
+	return axType(  & _TypeImp::instance() );
 }
 
 inline
-axType	axObject::type	() const {
+axType	axObject::getType	() const {
 	return staticType();
 }
 

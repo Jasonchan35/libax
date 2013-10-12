@@ -121,8 +121,8 @@ template<class T> inline axStatus ax_log_hex( axLog_Tag &tag, const axIString_<T
 
 				  inline axStatus ax_log_hex( const void* ptr, size_t byteSize )			{ return ax_log_hex( axLog_StdTag::instance(), ptr, byteSize ); }
 template<class T> inline axStatus ax_log_hex( const T* obj )								{ return ax_log_hex( obj, sizeof(T) ); }
-template<class T> inline axStatus ax_log_hex( const axIArray<T>		& arr )					{ return ax_log_hex( *axLog_StdTag::instance, arr ); }
-template<class T> inline axStatus ax_log_hex( const axIString_<T>	& str )					{ return ax_log_hex( *axLog_StdTag::instance, str ); }
+template<class T> inline axStatus ax_log_hex( const axIArray<T>		& arr )					{ return ax_log_hex( axLog_StdTag::instance(), arr ); }
+template<class T> inline axStatus ax_log_hex( const axIString_<T>	& str )					{ return ax_log_hex( axLog_StdTag::instance(), str ); }
 
 //===============
 inline axStatus ax_log_ArgList( const char*		 fmt, const axStringFormat::ArgList &list ) { return axLog::instance().log_ArgList( axLog_StdTag::instance(), NULL, fmt, list ); }
