@@ -47,14 +47,14 @@ public:
 	void		setBottomRight ( const axVec2<T> &v )		{ w = v.x - x;  h = v.y - y; }
 
 
-	axVec2<T>	topLeft		() const						{ return axVec2f( x,   y ); }
-	axVec2<T>	topRight	() const						{ return axVec2f( x+w, y ); }
+	axVec2<T>	topLeft		() const						{ return axVec2<T>( x,   y ); }
+	axVec2<T>	topRight	() const						{ return axVec2<T>( x+w, y ); }
 	
-	axVec2<T>	centerLeft	() const						{ return axVec2f( x,   y+h/2 ); }
-	axVec2<T>	centerRight	() const						{ return axVec2f( x+w, y+h/2 ); }
+	axVec2<T>	centerLeft	() const						{ return axVec2<T>( x,   y+h/2 ); }
+	axVec2<T>	centerRight	() const						{ return axVec2<T>( x+w, y+h/2 ); }
 		
-	axVec2<T>	bottomLeft	() const						{ return axVec2f( x,   y+h ); }
-	axVec2<T>	bottomRight	() const						{ return axVec2f( x+w, y+h ); }
+	axVec2<T>	bottomLeft	() const						{ return axVec2<T>( x,   y+h ); }
+	axVec2<T>	bottomRight	() const						{ return axVec2<T>( x+w, y+h ); }
 
 	axVec2<T>	center		() const						{ return axVec2<T>( centerX(), centerY() ); }
 	T			centerX		() const						{ return x + w / (T)2; }
