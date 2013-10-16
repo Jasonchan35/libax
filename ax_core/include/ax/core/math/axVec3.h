@@ -188,6 +188,12 @@ axVec3<T> ax_lerp ( const axVec3<T> &a, const axVec3<T> b, T  weight ) {
 }
 
 template<class T> inline
+axVec3i	ax_round_to_int( const axVec3<T> & a ) {
+	return axVec3i( ax_round_to_int(a.x), ax_round_to_int(a.y), ax_round_to_int(a.z) );
+}
+
+
+template<class T> inline
 axStatus axVec3<T> :: toStringFormat( axStringFormat &f ) const {
 	return f.format( "<{?}, {?}, {?}>", x, y, z );
 }	

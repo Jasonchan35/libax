@@ -238,14 +238,19 @@ template< class T > inline axStatus ax_json_serialize_value( axJsonParser &s, ax
     
 template<class T> inline
 axVec2<T> ax_clamp ( const axVec2<T> &v, const axVec2<T> a,  const axVec2<T> b ) {
-	return axVec2<T>( ax_clamp( v.x, a.x, b.x ), 
-                          ax_clamp( v.y, a.y, b.y ) );
+	return axVec2<T>( ax_clamp( v.x, a.x, b.x ),
+					  ax_clamp( v.y, a.y, b.y ) );
 }
 
 template<class T> inline
 axVec2<T> ax_lerp ( const axVec2<T> &a, const axVec2<T> b, T  weight ) {
 	return axVec2<T>( ax_lerp( a.x, b.x, weight ),
-                        ax_lerp( a.y, b.y, weight ) );
+                      ax_lerp( a.y, b.y, weight ) );
+}
+
+template<class T> inline
+axVec2i	ax_round_to_int( const axVec2<T> & a ) {
+	return axVec2i( ax_round_to_int(a.x), ax_round_to_int(a.y) );
 }
 
 //@}
