@@ -30,22 +30,23 @@ a.list.append( & b.inA );
 
 */
 
-#define	 axRefNode( OBJ, NODE ) \
+//Intrusive Reference Node
+#define	 axInRefNode( OBJ, NODE ) \
 	class NODE : public axDListNode< NODE, false > { \
 	public: \
 /*		friend class axJOIN_WORD3( axRefList_, OBJ, NODE ); */ \
-		OBJ&	obj		() { return ax_class_of( &OBJ::axRefNode_##NODE, this ); } \
+		OBJ&	obj		() { return ax_member_owner( &OBJ::axInRefNode_##NODE, this ); } \
 	}; \
-	NODE	axRefNode_##NODE; \
+	NODE	axInRefNode_##NODE; \
 //-----
 
-#define	axRefList( OBJ, NODE, ListName ) \
+#define	axInRefList( OBJ, NODE, ListName ) \
 	class axJOIN_WORD( OBJ, NODE ) : public axDList< OBJ::NODE > {\
 		typedef axDList< OBJ::NODE > B; \
 	public: \
-		void	insert	( OBJ * obj ) { B::insert( &(obj->axRefNode_##NODE) ); } \
+		void	insert	( OBJ * obj ) { B::insert( &(obj->axInRefNode_##NODE) ); } \
 		void	append	( OBJ * obj, OBJ * before = nullptr ) { \
-			B::append( &(obj->axRefNode_##NODE), before ? &(before->axRefNode_##NODE) : nullptr ); \
+			B::append( &(obj->axInRefNode_##NODE), before ? &(before->axInRefNode_##NODE) : nullptr ); \
 		} \
 	}; \
 	axJOIN_WORD( OBJ, NODE )	ListName; \

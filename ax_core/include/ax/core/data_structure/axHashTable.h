@@ -45,7 +45,7 @@ protected:
         typedef axTinyListNode< InTable, false > B;
 		typedef	axHashTable_List<T> Owner;
     public:
-		Owner* getOwner() { return ax_class_of( &Owner::inTable_, this ); }
+		Owner* getOwner() { return ax_member_owner( &Owner::inTable_, this ); }
     };
     InTable   inTable_;
 };

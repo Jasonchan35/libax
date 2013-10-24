@@ -22,7 +22,7 @@ size_t	ax_offsetof( Type Class::*PtrToMember ) {
 }
 
 template< class Class, typename Type > inline
-Class&	ax_class_of( Type Class::*PtrToMember, Type *p ) {
+Class&	ax_member_owner( Type Class::*PtrToMember, Type *p ) {
 	return *(Class*)( (char*)p - ax_offsetof( PtrToMember ) );
 }
 
