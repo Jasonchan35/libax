@@ -34,7 +34,7 @@ public:
 
 	class _TypeImp;
 	static	axType	staticType	();
-	virtual	axType	getType		() const;
+	virtual	axType	objectType	() const;
 	virtual	bool	isKindOf	( const axType & type ) const;
 };
 
@@ -52,7 +52,7 @@ public: \
 		return B::isKindOf(type); \
 	} \
 	static	axType 	staticType	() 		 { return axType( & _TypeImp::instance() ); } \
-	virtual	axType	getType		() const { return staticType(); } \
+	virtual	axType	objectType	() const { return staticType(); } \
 	\
 //-----------
 
@@ -114,7 +114,7 @@ axType axObject::staticType	() {
 }
 
 inline
-axType	axObject::getType	() const {
+axType	axObject::objectType () const {
 	return staticType();
 }
 
