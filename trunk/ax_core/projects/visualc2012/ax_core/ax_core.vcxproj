@@ -1,0 +1,350 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0973B941-59A1-4CC9-B2F7-5D38572CF27F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>ax_core</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>../../../lib/Windows/$(Platform)/$(Configuration)</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>../../../lib/Windows/$(Platform)/$(Configuration)</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>../../../lib/Windows/$(Platform)/$(Configuration)</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>../../../lib/Windows/$(Platform)/$(Configuration)</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../../include</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../../include</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../../include</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../../include</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\ax\ax_core.h" />
+    <ClInclude Include="..\..\..\include\ax\ax_unit_test.h" />
+    <ClInclude Include="..\..\..\include\ax\core\common\axExpandArgList.h" />
+    <ClInclude Include="..\..\..\include\ax\core\common\axObject.h" />
+    <ClInclude Include="..\..\..\include\ax\core\common\axSingleton.h" />
+    <ClInclude Include="..\..\..\include\ax\core\common\axSize.h" />
+    <ClInclude Include="..\..\..\include\ax\core\common\axStatus.h" />
+    <ClInclude Include="..\..\..\include\ax\core\common\axStatus_enum.h" />
+    <ClInclude Include="..\..\..\include\ax\core\common\axTypeList_float.h" />
+    <ClInclude Include="..\..\..\include\ax\core\common\axTypeList_int.h" />
+    <ClInclude Include="..\..\..\include\ax\core\common\axTypeList_uint.h" />
+    <ClInclude Include="..\..\..\include\ax\core\common\axTypeOf.h" />
+    <ClInclude Include="..\..\..\include\ax\core\common\ax_byteorder.h" />
+    <ClInclude Include="..\..\..\include\ax\core\common\ax_common.h" />
+    <ClInclude Include="..\..\..\include\ax\core\common\ax_macro.h" />
+    <ClInclude Include="..\..\..\include\ax\core\common\ax_utility.h" />
+    <ClInclude Include="..\..\..\include\ax\core\database\axDBColumn.h" />
+    <ClInclude Include="..\..\..\include\ax\core\database\axDBConn.h" />
+    <ClInclude Include="..\..\..\include\ax\core\database\axDBInParam.h" />
+    <ClInclude Include="..\..\..\include\ax\core\database\axDBOutParam.h" />
+    <ClInclude Include="..\..\..\include\ax\core\database\axDBStmt.h" />
+    <ClInclude Include="..\..\..\include\ax\core\database\axDBTableAccessor.h" />
+    <ClInclude Include="..\..\..\include\ax\core\database\axDB_common.h" />
+    <ClInclude Include="..\..\..\include\ax\core\database\axDB_c_type_list.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axArray.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axArray_types.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axAutoPtr.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axChunkArray.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axConnection.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axCopyOnWrite.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axDList.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axExternalArray.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axHashTable.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axIArray.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axLinkedPtrArray.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axLocalArray.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axLocalBuf.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axPtr.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axRef.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axRefArray.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axRefList.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axSharedPtr.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axTinyList.h" />
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\ax_array.h" />
+    <ClInclude Include="..\..\..\include\ax\core\file_system\all_file_system.h" />
+    <ClInclude Include="..\..\..\include\ax\core\file_system\axDir.h" />
+    <ClInclude Include="..\..\..\include\ax\core\file_system\axFile.h" />
+    <ClInclude Include="..\..\..\include\ax\core\file_system\axFilePath.h" />
+    <ClInclude Include="..\..\..\include\ax\core\file_system\axFileStream.h" />
+    <ClInclude Include="..\..\..\include\ax\core\file_system\axFileSystem.h" />
+    <ClInclude Include="..\..\..\include\ax\core\file_system\axMemMap.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\all_math.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axBBox3.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axClampedValue.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axCubicBezierCurve.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axEulerRotation3.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axFrustum3.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axIntersect3.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axLimitedValue.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axMargin2.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axMatrix4.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axPlane3.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axQuaternion.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axRange.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axRay3.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axRect2.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axRoundedRect.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axUnitCircle.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axVec2.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axVec3.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axVec4.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\axVec_Str.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\ax_linear_algebra.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\ax_math_angle.h" />
+    <ClInclude Include="..\..\..\include\ax\core\math\ax_math_template.h" />
+    <ClInclude Include="..\..\..\include\ax\core\net\axSockAddr.h" />
+    <ClInclude Include="..\..\..\include\ax\core\net\axSocket.h" />
+    <ClInclude Include="..\..\..\include\ax\core\other\axAny.h" />
+    <ClInclude Include="..\..\..\include\ax\core\other\axEvent.h" />
+    <ClInclude Include="..\..\..\include\ax\core\other\axFunctor.h" />
+    <ClInclude Include="..\..\..\include\ax\core\other\axJson.h" />
+    <ClInclude Include="..\..\..\include\ax\core\other\axSerializer.h" />
+    <ClInclude Include="..\..\..\include\ax\core\other\axSerializer_Helper.h" />
+    <ClInclude Include="..\..\..\include\ax\core\other\axTuple.h" />
+    <ClInclude Include="..\..\..\include\ax\core\other\ax_objc.h" />
+    <ClInclude Include="..\..\..\include\ax\core\parser\axCSVParser.h" />
+    <ClInclude Include="..\..\..\include\ax\core\parser\axIniParser.h" />
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_compiler_gcc.h" />
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_compiler_vc.h" />
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_os_android.h" />
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_os_freebsd.h" />
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_os_iOS.h" />
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_os_linux.h" />
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_os_mac.h" />
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_os_unix.h" />
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_os_win.h" />
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_platform.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\axConstString.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\axExternalString.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\axHumanString.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\axIString.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\axLocalString.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\axString.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\axStringFormat.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\axStringFormat_Arg.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\axStringFormat_out_Imp.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\axString_Array.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\axString_cout_support.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\axTinyString.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\ax_c_str.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\ax_print.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\ax_string.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\ax_str_encode.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\ax_str_to.h" />
+    <ClInclude Include="..\..\..\include\ax\core\string\ax_utf8.h" />
+    <ClInclude Include="..\..\..\include\ax\core\system\all_system.h" />
+    <ClInclude Include="..\..\..\include\ax\core\system\axAndroid.h" />
+    <ClInclude Include="..\..\..\include\ax\core\system\axApp.h" />
+    <ClInclude Include="..\..\..\include\ax\core\system\axCommandLineApp.h" />
+    <ClInclude Include="..\..\..\include\ax\core\system\axExecute.h" />
+    <ClInclude Include="..\..\..\include\ax\core\system\axLog.h" />
+    <ClInclude Include="..\..\..\include\ax\core\system\axSharedLibrary.h" />
+    <ClInclude Include="..\..\..\include\ax\core\system\axSystem.h" />
+    <ClInclude Include="..\..\..\include\ax\core\system\ax_poll.h" />
+    <ClInclude Include="..\..\..\include\ax\core\thread\axAtomicInt.h" />
+    <ClInclude Include="..\..\..\include\ax\core\thread\axAtomicQueue.h" />
+    <ClInclude Include="..\..\..\include\ax\core\thread\axCondVar.h" />
+    <ClInclude Include="..\..\..\include\ax\core\thread\axJobThread.h" />
+    <ClInclude Include="..\..\..\include\ax\core\thread\axMutex.h" />
+    <ClInclude Include="..\..\..\include\ax\core\thread\axSpinLock.h" />
+    <ClInclude Include="..\..\..\include\ax\core\thread\axThread.h" />
+    <ClInclude Include="..\..\..\include\ax\core\thread\axThreadLocalPtr.h" />
+    <ClInclude Include="..\..\..\include\ax\core\thread\axThreadPool.h" />
+    <ClInclude Include="..\..\..\include\ax\core\thread\axTimerThread.h" />
+    <ClInclude Include="..\..\..\include\ax\core\time\axDateTime.h" />
+    <ClInclude Include="..\..\..\include\ax\core\time\axStopWatch.h" />
+    <ClInclude Include="..\..\..\include\ax\core\time\axTimeStamp.h" />
+    <ClInclude Include="..\..\..\src\pch\pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\common\axStatus.cpp" />
+    <ClCompile Include="..\..\..\src\database\axDBConn.cpp" />
+    <ClCompile Include="..\..\..\src\database\axDBStmt.cpp" />
+    <ClCompile Include="..\..\..\src\database\axDB_common.cpp" />
+    <ClCompile Include="..\..\..\src\file_system\axDir.cpp" />
+    <ClCompile Include="..\..\..\src\file_system\axFile.cpp" />
+    <ClCompile Include="..\..\..\src\file_system\axFilePath.cpp" />
+    <ClCompile Include="..\..\..\src\file_system\axFileStream.cpp" />
+    <ClCompile Include="..\..\..\src\file_system\axFileSystem.cpp" />
+    <ClCompile Include="..\..\..\src\file_system\axMemMap.cpp" />
+    <ClCompile Include="..\..\..\src\math\axEulerRotation3.cpp" />
+    <ClCompile Include="..\..\..\src\math\axFrustum3.cpp" />
+    <ClCompile Include="..\..\..\src\math\axIntersect3.cpp" />
+    <ClCompile Include="..\..\..\src\math\axMatrix4.cpp" />
+    <ClCompile Include="..\..\..\src\math\axQuaternion.cpp" />
+    <ClCompile Include="..\..\..\src\math\axRay3.cpp" />
+    <ClCompile Include="..\..\..\src\math\axRect2.cpp" />
+    <ClCompile Include="..\..\..\src\math\axVec2.cpp" />
+    <ClCompile Include="..\..\..\src\math\axVec3.cpp" />
+    <ClCompile Include="..\..\..\src\math\axVec4.cpp" />
+    <ClCompile Include="..\..\..\src\math\axVec_Str.cpp" />
+    <ClCompile Include="..\..\..\src\net\axSockAddr.cpp" />
+    <ClCompile Include="..\..\..\src\net\axSocket.cpp" />
+    <ClCompile Include="..\..\..\src\other\axJson.cpp" />
+    <ClCompile Include="..\..\..\src\other\axSerializer.cpp" />
+    <ClCompile Include="..\..\..\src\parser\axCSVParser.cpp" />
+    <ClCompile Include="..\..\..\src\parser\axIniParser.cpp" />
+    <ClCompile Include="..\..\..\src\pch\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\string\axIString.cpp" />
+    <ClCompile Include="..\..\..\src\string\axStringFormat.cpp" />
+    <ClCompile Include="..\..\..\src\string\axStringFormat_out_Imp.cpp" />
+    <ClCompile Include="..\..\..\src\string\axString_Array.cpp" />
+    <ClCompile Include="..\..\..\src\string\ax_c_str.cpp" />
+    <ClCompile Include="..\..\..\src\string\ax_print.cpp" />
+    <ClCompile Include="..\..\..\src\string\ax_str_encode.cpp" />
+    <ClCompile Include="..\..\..\src\string\ax_str_to.cpp" />
+    <ClCompile Include="..\..\..\src\string\ax_utf8.cpp" />
+    <ClCompile Include="..\..\..\src\system\axAndroid.cpp" />
+    <ClCompile Include="..\..\..\src\system\axApp.cpp" />
+    <ClCompile Include="..\..\..\src\system\axCommandLineApp.cpp" />
+    <ClCompile Include="..\..\..\src\system\axExecute.cpp" />
+    <ClCompile Include="..\..\..\src\system\axLog.cpp" />
+    <ClCompile Include="..\..\..\src\system\axSharedLibrary.cpp" />
+    <ClCompile Include="..\..\..\src\system\axSystem.cpp" />
+    <ClCompile Include="..\..\..\src\system\ax_poll.cpp" />
+    <ClCompile Include="..\..\..\src\thread\axCondVar.cpp" />
+    <ClCompile Include="..\..\..\src\thread\axMutex.cpp" />
+    <ClCompile Include="..\..\..\src\thread\axThread.cpp" />
+    <ClCompile Include="..\..\..\src\thread\axThreadPool.cpp" />
+    <ClCompile Include="..\..\..\src\time\axDateTime.cpp" />
+    <ClCompile Include="..\..\..\src\time\axTimeStamp.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
