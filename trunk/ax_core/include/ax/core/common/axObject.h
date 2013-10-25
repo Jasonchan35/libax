@@ -33,9 +33,12 @@ public:
 	template<class T> bool	cast	( axAutoPtr<T> 	& ptr ) const;
 
 	class _TypeImp;
-	static	axType	staticType	();
-	virtual	axType	objectType	() const;
-	virtual	bool	isKindOf	( const axType & type ) const;
+	static	axType	staticType		();
+	virtual	axType	objectType		() const;
+	virtual	bool	isKindOfType	( const axType & type ) const;
+	
+	template<class A>
+			bool	isKindOf		() const { return isKindOfType( A::staticType() ); }
 };
 
 #define axObjectDef(T,BASE) \
@@ -47,9 +50,9 @@ public: \
 		virtual	const char* name		() const	{ return staticName(); } \
 		virtual axTypeImp*	baseType	() const	{ return B::staticType()._imp(); } \
 	}; \
-	virtual	bool	isKindOf ( const axType & type ) const { \
+	virtual	bool	isKindOfType ( const axType & type ) const { \
 		if( type == staticType() ) return true; \
-		return B::isKindOf(type); \
+		return B::isKindOfType(type); \
 	} \
 	static	axType 	staticType	() 		 { return axType( & _TypeImp::instance() ); } \
 	virtual	axType	objectType	() const { return staticType(); } \
@@ -93,7 +96,7 @@ private:
 
 template<class T> inline
 T* axObject::cast () {
-	if( this != nullptr && isKindOf( T::staticType() ) ) {
+	if( this != nullptr && isKindOf<T>() ) {
 		return (T*)this;
 	}else{
 		return nullptr;
@@ -119,7 +122,7 @@ axType	axObject::objectType () const {
 }
 
 inline
-bool	axObject::isKindOf	( const axType & type ) const {
+bool	axObject::isKindOfType ( const axType & type ) const {
 	if( type == staticType() ) return true;
 	return false;
 }
