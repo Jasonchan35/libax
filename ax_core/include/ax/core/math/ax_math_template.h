@@ -18,6 +18,9 @@ template<class T> inline T ax_sign( T a )					{ if( a == 0 ) return 0; return ax
 	#include "../common/axTypeList_uint.h"
 #undef axTYPE_LIST
 
+template<class T>	inline T		ax_div			( const T & a, const T & b ) { return ( b==0 ) ? 0 : a/b; }
+template<class T>	inline void		ax_div_it		( 	    T & a, const T & b ) {    a = ( b==0 ) ? 0 : a/b; }
+
 template<class T>	inline T		ax_abs			( T a )					{ return a>0 ? a : -a ; } 
 template<class T>	inline void		ax_abs_it		( T &a )				{ a = ax_abs(a); }
 
