@@ -1,0 +1,662 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\core">
+      <UniqueIdentifier>{b0d32216-9be1-4664-8da9-986fe983d9b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\common">
+      <UniqueIdentifier>{7034e5bb-1dcd-46a6-9386-60eb36e163c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common">
+      <UniqueIdentifier>{bbd640d7-b1f7-4539-9030-bc56a549e1bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\database">
+      <UniqueIdentifier>{a742a18e-0398-42d6-aa22-d9a1d4b2179d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\file_system">
+      <UniqueIdentifier>{1f074457-88bd-4f91-b0c3-bc0e45dc58f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\math">
+      <UniqueIdentifier>{9d45baa3-8fb7-4be9-9b12-01b95fdace55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\net">
+      <UniqueIdentifier>{b7b39efc-0cca-45f8-8b94-5a57dbccaa28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\parser">
+      <UniqueIdentifier>{88defad5-df4b-49c5-82ae-39d51552135b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\pch">
+      <UniqueIdentifier>{1e3a4b18-5c28-4a8d-9ee3-0cb67c1959b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\string">
+      <UniqueIdentifier>{82e7e7b7-1a80-4b95-ae41-6af571e467bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\system">
+      <UniqueIdentifier>{f18cfdea-90e9-4653-9f1c-754486ccd26b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\thread">
+      <UniqueIdentifier>{e94261fc-00bb-4523-8116-e6434e1b96a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\other">
+      <UniqueIdentifier>{5ae8515c-d6b6-425d-b90c-55adc309a89f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\time">
+      <UniqueIdentifier>{95241759-3c68-4671-a19a-58d7dd020a64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\database">
+      <UniqueIdentifier>{0e19fb13-ff03-4400-926a-543480e7bbe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\file_system">
+      <UniqueIdentifier>{6fd006aa-5b8b-44fe-8da1-35af81cb6aa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\math">
+      <UniqueIdentifier>{a01ea469-08fa-4829-ba10-62a5fbc17c5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\net">
+      <UniqueIdentifier>{48f3122a-906a-4308-a463-2afa64db0fcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\other">
+      <UniqueIdentifier>{e80d1420-8eba-4ef6-b06c-364b671ceb9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\thread">
+      <UniqueIdentifier>{08a3827d-e737-4e9e-ab3e-e4e686f21f14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\system">
+      <UniqueIdentifier>{52876802-42c8-4c5e-81e3-d010fafd11a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\parser">
+      <UniqueIdentifier>{6e5dc9c6-127f-4373-a89b-d2f327c68810}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\time">
+      <UniqueIdentifier>{bb9e3b4f-0f3a-4757-9a00-0949738afe51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\data_structure">
+      <UniqueIdentifier>{26fafae2-1692-4536-98e8-cad108e79547}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\platform">
+      <UniqueIdentifier>{466ba7a1-245c-427b-8baa-e1f64b1cfc2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\string">
+      <UniqueIdentifier>{d9171aaa-b1f5-466f-8e45-2c5c11e1865a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\ax\ax_core.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\ax_unit_test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\common\ax_common.h">
+      <Filter>Header Files\core\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\common\ax_macro.h">
+      <Filter>Header Files\core\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\common\ax_utility.h">
+      <Filter>Header Files\core\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\common\axExpandArgList.h">
+      <Filter>Header Files\core\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\common\axObject.h">
+      <Filter>Header Files\core\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\common\axSingleton.h">
+      <Filter>Header Files\core\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\common\axSize.h">
+      <Filter>Header Files\core\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\common\axStatus.h">
+      <Filter>Header Files\core\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\common\axStatus_enum.h">
+      <Filter>Header Files\core\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\common\axTypeList_float.h">
+      <Filter>Header Files\core\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\common\axTypeList_int.h">
+      <Filter>Header Files\core\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\common\axTypeList_uint.h">
+      <Filter>Header Files\core\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\common\axTypeOf.h">
+      <Filter>Header Files\core\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\common\ax_byteorder.h">
+      <Filter>Header Files\core\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pch\pch.h">
+      <Filter>Source Files\pch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axArray_types.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axAutoPtr.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axChunkArray.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axConnection.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axCopyOnWrite.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axDList.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axExternalArray.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axHashTable.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axIArray.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axLinkedPtrArray.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axLocalArray.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axLocalBuf.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axPtr.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axRef.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axRefArray.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axRefList.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axSharedPtr.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axTinyList.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\ax_array.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\data_structure\axArray.h">
+      <Filter>Header Files\core\data_structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\net\axSockAddr.h">
+      <Filter>Header Files\core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\net\axSocket.h">
+      <Filter>Header Files\core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\ax_linear_algebra.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\ax_math_angle.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\ax_math_template.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axBBox3.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axClampedValue.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axCubicBezierCurve.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axEulerRotation3.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axFrustum3.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axIntersect3.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axLimitedValue.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axMargin2.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axMatrix4.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axPlane3.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axQuaternion.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axRange.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axRay3.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axRect2.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axRoundedRect.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axUnitCircle.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axVec_Str.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axVec2.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axVec3.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axVec4.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\all_math.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\file_system\all_file_system.h">
+      <Filter>Header Files\core\file_system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\file_system\axDir.h">
+      <Filter>Header Files\core\file_system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\file_system\axFile.h">
+      <Filter>Header Files\core\file_system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\file_system\axFilePath.h">
+      <Filter>Header Files\core\file_system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\file_system\axFileStream.h">
+      <Filter>Header Files\core\file_system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\file_system\axFileSystem.h">
+      <Filter>Header Files\core\file_system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\file_system\axMemMap.h">
+      <Filter>Header Files\core\file_system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\database\axDB_c_type_list.h">
+      <Filter>Header Files\core\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\database\axDB_common.h">
+      <Filter>Header Files\core\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\database\axDBColumn.h">
+      <Filter>Header Files\core\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\database\axDBConn.h">
+      <Filter>Header Files\core\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\database\axDBInParam.h">
+      <Filter>Header Files\core\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\database\axDBOutParam.h">
+      <Filter>Header Files\core\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\database\axDBStmt.h">
+      <Filter>Header Files\core\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\database\axDBTableAccessor.h">
+      <Filter>Header Files\core\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\time\axStopWatch.h">
+      <Filter>Header Files\core\time</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\time\axTimeStamp.h">
+      <Filter>Header Files\core\time</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\time\axDateTime.h">
+      <Filter>Header Files\core\time</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\parser\axCSVParser.h">
+      <Filter>Header Files\core\parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\parser\axIniParser.h">
+      <Filter>Header Files\core\parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\system\axExecute.h">
+      <Filter>Header Files\core\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\system\axLog.h">
+      <Filter>Header Files\core\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\system\axSharedLibrary.h">
+      <Filter>Header Files\core\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\system\axSystem.h">
+      <Filter>Header Files\core\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\system\all_system.h">
+      <Filter>Header Files\core\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\system\ax_poll.h">
+      <Filter>Header Files\core\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\system\axAndroid.h">
+      <Filter>Header Files\core\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\system\axApp.h">
+      <Filter>Header Files\core\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\system\axCommandLineApp.h">
+      <Filter>Header Files\core\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\thread\axMutex.h">
+      <Filter>Header Files\core\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\thread\axSpinLock.h">
+      <Filter>Header Files\core\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\thread\axThread.h">
+      <Filter>Header Files\core\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\thread\axThreadLocalPtr.h">
+      <Filter>Header Files\core\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\thread\axThreadPool.h">
+      <Filter>Header Files\core\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\thread\axTimerThread.h">
+      <Filter>Header Files\core\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\thread\axAtomicInt.h">
+      <Filter>Header Files\core\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\thread\axAtomicQueue.h">
+      <Filter>Header Files\core\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\thread\axCondVar.h">
+      <Filter>Header Files\core\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\thread\axJobThread.h">
+      <Filter>Header Files\core\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\other\ax_objc.h">
+      <Filter>Header Files\core\other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\other\axAny.h">
+      <Filter>Header Files\core\other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\other\axEvent.h">
+      <Filter>Header Files\core\other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\other\axFunctor.h">
+      <Filter>Header Files\core\other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\other\axJson.h">
+      <Filter>Header Files\core\other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\other\axSerializer.h">
+      <Filter>Header Files\core\other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\other\axSerializer_Helper.h">
+      <Filter>Header Files\core\other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\other\axTuple.h">
+      <Filter>Header Files\core\other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_compiler_gcc.h">
+      <Filter>Header Files\core\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_compiler_vc.h">
+      <Filter>Header Files\core\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_os_android.h">
+      <Filter>Header Files\core\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_os_freebsd.h">
+      <Filter>Header Files\core\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_os_iOS.h">
+      <Filter>Header Files\core\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_os_linux.h">
+      <Filter>Header Files\core\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_os_mac.h">
+      <Filter>Header Files\core\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_os_unix.h">
+      <Filter>Header Files\core\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_os_win.h">
+      <Filter>Header Files\core\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\platform\ax_platform.h">
+      <Filter>Header Files\core\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\ax_c_str.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\ax_print.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\ax_str_encode.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\ax_str_to.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\ax_string.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\ax_utf8.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\axConstString.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\axExternalString.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\axHumanString.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\axIString.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\axLocalString.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\axString.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\axString_Array.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\axString_cout_support.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\axStringFormat.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\axStringFormat_Arg.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\axStringFormat_out_Imp.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\string\axTinyString.h">
+      <Filter>Header Files\core\string</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\common\axStatus.cpp">
+      <Filter>Source Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\database\axDBConn.cpp">
+      <Filter>Source Files\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\database\axDBStmt.cpp">
+      <Filter>Source Files\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\database\axDB_common.cpp">
+      <Filter>Source Files\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\file_system\axFile.cpp">
+      <Filter>Source Files\file_system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\file_system\axFilePath.cpp">
+      <Filter>Source Files\file_system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\file_system\axFileStream.cpp">
+      <Filter>Source Files\file_system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\file_system\axFileSystem.cpp">
+      <Filter>Source Files\file_system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\file_system\axMemMap.cpp">
+      <Filter>Source Files\file_system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\file_system\axDir.cpp">
+      <Filter>Source Files\file_system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\math\axVec4.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\math\axEulerRotation3.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\math\axFrustum3.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\math\axIntersect3.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\math\axMatrix4.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\math\axQuaternion.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\math\axRay3.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\math\axRect2.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\math\axVec_Str.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\math\axVec2.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\math\axVec3.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\axSockAddr.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\axSocket.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\other\axJson.cpp">
+      <Filter>Source Files\other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\other\axSerializer.cpp">
+      <Filter>Source Files\other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\parser\axCSVParser.cpp">
+      <Filter>Source Files\parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\parser\axIniParser.cpp">
+      <Filter>Source Files\parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\thread\axMutex.cpp">
+      <Filter>Source Files\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\thread\axThread.cpp">
+      <Filter>Source Files\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\thread\axThreadPool.cpp">
+      <Filter>Source Files\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\thread\axCondVar.cpp">
+      <Filter>Source Files\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\system\axCommandLineApp.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\system\axExecute.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\system\axLog.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\system\axSharedLibrary.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\system\axSystem.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\system\ax_poll.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\system\axAndroid.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\system\axApp.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\string\axStringFormat_out_Imp.cpp">
+      <Filter>Source Files\string</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\string\ax_c_str.cpp">
+      <Filter>Source Files\string</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\string\ax_print.cpp">
+      <Filter>Source Files\string</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\string\ax_str_encode.cpp">
+      <Filter>Source Files\string</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\string\ax_str_to.cpp">
+      <Filter>Source Files\string</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\string\ax_utf8.cpp">
+      <Filter>Source Files\string</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\string\axIString.cpp">
+      <Filter>Source Files\string</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\string\axString_Array.cpp">
+      <Filter>Source Files\string</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\string\axStringFormat.cpp">
+      <Filter>Source Files\string</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\time\axDateTime.cpp">
+      <Filter>Source Files\time</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\time\axTimeStamp.cpp">
+      <Filter>Source Files\time</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pch\pch.cpp">
+      <Filter>Source Files\pch</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
