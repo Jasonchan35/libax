@@ -165,7 +165,7 @@ public:
 axStatus test_ax_database_common( axDBConn & db ) {
 	axStatus st;
 
-	test_timestamp.now();
+	test_timestamp.setToNow();
 
 	db.setEchoSQL( echoSQL );
 
@@ -457,7 +457,7 @@ axStatus test_Oracle() {
 axStatus test_ax_database() {
 	axStatus st;
 	
-	axLog::instance->addFile( "test.log", false );
+	axLog::instance().addFile( "test.log", false );
 	ax_log("test {?} records\n", numRows );
 
 	axUTestCase( test_SQLite3() );

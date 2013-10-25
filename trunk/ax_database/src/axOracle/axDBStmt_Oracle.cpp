@@ -117,7 +117,7 @@ sword FetchDefineCallback(	dvoid		*octxp,
 
 axDBStmt_Oracle::axDBStmt_Oracle( axDBConn_Oracle* db ) {
 	stmt_ = NULL;
-	db_ = db;
+	db_.ref( db );
 	stmt_type_ = OCI_STMT_UNKNOWN;
 }
 
