@@ -164,8 +164,8 @@ axVec4<T> ax_lerp ( const axVec4<T> &a, const axVec4<T> b, T  weight ) {
 }
 
 template<class T> inline
-axVec4i	ax_round_to_int( const axVec4<T> & a ) {
-	return axVec4i( ax_round_to_int(a.x), ax_round_to_int(a.y), ax_round_to_int(a.z), ax_round_to_int(a.w) );
+axVec4i	ax_round_int( const axVec4<T> & a ) {
+	return axVec4i( ax_round_int(a.x), ax_round_int(a.y), ax_round_int(a.z), ax_round_int(a.w) );
 }
 
 
