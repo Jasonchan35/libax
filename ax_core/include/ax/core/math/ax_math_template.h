@@ -68,31 +68,36 @@ template<>	inline float	ax_epsilon<float> () { return 1.0e-5f; }
 const  double ax_math_PI = 3.14159265358979323846;
 
 //Splits a floating-point value into fractional and integer parts
-inline float  ax_modf( float  n, float  *i ) { return ::modff( n, i ); }
-inline double ax_modf( double n, double *i ) { return ::modf ( n, i ); }
+inline float  ax_modf		( float  n, float  *i ) { return ::modff( n, i ); }
+inline double ax_modf		( double n, double *i ) { return ::modf ( n, i ); }
 
-inline float  ax_modf( float  n )	{ float  i; return ::modff( n, &i ); }
-inline double ax_modf( double n )	{ double i; return ::modf ( n, &i ); }
+inline float  ax_modf		( float  n )	{ float  i; return ::modff( n, &i ); }
+inline double ax_modf		( double n )	{ double i; return ::modf ( n, &i ); }
 
-inline float  ax_sqrt( float  n )	{ return ::sqrtf( n ); }
-inline double ax_sqrt( double n )	{ return ::sqrt ( n ); }
+inline float  ax_sqrt		( float  n )	{ return ::sqrtf( n ); }
+inline double ax_sqrt		( double n )	{ return ::sqrt ( n ); }
 
 //! reciprocal square root
-inline float  ax_rsqrt( float  n )	{ return 1.0f/::sqrtf( n ); }
-inline double ax_rsqrt( double n )	{ return 1.0 /::sqrt ( n ); }
+inline float  ax_rsqrt		( float  n )	{ return 1.0f/::sqrtf( n ); }
+inline double ax_rsqrt		( double n )	{ return 1.0 /::sqrt ( n ); }
 
-inline float  ax_ceil( float  a )	{ return ::ceilf(a); }
-inline double ax_ceil( double a )	{ return ::ceil(a); }
+inline float  ax_ceil		( float  a )	{ return ::ceilf(a); }
+inline double ax_ceil		( double a )	{ return ::ceil (a); }
 
-inline float  ax_floor( float  a )	{ return ::floorf(a); }
-inline double ax_floor( double a )	{ return ::floor(a); }
+inline int    ax_ceil_int	( float  a  )	{ return (int)ax_ceil(a); }
+inline int	  ax_ceil_int	( double a )	{ return (int)ax_ceil(a); }
 
-//round up
-inline float  ax_round( float a  )	{ return ax_floor( a > 0 ? a+0.5f : a-0.5f ); }
-inline double ax_round( double a )	{ return ax_floor( a > 0 ? a+0.5  : a-0.5  ); }
+inline float  ax_floor		( float  a )	{ return ::floorf(a); }
+inline double ax_floor		( double a )	{ return ::floor (a); }
 
-inline int    ax_round_to_int( float a  )	{ return (int)ax_floor( a > 0 ? a+0.5f : a-0.5f ); }
-inline int	  ax_round_to_int( double a )	{ return (int)ax_floor( a > 0 ? a+0.5  : a-0.5  ); }
+inline int    ax_floor_int	( float  a  )	{ return (int)ax_floor(a); }
+inline int	  ax_floor_int	( double a )	{ return (int)ax_floor(a); }
+
+inline float  ax_round		( float  a  )	{ return ::roundf(a); }
+inline double ax_round		( double a )	{ return ::round (a); }
+
+inline int    ax_round_int	( float  a  )	{ return (int)ax_round(a); }
+inline int	  ax_round_int	( double a )	{ return (int)ax_round(a); }
 
 
 

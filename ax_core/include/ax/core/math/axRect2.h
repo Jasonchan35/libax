@@ -27,8 +27,10 @@ public:
 		  T*	asPointer()			{ return &x; }
 	const T*	asPointer() const	{ return &x; }
 
-	T	right()  const	{ return x+w; }
-	T	bottom() const	{ return y+h; }
+				T	xMin	() const	{ return x;   }
+				T	xMax	() const	{ return x+w; }
+				T	yMin	() const	{ return y;   }
+				T	yMax	() const	{ return y+h; }
 
 		  axVec2<T>& pos	()				{ return *(axVec2<T>*)&x; }
 		  axVec2<T>& size	()				{ return *(axVec2<T>*)&w; }
@@ -77,7 +79,9 @@ public:
 
 	bool		isAll		( T v ) const					{ return( x==v && y==v && w==v && h==v ); }
 
-	bool		isInside	( const axVec2<T>  &p ) const	{ return ( p.x >= x && p.x <= right() && p.y >= y && p.y <= bottom() ); }
+	bool		isInsideX	( T v ) const					{ return v >= x && v <= xMax(); }
+	bool		isInsideY	( T v ) const					{ return v >= y && v <= yMax(); }
+	bool		isInside	( const axVec2<T>  &p ) const	{ return isInsideX(p.x) && isInsideY(p.y); }
 
 	bool		operator == ( const axRect2<T> &v ) const	{ return( x == v.x && y == v.y && w == v.w && h == v.h ); }
 	bool		operator != ( const axRect2<T> &v ) const	{ return( x != v.x || y != v.y || w != v.w || h != v.h ); }
