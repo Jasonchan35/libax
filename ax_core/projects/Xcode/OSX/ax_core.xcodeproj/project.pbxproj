@@ -327,7 +327,7 @@
 		96D0954F160F852E00FDA718 /* axStatus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axStatus.cpp; sourceTree = "<group>"; };
 		96E99BDF16DA6BE1004E7C2F /* axClampedValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axClampedValue.h; sourceTree = "<group>"; };
 		96E99BE116DA6FBD004E7C2F /* axLimitedValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axLimitedValue.h; sourceTree = "<group>"; };
-		96F892D117FA12240052E553 /* axRefList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRefList.h; sourceTree = "<group>"; };
+		96F892D117FA12240052E553 /* axInRefList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axInRefList.h; sourceTree = "<group>"; };
 		EA15F6C81544053B00356C7C /* ax_core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ax_core.h; sourceTree = "<group>"; };
 		EA1DC90C161DDC9200FFD681 /* axVec2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axVec2.cpp; sourceTree = "<group>"; };
 		EA1FB14D16CA23FD00C4853B /* axTimeStamp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axTimeStamp.cpp; sourceTree = "<group>"; };
@@ -547,7 +547,7 @@
 				9640E05916009DA400F9D037 /* axPtr.h */,
 				9635600B1734AD2700C6C9A0 /* axRef.h */,
 				9651A86D17FA2B480054AB66 /* axRefArray.h */,
-				96F892D117FA12240052E553 /* axRefList.h */,
+				96F892D117FA12240052E553 /* axInRefList.h */,
 				9640E05A16009DA400F9D037 /* axSharedPtr.h */,
 				9640E05B16009DA400F9D037 /* axTinyList.h */,
 			);
