@@ -10,47 +10,61 @@
 #define ax_core_axRefArray_h
 
 
-template<class T, size_t LOCAL_BUF_SIZE> class axRefArray;
+template<class T, bool OBJECT_OWNER, size_t LOCAL_BUF_SIZE> class axRefArray;
 
-template<class T, size_t LOCAL_BUF_SIZE>
+template<class T, bool OBJECT_OWNER, size_t LOCAL_BUF_SIZE>
 class axRefArrayElement : public axRef<T> {
-	typedef axRefArray<T,LOCAL_BUF_SIZE>	ARRAY;
+	typedef axRefArray<T, OBJECT_OWNER, LOCAL_BUF_SIZE>	RefArray;
 public:
-	axRefArrayElement() { _array = nullptr; }
+	axRefArrayElement() { _refArray = nullptr; }
 
 	virtual void	onWillRemoveFromList() {
 		axSize	idx;
-		if( !_array->getIndexOf( idx, *this ) ) {
+		if( !_refArray->getIndexOf( idx, *this ) ) {
 			assert(false);
 			return;
 		}
-		_array->remove( idx );
+		_refArray->remove( idx );
 	}
 	
 protected:
-	friend class axRefArray<T,LOCAL_BUF_SIZE>;
+	friend class axRefArray<T, OBJECT_OWNER, LOCAL_BUF_SIZE>;
 
-	axPtr< ARRAY >	_array;
+	axPtr< RefArray >	_refArray;
 };
 
-template<class T, size_t LOCAL_BUF_SIZE = 4>
+template<class T, bool OBJECT_OWNER, size_t LOCAL_BUF_SIZE = 4>
 class axRefArray {
-	typedef	axRefArrayElement<T, LOCAL_BUF_SIZE>	E;
 public:
+	typedef	axRefArrayElement<T, OBJECT_OWNER, LOCAL_BUF_SIZE>	Element;
+	
+	~axRefArray() { clear(); }
 
 	axRef<T> &	operator[]( size_t i )	{ return arr_[i]; }
 
 	axStatus	append( T & obj ) {
 		axStatus st;
 		st = arr_.incSize(1);		if( !st ) return st;
-		E &e = arr_.last();
+		Element &e = arr_.last();
 		e._array = this;
 		e.ref( obj );
 		return 0;
 	}
+	
+	void clear() {
+		if( ! OBJECT_OWNER ) return;
+		axSize n = arr_.size();
+		if( n == 0 ) return;
+		axSize i=n-1;
+		for(;;) {
+			delete arr_[i];
+			if( i == 0 ) break;
+			i--;
+		}
+	}
 
 private:
-	axArray< E, LOCAL_BUF_SIZE >	arr_;
+	axArray< Element, LOCAL_BUF_SIZE >	arr_;
 };
 
 

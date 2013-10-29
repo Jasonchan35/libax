@@ -10,12 +10,12 @@
 #define ax_core_axConnection_h
 
 template<class T> class axConnection;
-template<class T> class axConnectionList;
+template<class T> class axConnector;
 
 //---------------------------
 
 template<class T>
-class axConnectionList {
+class axConnector {
 public:
 	class Input : public axNonCopyable {
 	public:
@@ -55,7 +55,7 @@ public:
 template<class T>
 class axConnection {
 public:
-	typedef	axConnectionList<T>		List;
+	typedef	axConnector<T>		List;
 	~axConnection();
 	
 	void removeFromList();
@@ -130,7 +130,7 @@ bool axConnection<T> :: isInList() {
 
 
 template<class T> inline
-void axConnectionList<T>::Output :: insert( T* conn ) {
+void axConnector<T>::Output :: insert( T* conn ) {
 	assert( conn->output.prev_ == NULL );
 	assert( conn->output.next_ == NULL );
 
@@ -143,7 +143,7 @@ void axConnectionList<T>::Output :: insert( T* conn ) {
 }
 
 template<class T> inline
-void axConnectionList<T>::Output :: remove( T* conn ) {
+void axConnector<T>::Output :: remove( T* conn ) {
 	assert( conn->output.list_ == this );
 	
 	if( conn->output.prev_ ) {
@@ -161,7 +161,7 @@ void axConnectionList<T>::Output :: remove( T* conn ) {
 }
 
 template<class T> inline
-void axConnectionList<T>::Input :: insert( T* conn ) {
+void axConnector<T>::Input :: insert( T* conn ) {
 	assert( conn->input.prev_ == NULL );
 	assert( conn->input.next_ == NULL );
 	
@@ -174,7 +174,7 @@ void axConnectionList<T>::Input :: insert( T* conn ) {
 }
 
 template<class T> inline
-void axConnectionList<T>::Input :: remove( T* conn ) {
+void axConnector<T>::Input :: remove( T* conn ) {
 	assert( conn->input.list_ == this );
 	
 	if( conn->input.prev_ ) {

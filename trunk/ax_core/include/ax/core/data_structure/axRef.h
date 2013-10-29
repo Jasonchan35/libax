@@ -34,7 +34,7 @@ public:
 	axRef( axStatus & st )		{ st = newObject(); }
 	
 	template<class S>
-	axRef( axRef<S> & src )	{ ref( src.ptr() ); }
+	axRef( axRef<S> & src )		{ ref( src.ptr() ); }
 	
 	
 	virtual ~axRef()			{ unref(); }

@@ -13,13 +13,13 @@
 
 class B {
 public:
-	axRefNode( B, inA );
+	axInRefNode( B, inA );
 };
 
 
 class A {
 public:
-	axRefList( B, inA, list );
+	axInRefList( B, inA, list );
 };
 
 A a;
@@ -34,7 +34,6 @@ a.list.append( & b.inA );
 #define	 axInRefNode( OBJ, NODE ) \
 	class NODE : public axDListNode< NODE, false > { \
 	public: \
-/*		friend class axJOIN_WORD3( axRefList_, OBJ, NODE ); */ \
 		OBJ&	obj		() { return ax_member_owner( &OBJ::axInRefNode_##NODE, this ); } \
 	}; \
 	NODE	axInRefNode_##NODE; \
