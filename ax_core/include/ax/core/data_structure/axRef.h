@@ -32,6 +32,7 @@ class axRef : public axRefBase {
 public:
 	axRef()						{}
 	axRef( axStatus & st )		{ st = newObject(); }
+	axRef( T* p )				{ ref(p); }
 	
 	template<class S>
 	axRef( axRef<S> & src )		{ ref( src.ptr() ); }
@@ -56,8 +57,8 @@ public:
 	template<class S>	bool	operator==	( const axRef<S> & src ) const { return p_ == src.p_; }
 	template<class S>	bool	operator!=	( const axRef<S> & src ) const { return p_ != src.p_; }
 
-	axStatus	newObject	();
-	void		forceDelete () { if( p_ ) delete p_; }
+	axStatus	newObject	 ();
+	void		deleteObject () { if( p_ ) delete p_; }
 	
 	void		ref			( T* p );
 	void		unref		();
