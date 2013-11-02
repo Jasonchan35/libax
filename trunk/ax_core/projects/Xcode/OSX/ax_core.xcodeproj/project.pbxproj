@@ -169,7 +169,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		9606293C17F88EB60010B9D3 /* axFunctor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axFunctor.h; sourceTree = "<group>"; };
 		9616E4D9161729D800AF9F80 /* axConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axConnection.h; sourceTree = "<group>"; };
 		96321751155EF2000061BE21 /* axDBConn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDBConn.cpp; sourceTree = "<group>"; };
 		96321752155EF2000061BE21 /* axDBStmt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axDBStmt.cpp; sourceTree = "<group>"; };
@@ -632,7 +631,6 @@
 				9640E07F16009DA400F9D037 /* axJson.h */,
 				9640E08016009DA400F9D037 /* axSerializer.h */,
 				9640E08116009DA400F9D037 /* axSerializer_Helper.h */,
-				9606293C17F88EB60010B9D3 /* axFunctor.h */,
 				9651A88717FB69A20054AB66 /* axAny.h */,
 			);
 			path = other;

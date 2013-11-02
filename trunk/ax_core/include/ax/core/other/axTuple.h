@@ -9,8 +9,10 @@
 #ifndef ax_core_axTuple_h
 #define ax_core_axTuple_h
 
+template<class A=void, class B=void, class C=void, class D=void> class axTuple;
+
 template<class A, class B, class C, class D>
-class axTuple <A,B,C,D> {
+class axTuple {
 public:
 	A	a;
 	B	b;
@@ -33,6 +35,10 @@ public:
 	B	b;
 };
 
-
+template<class A>
+class axTuple <A,void,void,void> {
+public:
+	A	a;
+};
 
 #endif
