@@ -39,7 +39,7 @@ public:
 	
 	operator		T ()			{ return  p_; }
 	operator const	T () const		{ return  p_; }
-	
+		
 	void	operator=( T p )		{ retain(p); }
 	
 	axStatus	onTake ( axNSObject &src ) { operator=(src);	return 0; }
