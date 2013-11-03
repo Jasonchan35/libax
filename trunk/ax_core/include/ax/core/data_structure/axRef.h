@@ -19,10 +19,17 @@ public:
 	virtual void	onWillRemoveFromList() {}
 };
 
-class axReferencee {
+class axReferenceable {
 public:
 	axTinyList< axRefBase >	_refList_;
 //	virtual	axStatus	onClone( void* & obj ) = 0;
+};
+
+// Referenceable Object
+class axRefObject : public axReferenceable, public axObject {
+	axObjectDef( axRefObject, axObject );
+public:
+
 };
 
 //! This class is non-threadsafe

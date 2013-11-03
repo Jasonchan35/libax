@@ -93,7 +93,8 @@ public:
 			
 	axALWAYS_INLINE(	axStatus	extract		( axIArray & out, axSize start, axSize count ) );
 
-	axALWAYS_INLINE(	axStatus	appendByTake( T & src ) );
+	axALWAYS_INLINE(	axStatus	appendByTake	( T & src ) );
+	axALWAYS_INLINE(	axStatus	appendNByTake	( const axIArray<T> & src ) );
 
 						void		setAll		( const T& value );
 						axStatus	setValues	( const T* src, axSize count )  { resize(0); return appendN(src,count); }
@@ -281,9 +282,9 @@ template< class T > inline
 axStatus	axIArray<T>::getIndexOf	( axSize &out, const T & element ) const {
 	if( ! size_ ) return axStatus_Std::not_found;
 	const T* e = &element;
-	if( e < p_ || e >= p_ * size_ ) return axStatus_Std::not_found;
+	if( e < p_ || e >= p_ + size_ ) return axStatus_Std::not_found;
 	size_t x = (e - p_) / sizeof(T);
-	if( p_[x] != e ) return axStatus_Std::not_found;
+	if( p_ + x != e ) return axStatus_Std::not_found;
 	out = x;
 	return 0;
 }
@@ -487,8 +488,24 @@ axStatus	axIArray<T>::insertN( axSize pos, const T* src, axSize count ) {
 template<class T> inline
 axStatus	axIArray<T>::appendByTake( T & src ) { 
 	axStatus st = incSize(1);		if(!st) return st; 
-	st = ax_take( last(), src );	if(!st) decSize(1); 
-	return st; 
+	st = ax_take( last(), src );	if(!st) { decSize(1); return st; }
+	return 0;
+}
+
+template<class T> inline
+axStatus	axIArray<T>::appendNByTake	( const axIArray<T> & src ) {
+	axStatus st;
+	size_t n = src.size();
+	size_t oldSize = size();
+	size_t newSize = oldSize + n;
+	
+	st = resize( newSize );			if( !st ) return st;
+	
+	for( size_t i=0; i<n; i++ ) {
+		st = ax_take( at(i+oldSize), src[i] );
+		if(!st) { resize( oldSize ); return 0; }
+	}
+	return 0;
 }
 
 template< class T > inline
