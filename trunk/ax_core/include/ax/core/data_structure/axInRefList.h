@@ -47,6 +47,15 @@ a.list.append( & b.inA );
 		void	append	( OBJ * obj, OBJ * before = nullptr ) { \
 			B::append( &(obj->axInRefNode_##NODE), before ? &(before->axInRefNode_##NODE) : nullptr ); \
 		} \
+		axStatus getArray( axIArray<OBJ*> & objs ) { \
+			axStatus st = objs.resize( B::size() ); if(!st) return st;\
+			OBJ::NODE* p = B::head();\
+			size_t i=0; \
+			for( ; p; p=p->next(), i++ ) { \
+				objs[i] = &p->obj(); \
+			} \
+			return 0; \
+		} \
 	}; \
 	axJOIN_WORD( OBJ, NODE )	ListName; \
 //-----

@@ -47,7 +47,19 @@ public:
 	axTinyList();
 	~axTinyList()		{ clear(); }
 
-	void	clear		();
+	class	iterator {
+	public:
+		iterator( T* p=nullptr ) : p_(p) {}
+		T*		operator*	()	{ return p_; }
+		void	operator++	()	{ p_ = p_ ? p_->next() : nullptr; }
+		bool	operator==	( const iterator & rhs )	{ p_ == rhs.p_; }
+		bool	operator!=	( const iterator & rhs )	{ p_ != rhs.p_; }
+	private:
+		T*	p_;
+	};
+	
+	iterator	begin	()	{ return iterator( head() ); }
+	iterator	end		()	{ return iterator( nullptr ); }
 
 	axALWAYS_INLINE( 		T*	head		() )			{ return _head_; }
 	axALWAYS_INLINE( const	T*	head		() const	)	{ return _head_; }
@@ -59,17 +71,9 @@ public:
 	axALWAYS_INLINE( void		remove	( T* node, bool call_onWillRemoveFromList = true ) );
 	axALWAYS_INLINE( axStatus	onTake	( axTinyList<T> &src ) );
 
-	axStatus	toStringFormat( axStringFormat &f ) const {
-		const T* p = _head_;
-		f.out("[");
-		size_t i = 0;
-		for( ; p; p=p->next(), i++ ) {
-			if( i > 0 ) f.out(", ");
-			f.format("{?}", *p );
-		}
-		f.out("]");
-		return 0;
-	}
+	void	clear		();
+
+	axStatus	toStringFormat( axStringFormat &f ) const;
 
 private:
 	T*	_head_;
@@ -147,6 +151,19 @@ void axTinyList<T>::remove( T* node, bool call_onWillRemoveFromList ) {
 	node->_prev_ = node->_next_ = NULL;
 	node->_list_ = NULL;
 	node->onWillRemoveFromList();
+}
+
+template<class T>
+axStatus axTinyList<T>::toStringFormat( axStringFormat &f ) const {
+	const T* p = _head_;
+	f.out("[");
+	size_t i = 0;
+	for( ; p; p=p->next(), i++ ) {
+		if( i > 0 ) f.out(", ");
+		f.format("{?}", *p );
+	}
+	f.out("]");
+	return 0;
 }
 
 #endif //__axTinyList_h__
