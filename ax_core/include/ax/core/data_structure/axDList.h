@@ -60,6 +60,22 @@ class axDList : public axNonCopyable {
 public:
 	axDList();
 	~axDList();
+	
+
+	class	iterator {
+	public:
+		iterator( T* p=nullptr ) : p_(p) {}
+		T*		operator*	()	{ return p_; }
+		void	operator++	()	{ p_ = p_ ? p_->next() : nullptr; }
+		bool	operator==	( const iterator & rhs )	{ p_ == rhs.p_; }
+		bool	operator!=	( const iterator & rhs )	{ p_ != rhs.p_; }
+	private:
+		T*	p_;
+	};
+	
+	iterator	begin	()	{ return iterator( head() ); }
+	iterator	end		()	{ return iterator( nullptr ); }
+	
 
 	void*	owner		() const				{ return _owner_; }
 	void	setOwner	( void* o )				{ _owner_ = o; }
