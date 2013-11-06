@@ -13,19 +13,24 @@
 template<class T>
 class axSingleton {
 public:
-	static	T&			instance() { return instance_.get(); }
+	static	T&		instance		()		{ return instance_.get(); }
+	static	T*		instanceNoInit	()		{ return instance_.getNoInit(); }
+	static	void	setInstance	( T* p )	{ instance_.set( p ); }
 
 private:
 	class Instance {
 	public:
-		T& get() {
-			if( ! p ) { //might init by other EXE/DLL
+		void	set( T* p ) { p_ = p; }
+		T*		getNoInit()	{ return p_; }
+		
+		T& 		get() {
+			if( ! p_ ) { //might init by other EXE/DLL
 				static T t;
-				p = &t;
+				p_ = &t;
 			}
-			return *p;
+			return *p_;
 		}
-		T* volatile p; // will be init to zero cause static, and also share between DLL/EXE so don't try to init to NULL here
+		T* volatile p_; // will be init to zero cause static, and also share between DLL/EXE so don't try to init to NULL here
 	};
 	static 	Instance 	instance_;
 };

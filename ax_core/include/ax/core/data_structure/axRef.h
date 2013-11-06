@@ -44,8 +44,8 @@ public:
 			T& operator* ()			{ return *p_; }
 	const	T& operator* () const	{ return *p_; }
 
-	operator		T* 	()			{ return p_; }
-	operator const	T*	() const	{ return p_; }
+	operator		T* 	()			{ return  p_; }
+	operator const	T*	() const	{ return  p_; }
 	
 	template<class S>	void	operator= 	( axRef<S> & src ) 	{ ref( src.ptr() ); }
 			
@@ -70,6 +70,54 @@ private:
 	axPtr<T> p_;
 };
 
+// List Iterator which can over come the refered object deletion during iteration
+template<class T>
+class	axRefIterator : private axRef<T> {
+	typedef	axRef<T> B;
+public:
+	axRefIterator( T* p = nullptr )	{ ref(p); }
+
+	void 	operator++() {
+		isNext_ = false;
+		if( isNext_ ) return;
+		if( B::ptr() ) {
+			ref( B::ptr()->next() );
+		}
+	}
+
+			T* ptr	()				{ return isNext_ ? nullptr : B::ptr(); }
+	const	T* ptr	() const		{ return isNext_ ? nullptr : B::ptr(); }
+	
+			T* operator->()			{ return  ptr(); }
+	const	T* operator->() const	{ return  ptr(); }
+	
+			T& operator* ()			{ return *ptr(); }
+	const	T& operator* () const	{ return *ptr(); }
+
+	operator		T* 	()			{ return  ptr(); }
+	operator const	T*	() const	{ return  ptr(); }
+
+	template<class S>	bool	operator==	( const axRefIterator<S> & src ) const { return ptr() == src.ptr(); }
+	template<class S>	bool	operator!=	( const axRefIterator<S> & src ) const { return ptr() != src.ptr(); }
+
+	axStatus	newObject	 ();
+	void		deleteObject () { T* p=ptr(); if( p ) delete p; }
+	
+	void		ref			( T* p )	{ isNext_ = false; B::ref(p);	}
+	void		unref		()			{ isNext_ = false; B::unref(); }
+
+private:
+	virtual void	onWillRemoveFromList() {
+		T* p = B::ptr();
+		B::onWillRemoveFromList();
+		if( p ) {
+			B::ref( p->next() );
+			isNext_ = true;
+		}
+	}
+	bool	isNext_;
+};
+
 class axReferred {
 public:
 	axTinyList< axRefBase >	_refList_;
@@ -82,16 +130,6 @@ class axReferredObject : public axReferred, public axObject {
 public:
 	axReferredObject() {}
 };
-
-template<class T, bool OwnedByList>
-class axReferredTinyListNode : public axReferred, public axTinyListNode< T, OwnedByList > {
-};
-
-template<class T, bool OwnedByList>
-class axReferredDListNode : public axReferred, public axDListNode< T, OwnedByList > {
-};
-
-
 
 //---------------------------
 template<class T> inline

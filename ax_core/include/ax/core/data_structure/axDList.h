@@ -67,8 +67,8 @@ public:
 		iterator( T* p=nullptr ) : p_(p) {}
 		T*		operator*	()	{ return p_; }
 		void	operator++	()	{ p_ = p_ ? p_->next() : nullptr; }
-		bool	operator==	( const iterator & rhs )	{ p_ == rhs.p_; }
-		bool	operator!=	( const iterator & rhs )	{ p_ != rhs.p_; }
+		bool	operator==	( const iterator & rhs )	{ return p_ == rhs.p_; }
+		bool	operator!=	( const iterator & rhs )	{ return p_ != rhs.p_; }
 	private:
 		T*	p_;
 	};
