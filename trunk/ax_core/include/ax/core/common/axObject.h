@@ -16,10 +16,15 @@ template<class T>	class axPtr;
 template<class T>	class axRef;
 template<class T>	class axAutoPtr;
 
+class axObjectBaseClassValidation {};
+
 class axObject : public axNonCopyable {
 	typedef	axObject		CLASS;
+protected:
+	axObject( axObjectBaseClassValidation & a ) {}
 public:
 
+	axObject() {}
 	virtual	~axObject() {}
 
 	template<class T> T*		cast	();
@@ -43,6 +48,8 @@ public:
 
 #define axObjectDef(T,BASE) \
 	typedef BASE	B; \
+protected: \
+	T( axObjectBaseClassValidation & a ) : BASE(a) {} \
 public: \
 	typedef	T		CLASS; \
 	class _TypeImp : public axTypeImp, public axSingleton< _TypeImp > { \

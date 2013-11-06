@@ -10,6 +10,7 @@
 #define ax_core_axRef_h
 
 #include "axTinyList.h"
+#include "axDList.h"
 #include "axPtr.h"
 #include "../other/axJson.h"
 
@@ -17,19 +18,6 @@ class axRefBase : public axTinyListNode< axRefBase, false > {
 public:
 	virtual ~axRefBase() 	{}
 	virtual void	onWillRemoveFromList() {}
-};
-
-class axReferenceable {
-public:
-	axTinyList< axRefBase >	_refList_;
-//	virtual	axStatus	onClone( void* & obj ) = 0;
-};
-
-// Referenceable Object
-class axRefObject : public axReferenceable, public axObject {
-	axObjectDef( axRefObject, axObject );
-public:
-
 };
 
 //! This class is non-threadsafe
@@ -82,6 +70,30 @@ private:
 	axPtr<T> p_;
 };
 
+class axReferred {
+public:
+	axTinyList< axRefBase >	_refList_;
+//	virtual	axStatus	onClone( void* & obj ) = 0;
+};
+
+// Referred Object
+class axReferredObject : public axReferred, public axObject {
+	axObjectDef( axReferredObject, axObject );
+public:
+	axReferredObject() {}
+};
+
+template<class T, bool OwnedByList>
+class axReferredTinyListNode : public axReferred, public axTinyListNode< T, OwnedByList > {
+};
+
+template<class T, bool OwnedByList>
+class axReferredDListNode : public axReferred, public axDListNode< T, OwnedByList > {
+};
+
+
+
+//---------------------------
 template<class T> inline
 bool axObject::cast ( axRef<T> &ptr ) const {
 	ptr.ref( cast<T>() );

@@ -58,6 +58,6 @@ protected:
 	axArray< Element, LOCAL_BUF_SIZE >	arr_;
 };
 
-typedef	axRefArray< axRefObject >	axRefObjectArray;
+typedef	axRefArray< axReferredObject >	axReferredObjectArray;
 
 #endif
