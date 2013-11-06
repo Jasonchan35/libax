@@ -52,8 +52,8 @@ public:
 		iterator( T* p=nullptr ) : p_(p) {}
 		T*		operator*	()	{ return p_; }
 		void	operator++	()	{ p_ = p_ ? p_->next() : nullptr; }
-		bool	operator==	( const iterator & rhs )	{ p_ == rhs.p_; }
-		bool	operator!=	( const iterator & rhs )	{ p_ != rhs.p_; }
+		bool	operator==	( const iterator & rhs )	{ return p_ == rhs.p_; }
+		bool	operator!=	( const iterator & rhs )	{ return p_ != rhs.p_; }
 	private:
 		T*	p_;
 	};
@@ -140,6 +140,8 @@ void axTinyList<T>::remove( T* node, bool call_onWillRemoveFromList ) {
 		assert( false ); return;
 	}  // node is not belongs to this list !!
 
+	node->onWillRemoveFromList();
+	
 	if( node->_prev_ )
 		node->_prev_->_next_ = node->_next_;
 	else
@@ -150,7 +152,6 @@ void axTinyList<T>::remove( T* node, bool call_onWillRemoveFromList ) {
 
 	node->_prev_ = node->_next_ = NULL;
 	node->_list_ = NULL;
-	node->onWillRemoveFromList();
 }
 
 template<class T>

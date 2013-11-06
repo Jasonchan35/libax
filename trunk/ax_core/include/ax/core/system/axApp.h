@@ -9,7 +9,7 @@
 #include "axLog.h"
 #include "../other/ax_objc.h"
 
-class axApp : public axNonCopyable {
+class axApp : public axSingleton<axApp>,  public axNonCopyable {
 #ifdef __OBJC__
 	axScope_NSAutoreleasePool autoReleasePool__;
 #endif //__OBJC__
