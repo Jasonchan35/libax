@@ -57,9 +57,15 @@ a.list.append( & b.inA );
 		iterator	begin	()	{ return iterator( B::head() ); } \
 		iterator	end		()	{ return iterator(); } \
 		\
+		void	remove	( OBJ * obj ) { B::remove( &(obj->NODE) ); } \
 		void	insert	( OBJ * obj ) { B::insert( &(obj->NODE) ); } \
 		void	append	( OBJ * obj, OBJ * before = nullptr ) { \
 			B::append( &(obj->NODE), before ? &(before->NODE) : nullptr ); \
+		} \
+		void	append	( axIArray<OBJ*> & objs, OBJ * before = nullptr ) { \
+			for( auto & p: objs ) {  		\
+				append( p, before ); 		\
+			} \
 		} \
 		axStatus getArray( axIArray<OBJ*> & objs ) { \
 			axStatus st = objs.resize( B::size() ); if(!st) return st;\
