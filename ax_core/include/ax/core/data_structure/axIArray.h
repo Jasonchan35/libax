@@ -41,6 +41,22 @@ public:
 	virtual	~axIArray();
 //	void operator=	( const axIArray &src )	{ copy(src); }
 
+	class	iterator {
+	public:
+		iterator( T* p=nullptr ) : p_(p) {}
+		T&		operator*	()	{ return *p_; }
+		T* 		operator->	()	{ return  p_; }
+		void	operator++	()	{ if( p_ ) p_++; }
+		bool	operator==	( const iterator & rhs )	{ return p_ == rhs.p_; }
+		bool	operator!=	( const iterator & rhs )	{ return p_ != rhs.p_; }
+	private:
+		T*	p_;
+	};
+	
+	iterator	begin	()	{ return iterator( size_ ? p_         : nullptr ); }
+	iterator	end		()	{ return iterator( size_ ? p_ + size_ : nullptr ); }
+
+
 						bool		inBound			( axSize i ) const		{ return i < size_; }
 
 	axALWAYS_INLINE(	axStatus	resize			( axSize new_size, bool keep_data = true ) );					

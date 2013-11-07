@@ -65,7 +65,8 @@ public:
 	class	iterator {
 	public:
 		iterator( T* p=nullptr ) : p_(p) {}
-		T*		operator*	()	{ return p_; }
+		T&		operator*	()	{ return *p_; }
+		T*		operator->	()	{ return  p_; }
 		void	operator++	()	{ p_ = p_ ? p_->next() : nullptr; }
 		bool	operator==	( const iterator & rhs )	{ return p_ == rhs.p_; }
 		bool	operator!=	( const iterator & rhs )	{ return p_ != rhs.p_; }
