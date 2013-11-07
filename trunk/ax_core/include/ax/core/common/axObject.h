@@ -61,7 +61,7 @@ public: \
 		if( type == staticType() ) return true; \
 		return B::isKindOfType(type); \
 	} \
-	static	axType 	staticType	() 		 { return axType( & _TypeImp::instance() ); } \
+	static	axType 	staticType	() 		 { return axType( _TypeImp::instance() ); } \
 	virtual	axType	objectType	() const { return staticType(); } \
 	\
 //-----------
@@ -120,7 +120,7 @@ class axObject::_TypeImp : public axTypeImp, public axSingleton< axObject::_Type
 
 inline
 axType axObject::staticType	() {
-	return axType(  & _TypeImp::instance() );
+	return axType( _TypeImp::instance() );
 }
 
 inline

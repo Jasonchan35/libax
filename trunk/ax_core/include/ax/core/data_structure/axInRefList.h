@@ -45,7 +45,8 @@ a.list.append( & b.inA );
 		public: \
 			iterator( axInRefNode_##NODE* p=nullptr ) : p_( p ) {} \
 			iterator( OBJ* obj ) : p_( obj ? &obj->NODE : nullptr ) {} \
-			OBJ*	operator*	()	{ return & p_->obj(); } \
+			OBJ&	operator*	()	{ return   p_->obj(); } \
+			OBJ*	operator->	()	{ return & p_->obj(); } \
 			void	operator++	()	{ p_ = p_ ? p_->next() : nullptr; } \
 			bool	operator==	( const iterator & rhs )	{ return p_ == rhs.p_; } \
 			bool	operator!=	( const iterator & rhs )	{ return p_ != rhs.p_; } \
