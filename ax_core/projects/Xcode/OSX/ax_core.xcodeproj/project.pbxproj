@@ -318,6 +318,8 @@
 		9651A88717FB69A20054AB66 /* axAny.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axAny.h; sourceTree = "<group>"; };
 		9651A88817FB6DCD0054AB66 /* axObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axObject.h; sourceTree = "<group>"; };
 		9659F0F6164C0251005F86FC /* axRange.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRange.h; sourceTree = "<group>"; };
+		965A2669182D4B1200BA2A9B /* axDict.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDict.h; sourceTree = "<group>"; };
+		965A266B182D4F0D00BA2A9B /* axStringWithHash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axStringWithHash.h; sourceTree = "<group>"; };
 		96672BA916518F1C007CB393 /* axHumanString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axHumanString.h; sourceTree = "<group>"; };
 		96672BF91652E0C4007CB393 /* axTuple.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axTuple.h; sourceTree = "<group>"; };
 		966A56C415F3BEF300012DCA /* axJson.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axJson.cpp; sourceTree = "<group>"; };
@@ -539,6 +541,7 @@
 				9640E05416009DA400F9D037 /* axDList.h */,
 				9640E05516009DA400F9D037 /* axExternalArray.h */,
 				9640E05616009DA400F9D037 /* axHashTable.h */,
+				965A2669182D4B1200BA2A9B /* axDict.h */,
 				9640E05716009DA400F9D037 /* axIArray.h */,
 				964669A417E594FF00653B01 /* axLinkedPtrArray.h */,
 				9640E05816009DA400F9D037 /* axLocalArray.h */,
@@ -683,6 +686,7 @@
 				9640E0A116009DA400F9D037 /* axStringFormat_out_Imp.h */,
 				9640E0A216009DA400F9D037 /* axTinyString.h */,
 				96672BA916518F1C007CB393 /* axHumanString.h */,
+				965A266B182D4F0D00BA2A9B /* axStringWithHash.h */,
 			);
 			path = string;
 			sourceTree = "<group>";
