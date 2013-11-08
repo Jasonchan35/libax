@@ -182,6 +182,7 @@ axStatus ax_str_to( const wchar_t* sz, double &v ) {
 //==============================
 
 uint32_t ax_string_hash( const char *sz ) {
+	if( ! sz ) return 0;
 	/*
 	"djb2" string hash
 	this algorithm (k=33) was first reported by dan bernstein many years ago
@@ -198,6 +199,8 @@ uint32_t ax_string_hash( const char *sz ) {
 }
 
 uint32_t ax_string_hash( const wchar_t *sz ) {
+	if( ! sz ) return 0;
+
     uint32_t h = 5381;
     uint32_t c;
     while ( 0 != (c=(uint32_t)*sz++) )
