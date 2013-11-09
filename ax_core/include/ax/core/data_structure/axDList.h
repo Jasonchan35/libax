@@ -247,7 +247,7 @@ void axDList<T>::removeAll() {
 template<class T> inline
 void axDList<T>::appendByTake( axDList<T> &src ) {
 	for(;;) {
-		T *n = src.popHead();
+		T *n = src.takeHead();
 		if( !n ) break;
 		append( n );
 	}
