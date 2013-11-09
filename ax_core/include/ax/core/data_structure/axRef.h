@@ -75,13 +75,25 @@ template<class T>
 class	axRefIterator : private axRef<T> {
 	typedef	axRef<T> B;
 public:
-	axRefIterator( T* p = nullptr )	{ ref(p); }
+	axRefIterator( T* p = nullptr )
+	: isNext_(false)
+	, goingNext_(false)
+	{
+		ref(p);
+	}
 
 	void 	operator++() {
+		if( isNext_ ) {
+			isNext_ = false;
+			return; //already pointed to next
+		}
+		
 		isNext_ = false;
-		if( isNext_ ) return;
-		if( B::ptr() ) {
+		T* p = B::ptr();
+		if( p ) {
+			goingNext_ = true;
 			ref( B::ptr()->next() );
+			goingNext_ = false;
 		}
 	}
 
@@ -110,12 +122,13 @@ private:
 	virtual void	onWillRemoveFromList() {
 		T* p = B::ptr();
 		B::onWillRemoveFromList();
-		if( p ) {
+		if( p && ! goingNext_ ) {
 			B::ref( p->next() );
 			isNext_ = true;
 		}
 	}
-	bool	isNext_;
+	bool	isNext_ : 1;
+	bool	goingNext_ : 1;
 };
 
 class axReferred {

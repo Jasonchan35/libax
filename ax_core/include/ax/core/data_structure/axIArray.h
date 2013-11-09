@@ -56,6 +56,22 @@ public:
 	iterator	begin	()	{ return iterator( size_ ? p_         : nullptr ); }
 	iterator	end		()	{ return iterator( size_ ? p_ + size_ : nullptr ); }
 
+	class	const_iterator {
+	public:
+		const_iterator( const T* p=nullptr ) : p_(p) {}
+		const T&		operator*	()	{ return *p_; }
+		const T* 		operator->	()	{ return  p_; }
+		void	operator++	()	{ if( p_ ) p_++; }
+		bool	operator==	( const const_iterator & rhs )	{ return p_ == rhs.p_; }
+		bool	operator!=	( const const_iterator & rhs )	{ return p_ != rhs.p_; }
+	private:
+		const T*	p_;
+	};
+	
+	const_iterator	begin	() const	{ return const_iterator( size_ ? p_         : nullptr ); }
+	const_iterator	end		() const	{ return const_iterator( size_ ? p_ + size_ : nullptr ); }
+
+
 
 						bool		inBound			( axSize i ) const		{ return i < size_; }
 
