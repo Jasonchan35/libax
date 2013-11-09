@@ -48,6 +48,12 @@ private:
 	size_t	capacityIncrement_;
 };
 
+template<class T>
+class axArray1 : public axArray< T, 1 > {
+	typedef axArray< T, 1 > B;
+public:
+	axArray1( T & c ) { B::append(c); }
+};
 
 template<class T, size_t N>  inline
 axStatus	ax_copy( axArray<T,N> &dst, const axArray<T,N> &src ) {
