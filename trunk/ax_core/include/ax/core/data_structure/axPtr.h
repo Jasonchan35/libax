@@ -30,6 +30,8 @@ public:
 	axALWAYS_INLINE( axStatus	onTake( axPtr<T> &o )	)	{ p_ = o; return 0; }
 	
 	axALWAYS_INLINE( axStatus	newObject()				)	{ p_ = new T; return p_ ? 0 : axStatus_Std::not_enough_memory; }
+	axALWAYS_INLINE( axStatus	newObjectIfNull()		)	{ return p_ ? axStatus(0) : newObject(); }
+	
 	axALWAYS_INLINE( void		deleteObject()			)	{ if( p_ ) { delete p_; p_=NULL; } }
 	
 	axALWAYS_INLINE( void		setPtr( T* p )			)	{ p_ = p; }
