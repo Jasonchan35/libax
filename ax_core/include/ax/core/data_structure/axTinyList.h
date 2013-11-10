@@ -50,6 +50,7 @@ public:
 	class	iterator {
 	public:
 		iterator( T* p=nullptr ) : p_(p) {}
+		operator T*			()  { return p_; }
 		T&		operator*	()	{ return *p_; }
 		T*		operator->	()	{ return  p_; }
 		void	operator++	()	{ p_ = p_ ? p_->next() : nullptr; }
@@ -61,6 +62,23 @@ public:
 	
 	iterator	begin	()	{ return iterator( head() ); }
 	iterator	end		()	{ return iterator( nullptr ); }
+	
+	class	const_iterator {
+	public:
+		const_iterator( const T* p=nullptr ) : p_(p) {}
+		operator const T*			()  { return p_; }
+		const T&		operator*	()	{ return *p_; }
+		const T*		operator->	()	{ return  p_; }
+		void	operator++	()	{ p_ = p_ ? p_->next() : nullptr; }
+		bool	operator==	( const const_iterator & rhs )	{ return p_ == rhs.p_; }
+		bool	operator!=	( const const_iterator & rhs )	{ return p_ != rhs.p_; }
+	private:
+		const T*	p_;
+	};
+	
+	const_iterator	begin	() const	{ return const_iterator( head() ); }
+	const_iterator	end		() const	{ return const_iterator( nullptr ); }
+	
 
 	axALWAYS_INLINE( 		T*	head		() )			{ return _head_; }
 	axALWAYS_INLINE( const	T*	head		() const	)	{ return _head_; }
