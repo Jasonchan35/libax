@@ -44,6 +44,7 @@ public:
 	class	iterator {
 	public:
 		iterator( T* p=nullptr ) : p_(p) {}
+		operator T*			()  { return p_; }
 		T&		operator*	()	{ return *p_; }
 		T* 		operator->	()	{ return  p_; }
 		void	operator++	()	{ if( p_ ) p_++; }
@@ -59,6 +60,7 @@ public:
 	class	const_iterator {
 	public:
 		const_iterator( const T* p=nullptr ) : p_(p) {}
+		operator const T*			()  { return p_; }
 		const T&		operator*	()	{ return *p_; }
 		const T* 		operator->	()	{ return  p_; }
 		void	operator++	()	{ if( p_ ) p_++; }
