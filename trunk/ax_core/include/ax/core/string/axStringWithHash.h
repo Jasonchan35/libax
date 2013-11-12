@@ -9,14 +9,14 @@
 #ifndef ax_core_axStringWithHash_h
 #define ax_core_axStringWithHash_h
 
-template<class T, size_t LOCAL_BUF_SIZE=8 >
+template<class T, size_t LOCAL_BUF_SIZE=64 >
 class axStringWithHash {
 public:
 
-	axStringWithHash( const T* sz ) : hash_(0) {}
+	axStringWithHash() : hash_(0) {}
 
 	axStatus	set( const T* sz ) {
-		hash_ = ax_string_hash( sz );
+		hash_ = ax_hash_code( sz );
 		return str_.set( sz );
 	}
 
@@ -30,12 +30,13 @@ public:
 	
 	uint32_t	hash	() const	{ return hash_; }
 
+	axStatus	toStringFormat(	axStringFormat & f ) const { return str_.toStringFormat(f); }
+
 private:
 	axString_<T, LOCAL_BUF_SIZE> str_;
 	uint32_t hash_;
 };
 
-template<> inline uint32_t ax_hash_code( const int8_t   & v ) { return (uint32_t) v.hash(); }
-
+template<class T, size_t LOCAL_BUF_SIZE> inline uint32_t ax_hash_code( const axStringWithHash<T,LOCAL_BUF_SIZE> & v ) { return (uint32_t) v.hash(); }
 
 #endif
