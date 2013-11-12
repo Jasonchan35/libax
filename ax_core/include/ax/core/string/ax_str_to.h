@@ -3,6 +3,7 @@
 #define __ax_str_to_h__
 
 #include "axString.h"
+#include "../common/ax_utility.h"
 #include "../data_structure/axArray_types.h"
 
 //! \ingroup base_string
@@ -47,8 +48,8 @@ axStatus ax_str_to( const wchar_t* sz, float    &v );
 axStatus ax_str_to( const wchar_t* sz, double   &v );
 //==============================
 
-uint32_t ax_string_hash( const char *sz );
-uint32_t ax_string_hash( const wchar_t *sz );
+uint32_t ax_hash_code( const char* 	 sz );
+uint32_t ax_hash_code( const wchar_t* sz );
 
 
 template<class T> inline

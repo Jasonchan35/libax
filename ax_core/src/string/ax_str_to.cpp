@@ -181,7 +181,7 @@ axStatus ax_str_to( const wchar_t* sz, double &v ) {
 
 //==============================
 
-uint32_t ax_string_hash( const char *sz ) {
+uint32_t ax_hash_code( const char *sz ) {
 	if( ! sz ) return 0;
 	/*
 	"djb2" string hash
@@ -198,7 +198,7 @@ uint32_t ax_string_hash( const char *sz ) {
 	return h;
 }
 
-uint32_t ax_string_hash( const wchar_t *sz ) {
+uint32_t ax_hash_code( const wchar_t *sz ) {
 	if( ! sz ) return 0;
 
     uint32_t h = 5381;

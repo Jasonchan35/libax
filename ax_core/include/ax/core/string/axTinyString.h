@@ -45,6 +45,15 @@ template< size_t LOCAL_BUF_SIZE >
 class axTinyStringW : public axTinyString_<wchar_t, LOCAL_BUF_SIZE> {
 };
 
+template<class T, size_t LOCAL_BUF_SIZE> inline
+uint32_t ax_hash_code( const axTinyString_<T,LOCAL_BUF_SIZE> & v ) { return ax_hash_code( v.c_str() ); }
+
+template< size_t LOCAL_BUF_SIZE > inline uint32_t ax_hash_code( const axTinyStringA<LOCAL_BUF_SIZE> & v ) { return ax_hash_code( v.c_str() ); }
+template< size_t LOCAL_BUF_SIZE > inline uint32_t ax_hash_code(       axTinyStringA<LOCAL_BUF_SIZE> & v ) { return ax_hash_code( v.c_str() ); }
+template< size_t LOCAL_BUF_SIZE > inline uint32_t ax_hash_code( const axTinyStringW<LOCAL_BUF_SIZE> & v ) { return ax_hash_code( v.c_str() ); }
+template< size_t LOCAL_BUF_SIZE > inline uint32_t ax_hash_code(       axTinyStringW<LOCAL_BUF_SIZE> & v ) { return ax_hash_code( v.c_str() ); }
+
+
 //-----------
 
 template<class T, size_t LOCAL_BUF_SIZE> inline

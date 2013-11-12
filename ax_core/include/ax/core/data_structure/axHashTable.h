@@ -28,6 +28,8 @@ public:
     axHashTable_List()          {}
     ~axHashTable_List()         { B::clear(); }
     
+	axStatus	onTake	( axHashTable_List & src )	{ return -1; }
+	
 	axStatus	toStringFormat( axStringFormat &f ) const {
 		return B::toStringFormat(f);
 	}

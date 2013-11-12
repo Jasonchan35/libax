@@ -13,7 +13,7 @@
 
 class B {
 public:
-	axInRefNode( B, inA );
+	axInRefDListNode( B, inA );
 };
 
 
@@ -31,19 +31,19 @@ a.list.append( & b.inA );
 */
 
 //Intrusive Reference Node
-#define	 axInRefNode( OBJ, NODE ) \
-	class axInRefNode_##NODE : public axDListNode< axInRefNode_##NODE, false > { \
+#define	 axInRefDListNode( OBJ, NODE ) \
+	class axInRefDListNode_##NODE : public axDListNode< axInRefDListNode_##NODE, false > { \
 	public: \
 		OBJ&	obj		() { return ax_member_owner( &OBJ::NODE, this ); } \
 	}; \
-	axInRefNode_##NODE	NODE; \
+	axInRefDListNode_##NODE	NODE; \
 	\
-	class axJOIN_WORD( NODE, List ) : public axDList< axInRefNode_##NODE > {\
-		typedef axDList< axInRefNode_##NODE > B; \
+	class axJOIN_WORD( NODE, DList ) : public axDList< axInRefDListNode_##NODE > {\
+		typedef axDList< axInRefDListNode_##NODE > B; \
 	public: \
 		class	iterator { \
 		public: \
-			iterator( axInRefNode_##NODE* p=nullptr ) : p_( p ) {} \
+			iterator( axInRefDListNode_##NODE* p=nullptr ) : p_( p ) {} \
 			iterator( OBJ* obj ) : p_( obj ? &obj->NODE : nullptr ) {} \
 			OBJ&	operator*	()	{ return   p_->obj(); } \
 			OBJ*	operator->	()	{ return & p_->obj(); } \
@@ -51,7 +51,7 @@ a.list.append( & b.inA );
 			bool	operator==	( const iterator & rhs )	{ return p_ == rhs.p_; } \
 			bool	operator!=	( const iterator & rhs )	{ return p_ != rhs.p_; } \
 		private: \
-			axInRefNode_##NODE*	p_; \
+			axInRefDListNode_##NODE*	p_; \
 		}; \
 		\
 		iterator	begin	()	{ return iterator( B::head() ); } \
@@ -69,7 +69,7 @@ a.list.append( & b.inA );
 		} \
 		axStatus getArray( axIArray<OBJ*> & objs ) { \
 			axStatus st = objs.resize( B::size() ); if(!st) return st;\
-			axInRefNode_##NODE* p = B::head();\
+			axInRefDListNode_##NODE* p = B::head();\
 			size_t i=0; \
 			for( ; p; p=p->next(), i++ ) { \
 				objs[i] = &p->obj(); \

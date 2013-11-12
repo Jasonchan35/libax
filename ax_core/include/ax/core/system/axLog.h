@@ -162,10 +162,19 @@ axLogExpandArgListUserTag3	(  axStatus, ax_log_ex, axLog_Tag&, const char*, cons
 //	axStatus	ax_log_ex	( axLog_Tag &tag, const char* user_string, const wchar_t* fmt, ... );
 axLogExpandArgListUserTag3	(  axStatus, ax_log_ex, axLog_Tag&, const char*, const wchar_t*, const axStringFormat_Arg&, axStringFormat_ArgList )
 
-#define ax_log_var(  v1 )						ax_log( "{?}:{?}\n VAR: {?} = [{?}]",														__FILE__, __LINE__, #v1, v1 )
-#define ax_log_var2( v1, v2 )					ax_log( "{?}:{?}\n VAR: {?} = [{?}], {?} = [{?}]",										__FILE__, __LINE__, #v1, v1, #v2, v2 )
-#define ax_log_var3( v1, v2, v3 )				ax_log( "{?}:{?}\n VAR: {?} = [{?}], {?} = [{?}], {?} = [{?}]",							__FILE__, __LINE__, #v1, v1, #v2, v2, #v3, v3 )
-#define ax_log_var4( v1, v2, v3, v4 )			ax_log( "{?}:{?}\n VAR: {?} = [{?}], {?} = [{?}], {?} = [{?}], {?} = [{?}]",				__FILE__, __LINE__, #v1, v1, #v2, v2, #v3, v3, #v4, v4 )
+#if 0 // With Line No
+	#define ax_log_var(  v1 )						ax_log( "{?}:{?}\n VAR: {?} = [{?}]",										__FILE__, __LINE__, #v1, v1 )
+	#define ax_log_var2( v1, v2 )					ax_log( "{?}:{?}\n VAR: {?} = [{?}], {?} = [{?}]",							__FILE__, __LINE__, #v1, v1, #v2, v2 )
+	#define ax_log_var3( v1, v2, v3 )				ax_log( "{?}:{?}\n VAR: {?} = [{?}], {?} = [{?}], {?} = [{?}]",				__FILE__, __LINE__, #v1, v1, #v2, v2, #v3, v3 )
+	#define ax_log_var4( v1, v2, v3, v4 )			ax_log( "{?}:{?}\n VAR: {?} = [{?}], {?} = [{?}], {?} = [{?}], {?} = [{?}]",__FILE__, __LINE__, #v1, v1, #v2, v2, #v3, v3, #v4, v4 )
+
+#else
+	#define ax_log_var(  v1 )						ax_log( "VAR: {?} = [{?}]",											#v1, v1 )
+	#define ax_log_var2( v1, v2 )					ax_log( "VAR: {?} = [{?}], {?} = [{?}]",							#v1, v1, #v2, v2 )
+	#define ax_log_var3( v1, v2, v3 )				ax_log( "VAR: {?} = [{?}], {?} = [{?}], {?} = [{?}]",				#v1, v1, #v2, v2, #v3, v3 )
+	#define ax_log_var4( v1, v2, v3, v4 )			ax_log( "VAR: {?} = [{?}], {?} = [{?}], {?} = [{?}], {?} = [{?}]",	#v1, v1, #v2, v2, #v3, v3, #v4, v4 )
+
+#endif
 
 void ax_log_unix_errno( const char* msg, int code );
 void ax_log_unix_errno( const char* msg );

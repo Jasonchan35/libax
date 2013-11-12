@@ -39,7 +39,7 @@ private:
 
 //------------------
 
-template< class T, size_t LOCAL_BUF_SIZE = 32 >
+template< class T, size_t LOCAL_BUF_SIZE = 64 >
 class axString_ : public axIString_<T> {
 	typedef	axIString_<T>	B;
 public:
@@ -60,6 +60,9 @@ typedef	axString_<wchar_t>			axStringW;
 const size_t axTempString_localBufSize = 128;
 typedef axString_<char,		axTempString_localBufSize>		axTempStringA;
 typedef axString_<wchar_t,	axTempString_localBufSize>		axTempStringW;
+
+template< class T, size_t LOCAL_BUF_SIZE > inline uint32_t ax_hash_code( const axString_<T, LOCAL_BUF_SIZE> & v ) { return ax_hash_code( v.c_str() ); }
+template< class T, size_t LOCAL_BUF_SIZE > inline uint32_t ax_hash_code(       axString_<T, LOCAL_BUF_SIZE> & v ) { return ax_hash_code( v.c_str() ); }
 
 //@}
 
