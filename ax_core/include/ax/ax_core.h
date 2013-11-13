@@ -55,6 +55,7 @@
 
 #include "core/other/axSerializer_Helper.h"
 #include "core/other/axJson.h"
+#include "core/other/axUUID.h"
 
 #include "ax_unit_test.h"
 
