@@ -18,14 +18,14 @@ template<class T>	class axAutoPtr;
 
 class axObjectBaseClassValidation {};
 
-class axObject : public axNonCopyable {
-	typedef	axObject		CLASS;
+class axTyped : public axNonCopyable {
+	typedef	axTyped		CLASS;
 protected:
-	axObject( axObjectBaseClassValidation & a ) {}
+	axTyped( axObjectBaseClassValidation & a ) {}
 public:
 
-	axObject() {}
-	virtual	~axObject() {}
+	axTyped() {}
+	virtual	~axTyped() {}
 
 	template<class T> T*		cast	();
 	template<class T> const T*	cast	() const					{ return ax_const_cast(this)->cast<T>(); }
@@ -46,7 +46,7 @@ public:
 			bool	isKindOf		() const { return isKindOfType( A::staticType() ); }
 };
 
-#define axObjectDef(T,BASE) \
+#define axTypeDeclare(T,BASE) \
 	typedef BASE	B; \
 protected: \
 	T( axObjectBaseClassValidation & a ) : BASE(a) {} \
@@ -66,7 +66,7 @@ public: \
 	\
 //-----------
 
-class axTypeImp : public axObject {
+class axTypeImp : public axTyped {
 public:
 	static	const char* staticName	() 			{ return "Undefined"; }
 	virtual	const char*	name		() const	{ return staticName(); }
@@ -79,8 +79,8 @@ The reason why not using C++ RTTI
 - no option to disable RTTI for specify class by security reason, e.g. network protocol package
 
 */
-class axType : public axObject {
-	axObjectDef( axType, axObject );
+class axType : public axTyped {
+	axTypeDeclare( axType, axTyped );
 public:
 	axType( const axType & src ) : p_(src.p_) {}
 	axType( axTypeImp* p = nullptr ) : p_(p) {}
@@ -102,7 +102,7 @@ private:
 
 
 template<class T> inline
-T* axObject::cast () {
+T* axTyped::cast () {
 	if( this != nullptr && isKindOf<T>() ) {
 		return (T*)this;
 	}else{
@@ -113,23 +113,23 @@ T* axObject::cast () {
 
 //-----------
 
-class axObject::_TypeImp : public axTypeImp, public axSingleton< axObject::_TypeImp > {
-	static	const char* staticName	() 			{ return "axObject"; }
+class axTyped::_TypeImp : public axTypeImp, public axSingleton< axTyped::_TypeImp > {
+	static	const char* staticName	() 			{ return "axTyped"; }
 	virtual	const char* name		() const	{ return staticName(); }
 };
 
 inline
-axType axObject::staticType	() {
+axType axTyped::staticType	() {
 	return axType( _TypeImp::instance() );
 }
 
 inline
-axType	axObject::objectType () const {
+axType	axTyped::objectType () const {
 	return staticType();
 }
 
 inline
-bool	axObject::isKindOfType ( const axType & type ) const {
+bool	axTyped::isKindOfType ( const axType & type ) const {
 	if( type == staticType() ) return true;
 	return false;
 }

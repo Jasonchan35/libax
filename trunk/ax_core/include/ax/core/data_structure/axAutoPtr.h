@@ -4,7 +4,7 @@
 
 #include "../common/ax_utility.h"
 #include "../common/axStatus.h"
-#include "../common/axObject.h"
+#include "../common/axTyped.h"
 
 template< class T > inline
 void ax_delete( T* p ) { delete p; }
@@ -57,7 +57,7 @@ private:
 };
 
 template<class T> inline
-bool axObject::cast ( axAutoPtr<T> &ptr ) const {
+bool axTyped::cast ( axAutoPtr<T> &ptr ) const {
 	ptr.ref( cast<T>() );
 	return ptr;
 }

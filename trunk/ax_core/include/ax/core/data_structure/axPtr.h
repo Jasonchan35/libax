@@ -2,7 +2,7 @@
 #define __axPtr_h__
 
 #include "../common/axStatus.h"
-#include "../common/axObject.h"
+#include "../common/axTyped.h"
 
 //! \ingroup base_data_structure
 //@{
@@ -43,7 +43,7 @@ private:
 };
 
 template<class T> inline
-bool axObject::cast ( axPtr<T> &ptr ) const {
+bool axTyped::cast ( axPtr<T> &ptr ) const {
 	ptr.ref( cast<T>() );
 	return ptr;
 }
