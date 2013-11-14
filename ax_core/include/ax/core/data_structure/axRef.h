@@ -137,16 +137,9 @@ public:
 //	virtual	axStatus	onClone( void* & obj ) = 0;
 };
 
-// Referred Object
-class axReferredObject : public axReferred, public axObject {
-	axObjectDef( axReferredObject, axObject );
-public:
-	axReferredObject() {}
-};
-
 //---------------------------
 template<class T> inline
-bool axObject::cast ( axRef<T> &ptr ) const {
+bool axTyped::cast ( axRef<T> &ptr ) const {
 	ptr.ref( cast<T>() );
 	return ptr;
 }

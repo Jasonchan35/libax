@@ -14,7 +14,7 @@
 	axAny_Type( int64_t,	int64	) \
 	axAny_Type( float,		float	) \
 	axAny_Type( double,		double	) \
-	axAny_Type( axObject*,	object	) \
+	axAny_Type( axTyped*,	object	) \
 //--------------
 
 class axAny {
