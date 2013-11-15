@@ -25,9 +25,9 @@ template< class T >
 class axRef : public axRefBase {
 	typedef	axRef<T> CLASS;
 public:
-	axRef()						{}
-	axRef( axStatus & st )		{ st = newObject(); }
-	axRef( T* p )				{ ref(p); }
+	axRef()					{ p_=nullptr; }
+	axRef( axStatus & st )	{ p_=nullptr; st = newObject(); }
+	axRef( T* p )			{ p_=nullptr; ref(p); }
 	
 	template<class S>
 	axRef( axRef<S> & src )		{ ref( src.ptr() ); }
@@ -67,7 +67,7 @@ public:
 	virtual void	onWillRemoveFromList() { p_=NULL; }
 	
 private:
-	axPtr<T> p_;
+	T* p_;
 };
 
 // List Iterator which can over come the refered object deletion during iteration
