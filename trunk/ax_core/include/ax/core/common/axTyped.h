@@ -53,8 +53,6 @@ protected: \
 public: \
 	typedef	T		CLASS; \
 	class _TypeImp : public axTypeImp, public axSingleton< _TypeImp > { \
-		static	const char* staticName	() 			{ return #T; } \
-		virtual	const char* name		() const	{ return staticName(); } \
 		virtual axTypeImp*	baseType	() const	{ return B::staticType()._imp(); } \
 	}; \
 	virtual	bool	isKindOfType ( const axType & type ) const { \
@@ -68,8 +66,6 @@ public: \
 
 class axTypeImp : public axTyped {
 public:
-	static	const char* staticName	() 			{ return "Undefined"; }
-	virtual	const char*	name		() const	{ return staticName(); }
 	virtual	axTypeImp*	baseType	() const	{ return nullptr; }
 };
 
@@ -86,8 +82,6 @@ public:
 	axType( axTypeImp* p = nullptr ) : p_(p) {}
 
 	operator	bool 		() const	{ return p_ != nullptr; }
-
-	const char*	name		() const	{ return p_ ? p_->name() : "null"; }
 	axType		baseType	() const	{ return axType( p_ ? p_->baseType() : nullptr ); }
 	
 	void operator= ( const axType & a ) { p_ = a.p_; }
@@ -114,27 +108,11 @@ T* axTyped::cast () {
 //-----------
 
 class axTyped::_TypeImp : public axTypeImp, public axSingleton< axTyped::_TypeImp > {
-	static	const char* staticName	() 			{ return "axTyped"; }
-	virtual	const char* name		() const	{ return staticName(); }
 };
 
-inline
-axType axTyped::staticType	() {
-	return axType( _TypeImp::instance() );
-}
-
-inline
-axType	axTyped::objectType () const {
-	return staticType();
-}
-
-inline
-bool	axTyped::isKindOfType ( const axType & type ) const {
-	if( type == staticType() ) return true;
-	return false;
-}
-
-
+inline	axType	axTyped::staticType		() 			{ return axType( _TypeImp::instance() ); }
+inline	axType	axTyped::objectType 	() const 	{ return staticType(); }
+inline	bool	axTyped::isKindOfType 	( const axType & type ) const { return type == staticType(); }
 
 
 #endif
