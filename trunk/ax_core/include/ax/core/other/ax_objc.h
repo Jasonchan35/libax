@@ -28,24 +28,24 @@ template<class T>
 class	axNSObject {
 public:
 	axNSObject	()				{ p_ = nil; }
-	axNSObject	( T p )			{ p_ = p; retain(p); }	
+	axNSObject	( T* p )		{ p_ = p; retain(p); }
 	~axNSObject	()				{ release(); }
 	
-	void	retain	( T p )			{ release(); p_ = p; [p retain]; } 
+	void	retain	( T* p )		{ release(); p_ = p; [p retain]; }
 	void	release	()				{ if(p_) { [p_ release]; p_ = nil; } }
 	
-			T obj	()				{ return  p_; }
-	const	T obj	() const		{ return  p_; }
+			T* ptr	()				{ return  p_; }
+	const	T* ptr	() const		{ return  p_; }
 	
-	operator		T ()			{ return  p_; }
-	operator const	T () const		{ return  p_; }
+	operator		T* ()			{ return  p_; }
+	operator const	T* () const		{ return  p_; }
 		
-	void	operator=( T p )		{ retain(p); }
+	void	operator=( T* p )		{ retain(p); }
 	
 	axStatus	onTake ( axNSObject &src ) { operator=(src);	return 0; }
 	
 private:
-	T	p_;
+	T*	p_;
 };
 
 //template<class T> inline 
