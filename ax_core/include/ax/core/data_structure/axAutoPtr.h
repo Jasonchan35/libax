@@ -57,7 +57,7 @@ private:
 };
 
 template<class T> inline
-bool axTyped::cast ( axAutoPtr<T> &ptr ) const {
+bool axTyped::cast ( axAutoPtr<T> &ptr ) {
 	ptr.ref( cast<T>() );
 	return ptr;
 }

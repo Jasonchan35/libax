@@ -33,9 +33,9 @@ public:
 	template<class T> bool	cast	( 		T* 		& ptr )			{ ptr=cast<T>(); return ptr; }
 	template<class T> bool	cast	( const T* 		& ptr ) const	{ ptr=cast<T>(); return ptr; }
 
-	template<class T> bool	cast	( axPtr<T> 		& ptr ) const;
-	template<class T> bool	cast	( axRef<T> 		& ptr ) const;
-	template<class T> bool	cast	( axAutoPtr<T> 	& ptr ) const;
+	template<class T> bool	cast	( axPtr<T> 		& ptr );
+	template<class T> bool	cast	( axRef<T> 		& ptr );
+	template<class T> bool	cast	( axAutoPtr<T> 	& ptr );
 
 	class _TypeImp;
 	static	axType	staticType		();

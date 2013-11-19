@@ -139,7 +139,7 @@ public:
 
 //---------------------------
 template<class T> inline
-bool axTyped::cast ( axRef<T> &ptr ) const {
+bool axTyped::cast ( axRef<T> &ptr ) {
 	ptr.ref( cast<T>() );
 	return ptr;
 }
