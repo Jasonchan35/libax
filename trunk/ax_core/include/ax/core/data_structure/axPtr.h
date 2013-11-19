@@ -43,8 +43,8 @@ private:
 };
 
 template<class T> inline
-bool axTyped::cast ( axPtr<T> &ptr ) const {
-	ptr.ref( cast<T>() );
+bool axTyped::cast ( axPtr<T> &ptr ) {
+	ptr.setPtr( cast<T>() );
 	return ptr;
 }
 

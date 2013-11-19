@@ -23,7 +23,6 @@ private:
 	NSAutoreleasePool* p_;
 };
 
-
 template<class T>
 class	axNSObject {
 public:
@@ -46,6 +45,30 @@ public:
 	
 private:
 	T*	p_;
+};
+
+template<>
+class axNSObject<id> {
+public:
+	axNSObject	()				{ p_ = nil; }
+	axNSObject	( id p )		{ p_ = p; retain(p); }
+	~axNSObject	()				{ release(); }
+	
+	void	retain	( id p )		{ release(); p_ = p; [p retain]; }
+	void	release	()				{ if(p_) { [p_ release]; p_ = nil; } }
+	
+			id ptr	()				{ return  p_; }
+	const	id ptr	() const		{ return  p_; }
+	
+	operator		id ()			{ return  p_; }
+	operator const	id () const		{ return  p_; }
+		
+	void	operator=( id p )		{ retain(p); }
+	
+	axStatus	onTake ( axNSObject &src ) { operator=(src);	return 0; }
+	
+private:
+	id	p_;
 };
 
 //template<class T> inline 
