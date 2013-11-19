@@ -119,10 +119,10 @@ public:
 	Node	stdout_node;
 	Node	stderr_node;
 		
-	axNSObject< NSPipe* >	inPipe;
-	axNSObject< NSPipe* >	outPipe;
-	axNSObject< NSPipe* >	errPipe;
-	axNSObject< NSTask* >	task;
+	axNSObject< NSPipe >	inPipe;
+	axNSObject< NSPipe >	outPipe;
+	axNSObject< NSPipe >	errPipe;
+	axNSObject< NSTask >	task;
 	
 	uint32_t polling;	
 	
