@@ -16,12 +16,12 @@ template<class T>	class axPtr;
 template<class T>	class axRef;
 template<class T>	class axAutoPtr;
 
-class axObjectBaseClassValidation {};
+class axTypedBaseClassValidation {};
 
 class axTyped : public axNonCopyable {
 	typedef	axTyped		CLASS;
 protected:
-	axTyped( axObjectBaseClassValidation & a ) {}
+	axTyped( axTypedBaseClassValidation & a ) {}
 public:
 
 	axTyped() {}
@@ -49,7 +49,7 @@ public:
 #define axTypeDeclare(T,BASE) \
 	typedef BASE	B; \
 protected: \
-	T( axObjectBaseClassValidation & a ) : BASE(a) {} \
+	T( axTypedBaseClassValidation & a ) : BASE(a) {} \
 public: \
 	typedef	T		CLASS; \
 	class _TypeImp : public axTypeImp, public axSingleton< _TypeImp > { \
