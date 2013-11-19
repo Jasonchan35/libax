@@ -4,7 +4,7 @@
 #include <ax/core/system/axAndroid.h>
 
 axApp::axApp() {
-
+	setInstance( this );
 }
 
 axStatus axApp::setAppName( const char* sz ) {

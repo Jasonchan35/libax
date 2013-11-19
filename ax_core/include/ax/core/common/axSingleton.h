@@ -34,27 +34,7 @@ private:
 	static 	Instance 	instance_;
 };
 
-//cross EXE/DLL singleton
-template<class T>
-class axManualSingleton {
-public:
-	static	T*		instance	()			{ return instance_.get(); }
-	static	void	setInstance	( T* p )	{ instance_.set( p ); }
-
-private:
-	class Instance {
-	public:
-		void	set( T* p ) { p_ = p; }
-		T*		get()		{ return p_; }
-	private:
-		T* volatile p_; // will be init to zero cause static, and also share between DLL/EXE so don't try to init to NULL here
-	};
-	static 	Instance 	instance_;
-};
-
 template<class T> typename axSingleton<T>::Instance 		axSingleton<T>::instance_;
-template<class T> typename axManualSingleton<T>::Instance 	axManualSingleton<T>::instance_;
-
 
 
 
