@@ -17,57 +17,63 @@ template<class T>	class axRef;
 template<class T>	class axAutoPtr;
 
 class axTypedBaseClassValidation {};
+class axTypeImp;
+class axType;
+
+template<class T> inline axType axTypeGet();
 
 class axTyped : public axNonCopyable {
 	typedef	axTyped		CLASS;
+
 protected:
 	axTyped( axTypedBaseClassValidation & a ) {}
+	
+	friend axType axTypeGet< axTyped > ();
+	template<class T> friend class axSingleton;
+	class _TypeImp;
+	
 public:
 
 	axTyped() {}
 	virtual	~axTyped() {}
 
 	template<class T> T*		cast	();
-	template<class T> const T*	cast	() const					{ return ax_const_cast(this)->cast<T>(); }
+	template<class T> const T*	cast	() const						{ return ax_const_cast(this)->cast<T>(); }
 	
-	template<class T> bool	cast	( 		T* 		& ptr )			{ ptr=cast<T>(); return ptr; }
-	template<class T> bool	cast	( const T* 		& ptr ) const	{ ptr=cast<T>(); return ptr; }
+	template<class T> 	bool	cast	( 		T* 		& ptr )			{ ptr=cast<T>(); return ptr; }
+	template<class T> 	bool	cast	( const T* 		& ptr ) const	{ ptr=cast<T>(); return ptr; }
 
-	template<class T> bool	cast	( axPtr<T> 		& ptr );
-	template<class T> bool	cast	( axRef<T> 		& ptr );
-	template<class T> bool	cast	( axAutoPtr<T> 	& ptr );
+	template<class T> 	bool	cast	( axPtr<T> 		& ptr );
+	template<class T> 	bool	cast	( axRef<T> 		& ptr );
+	template<class T> 	bool	cast	( axAutoPtr<T> 	& ptr );
 
-	class _TypeImp;
-	static	axType	staticType		();
-	virtual	axType	objectType		() const;
-	virtual	bool	isKindOfType	( const axType & type ) const;
+			virtual		axType	objectType		() const;
+			virtual		bool	isKindOfType	( const axType & type ) const;
 	
-	template<class A>
-			bool	isKindOf		() const { return isKindOfType( A::staticType() ); }
+	template<class T> 	bool	isKindOf () const {	return isKindOfType( axTypeGet<T>() ); }
 };
 
 #define axTypeDeclare(T,BASE) \
 	typedef BASE	B; \
+	\
 protected: \
+	template<class T> friend class axSingleton; \
+	friend axType axTypeGet< T > (); \
 	T( axTypedBaseClassValidation & a ) : BASE(a) {} \
+	class _TypeImp : public axTypeImp, public axSingleton< _TypeImp > { \
+	public: \
+		_TypeImp() { baseType_ = axTypeGet<BASE>().p_;  } \
+	}; \
+	\
 public: \
 	typedef	T		CLASS; \
-	class _TypeImp : public axTypeImp, public axSingleton< _TypeImp > { \
-		virtual axTypeImp*	baseType	() const	{ return B::staticType()._imp(); } \
-	}; \
 	virtual	bool	isKindOfType ( const axType & type ) const { \
-		if( type == staticType() ) return true; \
+		if( type == axTypeGet<CLASS>() ) return true; \
 		return B::isKindOfType(type); \
 	} \
-	static	axType 	staticType	() 		 { return axType( _TypeImp::instance() ); } \
-	virtual	axType	objectType	() const { return staticType(); } \
+	virtual	axType objectType	() const { return axTypeGet<CLASS>(); } \
 	\
 //-----------
-
-class axTypeImp : public axTyped {
-public:
-	virtual	axTypeImp*	baseType	() const	{ return nullptr; }
-};
 
 /*!	TypeInfo
 
@@ -75,25 +81,13 @@ The reason why not using C++ RTTI
 - no option to disable RTTI for specify class by security reason, e.g. network protocol package
 
 */
-class axType : public axTyped {
-	axTypeDeclare( axType, axTyped );
+class axTypeImp {
 public:
-	axType( const axType & src ) : p_(src.p_) {}
-	axType( axTypeImp* p = nullptr ) : p_(p) {}
-
-	operator	bool 		() const	{ return p_ != nullptr; }
-	axType		baseType	() const	{ return axType( p_ ? p_->baseType() : nullptr ); }
-	
-	void operator= ( const axType & a ) { p_ = a.p_; }
-
-	bool operator==( const axType & a ) const	{ return p_ == a.p_; }
-	bool operator!=( const axType & a ) const	{ return p_ != a.p_; }
-
-	axTypeImp*	_imp		() const	{ return p_; }
-private:
-	axTypeImp*	p_;
+	axTypeImp() : baseType_(nullptr) {}
+	const axTypeImp*	baseType	() const	{ return baseType_; }
+protected:
+	const axTypeImp*	baseType_;
 };
-
 
 template<class T> inline
 T* axTyped::cast () {
@@ -104,15 +98,30 @@ T* axTyped::cast () {
 	}
 }
 
+class axType {
+public:
+	axType( const axTypeImp* p = nullptr ) : p_(p) {}
+
+	bool operator == ( const axType & src ) const { return p_ == src.p_; }
+	bool operator != ( const axType & src ) const { return p_ == src.p_; }
+	
+	operator bool () const { return p_; }
+
+	axType baseType	() { return axType( p_ ? p_->baseType() : nullptr ); }
+
+	const axTypeImp* p_;
+};
+
+template<class T> inline axType axTypeGet()	{ return axType( T::_TypeImp::instance() ); }
 
 //-----------
 
 class axTyped::_TypeImp : public axTypeImp, public axSingleton< axTyped::_TypeImp > {
 };
 
-inline	axType	axTyped::staticType		() 			{ return axType( _TypeImp::instance() ); }
-inline	axType	axTyped::objectType 	() const 	{ return staticType(); }
-inline	bool	axTyped::isKindOfType 	( const axType & type ) const { return type == staticType(); }
+
+inline	axType	axTyped::objectType 	() const 	{ return axTypeGet< axTyped >(); }
+inline	bool	axTyped::isKindOfType 	( const axType & type ) const { return type == axTypeGet< axTyped >(); }
 
 
 #endif
