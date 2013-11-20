@@ -325,7 +325,7 @@ axStatus	axIString_<T> :: reserve( axSize new_size ) {
 }
 
 template< class T > 
-axStatus	axIString_<T> :: clone( const axIString_<T> &src ) {
+axStatus	axIString_<T> :: copy( const axIString_<T> &src ) {
 	return set( src.c_str() );
 }
 
@@ -397,7 +397,7 @@ axStatus	axIString_<T> :: splitByChar( T ch, axIString_<T> &part1, axIString_<T>
 	if( findChar( ch, idx ) ) {
 		return splitByIndex( idx, part1, part2 );
 	}else{
-		st = part1.clone( *this );		if( !st ) return st;
+		st = part1.copy( *this );		if( !st ) return st;
 		return axStatus_Std::not_found;
 	}
 }

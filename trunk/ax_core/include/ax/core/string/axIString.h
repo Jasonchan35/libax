@@ -108,7 +108,7 @@ public:
 	axStatus		append					( const wchar_t* src )					{ return appendWithLength( src, (axSize)ax_strlen(src) ); }
 	axStatus		appendWithLength		( const wchar_t* src, axSize src_len );
 
-	axStatus		clone					( const axIString_<T> &src );
+	axStatus		copy					( const axIString_<T> &src );
 	
 	axStatus		findChar				(       T  ch,        axSize &outPos, axSize start_from     = 0 ) const;
 	axStatus		findCharFromEnd			(       T  ch,        axSize &outPos, axSize start_from_end = 0 ) const;
@@ -172,5 +172,10 @@ template< class T > inline
 axSize	axIString_<T> :: size	() const {
 	return ( buf_.size() ) ? ( buf_.size()-1 ) : 0;
 }
+
+
+template< class T > inline axStatus ax_copy( axIString_<T> & dst, const axIString_<T> & src ) { return dst.copy( src ); }
+
+
 
 #endif //__axIString_h__

@@ -45,9 +45,9 @@ protected:
     
     class   InTable : public axTinyListNode< InTable, false> {
         typedef axTinyListNode< InTable, false > B;
-		typedef	axHashTable_List<T> Owner;
+		typedef	axHashTable_List<T> List;
     public:
-		Owner* getOwner() { return ax_member_owner( &Owner::inTable_, this ); }
+		List & getOwner() { return ax_member_owner( &List::inTable_, this ); }
     };
     InTable   inTable_;
 };
@@ -73,41 +73,30 @@ public:
 	axStatus	setTableSize( axSize table_size );	
     axSize      tableSize   () const			{ return table_.size(); }
 
-	axSize      nodeCount   () const			{ return nodeCount_; }
+	axSize      count	   () const			{ return nodeCount_; }
 
 	axStatus	toStringFormat( axStringFormat &f ) const {
 		return f.format("{?}", table_ );
 	}
 
-	class Iterator : public axNonCopyable {
+	class iterator {
 		typedef	axHashTable_List<T>	List;
 	public:
+		iterator ( T* p=nullptr ) : p_(p) {}
 
-		Iterator ( axHashTable &table ) : table_(table)		{ reset(); }
-
-		void	reset	();
-		bool	goNext	();
-
-		void	operator++()			{ goNext(); }
-		void	operator++(int)			{ goNext(); }
-
-			  Node* node()				{ return  p_; }
-		const Node* node() const		{ return  p_; }
-
-			  Node* operator->()		{ return  p_; }
-		const Node* operator->() const	{ return  p_; }
-
-			  Node& operator* ()		{ return *p_; }
-		const Node& operator* () const	{ return *p_; }
-
-		operator Node*()				{ return  p_; }
-		operator const Node*() const	{ return  p_; }
-
+		operator T*()				{ return  p_; }
+		T& 		operator* ()		{ return *p_; }
+		T* 		operator->()		{ return  p_; }
+		void	operator++();
+		bool	operator==	( const iterator & rhs )	{ return p_ == rhs.p_; }
+		bool	operator!=	( const iterator & rhs )	{ return p_ != rhs.p_; }
+			  
 	private:
-		axHashTable	&table_;
-		List*		list_;
-		Node*		p_;
+		T*				p_;
 	};
+	
+	iterator	begin	();
+	iterator	end		();
 
 friend class axHashTable_List<T>;
 protected:
@@ -215,29 +204,39 @@ void axHashTable_List<T> :: remove( T* item ) {
     }
 }
 
-template< class T >
-void axHashTable<T> :: Iterator :: reset() {
-	list_ = table_.nonEmptyList_.head()->getOwner(); 
-	p_ = list_ ? list_->head() : NULL;
+
+template< class T > inline
+typename axHashTable<T>::iterator axHashTable<T> :: begin () {
+	if( nonEmptyList_.head() ) {
+		return iterator( nonEmptyList_.head()->getOwner().head() );
+	}
+	
+	return iterator( nullptr );
 }
 
-template< class T >
-bool axHashTable<T> :: Iterator :: goNext() {
+template< class T > inline
+typename axHashTable<T>::iterator axHashTable<T> :: end	() {
+	return iterator( nullptr );
+}
+
+
+template< class T > inline
+void axHashTable<T> :: iterator :: operator++() {
+	axHashTable_List<T>* list;
 	if( p_ ) {
+		list = p_->list();	//current list
 		p_ = p_->next();
-		if( p_ ) return true;
+		if( p_ ) return;
 	}
 
-	if( ! list_ ) return false;
-
-	typename List::InTable* p = list_->inTable_.next();
-	if( !p ) return false;
-
-	list_ = p->getOwner();
-	if( ! list_ ) return false;
-
-	p_ = list_->head();
-	return true;
+	if( list && list->inTable_.next() ) {
+		//try next list
+		list = & ( list->inTable_.next()->getOwner() );
+		p_ = list->head();
+		return;
+	}
+	
+	p_ = nullptr;
 }
 
 #endif //__axHashTable_h__

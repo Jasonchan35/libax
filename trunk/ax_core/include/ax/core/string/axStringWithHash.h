@@ -32,11 +32,24 @@ public:
 
 	axStatus	toStringFormat(	axStringFormat & f ) const { return str_.toStringFormat(f); }
 
+	axStatus	copy	( const axStringWithHash & src ) {
+		hash_ = src.hash_;
+		return ax_copy( str_, src.str_ );
+	}
+
 private:
 	axString_<T, LOCAL_BUF_SIZE> str_;
 	uint32_t hash_;
 };
 
-template<class T, size_t LOCAL_BUF_SIZE> inline uint32_t ax_hash_code( const axStringWithHash<T,LOCAL_BUF_SIZE> & v ) { return (uint32_t) v.hash(); }
+template<class T, size_t LOCAL_BUF_SIZE> inline
+uint32_t ax_hash_code( const axStringWithHash<T,LOCAL_BUF_SIZE> & v ) {
+	return (uint32_t) v.hash();
+}
+
+template<class T, size_t LOCAL_BUF_SIZE> inline
+axStatus ax_copy( axStringWithHash<T,LOCAL_BUF_SIZE> & dst, const axStringWithHash<T,LOCAL_BUF_SIZE> & src ) {
+	return dst.copy( src );
+}
 
 #endif
