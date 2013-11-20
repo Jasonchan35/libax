@@ -47,10 +47,10 @@ public:
 	template<class T> 	bool	cast	( axRef<T> 		& ptr );
 	template<class T> 	bool	cast	( axAutoPtr<T> 	& ptr );
 
-			virtual		axType	objectType		() const;
-			virtual		bool	isKindOfType	( const axType & type ) const;
+			virtual		axType	objectType	() const;
+			virtual		bool	isKindOf	( const axType & type ) const;
 	
-	template<class T> 	bool	isKindOf () const {	return isKindOfType( axTypeGet<T>() ); }
+	template<class T> 	bool	isKindOf_ 	() const {	return isKindOf( axTypeGet<T>() ); }
 };
 
 #define axTypeDeclare(T,BASE) \
@@ -67,9 +67,9 @@ protected: \
 	\
 public: \
 	typedef	T		CLASS; \
-	virtual	bool	isKindOfType ( const axType & type ) const { \
+	virtual	bool	isKindOf ( const axType & type ) const { \
 		if( type == axTypeGet<CLASS>() ) return true; \
-		return B::isKindOfType(type); \
+		return B::isKindOf(type); \
 	} \
 	virtual	axType objectType	() const { return axTypeGet<CLASS>(); } \
 	\
@@ -91,7 +91,7 @@ protected:
 
 template<class T> inline
 T* axTyped::cast () {
-	if( this != nullptr && isKindOf<T>() ) {
+	if( this != nullptr && isKindOf_<T>() ) {
 		return (T*)this;
 	}else{
 		return nullptr;
@@ -120,8 +120,8 @@ class axTyped::_TypeImp : public axTypeImp, public axSingleton< axTyped::_TypeIm
 };
 
 
-inline	axType	axTyped::objectType 	() const 	{ return axTypeGet< axTyped >(); }
-inline	bool	axTyped::isKindOfType 	( const axType & type ) const { return type == axTypeGet< axTyped >(); }
+inline	axType	axTyped::objectType () const 	{ return axTypeGet< axTyped >(); }
+inline	bool	axTyped::isKindOf 	( const axType & type ) const { return type == axTypeGet< axTyped >(); }
 
 
 #endif
