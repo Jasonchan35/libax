@@ -64,6 +64,8 @@ typedef axString_<wchar_t,	axTempString_localBufSize>		axTempStringW;
 template< class T, size_t LOCAL_BUF_SIZE > inline uint32_t ax_hash_code( const axString_<T, LOCAL_BUF_SIZE> & v ) { return ax_hash_code( v.c_str() ); }
 template< class T, size_t LOCAL_BUF_SIZE > inline uint32_t ax_hash_code(       axString_<T, LOCAL_BUF_SIZE> & v ) { return ax_hash_code( v.c_str() ); }
 
+template< class T, size_t LOCAL_BUF_SIZE >inline axStatus ax_copy( axString_<T,LOCAL_BUF_SIZE> & dst, const axString_<T,LOCAL_BUF_SIZE> & src ) { return dst.copy( src ); }
+
 //@}
 
 

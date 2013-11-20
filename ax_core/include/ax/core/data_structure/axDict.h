@@ -14,50 +14,76 @@
 template<class KEY, class VALUE>
 class axDict {
 public:
-		axStatus	insert	( const KEY & key, const VALUE& value ) {
-			axStatus	st;
-			axAutoPtr< Node >	p(st);		if( !st ) return st;
-			st = ax_copy( p.key, key );		if( !st ) return st;
-			st = ax_copy( p.value, value );	if( !st ) return st;
-			st = table_.insert( p );		if( !st ) return st;
-			p.unref();
-			return 0;
-		}
-			
-		const VALUE*	find	( const KEY & key ) {
-			Node* p = getListHead( ax_hash_code( key ) );
-			for( ; p; p=p->next() ) {
-				if( p->key == key ) return & p->value;
-			}
-			return nullptr;
-		}
-		
-private:
 
-	class Node : public axHashTableNode< Node, true > {
+	class Pair : public axHashTableNode< Pair, true > {
 	public:
+		uint32_t	hashTableValue() { return ax_hash_code( key ); }
 		KEY		key;
 		VALUE	value;
 	};
 
-	axHashTable< Node >	table_;
-};
+	typedef	axHashTable< Pair >	HashTable;
+	typedef	typename HashTable::iterator	iterator;
 
-template< class VALUE, class CHAR, size_t LOCAL_BUF_SIZE >
-class axDict_String : public axDict< axStringWithHash<CHAR, LOCAL_BUF_SIZE > > {
-	typedef	axStringWithHash< CHAR, LOCAL_BUF_SIZE >		String;
-	typedef	axDict< String, VALUE > B;
-public:
-	axStatus	insert	( const CHAR* key, const VALUE & value ) {
-		String	skey;	skey.set(key);
-		return B::insert( skey, value );
+	iterator	begin	()	{ return table_.begin(); }
+	iterator	end		()	{ return table_.end(); }
+
+	axStatus	set	( const KEY & key, const VALUE& value ) {
+		axStatus	st;
+		Pair* p = getPair( key );
+		if( p ) {
+			st = ax_copy( p->value, value );	if( !st ) return st;
+		}else{
+			axAutoPtr< Pair >	ap(st);			if( !st ) return st;
+			st = ax_copy( ap->key, key );		if( !st ) return st;
+			st = ax_copy( ap->value, value );	if( !st ) return st;
+			st = table_.insert( ap );			if( !st ) return st;
+			ap.unref();
+		}
+		return 0;
+	}
+		
+	const VALUE*	get	( const KEY & key ) {
+		Pair* p = getNode( key );
+		return p ? & p->value : nullptr;
+	}
+
+	Pair*	getPair	( const KEY & key ) {
+		Pair* p = table_.getListHead( ax_hash_code( key ) );
+		for( ; p; p=p->next() ) {
+			if( p->key == key ) return p;
+		}
+		return nullptr;
 	}
 	
-	const VALUE* find	( const CHAR* key ) {
+	axSize	count	() const	{ return table_.count(); }
+		
+private:
+	HashTable	table_;
+};
+
+template< class VALUE, class CHAR, size_t STRING_LOCAL_BUF_SIZE >
+class axDict_String : public axDict< axStringWithHash<CHAR, STRING_LOCAL_BUF_SIZE >, VALUE > {
+	typedef	axStringWithHash< CHAR, STRING_LOCAL_BUF_SIZE >		String;
+	typedef	axDict< String, VALUE > B;
+public:
+	axStatus	set	( const CHAR* key, const VALUE & value ) {
 		String	skey;	skey.set(key);
-		return B::find( skey );
+		return B::set( skey, value );
+	}
+	
+	const VALUE* get ( const CHAR* key ) {
+		String	skey;	skey.set(key);
+		return B::get( skey );
 	}
 
 };
+
+template< class VALUE, size_t STRING_LOCAL_BUF_SIZE=64 >
+class axDict_StringA : public axDict_String< VALUE, char, 	 STRING_LOCAL_BUF_SIZE > {};
+
+template< class VALUE, size_t STRING_LOCAL_BUF_SIZE=64 >
+class axDict_StringW : public axDict_String< VALUE, wchar_t, STRING_LOCAL_BUF_SIZE > {};
+
 
 #endif
