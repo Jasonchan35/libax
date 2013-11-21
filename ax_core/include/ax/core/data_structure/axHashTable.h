@@ -42,8 +42,8 @@ friend class axHashTableNode<T,true>;
 friend class axHashTableNode<T,false>;
 protected:
 	void	insert 		( T* item );
-	void	remove 		( T* item );
-	T*		takeHead	()				{ T* h = B::head(); if (h) remove(h); return h; }
+	void	remove 		( T* item, bool call_onWillRemoveFromList = true );
+	T*		takeHead	( bool call_onWillRemoveFromList = true )		{ T* h = B::head(); if (h) remove(h,call_onWillRemoveFromList); return h; }
 	
 	
     Table*  table_;
@@ -144,7 +144,7 @@ axStatus axHashTable<T>::setTableSize( axSize table_size ) {
 	for( axSize i=0; i<table_.size(); i++ ) {
 		List & list = table_[i];
         for( ;; ) {
-            p = list.takeHead();
+            p = list.takeHead( false );
             if( !p ) break;
             tmpList.insert( p );
         }
@@ -157,7 +157,7 @@ axStatus axHashTable<T>::setTableSize( axSize table_size ) {
 
 	//re-insert all node to new list
     for(;;) {
-        p = tmpList.takeHead();
+        p = tmpList.takeHead( false );
         if( !p ) break;
         insert( p );
     }
@@ -200,8 +200,8 @@ void axHashTable_List<T> :: insert( T* item ) {
 }
 
 template < class T >
-void axHashTable_List<T> :: remove( T* item ) {
-    B::remove(item);
+void axHashTable_List<T> :: remove( T* item, bool call_onWillRemoveFromList ) {
+    B::remove(item, call_onWillRemoveFromList);
 	table_->_decNodeCount();
 	if( ! B::head() ) {//only remove from nonEmptyList when no more node
 		table_->nonEmptyList_.remove( &inTable_ );
