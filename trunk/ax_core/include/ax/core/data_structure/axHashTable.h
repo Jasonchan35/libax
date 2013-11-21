@@ -28,7 +28,10 @@ public:
     axHashTable_List()          {}
     ~axHashTable_List()         { B::clear(); }
     
-	axStatus	onTake	( axHashTable_List & src )	{ return -1; }
+	axStatus	onTake	( axHashTable_List & src )	{
+		assert( B::head() == nullptr ); //list must be empty when HashTable resize List Array
+		return 0;
+	}
 	
 	axStatus	toStringFormat( axStringFormat &f ) const {
 		return B::toStringFormat(f);
@@ -38,9 +41,11 @@ friend class axHashTable<T>;
 friend class axHashTableNode<T,true>;
 friend class axHashTableNode<T,false>;
 protected:
-	void insert ( T* item );
-	void remove ( T* item );
-    
+	void	insert 		( T* item );
+	void	remove 		( T* item );
+	T*		takeHead	()				{ T* h = B::head(); if (h) remove(h); return h; }
+	
+	
     Table*  table_;
     
     class   InTable : public axTinyListNode< InTable, false> {
@@ -73,11 +78,9 @@ public:
 	axStatus	setTableSize( axSize table_size );	
     axSize      tableSize   () const			{ return table_.size(); }
 
-	axSize      count	   () const			{ return nodeCount_; }
+	axSize      count	   () const				{ return nodeCount_; }
 
-	axStatus	toStringFormat( axStringFormat &f ) const {
-		return f.format("{?}", table_ );
-	}
+	axStatus	toStringFormat( axStringFormat &f ) const { return f.format("{?}", table_ ); }
 
 	class iterator {
 		typedef	axHashTable_List<T>	List;
@@ -139,14 +142,15 @@ axStatus axHashTable<T>::setTableSize( axSize table_size ) {
 
 	//move all node to tmpList
 	for( axSize i=0; i<table_.size(); i++ ) {
+		List & list = table_[i];
         for( ;; ) {
-            p = table_[i].takeHead();
+            p = list.takeHead();
             if( !p ) break;
             tmpList.insert( p );
         }
     }    
     
-	st = table_.resize( table_size );	if( !st ) return st;    
+	st = table_.resize( table_size );	if( !st ) return st;
 	for( axSize i=0; i<table_.size(); i++ ) {
         table_[i].table_ = this;
     }
