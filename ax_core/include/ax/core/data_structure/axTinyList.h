@@ -84,7 +84,7 @@ public:
 	axALWAYS_INLINE( const	T*	head		() const	)	{ return _head_; }
 
 
-	axALWAYS_INLINE( 		T*	takeHead	() )	{ T* h = _head_; if (h) h->removeFromList(); return h; }
+	axALWAYS_INLINE( 		T*	takeHead	() )	{ T* h = _head_; if (h) remove(h); return h; }
 
 	axALWAYS_INLINE( void		insert	( T* node )	);
 	axALWAYS_INLINE( void		remove	( T* node, bool call_onWillRemoveFromList = true ) );
