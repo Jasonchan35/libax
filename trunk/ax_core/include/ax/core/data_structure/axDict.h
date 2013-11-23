@@ -43,8 +43,8 @@ public:
 		return 0;
 	}
 		
-	const VALUE*	get	( const KEY & key ) {
-		Pair* p = getNode( key );
+	VALUE*	get	( const KEY & key ) {
+		Pair* p = getPair( key );
 		return p ? & p->value : nullptr;
 	}
 
@@ -54,6 +54,12 @@ public:
 			if( p->key == key ) return p;
 		}
 		return nullptr;
+	}
+	
+	axStatus	remove	( const KEY & key ) {
+		Pair* p = getPair( key );
+		if( p ) { delete p; return 0; }
+		return axStatus_Std::not_found;
 	}
 	
 	axSize	count	() const	{ return table_.count(); }
@@ -67,16 +73,12 @@ class axDict_String : public axDict< axStringWithHash<CHAR, STRING_LOCAL_BUF_SIZ
 	typedef	axStringWithHash< CHAR, STRING_LOCAL_BUF_SIZE >		String;
 	typedef	axDict< String, VALUE > B;
 public:
-	axStatus	set	( const CHAR* key, const VALUE & value ) {
-		String	skey;	skey.set(key);
-		return B::set( skey, value );
-	}
-	
-	const VALUE* get ( const CHAR* key ) {
-		String	skey;	skey.set(key);
-		return B::get( skey );
-	}
+	typedef typename B::Pair	Pair;
 
+	axStatus	set		( const CHAR* key, const VALUE & value ) 	{ String skey; skey.set(key); return B::set( skey, value ); }
+	VALUE* 		get 	( const CHAR* key ) 						{ String skey; skey.set(key); return B::get		( skey ); }
+	Pair* 		getPair	( const CHAR* key ) 						{ String skey; skey.set(key); return B::getPair	( skey ); }
+	axStatus	remove	( const CHAR* key )							{ String skey; skey.set(key); return B::remove 	( skey ); }
 };
 
 template< class VALUE, size_t STRING_LOCAL_BUF_SIZE=64 >
