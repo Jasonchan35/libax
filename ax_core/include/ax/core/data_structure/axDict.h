@@ -12,7 +12,7 @@
 #include "axHashTable.h"
 
 template<class KEY, class VALUE>
-class axDict {
+class axDict : public axNonCopyable {
 public:
 
 	class Pair : public axHashTableNode< Pair, true > {
@@ -62,6 +62,15 @@ public:
 		return axStatus_Std::not_found;
 	}
 	
+	axStatus	getArray( axIArray< VALUE > & arr ) {
+		axStatus st;
+		st = arr.reserve( count() );		if( !st ) return st;
+		for( auto & p : table_ ) {
+			st = arr.append( p.value );	if( !st ) return st;
+		}
+		return 0;
+	}
+	
 	axSize	count	() const	{ return table_.count(); }
 		
 private:
@@ -78,7 +87,7 @@ public:
 	axStatus	set		( const CHAR* key, const VALUE & value ) 	{ String skey; skey.set(key); return B::set( skey, value ); }
 	VALUE* 		get 	( const CHAR* key ) 						{ String skey; skey.set(key); return B::get		( skey ); }
 	Pair* 		getPair	( const CHAR* key ) 						{ String skey; skey.set(key); return B::getPair	( skey ); }
-	axStatus	remove	( const CHAR* key )							{ String skey; skey.set(key); return B::remove 	( skey ); }
+	axStatus	remove	( const CHAR* key )							{ String skey; skey.set(key); return B::remove 	( skey ); }	
 };
 
 template< class VALUE, size_t STRING_LOCAL_BUF_SIZE=64 >
