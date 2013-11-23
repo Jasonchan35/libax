@@ -176,6 +176,10 @@ axLogExpandArgListUserTag3	(  axStatus, ax_log_ex, axLog_Tag&, const char*, cons
 
 #endif
 
+#define	ax_log_func()			ax_log("{?}", 					axPRETTY_FUNC_NAME );
+#define	ax_log_func1( v1 )		ax_log("{?} {?}={?}", 			axPRETTY_FUNC_NAME, #v1,v1 );
+#define	ax_log_func2( v1,v2 )	ax_log("{?} {?}={?} {?}={?}", 	axPRETTY_FUNC_NAME, #v1,v1, #v2,v2 );
+
 void ax_log_unix_errno( const char* msg, int code );
 void ax_log_unix_errno( const char* msg );
 

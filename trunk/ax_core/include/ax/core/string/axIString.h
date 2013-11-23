@@ -26,9 +26,13 @@ public:
 
 	axStatus		set						( const char* sz );
 	axStatus		setWithLength			( const char* sz, axSize len );
+	axStatus		setLowerCase			( const char* sz ) { axStatus st=set(sz); if( !st ) return st; toLowerCase(); return 0; }
+	axStatus		setUpperCase			( const char* sz ) { axStatus st=set(sz); if( !st ) return st; toUpperCase(); return 0; }
 
 	axStatus		set						( const wchar_t* sz );
 	axStatus		setWithLength			( const wchar_t* sz, axSize len );
+	axStatus		setLowerCase			( const wchar_t* sz ) { axStatus st=set(sz); if( !st ) return st; toLowerCase(); return 0; }
+	axStatus		setUpperCase			( const wchar_t* sz ) { axStatus st=set(sz); if( !st ) return st; toUpperCase(); return 0; }
 
 	template<class V>
 	axStatus		convert					( const V& value )						{ return format( "{?}", value ); }
