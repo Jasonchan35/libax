@@ -674,8 +674,11 @@ axStatus	axFileSystem::shellOpenFile( const char *file ) {
 }
 
 axStatus	axFileSystem::showFileInFinder( const char *path ) {
+	axStatus st;
+	axStringA fullpath;
+	st = axFilePath::fullPath( fullpath, path );		if( !st ) return st;
 	
-	BOOL b  = [ [NSWorkspace sharedWorkspace] selectFile: ax_toNSString( path )  inFileViewerRootedAtPath:@""];
+	BOOL b  = [ [NSWorkspace sharedWorkspace] selectFile: ax_toNSString( fullpath )  inFileViewerRootedAtPath:@""];
 	if( !b ) return -1;
 	return 0;
 }
