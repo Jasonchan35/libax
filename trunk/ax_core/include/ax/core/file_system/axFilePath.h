@@ -22,8 +22,8 @@ public:
 	static axStatus	changeExt	( axIStringA &out, const char* 	  path, const char*    newExt );
 	static axStatus	changeExt	( axIStringW &out, const wchar_t* path, const wchar_t* newExt );
 	
-	static axStatus	parentDir	( axIStringA &out, const char*	  path );
-	static axStatus	parentDir	( axIStringW &out, const wchar_t* path );
+	static axStatus	parentDirInFileSystem	( axIStringA &out, const char*	  path );
+	static axStatus	parentDirInFileSystem	( axIStringW &out, const wchar_t* path );
 	
 	static axStatus	normalize	( axIStringA &out, const char*	  path );
 	static axStatus	normalize	( axIStringW &out, const wchar_t* path );

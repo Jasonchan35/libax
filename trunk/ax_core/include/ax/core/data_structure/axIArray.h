@@ -301,7 +301,7 @@ template< class T > inline
 bool	axIArray<T>::find	( axSize & index, const T& v ) const {
 
 	axSize i=0;
-	axForArray( const T, p, *this ) {
+	for( auto & p : *this ) {
 		if( *p == v ) {
 			index = i;
 			return true;
