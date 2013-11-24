@@ -105,8 +105,8 @@ public:
 	axALWAYS_INLINE( 	T*			head			() const )	{ return _head_; }
 	axALWAYS_INLINE( 	T*			tail			() const )	{ return _tail_; }
 
-	axALWAYS_INLINE( 	T*			takeHead		()	)						{ T* h = _head_; if (h) remove(h); return h; }
-	axALWAYS_INLINE( 	T*			takeTail		()	)						{ T* h = _tail_; if (h) remove(h); return h; }
+	axALWAYS_INLINE( 	T*			takeHead		( bool call_onWillRemoveFromList=true )	) { T* h = _head_; if (h) remove(h,call_onWillRemoveFromList); return h; }
+	axALWAYS_INLINE( 	T*			takeTail		( bool call_onWillRemoveFromList=true )	) { T* h = _tail_; if (h) remove(h,call_onWillRemoveFromList); return h; }
 	
 	axALWAYS_INLINE(	void		insert			( T* node )	)				{ append( node, _head_ ); }
 	axALWAYS_INLINE(	void		append			( T* node, T* before = NULL ) );
@@ -115,7 +115,7 @@ public:
 	axALWAYS_INLINE(	axStatus	appendByCopy	( const axDList<T> &src ) );
 	axALWAYS_INLINE(	axStatus	copy			( const axDList<T> &src ) ) { clear(); return appendByCopy( src ); }
 		
-	axALWAYS_INLINE(	void		remove			( T* node ) );
+	axALWAYS_INLINE(	void		remove			( T* node, bool call_onWillRemoveFromList=true ) );
 	axALWAYS_INLINE(	void		removeAll		() );
 	
 	axALWAYS_INLINE(	void		clear			() );
@@ -125,6 +125,8 @@ public:
 	
 	axALWAYS_INLINE(	axStatus	toStringFormat	( axStringFormat &f ) const );
 	axALWAYS_INLINE(	axStatus	onTake			( axDList<T> &src ) );
+
+						void		sort( bool (T::*largerThan)( const T & a ), bool ascending );
 
 private:
 	T*		_head_;
@@ -232,14 +234,17 @@ void axDList<T>::append( T *node, T *before ) {
 }
 
 template<class T> inline
-void axDList<T>::remove( T *node ) {
+void axDList<T>::remove( T *node, bool call_onWillRemoveFromList ) {
 	if( !node )	{ assert( false ); return; }
 	if( node->list() != this ) {
 		assert( false ); return;
 	}  // node is not belongs to this list !!
 
 	_size_--;
-	node->onWillRemoveFromList();
+	
+	if( call_onWillRemoveFromList ) {
+		node->onWillRemoveFromList();
+	}
 
 	if( node->_prev_ )
 		node->_prev_->_next_ = node->_next_;
@@ -296,6 +301,35 @@ axStatus axDList<T>::appendByCopy( const axDList<T> &src ) {
 	return 0;
 }
 
+
+template<class T> inline
+void axDList<T>::sort( bool (T::*largerThan)( const T & a ), bool ascending ) {
+	axDList<T>	tmp;
+
+	for(;;) {
+		T* p = takeHead( false );
+		if( !p ) break;
+		tmp.append(p);
+	}
+	
+	for(;;) {
+		T* p = tmp.takeHead( false );
+		if( !p ) break;
+		
+		T* before = nullptr;
+		for( auto & t : tmp ) {
+			if( ascending ) {
+				if( p.largerThan( t ) ) continue;
+			}else{
+				if( t.largerThan( p ) ) continue;
+			}
+			before = t;
+		}
+		
+		tmp.append( p, before );
+	}
+	
+}
 
 //@}
 
