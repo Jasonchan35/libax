@@ -131,25 +131,25 @@ static axStatus	axFilePath_normalize( axIString_<T> &out, const T* path ) {
 	const T* sp = axFilePath_seperators<T>();
 	st = folders.split( path, sp );	if( !st ) return st;
 
-	axForArray( axIString_<T>, p, folders ) {
-		if( p->size() == 0 ) continue;
-		if( p->equals( dot ) )	continue;
-		if( p->equals( dot2 ) ) {
+	for( auto & p : folders ) {
+		if( p.size() == 0 ) continue;
+		if( p.equals( dot ) )	continue;
+		if( p.equals( dot2 ) ) {
 			if( newPath.size() != 0 ) {
 				if( newPath.last().equals( dot2 ) ) return -1;
 				newPath.decSize(1);
 				continue;
 			}
 		}
-		st = newPath.addString( *p );		if( !st ) return st;
+		st = newPath.addString( p );		if( !st ) return st;
 	}
 
 	size_t i=0;
-	axForArray( axIString_<T>, p, newPath ) {
+	for( auto & p : newPath ) {
 		if( i > 0 ) {
 			st = out.append('/');		if( !st ) return st;
 		}
-		st = out.append( *p );			if( !st ) return st;
+		st = out.append( p );			if( !st ) return st;
 		i++;
 	}
 
@@ -160,11 +160,11 @@ static axStatus	axFilePath_normalize( axIString_<T> &out, const T* path ) {
 	return 0;
 }
 
-axStatus axFilePath::normalize( axIStringA &out, const char*		path ) { return axFilePath_normalize( out, path ); }
+axStatus axFilePath::normalize( axIStringA &out, const char*	path ) { return axFilePath_normalize( out, path ); }
 axStatus axFilePath::normalize( axIStringW &out, const wchar_t*	path ) { return axFilePath_normalize( out, path ); }
 
 template<class T> inline
-static axStatus	axFilePath_parentDir( axIString_<T> &out, const T* path ) {
+static axStatus	axFilePath_parentDirInFileSystem( axIString_<T> &out, const T* path ) {
 	axStatus st;
 	axString_<T, 256>	tmp;
 
@@ -172,7 +172,7 @@ static axStatus	axFilePath_parentDir( axIString_<T> &out, const T* path ) {
 
 	st = axFilePath_normalize( tmp, path );		if( !st ) return st;
 	if( tmp.size() == 0 ) return -1;
-
+	
 	T ch = tmp.lastChar(0);
 	const T* sp = axFilePath_seperators<T>();
 
@@ -186,8 +186,8 @@ static axStatus	axFilePath_parentDir( axIString_<T> &out, const T* path ) {
 	return out.setWithLength( tmp, outPos+1 );
 }
 
-axStatus axFilePath::parentDir( axIStringA &out, const char*		path ) { return axFilePath_parentDir( out, path ); }
-axStatus axFilePath::parentDir( axIStringW &out, const wchar_t*	path ) { return axFilePath_parentDir( out, path ); }
+axStatus axFilePath::parentDirInFileSystem( axIStringA &out, const char*	path ) { return axFilePath_parentDirInFileSystem( out, path ); }
+axStatus axFilePath::parentDirInFileSystem( axIStringW &out, const wchar_t*	path ) { return axFilePath_parentDirInFileSystem( out, path ); }
 
 #if 0
 #pragma mark ================= Windows ====================
