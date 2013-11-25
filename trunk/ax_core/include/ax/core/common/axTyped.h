@@ -47,6 +47,7 @@ public:
 	template<class T> 	bool	cast	( axRef<T> 		& ptr );
 	template<class T> 	bool	cast	( axAutoPtr<T> 	& ptr );
 
+			static		axType	staticType	();
 			virtual		axType	objectType	() const;
 			virtual		bool	isKindOf	( const axType & type ) const;
 	
@@ -67,11 +68,9 @@ protected: \
 	\
 public: \
 	typedef	T		CLASS; \
-	virtual	bool	isKindOf ( const axType & type ) const { \
-		if( type == axTypeGet<CLASS>() ) return true; \
-		return B::isKindOf(type); \
-	} \
-	virtual	axType objectType	() const { return axTypeGet<CLASS>(); } \
+	virtual	bool	isKindOf ( const axType & type ) const { return objectType().isKindOf( type ); } \
+	static	axType	staticType	()			{ return axTypeGet<CLASS>(); } \
+	virtual	axType	objectType	() const 	{ return axTypeGet<CLASS>(); } \
 	\
 //-----------
 
@@ -106,12 +105,20 @@ public:
 	bool operator != ( const axType & src ) const { return p_ == src.p_; }
 	
 	operator bool () const { return p_; }
+	
+	bool	isKindOf( axType t ) const	{
+		if( *this == t ) return true;
+		if( ! p_ ) return false;
+		return axType( p_->baseType() ).isKindOf(t);
+	}
 
-	axType baseType	() { return axType( p_ ? p_->baseType() : nullptr ); }
+	axType baseType	() const { return axType( p_ ? p_->baseType() : nullptr ); }
 
 	const axTypeImp* p_;
 };
 
+
+//! using this template function to prevent class forgot define axTypeDeclare()
 template<class T> inline axType axTypeGet()	{ return axType( T::_TypeImp::instance() ); }
 
 //-----------
@@ -119,9 +126,9 @@ template<class T> inline axType axTypeGet()	{ return axType( T::_TypeImp::instan
 class axTyped::_TypeImp : public axTypeImp, public axSingleton< axTyped::_TypeImp > {
 };
 
-
+inline	axType	axTyped::staticType () 		 	{ return axTypeGet< axTyped >(); }
 inline	axType	axTyped::objectType () const 	{ return axTypeGet< axTyped >(); }
-inline	bool	axTyped::isKindOf 	( const axType & type ) const { return type == axTypeGet< axTyped >(); }
+inline	bool	axTyped::isKindOf 	( const axType & type ) const { return objectType().isKindOf( type ); }
 
 
 #endif
