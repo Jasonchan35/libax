@@ -39,8 +39,17 @@ public:
 
 typedef axArray< axEnvVar >	axEnvVarArray;
 
-axStatus ax_exec		( int& cmd_ret, const char* cmd, const char*         std_in = NULL, axIStringA*   std_out = NULL, axIStringA*   std_err = NULL );
-axStatus ax_exec_bin	( int& cmd_ret, const char* cmd, const axIByteArray* std_in = NULL, axIByteArray* std_out = NULL, axIByteArray* std_err = NULL );
+axStatus ax_exec		( int& exitCode, const char* cmd,
+							const char*	workDir,
+							const char* std_in,
+							axIStringA* std_out,
+							axIStringA* std_err );
+
+axStatus ax_exec_bin	( int& exitCode, const char* cmd,
+							const char* workDir,
+							const axIByteArray* std_in,
+								  axIByteArray* std_out,
+								  axIByteArray* std_err );
 
 class axExecute : public axNonCopyable {
 public:
@@ -51,19 +60,19 @@ public:
 
 //			axStatus	setEnv		( const axEnvVarArray & env );
 			
-			axStatus	exec		( const char* cmd, const char*         std_in = NULL, axIStringA*   std_out = NULL, axIStringA*   std_err = NULL );
-			axStatus	execBin		( const char* cmd, const axIByteArray* std_in = NULL, axIByteArray* std_out = NULL, axIByteArray* std_err = NULL );
+			axStatus	exec		( const char* cmd, const char*	workDir, const char*         std_in, axIStringA*   std_out, axIStringA*   std_err );
+			axStatus	execBin		( const char* cmd, const char*	workDir, const axIByteArray* std_in, axIByteArray* std_out, axIByteArray* std_err );
 			
-			axStatus	asyncExec	( const char* cmd, const char*         std_in = NULL );
-			axStatus	asyncExecBin( const char* cmd, const axIByteArray* std_in = NULL );
+			axStatus	asyncExec	( const char* cmd, const char*	workDir, const char*         std_in );
+			axStatus	asyncExecBin( const char* cmd, const char*	workDir, const axIByteArray* std_in );
 			
-			axStatus	asyncPoll	( bool & isDone, uint32_t waitMilliseconds, axIStringA*   std_out = NULL, axIStringA*   std_err = NULL );
-			axStatus	asyncPollBin( bool & isDone, uint32_t waitMilliseconds, axIByteArray* std_out = NULL, axIByteArray* std_err = NULL );
+			axStatus	asyncPoll	( bool & isDone, uint32_t waitMilliseconds, axIStringA*   std_out, axIStringA*   std_err );
+			axStatus	asyncPollBin( bool & isDone, uint32_t waitMilliseconds, axIByteArray* std_out, axIByteArray* std_err );
 			
 //			bool		isRunning	();
 			void		terminate	();
 			
-			int			returnValue	() { return returnValue_; }
+			int			exitCode	() { return exitCode_; }
 			
 			axPID		pid			() { return pid_; }
 		
@@ -72,7 +81,7 @@ friend class Imp;
 protected:
 	Imp*	imp;
 
-	int 	returnValue_;
+	int 	exitCode_;
 	axPID	pid_;
 };
 
