@@ -5,7 +5,7 @@
 
 const size_t k_buf_size = 8*1024;
 
-class Node : public axDListNode< Node, true > {
+class axExecute_Buffer : public axDListNode< axExecute_Buffer, true > {
 public:
 	enum {
 		t_stdin,
@@ -48,15 +48,15 @@ void axPID::reset() {
 class axExecute_IOThread : public axThread {
 public:
 	NSFileHandle*			h;
-	axAtomicQueue< Node >	q;
-	axAtomicQueue< Node >*	qMain;
+	axAtomicQueue< axExecute_Buffer >	q;
+	axAtomicQueue< axExecute_Buffer >*	qMain;
 	
 	virtual	void onThreadProc() {
-		Node*	p;
+		axExecute_Buffer*	p;
 		for(;;) {
 			p = q.takeHead();		if( ! p ) continue;
 			switch( p->type ) {
-				case Node::t_stdin: {
+				case axExecute_Buffer::t_stdin: {
 //					DEBUG_ax_log("stdin writing");
 					if( p->buf.size() == 0 ) {
 						qMain->append( p );
@@ -67,23 +67,23 @@ public:
 					[h writeData:data];
 					qMain->append( p );
 				}break;
-				case Node::t_stdin_done: {
+				case axExecute_Buffer::t_stdin_done: {
 //					DEBUG_ax_log("thread stdin done");
 					[h closeFile];
 					qMain->append( p );
 					goto quit;
 				}break;
 
-				case Node::t_stdout: 
-				case Node::t_stderr: {
+				case axExecute_Buffer::t_stdout: 
+				case axExecute_Buffer::t_stderr: {
 				//	DEBUG_ax_log("thread stdout / stderr");
 					NSData* data = [h availableData];
 					size_t	n    = [data length];
 					if( n == 0 ) {
 			//			DEBUG_ax_log("thread stdout / stderr done");
 						switch( p->type ) {
-							case Node::t_stdout: 	p->type = Node::t_stdout_done;	break;
-							case Node::t_stderr: 	p->type = Node::t_stderr_done;	break;
+							case axExecute_Buffer::t_stdout: 	p->type = axExecute_Buffer::t_stdout_done;	break;
+							case axExecute_Buffer::t_stderr: 	p->type = axExecute_Buffer::t_stderr_done;	break;
 						}
 						//[h closeFile]; //no need for fileHandleForReading
 						qMain->append( p );
@@ -109,15 +109,15 @@ const int stderr_polling = 0x4;
 
 class axExecute::Imp {
 public:
-	axAtomicQueue< Node >	qMain;	
+	axAtomicQueue< axExecute_Buffer >	qMain;	
 	
 	axExecute_IOThread	stdin_thread;
 	axExecute_IOThread	stdout_thread;
 	axExecute_IOThread	stderr_thread;
 	
-	Node	stdin_node;
-	Node	stdout_node;
-	Node	stderr_node;
+	axExecute_Buffer	stdin_node;
+	axExecute_Buffer	stdout_node;
+	axExecute_Buffer	stderr_node;
 		
 	axNSObject< NSPipe >	inPipe;
 	axNSObject< NSPipe >	outPipe;
@@ -143,11 +143,11 @@ public:
 		[task terminate];
 	}
 
-	axStatus	create( axExecute* owner, const char* cmd, const axIByteArray* std_in ) {
+	axStatus	create( axExecute* owner, const char* cmd, const char* workDir, const axIByteArray* std_in ) {
 		axStatus st;
 		this->owner = owner;
 		
-		task    = [NSTask alloc];
+		task    = [[NSTask alloc] init];
 		
 	
 //	if( env ) {
@@ -167,6 +167,10 @@ public:
 		[task setStandardOutput: outPipe];
 		[task setStandardError:  errPipe];
 		
+		if( workDir ) {
+			[task setCurrentDirectoryPath:ax_toNSString(workDir)];
+		}
+		
 		axStringA_Array	arg;
 		st = arg.tokenize( cmd );		if( !st ) return st;
 		
@@ -180,9 +184,9 @@ public:
 		[task setLaunchPath:ax_toNSString(arg[0])];
 		[task setArguments:arr];
 
-		stdin_node.type  = Node::t_stdin;
-		stdout_node.type = Node::t_stdout;
-		stderr_node.type = Node::t_stderr;
+		stdin_node.type  = axExecute_Buffer::t_stdin;
+		stdout_node.type = axExecute_Buffer::t_stdout;
+		stderr_node.type = axExecute_Buffer::t_stderr;
 		
 		if( std_in ) {
 			st = stdin_node.buf.copy( *std_in );	if( !st ) return st;
@@ -220,13 +224,13 @@ public:
 						axIStringA*   str_out, axIStringA*   str_err ) 
 	{
 		axStatus st;
-		Node* p;
+		axExecute_Buffer* p;
 		isDone = false;
 		
 		if( ! polling ) {
 			isDone = ! [task isRunning];
 			if( isDone ) {
-				owner->returnValue_ = [task terminationStatus];
+				owner->exitCode_ = [task terminationStatus];
 			}			
 			return 0;
 		}		
@@ -237,20 +241,20 @@ public:
 		
 		switch( p->type ) {
 		//-- stdin
-			case Node::t_stdin: {
+			case axExecute_Buffer::t_stdin: {
 				p->buf.resize(0);
 				if( owner->on_stdin( p->buf ) ) {
 					stdin_thread.q.append( p );
 				}else{
-					p->type = Node::t_stdin_done;
+					p->type = axExecute_Buffer::t_stdin_done;
 					stdin_thread.q.append( p );
 				}
 			}break;
-			case Node::t_stdin_done: {
+			case axExecute_Buffer::t_stdin_done: {
 				ax_unset_bits( polling, stdin_polling );
 			}break;
 		//-- stdout
-			case Node::t_stdout: {
+			case axExecute_Buffer::t_stdout: {
 				if( bin_out ) {
 					st = bin_out->appendN( p->buf );
 					if( !st ) ax_log("Error {?}: axExecute cannot append to stdout buffer", st );
@@ -261,11 +265,11 @@ public:
 				}
 				stdout_thread.q.append( p );
 			}break;
-			case Node::t_stdout_done: {
+			case axExecute_Buffer::t_stdout_done: {
 				ax_unset_bits( polling, stdout_polling );
 			}break;
 		//-- stderr
-			case Node::t_stderr: {
+			case axExecute_Buffer::t_stderr: {
 				if( bin_err ) {
 					bin_err->appendN( p->buf );
 					if( !st ) ax_log("Error {?}: axExecute cannot append to stderr buffer", st );
@@ -276,7 +280,7 @@ public:
 				}
 				stderr_thread.q.append( p );
 			}break;
-			case Node::t_stderr_done: {
+			case axExecute_Buffer::t_stderr_done: {
 				ax_unset_bits( polling, stderr_polling );
 			}break;
 		}
@@ -346,7 +350,7 @@ public:
 		kill( owner->pid_.p_, SIGKILL );
 	}
 	
-	axStatus create( axExecute* owner, const char* cmd, const axIByteArray* std_in ) {
+	axStatus create( axExecute* owner, const char* cmd, cosnt char* workDir, const axIByteArray* std_in ) {
 		axStatus st;
 		this->owner = owner;
 		
@@ -365,6 +369,10 @@ public:
 		}
 		
 		owner->pid_.p_ = pid;
+
+		if( workDir ) {
+			chdir( workDir );
+		}
 
 		int ret;
 		if( pid == 0 ) {
@@ -684,7 +692,7 @@ public:
 		}
 	}
 
-	axStatus	create	( axExecute* owner, const char* cmd, const axIByteArray* std_in ) {
+	axStatus	create	( axExecute* owner, const char* cmd, const char* workDir, const axIByteArray* std_in ) {
 		this->owner = owner;
 		axStatus st;
 		if( std_in ) {
@@ -697,10 +705,13 @@ public:
 
 		axTempStringA	tmp;
 		axTempStringW	_cmd;
+		
+		axTempStringW	_workDir;
+		st = _workDir.set( workDir );				if( !st ) return st;
 
 		st = escpaceQuote( tmp, cmd );				if( !st ) return st;
 //		st =  _cmd.format( "cmd /c {?}", cmd );		if( !st ) return st;
-		st =  _cmd.format( "{?}", cmd );			if( !st ) return st;
+		st =  _cmd.set( cmd );						if( !st ) return st;
 
 	//	DEBUG_ax_log_var( _cmd );
 
@@ -728,7 +739,7 @@ public:
 								TRUE,           // handles are inherited 
 								0,              // creation flags 
 								NULL,           // use parent's environment 
-								NULL,           // use parent's current directory 
+								workDir ? _workDir : NULL,           // use parent's current directory
 								&siStartInfo,   // STARTUPINFO pointer 
 								&piProcInfo );  // receives PROCESS_INFORMATION 
 	   
@@ -863,15 +874,15 @@ public:
 #pragma mark ================= Common ====================
 #endif
 
-axStatus axExecute::asyncExec   ( const char* cmd, const char*   std_in ) {
+axStatus axExecute::asyncExec   ( const char* cmd, const char*	workDir, const char*   std_in ) {
 	if( std_in ) {
 		axExternalArray<uint8_t>	buf( (uint8_t*)std_in, ax_strlen(std_in) );
-		return asyncExecBin(cmd, & buf );
+		return asyncExecBin(cmd, workDir, & buf );
 	}
-	return asyncExecBin( cmd, NULL );
+	return asyncExecBin( cmd, workDir, nullptr );
 }
 
-axStatus axExecute::asyncExecBin( const char* cmd, const axIByteArray*   std_in ) {
+axStatus axExecute::asyncExecBin( const char* cmd, const char*	workDir, const axIByteArray*   std_in ) {
 	terminate();
 	
 	axStatus st;
@@ -880,7 +891,7 @@ axStatus axExecute::asyncExecBin( const char* cmd, const axIByteArray*   std_in 
 	imp = new Imp;	
 	if( ! imp ) return axStatus_Std::not_enough_memory;
 
-	st = imp->create( this, cmd, std_in );		if( !st ) return st;
+	st = imp->create( this, cmd, workDir, std_in );		if( !st ) return st;
 	return 0;
 }
 
@@ -910,7 +921,7 @@ bool	axExecute::isRunning() {
 
 axExecute::axExecute() {
 	imp = NULL;
-	returnValue_ = axStatus::kUndefine;
+	exitCode_ = axStatus::kUndefine;
 }
 
 axExecute::~axExecute() {
@@ -918,9 +929,9 @@ axExecute::~axExecute() {
 }
 
 
-axStatus	axExecute::exec		( const char* cmd, const char*         std_in, axIStringA*   std_out, axIStringA*   std_err ) {
+axStatus	axExecute::exec		( const char* cmd, const char*	workDir, const char* std_in, axIStringA* std_out, axIStringA* std_err ) {
 	axStatus st;
-	st = asyncExec( cmd, std_in );		if( !st ) return st;
+	st = asyncExec( cmd, workDir, std_in );		if( !st ) return st;
 	bool isDone = false;
 	while( ! isDone ) {
 		st = asyncPoll( isDone, 50, std_out, std_err );		if( !st ) return st;
@@ -928,9 +939,9 @@ axStatus	axExecute::exec		( const char* cmd, const char*         std_in, axIStri
 	return 0;
 }
 
-axStatus	axExecute::execBin	( const char* cmd, const axIByteArray* std_in, axIByteArray* std_out, axIByteArray* std_err ) {
+axStatus	axExecute::execBin	( const char* cmd,  const char*	workDir, const axIByteArray* std_in, axIByteArray* std_out, axIByteArray* std_err ) {
 	axStatus st;
-	st = asyncExecBin( cmd, std_in );		if( !st ) return st;
+	st = asyncExecBin( cmd, workDir, std_in );		if( !st ) return st;
 	bool isDone = false;
 	while( ! isDone ) {
 		st = asyncPollBin( isDone, 50, std_out, std_err );		if( !st ) return st;
@@ -939,19 +950,19 @@ axStatus	axExecute::execBin	( const char* cmd, const axIByteArray* std_in, axIBy
 }
 
 
-axStatus ax_exec( int& cmd_ret, const char* cmd, const char*   std_in, axIStringA*   std_out, axIStringA*   std_err ) {
+axStatus ax_exec( int& exitCode, const char* cmd, const char* workDir, const char*   std_in, axIStringA*   std_out, axIStringA*   std_err ) {
 	axStatus	st;
 	axExecute	e;	
-	st =  e.exec( cmd, std_in, std_out, std_err );		if( !st ) return st;
-	cmd_ret = e.returnValue();
+	st =  e.exec( cmd, workDir, std_in, std_out, std_err );		if( !st ) return st;
+	exitCode = e.exitCode();
 	return 0;
 }
 
-axStatus ax_exec_bin( int& cmd_ret, const char* cmd, const axIByteArray* std_in, axIByteArray* std_out, axIByteArray* std_err ) {
+axStatus ax_exec_bin( int& exitCode, const char* cmd, const char* workDir, const axIByteArray* std_in, axIByteArray* std_out, axIByteArray* std_err ) {
 	axStatus	st;
 	axExecute	e;
-	st =  e.execBin( cmd, std_in, std_out, std_err );		if( !st ) return st;
-	cmd_ret = e.returnValue();
+	st =  e.execBin( cmd, workDir, std_in, std_out, std_err );		if( !st ) return st;
+	exitCode = e.exitCode();
 	return 0;
 }
 
