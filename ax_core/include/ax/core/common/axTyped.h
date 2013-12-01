@@ -58,7 +58,7 @@ public:
 	typedef BASE	B; \
 	\
 protected: \
-	template<class T> friend class axSingleton; \
+	template<class P> friend class axSingleton; \
 	friend axType axTypeGet< T > (); \
 	T( axTypedBaseClassValidation & a ) : BASE(a) {} \
 	class _TypeImp : public axTypeImp, public axSingleton< _TypeImp > { \
