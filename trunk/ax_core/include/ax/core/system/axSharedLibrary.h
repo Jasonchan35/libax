@@ -22,6 +22,8 @@ public:
     template<class FUNC>
     axStatus  getProc( FUNC &func, const char* proc_name );
 
+	axStatus	onTake( axSharedLibrary & src );
+
 private:
 
 #ifdef axOS_WIN

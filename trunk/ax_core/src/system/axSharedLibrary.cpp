@@ -9,6 +9,13 @@ axSharedLibrary::~axSharedLibrary() {
     unload();
 }
 
+axStatus axSharedLibrary::onTake( axSharedLibrary & src ) {
+	unload();
+	handle_ = src.handle_;
+	src.handle_ = nullptr;
+	return 0;
+}
+
 #if 0
 #pragma mark ================= MS Win ====================
 #endif
