@@ -22,10 +22,6 @@ public:
 
 	virtual	void		onThreadProc() = 0;
 
-friend class axThreadPool;
-protected:
-    axPtr< axThreadPool >	pool_;        
-    
 private:
 #ifdef axOS_WIN
 	HANDLE	h_;

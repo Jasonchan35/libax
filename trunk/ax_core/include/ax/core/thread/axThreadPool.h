@@ -14,34 +14,40 @@ public:
 	axStatus	setCount( axSize n, bool wait ); //!< todo: timeout value
 	axSize      count();
 	axSize      target();
+
+	class PerThreadData : public axNonCopyable {
+	public:
+		virtual ~PerThreadData() {}
+	};
+
+    class Thread : public axThread {
+        virtual void onThreadProc();
+	public:
+		Thread();
+	    axPtr< axThreadPool >	pool_;
+		bool	needDecudeFromCounter_;
+		
+		axAutoPtr< PerThreadData >	perThreadData;
+    };
     
-	virtual void onThreadStart	( axThread* thread ) { };
-	virtual void onThreadStop	( axThread* thread ) { };
-	virtual void onThreadProc	( axThread* thread ) = 0;
+	virtual void onThreadStart	( Thread* thread ) { };
+	virtual void onThreadStop	( Thread* thread ) { };
+	virtual void onThreadProc	( Thread* thread ) = 0;
 
 private:
 
 	class _CVData {
 	public:
-		_CVData() { 
-			target	= 0; 
-			count	= 0;
-		}
-
 		axSize		target;
-		axSize		count;	//!< created thread
-		axSize		running;//!< in running
+		axSize		count;
 	};
     typedef axCondVarProtected<_CVData>     CVData;
     CVData::Data    cvdata_;
     
-    class Thread : public axThread {
-        virtual void onThreadProc();
-    };
-    
 protected:
+
     friend class Thread;
-	bool keeprun( axThread* thread ); 
+	bool keeprun( Thread* thread ); 
 };
 
 

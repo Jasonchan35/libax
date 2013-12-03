@@ -197,7 +197,7 @@ void axLog::doNode( Node* n ) {
     }
 }
 
-void axLog::onThreadProc( axThread* thread ) {
+void axLog::onThreadProc( Thread* thread ) {
     //bool lv_ok;
     Node *n = NULL;
     for(;;) {
