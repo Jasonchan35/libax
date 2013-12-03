@@ -97,7 +97,7 @@ friend class Format_Log;
     Queue::Data                             queue_list_;
 
 private:
-	virtual void onThreadProc( axThread* thread );
+	virtual void onThreadProc( Thread* thread );
 
 	static	void _to_file_stream( FILE* f, Node* n, bool with_time );
 	
