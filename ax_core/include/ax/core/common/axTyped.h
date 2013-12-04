@@ -106,6 +106,8 @@ public:
 	
 	operator bool () const { return p_; }
 	
+	template<class T> 	bool	isKindOf_ 	() const {	return isKindOf( axTypeOf<T>() ); }	
+	
 	bool	isKindOf( axType t ) const	{
 		if( *this == t ) return true;
 		if( ! p_ ) return false;
