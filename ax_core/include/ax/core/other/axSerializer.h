@@ -477,7 +477,7 @@ template<class S> inline
 axStatus axIArray<T>::serialize_io( S &s ) {
 	axStatus st = ax_serialize_io_array_size( s, *this );	if( !st ) return st;
 #if ( axBYTE_ORDER == axSERIALIZE_BYTE_ORDER )
-	if( axTypeOf<T>::rawSerializable ) {
+	if( axTypeTrait<T>::rawSerializable ) {
 		return s.io_raw( ptr(), size() * sizeof(T) );
 	}
 #endif

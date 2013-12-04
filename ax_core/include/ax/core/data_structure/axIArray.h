@@ -253,7 +253,7 @@ axStatus	axIArray<T>::setCapacity ( axSize n ) {
 
 	if( p_ != np ) {
 		if( size_ ) {
-			if( axTypeOf<T>::isPOD ) {
+			if( axTypeTrait<T>::isPOD ) {
 				memcpy( (void*)np, (void*)p_, size_ * sizeof(T) );
 			}else{
 				T* s = p_; //old data

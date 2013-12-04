@@ -53,7 +53,7 @@
 		9640E0C516009DA400F9D037 /* axTypeList_float.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E04916009DA400F9D037 /* axTypeList_float.h */; };
 		9640E0C616009DA400F9D037 /* axTypeList_int.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E04A16009DA400F9D037 /* axTypeList_int.h */; };
 		9640E0C716009DA400F9D037 /* axTypeList_uint.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E04B16009DA400F9D037 /* axTypeList_uint.h */; };
-		9640E0C816009DA400F9D037 /* axTypeOf.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E04C16009DA400F9D037 /* axTypeOf.h */; };
+		9640E0C816009DA400F9D037 /* axTypeTrait.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E04C16009DA400F9D037 /* axTypeTrait.h */; };
 		9640E0C916009DA400F9D037 /* axArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E04E16009DA400F9D037 /* axArray.h */; };
 		9640E0CB16009DA400F9D037 /* axArray_types.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E05016009DA400F9D037 /* axArray_types.h */; };
 		9640E0CC16009DA400F9D037 /* axAutoPtr.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E05116009DA400F9D037 /* axAutoPtr.h */; };
@@ -219,7 +219,7 @@
 		9640E04916009DA400F9D037 /* axTypeList_float.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axTypeList_float.h; sourceTree = "<group>"; };
 		9640E04A16009DA400F9D037 /* axTypeList_int.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axTypeList_int.h; sourceTree = "<group>"; };
 		9640E04B16009DA400F9D037 /* axTypeList_uint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axTypeList_uint.h; sourceTree = "<group>"; };
-		9640E04C16009DA400F9D037 /* axTypeOf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axTypeOf.h; sourceTree = "<group>"; };
+		9640E04C16009DA400F9D037 /* axTypeTrait.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axTypeTrait.h; sourceTree = "<group>"; };
 		9640E04E16009DA400F9D037 /* axArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axArray.h; sourceTree = "<group>"; };
 		9640E05016009DA400F9D037 /* axArray_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axArray_types.h; sourceTree = "<group>"; };
 		9640E05116009DA400F9D037 /* axAutoPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axAutoPtr.h; sourceTree = "<group>"; };
@@ -528,7 +528,7 @@
 				9640E04916009DA400F9D037 /* axTypeList_float.h */,
 				9640E04A16009DA400F9D037 /* axTypeList_int.h */,
 				9640E04B16009DA400F9D037 /* axTypeList_uint.h */,
-				9640E04C16009DA400F9D037 /* axTypeOf.h */,
+				9640E04C16009DA400F9D037 /* axTypeTrait.h */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -831,7 +831,7 @@
 				9640E0C516009DA400F9D037 /* axTypeList_float.h in Headers */,
 				9640E0C616009DA400F9D037 /* axTypeList_int.h in Headers */,
 				9640E0C716009DA400F9D037 /* axTypeList_uint.h in Headers */,
-				9640E0C816009DA400F9D037 /* axTypeOf.h in Headers */,
+				9640E0C816009DA400F9D037 /* axTypeTrait.h in Headers */,
 				9640E0C916009DA400F9D037 /* axArray.h in Headers */,
 				9640E0CB16009DA400F9D037 /* axArray_types.h in Headers */,
 				9640E0CC16009DA400F9D037 /* axAutoPtr.h in Headers */,

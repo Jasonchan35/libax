@@ -2,7 +2,7 @@
 #ifndef __axStringFormat_out_Imp_h__
 #define __axStringFormat_out_Imp_h__
 
-#include "../common/axTypeOf.h"
+#include "../common/axTypeTrait.h"
 #include "axStringFormat.h"
 #include "ax_str_to.h"
 #include "../data_structure/axPtr.h"

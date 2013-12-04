@@ -284,7 +284,7 @@ axStatus axStringFormat_out_NumberT( axStringFormat &f, T value ) {
 	}else{
 		digi = axStringFormat_to_digi( ch, max_digi, value, base, type, precision, table );
 		if( digi < 0 ) { assert(false); return -1; }        
-		if( ! axTypeOf<T>::isUnsigned && ax_less_than0( value ) ) {
+		if( ! axTypeTrait<T>::isUnsigned && ax_less_than0( value ) ) {
 			plus_sign = false;
 		}
 	}
