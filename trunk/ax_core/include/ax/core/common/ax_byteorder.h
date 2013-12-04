@@ -1,7 +1,7 @@
 #ifndef __ax_byteorder_h__
 #define __ax_byteorder_h__
 
-#include "axTypeOf.h"
+#include "axTypeTrait.h"
 
 inline uint8_t  ax_byte_swap( uint8_t  x ) { return x; }
 inline uint16_t ax_byte_swap( uint16_t x ) { return (x>>8) | (x<<8); }

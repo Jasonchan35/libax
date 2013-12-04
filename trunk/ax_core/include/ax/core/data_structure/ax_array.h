@@ -26,7 +26,7 @@ template<class T> axALWAYS_INLINE( T* 		ax_array_max		( T* p, size_t n ) );
 
 template< class T > inline
 void	ax_array_constructor( T* p, size_t n ) {
-	if( axTypeOf<T>::isPOD ) return;
+	if( axTypeTrait<T>::isPOD ) return;
 	T *e = p + n;
 	for( ; p<e; p++ )
 		::new(p) T;
@@ -34,7 +34,7 @@ void	ax_array_constructor( T* p, size_t n ) {
 
 template< class T > inline
 void	ax_array_destructor( T* p, size_t n ) {
-	if( axTypeOf<T>::isPOD ) return;
+	if( axTypeTrait<T>::isPOD ) return;
 	T *e = p + n;
 	for( ; p<e; p++ )
 		p->~T();
@@ -42,7 +42,7 @@ void	ax_array_destructor( T* p, size_t n ) {
 
 template<class T> inline
 bool ax_array_is_equals( const T* dst, const T* src, size_t n ) {
-	if( axTypeOf<T>::isPOD ) {
+	if( axTypeTrait<T>::isPOD ) {
 		return ( 0 == memcmp( dst, src, n * sizeof(T) ) );
 	}else{
 		const T* end = src + n;
@@ -61,7 +61,7 @@ axStatus ax_array_copy( T* dst, const T* src, size_t n ) {
 	}
 
 	axStatus st;
-	if( axTypeOf<T>::isPOD ) {
+	if( axTypeTrait<T>::isPOD ) {
 		memcpy( (void*)dst, (void*)src, n * sizeof(T) );
 	}else{
 		const T* end = src + n;
@@ -81,7 +81,7 @@ axStatus ax_array_take( T* dst, T* src, size_t n ) {
 
 	if( dst+n > src && dst < src+n ) {
 		//overlapped
-		if( axTypeOf<T>::isPOD ) {
+		if( axTypeTrait<T>::isPOD ) {
 			memmove( (void*)dst, (void*)src, n * sizeof(T) );
 			return 0;
 		}else{
@@ -105,7 +105,7 @@ axStatus ax_array_take( T* dst, T* src, size_t n ) {
 		return 0;
 	}
 
-	if( axTypeOf<T>::isPOD ) {
+	if( axTypeTrait<T>::isPOD ) {
 		//warning: destination for this 'memcpy' call is a pointer to dynamic class 'axArray<int, 0>'; vtable pointer will be overwritten [-Wnon-pod-memaccess,3]
 		memcpy( (void*)dst, (void*)src, n * sizeof(T) );
 	}else{

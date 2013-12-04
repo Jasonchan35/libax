@@ -1,7 +1,7 @@
 #ifndef __axSize_h__
 #define __axSize_h__
 
-#include "axTypeOf.h"
+#include "axTypeTrait.h"
 
 //! \ingroup base_common
 //@{
@@ -60,7 +60,7 @@ typedef uint64_t axFileSize;
 
 
 template<>
-class axTypeOf<axSize> {
+class axTypeTrait<axSize> {
 	typedef	size_t	T;
 public:
 	static	const	bool	isPOD		= true;

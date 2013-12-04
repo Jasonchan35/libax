@@ -96,7 +96,7 @@ public:
 };
 
 #define axTYPE_LIST(T) \
-	template<> class axTypeOf<T> { \
+	template<> class axTypeTrait<T> { \
 	public: \
 		static	const	bool	isPOD = true; \
 		static	const	bool	rawSerializable = true; \

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __axTypeOf_h__
-#define __axTypeOf_h__
+#ifndef __axTypeTrait_h__
+#define __axTypeTrait_h__
 
 #include "axStatus.h"
 
@@ -30,7 +30,7 @@ class axNullClass;
 #endif
 
 template< class T >	
-class axTypeOf {
+class axTypeTrait {
 public:
 	//! POD (plain-old-data)
 	static	const	bool	isPOD = false; 				//can be memcpy
@@ -42,7 +42,7 @@ template<class T>	bool  ax_less_than0( T value );
 //--- uint ---
 
 #define	axTYPE_LIST(T)	\
-	template<> class axTypeOf<T > { \
+	template<> class axTypeTrait<T > { \
 	public: \
 		static	const	bool	isPOD			= true; \
 		static	const	bool	rawSerializable = true; \
@@ -57,7 +57,7 @@ template<class T>	bool  ax_less_than0( T value );
 #undef		axTYPE_LIST
 
 #define	axTYPE_LIST(T)	\
-	template<> class axTypeOf<T > { \
+	template<> class axTypeTrait<T > { \
 	public: \
 		static	const	bool	isPOD			= true; \
 		static	const	bool	rawSerializable = true; \
@@ -77,7 +77,7 @@ template<class T>	bool  ax_less_than0( T value );
 
 //--- float ---
 template<>
-class axTypeOf<float> {
+class axTypeTrait<float> {
 public:
 	static	const	bool	isPOD		= true;
 	static	const	bool	rawSerializable = true;
@@ -87,7 +87,7 @@ public:
 };
 
 template<>
-class axTypeOf<double> {
+class axTypeTrait<double> {
 public:
 	static	const	bool	isPOD		= true;
 	static	const	bool	rawSerializable = true;
@@ -191,14 +191,14 @@ axStatus	ax_safe_assign( DST &dst, const SRC &src ) {
 	DST tmp = (DST) src;
 
 	//unsigned <<= signed
-	if( axTypeOf<DST>::isUnsigned && ! axTypeOf<SRC>::isUnsigned ) {
+	if( axTypeTrait<DST>::isUnsigned && ! axTypeTrait<SRC>::isUnsigned ) {
 		if( ax_less_than0( src ) ) {
 			return axStatus_Std::non_safe_assign;
 		}
 	}
 	
 	// signed <<= unsigned
-	if( ! axTypeOf<DST>::isUnsigned && axTypeOf<SRC>::isUnsigned ) {
+	if( ! axTypeTrait<DST>::isUnsigned && axTypeTrait<SRC>::isUnsigned ) {
 		if( ax_less_than0( tmp ) ) {
 			return axStatus_Std::non_safe_assign;	
 		}
@@ -277,4 +277,4 @@ axStatus	ax_safe_mul( DST &dst, const SRC & input_src ) {
 
 //@}
 
-#endif //__axTypeOf_h__
+#endif //__axTypeTrait_h__

@@ -20,7 +20,7 @@ class axTypedBaseClassValidation {};
 class axTypeImp;
 class axType;
 
-template<class T> inline axType axTypeGet();
+template<class T> inline axType axTypeOf();
 
 class axTyped : public axNonCopyable {
 	typedef	axTyped		CLASS;
@@ -28,7 +28,7 @@ class axTyped : public axNonCopyable {
 protected:
 	axTyped( axTypedBaseClassValidation & a ) {}
 	
-	friend axType axTypeGet< axTyped > ();
+	friend axType axTypeOf< axTyped > ();
 	template<class T> friend class axSingleton;
 	class _TypeImp;
 	
@@ -51,7 +51,7 @@ public:
 			virtual		axType	objectType	() const;
 			virtual		bool	isKindOf	( const axType & type ) const;
 	
-	template<class T> 	bool	isKindOf_ 	() const {	return isKindOf( axTypeGet<T>() ); }
+	template<class T> 	bool	isKindOf_ 	() const {	return isKindOf( axTypeOf<T>() ); }
 };
 
 #define axTypeDeclare(T,BASE) \
@@ -59,18 +59,18 @@ public:
 	\
 protected: \
 	template<class P> friend class axSingleton; \
-	friend axType axTypeGet< T > (); \
+	friend axType axTypeOf< T > (); \
 	T( axTypedBaseClassValidation & a ) : BASE(a) {} \
 	class _TypeImp : public axTypeImp, public axSingleton< _TypeImp > { \
 	public: \
-		_TypeImp() { baseType_ = axTypeGet<BASE>().p_;  } \
+		_TypeImp() { baseType_ = axTypeOf<BASE>().p_;  } \
 	}; \
 	\
 public: \
 	typedef	T		CLASS; \
 	virtual	bool	isKindOf ( const axType & type ) const { return objectType().isKindOf( type ); } \
-	static	axType	staticType	()			{ return axTypeGet<CLASS>(); } \
-	virtual	axType	objectType	() const 	{ return axTypeGet<CLASS>(); } \
+	static	axType	staticType	()			{ return axTypeOf<CLASS>(); } \
+	virtual	axType	objectType	() const 	{ return axTypeOf<CLASS>(); } \
 	\
 //-----------
 
@@ -119,15 +119,15 @@ public:
 
 
 //! using this template function to prevent class forgot define axTypeDeclare()
-template<class T> inline axType axTypeGet()	{ return axType( T::_TypeImp::instance() ); }
+template<class T> inline axType axTypeOf()	{ return axType( T::_TypeImp::instance() ); }
 
 //-----------
 
 class axTyped::_TypeImp : public axTypeImp, public axSingleton< axTyped::_TypeImp > {
 };
 
-inline	axType	axTyped::staticType () 		 	{ return axTypeGet< axTyped >(); }
-inline	axType	axTyped::objectType () const 	{ return axTypeGet< axTyped >(); }
+inline	axType	axTyped::staticType () 		 	{ return axTypeOf< axTyped >(); }
+inline	axType	axTyped::objectType () const 	{ return axTypeOf< axTyped >(); }
 inline	bool	axTyped::isKindOf 	( const axType & type ) const { return objectType().isKindOf( type ); }
 
 

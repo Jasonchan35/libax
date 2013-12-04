@@ -204,7 +204,7 @@ template< class T > inline axStatus ax_json_serialize_value( axJsonParser &s, ax
 //@}
 
 #define axTYPE_LIST(T) \
-	template<> class axTypeOf<T> { \
+	template<> class axTypeTrait<T> { \
 	public: \
 		static const bool isPOD = true; \
 	};\
