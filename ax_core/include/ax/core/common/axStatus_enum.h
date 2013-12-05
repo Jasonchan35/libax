@@ -17,7 +17,7 @@ axStatus_enum( timed_out )
 axStatus_enum( data_corrupted )
 axStatus_enum( opengl_unsupported_extension )
 axStatus_enum( hex_format_error )
-
+axStatus_enum( dict_cannot_add_pair )
 
 //-------------
 axStatus_offset( __non_safe_assign__, 100 )
