@@ -30,29 +30,40 @@ public:
 
 	axStatus	set	( const KEY & key, const VALUE& value ) {
 		axStatus	st;
-		Pair* p = getPair( key );
-		if( p ) {
-			st = ax_copy( p->value, value );	if( !st ) return st;
-		}else{
-			axAutoPtr< Pair >	ap(st);			if( !st ) return st;
-			st = ax_copy( ap->key, key );		if( !st ) return st;
-			st = ax_copy( ap->value, value );	if( !st ) return st;
-			st = table_.insert( ap );			if( !st ) return st;
-			ap.unref();
-		}
+		Pair* p = getPair( key, true );
+		if( !p ) return axStatus_Std::dict_cannot_add_pair;
+		st = ax_copy( p->value, value );	if( !st ) return st;
 		return 0;
 	}
+
+	axStatus	setByTake ( const KEY & key, VALUE & value ) {
+		axStatus	st;
+		Pair* p = getPair( key, true );
+		if( !p ) return axStatus_Std::dict_cannot_add_pair;
+		st = ax_take( p->value, value );	if( !st ) return st;
+		return 0;
+	}
+
 		
 	VALUE*	get	( const KEY & key ) {
-		Pair* p = getPair( key );
+		Pair* p = getPair( key, false );
 		return p ? & p->value : nullptr;
 	}
 
-	Pair*	getPair	( const KEY & key ) {
+	Pair*	getPair	( const KEY & key, bool newIfNotFound ) {
 		Pair* p = table_.getListHead( ax_hash_code( key ) );
 		for( ; p; p=p->next() ) {
 			if( p->key == key ) return p;
 		}
+		
+		if( newIfNotFound ) {
+			axStatus st;
+			axAutoPtr< Pair >	ap(st);			if( !st ) return nullptr;
+			st = ax_copy( ap->key, key );		if( !st ) return nullptr;
+			st = table_.insert( ap );			if( !st ) return nullptr;
+			return ap.unref();
+		}
+		
 		return nullptr;
 	}
 	
@@ -72,6 +83,8 @@ public:
 	}
 	
 	axSize	count	() const	{ return table_.count(); }
+	
+	void	clear	()			{ table_.clear(); }
 		
 private:
 	HashTable	table_;
@@ -84,10 +97,11 @@ class axDict_String : public axDict< axStringWithHash<CHAR, STRING_LOCAL_BUF_SIZ
 public:
 	typedef typename B::Pair	Pair;
 
-	axStatus	set		( const CHAR* key, const VALUE & value ) 	{ String skey; skey.set(key); return B::set( skey, value ); }
-	VALUE* 		get 	( const CHAR* key ) 						{ String skey; skey.set(key); return B::get		( skey ); }
-	Pair* 		getPair	( const CHAR* key ) 						{ String skey; skey.set(key); return B::getPair	( skey ); }
-	axStatus	remove	( const CHAR* key )							{ String skey; skey.set(key); return B::remove 	( skey ); }	
+	axStatus	set			( const CHAR* key, const VALUE & value ) 	{ String skey; skey.set(key); return B::set		( skey, value ); }
+	axStatus	setByTake	( const CHAR* key, const VALUE & value ) 	{ String skey; skey.set(key); return B::setByTake( skey, value ); }
+	VALUE* 		get 		( const CHAR* key ) 						{ String skey; skey.set(key); return B::get		( skey ); }
+	Pair* 		getPair		( const CHAR* key, bool newIfNotFound ) 	{ String skey; skey.set(key); return B::getPair	( skey, newIfNotFound ); }
+	axStatus	remove		( const CHAR* key )							{ String skey; skey.set(key); return B::remove 	( skey ); }	
 };
 
 template< class VALUE, size_t STRING_LOCAL_BUF_SIZE=64 >

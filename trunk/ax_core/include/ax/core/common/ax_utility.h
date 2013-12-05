@@ -34,6 +34,7 @@ template<class T> inline bool ax_is_memory_overlapped( const T* a, size_t a_size
 inline void ax_toggle( bool &b ) { b = !b; }
 
 template< class T > uint32_t ax_hash_code( const T & v );
+template< class T > inline uint32_t ax_hash_code ( T* const & p ) { return (uint32_t)(intptr_t)p; }
 
 template<> inline uint32_t ax_hash_code( const int8_t   & v ) { return (uint32_t) v; }
 template<> inline uint32_t ax_hash_code( const int16_t  & v ) { return (uint32_t) v; }
@@ -45,9 +46,9 @@ template<> inline uint32_t ax_hash_code( const uint16_t & v ) { return (uint32_t
 template<> inline uint32_t ax_hash_code( const uint32_t & v ) { return (uint32_t) v; }
 template<> inline uint32_t ax_hash_code( const uint64_t & v ) { return (uint32_t) v; }
 
+
 uint32_t ax_hash_code( const char* 	 sz );
 uint32_t ax_hash_code( const wchar_t* sz );
-
 
 //--- 32 bits ---
 
