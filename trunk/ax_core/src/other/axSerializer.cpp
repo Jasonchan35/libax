@@ -71,180 +71,83 @@ axStatus axDeserializer :: getLine( axIStringW &str ) {
 	return 0;
 }
 
-//------- io vary ---------
+//------- io vary signed ---------
+/*
+encode signed to unsigned int using ZigZag, 
 
-axStatus ax_serialize_io_vary( axSerializer &s, uint32_t &v ){
-	axStatus st;
-	if( v < (1<<(7*1)) ) {
-		st = s.checkRemain( 1 );	if( !st ) return st;
-		s.w_[0] = (uint8_t) v;
-		s._advance(1);
-		return 0;
-	}
+therefore the small digi negative int can keep small negative value
+which is good for io_vary for less bytes needed for small digi
 
-	if( v < (1<<(7*2)) ) {
-		st = s.checkRemain( 2 );	if( !st ) return st;
-		s.w_[0] = (uint8_t) ( v	        | 0x80 );
-		s.w_[1] = (uint8_t) ( v >> (7*1) );
-		s._advance(2);
-		return 0;
-	}
+int   	| encoded uint
+0		| 0
+-1		| 1
+ 1		| 2
+-2		| 3
+ 2		| 4
+-3		| 5
+ 3		| 6
+ 
+*/
 
-	if( v < (1<<(7*3)) ) {
-		st = s.checkRemain( 3 );	if( !st ) return st;
-		s.w_[0] = (uint8_t) ( v	         | 0x80 );
-		s.w_[1] = (uint8_t) ( v >> (7*1) | 0x80 );
-		s.w_[2] = (uint8_t) ( v >> (7*2) );
-		s._advance(3);
-		return 0;
-	}
-
-	if( v < (1<<(7*4)) ) {
-		st = s.checkRemain( 4 );	if( !st ) return st;
-		s.w_[0] = (uint8_t) ( v	         | 0x80 );
-		s.w_[1] = (uint8_t) ( v >> (7*1) | 0x80 );
-		s.w_[2] = (uint8_t) ( v >> (7*2) | 0x80 );
-		s.w_[3] = (uint8_t) ( v >> (7*3) );
-		s._advance(4);
-		return 0;
-	}
-
-	st = s.checkRemain( 5 );	if( !st ) return st;
-	s.w_[0] = (uint8_t) ( v	         | 0x80 );
-	s.w_[1] = (uint8_t) ( v >> (7*1) | 0x80 );
-	s.w_[2] = (uint8_t) ( v >> (7*2) | 0x80 );
-	s.w_[3] = (uint8_t) ( v >> (7*3) | 0x80 );
-	s.w_[4] = (uint8_t) ( v >> (7*4) );
-	s._advance(5);
+template<class T, class U> inline
+axStatus _ax_serialize_io_vary_se_signed( axSerializer &s, T &v ) {
+	U tmp = (U) ( ( v << 1 ) ^ ( v >> (sizeof(T)*8-1) ) );
+	axStatus st = ax_serialize_io_vary(s, tmp);			if( !st ) return st;
 	return 0;
 }
 
-axStatus ax_serialize_io_vary( axSerializer &s, uint64_t &v ) {
-	axStatus st;
-	if( v < (1ULL<<(7*1)) ) {
-		st = s.checkRemain( 1 );	if( !st ) return st;
-		s.w_[0] = (uint8_t) v;
-		s._advance(1);
-		return 0;
-	}
-
-	if( v < (1ULL<<(7*2)) ) {
-		st = s.checkRemain( 2 );	if( !st ) return st;
-		s.w_[0] = (uint8_t) ( v	        | 0x80 );
-		s.w_[1] = (uint8_t) ( v >> (7*1) );
-		s._advance(2);
-		return 0;
-	}
-
-	if( v < (1ULL<<(7*3)) ) {
-		st = s.checkRemain( 3 );	if( !st ) return st;
-		s.w_[0] = (uint8_t) ( v	         | 0x80 );
-		s.w_[1] = (uint8_t) ( v >> (7*1) | 0x80 );
-		s.w_[2] = (uint8_t) ( v >> (7*2) );
-		s._advance(3);
-		return 0;
-	}
-
-	if( v < (1ULL<<(7*4)) ) {
-		st = s.checkRemain( 4 );	if( !st ) return st;
-		s.w_[0] = (uint8_t) ( v	         | 0x80 );
-		s.w_[1] = (uint8_t) ( v >> (7*1) | 0x80 );
-		s.w_[2] = (uint8_t) ( v >> (7*2) | 0x80 );
-		s.w_[3] = (uint8_t) ( v >> (7*3) );
-		s._advance(4);
-		return 0;
-	}
-
-	if( v < (1ULL<<(7*5)) ) {
-		st = s.checkRemain( 5 );	if( !st ) return st;
-		s.w_[0] = (uint8_t) ( v	         | 0x80 );
-		s.w_[1] = (uint8_t) ( v >> (7*1) | 0x80 );
-		s.w_[2] = (uint8_t) ( v >> (7*2) | 0x80 );
-		s.w_[3] = (uint8_t) ( v >> (7*3) | 0x80 );
-		s.w_[4] = (uint8_t) ( v >> (7*4) );
-		s._advance(5);
-		return 0;
-	}
-
-	if( v < (1ULL<<(7*6)) ) {
-		st = s.checkRemain( 6 );	if( !st ) return st;
-		s.w_[0] = (uint8_t) ( v	         | 0x80 );
-		s.w_[1] = (uint8_t) ( v >> (7*1) | 0x80 );
-		s.w_[2] = (uint8_t) ( v >> (7*2) | 0x80 );
-		s.w_[3] = (uint8_t) ( v >> (7*3) | 0x80 );
-		s.w_[4] = (uint8_t) ( v >> (7*4) | 0x80 );
-		s.w_[5] = (uint8_t) ( v >> (7*5) );
-		s._advance(6);
-		return 0;
-	}
-
-	if( v < (1ULL<<(7*7)) ) {
-		st = s.checkRemain( 7 );	if( !st ) return st;
-		s.w_[0] = (uint8_t) ( v	         | 0x80 );
-		s.w_[1] = (uint8_t) ( v >> (7*1) | 0x80 );
-		s.w_[2] = (uint8_t) ( v >> (7*2) | 0x80 );
-		s.w_[3] = (uint8_t) ( v >> (7*3) | 0x80 );
-		s.w_[4] = (uint8_t) ( v >> (7*4) | 0x80 );
-		s.w_[5] = (uint8_t) ( v >> (7*5) | 0x80 );
-		s.w_[6] = (uint8_t) ( v >> (7*6) );
-		s._advance(7);
-		return 0;
-	}
-
-	if( v < (1ULL<<(7*8)) ) {
-		st = s.checkRemain( 8 );	if( !st ) return st;
-		s.w_[0] = (uint8_t) ( v	         | 0x80 );
-		s.w_[1] = (uint8_t) ( v >> (7*1) | 0x80 );
-		s.w_[2] = (uint8_t) ( v >> (7*2) | 0x80 );
-		s.w_[3] = (uint8_t) ( v >> (7*3) | 0x80 );
-		s.w_[4] = (uint8_t) ( v >> (7*4) | 0x80 );
-		s.w_[5] = (uint8_t) ( v >> (7*5) | 0x80 );
-		s.w_[6] = (uint8_t) ( v >> (7*6) | 0x80 );
-		s.w_[7] = (uint8_t) ( v >> (7*7) );
-		s._advance(8);
-		return 0;
-	}
-
-	if( v < (1ULL<<(7*9)) ) {
-		st = s.checkRemain( 9 );	if( !st ) return st;
-		s.w_[0] = (uint8_t) ( v	         | 0x80 );
-		s.w_[1] = (uint8_t) ( v >> (7*1) | 0x80 );
-		s.w_[2] = (uint8_t) ( v >> (7*2) | 0x80 );
-		s.w_[3] = (uint8_t) ( v >> (7*3) | 0x80 );
-		s.w_[4] = (uint8_t) ( v >> (7*4) | 0x80 );
-		s.w_[5] = (uint8_t) ( v >> (7*5) | 0x80 );
-		s.w_[6] = (uint8_t) ( v >> (7*6) | 0x80 );
-		s.w_[7] = (uint8_t) ( v >> (7*7) | 0x80 );
-		s.w_[8] = (uint8_t) ( v >> (7*8) );
-		s._advance(9);
-		return 0;
-	}
-
-	st = s.checkRemain( 10 );	if( !st ) return st;
-	s.w_[0] = (uint8_t) ( v	         | 0x80 );
-	s.w_[1] = (uint8_t) ( v >> (7*1) | 0x80 );
-	s.w_[2] = (uint8_t) ( v >> (7*2) | 0x80 );
-	s.w_[3] = (uint8_t) ( v >> (7*3) | 0x80 );
-	s.w_[4] = (uint8_t) ( v >> (7*4) | 0x80 );
-	s.w_[5] = (uint8_t) ( v >> (7*5) | 0x80 );
-	s.w_[6] = (uint8_t) ( v >> (7*6) | 0x80 );
-	s.w_[7] = (uint8_t) ( v >> (7*7) | 0x80 );
-	s.w_[8] = (uint8_t) ( v >> (7*8) | 0x80 );
-	s.w_[9] = (uint8_t) ( v >> (7*9) );
-	s._advance(10);
-
+template<class T, class U> inline
+axStatus _ax_serialize_io_vary_de_signed( axDeserializer 	&s, T &v ) {
+	U tmp;
+	axStatus st = ax_serialize_io_vary(s, tmp);			if( !st ) return st;
+	v = (T)( (tmp >> 1) ^ ( -(tmp & 1) ) );
 	return 0;
 }
 
-axStatus ax_serialize_io_vary( axDeserializer &s, uint32_t &v ) {
+axStatus ax_serialize_io_vary( axSerializer   &s, int8_t  &v ) { return _ax_serialize_io_vary_se_signed< int8_t,  uint8_t  >( s, v ); }
+axStatus ax_serialize_io_vary( axSerializer   &s, int16_t &v ) { return _ax_serialize_io_vary_se_signed< int16_t, uint16_t >( s, v ); }
+axStatus ax_serialize_io_vary( axSerializer   &s, int32_t &v ) { return _ax_serialize_io_vary_se_signed< int32_t, uint32_t >( s, v ); }
+axStatus ax_serialize_io_vary( axSerializer   &s, int64_t &v ) { return _ax_serialize_io_vary_se_signed< int64_t, uint64_t >( s, v ); }
+
+axStatus ax_serialize_io_vary( axDeserializer &s, int8_t  &v ) { return _ax_serialize_io_vary_de_signed< int8_t,  uint8_t  >( s, v ); }
+axStatus ax_serialize_io_vary( axDeserializer &s, int16_t &v ) { return _ax_serialize_io_vary_de_signed< int16_t, uint16_t >( s, v ); }
+axStatus ax_serialize_io_vary( axDeserializer &s, int32_t &v ) { return _ax_serialize_io_vary_de_signed< int32_t, uint32_t >( s, v ); }
+axStatus ax_serialize_io_vary( axDeserializer &s, int64_t &v ) { return _ax_serialize_io_vary_de_signed< int64_t, uint64_t >( s, v ); }
+
+
+// --- io_vary unsigned ---
+
+template< class T > inline
+axStatus _ax_serialize_io_vary_se_unsigned( axSerializer &s, T &v ){
 	axStatus st;
-	axSize bit = 0;
+	
+	T tmp = v;
+	uint8_t  b[16];
+	size_t i = 0;
+	for(;;) {
+		assert( i < 16 );
+		
+		b[i] = tmp & 0x7f;
+		tmp >>= 7;
+		if( tmp == 0 ) {
+			return s.io_raw( b, i+1 );
+		}
+		b[i] |= 0x80;
+		i++;
+	}
+	return axStatus_Std::serialize_io_vary_error;
+}
+
+template<class T > inline
+axStatus _ax_serialize_io_vary_de_unsigned( axDeserializer &s, T &v ) {
+	axStatus st;
+	size_t bit = 0;
 	uint8_t t;
 	v = 0;
 	for(;;){
 		st = s.checkRemain( 1 );	if( !st ) return st;
 		t = *s.r_;
-		v |= (uint32_t)( t & 0x7F ) << bit;
+		v |= (T)( t & 0x7F ) << bit;
 		s._advance(1);
 		if( !( t & 0x80 ) ) return 0;
 		bit += 7;
@@ -252,18 +155,13 @@ axStatus ax_serialize_io_vary( axDeserializer &s, uint32_t &v ) {
 	}
 }
 
-axStatus ax_serialize_io_vary( axDeserializer &s, uint64_t &v ) {
-	axStatus st;
-	axSize bit = 0;
-	uint8_t t;
-	v = 0;
-	for(;;){
-		st = s.checkRemain( 1 );	if( !st ) return st;
-		t = *s.r_;
-		v |= (uint64_t)( t & 0x7F ) << bit;
-		s._advance(1);
-		if( !( t & 0x80 ) ) return 0;
-		bit += 7;
-		if( bit > sizeof(v)*8 ) { assert(false); return axStatus_Std::serialize_out_of_bound; }
-	}
-}
+axStatus ax_serialize_io_vary( axSerializer   &s, uint8_t  &v )	{ return _ax_serialize_io_vary_se_unsigned(s,v); }
+axStatus ax_serialize_io_vary( axSerializer   &s, uint16_t &v )	{ return _ax_serialize_io_vary_se_unsigned(s,v); }
+axStatus ax_serialize_io_vary( axSerializer   &s, uint32_t &v )	{ return _ax_serialize_io_vary_se_unsigned(s,v); }
+axStatus ax_serialize_io_vary( axSerializer   &s, uint64_t &v )	{ return _ax_serialize_io_vary_se_unsigned(s,v); }
+
+axStatus ax_serialize_io_vary( axDeserializer &s, uint8_t  &v )	{ return _ax_serialize_io_vary_de_unsigned(s,v); }
+axStatus ax_serialize_io_vary( axDeserializer &s, uint16_t &v )	{ return _ax_serialize_io_vary_de_unsigned(s,v); }
+axStatus ax_serialize_io_vary( axDeserializer &s, uint32_t &v )	{ return _ax_serialize_io_vary_de_unsigned(s,v); }
+axStatus ax_serialize_io_vary( axDeserializer &s, uint64_t &v )	{ return _ax_serialize_io_vary_de_unsigned(s,v); }
+

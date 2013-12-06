@@ -29,6 +29,7 @@ axStatus_enum( non_safe_abs )
 //-------------
 axStatus_offset( __serialize__, 200 )
 axStatus_enum( serialize_out_of_bound )
+axStatus_enum( serialize_io_vary_error )
 axStatus_enum( serialize_utf8_error )
 
 //-----------

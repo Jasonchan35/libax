@@ -544,10 +544,25 @@ axStatus axAutoPtr<T> :: serialize_io( axDeserializer &s ) {
 
 //------- io vary ---------
 
+axStatus ax_serialize_io_vary( axSerializer 	&s, uint8_t  &v );
+axStatus ax_serialize_io_vary( axSerializer 	&s, uint16_t &v );
 axStatus ax_serialize_io_vary( axSerializer 	&s, uint32_t &v );
 axStatus ax_serialize_io_vary( axSerializer 	&s, uint64_t &v );
+
+axStatus ax_serialize_io_vary( axDeserializer 	&s, uint8_t  &v );
+axStatus ax_serialize_io_vary( axDeserializer 	&s, uint16_t &v );
 axStatus ax_serialize_io_vary( axDeserializer 	&s, uint32_t &v );
 axStatus ax_serialize_io_vary( axDeserializer 	&s, uint64_t &v );
+
+axStatus ax_serialize_io_vary( axSerializer 	&s, int8_t  &v );
+axStatus ax_serialize_io_vary( axSerializer 	&s, int16_t &v );
+axStatus ax_serialize_io_vary( axSerializer 	&s, int32_t &v );
+axStatus ax_serialize_io_vary( axSerializer 	&s, int64_t &v );
+
+axStatus ax_serialize_io_vary( axDeserializer 	&s, int8_t  &v );
+axStatus ax_serialize_io_vary( axDeserializer 	&s, int16_t &v );
+axStatus ax_serialize_io_vary( axDeserializer 	&s, int32_t &v );
+axStatus ax_serialize_io_vary( axDeserializer 	&s, int64_t &v );
 
 template<class S> inline 
 axStatus ax_serialize_io_vary  ( S &s, axSize &v ) { return ax_serialize_io_vary  ( s, v.asNative() ); }
