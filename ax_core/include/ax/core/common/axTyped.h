@@ -54,7 +54,7 @@ public:
 	template<class T> 	bool	isKindOf_ 	() const {	return isKindOf( axTypeOf<T>() ); }
 };
 
-#define axTypeDeclare(T,BASE) \
+#define axTypeDef(T,BASE) \
 	typedef BASE	B; \
 	\
 protected: \
@@ -120,7 +120,7 @@ public:
 };
 
 
-//! using this template function to prevent class forgot define axTypeDeclare()
+//! using this template function to prevent class forgot define axTypeDef()
 template<class T> inline axType axTypeOf()	{ return axType( T::_TypeImp::instance() ); }
 
 //-----------
