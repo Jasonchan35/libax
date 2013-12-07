@@ -33,9 +33,9 @@ axStatus test_io_vary() {
 
 		axByteArray_< 512 > buf;
 	
-	for( int i=0; i<1000000; i++ ) {
+	for( int i=0; i<50; i++ ) {
 		TestClass src, dst;
-		src.test_uint = i << 4;
+		src.test_uint = i * 1779;
 		src.test_int = src.test_uint;
 		src.test_neg_int = -src.test_int;
 
@@ -43,9 +43,10 @@ axStatus test_io_vary() {
 		st = ax_serialize_to_buf( buf, src );		if( !st ) return st;		
 		st = ax_serialize_from_buf( buf, dst );		if( !st ) return st;
 
-//			ax_log("----");
-//			ax_log_var3( src.test_uint, src.test_int, src.test_neg_int );
-//			ax_log_var3( dst.test_uint, dst.test_int, dst.test_neg_int );
+			ax_log("----");
+			ax_log_hex( buf );
+			ax_log_var3( src.test_uint, src.test_int, src.test_neg_int );
+			ax_log_var3( dst.test_uint, dst.test_int, dst.test_neg_int );
 		
 		if( src != dst ) {
 			ax_log_hex( buf );
