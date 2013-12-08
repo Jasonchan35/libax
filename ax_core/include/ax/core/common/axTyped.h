@@ -1,4 +1,4 @@
-//
+ //
 //  axType.h
 //  ax_core
 //
@@ -22,7 +22,48 @@ class axType;
 
 template<class T> inline axType axTypeOf();
 
-class axTyped : public axNonCopyable {
+
+/*!	TypeInfo
+
+The reason why not using C++ RTTI
+- no option to disable RTTI for specify class by security reason, e.g. network protocol packet
+
+*/
+class axTypeImp {
+public:
+	axTypeImp() : baseType_(nullptr), debugClassName_(nullptr) {}
+	const axTypeImp*	baseType	() const	{ return baseType_; }
+	const char*			debugClassName() const	{ return debugClassName_; }
+protected:
+	const axTypeImp*	baseType_;
+	const char*			debugClassName_;
+};
+
+class axType {
+public:
+	axType( const axTypeImp* p = nullptr ) : p_(p) {}
+
+	bool operator == ( const axType & src ) const { return p_ == src.p_; }
+	bool operator != ( const axType & src ) const { return p_ == src.p_; }
+	
+	operator bool () const { return p_; }
+	
+	template<class T> 	bool	isKindOf_ 	() const {	return isKindOf( axTypeOf<T>() ); }	
+	
+	bool	isKindOf( axType t ) const	{
+		if( *this == t ) return true;
+		if( ! p_ ) return false;
+		return axType( p_->baseType() ).isKindOf(t);
+	}
+
+	axType 		baseType		() const 	{ return axType( p_ ? p_->baseType() : nullptr ); }	
+	const char*	debugClassName	() const	{ return p_ ? p_->debugClassName() : nullptr; }
+
+	const axTypeImp* p_;
+};
+
+
+class axTyped {
 	typedef	axTyped		CLASS;
 
 protected:
@@ -51,7 +92,7 @@ public:
 			virtual		axType	objectType	() const;
 			virtual		bool	isKindOf	( const axType & type ) const;
 	
-	template<class T> 	bool	isKindOf_ 	() const {	return isKindOf( axTypeOf<T>() ); }
+	template<class T> 	bool	isKindOf_ 	() const {	return isKindOf( axTypeOf<T>() ); }	
 };
 
 #define axTypeDef(T,BASE) \
@@ -63,7 +104,10 @@ protected: \
 	T( axTypedBaseClassValidation & a ) : BASE(a) {} \
 	class _TypeImp : public axTypeImp, public axSingleton< _TypeImp > { \
 	public: \
-		_TypeImp() { baseType_ = axTypeOf<BASE>().p_;  } \
+		_TypeImp() { \
+			assert( debugClassName_ = #T ); \
+			baseType_ = axTypeOf<BASE>().p_;  \
+		} \
 	}; \
 	\
 public: \
@@ -74,19 +118,6 @@ public: \
 	\
 //-----------
 
-/*!	TypeInfo
-
-The reason why not using C++ RTTI
-- no option to disable RTTI for specify class by security reason, e.g. network protocol package
-
-*/
-class axTypeImp {
-public:
-	axTypeImp() : baseType_(nullptr) {}
-	const axTypeImp*	baseType	() const	{ return baseType_; }
-protected:
-	const axTypeImp*	baseType_;
-};
 
 template<class T> inline
 T* axTyped::cast () {
@@ -97,35 +128,16 @@ T* axTyped::cast () {
 	}
 }
 
-class axType {
-public:
-	axType( const axTypeImp* p = nullptr ) : p_(p) {}
-
-	bool operator == ( const axType & src ) const { return p_ == src.p_; }
-	bool operator != ( const axType & src ) const { return p_ == src.p_; }
-	
-	operator bool () const { return p_; }
-	
-	template<class T> 	bool	isKindOf_ 	() const {	return isKindOf( axTypeOf<T>() ); }	
-	
-	bool	isKindOf( axType t ) const	{
-		if( *this == t ) return true;
-		if( ! p_ ) return false;
-		return axType( p_->baseType() ).isKindOf(t);
-	}
-
-	axType baseType	() const { return axType( p_ ? p_->baseType() : nullptr ); }
-
-	const axTypeImp* p_;
-};
-
-
 //! using this template function to prevent class forgot define axTypeDef()
 template<class T> inline axType axTypeOf()	{ return axType( T::_TypeImp::instance() ); }
 
 //-----------
 
 class axTyped::_TypeImp : public axTypeImp, public axSingleton< axTyped::_TypeImp > {
+public:
+	_TypeImp() {
+		assert( debugClassName_ = "axTyped" ); // only for debug
+	}
 };
 
 inline	axType	axTyped::staticType () 		 	{ return axTypeOf< axTyped >(); }

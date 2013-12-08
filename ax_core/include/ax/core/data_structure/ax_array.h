@@ -23,6 +23,24 @@ template<class T> axALWAYS_INLINE( axStatus ax_array_take		( T* dst, const T* sr
 template<class T> axALWAYS_INLINE( T* 		ax_array_min		( T* p, size_t n ) );
 template<class T> axALWAYS_INLINE( T* 		ax_array_max		( T* p, size_t n ) );
 
+template<class T> class axIArray;
+
+template< class DST, class SRC > inline
+axStatus	ax_array_cast		( axIArray<DST*> & dst, axIArray<SRC*> & src ) {
+	axStatus st;
+	size_t n = src.size();
+	st = dst.reserve( n );			if( !st ) return st;
+	for( size_t i=0; i<n; i++ ) {
+		SRC* s = src[i];
+		DST* t;
+		
+		s->cast(t);
+		
+		if( ! src[i]->cast(t) ) continue;
+		st = dst.append( t );		if( !st ) return st;
+	}
+	return 0;
+}
 
 template< class T > inline
 void	ax_array_constructor( T* p, size_t n ) {

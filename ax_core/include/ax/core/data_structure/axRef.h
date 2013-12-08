@@ -131,7 +131,7 @@ private:
 	bool	goingNext_ : 1;
 };
 
-class axReferred {
+class axReferred : public axNonCopyable {
 public:
 	axTinyList< axRefBase >	_refList_;
 //	virtual	axStatus	onClone( void* & obj ) = 0;
