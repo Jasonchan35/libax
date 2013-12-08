@@ -12,7 +12,7 @@
 #include "../common/axTyped.h"
 #include "../data_structure/axRef.h"
 
-class axObject : public axReferred, public axTyped {
+class axObject : public axTyped, public axReferred {
 	axTypeDef( axObject, axTyped );
 public:
 	axObject() {}
