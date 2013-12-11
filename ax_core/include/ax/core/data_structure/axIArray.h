@@ -113,7 +113,6 @@ public:
 						bool		find		( axSize &index, const T& value ) const;
 						axStatus	getIndexOf	( axSize &index, const T& element ) const;
 
-
 	axALWAYS_INLINE(	axStatus	copy		( const axIArray<T> &src ) );
 	axALWAYS_INLINE(	axStatus	onTake		( axIArray<T> &src ) );
 

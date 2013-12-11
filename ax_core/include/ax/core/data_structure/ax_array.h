@@ -31,11 +31,7 @@ axStatus	ax_array_cast		( axIArray<DST*> & dst, axIArray<SRC*> & src ) {
 	size_t n = src.size();
 	st = dst.reserve( n );			if( !st ) return st;
 	for( size_t i=0; i<n; i++ ) {
-		SRC* s = src[i];
 		DST* t;
-		
-		s->cast(t);
-		
 		if( ! src[i]->cast(t) ) continue;
 		st = dst.append( t );		if( !st ) return st;
 	}
