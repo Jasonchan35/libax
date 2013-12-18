@@ -56,6 +56,9 @@ private:
 	size_t	value_;
 };
 
+#define	ax_sizeof(T)	axSize( sizeof(T) )
+
+
 typedef uint64_t axFileSize;
 
 

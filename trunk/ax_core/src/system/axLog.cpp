@@ -9,7 +9,7 @@
 #include <ax/core/system/axLog.h>
 #include <ax/core/common/axExpandArgList.h>
 
-axStatus ax_log_hex( axLog_Tag &tag, const void* ptr, size_t byteSize ) {
+axStatus ax_log_hex( axLog_Tag &tag, const void* ptr, axSize byteSize ) {
 	axStringA_<8000>	tmp;
 	axStatus st;
 	st = ax_convert_dump_hex_string( tmp, ptr, byteSize );		if( !st ) return st;

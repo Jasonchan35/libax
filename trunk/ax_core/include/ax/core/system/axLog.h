@@ -114,7 +114,7 @@ public:
 	axLog_StdTag() : axLog_Tag("log") {}
 };
 
-						 axStatus ax_log_hex( axLog_Tag &tag, const void* ptr, size_t byteSize );
+						 axStatus ax_log_hex( axLog_Tag &tag, const void* ptr, axSize byteSize );
 template<class T> inline axStatus ax_log_hex( axLog_Tag &tag, const T*    obj )				{ return ax_log_hex( tag, obj, sizeof(T) );  }
 template<class T> inline axStatus ax_log_hex( axLog_Tag &tag, const axIArray<T>		& arr ) { return ax_log_hex( tag, arr.ptr(), arr.byteSize() );  }
 template<class T> inline axStatus ax_log_hex( axLog_Tag &tag, const axIString_<T>	& str ) { return ax_log_hex( tag, str.c_str(), str.byteSize() ); }
