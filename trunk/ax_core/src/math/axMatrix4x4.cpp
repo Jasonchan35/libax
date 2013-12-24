@@ -1,38 +1,38 @@
 /*
- *  axMatrix4f.cpp
+ *  axMatrix4x4f.cpp
  *
  *  Created by jason on 04/Apr/2006.
  *  Copyright 2006 __MyCompanyName__. All rights reserved.
  *
  */
 
-#include <ax/core/math/axMatrix4.h>
+#include <ax/core/math/axMatrix4x4.h>
 #include <ax/core/math/axEulerRotation3.h>
 #include <ax/core/math/axQuaternion.h>
 
 
-template<> const axMatrix4f axMatrix4f::kIdentity( 	1,0,0,0,
+template<> const axMatrix4x4f axMatrix4x4f::kIdentity( 	1,0,0,0,
 													0,1,0,0,
 													0,0,1,0,
 													0,0,0,1 );
 
-template<> const axMatrix4d axMatrix4d::kIdentity( 	1,0,0,0,
+template<> const axMatrix4x4d axMatrix4x4d::kIdentity( 	1,0,0,0,
 													0,1,0,0,
 													0,0,1,0,
 													0,0,0,1);
 
 template<class T>
-void axMatrix4<T>::rotate ( const axEulerRotation3<T>  &er )	{ 
+void axMatrix4x4<T>::rotate ( const axEulerRotation3<T>  &er )	{ 
 	operator*=( er.to_Matrix4() ); 
 }
 
 template<class T>
-void axMatrix4<T>::rotate ( const axQuaternion<T>     &qu )	{ 
+void axMatrix4x4<T>::rotate ( const axQuaternion<T>     &qu )	{ 
 	operator*=( qu.to_Matrix4() ); 
 }
 
 template<class T>
-axMatrix4<T> axMatrix4<T>::inverse() const {
+axMatrix4x4<T> axMatrix4x4<T>::inverse() const {
    T wtmp[4][8];
    T m0, m1, m2, m3, s;
    T *r0, *r1, *r2, *r3;
@@ -154,14 +154,14 @@ axMatrix4<T> axMatrix4<T>::inverse() const {
    r0[6] = s * (r0[6] - r1[6] * m0);
    r0[7] = s * (r0[7] - r1[7] * m0);
 
-   return axMatrix4( r0[4], r0[5], r0[6], r0[7],
+   return axMatrix4x4( r0[4], r0[5], r0[6], r0[7],
 				   r1[4], r1[5], r1[6], r1[7],
 				   r2[4], r2[5], r2[6], r2[7],
 				   r3[4], r3[5], r3[6], r3[7] );
 }
 
 template<class T>
-void axMatrix4<T>::setAimZ_UpY ( const axVec3<T> &eye, const axVec3<T> &aim, const axVec3<T> &up, bool neg_z_aim ) {
+void axMatrix4x4<T>::setAimZ_UpY ( const axVec3<T> &eye, const axVec3<T> &aim, const axVec3<T> &up, bool neg_z_aim ) {
 	axVec3<T> f = ( eye - aim ).normalize();
 	if( neg_z_aim ) f = -f;
 
@@ -176,7 +176,7 @@ void axMatrix4<T>::setAimZ_UpY ( const axVec3<T> &eye, const axVec3<T> &aim, con
 
 
 template<class T>
-void axMatrix4<T>::setLookAt ( const axVec3<T> &eye, const axVec3<T> &aim, const axVec3<T> &up ) {
+void axMatrix4x4<T>::setLookAt ( const axVec3<T> &eye, const axVec3<T> &aim, const axVec3<T> &up ) {
 	axVec3<T> f = ( aim - eye ).normalize();
 	axVec3<T> s = f.cross(up).normalize();
 	axVec3<T> u = s.cross(f);
@@ -190,7 +190,7 @@ void axMatrix4<T>::setLookAt ( const axVec3<T> &eye, const axVec3<T> &aim, const
 }
 
 template<class T>
-void axMatrix4<T>::setOrtho( T left, T right, T bottom, T top, T zNear, T zFar ) {
+void axMatrix4x4<T>::setOrtho( T left, T right, T bottom, T top, T zNear, T zFar ) {
 	T w = right - left;
 	T h = top - bottom;
 	T d = zFar - zNear;
@@ -206,7 +206,7 @@ void axMatrix4<T>::setOrtho( T left, T right, T bottom, T top, T zNear, T zFar )
 }
 
 template<class T>
-void axMatrix4<T>::setPerspective( T fovy_rad, T aspect, T zNear, T zFar ) {
+void axMatrix4x4<T>::setPerspective( T fovy_rad, T aspect, T zNear, T zFar ) {
 	T s, c, deltaZ;
 	T fov = fovy_rad / 2;
 	
@@ -229,7 +229,7 @@ void axMatrix4<T>::setPerspective( T fovy_rad, T aspect, T zNear, T zFar ) {
 //------- inline ------------
 
 template< class T>
-axStatus axMatrix4<T>::toStringFormat( axStringFormat &f ) const {
+axStatus axMatrix4x4<T>::toStringFormat( axStringFormat &f ) const {
     f.out("\n");
 	int i;
 	for( i=0; i<4; i++ ) {
@@ -240,7 +240,7 @@ axStatus axMatrix4<T>::toStringFormat( axStringFormat &f ) const {
 
 //=================================================
 template<class T>
-axMatrix4<T>::axMatrix4( T v00, T v01, T v02, T v03,
+axMatrix4x4<T>::axMatrix4x4( T v00, T v01, T v02, T v03,
 						T v10, T v11, T v12, T v13,
 						T v20, T v21, T v22, T v23,
 						T v30, T v31, T v32, T v33 )
@@ -250,7 +250,7 @@ cz( v20, v21, v22, v23 ),
 cw( v30, v31, v32, v33 ) {}
 
 template<class T>
-void axMatrix4<T>::set( T v00, T v01, T v02, T v03,
+void axMatrix4x4<T>::set( T v00, T v01, T v02, T v03,
 					   T v10, T v11, T v12, T v13,
 					   T v20, T v21, T v22, T v23,
 					   T v30, T v31, T v32, T v33 )
@@ -262,7 +262,7 @@ void axMatrix4<T>::set( T v00, T v01, T v02, T v03,
 }
 
 template<class T>
-void axMatrix4<T>::setTRS ( const axVec3<T> & translate, const axVec3<T> & rotate, const axVec3<T> & scale ) {
+void axMatrix4x4<T>::setTRS ( const axVec3<T> & translate, const axVec3<T> & rotate, const axVec3<T> & scale ) {
 	T cx = ax_cos(rotate.x), cy = ax_cos(rotate.y), cz = ax_cos(rotate.z);
 	T sx = ax_sin(rotate.x), sy = ax_sin(rotate.y), sz = ax_sin(rotate.z);
 	
@@ -273,7 +273,7 @@ void axMatrix4<T>::setTRS ( const axVec3<T> & translate, const axVec3<T> & rotat
 }
 
 template <class T>
-void axMatrix4<T>::setRotate ( const axVec3<T> &   eulerAngle ) {
+void axMatrix4x4<T>::setRotate ( const axVec3<T> &   eulerAngle ) {
 	T cx = ax_cos(eulerAngle.x), cy = ax_cos(eulerAngle.y), cz = ax_cos(eulerAngle.z);
 	T sx = ax_sin(eulerAngle.x), sy = ax_sin(eulerAngle.y), sz = ax_sin(eulerAngle.z);
 	
@@ -284,7 +284,7 @@ void axMatrix4<T>::setRotate ( const axVec3<T> &   eulerAngle ) {
 }
 
 template <class T>
-void axMatrix4<T>::setTranslate ( const axVec3<T> &v )	{
+void axMatrix4x4<T>::setTranslate ( const axVec3<T> &v )	{
 	cx.set(   1,   0,   0,   0 );
 	cy.set(   0,   1,   0,   0 );
 	cz.set(   0,   0,   1,   0 );
@@ -293,13 +293,13 @@ void axMatrix4<T>::setTranslate ( const axVec3<T> &v )	{
 
 
 template <class T>
-void axMatrix4<T>::translate ( const axVec3<T> &v ) {
-	axMatrix4<T> t; t.setTranslate( v );
+void axMatrix4x4<T>::translate ( const axVec3<T> &v ) {
+	axMatrix4x4<T> t; t.setTranslate( v );
 	operator*=(t);
 }
 
 template <class T>
-void axMatrix4<T>::setRotateX ( T rad ) {
+void axMatrix4x4<T>::setRotateX ( T rad ) {
 	T s = ax_sin ( rad ), c = ax_cos ( rad );
 	cx.set( 1, 0, 0, 0 );
 	cy.set( 0, c, s, 0 );
@@ -308,7 +308,7 @@ void axMatrix4<T>::setRotateX ( T rad ) {
 }
 
 template <class T>
-void axMatrix4<T>::setRotateY ( T rad ) {
+void axMatrix4x4<T>::setRotateY ( T rad ) {
 	T s = ax_sin ( rad ), c = ax_cos ( rad );
 	cx.set( c, 0,-s, 0 );
 	cy.set( 0, 1, 0, 0 );
@@ -317,7 +317,7 @@ void axMatrix4<T>::setRotateY ( T rad ) {
 }
 
 template <class T>
-void axMatrix4<T>::setRotateZ ( T rad ) {
+void axMatrix4x4<T>::setRotateZ ( T rad ) {
 	T s = ax_sin ( rad ), c = ax_cos ( rad );
 	cx.set( c, s, 0, 0 );
 	cy.set(-s, c, 0, 0 );
@@ -326,7 +326,7 @@ void axMatrix4<T>::setRotateZ ( T rad ) {
 }
 
 template <class T>
-void axMatrix4<T>::setScale ( const axVec3<T> &v ) {
+void axMatrix4x4<T>::setScale ( const axVec3<T> &v ) {
 	cx.set( v.x,   0,   0, 0 );
 	cy.set(   0, v.y,   0, 0 );
 	cz.set(   0,   0, v.z, 0 );
@@ -334,7 +334,7 @@ void axMatrix4<T>::setScale ( const axVec3<T> &v ) {
 }
 
 template <class T>
-void axMatrix4<T>::setShear ( const axVec3<T> &v ) {
+void axMatrix4x4<T>::setShear ( const axVec3<T> &v ) {
 	const T &xy = v.x;
 	const T &xz = v.y;
 	const T &yz = v.z;
@@ -346,8 +346,8 @@ void axMatrix4<T>::setShear ( const axVec3<T> &v ) {
 }
 
 template <class T>
-axMatrix4<T> axMatrix4<T>::transpose () const  {
-	return axMatrix4( cx.x, cy.x, cz.x, cw.x,
+axMatrix4x4<T> axMatrix4x4<T>::transpose () const  {
+	return axMatrix4x4( cx.x, cy.x, cz.x, cw.x,
 					 cx.y, cy.y, cz.y, cw.y,
 					 cx.z, cy.z, cz.z, cw.z,
 					 cx.w, cy.w, cz.w, cw.w );
@@ -357,7 +357,7 @@ axMatrix4<T> axMatrix4<T>::transpose () const  {
 
 
 template<class T> 
-void axMatrix4<T>::setRotateAxis ( T rad, const axVec3<T> &axis ) {
+void axMatrix4x4<T>::setRotateAxis ( T rad, const axVec3<T> &axis ) {
 	axVec3<T>	a = axis.normalize();
 	
 	T c   = ax_cos( rad );
@@ -379,8 +379,8 @@ void axMatrix4<T>::setRotateAxis ( T rad, const axVec3<T> &axis ) {
 }
 
 template<class T> 
-axMatrix4<T> axMatrix4<T>::operator* ( const axMatrix4<T> &v ) const{
-	axMatrix4<T>	out;
+axMatrix4x4<T> axMatrix4x4<T>::operator* ( const axMatrix4x4<T> &v ) const{
+	axMatrix4x4<T>	out;
 	
 	T e0,e1,e2,e3;
 	e0=cx.x, e1=cy.x, e2=cz.x, e3=cw.x;
@@ -411,9 +411,9 @@ axMatrix4<T> axMatrix4<T>::operator* ( const axMatrix4<T> &v ) const{
 }
 
 template<class T>
-void axMatrix4<T>::operator*=( const axMatrix4<T> &v ) {
+void axMatrix4x4<T>::operator*=( const axMatrix4x4<T> &v ) {
 	if( this == &v ) { 
-		axMatrix4<T>	tmp = v;
+		axMatrix4x4<T>	tmp = v;
 		this->operator*=( tmp );
 		return;
 	}
@@ -447,6 +447,6 @@ void axMatrix4<T>::operator*=( const axMatrix4<T> &v ) {
 
 
 //The explicit instantiation
-template class axMatrix4<float>;
-template class axMatrix4<double>;
+template class axMatrix4x4<float>;
+template class axMatrix4x4<double>;
 

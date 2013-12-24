@@ -1,11 +1,11 @@
 #ifndef __axMargin2_h__
 #define __axMargin2_h__
 
-#include "axMatrix4.h"
+#include "axMatrix4x4.h"
 #include "axPlane3.h"
 #include "axBBox3.h"
 
-template<class T> class axMatrix4;
+template<class T> class axMatrix4x4;
 
 template<class T>
 class axMargin2 {

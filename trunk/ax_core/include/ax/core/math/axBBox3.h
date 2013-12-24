@@ -25,7 +25,7 @@ public:
 	bool		isInside	( const axVec3<T>  &pt ) const;
 	bool		isOverlap	( const axBBox3<T> &bb ) const;
 	
-	axBBox3<T>	operator*	( const axMatrix4<T>& m ) const;
+	axBBox3<T>	operator*	( const axMatrix4x4<T>& m ) const;
 
 	const axVec3<T>&	minPoint() const { return minPoint_; }
 	const axVec3<T>&	maxPoint() const { return maxPoint_; }
@@ -42,7 +42,7 @@ typedef axBBox3<double>	axBBox3d;
 
 
 template<class T>
-axBBox3<T>	axBBox3<T>::operator*( const axMatrix4<T>& m ) const {
+axBBox3<T>	axBBox3<T>::operator*( const axMatrix4x4<T>& m ) const {
 	axBBox3<T>	ret;
 	if( isEmpty() ) return ret;
 	ret.minPoint_ = minPoint_ * m;

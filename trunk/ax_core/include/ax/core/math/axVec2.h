@@ -16,7 +16,7 @@ typedef axVec2<float>	axVec2f;
 typedef axVec2<double>	axVec2d;
 typedef axVec2<size_t>	axVec2size;
 
-template<class T> class axMatrix4;
+template<class T> class axMatrix4x4;
 
 template <class T>
 class axVec2 {
@@ -51,10 +51,10 @@ public:
 	axVec2		operator*	( const axVec2 &v ) const		{ return axVec2( x * v.x, y * v.y ); }
 	axVec2		operator/	( const axVec2 &v ) const		{ return axVec2( x / v.x, y / v.y ); }
 
-	axVec2		operator*	( const axMatrix4<T> &m ) const { return mul3x2(m);	 }
-	void		operator*=	( const axMatrix4<T> &m )		{ *this = this->mul3x2(m); }
+	axVec2		operator*	( const axMatrix4x4<T> &m ) const { return mul3x2(m);	 }
+	void		operator*=	( const axMatrix4x4<T> &m )		{ *this = this->mul3x2(m); }
 	
-	axVec2		mul3x2		( const axMatrix4<T> &m ) const;
+	axVec2		mul3x2		( const axMatrix4x4<T> &m ) const;
 	
 	
 	axVec2		operator-	() const					{ return axVec2( -x,-y ); }

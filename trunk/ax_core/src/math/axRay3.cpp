@@ -2,7 +2,7 @@
 
 template<class T>
 bool axRay3<T>::unprojectFromMatrix( const axVec2<T>    &pointInView, const axRect2<T>   &view, 
-									 const axMatrix4<T> &projection,  const axMatrix4<T> &modelView ) 
+									 const axMatrix4x4<T> &projection,  const axMatrix4x4<T> &modelView ) 
 {
 	if( view.w == 0 || view.h == 0 ) return false;	
 	return unprojectFromInverseMatrix( pointInView, view, projection.inverse(), modelView.inverse() );
@@ -10,7 +10,7 @@ bool axRay3<T>::unprojectFromMatrix( const axVec2<T>    &pointInView, const axRe
 
 template<class T>
 bool axRay3<T>::unprojectFromInverseMatrix ( const axVec2<T>    &pointInView,		const axRect2<T>   &view,
-											 const axMatrix4<T> &projectionInverse, const axMatrix4<T> &modelViewInvsere ) 
+											 const axMatrix4x4<T> &projectionInverse, const axMatrix4x4<T> &modelViewInvsere ) 
 {
 	if( view.w == 0 || view.h == 0 ) return false;
 	

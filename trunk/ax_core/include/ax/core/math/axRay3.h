@@ -4,7 +4,7 @@
 #include "axVec2.h"
 #include "axVec3.h"
 #include "axRect2.h"
-#include "axMatrix4.h"
+#include "axMatrix4x4.h"
 #include "axPlane3.h"
 
 template<class T>
@@ -18,16 +18,16 @@ public:
 	void	set			( const axVec3<T> &origin, const axVec3<T> &direction ) { o=origin;  v=direction; }
 
 	bool	unprojectFromMatrix			( const axVec2<T>    &pointInView,		 const axRect2<T>   &view,
-										  const axMatrix4<T> &projection,		 const axMatrix4<T> &modelView );
+										  const axMatrix4x4<T> &projection,		 const axMatrix4x4<T> &modelView );
 	
 	bool	unprojectFromInverseMatrix	( const axVec2<T>	 &pointInView,		 const axRect2<T>	&view,
-										  const axMatrix4<T> &projectionInverse, const axMatrix4<T> &modelViewInvsere );
+										  const axMatrix4x4<T> &projectionInverse, const axMatrix4x4<T> &modelViewInvsere );
 
 	bool	hitTest			( HitResult &result, const axPlane3<T> &plane, bool test_double_side ) const;
 	bool	hitTestTriangle ( HitResult &result, const axVec3<T> &p0, const axVec3<T> &p1, const axVec3<T> &p2, bool test_double_side ) const;
 	
-	axRay3		mul4x4		( const axMatrix4<T> &m )		{ return axRay3( o.mul4x4(m), v.mul4x4(m).normalize() ); }
-	void		mul4x4_it	( const axMatrix4<T> &m )		{ *this = this->mul4x4(m); }
+	axRay3		mul4x4		( const axMatrix4x4<T> &m )		{ return axRay3( o.mul4x4(m), v.mul4x4(m).normalize() ); }
+	void		mul4x4_it	( const axMatrix4x4<T> &m )		{ *this = this->mul4x4(m); }
 
 	axVec3<T>	getPoint( T distance ) const {  return o + v * distance; }
 

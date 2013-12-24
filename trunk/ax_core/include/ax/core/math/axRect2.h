@@ -2,13 +2,13 @@
 #define __axRect2_h__
 
 #include "axVec2.h"
-#include "axMatrix4.h"
+#include "axMatrix4x4.h"
 #include "axMargin2.h"
 
 //! \addtogroup math
 //@{
 template <class T> class axRect2;
-template <class T> class axMatrix4;
+template <class T> class axMatrix4x4;
 
 typedef axRect2<int>	axRect2i;
 typedef axRect2<float>	axRect2f;
@@ -96,8 +96,8 @@ public:
 	void		operator /= ( T s )							{ *this = *this / s; }
 	void		operator /= ( const axVec2<T> & s )			{ *this = *this / s; }
 
-	void		operator *= ( const axMatrix4<T> &m )		{ *this = *this * m; }
-	axRect2<T>	operator *  ( const axMatrix4<T> &m	) const;
+	void		operator *= ( const axMatrix4x4<T> &m )		{ *this = *this * m; }
+	axRect2<T>	operator *  ( const axMatrix4x4<T> &m	) const;
 	
 	
 	axRect2<T>	operator -  ( const axMargin2<T> &m ) const	{ return axRect2<T>( pos() + m.topLeft(), size() - m.both() ); };
@@ -253,7 +253,7 @@ axStatus axRect2<T>::serialize_io( S &s ) {
 }
 
 template<class T>
-axRect2<T> axRect2<T>::operator *  ( const axMatrix4<T> &m	) const {
+axRect2<T> axRect2<T>::operator *  ( const axMatrix4x4<T> &m	) const {
 	axRect2<T> tmp;
 	tmp.pos() = pos() * m;
 	tmp.size() = bottomRight() * m - tmp.pos();

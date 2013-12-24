@@ -1,7 +1,7 @@
 #ifndef __axFrustum3_h__
 #define __axFrustum3_h__
 
-#include "axMatrix4.h"
+#include "axMatrix4x4.h"
 #include "axBBox3.h"
 #include "axPlane3.h"
 
@@ -9,9 +9,9 @@ template<class T>
 class axFrustum3 {
 public:
 	axFrustum3();
-	axFrustum3( const axMatrix4<T>&	projection );
+	axFrustum3( const axMatrix4x4<T>&	projection );
 
-	void set( const axMatrix4<T>&	projection );
+	void set( const axMatrix4x4<T>&	projection );
 
 	bool	isInside	( const axVec3<T>&  pt );
 	bool	isIntersect	( const axBBox3<T>& bb );
@@ -19,8 +19,8 @@ public:
 	bool		valid;
 	axVec3<T>		pt[8];
 
-	axFrustum3<T> operator * ( const axMatrix4<T>& m );
-	void operator *= ( const axMatrix4<T>& m );
+	axFrustum3<T> operator * ( const axMatrix4x4<T>& m );
+	void operator *= ( const axMatrix4x4<T>& m );
 
 	const axPlane3<T>*	planes() const; //near, far, top, bottom, left, right
 

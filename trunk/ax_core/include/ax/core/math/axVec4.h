@@ -15,7 +15,7 @@ typedef axVec4<float>	axVec4f;
 typedef axVec4<double>	axVec4d;
 
 
-template<class T> class axMatrix4;
+template<class T> class axMatrix4x4;
 
 template <class T>
 class axVec4 {
@@ -63,8 +63,8 @@ public:
 	void		operator*=	( T v )						{ x*=v; y*=v; z*=v; w*=v; }
 	void		operator/=	( T v )						{ x/=v; y/=v; z/=v; w/=v; }
 
-	axVec4		operator*	( const axMatrix4<T> &m ) const;
-	void		operator*=	( const axMatrix4<T> &m );
+	axVec4		operator*	( const axMatrix4x4<T> &m ) const;
+	void		operator*=	( const axMatrix4x4<T> &m );
 
 	bool		operator==	( const axVec4 &v ) const		{ return ( x == v.x && y == v.y && z == v.z && w == v.w ); }
 	bool		operator!=	( const axVec4 &v ) const		{ return ( x != v.x || y != v.y || z != v.z || w != v.w ); }

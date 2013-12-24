@@ -15,7 +15,7 @@ typedef axVec3<float>	axVec3f;
 typedef axVec3<double>	axVec3d;
 
 
-template<class T> class axMatrix4;
+template<class T> class axMatrix4x4;
 template<class T> class axQuaternion;
 
 template <class T>
@@ -55,16 +55,16 @@ public:
 	void		operator*=	( const axVec3 &v )			{ x*=v.x; y*=v.y; z*=v.z; }
 	void		operator/=	( const axVec3 &v )			{ x/=v.x; y/=v.y; z/=v.z; }
 
-	axVec3		mul4x4		( const axMatrix4<T> &m ) const;
-	void		mul4x4_it	( const axMatrix4<T> &m )		{ *this = this->mul4x4(m); }
+	axVec3		mul4x4		( const axMatrix4x4<T> &m ) const;
+	void		mul4x4_it	( const axMatrix4x4<T> &m )		{ *this = this->mul4x4(m); }
 
 	//!< no projection
-	axVec3		mul4x3		( const axMatrix4<T> &m ) const;	
-	void		mul4x3_it	( const axMatrix4<T> &m )		{ *this = this->mul4x3(m); }
+	axVec3		mul4x3		( const axMatrix4x4<T> &m ) const;	
+	void		mul4x3_it	( const axMatrix4x4<T> &m )		{ *this = this->mul4x3(m); }
 
 	//!< no translate and projection
-	axVec3		mul3x3		( const axMatrix4<T> &m ) const;	
-	void		mul3x3_it	( const axMatrix4<T> &m )		{ *this = this->mul3x3(m); }
+	axVec3		mul3x3		( const axMatrix4x4<T> &m ) const;	
+	void		mul3x3_it	( const axMatrix4x4<T> &m )		{ *this = this->mul3x3(m); }
 
 	axVec3		operator*	( const axQuaternion<T> &q ) const;
 	void		operator*=	( const axQuaternion<T> &q )	{ *this = *this * q; }
