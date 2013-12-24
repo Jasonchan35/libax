@@ -7,12 +7,12 @@
 //
 
 #include <ax/core/math/axVec2.h>
-#include <ax/core/math/axMatrix4.h>
+#include <ax/core/math/axMatrix4x4.h>
  
 //---------- Matrix * Vec 2----------------
 
 template<class T>
-axVec2<T>	axVec2<T>::mul3x2( const axMatrix4<T> &m ) const {
+axVec2<T>	axVec2<T>::mul3x2( const axMatrix4x4<T> &m ) const {
 	return axVec2<T>(	x*m.cx.x + y*m.cy.x + m.cw.x,
 						x*m.cx.y + y*m.cy.y + m.cw.y );
 }

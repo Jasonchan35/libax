@@ -8,7 +8,7 @@
 //! \addtogroup math
 //!@{
 
-template<class T> class axMatrix4;
+template<class T> class axMatrix4x4;
 template<class T> class axEulerRotation3;
 
 template<class T>
@@ -57,7 +57,7 @@ public:
 	//! Spherical linear interpolation
 	axQuaternion		sphericalLerp ( const axQuaternion &q, T t ) const;
 
-	axMatrix4<T>		to_Matrix4() const;
+	axMatrix4x4<T>		to_Matrix4() const;
 	axEulerRotation3<T>	to_EulerRotation3() const;
 
 	template<class S>	axStatus	serialize_io	( S &se );

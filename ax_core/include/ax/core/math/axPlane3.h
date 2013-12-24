@@ -1,7 +1,7 @@
 #ifndef __axPlane3_h__
 #define __axPlane3_h__
 
-#include "axMatrix4.h"
+#include "axMatrix4x4.h"
 #include "axBBox3.h"
 
 //! N dot P + d = 0
@@ -23,8 +23,8 @@ public:
 	//! d in "N dot P + d = 0"
 	T	d() const { return -p.dot( n ); }
 
-	void   operator*=	( const axMatrix4<T> &mat )	{ p*=mat; n*=mat; }
-	axPlane3 operator*  ( const axMatrix4<T> &mat )	const { return axPlane3( p*mat, (n*mat).normal() ); }
+	void   operator*=	( const axMatrix4x4<T> &mat )	{ p*=mat; n*=mat; }
+	axPlane3 operator*  ( const axMatrix4x4<T> &mat )	const { return axPlane3( p*mat, (n*mat).normal() ); }
 
 	template<class S>	axStatus	serialize_io	( S &se );
 						axStatus	toStringFormat	( axStringFormat &f ) const;

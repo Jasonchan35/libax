@@ -5,7 +5,7 @@
 
 #include "axVec_Str.h"
 #include "axRect2.h"
-#include "axMatrix4.h"
+#include "axMatrix4x4.h"
 #include "axRay3.h"
 #include "axPlane3.h"
 #include "axIntersect3.h"

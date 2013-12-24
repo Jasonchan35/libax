@@ -7,7 +7,7 @@
 //! \addtogroup math
 //!@{
 
-template<class T> class axMatrix4;
+template<class T> class axMatrix4x4;
 template<class T> class axQuaternion;
 
 template<class T>
@@ -30,9 +30,9 @@ public:
 
 	void			set( T x, T y, T z, int oo=o_xyz )			{ a.set(x,y,z); o = oo; }
 	void			set( const axVec3<T> &aa, int oo=o_xyz )	{ a = aa; o = oo; }
-	void			set( const axMatrix4<T> &m );
+	void			set( const axMatrix4x4<T> &m );
 
-	axMatrix4<T>	to_Matrix4		() const;
+	axMatrix4x4<T>	to_Matrix4		() const;
 	axQuaternion<T>	to_Quaternion	() const;
 
 	const char*		orderName		() const;

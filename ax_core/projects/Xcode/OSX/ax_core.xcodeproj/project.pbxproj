@@ -17,7 +17,7 @@
 		96321782155EF2000061BE21 /* axEulerRotation3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9632175A155EF2000061BE21 /* axEulerRotation3.cpp */; };
 		96321783155EF2000061BE21 /* axFrustum3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9632175B155EF2000061BE21 /* axFrustum3.cpp */; };
 		96321784155EF2000061BE21 /* axIntersect3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9632175C155EF2000061BE21 /* axIntersect3.cpp */; };
-		96321785155EF2000061BE21 /* axMatrix4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9632175D155EF2000061BE21 /* axMatrix4.cpp */; };
+		96321785155EF2000061BE21 /* axMatrix4x4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9632175D155EF2000061BE21 /* axMatrix4x4.cpp */; };
 		96321786155EF2000061BE21 /* axQuaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9632175E155EF2000061BE21 /* axQuaternion.cpp */; };
 		96321787155EF2000061BE21 /* axRay3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9632175F155EF2000061BE21 /* axRay3.cpp */; };
 		96321788155EF2000061BE21 /* axRect2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96321760155EF2000061BE21 /* axRect2.cpp */; };
@@ -80,7 +80,7 @@
 		9640E0E516009DA400F9D037 /* axFrustum3.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E06D16009DA400F9D037 /* axFrustum3.h */; };
 		9640E0E616009DA400F9D037 /* axIntersect3.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E06E16009DA400F9D037 /* axIntersect3.h */; };
 		9640E0E716009DA400F9D037 /* axMargin2.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E06F16009DA400F9D037 /* axMargin2.h */; };
-		9640E0E816009DA400F9D037 /* axMatrix4.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E07016009DA400F9D037 /* axMatrix4.h */; };
+		9640E0E816009DA400F9D037 /* axMatrix4x4.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E07016009DA400F9D037 /* axMatrix4x4.h */; };
 		9640E0E916009DA400F9D037 /* axPlane3.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E07116009DA400F9D037 /* axPlane3.h */; };
 		9640E0EA16009DA400F9D037 /* axQuaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E07216009DA400F9D037 /* axQuaternion.h */; };
 		9640E0EB16009DA400F9D037 /* axRay3.h in Headers */ = {isa = PBXBuildFile; fileRef = 9640E07316009DA400F9D037 /* axRay3.h */; };
@@ -182,7 +182,7 @@
 		9632175A155EF2000061BE21 /* axEulerRotation3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axEulerRotation3.cpp; sourceTree = "<group>"; };
 		9632175B155EF2000061BE21 /* axFrustum3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axFrustum3.cpp; sourceTree = "<group>"; };
 		9632175C155EF2000061BE21 /* axIntersect3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axIntersect3.cpp; sourceTree = "<group>"; };
-		9632175D155EF2000061BE21 /* axMatrix4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axMatrix4.cpp; sourceTree = "<group>"; };
+		9632175D155EF2000061BE21 /* axMatrix4x4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axMatrix4x4.cpp; sourceTree = "<group>"; };
 		9632175E155EF2000061BE21 /* axQuaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axQuaternion.cpp; sourceTree = "<group>"; };
 		9632175F155EF2000061BE21 /* axRay3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axRay3.cpp; sourceTree = "<group>"; };
 		96321760155EF2000061BE21 /* axRect2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = axRect2.cpp; sourceTree = "<group>"; };
@@ -246,7 +246,7 @@
 		9640E06D16009DA400F9D037 /* axFrustum3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axFrustum3.h; sourceTree = "<group>"; };
 		9640E06E16009DA400F9D037 /* axIntersect3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axIntersect3.h; sourceTree = "<group>"; };
 		9640E06F16009DA400F9D037 /* axMargin2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axMargin2.h; sourceTree = "<group>"; };
-		9640E07016009DA400F9D037 /* axMatrix4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axMatrix4.h; sourceTree = "<group>"; };
+		9640E07016009DA400F9D037 /* axMatrix4x4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axMatrix4x4.h; sourceTree = "<group>"; };
 		9640E07116009DA400F9D037 /* axPlane3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axPlane3.h; sourceTree = "<group>"; };
 		9640E07216009DA400F9D037 /* axQuaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axQuaternion.h; sourceTree = "<group>"; };
 		9640E07316009DA400F9D037 /* axRay3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axRay3.h; sourceTree = "<group>"; };
@@ -428,7 +428,7 @@
 				9632175A155EF2000061BE21 /* axEulerRotation3.cpp */,
 				9632175B155EF2000061BE21 /* axFrustum3.cpp */,
 				9632175C155EF2000061BE21 /* axIntersect3.cpp */,
-				9632175D155EF2000061BE21 /* axMatrix4.cpp */,
+				9632175D155EF2000061BE21 /* axMatrix4x4.cpp */,
 				9632175E155EF2000061BE21 /* axQuaternion.cpp */,
 				9632175F155EF2000061BE21 /* axRay3.cpp */,
 				96321760155EF2000061BE21 /* axRect2.cpp */,
@@ -602,7 +602,7 @@
 				9640E06D16009DA400F9D037 /* axFrustum3.h */,
 				9640E06E16009DA400F9D037 /* axIntersect3.h */,
 				9640E06F16009DA400F9D037 /* axMargin2.h */,
-				9640E07016009DA400F9D037 /* axMatrix4.h */,
+				9640E07016009DA400F9D037 /* axMatrix4x4.h */,
 				9640E07116009DA400F9D037 /* axPlane3.h */,
 				9640E07216009DA400F9D037 /* axQuaternion.h */,
 				9640E07316009DA400F9D037 /* axRay3.h */,
@@ -858,7 +858,7 @@
 				9640E0E516009DA400F9D037 /* axFrustum3.h in Headers */,
 				9640E0E616009DA400F9D037 /* axIntersect3.h in Headers */,
 				9640E0E716009DA400F9D037 /* axMargin2.h in Headers */,
-				9640E0E816009DA400F9D037 /* axMatrix4.h in Headers */,
+				9640E0E816009DA400F9D037 /* axMatrix4x4.h in Headers */,
 				9640E0E916009DA400F9D037 /* axPlane3.h in Headers */,
 				9640E0EA16009DA400F9D037 /* axQuaternion.h in Headers */,
 				9640E0EB16009DA400F9D037 /* axRay3.h in Headers */,
@@ -1009,7 +1009,7 @@
 				96321782155EF2000061BE21 /* axEulerRotation3.cpp in Sources */,
 				96321783155EF2000061BE21 /* axFrustum3.cpp in Sources */,
 				96321784155EF2000061BE21 /* axIntersect3.cpp in Sources */,
-				96321785155EF2000061BE21 /* axMatrix4.cpp in Sources */,
+				96321785155EF2000061BE21 /* axMatrix4x4.cpp in Sources */,
 				96321786155EF2000061BE21 /* axQuaternion.cpp in Sources */,
 				96321787155EF2000061BE21 /* axRay3.cpp in Sources */,
 				96321788155EF2000061BE21 /* axRect2.cpp in Sources */,

@@ -12,7 +12,7 @@ axFrustum3<T>::axFrustum3() {
 }
 
 template<class T>
-axFrustum3<T>::axFrustum3( const axMatrix4<T>& projection ) {
+axFrustum3<T>::axFrustum3( const axMatrix4x4<T>& projection ) {
 	_ctor();
 	set( projection );
 }
@@ -45,8 +45,8 @@ const axPlane3<T>*	axFrustum3<T>::planes() const {
 }
 
 template<class T>
-void axFrustum3<T>::set( const axMatrix4<T>&	projection ) {
-	axMatrix4<T>	im = projection.inverse();
+void axFrustum3<T>::set( const axMatrix4x4<T>&	projection ) {
+	axMatrix4x4<T>	im = projection.inverse();
 	//near
 	pt[0] = ( axVec4<T>( -1,-1, 0, 1 ) * im ).to_Vec3();
 	pt[1] = ( axVec4<T>(  1,-1, 0, 1 ) * im ).to_Vec3();
@@ -64,7 +64,7 @@ void axFrustum3<T>::set( const axMatrix4<T>&	projection ) {
 }
 
 template<class T>
-axFrustum3<T> axFrustum3<T>::operator*( const axMatrix4<T>& m ) {
+axFrustum3<T> axFrustum3<T>::operator*( const axMatrix4x4<T>& m ) {
 	axFrustum3<T>	fr;
 	if( !valid ) return fr;
 
@@ -83,7 +83,7 @@ axFrustum3<T> axFrustum3<T>::operator*( const axMatrix4<T>& m ) {
 
 
 template<class T>
-void axFrustum3<T>::operator*=( const axMatrix4<T>& m ) {
+void axFrustum3<T>::operator*=( const axMatrix4x4<T>& m ) {
 	if( !valid ) return;
 	pt[0].mul4x4_it(m);
 	pt[1].mul4x4_it(m);

@@ -1,5 +1,5 @@
 #include <ax/core/math/axEulerRotation3.h>
-#include <ax/core/math/axMatrix4.h>
+#include <ax/core/math/axMatrix4x4.h>
 #include <ax/core/math/axQuaternion.h>
 
 template<class T>
@@ -16,8 +16,8 @@ const char* axEulerRotation3<T>::orderName() const {
 }
 
 template<class T>
-axMatrix4<T> axEulerRotation3<T>::to_Matrix4() const {
-	axMatrix4<T> m;
+axMatrix4x4<T> axEulerRotation3<T>::to_Matrix4() const {
+	axMatrix4x4<T> m;
 	if( a.isAll(0) ) {
 		m.setIdentity();
 		return m;
@@ -71,7 +71,7 @@ axMatrix4<T> axEulerRotation3<T>::to_Matrix4() const {
 	}
 #else
 
-	axMatrix4<T> mx, my, mz;
+	axMatrix4x4<T> mx, my, mz;
 	mx.set_rotate_x(a.x);
 	my.set_rotate_y(a.y);
 	mz.set_rotate_z(a.z);
@@ -132,7 +132,7 @@ axQuaternion<T> axEulerRotation3<T>::to_Quaternion() const {
 }
 
 template<class T>
-void axEulerRotation3<T>::set( const axMatrix4<T> &m ) {
+void axEulerRotation3<T>::set( const axMatrix4x4<T> &m ) {
 	T pole = (T)1.0 - ax_epsilon<T>();
 
 	o = o_xyz;

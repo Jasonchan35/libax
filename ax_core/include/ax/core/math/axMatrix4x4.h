@@ -1,5 +1,5 @@
-#ifndef __axMatrix4_h__
-#define __axMatrix4_h__
+#ifndef __axMatrix4x4_h__
+#define __axMatrix4x4_h__
 
 #include "ax_math_angle.h"
 #include "axVec3.h"
@@ -10,22 +10,22 @@
 //! \addtogroup math
 //@{
 
-template<class T> class axMatrix4;
-typedef axMatrix4<float>	axMatrix4f;
-typedef axMatrix4<double>	axMatrix4d;
+template<class T> class axMatrix4x4;
+typedef axMatrix4x4<float>	axMatrix4x4f;
+typedef axMatrix4x4<double>	axMatrix4x4d;
 
 //! 4x4 matrix template, matrix is column-major
 template<class T>
-class axMatrix4 {
+class axMatrix4x4 {
 public:
 	typedef	T	TYPE;
 	
 	axVec4<T> cx,cy,cz,cw;
 
-	axMatrix4() {}
-	axMatrix4( axVec4<T> cxx, axVec4<T> cyy, axVec4<T> czz, axVec4<T> cww ) :cx(cxx),cy(cyy),cz(czz),cw(cww) {}
+	axMatrix4x4() {}
+	axMatrix4x4( axVec4<T> cxx, axVec4<T> cyy, axVec4<T> czz, axVec4<T> cww ) :cx(cxx),cy(cyy),cz(czz),cw(cww) {}
 
-	axMatrix4 ( T v00, T v01, T v02, T v03,
+	axMatrix4x4 ( T v00, T v01, T v02, T v03,
 			  T v10, T v11, T v12, T v13,
 			  T v20, T v21, T v22, T v23,
 			  T v30, T v31, T v32, T v33 );
@@ -51,28 +51,28 @@ public:
 			  axVec4<T>&	operator[]( axSize col )				{ return (&cx)[col]; }
 		const axVec4<T>&	operator[]( axSize col ) const			{ return (&cx)[col]; }
 
-		void		operator+=		( const axMatrix4 &v ) 		{ cx += v.cx; cy += v.cy; cz += v.cz; cw += v.cw; }
-		void		operator-=		( const axMatrix4 &v ) 		{ cx -= v.cx; cy -= v.cy; cz -= v.cz; cw -= v.cw; }
+		void		operator+=		( const axMatrix4x4 &v ) 		{ cx += v.cx; cy += v.cy; cz += v.cz; cw += v.cw; }
+		void		operator-=		( const axMatrix4x4 &v ) 		{ cx -= v.cx; cy -= v.cy; cz -= v.cz; cw -= v.cw; }
 
 		void		operator+=		( T v ) 					{ cx += v; cy += v; cz += v; cw += v; }
 		void		operator-=		( T v ) 					{ cx -= v; cy -= v; cz -= v; cw -= v; }
 		void		operator*=		( T v ) 					{ cx *= v; cy *= v; cz *= v; cw *= v; }
-		void		operator*=		( const axMatrix4 &v );
+		void		operator*=		( const axMatrix4x4 &v );
 
-		bool		operator==		( const axMatrix4 &v ) const	{ return memcmp( &v, this, sizeof(v) ) == 0; }
-		bool		operator!=		( const axMatrix4 &v ) const	{ return memcmp( &v, this, sizeof(v) ) != 0; }
+		bool		operator==		( const axMatrix4x4 &v ) const	{ return memcmp( &v, this, sizeof(v) ) == 0; }
+		bool		operator!=		( const axMatrix4x4 &v ) const	{ return memcmp( &v, this, sizeof(v) ) != 0; }
 
-		axMatrix4		operator+		( const axMatrix4 &v ) const	{ return axMatrix4( cx+v.cx, cy+v.cy, cz+v.cz, cw+v.cw ); }
-		axMatrix4		operator-		( const axMatrix4 &v ) const	{ return axMatrix4( cx-v.cx, cy-v.cy, cz-v.cz, cw-v.cw ); }
-		axMatrix4		operator*		( const axMatrix4 &v ) const;
+		axMatrix4x4		operator+		( const axMatrix4x4 &v ) const	{ return axMatrix4x4( cx+v.cx, cy+v.cy, cz+v.cz, cw+v.cw ); }
+		axMatrix4x4		operator-		( const axMatrix4x4 &v ) const	{ return axMatrix4x4( cx-v.cx, cy-v.cy, cz-v.cz, cw-v.cw ); }
+		axMatrix4x4		operator*		( const axMatrix4x4 &v ) const;
 
-		axMatrix4		operator+		( T v ) const				{ return axMatrix4<T>( cx+v, cy+v, cz+v, cw+v ); }
-		axMatrix4		operator-		( T v ) const				{ return axMatrix4<T>( cx-v, cy-v, cz-v, cw-v ); }
-		axMatrix4		operator*		( T v ) const				{ return axMatrix4<T>( cx*v, cy*v, cz*v, cw*v ); }
-		axMatrix4		operator/		( T v ) const				{ T inv = (T)1.0/v; return *this * inv; }
+		axMatrix4x4		operator+		( T v ) const				{ return axMatrix4x4<T>( cx+v, cy+v, cz+v, cw+v ); }
+		axMatrix4x4		operator-		( T v ) const				{ return axMatrix4x4<T>( cx-v, cy-v, cz-v, cw-v ); }
+		axMatrix4x4		operator*		( T v ) const				{ return axMatrix4x4<T>( cx*v, cy*v, cz*v, cw*v ); }
+		axMatrix4x4		operator/		( T v ) const				{ T inv = (T)1.0/v; return *this * inv; }
 
-		axMatrix4		transpose		() const;
-		axMatrix4		inverse			() const;
+		axMatrix4x4		transpose		() const;
+		axMatrix4x4		inverse			() const;
 
 			void		inverseIt		() { *this = inverse(); }
 
@@ -93,7 +93,7 @@ public:
 			void		setRotate		( const axVec3<T> & eulerAngle	  );
 			void		setRotateDeg	( const axVec3<T> & eulerAngleDeg )	{ setRotate( ax_deg_to_rad( eulerAngleDeg ) ); }
 			
-			void		rotate			( const axVec3<T> & eulerAngle    )	{ axMatrix4<T> t; t.setRotate(eulerAngle); operator*=(t); }
+			void		rotate			( const axVec3<T> & eulerAngle    )	{ axMatrix4x4<T> t; t.setRotate(eulerAngle); operator*=(t); }
 			void		rotateDeg		( const axVec3<T> & eulerAngleDeg )	{ rotate( ax_deg_to_rad( eulerAngleDeg ) ); }
 
 			void		rotate			( const axEulerRotation3<T> & er );
@@ -103,9 +103,9 @@ public:
 			void		setRotateY		( T rad );
 			void		setRotateZ		( T rad );
 
-			void		rotateX         ( T rad )							{ axMatrix4<T> t; t.setRotateX( rad ); operator*=(t); }
-			void		rotateY         ( T rad )							{ axMatrix4<T> t; t.setRotateY( rad ); operator*=(t); }
-			void		rotateZ         ( T rad )							{ axMatrix4<T> t; t.setRotateZ( rad ); operator*=(t); }
+			void		rotateX         ( T rad )							{ axMatrix4x4<T> t; t.setRotateX( rad ); operator*=(t); }
+			void		rotateY         ( T rad )							{ axMatrix4x4<T> t; t.setRotateY( rad ); operator*=(t); }
+			void		rotateZ         ( T rad )							{ axMatrix4x4<T> t; t.setRotateZ( rad ); operator*=(t); }
 
 			void		setRotateDegX	( T deg )							{ return setRotateX( ax_deg_to_rad(deg) ); }
 			void		setRotateDegY	( T deg )							{ return setRotateY( ax_deg_to_rad(deg) ); }
@@ -122,19 +122,19 @@ public:
 			void		setRotateDegAxis( T deg, const axVec3<T> &axis )	{ setRotateAxis( ax_deg_to_rad(deg), axis ); }
 			void		setRotateDegAxis( T deg, T x, T y, T z )			{ setRotateAxis( ax_deg_to_rad(deg), x,y,z ); }
 
-			void		rotateAxis		( T rad, const axVec3<T> &axis )	{ axMatrix4<T> t; t.setRotateAxis( rad, axis ); operator*=(t); }
+			void		rotateAxis		( T rad, const axVec3<T> &axis )	{ axMatrix4x4<T> t; t.setRotateAxis( rad, axis ); operator*=(t); }
 			void		rotateDegAxis	( T deg, const axVec3<T> &axis )	{ rotateAxis( ax_deg_to_rad(deg), axis ); }
 
 			void		rotateAxis		( T rad, T x, T y, T z )			{ rotateAxis( rad, 					axVec3<T>(x,y,z) ); }
 			void		rotateDegAxis	( T deg, T x, T y, T z )			{ rotateAxis( ax_deg_to_rad(deg), 	axVec3<T>(x,y,z) ); }
 			
 			void		setScale		( const axVec3<T> &v );
-			void		scale			( const axVec3<T> &v )				{ axMatrix4<T> t; t.setScale( v ); operator*=(t); }
+			void		scale			( const axVec3<T> &v )				{ axMatrix4x4<T> t; t.setScale( v ); operator*=(t); }
 			void		scale			( const axVec2<T> &v )				{ scale( axVec3<T>(v.x,v.y,1) ); }
 			void		scale			( T x, T y, T z )					{ scale( axVec3<T>(x,y,z) ); }
 
 			void		setShear		( const axVec3<T> &v );
-			void		shear			( const axVec3<T> &v )				{ axMatrix4<T> t; t.setShear( v ); operator*=(t); }
+			void		shear			( const axVec3<T> &v )				{ axMatrix4x4<T> t; t.setShear( v ); operator*=(t); }
 
 			void		setAimZ_UpY		( const axVec3<T> &eye, const axVec3<T> &aim, const axVec3<T> &up, bool neg_z = false );
 			void		setLookAt		( const axVec3<T> &eye, const axVec3<T> &aim, const axVec3<T> &up = axVec3f(0,1,0) );
@@ -152,39 +152,39 @@ public:
 	axVec3<T>		dirY_transpose	() const;
 	axVec3<T>		dirZ_transpose	() const;
 
-	const	static 		axMatrix4	kIdentity;
+	const	static 		axMatrix4x4	kIdentity;
 
 	template<class S>	axStatus	serialize_io	( S &s );
 
 						axStatus	toStringFormat	( axStringFormat &f ) const;
-						axStatus	onTake			( axMatrix4<T> &b ) { *this = b; return 0; }
+						axStatus	onTake			( axMatrix4x4<T> &b ) { *this = b; return 0; }
 
 };
 
-template< class T > inline axMatrix4f to_axMatrix4f( const axMatrix4<T>& v ) { 
-	return axMatrix4f( to_axVec4f(v.cx), to_axVec4f(v.cy), to_axVec4f(v.cz), to_axVec4f(v.cw) ); 
+template< class T > inline axMatrix4x4f to_axMatrix4x4f( const axMatrix4x4<T>& v ) { 
+	return axMatrix4x4f( to_axVec4f(v.cx), to_axVec4f(v.cy), to_axVec4f(v.cz), to_axVec4f(v.cw) ); 
 }
 
-template< class T > inline axMatrix4d to_axMatrix4d( const axMatrix4<T>& v ) { 
-	return axMatrix4d( to_axVec4d(v.cx), to_axVec4d(v.cy), to_axVec4d(v.cz), to_axVec4d(v.cw) ); 
+template< class T > inline axMatrix4x4d to_axMatrix4x4d( const axMatrix4x4<T>& v ) { 
+	return axMatrix4x4d( to_axVec4d(v.cx), to_axVec4d(v.cy), to_axVec4d(v.cz), to_axVec4d(v.cw) ); 
 }
 
 
-template<class T> inline axVec4<T> axMatrix4<T>::position() const    { return cw; }
+template<class T> inline axVec4<T> axMatrix4x4<T>::position() const    { return cw; }
 
-template<class T> inline axVec3<T> axMatrix4<T>::dirX() const       { return axVec3<T>( cx.x, cy.x, cz.x ).normalize(); }
-template<class T> inline axVec3<T> axMatrix4<T>::dirY() const       { return axVec3<T>( cx.y, cy.y, cz.y ).normalize(); }
-template<class T> inline axVec3<T> axMatrix4<T>::dirZ() const       { return axVec3<T>( -cx.z, -cy.z, -cz.z ).normalize(); }
+template<class T> inline axVec3<T> axMatrix4x4<T>::dirX() const       { return axVec3<T>( cx.x, cy.x, cz.x ).normalize(); }
+template<class T> inline axVec3<T> axMatrix4x4<T>::dirY() const       { return axVec3<T>( cx.y, cy.y, cz.y ).normalize(); }
+template<class T> inline axVec3<T> axMatrix4x4<T>::dirZ() const       { return axVec3<T>( -cx.z, -cy.z, -cz.z ).normalize(); }
 
-template<class T> inline axVec3<T> axMatrix4<T>::dirX_transpose() const   { return axVec3<T>( cx.x, cx.y, cx.z ).normalize(); }
-template<class T> inline axVec3<T> axMatrix4<T>::dirY_transpose() const   { return axVec3<T>( cy.x, cy.y, cy.z ).normalize(); }
-template<class T> inline axVec3<T> axMatrix4<T>::dirZ_transpose() const   { return axVec3<T>( -cz.x, -cz.y, -cz.z ).normalize(); }
+template<class T> inline axVec3<T> axMatrix4x4<T>::dirX_transpose() const   { return axVec3<T>( cx.x, cx.y, cx.z ).normalize(); }
+template<class T> inline axVec3<T> axMatrix4x4<T>::dirY_transpose() const   { return axVec3<T>( cy.x, cy.y, cy.z ).normalize(); }
+template<class T> inline axVec3<T> axMatrix4x4<T>::dirZ_transpose() const   { return axVec3<T>( -cz.x, -cz.y, -cz.z ).normalize(); }
 
 
 
 template<class T>
 template<class S> inline
-axStatus axMatrix4<T>::serialize_io( S &s ) {
+axStatus axMatrix4x4<T>::serialize_io( S &s ) {
 #if axBYTE_ORDER == axSERIALIZE_BYTE_ORDER
 	return s.io_raw( this, sizeof(T)*16 );
 #else
@@ -197,8 +197,8 @@ axStatus axMatrix4<T>::serialize_io( S &s ) {
 #endif
 }
 
-template< class T > inline axStatus ax_json_serialize_value( axJsonWriter &s, axMatrix4<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 16 ); }
-template< class T > inline axStatus ax_json_serialize_value( axJsonParser &s, axMatrix4<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 16 ); }
+template< class T > inline axStatus ax_json_serialize_value( axJsonWriter &s, axMatrix4x4<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 16 ); }
+template< class T > inline axStatus ax_json_serialize_value( axJsonParser &s, axMatrix4x4<T> &v ) { return ax_json_serialize_value_array( s, v.asPointer(), 16 ); }
 
 
 //@}
@@ -209,10 +209,10 @@ template< class T > inline axStatus ax_json_serialize_value( axJsonParser &s, ax
 		static const bool isPOD = true; \
 	};\
 //----
-    axTYPE_LIST( axMatrix4f )
-    axTYPE_LIST( axMatrix4d )
+    axTYPE_LIST( axMatrix4x4f )
+    axTYPE_LIST( axMatrix4x4d )
 #undef axTYPE_LIST
 
 
-#endif //__axMatrix4_h__
+#endif //__axMatrix4x4_h__
     

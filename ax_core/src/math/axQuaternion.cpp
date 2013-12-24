@@ -1,6 +1,6 @@
 #include <ax/core/math/axQuaternion.h>
 #include <ax/core/math/axEulerRotation3.h>
-#include <ax/core/math/axMatrix4.h>
+#include <ax/core/math/axMatrix4x4.h>
 
 template<class T>
 axQuaternion<T>	axQuaternion<T>::operator*( const axQuaternion<T> &rq ) const {
@@ -78,7 +78,7 @@ template<class T> bool axQuaternion<T>::getRotate(T &angle, axVec3<T> &axis) con
 }
 
 template<class T>
-axMatrix4<T> axQuaternion<T>::to_Matrix4() const{
+axMatrix4x4<T> axQuaternion<T>::to_Matrix4() const{
 	T x2 = c.x * c.x;
 	T y2 = c.y * c.y;
 	T z2 = c.z * c.z;
@@ -90,9 +90,9 @@ axMatrix4<T> axQuaternion<T>::to_Matrix4() const{
 	T wz = c.w * c.z;
 
 	// This calculation would be a lot more complicated for non-unit length quaternions
-	// Note: The constructor of axMatrix4 expects the Matrix in column-major format like expected by
+	// Note: The constructor of axMatrix4x4 expects the Matrix in column-major format like expected by
 	//   OpenGL
-	return axMatrix4<T>(	1 -2*(y2+z2),	2*(xy-wz),		2*(xz+wy),		0,
+	return axMatrix4x4<T>(	1 -2*(y2+z2),	2*(xy-wz),		2*(xz+wy),		0,
 		 				2*(xy+wz),		1 -2*(x2 + z2),	2*(yz-wx),		0,
 						2*(xz-wy),		2*(yz + wx),	1 -2*(x2+y2),	0,
 						0,				0,				0,				1);
