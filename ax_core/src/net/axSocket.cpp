@@ -297,12 +297,12 @@ axStatus axSocket::getRecvQueueSize( axSize &byteSize ) {
 	return 0;
 }
 
-bool axSocket::setNonBlocking( bool b )	{
-	if( ! isValid() ) { axASSERT(false); return false; }
+axStatus axSocket::setNonBlocking( bool b )	{
+	if( ! isValid() ) { axASSERT(false); return axStatus_Std::not_initialized; }
 	unsigned long a=b?1:0;
 	if( ::ioctlsocket(fd_,FIONBIO,&a) !=0 )
-		return false;
-	return true;
+		return -1;
+	return 0;
 }
 
 axStatus axSocket::shutdownRead()		{ 
@@ -458,12 +458,12 @@ axStatus axSocket::getRecvQueueSize( axSize &byteSize ) {
 	return 0;
 }
 
-bool  axSocket::setNonBlocking( bool b )	{
+axStatus axSocket::setNonBlocking( bool b )	{
 	if( ! isValid() ) { axASSERT(false); return axStatus_Std::not_initialized; }
 	int a=b?1:0;
 	if( ::ioctl(fd_, FIONBIO, &a ) != 0 )
-		return false;
-	return true;
+		return -1;
+	return 0;
 }
 
 axStatus axSocket::shutdownRead()		{ 

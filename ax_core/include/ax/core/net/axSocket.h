@@ -47,7 +47,7 @@ public:
 	axStatus	shutdownWrite		();
 	axStatus	shutdownReadWrite	();
 
-	bool		setNonBlocking		( bool b );
+	axStatus	setNonBlocking		( bool b );
 	bool		setReuseAddr		( bool b );
 	bool		setTCP_NoDelay		( bool b );
 	bool		setTCP_KeepAlive	( bool b );
