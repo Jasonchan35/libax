@@ -4,13 +4,23 @@ axThreadPool::axThreadPool() {
 }
 
 axThreadPool::~axThreadPool() {
-    assert( count() == 0 && target() == 0 ); // must set_conut(0,ture) outside before call this destructor
+	{	CVData	d(cvdata_,false);
+	    assert( d->runningCount == 0 && d->target == 0 ); // must set_conut(0,ture) outside before call this destructor
+	}
+	
     setCount( 0, true );
+	
+	{ // wait for all thread destroyed
+	    CVData	d(cvdata_,false);
+		while( d->internalCount > 0 ) {
+			d.wait();
+		}
+	}
 }
 
 axSize	axThreadPool::count()	{
     CVData	d(cvdata_,false);
-    return d->count; 
+    return d->runningCount;
 }
 
 axSize	axThreadPool::target() {
@@ -23,10 +33,10 @@ bool axThreadPool::keeprun( Thread* thread ) {
     
     //	printf("ThreadPool[%p] set_count() target=%u current=%u\n", this , (unsigned)d->target, (unsigned)d->current );
     
-    if( d->count <= d->target ) return true;
+    if( d->runningCount <= d->target ) return true;
     
 	thread->needDecudeFromCounter_ = false;
-    d->count--;
+    d->runningCount--;
     d.signal();
     return false;
 }
@@ -39,13 +49,12 @@ axStatus axThreadPool::setCount( axSize n, bool wait ) {
     for(;;) {
         //		printf("ThreadPool[%p] set_count() target=%u current=%u\n", this , (unsigned)d->target, (unsigned)d->current );
         //got the target number
-        if( d->target == d->count ) return 0;
+        if( d->target == d->runningCount ) return 0;
         
         //create more
-        if( d->target > d->count ) {
-            Thread* t = new Thread; //delete in Thread::onThreadProc
+        if( d->target > d->runningCount ) {
+            Thread* t = new Thread( this ); //delete in Thread::onThreadProc
             if( !t ) return axStatus_Std::not_enough_memory;
-            t->pool_ = this;
             
             st = t->create();
             if( !st ) {
@@ -54,7 +63,8 @@ axStatus axThreadPool::setCount( axSize n, bool wait ) {
             }
 
 			t->needDecudeFromCounter_ = true;
-            d->count++;
+			d->internalCount++;
+            d->runningCount++;
             continue;
         }
         
@@ -66,24 +76,25 @@ axStatus axThreadPool::setCount( axSize n, bool wait ) {
     }
 }	
 
-axThreadPool::Thread::Thread()
+axThreadPool::Thread::Thread( axThreadPool* pool )
 : needDecudeFromCounter_(false)
-{	
+{
+	pool_ = pool;
 }
 
 //virtual 
 void axThreadPool::Thread::onThreadProc() {
     pool_->onThreadStart( this );
     pool_->onThreadProc ( this );    
-    pool_->onThreadStop( this );
+    pool_->onThreadStop ( this );
     
     {	CVData	d(pool_->cvdata_, true);
 		if( needDecudeFromCounter_ ) {
 			needDecudeFromCounter_ = false;
-			d->count--;
-		    d.signal();
+			d->runningCount--;
 		}
 		detach(); //deatch before delete
 	    delete this;
+		d->internalCount--;
     }    
 }

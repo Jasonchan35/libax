@@ -23,11 +23,14 @@ public:
     class Thread : public axThread {
         virtual void onThreadProc();
 	public:
-		Thread();
-	    axPtr< axThreadPool >	pool_;
-		bool	needDecudeFromCounter_;
-		
+		Thread( axThreadPool* pool );
+
 		axAutoPtr< PerThreadData >	perThreadData;
+		
+	friend class axThreadPool;
+	protected:
+	    axPtr< axThreadPool >	pool_;
+		bool	needDecudeFromCounter_;		
     };
     
 	virtual void onThreadStart	( Thread* thread ) { };
@@ -39,7 +42,8 @@ private:
 	class _CVData {
 	public:
 		axSize		target;
-		axSize		count;
+		axSize		runningCount;
+		axSize		internalCount;
 	};
     typedef axCondVarProtected<_CVData>     CVData;
     CVData::Data    cvdata_;
