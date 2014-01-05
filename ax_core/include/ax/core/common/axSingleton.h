@@ -38,4 +38,33 @@ template<class T> typename axSingleton<T>::Instance 		axSingleton<T>::instance_;
 
 
 
+
+//cross EXE/DLL singleton
+template<class T>
+class axSingleton2 {
+public:
+	T*		operator-> ()			{ return instance_.get(); }
+private:
+	class Instance {
+	public:
+		void	set( T* p )		{ p_ = p; }
+		T*		getNoInit ()	{ return p_; }
+		T*		get() {
+			if( ! p_ ) { //might init by other EXE/DLL
+				static T t;
+				p_ = &t;
+			}
+			return p_;
+		}
+	private:
+		T* volatile p_; // will be init to zero cause static, and also share between DLL/EXE so don't try to init to NULL here
+	};
+	static 	Instance 	instance_;
+};
+
+template<class T> typename axSingleton2<T>::Instance 		axSingleton2<T>::instance_;
+
+
+
+
 #endif
