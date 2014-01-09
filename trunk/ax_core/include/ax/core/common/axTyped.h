@@ -48,7 +48,7 @@ public:
 	
 	operator bool () const { return p_; }
 	
-	template<class T> 	bool	isKindOf_ 	() const {	return isKindOf( axTypeOf<T>() ); }	
+	template<class T> 	bool	isKindOfT 	() const {	return isKindOf( axTypeOf<T>() ); }	
 	
 	bool	isKindOf( axType t ) const	{
 		if( *this == t ) return true;
@@ -88,11 +88,11 @@ public:
 	template<class T> 	bool	cast	( axRef<T> 		& ptr );
 	template<class T> 	bool	cast	( axAutoPtr<T> 	& ptr );
 
-			static		axType	staticType	();
-			virtual		axType	objectType	() const;
-			virtual		bool	isKindOf	( const axType & type ) const;
+			static		axType	getTypeStatic	();
+			virtual		axType	getType			() const;
+			virtual		bool	isKindOf		( const axType & type ) const;
 	
-	template<class T> 	bool	isKindOf_ 	() const {	return isKindOf( axTypeOf<T>() ); }	
+	template<class T> 	bool	isKindOfT 		() const {	return isKindOf( axTypeOf<T>() ); }	
 };
 
 #define axTypeDef(T,BASE) \
@@ -112,16 +112,16 @@ protected: \
 	\
 public: \
 	typedef	T		CLASS; \
-	virtual	bool	isKindOf ( const axType & type ) const { return objectType().isKindOf( type ); } \
-	static	axType	staticType	()			{ return axTypeOf<CLASS>(); } \
-	virtual	axType	objectType	() const 	{ return axTypeOf<CLASS>(); } \
+	virtual	bool	isKindOf ( const axType & type ) const { return getType().isKindOf( type ); } \
+	static	axType	getTypeStatic	()			{ return axTypeOf<CLASS>(); } \
+	virtual	axType	getType	() const 	{ return axTypeOf<CLASS>(); } \
 	\
 //-----------
 
 
 template<class T> inline
 T* axTyped::cast () {
-	if( this != nullptr && isKindOf_<T>() ) {
+	if( this != nullptr && isKindOfT<T>() ) {
 		return (T*)this;
 	}else{
 		return nullptr;
@@ -140,9 +140,9 @@ public:
 	}
 };
 
-inline	axType	axTyped::staticType () 		 	{ return axTypeOf< axTyped >(); }
-inline	axType	axTyped::objectType () const 	{ return axTypeOf< axTyped >(); }
-inline	bool	axTyped::isKindOf 	( const axType & type ) const { return objectType().isKindOf( type ); }
+inline	axType	axTyped::getTypeStatic () 		 	{ return axTypeOf< axTyped >(); }
+inline	axType	axTyped::getType () const 	{ return axTypeOf< axTyped >(); }
+inline	bool	axTyped::isKindOf 	( const axType & type ) const { return getType().isKindOf( type ); }
 
 
 #endif

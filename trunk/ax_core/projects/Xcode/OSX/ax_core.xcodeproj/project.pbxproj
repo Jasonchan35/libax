@@ -320,7 +320,7 @@
 		964CADB11649783100EADA03 /* ax_array.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ax_array.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9651A86D17FA2B480054AB66 /* axRefArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRefArray.h; sourceTree = "<group>"; };
 		9651A88717FB69A20054AB66 /* axAny.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axAny.h; sourceTree = "<group>"; };
-		9651A88817FB6DCD0054AB66 /* axTyped.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = axTyped.h; sourceTree = "<group>"; };
+		9651A88817FB6DCD0054AB66 /* axTyped.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = axTyped.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9659F0F6164C0251005F86FC /* axRange.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axRange.h; sourceTree = "<group>"; };
 		965A2669182D4B1200BA2A9B /* axDict.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axDict.h; sourceTree = "<group>"; };
 		965A266B182D4F0D00BA2A9B /* axStringWithHash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = axStringWithHash.h; sourceTree = "<group>"; };
