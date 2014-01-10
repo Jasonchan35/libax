@@ -98,7 +98,7 @@ public:
 #define axTypeDef(T,BASE) \
 	typedef BASE	B; \
 	\
-protected: \
+public: \
 	template<class P> friend class axSingleton; \
 	friend axType axTypeOf< T > (); \
 	T( axTypedBaseClassValidation & a ) : BASE(a) {} \
@@ -114,7 +114,7 @@ public: \
 	typedef	T		CLASS; \
 	virtual	bool	isKindOf ( const axType & type ) const { return getType().isKindOf( type ); } \
 	static	axType	getTypeStatic	()			{ return axTypeOf<CLASS>(); } \
-	virtual	axType	getType	() const 	{ return axTypeOf<CLASS>(); } \
+	virtual	axType	getType			() const 	{ return axTypeOf<CLASS>(); } \
 	\
 //-----------
 
