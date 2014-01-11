@@ -88,7 +88,7 @@ public:
 	template<class T> 	bool	cast	( axRef<T> 		& ptr );
 	template<class T> 	bool	cast	( axAutoPtr<T> 	& ptr );
 
-			static		axType	getTypeStatic	();
+			static		axType	staticGetType	();
 			virtual		axType	getType			() const;
 			virtual		bool	isKindOf		( const axType & type ) const;
 	
@@ -113,7 +113,7 @@ public: \
 public: \
 	typedef	T		CLASS; \
 	virtual	bool	isKindOf ( const axType & type ) const { return getType().isKindOf( type ); } \
-	static	axType	getTypeStatic	()			{ return axTypeOf<CLASS>(); } \
+	static	axType	staticGetType	()			{ return axTypeOf<CLASS>(); } \
 	virtual	axType	getType			() const 	{ return axTypeOf<CLASS>(); } \
 	\
 //-----------
@@ -140,9 +140,9 @@ public:
 	}
 };
 
-inline	axType	axTyped::getTypeStatic () 		 	{ return axTypeOf< axTyped >(); }
-inline	axType	axTyped::getType () const 	{ return axTypeOf< axTyped >(); }
-inline	bool	axTyped::isKindOf 	( const axType & type ) const { return getType().isKindOf( type ); }
+inline	axType	axTyped::staticGetType 	() 		 	{ return axTypeOf< axTyped >(); }
+inline	axType	axTyped::getType 		() const 	{ return axTypeOf< axTyped >(); }
+inline	bool	axTyped::isKindOf 		( const axType & type ) const { return getType().isKindOf( type ); }
 
 
 #endif
