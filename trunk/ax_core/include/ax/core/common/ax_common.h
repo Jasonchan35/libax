@@ -8,6 +8,6 @@
 #include "ax_macro.h"
 #include "axExpandArgList.h"
 #include "axSingleton.h"
-#include "axTyped.h"
+#include "axType.h"
 
 #endif //__ax_common_h__

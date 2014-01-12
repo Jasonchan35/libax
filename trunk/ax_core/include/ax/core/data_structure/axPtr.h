@@ -2,7 +2,7 @@
 #define __axPtr_h__
 
 #include "../common/axStatus.h"
-#include "../common/axTyped.h"
+#include "../common/axType.h"
 
 //! \ingroup base_data_structure
 //@{
