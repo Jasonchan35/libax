@@ -4,7 +4,7 @@
 
 #include "../common/ax_utility.h"
 #include "../common/axStatus.h"
-#include "../common/axTyped.h"
+#include "../common/axType.h"
 
 template< class T > inline
 void ax_delete( T* p ) { delete p; }
