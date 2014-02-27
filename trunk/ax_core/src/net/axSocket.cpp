@@ -135,7 +135,7 @@ bool axSocket::getopt_error( int &i ) {
 axStatus axSocket::poll( short &revents, short events, int timeout_milliseconds ) {
 	if( ! isValid() ) { axASSERT(false); return axStatus_Std::not_initialized; }
 	ax_pollfd pf;
-	pf.fd = (ax_poll_fd_t) fd_;
+	pf.fd = fd_;
 	pf.events = events;
 	pf.revents = 0;
 

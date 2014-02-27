@@ -7,9 +7,8 @@
 #if axOS_WIN && (_WIN32_WINNT < 0x0600)
 //! don't change it since this struct must as same as Unix pollfd
 
-typedef	unsigned int	 ax_poll_fd_t;
 struct ax_pollfd {
-	UINT_PTR	fd;
+	SOCKET		fd;
 	short		events;
 	short		revents;
 };
@@ -35,8 +34,9 @@ int		_ax_poll	( ax_pollfd* ufds, unsigned int nfds, int timeout_milliseconds );
 
 const unsigned int ax_poll_fd_set_size = 8000;
 
+typedef	unsigned int	 ax_poll_fd_t;
 struct ax_poll_fd_set {
-	u_int			fd_count;
+	unsigned int	fd_count;
 	ax_poll_fd_t	fd_array[ ax_poll_fd_set_size ];
 
 	void reset	()				{ fd_count=0; }
@@ -45,8 +45,6 @@ struct ax_poll_fd_set {
 };
 
 #else
-	typedef	pollfd			ax_pollfd;
-	typedef	int				ax_poll_fd_t;
 
 	#define axPOLLIN		POLLIN
 	#define axPOLLPRI		POLLPRI
@@ -62,11 +60,15 @@ struct ax_poll_fd_set {
 	#define axPOLLWRBAND	POLLWRBAND
 
 	#if axOS_WIN
-		inline	int _ax_poll	( ax_pollfd* ufds, unsigned int nfds, int timeout_milliseconds ) { 
+		typedef	WSAPOLLFD		ax_pollfd;
+
+		inline	int _ax_poll	( ax_pollfd* ufds, unsigned int nfds, int timeout_milliseconds ) {
 			return ::WSAPoll(ufds,nfds,timeout_milliseconds); 
 		}
 	#else
-		inline	int _ax_poll	( ax_pollfd* ufds, unsigned int nfds, int timeout_milliseconds ) { 
+		typedef	pollfd			ax_pollfd;
+
+		inline	int _ax_poll	( ax_pollfd* ufds, unsigned int nfds, int timeout_milliseconds ) {
 			return ::poll(ufds,nfds,timeout_milliseconds); 
 		}
 	#endif

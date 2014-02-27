@@ -85,7 +85,7 @@ int _ax_poll( ax_pollfd* ufds, unsigned int nfds, int timeout_milliseconds ) {
 
 	d = ufds;
 	s = wr.fd_array;
-	for( u=0; u<wr.fd_count; u++ ) {
+	for( u=0; u<wr.fd_count; u++, s++ ) {
 		for( i=0; i<n; i++, d++ ) {
 			if( d->fd == *s ) { 
 				d->revents |= POLLOUT; break; 
@@ -95,7 +95,7 @@ int _ax_poll( ax_pollfd* ufds, unsigned int nfds, int timeout_milliseconds ) {
 
 	d = ufds;
 	s = ex.fd_array;
-	for( u=0; u<ex.fd_count; u++ ) {
+	for( u=0; u<ex.fd_count; u++, s++ ) {
 		for( i=0; i<n; i++, d++  ) {
 			if( d->fd == *s ) { 
 				d->revents |= POLLERR; break; 
