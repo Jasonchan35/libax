@@ -84,3 +84,4 @@
 	- [ok] Win32
 	- [not support] Android 
 - axFont Align
+test
