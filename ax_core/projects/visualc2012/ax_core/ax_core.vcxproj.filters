@@ -131,9 +131,6 @@
     <ClInclude Include="..\..\..\include\ax\core\common\axTypeList_uint.h">
       <Filter>Header Files\core\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\ax\core\common\axTypeOf.h">
-      <Filter>Header Files\core\common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\ax\core\common\ax_byteorder.h">
       <Filter>Header Files\core\common</Filter>
     </ClInclude>
@@ -237,9 +234,6 @@
       <Filter>Header Files\core\math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ax\core\math\axMargin2.h">
-      <Filter>Header Files\core\math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\ax\core\math\axMatrix4.h">
       <Filter>Header Files\core\math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ax\core\math\axPlane3.h">
@@ -503,6 +497,12 @@
     <ClInclude Include="..\..\..\include\ax\core\string\axTinyString.h">
       <Filter>Header Files\core\string</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\math\axMatrix4x4.h">
+      <Filter>Header Files\core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ax\core\common\axTypeTrait.h">
+      <Filter>Header Files\core\common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\common\axStatus.cpp">
@@ -545,9 +545,6 @@
       <Filter>Source Files\math</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\math\axIntersect3.cpp">
-      <Filter>Source Files\math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\math\axMatrix4.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\math\axQuaternion.cpp">
@@ -657,6 +654,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\pch\pch.cpp">
       <Filter>Source Files\pch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\math\axMatrix4x4.cpp">
+      <Filter>Source Files\math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

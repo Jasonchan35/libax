@@ -98,6 +98,7 @@
 #include <sys/types.h>
 #include <errno.h>
 #include <math.h>
+#include <cmath>
 //#include <limits.h>
 #include <limits>
 
