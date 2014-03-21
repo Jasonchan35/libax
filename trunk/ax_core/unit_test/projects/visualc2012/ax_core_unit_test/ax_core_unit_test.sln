@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Windows Desktop
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ax_core_unit_test", "ax_core_unit_test.vcxproj", "{40036527-E11B-4CE0-92E8-0484E03F4D7C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ax_core", "..\..\..\..\projects\visualc2012\ax_core\ax_core.vcxproj", "{0973B941-59A1-4CC9-B2F7-5D38572CF27F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40036527-E11B-4CE0-92E8-0484E03F4D7C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{40036527-E11B-4CE0-92E8-0484E03F4D7C}.Debug|Win32.Build.0 = Debug|Win32
+		{40036527-E11B-4CE0-92E8-0484E03F4D7C}.Debug|x64.ActiveCfg = Debug|Win32
+		{40036527-E11B-4CE0-92E8-0484E03F4D7C}.Release|Win32.ActiveCfg = Release|Win32
+		{40036527-E11B-4CE0-92E8-0484E03F4D7C}.Release|Win32.Build.0 = Release|Win32
+		{40036527-E11B-4CE0-92E8-0484E03F4D7C}.Release|x64.ActiveCfg = Release|Win32
+		{0973B941-59A1-4CC9-B2F7-5D38572CF27F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0973B941-59A1-4CC9-B2F7-5D38572CF27F}.Debug|Win32.Build.0 = Debug|Win32
+		{0973B941-59A1-4CC9-B2F7-5D38572CF27F}.Debug|x64.ActiveCfg = Debug|x64
+		{0973B941-59A1-4CC9-B2F7-5D38572CF27F}.Debug|x64.Build.0 = Debug|x64
+		{0973B941-59A1-4CC9-B2F7-5D38572CF27F}.Release|Win32.ActiveCfg = Release|Win32
+		{0973B941-59A1-4CC9-B2F7-5D38572CF27F}.Release|Win32.Build.0 = Release|Win32
+		{0973B941-59A1-4CC9-B2F7-5D38572CF27F}.Release|x64.ActiveCfg = Release|x64
+		{0973B941-59A1-4CC9-B2F7-5D38572CF27F}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
