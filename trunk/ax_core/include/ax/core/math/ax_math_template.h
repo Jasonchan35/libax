@@ -71,9 +71,6 @@ const  double ax_math_PI = 3.14159265358979323846;
 inline float  ax_modf		( float  n, float  *i ) { return ::modff( n, i ); }
 inline double ax_modf		( double n, double *i ) { return ::modf ( n, i ); }
 
-inline float  ax_modf		( float  n )	{ float  i; return ::modff( n, &i ); }
-inline double ax_modf		( double n )	{ double i; return ::modf ( n, &i ); }
-
 inline float  ax_sqrt		( float  n )	{ return ::sqrtf( n ); }
 inline double ax_sqrt		( double n )	{ return ::sqrt ( n ); }
 
@@ -84,17 +81,28 @@ inline double ax_rsqrt		( double n )	{ return 1.0 /::sqrt ( n ); }
 inline float  ax_ceil		( float  a )	{ return ::ceilf(a); }
 inline double ax_ceil		( double a )	{ return ::ceil (a); }
 
-inline int    ax_ceil_int	( float  a  )	{ return (int)ax_ceil(a); }
+inline int    ax_ceil_int	( float  a )	{ return (int)ax_ceil(a); }
 inline int	  ax_ceil_int	( double a )	{ return (int)ax_ceil(a); }
 
 inline float  ax_floor		( float  a )	{ return ::floorf(a); }
 inline double ax_floor		( double a )	{ return ::floor (a); }
 
-inline int    ax_floor_int	( float  a  )	{ return (int)ax_floor(a); }
+inline int    ax_floor_int	( float  a )	{ return (int)ax_floor(a); }
 inline int	  ax_floor_int	( double a )	{ return (int)ax_floor(a); }
 
-inline float  ax_round		( float  a  )	{ return ::roundf(a); }
-inline double ax_round		( double a )	{ return ::round (a); }
+#if axOS_WIN
+	inline float  ax_trunc	( float  n )	{ float  i; return ::modff( n, &i ); }
+	inline double ax_trunc	( double n )	{ double i; return ::modf ( n, &i ); }
+
+	inline float  ax_round	( float  a )	{ return ax_trunc ( a > 0 ? a+0.5f : a-0.5f ); }
+	inline double ax_round	( double a )	{ return ax_trunc ( a > 0 ? a+0.5  : a-0.5  ); }
+#else
+	inline float  ax_trunc	( float  n )	{ return ::truncf(n); }
+	inline double ax_trunc	( double n )	{ return ::trunc (n); }
+
+	inline float  ax_round	( float  a )	{ return ::roundf(a); }
+	inline double ax_round	( double a )	{ return ::round (a); }
+#endif
 
 inline int    ax_round_int	( float  a  )	{ return (int)ax_round(a); }
 inline int	  ax_round_int	( double a )	{ return (int)ax_round(a); }

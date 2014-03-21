@@ -6,7 +6,7 @@
 //
 //
 
-#include "axUUID.h"
+#include <ax/core/other/axUUID.h>
 
 axUUID::axUUID () {
 	memset( bytes_, 0, kByteSize );

@@ -6,6 +6,8 @@
 //@{
 #ifdef	_MSC_VER
 
+//#pragma warning( disable : 4396 ) // warning C4396: 'axTypeOf' : the inline specifier cannot be used when a friend declaration refers to a specialization of a function template
+
 #ifndef _CRT_SECURE_NO_WARNINGS
 	#define	_CRT_SECURE_NO_WARNINGS	 1
 #endif

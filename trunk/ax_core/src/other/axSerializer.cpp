@@ -96,13 +96,22 @@ axStatus _ax_serialize_io_vary_se_signed( axSerializer &s, T &v ) {
 	return 0;
 }
 
+#ifdef axCOMPILER_VC
+	#pragma warning( push )
+	#pragma warning( disable : 4146 ) // warning C4146: unary minus operator applied to unsigned type, result still unsigned
+#endif
+
 template<class T, class U> inline
 axStatus _ax_serialize_io_vary_de_signed( axDeserializer 	&s, T &v ) {
 	U tmp;
 	axStatus st = ax_serialize_io_vary(s, tmp);			if( !st ) return st;
-	v = (T)( (tmp >> 1) ^ ( -(tmp & 1) ) );
+	v = (T)( (tmp >> 1) ^ ( -(tmp & 1) ) ); // warning C4146 here !
 	return 0;
 }
+
+#ifdef axCOMPILER_VC
+	#pragma warning( pop )
+#endif
 
 axStatus ax_serialize_io_vary( axSerializer   &s, int8_t  &v ) { return _ax_serialize_io_vary_se_signed< int8_t,  uint8_t  >( s, v ); }
 axStatus ax_serialize_io_vary( axSerializer   &s, int16_t &v ) { return _ax_serialize_io_vary_se_signed< int16_t, uint16_t >( s, v ); }

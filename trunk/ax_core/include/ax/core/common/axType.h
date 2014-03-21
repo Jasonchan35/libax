@@ -89,7 +89,7 @@ public:
 public: \
 	template<class P> friend class axSingleton; \
 	class _TypeImp : public BASE::_TypeImp, public axSingleton< _TypeImp > { \
-		typedef typename BASE::_TypeImp B; \
+		typedef BASE::_TypeImp B; \
 	public: \
 		_TypeImp( const char* debugClassName = axTypeMakeDebugClassName(T), axType* baseClass = axTypeOf<BASE>() ) : B( debugClassName, baseClass ) {} \
 	}; \

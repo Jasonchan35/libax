@@ -559,16 +559,16 @@ public:
 class axExecute_IOThread : public axThread {
 public:
 	HANDLE		h;
-	axAtomicQueue< Node >	q;
-	axAtomicQueue< Node >*	qMain;
+	axAtomicQueue< axExecute_Buffer >	q;
+	axAtomicQueue< axExecute_Buffer >*	qMain;
 	
 	virtual	void onThreadProc() {
 		DWORD dw = 0;
-		Node* p;
+		axExecute_Buffer* p;
 		for(;;) {
 			p = q.takeHead();		if( ! p ) continue;
 			switch( p->type ) {
-				case Node::t_stdin: {
+				case axExecute_Buffer::t_stdin: {
 //					DEBUG_ax_log("stdin writing");
 					if( p->buf.size() == 0 ) {
 						qMain->append( p );
@@ -580,22 +580,22 @@ public:
 					}
 					qMain->append( p );
 				}break;
-				case Node::t_stdin_done: {
+				case axExecute_Buffer::t_stdin_done: {
 //					DEBUG_ax_log("thread stdin done");
 					SetEndOfFile( h );
 					qMain->append( p );
 					goto quit;
 				}break;
 
-				case Node::t_stdout:
-				case Node::t_stderr: {
+				case axExecute_Buffer::t_stdout:
+				case axExecute_Buffer::t_stderr: {
 					p->buf.resizeToCapacity();
 					assert( p->buf.size() != 0 );
 					if( ! ReadFile( h, p->buf.ptr(), (DWORD)p->buf.size()-1, &dw, NULL ) ) {
 						if( dw == 0 ) {
 							switch( p->type ) {
-								case Node::t_stdout: 	p->type = Node::t_stdout_done;	break;
-								case Node::t_stderr: 	p->type = Node::t_stderr_done;	break;
+								case axExecute_Buffer::t_stdout: 	p->type = axExecute_Buffer::t_stdout_done;	break;
+								case axExecute_Buffer::t_stderr: 	p->type = axExecute_Buffer::t_stderr_done;	break;
 							}						
 							qMain->append( p );
 							goto quit;
@@ -659,9 +659,9 @@ class axExecute::Imp {
 public:
 	axExecute*	owner;
 
-	Node	stdin_node;
-	Node	stdout_node;
-	Node	stderr_node;
+	axExecute_Buffer	stdin_node;
+	axExecute_Buffer	stdout_node;
+	axExecute_Buffer	stderr_node;
 
 	axExecute_IOThread	stdin_thread;
 	axExecute_IOThread	stdout_thread;
@@ -671,7 +671,7 @@ public:
 	axExecute_Pipe	p_out;
 	axExecute_Pipe	p_err;
 
-	axAtomicQueue< Node >	qMain;	
+	axAtomicQueue< axExecute_Buffer >	qMain;	
 
 	uint32_t polling;
 
@@ -687,7 +687,7 @@ public:
 	void terminate() {
 		if( owner && childProcess ) {
 			TerminateProcess  ( childProcess, -9999 );
-			GetExitCodeProcess( childProcess, (LPDWORD)&owner->returnValue_ );
+			GetExitCodeProcess( childProcess, (LPDWORD)&owner->exitCode_ );
 			childProcess.close();
 		}
 	}
@@ -739,7 +739,7 @@ public:
 								TRUE,           // handles are inherited 
 								0,              // creation flags 
 								NULL,           // use parent's environment 
-								workDir ? _workDir : NULL,           // use parent's current directory
+								workDir ? _workDir.c_str() : NULL,           // use parent's current directory
 								&siStartInfo,   // STARTUPINFO pointer 
 								&piProcInfo );  // receives PROCESS_INFORMATION 
 	   
@@ -767,9 +767,9 @@ public:
 		st = stdout_node.buf.reserve( buf_increment );				if( !st ) return st;
 		st = stderr_node.buf.reserve( buf_increment );				if( !st ) return st;
 
-		stdin_node.type  = Node::t_stdin;
-		stdout_node.type = Node::t_stdout;
-		stderr_node.type = Node::t_stderr;
+		stdin_node.type  = axExecute_Buffer::t_stdin;
+		stdout_node.type = axExecute_Buffer::t_stdout;
+		stderr_node.type = axExecute_Buffer::t_stderr;
 
 
 		stdin_thread.qMain = &qMain;
@@ -797,12 +797,12 @@ public:
 					axIStringA*   str_out, axIStringA*   str_err ) 
 	{
 		axStatus st;
-		Node* p;
+		axExecute_Buffer* p;
 		isDone = false;
 		if( ! polling ) {
 			isDone = true;
 
-			if( ! GetExitCodeProcess( childProcess, (LPDWORD)&owner->returnValue_ ) ) return -1;
+			if( ! GetExitCodeProcess( childProcess, (LPDWORD)&owner->exitCode_ ) ) return -1;
 			return 0;
 		}
 
@@ -811,23 +811,23 @@ public:
 		if( p ) {
 			switch( p->type ) {
 			//-- stdin
-				case Node::t_stdin: {
+				case axExecute_Buffer::t_stdin: {
 					p->buf.resize(0);
 					if( owner->on_stdin( p->buf ) ) {
 //						DEBUG_ax_log("post stdin");
 						stdin_thread.q.append( p );
 					}else{
 //						DEBUG_ax_log("post stdin done");
-						p->type = Node::t_stdin_done;
+						p->type = axExecute_Buffer::t_stdin_done;
 						stdin_thread.q.append( p );
 					}
 				}break;
-				case Node::t_stdin_done: {
+				case axExecute_Buffer::t_stdin_done: {
 //					DEBUG_ax_log("stdin done");
 					ax_unset_bits( polling, stdin_polling );
 				}break;
 			//-- stdout
-				case Node::t_stdout: {
+				case axExecute_Buffer::t_stdout: {
 //					DEBUG_ax_log( "stdout {?}", (const char*)p->buf.ptr() );
 					if( bin_out ) {
 						st = bin_out->appendN( p->buf );
@@ -839,12 +839,12 @@ public:
 					}
 					stdout_thread.q.append( p );
 				}break;
-				case Node::t_stdout_done: {
+				case axExecute_Buffer::t_stdout_done: {
 //					DEBUG_ax_log("stdout done");
 					ax_unset_bits( polling, stdout_polling );
 				}break;
 			//-- stderr
-				case Node::t_stderr: {
+				case axExecute_Buffer::t_stderr: {
 //					DEBUG_ax_log( "stderr {?}", (const char*)p->buf.ptr() );
 					if( bin_err ) {
 						bin_err->appendN( p->buf );
@@ -856,7 +856,7 @@ public:
 					}
 					stderr_thread.q.append( p );
 				}break;
-				case Node::t_stderr_done: {
+				case axExecute_Buffer::t_stderr_done: {
 //					DEBUG_ax_log("stderr done");
 					ax_unset_bits( polling, stderr_polling );
 				}break;
