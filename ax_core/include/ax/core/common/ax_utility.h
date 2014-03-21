@@ -94,11 +94,16 @@ inline void		ax_free		( void* p  )			{ return ::free(p); }
 	}
 #endif //axOS_UNIX
 
+//! random between 0 ~ (n-1)
+inline int ax_random( int n ) {
+	return rand() % n;
+}
+
+//! random between start ~ end, both start, end are included
 inline int ax_random( int start, int end ) {
 	if( end < start ) { assert( false); return start; }
 	int n = end - start +1 ;
-	return ( (rand() % n ) + start );
-	
+	return ( (rand() % n ) + start );	
 }
 
 template<class T>

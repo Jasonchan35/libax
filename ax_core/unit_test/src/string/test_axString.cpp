@@ -37,21 +37,17 @@ axStatus test() {
 	axStringA_Array	str_array;
 	str_array.resize( 16 );
 	for( axSize i=0; i<str_array.size(); i++ ) {
-		if( i % 2 ) {
-			str_array[i].format( "{0:c}{0:c}", ('p' - i) );
-		}else{
-			str_array[i].format( "{0:c}{0:c}", ('P' - i) );
-		}
+		str_array[i].format( "{?}", (char)('A'+ ax_random(26) ) );
 	}
-
+	
 	ax_log( "str_array = \n{?}\n\n", str_array );
 //	str_array.remove( 2, 3 );
 	ax_log( "after remove str_array = \n{?}\n\n", str_array );
 
-	str_array.sortIgnoreCase( true );
+	str_array.sortNoCase( true );
 	ax_log( "after sort ascending  str_array = \n{?}\n\n", str_array );
 
-	str_array.sortIgnoreCase( false );
+	str_array.sortNoCase( false );
 
 	for( axSize i=0; i<str_array.size(); i++ ) {
 		str_array[i].toUpperCase();
