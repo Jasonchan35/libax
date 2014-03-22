@@ -19,7 +19,7 @@ public:
 		return istr_.set( sz );
 	}
 
-	const char*	c_str	( axSize offset=0 ) const 	{ return istr_.c_str( offset ); }
+	const T*	c_str	( axSize offset=0 ) const 	{ return istr_.c_str( offset ); }
 	operator const T*	() const 					{ return c_str(); }
 
 	bool	operator==	( const axIStringWithHash & rhs ) const { return equals(rhs); }
