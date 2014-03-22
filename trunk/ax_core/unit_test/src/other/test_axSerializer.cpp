@@ -82,7 +82,7 @@ axStatus test_io_vary() {
 }
 
 int main() {
-	axScope_NSAutoreleasePool	pool;
+//	axScope_NSAutoreleasePool	pool;
 	//========================================
 
 	axUTestCase( test_io_vary() );

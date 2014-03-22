@@ -87,7 +87,7 @@ axThread::~axThread() {
 
 void* axThread_onThreadProc( void *p ) {
 #ifdef __OBJC__
-	axScope_NSAutoreleasePool	pool; //we need pool for each thread
+//	axScope_NSAutoreleasePool	pool; //we need pool for each thread
 #endif		
 	axThread* t = (axThread*)p;
 	t->onThreadProc();

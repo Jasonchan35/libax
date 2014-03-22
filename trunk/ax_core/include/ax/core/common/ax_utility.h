@@ -10,6 +10,9 @@
 
 #define	axPRINT_FUNC_NAME	ax_print("FUNC [{?}]\n", axPRETTY_FUNC_NAME );
 
+// enum class doesn't support i++, for we using this template
+template<class T> inline void ax_enum_inc( T & v ) { v = (T)((int)v+1); }
+
 template<class T> inline T* ax_const_cast( const T* v ) { return const_cast<T*>(v); }
 template<class T> inline T& ax_const_cast( const T& v ) { return const_cast<T&>(v); }
 

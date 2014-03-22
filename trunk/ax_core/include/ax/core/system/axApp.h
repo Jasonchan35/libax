@@ -11,7 +11,7 @@
 
 class axApp : public axSingleton<axApp>,  public axNonCopyable {
 #ifdef __OBJC__
-	axScope_NSAutoreleasePool autoReleasePool__;
+//	axScope_NSAutoreleasePool autoReleasePool__;
 #endif //__OBJC__
 public:		
 	

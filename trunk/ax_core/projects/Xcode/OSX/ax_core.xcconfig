@@ -16,6 +16,13 @@ OTHER_CPLUSPLUSFLAGS = -Wno-invalid-offsetof -fvisibility=default -fvisibility-i
 				 
 //-lax_png -lax_z -lsqlite3 -lpq -lkrb5 -lssl -lcrypto
 
+//ObjectC Auto Reference Count
+CLANG_ENABLE_OBJC_ARC = YES
+
+GCC_C_LANGUAGE_STANDARD = gnu99 //GNU99 for C
+CLANG_CXX_LANGUAGE_STANDARD = gnu++0x //GNU++11 for C++
+CLANG_CXX_LIBRARY = libc++ // LLVM C++ Library with C++11 support
+
 COMPRESS_PNG_FILES = NO
 GCC_SYMBOLS_PRIVATE_EXTERN = YES
 
