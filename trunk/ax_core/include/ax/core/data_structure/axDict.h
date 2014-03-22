@@ -17,7 +17,16 @@ public:
 
 	class Pair : public axHashTableNode< Pair, true > {
 	public:
-		uint32_t	hashTableValue() { return ax_hash_code( key ); }
+		virtual ~Pair() {};
+		
+		uint32_t	hashTableValue() {
+			return ax_hash_code( key );
+		}
+		
+		virtual	axStatus toStringFormat( axStringFormat &f ) const {
+			return f.format("Pair<{?},{?}>",key,value);
+		}
+		
 		KEY		key;
 		VALUE	value;
 	};
