@@ -40,7 +40,7 @@
 
 
 #define axTHREAD_LOCAL	__thread
-#define axL( n ) L""#n
+#define axL( n ) L""n
 
 
 #if defined(__x86_64__)

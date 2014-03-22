@@ -16,6 +16,7 @@ OTHER_CPLUSPLUSFLAGS = -Wno-invalid-offsetof -fvisibility=default -fvisibility-i
 				 
 //-lax_png -lax_z -lsqlite3 -lpq -lkrb5 -lssl -lcrypto
 
+ARCHS = $(ARCHS_STANDARD_64_BIT)
 
 CLANG_ENABLE_OBJC_ARC = YES				//ObjectC Auto Reference Count
 GCC_C_LANGUAGE_STANDARD = gnu99 		//GNU99 for C
