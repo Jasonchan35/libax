@@ -14,7 +14,7 @@
 #include "../common/axStatus.h"
 #include "../common/ax_utility.h"
 #include "../string/ax_string.h"
-
+/*
 class	axScope_NSAutoreleasePool : public axNonCopyable {
 public:
 	axScope_NSAutoreleasePool () { p_ = [[NSAutoreleasePool alloc] init]; }
@@ -22,6 +22,7 @@ public:
 private:
 	NSAutoreleasePool* p_;
 };
+*/
 
 template<class T>
 class	axNSObject {
@@ -30,8 +31,8 @@ public:
 	axNSObject	( T* p )		{ p_ = p; retain(p); }
 	~axNSObject	()				{ release(); }
 	
-	void	retain	( T* p )		{ release(); p_ = p; [p retain]; }
-	void	release	()				{ if(p_) { [p_ release]; p_ = nil; } }
+	void	retain	( T* p )		{ release(); p_ = p; /*[p retain];*/ }
+	void	release	()				{ if(p_) { /*[p_ release];*/ p_ = nil; } }
 	
 			T* ptr	()				{ return  p_; }
 	const	T* ptr	() const		{ return  p_; }
@@ -54,8 +55,8 @@ public:
 	axNSObject	( id p )		{ p_ = p; retain(p); }
 	~axNSObject	()				{ release(); }
 	
-	void	retain	( id p )		{ release(); p_ = p; [p retain]; }
-	void	release	()				{ if(p_) { [p_ release]; p_ = nil; } }
+	void	retain	( id p )		{ release(); p_ = p; /*[p retain];*/ }
+	void	release	()				{ if(p_) { /*[p_ release];*/ p_ = nil; } }
 	
 			id ptr	()				{ return  p_; }
 	const	id ptr	() const		{ return  p_; }
