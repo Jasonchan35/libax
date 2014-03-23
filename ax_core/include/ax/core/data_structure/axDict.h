@@ -145,10 +145,9 @@ axStatus	ax_json_serialize_value ( axJsonWriter &s, axDict<KEY, VALUE> &v ) {
 	st = s.beginArrayValue();		if( !st ) return st;
 
 	for( auto & p : v )  {
-		st = s.io_value( p );		if( !st ) return st;
-		st = s.write( "," );		if( !st ) return st;
+		st = s.io( p.key, 	"key" );	if( !st ) return st;
+		st = s.io( p.value, "value" );	if( !st ) return st;
 	}
-
 	st = s.endArrayValue();			if( !st ) return st;
 	return 0 ;
 }
