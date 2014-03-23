@@ -72,8 +72,10 @@ public:
 template<class S, class T> inline	
 axStatus ax_json_serialize_value( S &s, T& value );
 
-axStatus	ax_to_json_str		( axIStringA & str, const char* sz, bool withQuote );
-axStatus	ax_from_json_str	( axIStringA & str, const char* sz, bool withQuote );
+axStatus	ax_to_json_str		( axIStringA & json, const char*    sz,	bool withQuote );
+axStatus	ax_to_json_str		( axIStringA & json, const wchar_t* sz, bool withQuote );
+
+axStatus	ax_from_json_str	( axIStringA & str,  const char* sz, bool withQuote );
 
 class axJsonSerializerBase: public axSerializerBase {
 public:
