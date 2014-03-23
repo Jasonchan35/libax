@@ -9,6 +9,8 @@
 #ifndef ax_core_axStringWithHash_h
 #define ax_core_axStringWithHash_h
 
+#include "../other/axJson.h"
+
 template<class T>
 class axIStringWithHash {
 public:
@@ -19,7 +21,8 @@ public:
 		return istr_.set( sz );
 	}
 
-	const T*	c_str	( axSize offset=0 ) const 	{ return istr_.c_str( offset ); }
+	const T*				c_str	( axSize offset=0 ) const 	{ return istr_.c_str( offset ); }
+	
 	operator const T*	() const 					{ return c_str(); }
 
 	bool	operator==	( const axIStringWithHash & rhs ) const { return equals(rhs); }
@@ -38,13 +41,8 @@ public:
 		return ax_copy( istr_, src.istr_ );
 	}
 	
-	template<class S>
-	axStatus	serialize_io( S & s ) {
-		axStatus st;
-		ax_io( istr_ );
-		ax_io( hash_ );
-		return 0;
-	}
+	axIString_<T> &		internal_str() 		{ return istr_; }
+	void				recalcHash	()		{ hash_ = ax_hash_code(istr_); }
 
 private:
 	bool operator ==	( const T* sz ) const;	// please using equals() to avoid  "abc" == str will compare the pointer rather than content
@@ -63,6 +61,8 @@ class axStringWithHash : public axIStringWithHash<T> {
 	typedef axIStringWithHash<T> B;
 public:
 	axStringWithHash() : B(str_) {}
+			B& asInterface() 		{ return (B&)*this; }
+	const 	B& asInterface() const 	{ return (B&)*this; }
 
 private:
 	axString_<T, LOCAL_BUF_SIZE> str_;
@@ -70,6 +70,34 @@ private:
 
 
 //-------------------------------------
+
+template<class T> inline
+axStatus	ax_json_serialize_value ( axJsonWriter &s, axIStringWithHash<T> &v ) {
+	axStatus st;
+	st = s.io_value( v.internal_str() );	if( !st ) return st;
+	return 0 ;
+}
+
+template<class T> inline
+axStatus	ax_json_serialize_value ( axJsonParser &s, axIStringWithHash<T> &v ) {
+	axStatus st;
+	st = s.io_value( v.internal_str() );	if( !st ) return st;
+	v.recalcHash();
+	return 0;
+}
+
+
+
+template<class T, size_t LOCAL_BUF_SIZE> inline
+axStatus	ax_json_serialize_value ( axJsonWriter &s, axStringWithHash<T,LOCAL_BUF_SIZE> &v ) {
+	return ax_json_serialize_value( s, v.asInterface() );
+}
+
+template<class T, size_t LOCAL_BUF_SIZE> inline
+axStatus	ax_json_serialize_value ( axJsonParser &s, axStringWithHash<T,LOCAL_BUF_SIZE> &v ) {
+	return ax_json_serialize_value( s, v.asInterface() );
+}
+
 
 template<class T> inline
 uint32_t ax_hash_code( const axIStringWithHash<T> & v ) {
