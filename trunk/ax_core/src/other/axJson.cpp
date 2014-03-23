@@ -9,35 +9,41 @@
 #include <ax/core/other/axJson.h>
 #include <ax/core/system/axLog.h>
 
-axStatus	ax_to_json_str	( axIStringA & str, const char* sz, bool withQuote ) {
+axStatus	ax_to_json_str	( axIStringA & json, const wchar_t* sz, bool withQuote ) {
+	axStringA_<2048>	tmp;
+	axStatus st = tmp.set(sz);	if( !st ) return st;
+	return ax_to_json_str( json, tmp, withQuote );
+}
+
+axStatus	ax_to_json_str	( axIStringA & json, const char* sz, bool withQuote ) {
 	axStatus st;
-	str.resize(0);
+	json.resize(0);
 
 	if( withQuote ) {
-		st = str.set("\"");		if( !st ) return st;
+		st = json.set("\"");		if( !st ) return st;
 	}
 	
 	const char* p = sz;
 	if( p ) {
 		for( ; *p; p++ ) {
 			switch( *p ) {
-				case '\\': { st = str.append("\\\\");	if( !st ) return st; continue; }
-				case '\"': { st = str.append("\\\"");	if( !st ) return st; continue; }
-				case '/' : { st = str.append("\\/");	if( !st ) return st; continue; }
-				case '\r': { st = str.append("\\r");	if( !st ) return st; continue; }
-				case '\n': { st = str.append("\\n");	if( !st ) return st; continue; }
-				case '\t': { st = str.append("\\t");	if( !st ) return st; continue; }
-				case '\b': { st = str.append("\\b");	if( !st ) return st; continue; }
-				case '\f': { st = str.append("\\f");	if( !st ) return st; continue; }
+				case '\\': { st = json.append("\\\\");	if( !st ) return st; continue; }
+				case '\"': { st = json.append("\\\"");	if( !st ) return st; continue; }
+				case '/' : { st = json.append("\\/");	if( !st ) return st; continue; }
+				case '\r': { st = json.append("\\r");	if( !st ) return st; continue; }
+				case '\n': { st = json.append("\\n");	if( !st ) return st; continue; }
+				case '\t': { st = json.append("\\t");	if( !st ) return st; continue; }
+				case '\b': { st = json.append("\\b");	if( !st ) return st; continue; }
+				case '\f': { st = json.append("\\f");	if( !st ) return st; continue; }
 				default: {
-					st = str.append(*p);	if( !st ) return st;
+					st = json.append(*p);	if( !st ) return st;
 				}
 			}
 		}
 	}	
 	
 	if( withQuote ) {
-		st = str.append("\"");		if( !st ) return st;
+		st = json.append("\"");		if( !st ) return st;
 	}	
 	return 0;
 }

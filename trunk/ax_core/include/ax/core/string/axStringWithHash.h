@@ -37,6 +37,14 @@ public:
 		hash_ = src.hash_;
 		return ax_copy( istr_, src.istr_ );
 	}
+	
+	template<class S>
+	axStatus	serialize_io( S & s ) {
+		axStatus st;
+		ax_io( istr_ );
+		ax_io( hash_ );
+		return 0;
+	}
 
 private:
 	bool operator ==	( const T* sz ) const;	// please using equals() to avoid  "abc" == str will compare the pointer rather than content
