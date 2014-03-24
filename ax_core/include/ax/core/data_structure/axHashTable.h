@@ -226,7 +226,7 @@ typename axHashTable<T>::iterator axHashTable<T> :: end	() {
 
 template< class T > inline
 void axHashTable<T> :: iterator :: operator++() {
-	axHashTable_List<T>* list;
+	axHashTable_List<T>* list = nullptr;
 	if( p_ ) {
 		list = p_->list();	//current list
 		p_ = p_->next();

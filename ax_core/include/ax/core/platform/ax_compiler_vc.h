@@ -25,7 +25,6 @@
 #define	axALWAYS_INLINE( f )	__forceinline f
 
 #define axTHREAD_LOCAL	__declspec( thread )
-#define axL(_String) L ## _String
 
 #if _MSC_VER < 1600
 	#define	nullptr	NULL
