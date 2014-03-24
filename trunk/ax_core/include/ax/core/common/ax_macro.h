@@ -11,8 +11,9 @@
 //-----
 */
 
-#define axJOIN_WORD(w0,w1)		w0##w1
+#define axL(_String) L ## _String
 
+#define axJOIN_WORD(w0,w1)		w0##w1
 #define axJOIN_WORD3(w0,w1,w2)	w0 ## w1 ## w2
 
 //TODO
