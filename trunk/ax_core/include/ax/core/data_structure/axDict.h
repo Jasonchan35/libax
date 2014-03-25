@@ -48,7 +48,7 @@ public:
 
 	axStatus	set	( const KEY & key, const VALUE& value ) {
 		axStatus	st;
-		Pair* p = getPair( key, true );
+		Pair* p = getOrAddPair( key );
 		if( !p ) return axStatus_Std::dict_cannot_add_pair;
 		st = ax_copy( p->value, value );	if( !st ) return st;
 		return 0;
@@ -56,7 +56,7 @@ public:
 
 	axStatus	setByTake ( const KEY & key, VALUE & value ) {
 		axStatus	st;
-		Pair* p = getPair( key, true );
+		Pair* p = getOrAddPair( key );
 		if( !p ) return axStatus_Std::dict_cannot_add_pair;
 		st = ax_take( p->value, value );	if( !st ) return st;
 		return 0;
@@ -68,18 +68,26 @@ public:
 	}
 		
 	VALUE*	get	( const KEY & key ) {
-		Pair* p = getPair( key, false );
+		Pair* p = getPair( key );
 		return p ? & p->value : nullptr;
 	}
 
-	Pair*	getPair	( const KEY & key, bool newIfNotFound ) {
+	Pair*	getPair	( const KEY & key ) {
 		Pair* p = table_.getListHead( ax_hash_code( key ) );
 		for( ; p; p=p->next() ) {
 			if( p->key == key ) return p;
 		}
-		
-		if( newIfNotFound ) return _createPair( key );
 		return nullptr;
+	}
+
+	VALUE* getOrAdd( const KEY & key ) {
+		Pair* p = getOrAddPair( key );
+		return p ? & p->value : nullptr;
+	}
+	
+	Pair*	getOrAddPair	( const KEY & key ) {
+		Pair* p = getPair( key );
+		return p ? p : _createPair( key );
 	}
 	
 	axStatus	remove	( const KEY & key ) {
@@ -129,7 +137,9 @@ public:
 	axStatus	setByTake	( const CHAR* key, const VALUE & value ) 	{ String skey; skey.set(key); return B::setByTake	( skey, value ); }
 	VALUE*		addUnique	( const CHAR* key )							{ String skey; skey.set(key); return B::addUnique	( skey ); }
 	VALUE* 		get 		( const CHAR* key ) 						{ String skey; skey.set(key); return B::get			( skey ); }
-	Pair* 		getPair		( const CHAR* key, bool newIfNotFound ) 	{ String skey; skey.set(key); return B::getPair		( skey, newIfNotFound ); }
+	Pair* 		getPair		( const CHAR* key ) 						{ String skey; skey.set(key); return B::getPair		( skey ); }
+	VALUE* 		getOrAdd	( const CHAR* key ) 						{ String skey; skey.set(key); return B::getOrAdd	( skey ); }
+	Pair* 		getOrAddPair( const CHAR* key ) 						{ String skey; skey.set(key); return B::getOrAddPair( skey ); }
 	axStatus	remove		( const CHAR* key )							{ String skey; skey.set(key); return B::remove 		( skey ); }
 	
 	template<class S>	axStatus	serialize_io ( S &s ) { return B::serialize_io(s); }
