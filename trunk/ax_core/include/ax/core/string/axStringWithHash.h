@@ -17,8 +17,15 @@ public:
 	axIStringWithHash( axIString_<T> & istr ) : istr_(istr), hash_(0) {}
 
 	axStatus	set( const T* sz ) {
-		hash_ = ax_hash_code( sz );
-		return istr_.set( sz );
+		axStatus st = istr_.set( sz );	if( !st ) return st;
+		recalcHash();
+		return 0;
+	}
+	
+	axStatus	setWithLength( const T* sz, size_t len ) {
+		axStatus st = istr_.setWithLength( sz, len );	if( !st ) return st;
+		recalcHash();
+		return 0;
 	}
 
 	const T*				c_str	( axSize offset=0 ) const 	{ return istr_.c_str( offset ); }
@@ -42,7 +49,7 @@ public:
 	}
 	
 	axIString_<T> &		internal_str() 		{ return istr_; }
-	void				recalcHash	()		{ hash_ = ax_hash_code(istr_); }
+	void				recalcHash	()		{ hash_ = ax_hash_code( istr_.c_str() ); }
 
 private:
 	bool operator ==	( const T* sz ) const;	// please using equals() to avoid  "abc" == str will compare the pointer rather than content
