@@ -126,10 +126,13 @@ private:
 
 template< class VALUE, class CHAR = char, size_t STRING_LOCAL_BUF_SIZE = 64 >
 class axDict_String : public axDict< axStringWithHash<CHAR, STRING_LOCAL_BUF_SIZE >, VALUE > {
-	typedef	axStringWithHash< CHAR, STRING_LOCAL_BUF_SIZE >		String;
+	typedef	axStringWithHash < CHAR, STRING_LOCAL_BUF_SIZE >	 String;
 	typedef	axDict< String, VALUE > B;
-	typedef typename B::Pair	Pair;
+
 public:
+	typedef typename B::Pair	Pair;
+	typedef	axIStringWithHash< CHAR >							IString;
+
 			B & asDict()		{ return (B&)*this; }
 	const	B & asDict() const	{ return (B&)*this; }
 	
@@ -141,6 +144,15 @@ public:
 	VALUE* 		getOrAdd	( const CHAR* key ) 						{ String skey; skey.set(key); return B::getOrAdd	( skey ); }
 	Pair* 		getOrAddPair( const CHAR* key ) 						{ String skey; skey.set(key); return B::getOrAddPair( skey ); }
 	axStatus	remove		( const CHAR* key )							{ String skey; skey.set(key); return B::remove 		( skey ); }
+
+	axStatus	set			( const String & key, const VALUE & value ) { return B::set			( key, value ); }
+	axStatus	setByTake	( const String & key, const VALUE & value ) { return B::setByTake	( key, value ); }
+	VALUE*		addUnique	( const String & key )						{ return B::addUnique	( key ); }
+	VALUE* 		get 		( const String & key ) 						{ return B::get			( key ); }
+	Pair* 		getPair		( const String & key ) 						{ return B::getPair		( key ); }
+	VALUE* 		getOrAdd	( const String & key ) 						{ return B::getOrAdd	( key ); }
+	Pair* 		getOrAddPair( const String & key ) 						{ return B::getOrAddPair( key ); }
+	axStatus	remove		( const String & key )						{ return B::remove 		( key ); }
 	
 	template<class S>	axStatus	serialize_io ( S &s ) { return B::serialize_io(s); }
 	
