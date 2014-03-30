@@ -10,6 +10,7 @@
 #define ax_core_axStringWithHash_h
 
 #include "../other/axJson.h"
+#include "../common/ax_macro.h"
 
 template<class T>
 class axIStringWithHash {
@@ -42,6 +43,13 @@ public:
 	uint32_t	hash	() const	{ return hash_; }
 
 	axStatus	toStringFormat(	axStringFormat & f ) const { return istr_.toStringFormat(f); }
+
+	axStatus	onTake	( axIStringWithHash & src ) {
+		axStatus st;
+		ax_macro_take( istr_ );
+		ax_macro_take( hash_ );
+		return 0;
+	}
 
 	axStatus	copy	( const axIStringWithHash & src ) {
 		hash_ = src.hash_;
