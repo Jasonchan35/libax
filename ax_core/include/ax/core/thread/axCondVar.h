@@ -53,7 +53,7 @@ public:
 	void	signal		()											{ if( cv_ ) cv_->signalNL(); }
 	void	broadcast	()											{ if( cv_ ) cv_->broadcastNL(); }
 	void	wait		()											{ if( cv_ ) return cv_->waitNL(); }
-	bool	timedWait	( uint32_t wait_milliseconds )				{ if( cv_ ) return false; return cv_->timedWaitNL( wait_milliseconds ); }
+	bool	timedWait	( uint32_t wait_milliseconds )				{ if( !cv_ ) return false; return cv_->timedWaitNL( wait_milliseconds ); }
 private:
 	axCondVar*	cv_; //!< condvar in lock
 };
