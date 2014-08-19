@@ -94,7 +94,7 @@ public:
 	int		operator++()		{ return OSAtomicIncrement32( &v ); }
 	int		operator--()		{ return OSAtomicDecrement32( &v ); }
 		
-	int		cmpset( int cmp_value, int new_value ) { int32_t ret; OSAtomicCompareAndSwap32( cmp_value, new_value, &ret ); return ret; }
+	bool	cmpset( int cmp_value, int new_value ) { return OSAtomicCompareAndSwap32( cmp_value, new_value, &v ); }
 private:
 	volatile int32_t	v;
 
