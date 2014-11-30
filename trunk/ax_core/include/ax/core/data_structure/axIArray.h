@@ -344,8 +344,10 @@ axStatus	axIArray<T>::copy ( const axIArray<T> &src ) {
 template<class T> inline
 axStatus	axIArray<T>::onTake( axIArray<T>	&src )	{  
 	axStatus	st;
+	
 	if( src._canBeTakenDirectly() && this->_canTakeOtherDirectly() ) {
 	//direct take
+		clear();
 		this->_init ( src.ptr(), src.size(), src.capacity() );
 		src._init( NULL, 0, 0 );
 		return 0;
