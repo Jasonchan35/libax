@@ -179,7 +179,7 @@ axStatus axSocket::setSendBufferSize( axSize len ) {
 	axStatus st;
 	int n = 0;
 	st = ax_safe_assign( n, len );	if( !st ) return st;
-	st = _setsockopt( SOL_SOCKET, SO_SNDBUF, &len, sizeof(len) );
+	st = _setsockopt( SOL_SOCKET, SO_SNDBUF, &n, sizeof(n) );
 	if( !st ) return st;
 
 	//according to the doc, should double check the buffer size to confirm
