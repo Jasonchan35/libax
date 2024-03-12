@@ -1,4 +1,6 @@
+# Libax – c++ cross-platform library (2008 - 2011)
 
+Back in 2008 cross-platform was a pain prior C++11, for example atomic integer, thread, data time, are all depends platform. And also helpers class/function were absent, such as string formatter, scoped_lock.
 
 ## Features overview:
 - File System – native file api wrapper, support memory mapping file, Unicode filename
